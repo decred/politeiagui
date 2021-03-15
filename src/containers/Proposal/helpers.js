@@ -394,9 +394,11 @@ export const getProposalStatusLabel = (proposalStatus, isVotingStatus) =>
         }
   );
 
-export const getProposalLink = (proposal) =>
+export const getProposalLink = (proposal, isJsEnabled) =>
   proposal
-    ? `/record/${getProposalStateLabel(
+    ? getProposalUrl(
+        proposal.censorshiprecord?.token,
+        isJsEnabled,
         proposal.state
-      )}/${proposal.censorshiprecord.token.substring(0, 7)}`
+      )
     : "";

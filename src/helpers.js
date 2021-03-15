@@ -181,8 +181,7 @@ export const parseRawProposal = (proposal) => {
 //
 export const getTextFromIndexMd = (file = {}) => {
   if (!file.payload) return "";
-  const text = atou(file.payload);
-  return text.substring(text.indexOf("\n\n") + 1).trim();
+  return atou(file.payload);
 };
 
 export const getIndexMdFromText = (text = "") => ({

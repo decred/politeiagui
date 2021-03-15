@@ -22,6 +22,7 @@ import {
 import { useProposalVote } from "../hooks";
 import useDocumentTitle from "src/hooks/utils/useDocumentTitle";
 import { GoBackLink } from "src/components/Router";
+import { useConfig } from "src/containers/Config";
 
 const SetPageTitle = ({ title }) => {
   useDocumentTitle(title);
@@ -37,10 +38,10 @@ const ProposalDetail = ({ Main, match, state }) => {
     threadParentCommentID
   );
   const proposalToken = getProposalToken(proposal);
-  const { voteSummary } = useProposalVote(proposalToken);
+  const { voteSummary } = useProposalVote(proposalToken || tokenFromUrl);
   const canReceiveComments =
     !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
-
+  const { javascriptEnabled } = useConfig();
   return (
     <>
       <Main className={styles.customMain} fillScreen>
@@ -69,7 +70,7 @@ const ProposalDetail = ({ Main, match, state }) => {
                 readOnly={!canReceiveComments}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
                 proposalState={state}
-                recordBaseLink={getProposalLink(proposal)}
+                recordBaseLink={getProposalLink(proposal, javascriptEnabled)}
               />
             )}
           </PublicActionsProvider>

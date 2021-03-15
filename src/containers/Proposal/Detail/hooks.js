@@ -15,10 +15,17 @@ import pick from "lodash/pick";
 import concat from "lodash/fp/concat";
 
 const getUnfetchedVoteSummaries = (proposal, voteSummaries) => {
+  if (!proposal) return [];
   const rfpLinks = getProposalRfpLinksTokens(proposal);
   const proposalToken = getProposalToken(proposal);
   const tokens = concat(rfpLinks || [])(proposalToken);
-  return difference(tokens)(keys(voteSummaries));
+  // compare tokens by substring
+  return tokens.filter(
+    (t) =>
+      !keys(voteSummaries).some(
+        (vs) => vs.substring(0, 7) === t.substring(0, 7)
+      )
+  );
 };
 
 const getProposalRfpLinksTokens = (proposal) => {
@@ -67,6 +74,7 @@ export function useProposal(token, proposalState, threadParentID) {
           onFetchProposalDetails(token, proposalState)
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
+          onFetchProposalsVoteSummary([token]);
           return send(FETCH);
         }
         return send(VERIFY);
