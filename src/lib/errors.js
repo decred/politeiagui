@@ -313,17 +313,22 @@ function TicketvotePluginError(code, context) {
     2: "The provided user public key is invalid",
     3: "The provided signature is invalid",
     4: `The provided record version is invalid, ${context}`,
-    5: `The provided record status is invalid, ${context}`,
-    6: `This operation is not authorized, ${context}`,
-    7: `The start details for this vote are missing, ${context}`,
-    8: `The start details for this vote are invalid, ${context}`,
-    9: `The provided vote parameters are invalid, ${context}`,
-    10: `This operation is invalid for this vote status, ${context}`,
-    11: `The provided metadata for this vote is invalid, ${context}`,
-    12: `The provided linkBy is invalid, ${context}`,
-    13: `The provided linkTo is invalid, ${context}`,
+    5: `The provided authorization is invalid, ${context}`,
+    6: `The start details for this vote are missing, ${context}`,
+    7: `The start details for this vote are invalid, ${context}`,
+    8: `The provided vote type is invalid, ${context}`,
+    9: `The provided vote duration is invalid, ${context}`,
+    10: `The provided quorum is invalid, ${context}`,
+    11: `The provided pass percentage is invalid, ${context}`,
+    12: `The provided vote options are invalid, ${context}`,
+    13: `The provided vote bits are invalid, ${context}`,
     14: `The parent for the runnoff vote is invalid, ${context}`,
-    15: `The linkBy deadline for this record is not yet expired, ${context}`
+    15: `The provided vote status is invalid, ${context}`,
+    16: `The provided metadata for this vote is invalid, ${context}`,
+    17: `The provided linkBy is invalid, ${context}`,
+    18: `The provided linkTo is invalid, ${context}`,
+    19: `The linkBy deadline for this record is not yet expired, ${context}`,
+    20: `The provided record status is invalid, ${context}`
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdComments);
