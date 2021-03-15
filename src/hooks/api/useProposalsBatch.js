@@ -69,8 +69,9 @@ export default function useProposalsBatch({
   proposalStatus,
   proposalPageSize = PROPOSAL_PAGE_SIZE
 }) {
-  const [recordState, setRecordState] = useState(
-    unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED
+  const recordState = useMemo(
+    () => (unvetted ? PROPOSAL_STATE_UNVETTED : PROPOSAL_STATE_VETTED),
+    [unvetted]
   );
 
   const [remainingTokens, setRemainingTokens] = useState([]);
@@ -135,6 +136,10 @@ export default function useProposalsBatch({
           );
           onFetchProposalsBatch(fetch, fetchVoteSummaries)
             .then(([proposals]) => {
+              if (isEmpty(proposals)) {
+                setRemainingTokens(next);
+                return send(RESOLVE);
+              }
               if (fetchRfpLinks) {
                 const rfpLinks = getRfpLinks(proposals);
                 const rfpSubmissions = getRfpSubmissions(proposals);
@@ -154,13 +159,6 @@ export default function useProposalsBatch({
                 }
               }
               const unfetchedTokens = getUnfetchedTokens(proposals, fetch);
-              if (!isEmpty(unfetchedTokens)) {
-                setRecordState(
-                  recordState === PROPOSAL_STATE_UNVETTED
-                    ? PROPOSAL_STATE_VETTED
-                    : PROPOSAL_STATE_UNVETTED
-                );
-              }
               setRemainingTokens([...unfetchedTokens, ...next]);
               return send(RESOLVE);
             })

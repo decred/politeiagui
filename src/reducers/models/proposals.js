@@ -189,7 +189,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 )
               ),
               update(["allByRecordStatus"], (props) =>
-                props[UNREVIEWED].filter(
+                props[UNREVIEWED]?.filter(
                   (p) => p !== action.payload.proposal.censorshiprecord.token
                 )
               )

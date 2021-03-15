@@ -453,8 +453,7 @@ export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
     try {
       const response = await Promise.all([
         api.proposalsBatch(csrf, {
-          requests,
-          state
+          requests
         }),
         fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
         api.commentsCount(tokens, state)
@@ -1122,6 +1121,7 @@ export const onSetProposalStatus = ({
         }
       })
       .catch((error) => {
+        console.log(error);
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
         throw error;
       });
