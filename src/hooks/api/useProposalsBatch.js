@@ -135,24 +135,20 @@ export default function useProposalsBatch({
             proposalPageSize
           );
           onFetchProposalsBatch(fetch, fetchVoteSummaries)
-            .then(([proposals]) => {
-              if (isEmpty(proposals)) {
+            .then(([fetchedProposals]) => {
+              if (isEmpty(fetchedProposals)) {
                 setRemainingTokens(next);
                 return send(RESOLVE);
               }
               if (fetchRfpLinks) {
-                const rfpLinks = getRfpLinks(proposals);
-                const rfpSubmissions = getRfpSubmissions(proposals);
+                const rfpLinks = getRfpLinks(fetchedProposals);
+                const rfpSubmissions = getRfpSubmissions(fetchedProposals);
                 const unfetchedRfpLinks = getUnfetchedTokens(proposals, [
                   ...rfpLinks,
                   ...rfpSubmissions
                 ]);
                 if (!isEmpty(unfetchedRfpLinks)) {
-                  onFetchProposalsBatch(
-                    unfetchedRfpLinks,
-                    // PROPOSAL_STATE_VETTED, // RFP linked proposals will always be vetted
-                    fetchVoteSummaries
-                  )
+                  onFetchProposalsBatch(unfetchedRfpLinks, fetchVoteSummaries)
                     .then(() => send(RESOLVE))
                     .catch((e) => send(REJECT, e));
                   return send(FETCH);

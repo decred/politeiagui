@@ -173,6 +173,17 @@ export const parseRawProposal = (proposal) => {
   };
 };
 
+// parseRawProposalsBatch accepts raw proposal batch object received from BE and parses
+// the respective metadata & status changes for each proposal
+export const parseRawProposalsBatch = (proposals) =>
+  Object.keys(proposals).reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr]: parseRawProposal(proposals[curr])
+    }),
+    {}
+  );
+
 // This function extracts the content of index.md's payload. The payload is
 // formatted as:
 //

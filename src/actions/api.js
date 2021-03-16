@@ -27,7 +27,11 @@ import {
   PROPOSAL_METADATA_FILENAME,
   VOTE_METADATA_FILENAME
 } from "../constants";
-import { parseReceivedProposalsMap, parseRawProposal } from "src/helpers";
+import {
+  parseReceivedProposalsMap,
+  parseRawProposal,
+  parseRawProposalsBatch
+} from "src/helpers";
 
 export const onResetNewUser = act.RESET_NEW_USER;
 
@@ -467,7 +471,10 @@ export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
         (acc, curr) => {
           return {
             ...acc,
-            [curr]: { ...proposals[curr], commentsCount: commentsCount[curr] }
+            [curr]: {
+              ...proposals[curr],
+              commentsCount: commentsCount[curr]
+            }
           };
         },
         {}
@@ -475,7 +482,7 @@ export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({ proposals: proposalsWithCommentsCount })
       );
-      return [proposals, summaries];
+      return [parseRawProposalsBatch(proposals), summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
       throw e;
