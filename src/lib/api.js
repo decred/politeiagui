@@ -326,6 +326,9 @@ const parseResponseBody = (response) => {
 
 export const parseResponse = (response) =>
   parseResponseBody(response).then((json) => {
+    // in case no response body is returned but response is successful
+    if (!json && response.status === 200)
+      return { response: {}, csrfToken: response.headers.get("X-Csrf-Token") };
     let errorcode = json.errorcode;
     let errorcontext = json.errorcontext;
 

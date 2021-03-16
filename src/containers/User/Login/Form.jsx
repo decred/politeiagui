@@ -1,11 +1,4 @@
-import {
-  Button,
-  Link as UILink,
-  Text,
-  TextInput,
-  classNames,
-  Toggle
-} from "pi-ui";
+import { Button, Link as UILink, Text, TextInput, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import React, { useCallback, useState } from "react";
 import { withRouter } from "react-router-dom";
@@ -40,17 +33,13 @@ const LoginForm = ({
       } catch (e) {
         setSubmitting(false);
         setFieldError("global", e);
-        if (e.errorCode === TOTP_MISSING_LOGIN_ERROR) {
+        if (e.errorcode === TOTP_MISSING_LOGIN_ERROR) {
           setShowTotp(true);
         }
       }
     },
     [onLogin, onLoggedIn]
   );
-
-  const handleToggleTotp = useCallback(() => setShowTotp(!showTotp), [
-    showTotp
-  ]);
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
@@ -66,10 +55,6 @@ const LoginForm = ({
     } else if (renderPrivacyPolicyModal) {
       handleOpenPrivacyPolicyModal();
     }
-  }
-
-  function handleToggleWithSpace(e) {
-    e && e.key && e.key === " " && handleToggleTotp();
   }
 
   return (
@@ -130,26 +115,12 @@ const LoginForm = ({
               onBlur={handleBlur}
               error={touched.password && errors.password}
             />
-            <div
-              onKeyDown={handleToggleWithSpace}
-              tabIndex={3}
-              className={styles.totpToggleWrapper}>
-              <Toggle
-                id="totp-toggle"
-                onToggle={handleToggleTotp}
-                toggled={showTotp}
-              />
-              <Text className={styles.totpToggleLabel}>
-                Two-Factor Authentication (2FA)
-              </Text>
-            </div>
-
             <VerifyTotp
               className={classNames(styles.totp, !showTotp && styles.hide)}
               onType={handleChangeTotp}
               inputClassName={styles.totpInput}
               extended={false}
-              tabIndex={4}
+              tabIndex={3}
               title="Authenticator Code"
             />
             <Actions>

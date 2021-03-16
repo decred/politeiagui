@@ -56,6 +56,7 @@ function PiUserError(code) {
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIPi);
+  this.errorcode = code;
 }
 
 PiUserError.prototype = new Error();
@@ -84,6 +85,7 @@ function RecordsUserError(code, context) {
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIRecords);
+  this.errorcode = code;
 }
 
 RecordsUserError.prototype = new Error();
@@ -102,6 +104,7 @@ function CommentsUserError(code) {
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIComments);
+  this.errorcode = code;
 }
 
 CommentsUserError.prototype = new Error();
@@ -121,6 +124,7 @@ function TicketvoteUserError(code) {
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APITicketvote);
+  this.errorcode = code;
 }
 
 TicketvoteUserError.prototype = new Error();
@@ -268,6 +272,7 @@ function WWWUserError(code, context) {
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIWww);
+  this.errorcode = code;
 }
 
 WWWUserError.prototype = new Error();
@@ -284,6 +289,7 @@ function PiPluginError(code, context) {
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdPi);
+  this.errorcode = code;
 }
 
 PiPluginError.prototype = new Error();
@@ -303,6 +309,7 @@ function CommentsPluginError(code, context) {
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdComments);
+  this.errorcode = code;
 }
 
 CommentsPluginError.prototype = new Error();
@@ -332,6 +339,7 @@ function TicketvotePluginError(code, context) {
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdComments);
+  this.errorcode = code;
 }
 
 TicketvotePluginError.prototype = new Error();
