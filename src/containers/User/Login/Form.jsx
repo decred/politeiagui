@@ -1,6 +1,6 @@
 import { Button, Link as UILink, Text, TextInput, classNames } from "pi-ui";
 import PropTypes from "prop-types";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { withRouter } from "react-router-dom";
 import FormWrapper from "src/components/FormWrapper";
 import ModalPrivacyPolicy from "src/components/ModalPrivacyPolicy";
@@ -8,7 +8,7 @@ import styles from "./LoginForm.module.css";
 import { useLogin } from "./hooks";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useConfig } from "src/containers/Config";
-import VerifyTotp from "../Totp/Verify";
+import ModalTotpVerify from "src/components/ModalTotpVerify";
 import { TOTP_MISSING_LOGIN_ERROR } from "src/constants";
 
 const LoginForm = ({
@@ -22,26 +22,33 @@ const LoginForm = ({
 }) => {
   const { onLogin, validationSchema } = useLogin();
   const { enableAdminInvite } = useConfig();
-  const [showTotp, setShowTotp] = useState(false);
-  const onSubmit = useCallback(
-    async (values, { resetForm, setSubmitting, setFieldError }) => {
-      try {
-        await onLogin(values);
-        setSubmitting(false);
-        resetForm();
-        onLoggedIn && onLoggedIn();
-      } catch (e) {
-        setSubmitting(false);
-        setFieldError("global", e);
-        if (e.errorcode === TOTP_MISSING_LOGIN_ERROR) {
-          setShowTotp(true);
-        }
-      }
-    },
-    [onLogin, onLoggedIn]
-  );
-
   const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const onSubmit = async (
+    values,
+    { resetForm, setSubmitting, setFieldError }
+  ) => {
+    try {
+      await onLogin(values);
+      setSubmitting(false);
+      resetForm();
+      onLoggedIn && onLoggedIn();
+    } catch (e) {
+      setSubmitting(false);
+      if (e.errorcode === TOTP_MISSING_LOGIN_ERROR) {
+        handleOpenModal(ModalTotpVerify, {
+          onVerify: (code) =>
+            onSubmit(
+              { ...values, code },
+              { resetForm, setSubmitting, setFieldError }
+            ),
+          onClose: handleCloseModal
+        });
+        return;
+      }
+      setFieldError("global", e);
+    }
+  };
 
   const handleOpenPrivacyPolicyModal = () => {
     handleOpenModal(ModalPrivacyPolicy, {
@@ -61,8 +68,7 @@ const LoginForm = ({
     <FormWrapper
       initialValues={{
         email: "",
-        password: "",
-        code: null
+        password: ""
       }}
       loading={!validationSchema}
       validationSchema={validationSchema}
@@ -80,12 +86,8 @@ const LoginForm = ({
         handleSubmit,
         isSubmitting,
         errors,
-        touched,
-        setFieldValue
+        touched
       }) => {
-        const handleChangeTotp = (code) => {
-          setFieldValue("code", code);
-        };
         return (
           <Form onSubmit={handleSubmit}>
             {!hideTitle && <Title>Log in</Title>}
@@ -114,14 +116,6 @@ const LoginForm = ({
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.password && errors.password}
-            />
-            <VerifyTotp
-              className={classNames(styles.totp, !showTotp && styles.hide)}
-              onType={handleChangeTotp}
-              inputClassName={styles.totpInput}
-              extended={false}
-              tabIndex={3}
-              title="Authenticator Code"
             />
             <Actions>
               <Link to="/user/request-reset-password">Reset Password</Link>
