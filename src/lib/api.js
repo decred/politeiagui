@@ -184,7 +184,8 @@ export const makeDccComment = (token, comment, parentid) => ({
   parentid
 });
 
-export const makeCommentVote = (token, vote, commentid) => ({
+export const makeCommentVote = (state, token, vote, commentid) => ({
+  state,
   token,
   commentid,
   vote

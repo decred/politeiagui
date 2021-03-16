@@ -60,12 +60,13 @@ const ProposalDetail = ({ Main, match, state }) => {
                 collapseBodyContent={!!threadParentID}
               />
             )}
-            {proposal && !isCensoredProposal(proposal) && (
+            {!isCensoredProposal(proposal) && (
               <Comments
-                recordAuthorID={proposal.userid} // this will be deprecated after tlog
-                recordAuthorUsername={proposal.username}
-                recordToken={proposalToken}
-                numOfComments={proposal.comments}
+                recordAuthorID={proposal?.userid} // this will be deprecated after tlog
+                recordAuthorUsername={proposal?.username}
+                recordToken={tokenFromUrl}
+                recordTokenFull={proposalToken}
+                numOfComments={proposal?.comments}
                 threadParentID={threadParentID}
                 readOnly={!canReceiveComments}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}

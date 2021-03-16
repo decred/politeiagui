@@ -94,7 +94,7 @@ function CommentsUserError(code) {
     2: "Unvetted records can only be voted by an admin or the author",
     3: "The user public key is not active",
     4: "The provided signature was invalid for this comment",
-    5: "The record is in an invalidstate",
+    5: "The record has an invalid state",
     6: "The record token is invalid",
     7: "The record was not found",
     8: "The record is locked for changes",

@@ -142,7 +142,7 @@ export const isUnreviewedProposal = (proposal) =>
  * @returns {Boolean} isCensored
  */
 export const isCensoredProposal = (proposal) =>
-  proposal.status === PROPOSAL_STATUS_CENSORED;
+  proposal?.status === PROPOSAL_STATUS_CENSORED;
 
 /**
  * Returns true if the given proposal is public, but voting

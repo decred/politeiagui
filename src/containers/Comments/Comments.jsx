@@ -39,6 +39,7 @@ const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 const Comments = ({
   numOfComments,
   recordToken,
+  recordTokenFull,
   recordAuthorID,
   recordAuthorUsername,
   threadParentID,
@@ -96,11 +97,11 @@ const Comments = ({
     (comment) =>
       onSubmitComment({
         comment,
-        token: recordToken,
+        token: recordTokenFull,
         parentID: 0,
         state: proposalState
       }),
-    [onSubmitComment, proposalState, recordToken]
+    [onSubmitComment, proposalState, recordTokenFull]
   );
 
   const handleSetSortOption = useCallback(
@@ -218,6 +219,14 @@ const Comments = ({
     ((comments && !comments.find((c) => c.commentid === +threadParentID)) ||
       numOfComments === 0);
 
+  const handleCommentVote = useCallback(
+    (commentID, action) =>
+      recordTokenFull
+        ? onCommentVote(commentID, action, recordTokenFull)
+        : null,
+    [onCommentVote, recordTokenFull]
+  );
+
   return (
     <>
       <Card
@@ -249,7 +258,7 @@ const Comments = ({
               )}
               {!readOnly && !!identityError && <IdentityMessageError />}
             </Or>
-            {!isSingleThread && !readOnly && (
+            {!isSingleThread && !readOnly && recordTokenFull && (
               <CommentForm
                 persistKey={`commenting-on-${recordToken}`}
                 onSubmit={handleSubmitComment}
@@ -321,7 +330,7 @@ const Comments = ({
             <CommentContext.Provider
               value={{
                 onSubmitComment,
-                onCommentVote,
+                onCommentVote: handleCommentVote,
                 recordAuthorID,
                 recordAuthorUsername,
                 recordToken,

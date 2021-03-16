@@ -230,9 +230,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_LOGOUT]: () => {
             const privateProps = [
-              ...state.allByRecordStatus[UNREVIEWED],
-              ...state.allByRecordStatus[ARCHIVED],
-              ...state.allByRecordStatus[CENSORED]
+              ...(state.allByRecordStatus[UNREVIEWED] || []),
+              ...(state.allByRecordStatus[ARCHIVED] || []),
+              ...(state.allByRecordStatus[CENSORED] || [])
             ];
             const filterPrivateProps = update("byToken", (propsByToken) =>
               Object.keys(propsByToken)

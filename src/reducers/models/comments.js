@@ -23,6 +23,7 @@ const comments = (state = DEFAULT_STATE, action) =>
         {
           [act.RECEIVE_RECORD_COMMENTS]: () => {
             const { token, comments, accesstime } = action.payload;
+            const fullToken = comments[0]?.token || token;
             // Filter duplicated comments by signature. The latest copy found
             // will be kept.
             const filteredComments = uniqWith(
@@ -31,8 +32,8 @@ const comments = (state = DEFAULT_STATE, action) =>
                 arrVal.signature && arrVal.signaure !== othVal.signaure
             );
             return compose(
-              set(["comments", "byToken", token], filteredComments),
-              set(["comments", "accessTimeByToken", token], accesstime)
+              set(["comments", "byToken", fullToken], filteredComments),
+              set(["comments", "accessTimeByToken", fullToken], accesstime)
             )(state);
           },
           [act.RECEIVE_NEW_COMMENT]: () => {

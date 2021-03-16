@@ -960,13 +960,13 @@ export const onSubmitEditedInvoice = (
       });
   });
 
-export const onCommentVote = (currentUserID, token, commentid, vote) =>
+export const onCommentVote = (currentUserID, token, commentid, vote, state) =>
   withCsrf((dispatch, _, csrf) => {
     if (!currentUserID) {
       return;
     }
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
-    return Promise.resolve(api.makeCommentVote(token, vote, commentid))
+    return Promise.resolve(api.makeCommentVote(state, token, vote, commentid))
       .then((comment) => api.signCommentVote(currentUserID, comment))
       .then((comment) => api.commentVote(csrf, comment))
       .then(() => {

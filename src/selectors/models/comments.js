@@ -13,11 +13,22 @@ export const commentsLikesByToken = get([
   "byToken"
 ]);
 
+const getCommentsByToken = (token) => (commentsByToken) => {
+  const comment = commentsByToken[token];
+  if (comment) return comment;
+  const commentsTokens = Object.keys(commentsByToken);
+  // check if the provided token is prefix of original token
+  const matchedTokenByPrefix = commentsTokens.find(
+    (key) => key.substring(0, 7) === token
+  );
+  return commentsByToken[matchedTokenByPrefix];
+};
+
 export const makeGetRecordComments = (token) =>
-  createSelector(commentsByToken, get(token));
+  createSelector(commentsByToken, getCommentsByToken(token));
 
 export const makeGetRecordCommentsLikes = (token) =>
-  createSelector(commentsLikesByToken, get(token));
+  createSelector(commentsLikesByToken, getCommentsByToken(token));
 
 export const makeGetLastAccessTime = (token) =>
-  createSelector(accessTimeByToken, get(token));
+  createSelector(accessTimeByToken, getCommentsByToken(token));

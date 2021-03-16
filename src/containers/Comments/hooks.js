@@ -112,10 +112,10 @@ export function useComments(recordToken, proposalState) {
   );
 
   const onCommentVote = useCallback(
-    (commentID, action) => {
-      onCommentVoteAction(userid, recordToken, commentID, action);
+    (commentID, action, token) => {
+      onCommentVoteAction(userid, token, commentID, action, proposalState);
     },
-    [onCommentVoteAction, recordToken, userid]
+    [onCommentVoteAction, userid, proposalState]
   );
 
   const getCommentLikeOption = useCallback(
