@@ -9,26 +9,28 @@ jobs:
         node-version: [14.x, 15.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use nodejs ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v2
+      - name: Use nodejs ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: xvfb run
-      run: |
-        export DISPLAY=:99.0
-        Xvfb :99.0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
-    - name: yarn install
-      run: yarn install --network-concurrency 1
-    - name: linter checks
-      run: yarn lint
-    - name: tests
-      run: |
-        yarn run uidev &
-        yarn test
-        scripts/serverUpChecker.sh
-      env:
-        CI: true
-    - name: build
-      run: yarn build
+      - name: xvfb run
+        run: |
+          export DISPLAY=:99.0
+          Xvfb :99.0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+      - name: yarn install
+        run: yarn install --network-concurrency 1
+      - name: linter checks
+        run: yarn lint
+      - name: pretty diff
+        run: yarn prettify:diff
+      - name: tests
+        run: |
+          yarn run uidev &
+          yarn test
+          scripts/serverUpChecker.sh
+        env:
+          CI: true
+      - name: build
+        run: yarn build

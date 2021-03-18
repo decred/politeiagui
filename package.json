@@ -63,8 +63,8 @@
     "test:e2e:dev": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start https-get://localhost:3000 cy:open",
     "eject": "react-app-rewired eject",
     "prettify": "prettier --write 'src/**/*.{js,jsx,css,json}'",
-    "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx",
-    "postinstall": "yarn husky install"
+    "prettify:diff": "prettier --list-different 'src/**/*.{js,jsx,css,json}'",
+    "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -94,7 +94,6 @@
     "eslint-plugin-react": "^7.21.5",
     "fetch-mock": "^7.7.3",
     "https": "^1.0.0",
-    "husky": "^5.0.9",
     "nightwatch": "^1.5.1",
     "pem": "^1.14.4",
     "prettier": "^2.2.1",
