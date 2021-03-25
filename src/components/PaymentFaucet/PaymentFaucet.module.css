@@ -2,14 +2,19 @@
   width: 100%;
 }
 
-.paywallFaucet {
-  max-width: 500px;
+.transactionLabel {
+  max-width: 20rem;
+}
+
+.transactionIdMessage:nth-child(2) {
+  width: 100;
 }
 
 /* SMALL */
 @media screen and (max-width: 768px) {
   .transactionIdMessage {
     padding: 2rem 2rem;
+    overflow-x: hidden;
   }
 
   .transactionIdLink {
@@ -21,6 +26,7 @@
 @media screen and (max-width: 560px) {
   .transactionIdMessage {
     padding: 2rem 1rem;
+    overflow-x: hidden;
   }
 
   .transactionIdLink {
@@ -32,9 +38,10 @@
 @media screen and (max-width: 410px) {
   .transactionIdMessage {
     padding: 2rem 0rem;
+    overflow-x: hidden;
+    width: 100%;
   }
-
-  .transactionIdLink {
-    width: 30%;
+  .transactionIdMessage > * {
+    width: 80%;
   }
 }
