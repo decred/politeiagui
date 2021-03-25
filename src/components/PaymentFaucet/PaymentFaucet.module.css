@@ -6,10 +6,6 @@
   max-width: 20rem;
 }
 
-.transactionIdMessage:nth-child(2) {
-  width: 100;
-}
-
 /* SMALL */
 @media screen and (max-width: 768px) {
   .transactionIdMessage {
