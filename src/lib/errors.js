@@ -206,7 +206,7 @@ function WWWUserError(code, context) {
     74: "Invalid proposal linkby",
     75: "Invalid runoff vote",
     76: "Wrong proposal type",
-    77: "The provided passcode for TOTP validation does not match the saved secret key",
+    77: "Wrong 2FA code was provided",
     78: "Invalid TOTP type",
     79: "Login requires the TOTP code",
     80: "You must wait until the next TOTP code window",

@@ -30,7 +30,12 @@ const SetTotp = ({ totp = {}, isAlreadySet }) =>
           <div className={styles.copyableKey}>
             {totp.key && <CopyableText id="totp-key">{totp.key}</CopyableText>}
           </div>
-          <P>2 - Scan the QR Code with a TOTP Authenticator</P>
+          <P>
+            2 - Scan the QR Code with a TOTP Authenticator{" "}
+            <span className={styles.totpAuthenticators}>
+              (Authy, Google Authenticator, FreeOTP, YubiKey, etc)
+            </span>
+          </P>
           <P>
             3 - Verify the 6-numbers code given by the authenticator using the
             input below to activate the 2FA
