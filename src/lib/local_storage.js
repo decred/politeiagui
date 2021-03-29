@@ -47,6 +47,12 @@ export const handleSaveVotesTimetamps = (token, timestamps) =>
 export const loadVotesTimestamps = (token) =>
   loadStateLocalStorage(`${token}-votes-timestamps`);
 
+export const handleSaveCommentsTimetamps = (token, timestamps) =>
+  saveStateLocalStorage(timestamps, `${token}-comments-timestamps`);
+
+export const loadCommentsTimestamps = (token) =>
+  loadStateLocalStorage(`${token}-comments-timestamps`);
+
 export const handleSaveAppDraftProposals = (state) => {
   const uuid = currentUserID(state);
   if (!uuid) {

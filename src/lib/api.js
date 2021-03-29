@@ -417,8 +417,8 @@ export const verifyNewUser = (email, verificationToken, username) => {
     .then(getResponse);
 };
 
-export const likedComments = (csrf, token, userid, state) =>
-  POST("/votes", csrf, { token, userid, state }, apiComments).then(getResponse);
+export const likedComments = (csrf, token, userid) =>
+  POST("/votes", csrf, { token, userid }, apiComments).then(getResponse);
 
 export const editUser = (csrf, params) =>
   POST("/user/edit", csrf, params).then(getResponse);
@@ -536,14 +536,14 @@ export const proposalDetails = (payload) =>
 
 export const user = (userId) => GET(`/user/${userId}`).then(getResponse);
 
-export const proposalComments = (csrf, token, state) =>
-  POST("/comments", csrf, { token, state }, apiComments).then(getResponse);
+export const proposalComments = (csrf, token) =>
+  POST("/comments", csrf, { token }, apiComments).then(getResponse);
 
-export const commentsCount = (tokens, state) =>
-  POST("/count", "", { tokens, state }, apiComments).then(getResponse);
+export const commentsCount = (tokens) =>
+  POST("/count", "", { tokens }, apiComments).then(getResponse);
 
-export const commentsTimestamps = (csrf, token, state, commentids) =>
-  POST("/timestamps", csrf, { token, state, commentids }, apiComments).then(
+export const commentsTimestamps = (csrf, token, commentids) =>
+  POST("/timestamps", csrf, { token, commentids }, apiComments).then(
     getResponse
   );
 
@@ -687,6 +687,9 @@ export const votesInventory = (status, page) =>
 
 export const recordsTimestamp = (csrf, token, version) =>
   POST("/timestamps", csrf, { token, version }, apiRecords).then(getResponse);
+
+export const votesDetails = (csrf, token) =>
+  POST("/details", csrf, { token }, apiTicketVote).then(getResponse);
 
 // CMS
 

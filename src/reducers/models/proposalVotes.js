@@ -37,6 +37,14 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
               })),
               set("bestBlock", action.payload.bestblock)
             )(state),
+          [act.RECEIVE_VOTES_DETAILS]: () =>
+            update(["byToken", action.payload.token], (voteSummaries) => ({
+              ...voteSummaries,
+              details: {
+                auths: action.payload.auths,
+                details: action.payload.vote
+              }
+            }))(state),
           [act.RECEIVE_AUTHORIZE_VOTE]: () =>
             receiveVoteStatusChange(
               state,
@@ -58,7 +66,7 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () =>
             update(["byToken", action.payload.token], (propVotes) => ({
               ...propVotes,
-              ...action.payload
+              votes: action.payload.votes
             }))(state)
         }[action.type] || (() => state)
       )();

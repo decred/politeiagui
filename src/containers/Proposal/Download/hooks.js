@@ -37,6 +37,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
         onFetchTicketVoteTimestamps(token, page)
           .then((resp) => {
             setTimestamps(resp.votes);
+            setProgress(((resp.votes.length * 100) / votesCount).toFixed(2));
             setPage(page + 1);
             return send(VERIFY);
           })
@@ -48,6 +49,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
         if (timestamps?.length === votesCount) {
           // all timestamps loaded, resolve
           handleSaveVotesTimetamps(token, timestamps);
+          setProgress(100);
           fileDownload(
             JSON.stringify(timestamps, null, 2),
             `${token}-votes-timestamps.json`

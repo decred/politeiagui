@@ -239,20 +239,26 @@ export const RfpProposalLink = ({ url, rfpTitle }) => {
   );
 };
 
-export const DownloadRecord = ({ content, fileName, label, serverpubkey }) => {
-  // Build proposal data to match record type on backend.
-  const proposal = {
-    state: content.state,
-    status: content.status,
-    version: content.version,
-    timestamp: content.timestamp,
-    username: content.username,
-    metadata: content.metadata,
-    files: content.files,
-    censorshiprecord: content.censorshiprecord,
-    serverpubkey
+export const DownloadRecord = ({
+  content,
+  fileName,
+  label,
+  serverpublickey
+}) => {
+  const bundle = {
+    record: {
+      state: content.state,
+      status: content.status,
+      version: content.version,
+      timestamp: content.timestamp,
+      username: content.username,
+      metadata: content.metadata,
+      files: content.files,
+      censorshiprecord: content.censorshiprecord
+    },
+    serverpublickey
   };
-  return <DownloadJSON fileName={fileName} label={label} content={proposal} />;
+  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;
 };
 
 export const DownloadTimestamps = ({ token, version, label }) => {
@@ -266,6 +272,21 @@ export const DownloadTimestamps = ({ token, version, label }) => {
       beforeDownload={() => onFetchRecordTimestamps(token, version)}
     />
   );
+};
+
+export const DownloadVotes = ({
+  label,
+  voteSummary,
+  fileName,
+  serverpublickey
+}) => {
+  const bundle = {
+    auths: voteSummary.details.auths,
+    details: voteSummary.details.details,
+    votes: voteSummary.votes,
+    serverpublickey
+  };
+  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;
 };
 
 export const LinkSection = ({ children, className, title }) => (
@@ -290,6 +311,7 @@ const RecordWrapper = ({ children, className }) => (
       CopyLink,
       DownloadRecord,
       DownloadTimestamps,
+      DownloadVotes,
       LinkSection,
       Header,
       Subtitle,

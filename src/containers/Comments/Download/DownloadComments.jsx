@@ -4,37 +4,20 @@ import DownloadJSON from "src/components/DownloadJSON";
 import { useDownloadComments } from "./hooks";
 import { useLoader } from "src/containers/Loader";
 
-const DownloadComments = ({
-  recordToken,
-  className,
-  isTimestamp,
-  state,
-  label
-}) => {
-  const { comments, onFetchCommentsTimestamps } = useDownloadComments(
-    recordToken
-  );
+const DownloadComments = ({ recordToken, className, label }) => {
+  const { comments } = useDownloadComments(recordToken);
   const { apiInfo } = useLoader();
+
   return !!comments && !!comments.length ? (
-    !isTimestamp ? (
-      <DownloadJSON
-        label={label}
-        fileName={`${recordToken}-comments`}
-        content={comments.map((c) => ({
-          ...c,
-          serverpublickey: apiInfo.pubkey
-        }))}
-        className={className}
-      />
-    ) : (
-      <DownloadJSON
-        label={label}
-        isAsync={true}
-        fileName={`${recordToken}-comments-timestamps`}
-        beforeDownload={() => onFetchCommentsTimestamps(recordToken, state)}
-        content={[]}
-      />
-    )
+    <DownloadJSON
+      label={label}
+      fileName={`${recordToken}-comments`}
+      content={{
+        ...comments,
+        serverpublickey: apiInfo.pubkey
+      }}
+      className={className}
+    />
   ) : null;
 };
 

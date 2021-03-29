@@ -14,7 +14,6 @@ import {
   PAYWALL_STATUS_PAID,
   DCC_SUPPORT_VOTE,
   TOTP_DEFAULT_TYPE,
-  PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED,
   UNREVIEWED,
   CENSORED,
@@ -447,7 +446,7 @@ export const onFetchProposalDetailsWithoutState = (
 };
 
 // state should be the state of requested proposals
-export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
+export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     const requests = tokens?.map((token) => ({
@@ -460,7 +459,7 @@ export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
           requests
         }),
         fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
-        api.commentsCount(tokens, state)
+        api.commentsCount(tokens)
       ]);
       const proposals = response.find((res) => res && res.records).records;
       const summaries =
@@ -489,14 +488,12 @@ export const onFetchProposalsBatch = (tokens, state, fetchVoteSummary = true) =>
     }
   });
 
-export const onFetchProposalDetails = (token, state, version) => async (
-  dispatch
-) => {
+export const onFetchProposalDetails = (token, version) => async (dispatch) => {
   dispatch(act.REQUEST_PROPOSALS_BATCH(token));
   try {
     const response = await Promise.all([
       api.proposalDetails({ token, version }),
-      api.commentsCount([token], state)
+      api.commentsCount([token])
     ]);
     const record = response.find((res) => res && res.record).record;
     const commentsCount = response.find((res) => res && res.counts).counts;
@@ -637,11 +634,11 @@ export const onFetchUser = (userId) => (dispatch, getState) => {
     });
 };
 
-export const onFetchProposalComments = (token, state) =>
+export const onFetchProposalComments = (token) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_RECORD_COMMENTS(token));
     return api
-      .proposalComments(csrf, token, state)
+      .proposalComments(csrf, token)
       .then((response) =>
         dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }))
       )
@@ -650,11 +647,11 @@ export const onFetchProposalComments = (token, state) =>
       });
   });
 
-export const onFetchLikedComments = (token, userid, state) =>
+export const onFetchLikedComments = (token, userid) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_LIKED_COMMENTS(token));
     return api
-      .likedComments(csrf, token, userid, state)
+      .likedComments(csrf, token, userid)
       .then((response) =>
         dispatch(act.RECEIVE_LIKED_COMMENTS({ ...response, token }))
       )
@@ -1123,7 +1120,7 @@ export const onSetProposalStatus = ({
         if (status === PROPOSAL_STATUS_PUBLIC) {
           dispatch(onFetchProposalsBatchVoteSummary([token]));
           if (linkto) {
-            dispatch(onFetchProposalsBatch([linkto], PROPOSAL_STATE_VETTED));
+            dispatch(onFetchProposalsBatch([linkto]));
           }
         }
       })
@@ -1252,13 +1249,11 @@ export const onFetchUserProposals = (userid) =>
           )
           .slice(0, 9);
         unvettedProposals = await dispatch(
-          onFetchProposalsBatch(remainingTokens, PROPOSAL_STATE_UNVETTED, false)
+          onFetchProposalsBatch(remainingTokens, false)
         );
       }
       if (vettedTokens.length) {
-        vettedProposals = await dispatch(
-          onFetchProposalsBatch(vettedTokens, PROPOSAL_STATE_VETTED)
-        );
+        vettedProposals = await dispatch(onFetchProposalsBatch(vettedTokens));
       }
       // we access the first array position, which contains the proposals.
       // second array position refers to the vote summary results.
@@ -1313,6 +1308,25 @@ export const onFetchProposalVoteResults = (token) =>
       )
       .catch((error) => {
         dispatch(act.RECEIVE_PROPOSAL_VOTE_RESULTS(null, error));
+        throw error;
+      });
+  });
+
+export const onFetchVotesDetails = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_VOTES_DETAILS({ token }));
+    return api
+      .votesDetails(csrf, token)
+      .then((response) =>
+        dispatch(
+          act.RECEIVE_VOTES_DETAILS({
+            ...response,
+            token
+          })
+        )
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_VOTES_DETAILS(null, error));
         throw error;
       });
   });
@@ -1720,10 +1734,8 @@ export const onFetchRecordTimestamps = (token, version) =>
   withCsrf((__, _, csrf) => api.recordsTimestamp(csrf, token, version));
 
 // Comments Actions
-export const onFetchCommentsTimestamps = (token, state, commentsids) =>
-  withCsrf((__, _, csrf) =>
-    api.commentsTimestamps(csrf, token, state, commentsids)
-  );
+export const onFetchCommentsTimestamps = (token, commentsids) =>
+  withCsrf((__, _, csrf) => api.commentsTimestamps(csrf, token, commentsids));
 
 // Ticket Vote actions
 export const onFetchTicketVoteTimestamps = (token, votespage) =>

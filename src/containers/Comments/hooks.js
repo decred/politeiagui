@@ -83,32 +83,19 @@ export function useComments(recordToken, proposalState) {
   useEffect(
     function handleFetchOfComments() {
       if (needsToFetchComments) {
-        onFetchComments(recordToken, isProposal && proposalState);
+        onFetchComments(recordToken);
       }
     },
-    [
-      onFetchComments,
-      needsToFetchComments,
-      recordToken,
-      constants.PROPOSAL_STATE_VETTED,
-      isProposal,
-      proposalState
-    ]
+    [onFetchComments, needsToFetchComments, recordToken]
   );
 
   useEffect(
     function handleFetchOfLikes() {
       if (needsToFetchCommentsLikes) {
-        onFetchLikes(recordToken, userid, proposalState);
+        onFetchLikes(recordToken, userid);
       }
     },
-    [
-      onFetchLikes,
-      needsToFetchCommentsLikes,
-      recordToken,
-      userid,
-      proposalState
-    ]
+    [onFetchLikes, needsToFetchCommentsLikes, recordToken, userid]
   );
 
   const onCommentVote = useCallback(
