@@ -52,7 +52,7 @@ const ModalConfirm = ({
       style={{ width: "600px" }}
       title={(success && successTitle) || title}
       show={show}
-      onClose={success ? onCloseSuccess || onClose : onClose}
+      onClose={success && onCloseSuccess ? onCloseSuccess : onClose}
       iconComponent={
         !success ? (
           <Icon type={"info"} size={26} />

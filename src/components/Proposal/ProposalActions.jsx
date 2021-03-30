@@ -86,10 +86,10 @@ const PublicActions = ({
     rfpSubmissionsVoteSummaries
   );
 
-  const underDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
+  const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
   return (
     <>
-      {underDiscussion && (
+      {isUnderDiscussion && (
         <div className="justify-right margin-top-m">
           <Button
             onClick={withProposal(onCensor)}

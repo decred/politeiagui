@@ -305,7 +305,7 @@ const ProposalFormWrapper = ({
   disableSubmit,
   history,
   isPublic,
-  isCreate,
+  isCreateRecordPage,
   proposalState
 }) => {
   const { text, markdownFiles } = replaceImgDigestByBlob(
@@ -367,7 +367,7 @@ const ProposalFormWrapper = ({
         // Also, we use short prefix when navigating to propsoal page
         history.push(
           `/record${
-            isCreate
+            isCreateRecordPage
               ? "/unvetted"
               : proposalState === PROPOSAL_STATE_VETTED
               ? ""
@@ -385,7 +385,7 @@ const ProposalFormWrapper = ({
       onSubmit,
       onFetchProposalsBatchWithoutState,
       isPublic,
-      isCreate,
+      isCreateRecordPage,
       proposalState
     ]
   );
