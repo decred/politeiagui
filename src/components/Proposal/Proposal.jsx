@@ -14,7 +14,11 @@ import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
-import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
+import {
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  PROPOSAL_STATE_VETTED
+} from "src/constants";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -25,7 +29,7 @@ import {
   getQuorumInVotes,
   isVotingFinishedProposal,
   getProposalToken,
-  isVotingNotAuthorizedProposal,
+  isVotingAuthorizedProposal,
   goToFullProposal
 } from "src/containers/Proposal/helpers";
 import {
@@ -39,6 +43,8 @@ import LoggedInContent from "src/components/LoggedInContent";
 import ProposalsList from "../ProposalsList/ProposalsList";
 import VotesCount from "./VotesCount";
 import DownloadComments from "src/containers/Comments/Download";
+import DownloadCommentsTimestamps from "src/containers/Comments/Download/DownloadCommentsTimestamps";
+import DownloadVotesTimestamps from "src/containers/Proposal/Download/DownloadVotesTimestamps";
 import ProposalActions from "./ProposalActions";
 import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
@@ -113,7 +119,6 @@ const Proposal = React.memo(function Proposal({
     censorshiprecord,
     files,
     name,
-    numcomments,
     publishedat,
     abandonedat,
     timestamp,
@@ -124,26 +129,29 @@ const Proposal = React.memo(function Proposal({
     linkto,
     proposedFor,
     type,
-    rfpSubmissions
+    rfpSubmissions,
+    state,
+    commentsCount
   } = proposal;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
   const isRfpActive = isRfp && isActiveRfp(linkby);
   const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
-  const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
+  const hasVoteSummary = !!voteSummary && !!voteSummary.endblockheight;
   const proposalToken = censorshiprecord && censorshiprecord.token;
+  const votesCount = !!voteSummary && getVotesReceived(voteSummary);
   const {
     proposalURL,
     authorURL,
     commentsURL,
     rfpProposalURL
-  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
+  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto, state);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned;
-  const isAuthor = currentUser && currentUser.userid === userid;
-  const isVotingAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
+  const isAuthor = currentUser && currentUser.username === username;
+  const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
   const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
@@ -192,10 +200,12 @@ const Proposal = React.memo(function Proposal({
           Title,
           RfpProposalLink,
           CommentsLink,
-          GithubLink,
           ChartsLink,
           CopyLink,
           DownloadRecord,
+          DownloadTimestamps,
+          DownloadVotes,
+          LinkSection,
           Header,
           Subtitle,
           Edit,
@@ -211,7 +221,7 @@ const Proposal = React.memo(function Proposal({
                   truncate
                   linesBeforeTruncate={2}
                   url={extended ? "" : proposalURL}>
-                  {name}
+                  {name || proposalToken}
                 </Title>
               }
               /**
@@ -221,7 +231,11 @@ const Proposal = React.memo(function Proposal({
                * */
               edit={
                 isEditable ? (
-                  <Edit url={`/proposals/${proposalToken}/edit`} />
+                  <Edit
+                    url={`/record${
+                      state === PROPOSAL_STATE_VETTED ? "" : "/unvetted"
+                    }/${proposalToken}/edit`}
+                  />
                 ) : showEditIcon ? (
                   <Tooltip
                     placement={mobile ? "left" : "right"}
@@ -269,6 +283,7 @@ const Proposal = React.memo(function Proposal({
                       )}
                       version={version}
                       token={proposalToken}
+                      proposalState={state}
                     />
                   )}
                 </Subtitle>
@@ -316,7 +331,7 @@ const Proposal = React.memo(function Proposal({
                 <RecordToken token={proposalToken} isCopyable />
               </Row>
             )}
-            {hasvoteSummary && (
+            {hasVoteSummary && (
               <Row>
                 <StatusBar
                   max={getQuorumInVotes(voteSummary)}
@@ -336,7 +351,7 @@ const Proposal = React.memo(function Proposal({
               </Row>
             )}
             {showRfpSubmissions && <ProposalsList data={rfpSubmissions} />}
-            {extended && !!files.length && !collapseBodyContent && (
+            {extended && files && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={classNames(
                   styles.markdownContainer,
@@ -356,12 +371,11 @@ const Proposal = React.memo(function Proposal({
             )}
             {isPublicAccessible && !extended && (
               <Row justify="space-between">
-                <CommentsLink numOfComments={numcomments} url={commentsURL} />
+                <CommentsLink numOfComments={commentsCount} url={commentsURL} />
                 <div>
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />
                   )}
-                  <GithubLink token={proposalToken} />
                 </div>
               </Row>
             )}
@@ -375,23 +389,50 @@ const Proposal = React.memo(function Proposal({
             )}
             {extended && (
               <Row className={styles.lastRow} justify="space-between">
-                <Row className={styles.downloadLinksWrapper} noMargin>
+                <LinkSection
+                  className={styles.downloadLinksWrapper}
+                  title="Available Downloads">
                   <DownloadRecord
-                    fileName={proposalToken}
-                    content={{
-                      ...proposal,
-                      serverpublickey: apiInfo.pubkey
-                    }}
-                    className="margin-right-l"
-                    label="Download Proposal Bundle"
+                    fileName={`${proposalToken}-v${version}`}
+                    content={proposal}
+                    serverpublickey={apiInfo.pubkey}
+                    label="Proposal Bundle"
                   />
-                  {isPublic && !!numcomments && (
+                  <DownloadTimestamps
+                    label="Proposal Timestamps"
+                    token={proposalToken}
+                    version={version}
+                    state={state}
+                  />
+                  {isPublic && commentsCount > 0 && (
                     <DownloadComments
+                      label="Comments Bundle"
                       recordToken={proposalToken}
-                      className={styles.downloadCommentsLink}
                     />
                   )}
-                </Row>
+                  {isPublic && commentsCount > 0 && (
+                    <DownloadCommentsTimestamps
+                      label="Load Comments Timestamps"
+                      recordToken={proposalToken}
+                      commentsCount={commentsCount}
+                    />
+                  )}
+                  {votesCount > 0 && (
+                    <DownloadVotes
+                      label="Votes Bundle"
+                      voteSummary={voteSummary}
+                      fileName={`${proposalToken}-votes`}
+                      serverpublickey={apiInfo.pubkey}
+                    />
+                  )}
+                  {votesCount > 0 && (
+                    <DownloadVotesTimestamps
+                      label="Load Votes Timestamp"
+                      votesCount={votesCount}
+                      recordToken={proposalToken}
+                    />
+                  )}
+                </LinkSection>
                 <Row className={styles.proposalActions}>
                   <CopyLink
                     className={classNames(
@@ -402,7 +443,6 @@ const Proposal = React.memo(function Proposal({
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />
                   )}
-                  {isPublicAccessible && <GithubLink token={proposalToken} />}
                 </Row>
               </Row>
             )}
@@ -411,7 +451,7 @@ const Proposal = React.memo(function Proposal({
                 proposal={proposal}
                 voteSummary={voteSummary}
                 rfpSubmissionsVoteSummaries={
-                  isRfp && showRfpSubmissions && rfpSubmissions.voteSummaries
+                  isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }
               />
             </LoggedInContent>

@@ -75,7 +75,6 @@ export function useUserProposals(userID) {
     () => sel.makeGetNumOfProposalsByUserId(userID),
     [userID]
   );
-
   const loadingSelector = useMemo(
     () =>
       or(
@@ -84,32 +83,22 @@ export function useUserProposals(userID) {
       ),
     []
   );
-
   const errorSelector = useMemo(
     () => or(sel.userProposalsError, sel.apiPropsVoteSummaryError),
     []
   );
-
   const proposals = useSelector(proposalsSelector);
   const numOfUserProposals = useSelector(numOfUserProposalsSelector);
-
   const generalProposals = useSelector(sel.proposalsByToken);
-
   const loading = useSelector(loadingSelector);
   const error = useSelector(errorSelector);
-
-  const onFetchUserProposals = useAction(
-    act.onFetchUserProposalsWithVoteSummary
-  );
-
+  const onFetchUserProposals = useAction(act.onFetchUserProposals);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
-
   const rfpLinks = flow(
     map((p) => p.linkto),
     uniq,
     compact
   )(proposals);
-
   const proposalsTokens = useMemo(() => {
     const userProposalsTokens = proposals
       ? proposals.map(getProposalToken)
@@ -117,14 +106,13 @@ export function useUserProposals(userID) {
     const generalProposalsTokens = keys(generalProposals);
     return uniq([...userProposalsTokens, ...generalProposalsTokens]);
   }, [proposals, generalProposals]);
-
   const unfetchedLinks = difference(rfpLinks)(proposalsTokens);
 
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => {
         if (isEmpty(proposals)) {
-          onFetchUserProposals(userID, "")
+          onFetchUserProposals(userID)
             .then(() => send(VERIFY))
             .catch((err) => send(REJECT, err));
           return send(FETCH);
@@ -168,7 +156,6 @@ export function useUserProposals(userID) {
       verifying: true
     }
   });
-
   useThrowError(error);
   return {
     proposals: state.proposals,

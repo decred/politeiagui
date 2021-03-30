@@ -29,3 +29,7 @@
   top: -2rem;
   font-size: var(--font-size-small) !important;
 }
+
+.totpAuthenticators {
+  color: var(--text-input-color) !important;
+}

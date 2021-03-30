@@ -3,6 +3,7 @@ import { Button, useMediaQuery } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import MultipleContentPage from "src/components/layout/MultipleContentPage";
 import ProposalEdit from "src/containers/Proposal/Edit";
+import { PROPOSAL_STATE_VETTED } from "src/constants";
 
 const PageProposalEdit = ({ history, match }) => {
   const mobile = useMediaQuery("(max-width: 560px)");
@@ -12,7 +13,7 @@ const PageProposalEdit = ({ history, match }) => {
       type="button"
       kind="secondary"
       size={mobile ? "sm" : "md"}
-      onClick={() => history.push(`/proposals/${match.params.token}`)}>
+      onClick={() => history.push(`/record/${match.params.token}`)}>
       Cancel
     </Button>
   );
@@ -28,7 +29,7 @@ const PageProposalEdit = ({ history, match }) => {
             />
           </TopBanner>
           <Main fillScreen>
-            <ProposalEdit />
+            <ProposalEdit state={PROPOSAL_STATE_VETTED} />
           </Main>
         </>
       )}

@@ -13,8 +13,24 @@ import act from "./methods";
 import {
   PAYWALL_STATUS_PAID,
   DCC_SUPPORT_VOTE,
-  TOTP_DEFAULT_TYPE
+  TOTP_DEFAULT_TYPE,
+  PROPOSAL_STATE_UNVETTED,
+  UNREVIEWED,
+  CENSORED,
+  PRE_VOTE,
+  ACTIVE_VOTE,
+  APPROVED,
+  REJECTED,
+  INELIGIBLE,
+  ARCHIVED,
+  PROPOSAL_METADATA_FILENAME,
+  VOTE_METADATA_FILENAME
 } from "../constants";
+import {
+  parseReceivedProposalsMap,
+  parseRawProposal,
+  parseRawProposalsBatch
+} from "src/helpers";
 
 export const onResetNewUser = act.RESET_NEW_USER;
 
@@ -262,12 +278,12 @@ export const handleNormalLogout = () => {
 
 // handlePermanentLogout handles the logout procedures while deleting all user related
 // information from the browser storage and cache.
-export const handlePermanentLogout = async (userid) => {
-  await pki.removeKeys(userid);
-  clearStateLocalStorage(userid);
-  clearPollingPointer();
-  clearProposalPaymentPollingPointer();
-};
+export const handlePermanentLogout = (userid) =>
+  pki.removeKeys(userid).then(() => {
+    clearStateLocalStorage(userid);
+    clearPollingPointer();
+    clearProposalPaymentPollingPointer();
+  });
 
 export const onLogout = (isCMS, isPermanent) =>
   withCsrf((dispatch, getState, csrf) => {
@@ -279,8 +295,8 @@ export const onLogout = (isCMS, isPermanent) =>
         isCMS
           ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
           : dispatch(act.RECEIVE_LOGOUT(response));
-        dispatch(handleLogout(isPermanent, userid));
       })
+      .then(() => handleLogout(isPermanent, userid))
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
         throw error;
@@ -390,74 +406,183 @@ export const onFetchProposalBilling = (token) =>
       });
   });
 
+// state should be the state of requested proposals
+// XXX ensure all ref. call with state provided
+// XXX and includefiles param
 export const onFetchProposalsBatchWithoutState = (
   tokens,
+  state,
   fetchProposals = true,
   fetchVoteSummary = true
 ) =>
   withCsrf(async (_, __, csrf) => {
+    const requests = tokens?.map((token) => ({
+      token,
+      filenames: [PROPOSAL_METADATA_FILENAME, VOTE_METADATA_FILENAME]
+    }));
     const res = await Promise.all([
-      fetchProposals && api.proposalsBatch(csrf, tokens),
+      fetchProposals &&
+        api.proposalsBatch(csrf, {
+          requests,
+          state,
+          includefiles: true
+        }),
       fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
     ]);
     const proposals =
-      fetchProposals && res.find((res) => res && res.proposals).proposals;
+      fetchProposals && res.find((res) => res && res.records).records;
+    const parsedProposals = proposals && parseReceivedProposalsMap(proposals);
     const summaries =
       fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
-    return [proposals, summaries];
+    return [parsedProposals, summaries];
   });
 
+export const onFetchProposalDetailsWithoutState = (
+  token,
+  version
+) => async () => {
+  const res = await api.proposalDetails({ token, version });
+  return res.record;
+};
+
+// state should be the state of requested proposals
 export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
+    const requests = tokens?.map((token) => ({
+      token,
+      filenames: [PROPOSAL_METADATA_FILENAME, VOTE_METADATA_FILENAME]
+    }));
     try {
-      const promises = [api.proposalsBatch(csrf, tokens)];
-      if (fetchVoteSummary) {
-        promises.push(dispatch(onFetchProposalsBatchVoteSummary(tokens)));
-      }
-      const response = await Promise.all(promises);
-      const proposals = response.find((res) => res && res.proposals).proposals;
+      const response = await Promise.all([
+        api.proposalsBatch(csrf, {
+          requests
+        }),
+        fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
+        api.commentsCount(tokens)
+      ]);
+      const proposals = response.find((res) => res && res.records).records;
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
-      dispatch(act.RECEIVE_PROPOSALS_BATCH({ proposals }));
-      return [proposals, summaries];
+      const commentsCount = response.find((res) => res && res.counts).counts;
+      const proposalsWithCommentsCount = Object.keys(proposals).reduce(
+        (acc, curr) => {
+          return {
+            ...acc,
+            [curr]: {
+              ...proposals[curr],
+              commentsCount: commentsCount[curr]
+            }
+          };
+        },
+        {}
+      );
+      dispatch(
+        act.RECEIVE_PROPOSALS_BATCH({ proposals: proposalsWithCommentsCount })
+      );
+      return [parseRawProposalsBatch(proposals), summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
       throw e;
     }
   });
 
-export const onFetchTokenInventory = () => (dispatch) => {
-  dispatch(act.REQUEST_TOKEN_INVENTORY());
-  return api
-    .tokenInventory()
-    .then((tokenInventory) =>
-      dispatch(act.RECEIVE_TOKEN_INVENTORY(tokenInventory))
-    )
-    .catch((error) => {
-      dispatch(act.RECEIVE_TOKEN_INVENTORY(null, error));
-      throw error;
-    });
+export const onFetchProposalDetails = (token, version) => async (dispatch) => {
+  dispatch(act.REQUEST_PROPOSALS_BATCH(token));
+  try {
+    const response = await Promise.all([
+      api.proposalDetails({ token, version }),
+      api.commentsCount([token])
+    ]);
+    const record = response.find((res) => res && res.record).record;
+    const commentsCount = response.find((res) => res && res.counts).counts;
+    const { linkby } = parseRawProposal(record);
+    if (linkby) {
+      const { submissions } = await api.proposalSubmissions(token);
+      dispatch(
+        act.RECEIVE_PROPOSALS_BATCH({
+          proposals: {
+            [token]: {
+              ...record,
+              linkedfrom: submissions,
+              commentsCount: commentsCount[token]
+            }
+          }
+        })
+      );
+    } else {
+      dispatch(
+        act.RECEIVE_PROPOSALS_BATCH({
+          proposals: {
+            [token]: {
+              ...record,
+              commentsCount: commentsCount[token]
+            }
+          }
+        })
+      );
+    }
+    return response.record;
+  } catch (e) {
+    act.RECEIVE_PROPOSALS_BATCH(null, e);
+    throw e;
+  }
 };
 
-export const onFetchProposal = (token, version = null) => (dispatch) => {
-  dispatch(act.REQUEST_PROPOSAL(token));
-  return api
-    .proposal(token, version)
-    .then((response) => {
-      response && response.proposal && Object.keys(response.proposal).length > 0
-        ? dispatch(act.RECEIVE_PROPOSAL(response))
-        : dispatch(
-            act.RECEIVE_PROPOSAL(
-              null,
-              new Error("The requested proposal does not exist.")
-            )
-          );
-    })
-    .catch((error) => {
-      dispatch(act.RECEIVE_PROPOSAL(null, error));
+export const onFetchTokenInventory = (
+  state,
+  status,
+  page = 0,
+  isVoteStatus
+) => async (dispatch) => {
+  dispatch(act.REQUEST_TOKEN_INVENTORY());
+  try {
+    return await Promise.all([
+      !isVoteStatus && api.proposalsInventory(state, status, page),
+      isVoteStatus &&
+        state !== PROPOSAL_STATE_UNVETTED &&
+        api.votesInventory(status, page)
+    ]).then(([proposals, votes]) => {
+      const byRecords = {
+        [UNREVIEWED]:
+          (proposals && proposals.unvetted && proposals.unvetted.unreviewed) ||
+          [],
+        [CENSORED]: [
+          ...((proposals &&
+            proposals.unvetted &&
+            proposals.unvetted.censored) ||
+            []),
+          ...((proposals && proposals.vetted && proposals.vetted.censored) ||
+            [])
+        ],
+        [ARCHIVED]: [
+          ...((proposals && proposals.vetted && proposals.vetted.archived) ||
+            []),
+          ...((proposals &&
+            proposals.unvetted &&
+            proposals.unvetted.archived) ||
+            [])
+        ]
+      };
+      const byVotes = {
+        [PRE_VOTE]: [
+          ...((votes && votes.vetted && votes.vetted.authorized) || []),
+          ...((votes && votes.vetted && votes.vetted.unauthorized) || [])
+        ],
+        [ACTIVE_VOTE]: (votes && votes.vetted && votes.vetted.started) || [],
+        [APPROVED]: (votes && votes.vetted && votes.vetted.approved) || [],
+        [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
+        [INELIGIBLE]: (votes && votes.vetted && votes.vetted.ineligible) || []
+      };
+      dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
+      dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
+      return { records: byRecords, votes: byVotes };
     });
+  } catch (error) {
+    dispatch(act.RECEIVE_VOTES_INVENTORY(null, error));
+    throw error;
+  }
 };
 
 export const onFetchInvoice = (token, version = null) => (dispatch) => {
@@ -513,7 +638,7 @@ export const onFetchProposalComments = (token) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_RECORD_COMMENTS(token));
     return api
-      .proposalComments(token, csrf)
+      .proposalComments(csrf, token)
       .then((response) =>
         dispatch(act.RECEIVE_RECORD_COMMENTS({ ...response, token }))
       )
@@ -522,17 +647,18 @@ export const onFetchProposalComments = (token) =>
       });
   });
 
-export const onFetchLikedComments = (token) => (dispatch) => {
-  dispatch(act.REQUEST_LIKED_COMMENTS(token));
-  return api
-    .likedComments(token)
-    .then((response) =>
-      dispatch(act.RECEIVE_LIKED_COMMENTS({ ...response, token }))
-    )
-    .catch((error) => {
-      dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
-    });
-};
+export const onFetchLikedComments = (token, userid) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_LIKED_COMMENTS(token));
+    return api
+      .likedComments(csrf, token, userid)
+      .then((response) =>
+        dispatch(act.RECEIVE_LIKED_COMMENTS({ ...response, token }))
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_LIKED_COMMENTS(null, error));
+      });
+  });
 
 export const onEditUser = (preferences) =>
   withCsrf((dispatch, _, csrf) => {
@@ -703,20 +829,20 @@ export const onSubmitProposal = (
     return Promise.resolve(
       api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
     )
-      .then((proposal) => api.signRegister(userid, proposal))
-      .then((proposal) => api.newProposal(csrf, proposal))
       .then((proposal) => {
+        return api.signRegister(userid, proposal);
+      })
+      .then((proposal) => api.newProposal(csrf, proposal))
+      .then(({ record }) => {
         dispatch(
           act.RECEIVE_NEW_PROPOSAL({
-            ...proposal,
-            numcomments: 0,
+            ...record,
+            comments: 0,
             userid,
             username,
             name,
             description,
-            type,
-            rfpLink,
-            files
+            type
           })
         );
         resetNewProposalData();
@@ -754,9 +880,10 @@ export const onSubmitEditedProposal = (
     )
       .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.editProposal(csrf, { ...proposal, token }))
-      .then((proposal) => {
-        dispatch(act.RECEIVE_EDIT_PROPOSAL(proposal));
+      .then(({ record }) => {
+        dispatch(act.RECEIVE_EDIT_PROPOSAL({ proposal: record }));
         resetNewProposalData();
+        return record.censorshiprecord.token;
       })
       .catch((error) => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(null, error));
@@ -830,18 +957,18 @@ export const onSubmitEditedInvoice = (
       });
   });
 
-export const onLikeComment = (currentUserID, token, commentid, action) =>
+export const onCommentVote = (currentUserID, token, commentid, vote, state) =>
   withCsrf((dispatch, _, csrf) => {
     if (!currentUserID) {
       return;
     }
     dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
-    return Promise.resolve(api.makeLikeComment(token, action, commentid))
-      .then((comment) => api.signLikeComment(currentUserID, comment))
-      .then((comment) => api.likeComment(csrf, comment))
+    return Promise.resolve(api.makeCommentVote(state, token, vote, commentid))
+      .then((comment) => api.signCommentVote(currentUserID, comment))
+      .then((comment) => api.commentVote(csrf, comment))
       .then(() => {
         dispatch(act.RECEIVE_LIKE_COMMENT({ token }));
-        dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, action }));
+        dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, vote }));
       })
       .catch((error) => {
         dispatch(act.RESET_SYNC_LIKE_COMMENT({ token }));
@@ -849,14 +976,16 @@ export const onLikeComment = (currentUserID, token, commentid, action) =>
       });
   });
 
-export const onCensorComment = (userid, token, commentid, reason) => {
+export const onCensorComment = (userid, token, commentid, state, reason) => {
   return withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token }));
-    return Promise.resolve(api.makeCensoredComment(token, reason, commentid))
+    dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token, state }));
+    return Promise.resolve(
+      api.makeCensoredComment(state, token, reason, commentid)
+    )
       .then((comment) => api.signCensorComment(userid, comment))
       .then((comment) => api.censorComment(csrf, comment))
-      .then((response) => {
-        if (response.receipt) {
+      .then(({ comment: { receipt, commentid, token } }) => {
+        if (receipt) {
           dispatch(act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null));
         }
       })
@@ -867,11 +996,17 @@ export const onCensorComment = (userid, token, commentid, reason) => {
   });
 };
 
-export const onSubmitComment = (currentUserID, token, comment, parentid) =>
+export const onSubmitComment = (
+  currentUserID,
+  token,
+  commentText,
+  parentid,
+  state
+) =>
   withCsrf((dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
-    return Promise.resolve(api.makeComment(token, comment, parentid))
-      .then((comment) => api.signComment(currentUserID, comment))
+    const comment = api.makeComment(token, commentText, parentid, state);
+    dispatch(act.REQUEST_NEW_COMMENT(comment));
+    return Promise.resolve(api.signComment(currentUserID, comment))
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the existent
         // comments signatures
@@ -883,13 +1018,10 @@ export const onSubmitComment = (currentUserID, token, comment, parentid) =>
         }
         return comment;
       })
-      .then((comment) => {
-        return api.newComment(csrf, comment);
-      })
+      .then((comment) => api.newComment(csrf, comment))
       .then((response) => {
         const responsecomment = response.comment;
-        dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
-        return;
+        return dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
@@ -969,17 +1101,20 @@ export const onSetProposalStatus = ({
   token,
   status,
   linkto,
-  censorMessage = ""
+  version,
+  reason = "",
+  oldStatus
 }) =>
   withCsrf((dispatch, getState, csrf) => {
     const userid = sel.currentUserID(getState());
     dispatch(act.REQUEST_SETSTATUS_PROPOSAL({ status, token }));
     return api
-      .proposalSetStatus(userid, csrf, token, status, censorMessage)
-      .then(({ proposal }) => {
+      .proposalSetStatus(userid, csrf, token, status, version, reason)
+      .then(({ record: proposal }) => {
         dispatch(
           act.RECEIVE_SETSTATUS_PROPOSAL({
-            proposal
+            proposal,
+            oldStatus
           })
         );
         if (status === PROPOSAL_STATUS_PUBLIC) {
@@ -990,6 +1125,7 @@ export const onSetProposalStatus = ({
         }
       })
       .catch((error) => {
+        console.log(error);
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
         throw error;
       });
@@ -1044,50 +1180,24 @@ export const onResendVerificationEmailConfirm = ({ username, email }) =>
 export const resetResendVerificationEmail = () => (dispatch) =>
   dispatch(act.RESET_RESEND_VERIFICATION_EMAIL());
 
-export const onStartVote = (userid, token, duration, quorum, pass, version) =>
+export const onStartVote = (userid, voteParams) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_START_VOTE({ token }));
+    if (!voteParams || voteParams.length < 1) {
+      throw Error("Invalid vote params");
+    }
+    const tokens = voteParams.map(({ token }) => token);
+    const type = voteParams[0].type;
+    dispatch(act.REQUEST_START_VOTE({ tokens, type }));
     return api
-      .startVote(userid, csrf, token, duration, quorum, pass, version)
+      .startVote(csrf, userid, voteParams)
       .then((response) => {
-        dispatch(onFetchProposalsBatchVoteSummary([token]));
-        dispatch(act.RECEIVE_START_VOTE({ ...response, token, success: true }));
-      })
-      .catch((error) => {
-        dispatch(act.RECEIVE_START_VOTE(null, error));
-        throw error;
-      });
-  });
-
-export const onStartRunoffVote = (
-  currentUserID,
-  token,
-  duration,
-  quorum,
-  pass,
-  votes
-) =>
-  withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_START_RUNOFF_VOTE({ token }));
-    return api
-      .startRunoffVote(
-        currentUserID,
-        csrf,
-        token,
-        duration,
-        quorum,
-        pass,
-        votes
-      )
-      .then((response) => {
-        const submissionsTokens = votes.map((vote) => vote.token);
-        dispatch(onFetchProposalsBatch([...submissionsTokens, token]));
+        dispatch(onFetchProposalsBatchVoteSummary(tokens));
         dispatch(
-          act.RECEIVE_START_RUNOFF_VOTE({ ...response, token, success: true })
+          act.RECEIVE_START_VOTE({ ...response, type, tokens, success: true })
         );
       })
       .catch((error) => {
-        dispatch(act.RECEIVE_START_RUNOFF_VOTE(null, error));
+        dispatch(act.RECEIVE_START_VOTE(null, error));
         throw error;
       });
   });
@@ -1118,25 +1228,52 @@ export const onUserProposalCredits = () => (dispatch, getState) => {
     });
 };
 
-export const onFetchUserProposalsWithVoteSummary = (userid, token) => async (
-  dispatch
-) => {
-  dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
-  try {
-    const { proposals, ...response } = await api.userProposals(userid, token);
-    const publicPropsTokens = proposals
-      .filter((prop) => prop.status === PROPOSAL_STATUS_PUBLIC)
-      .map((prop) => prop.censorshiprecord.token);
+export const onFetchUserProposals = (userid) =>
+  withCsrf(async (dispatch, getState, csrf) => {
+    dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
+    try {
+      const response = await api.userProposals(csrf, userid);
+      const cachedUserProposals = sel.makeGetUserProposals(userid)(getState());
+      const unvettedTokens = response.unvetted;
+      const vettedTokens = response.vetted;
+      const tokensLength = unvettedTokens.length + vettedTokens.length;
 
-    if (publicPropsTokens.length) {
-      await dispatch(onFetchProposalsBatchVoteSummary(publicPropsTokens));
+      let unvettedProposals = [];
+      let vettedProposals = [];
+
+      if (unvettedTokens.length) {
+        const remainingTokens = unvettedTokens
+          .filter(
+            (t) =>
+              !cachedUserProposals.find((up) => up.censorshiprecord.token === t)
+          )
+          .slice(0, 9);
+        unvettedProposals = await dispatch(
+          onFetchProposalsBatch(remainingTokens, false)
+        );
+      }
+      if (vettedTokens.length) {
+        vettedProposals = await dispatch(onFetchProposalsBatch(vettedTokens));
+      }
+      // we access the first array position, which contains the proposals.
+      // second array position refers to the vote summary results.
+      const proposals = {
+        ...unvettedProposals[0],
+        ...vettedProposals[0]
+      };
+
+      dispatch(
+        act.RECEIVE_USER_PROPOSALS({
+          proposals,
+          userid,
+          numofproposals: tokensLength
+        })
+      );
+    } catch (e) {
+      dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
+      throw e;
     }
-    dispatch(act.RECEIVE_USER_PROPOSALS({ proposals, userid, ...response }));
-  } catch (e) {
-    dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
-    throw e;
-  }
-};
+  });
 
 export const onFetchProposalsBatchVoteSummary = (tokens) =>
   withCsrf((dispatch, _, csrf) => {
@@ -1155,20 +1292,44 @@ export const onFetchProposalsBatchVoteSummary = (tokens) =>
       });
   });
 
-export const onFetchProposalVoteResults = (token) => (dispatch) => {
-  dispatch(act.REQUEST_PROPOSAL_VOTE_RESULTS({ token }));
-  return api
-    .proposalVoteResults(token)
-    .then((response) =>
-      dispatch(
-        act.RECEIVE_PROPOSAL_VOTE_RESULTS({ ...response, token, success: true })
+export const onFetchProposalVoteResults = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_PROPOSAL_VOTE_RESULTS({ token }));
+    return api
+      .proposalVoteResults(csrf, token)
+      .then((response) =>
+        dispatch(
+          act.RECEIVE_PROPOSAL_VOTE_RESULTS({
+            ...response,
+            token,
+            success: true
+          })
+        )
       )
-    )
-    .catch((error) => {
-      dispatch(act.RECEIVE_PROPOSAL_VOTE_RESULTS(null, error));
-      throw error;
-    });
-};
+      .catch((error) => {
+        dispatch(act.RECEIVE_PROPOSAL_VOTE_RESULTS(null, error));
+        throw error;
+      });
+  });
+
+export const onFetchVotesDetails = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_VOTES_DETAILS({ token }));
+    return api
+      .votesDetails(csrf, token)
+      .then((response) =>
+        dispatch(
+          act.RECEIVE_VOTES_DETAILS({
+            ...response,
+            token
+          })
+        )
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_VOTES_DETAILS(null, error));
+        throw error;
+      });
+  });
 
 export const onAuthorizeVote = (userid, token, version) =>
   withCsrf((dispatch, _, csrf) => {
@@ -1517,8 +1678,8 @@ export const onSetDccStatus = (token, status, reason) =>
 export const onSubmitDccComment = (currentUserID, token, comment, parentid) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_NEW_COMMENT({ token, comment, parentid }));
-    return Promise.resolve(api.makeComment(token, comment, parentid))
-      .then((comment) => api.signComment(currentUserID, comment))
+    return Promise.resolve(api.makeDccComment(token, comment, parentid))
+      .then((comment) => api.signDccComment(currentUserID, comment))
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the existent
         // comments signatures
@@ -1568,3 +1729,14 @@ export const onVerifyTotp = (code) =>
         throw e;
       });
   });
+// Records Actions
+export const onFetchRecordTimestamps = (token, version) =>
+  withCsrf((__, _, csrf) => api.recordsTimestamp(csrf, token, version));
+
+// Comments Actions
+export const onFetchCommentsTimestamps = (token, commentsids) =>
+  withCsrf((__, _, csrf) => api.commentsTimestamps(csrf, token, commentsids));
+
+// Ticket Vote actions
+export const onFetchTicketVoteTimestamps = (token, votespage) =>
+  withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token, votespage));

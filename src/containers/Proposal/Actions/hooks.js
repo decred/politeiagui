@@ -2,11 +2,12 @@ import { createContext, useContext, useCallback } from "react";
 import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_ABANDONED
+  PROPOSAL_STATUS_ARCHIVED
 } from "src/constants";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useAction, useSelector } from "src/redux";
+import { fullVoteParamObject } from "./helpers";
 
 export const PublicProposalsActionsContext = createContext();
 export const UnvettedProposalsActionsContext = createContext();
@@ -20,21 +21,27 @@ export function useUnvettedActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatus);
 
   const onCensorProposal = useCallback(
-    (proposal) => (reason) =>
+    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
       onSetProposalStatus({
-        token: proposal.censorshiprecord.token,
+        token,
         status: PROPOSAL_STATUS_CENSORED,
-        censorMessage: reason
+        oldStatus: status,
+        reason,
+        version,
+        state
       }),
     [onSetProposalStatus]
   );
 
   const onApproveProposal = useCallback(
-    (proposal) => () =>
+    ({ censorshiprecord: { token }, version, linkto, state, status }) => () =>
       onSetProposalStatus({
-        token: proposal.censorshiprecord.token,
+        token,
         status: PROPOSAL_STATUS_PUBLIC,
-        linkto: proposal.linkto
+        oldStatus: status,
+        linkto,
+        version,
+        state
       }),
     [onSetProposalStatus]
   );
@@ -48,7 +55,6 @@ export function useUnvettedActions() {
 export function usePublicActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatus);
   const onStart = useAction(act.onStartVote);
-  const onStartRunoff = useAction(act.onStartRunoffVote);
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);
   const onFetchProposalsBatchWithoutState = useAction(
@@ -57,12 +63,28 @@ export function usePublicActions() {
 
   const currentUserID = useSelector(sel.currentUserID);
 
-  const onAbandonProposal = useCallback(
-    (proposal) => (reason) =>
+  const onCensorProposal = useCallback(
+    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
       onSetProposalStatus({
-        token: proposal.censorshiprecord.token,
-        status: PROPOSAL_STATUS_ABANDONED,
-        censorMessage: reason
+        token,
+        status: PROPOSAL_STATUS_CENSORED,
+        oldStatus: status,
+        reason,
+        version,
+        state
+      }),
+    [onSetProposalStatus]
+  );
+
+  const onAbandonProposal = useCallback(
+    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
+      onSetProposalStatus({
+        token,
+        status: PROPOSAL_STATUS_ARCHIVED,
+        oldStatus: status,
+        reason,
+        version,
+        state
       }),
     [onSetProposalStatus]
   );
@@ -87,48 +109,39 @@ export function usePublicActions() {
     [onRevoke, currentUserID]
   );
 
+  // votes param is an array of object : [{ token, version, parent }] - where
+  // parent is RFP propsoals in case of runoff vote
   const onStartVote = useCallback(
-    ({ censorshiprecord: { token } = { token: null }, version }) => ({
-      duration,
-      quorumPercentage,
-      passPercentage
-    }) =>
-      onStart(
-        currentUserID,
-        token,
-        duration,
-        quorumPercentage,
-        passPercentage,
-        version
-      ),
-    [onStart, currentUserID]
-  );
-
-  const onStartRunoffVote = useCallback(
-    (token, votes, cb) => async ({
+    (votes, type, cb) => async ({
       duration,
       quorumPercentage,
       passPercentage
     }) => {
-      await onStartRunoff(
+      await onStart(
         currentUserID,
-        token,
-        duration,
-        quorumPercentage,
-        passPercentage,
-        votes
+        votes.map(({ token, version, parent }) =>
+          fullVoteParamObject({
+            type,
+            version,
+            duration,
+            quorumpercentage: quorumPercentage,
+            passpercentage: passPercentage,
+            token,
+            parent
+          })
+        )
       );
       cb && cb();
     },
-    [onStartRunoff, currentUserID]
+    [onStart, currentUserID]
   );
 
   return {
+    onCensorProposal,
     onAbandonProposal,
     onAuthorizeVote,
     onRevokeVote,
     onStartVote,
-    onStartRunoffVote,
     onFetchProposalsBatchWithoutState
   };
 }

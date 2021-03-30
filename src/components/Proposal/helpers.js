@@ -2,10 +2,11 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_VOTING_APPROVED,
+  PROPOSAL_VOTING_REJECTED,
   PROPOSAL_VOTING_FINISHED
-} from "../../constants";
+} from "src/constants";
 import {
-  isApprovedProposal,
   isPublicProposal,
   isAbandonedProposal
 } from "src/containers/Proposal/helpers";
@@ -16,15 +17,14 @@ import {
  * @param {Object} voteSummary
  * @returns {Array} status bar data
  */
-export const getStatusBarData = (voteSummary) => {
-  return voteSummary.results
+export const getStatusBarData = (voteSummary) =>
+  voteSummary.results
     .map((op) => ({
-      label: op.option.id,
-      amount: op.votesreceived,
-      color: op.option.id === "yes" ? "#41BE53" : "#ED6D47"
+      label: op.id,
+      amount: op.votes,
+      color: op.id === "yes" ? "#41BE53" : "#ED6D47"
     }))
     .sort((a) => (a.label === "yes" ? -1 : 1));
-};
 
 export const getProposalStatusTagProps = (
   proposal,
@@ -49,21 +49,27 @@ export const getProposalStatusTagProps = (
       case PROPOSAL_VOTING_ACTIVE:
         return { type: "bluePending", text: "Active" };
       case PROPOSAL_VOTING_FINISHED:
-        if (isApprovedProposal(proposal, voteSummary)) {
-          return { type: "greenCheck", text: "Finished" };
-        } else {
-          return {
-            type: isDarkTheme ? "blueNegative" : "grayNegative",
-            text: "Finished"
-          };
-        }
+        return {
+          type: isDarkTheme ? "blueNegative" : "grayNegative",
+          text: "Finished"
+        };
+      case PROPOSAL_VOTING_REJECTED:
+        return {
+          type: "orangeNegativeCircled",
+          text: "Rejected"
+        };
+      case PROPOSAL_VOTING_APPROVED:
+        return { type: "greenCheck", text: "Approved" };
       default:
         break;
     }
   }
 
   if (isAbandonedProposal(proposal)) {
-    return { type: "orangeNegativeCircled", text: "Abandoned" };
+    return {
+      type: isDarkTheme ? "blueNegative" : "grayNegative",
+      text: "Abandoned"
+    };
   }
 
   return { type: "grayNegative", text: "missing" };

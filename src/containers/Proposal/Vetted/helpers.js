@@ -1,9 +1,17 @@
+import {
+  PROPOSAL_VOTING_INELIGIBLE,
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_VOTING_ACTIVE,
+  PROPOSAL_VOTING_APPROVED,
+  PROPOSAL_VOTING_REJECTED
+} from "src/constants";
+
 export const tabValues = {
   IN_DISCUSSION: "In Discussion",
   VOTING: "Voting",
   APPROVED: "Approved",
   REJECTED: "Rejected",
-  ABANDONED: "Abandoned"
+  INELIGIBLE: "Abandoned"
 };
 
 export const noProposalMessage = "No proposals available";
@@ -16,18 +24,18 @@ export const noProposalMessage = "No proposals available";
  */
 export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
   if (!proposalsTokens) return [];
-  const { pre, active, approved, rejected, abandoned } = proposalsTokens;
+  const { pre, started, approved, rejected, ineligible } = proposalsTokens;
   switch (tabOption) {
     case tabValues.IN_DISCUSSION:
       return pre;
     case tabValues.VOTING:
-      return active;
+      return started;
     case tabValues.APPROVED:
       return approved;
     case tabValues.REJECTED:
       return rejected;
-    case tabValues.ABANDONED:
-      return abandoned;
+    case tabValues.INELIGIBLE:
+      return ineligible;
     default:
       return [];
   }
@@ -45,4 +53,12 @@ export const mapProposalsTokensByTab = (tabLabels, proposalsTokens) => {
       [tab]: getProposalTokensByTabOption(tab, proposalsTokens)
     };
   }, {});
+};
+
+export const statusByTab = {
+  [tabValues.IN_DISCUSSION]: PROPOSAL_VOTING_NOT_AUTHORIZED,
+  [tabValues.VOTING]: PROPOSAL_VOTING_ACTIVE,
+  [tabValues.APPROVED]: PROPOSAL_VOTING_APPROVED,
+  [tabValues.REJECTED]: PROPOSAL_VOTING_REJECTED,
+  [tabValues.INELIGIBLE]: PROPOSAL_VOTING_INELIGIBLE
 };

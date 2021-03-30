@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import { useUnvettedActions, UnvettedProposalsActionsContext } from "./hooks";
 import { Text } from "pi-ui";
 import Link from "src/components/Link";
@@ -6,12 +7,15 @@ import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalConfirm from "src/components/ModalConfirm";
 import useModalContext from "src/hooks/utils/useModalContext";
 
-const UnvettedActionsProvider = ({ children }) => {
+const UnvettedActionsProvider = ({ children, history }) => {
   const { onCensorProposal, onApproveProposal } = useUnvettedActions();
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
   const handleOpenCensorModal = (proposal) => {
+    const handleClose = () => {
+      handleCloseModal();
+    };
     handleOpenModal(ModalConfirmWithReason, {
       title: `Censor proposal - ${proposal.name}`,
       reasonLabel: "Censor reason",
@@ -21,15 +25,22 @@ const UnvettedActionsProvider = ({ children }) => {
       successMessage: (
         <Text>
           The proposal has been successfully censored! Now it will appear under
-          under <Link to={"/proposals/unvetted?tab=censored"}>Censored</Link>{" "}
-          tab among Unvetted Proposals.
+          under <Link to={"/record/admin?tab=unvetted censored"}>Censored</Link>{" "}
+          tab among Admin Proposals.
         </Text>
       ),
-      onClose: handleCloseModal
+      onClose: handleClose
     });
   };
 
   const handleOpenApproveModal = (proposal) => {
+    const handleClose = () => {
+      handleCloseModal();
+    };
+    const handleCloseSuccess = () => {
+      handleCloseModal();
+      history.push(`/record/${proposal.censorshiprecord.token}`);
+    };
     handleOpenModal(ModalConfirm, {
       title: `Approve proposal - ${proposal.name}`,
       message: "Are you sure you want to approve this proposal?",
@@ -42,7 +53,8 @@ const UnvettedActionsProvider = ({ children }) => {
           Public Proposals.
         </Text>
       ),
-      onClose: handleCloseModal
+      onClose: handleClose,
+      onCloseSuccess: handleCloseSuccess
     });
   };
 
@@ -57,4 +69,4 @@ const UnvettedActionsProvider = ({ children }) => {
   );
 };
 
-export default UnvettedActionsProvider;
+export default withRouter(UnvettedActionsProvider);

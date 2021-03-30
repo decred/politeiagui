@@ -7,7 +7,7 @@ import isEqual from "lodash/isEqual";
 const ERROR_CODE_INVALID_PARAMS = 77;
 
 const isInvalidParamsError = (error) =>
-  error && error.errorCode === ERROR_CODE_INVALID_PARAMS;
+  error?.errorcode === ERROR_CODE_INVALID_PARAMS;
 
 export default function useTotp() {
   const onSetTotp = useAction(act.onSetTotp);

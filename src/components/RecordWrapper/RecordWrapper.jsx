@@ -16,15 +16,17 @@ import {
   Tooltip,
   CopyableText,
   useMediaQuery,
-  DEFAULT_DARK_THEME_NAME
+  DEFAULT_DARK_THEME_NAME,
+  Dropdown,
+  DropdownItem
 } from "pi-ui";
 import { Row } from "../layout";
 import Link from "../Link";
-import { useConfig } from "src/containers/Config";
 import { useLoader } from "src/containers/Loader";
 import Join from "../Join";
 import CopyLink from "../CopyLink";
 import rfpTag from "src/assets/images/rfp-tag.svg";
+import useTimestamps from "src/hooks/api/useTimestamps";
 
 export const Author = ({ username, url }) => <Link to={url}>{username}</Link>;
 
@@ -193,35 +195,6 @@ export const ChartsLink = ({ token }) => {
   );
 };
 
-export const GithubLink = ({ token }) => {
-  const { testnetGitRepository, mainnetGitRepository } = useConfig();
-  const { apiInfo } = useLoader();
-  const repoURL = apiInfo.testnet ? testnetGitRepository : mainnetGitRepository;
-  const { theme, themeName } = useTheme();
-  const hoverColor = getThemeProperty(theme, "icon-hover-color");
-  const textColor = getThemeProperty(theme, "icon-color");
-  const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : textColor;
-  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  return (
-    <Tooltip
-      className={classNames(
-        styles.seeOnGithubTooltip,
-        isDarkTheme && styles.darkSeeOnGithubTooltip
-      )}
-      placement="bottom"
-      content="See on GitHub">
-      <UILink
-        ref={ref}
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-        href={`${repoURL}/${token}`}>
-        <Icon type="github" iconColor={iconColor} />
-      </UILink>
-    </Tooltip>
-  );
-};
-
 export const CommentsLink = ({
   numOfComments,
   url,
@@ -266,7 +239,63 @@ export const RfpProposalLink = ({ url, rfpTitle }) => {
   );
 };
 
-export const DownloadRecord = DownloadJSON;
+export const DownloadRecord = ({
+  content,
+  fileName,
+  label,
+  serverpublickey
+}) => {
+  const bundle = {
+    record: {
+      state: content.state,
+      status: content.status,
+      version: content.version,
+      timestamp: content.timestamp,
+      username: content.username,
+      metadata: content.metadata,
+      files: content.files,
+      censorshiprecord: content.censorshiprecord
+    },
+    serverpublickey
+  };
+  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;
+};
+
+export const DownloadTimestamps = ({ token, version, label }) => {
+  const { onFetchRecordTimestamps } = useTimestamps();
+  return (
+    <DownloadJSON
+      label={label}
+      fileName={`${token}-v${version}-timestamps`}
+      isAsync={true}
+      content={[]}
+      beforeDownload={() => onFetchRecordTimestamps(token, version)}
+    />
+  );
+};
+
+export const DownloadVotes = ({
+  label,
+  voteSummary,
+  fileName,
+  serverpublickey
+}) => {
+  const bundle = {
+    auths: voteSummary.details.auths,
+    details: voteSummary.details.details,
+    votes: voteSummary.votes,
+    serverpublickey
+  };
+  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;
+};
+
+export const LinkSection = ({ children, className, title }) => (
+  <Dropdown className={className} title={title} closeOnItemClick={false}>
+    {React.Children.toArray(children).map((link, i) => (
+      <DropdownItem key={i}>{link}</DropdownItem>
+    ))}
+  </Dropdown>
+);
 
 const RecordWrapper = ({ children, className }) => (
   <Card className={classNames("container margin-bottom-m", className)}>
@@ -278,10 +307,12 @@ const RecordWrapper = ({ children, className }) => (
       RfpProposalLink,
       CommentsLink,
       Link,
-      GithubLink,
       ChartsLink,
       CopyLink,
       DownloadRecord,
+      DownloadTimestamps,
+      DownloadVotes,
+      LinkSection,
       Header,
       Subtitle,
       Edit,

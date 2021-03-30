@@ -22,7 +22,6 @@ import {
   createSelectOptionFromSortOption,
   commentSortOptions,
   handleCommentCensoringInfo,
-  handleCommentSubmission,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
 import useIdentity from "src/hooks/api/useIdentity";
@@ -40,12 +39,16 @@ const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 const Comments = ({
   numOfComments,
   recordToken,
+  recordTokenFull,
   recordAuthorID,
+  recordAuthorUsername,
   threadParentID,
   readOnly,
   readOnlyReason,
   className,
-  history
+  history,
+  proposalState,
+  recordBaseLink
 }) => {
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
@@ -67,7 +70,7 @@ const Comments = ({
 
   const {
     onSubmitComment,
-    onLikeComment,
+    onCommentVote,
     onCensorComment,
     comments,
     loading,
@@ -76,7 +79,7 @@ const Comments = ({
     currentUser,
     error,
     ...commentsCtx
-  } = useComments(recordToken);
+  } = useComments(recordToken, proposalState);
 
   const commentsCount = comments ? comments.length : 0;
 
@@ -90,10 +93,15 @@ const Comments = ({
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
 
-  const handleSubmitComment = handleCommentSubmission(
-    onSubmitComment,
-    recordToken,
-    0
+  const handleSubmitComment = useCallback(
+    (comment) =>
+      onSubmitComment({
+        comment,
+        token: recordTokenFull,
+        parentID: 0,
+        state: proposalState
+      }),
+    [onSubmitComment, proposalState, recordTokenFull]
   );
 
   const handleSetSortOption = useCallback(
@@ -167,7 +175,8 @@ const Comments = ({
         onCensorComment,
         userid,
         recordToken,
-        id
+        id,
+        proposalState
       );
       handleOpenModal(ModalConfirmWithReason, {
         title: "Censor comment",
@@ -178,12 +187,17 @@ const Comments = ({
           <Text>The comment has been successfully censored.</Text>
         ),
         onSubmit: handleCensorComment,
-        onClose() {
-          return handleCloseModal();
-        }
+        onClose: () => handleCloseModal()
       });
     },
-    [handleCloseModal, handleOpenModal, onCensorComment, recordToken, userid]
+    [
+      handleCloseModal,
+      handleOpenModal,
+      onCensorComment,
+      recordToken,
+      userid,
+      proposalState
+    ]
   );
 
   const handleCommentsModeToggle = useCallback(() => {
@@ -202,8 +216,16 @@ const Comments = ({
 
   const singleThreadCommentCannotBeAccessed =
     isSingleThread &&
-    ((comments && !comments.find((c) => c.commentid === threadParentID)) ||
+    ((comments && !comments.find((c) => c.commentid === +threadParentID)) ||
       numOfComments === 0);
+
+  const handleCommentVote = useCallback(
+    (commentID, action) =>
+      recordTokenFull
+        ? onCommentVote(commentID, action, recordTokenFull)
+        : null,
+    [onCommentVote, recordTokenFull]
+  );
 
   return (
     <>
@@ -236,7 +258,7 @@ const Comments = ({
               )}
               {!readOnly && !!identityError && <IdentityMessageError />}
             </Or>
-            {!isSingleThread && !readOnly && (
+            {!isSingleThread && !readOnly && recordTokenFull && (
               <CommentForm
                 persistKey={`commenting-on-${recordToken}`}
                 onSubmit={handleSubmitComment}
@@ -290,7 +312,13 @@ const Comments = ({
             {isSingleThread && (
               <div className="justify-right">
                 <Text className="margin-right-xs">Single comment thread. </Text>
-                <Link to={`/${recordType}s/${recordToken}`}> View all.</Link>
+                {proposalState ? (
+                  <Link to={`/${recordType}s/${proposalState}/${recordToken}`}>
+                    {" View All"}
+                  </Link>
+                ) : (
+                  <Link to={`/${recordType}s/${recordToken}`}> View all.</Link>
+                )}
               </div>
             )}
           </div>
@@ -302,15 +330,18 @@ const Comments = ({
             <CommentContext.Provider
               value={{
                 onSubmitComment,
-                onLikeComment,
+                onCommentVote: handleCommentVote,
                 recordAuthorID,
+                recordAuthorUsername,
                 recordToken,
                 threadParentID,
                 recordType,
+                proposalState,
                 readOnly,
                 identityError,
                 paywallMissing,
                 isAdmin: currentUser && currentUser.isadmin,
+                currentUser,
                 openCensorModal: handleCensorCommentModal,
                 openLoginModal: handleOpenLoginModal,
                 ...commentsCtx
@@ -321,6 +352,8 @@ const Comments = ({
                 currentUserID={currentUser && currentUser.userid}
                 comments={state.comments}
                 isFlatMode={isFlatCommentsMode}
+                proposalState={proposalState}
+                recordsBaseLink={recordBaseLink}
               />
             </CommentContext.Provider>
           ) : null}

@@ -8,13 +8,17 @@ import {
 } from "src/containers/Routes";
 import commonRoutes from "./commonRoutes";
 import PageNotFound from "./NotFound";
-import PageProposalDetail from "./Proposals/Detail";
-import PageProposalsPublicList from "./Proposals/PublicList";
-import PageProposalsUnvetted from "./Proposals/UnvettedList";
+import PageProposalVettedDetail from "./Proposals/DetailVetted";
+import PageProposalUnvettedDetail from "./Proposals/DetailUnvetted";
+import PageProposalsVettedList from "./Proposals/VettedList";
+import PageProposalsAdmin from "./Proposals/AdminList";
 import PageProposalNew from "./Proposals/New";
-import PageProposalEdit from "./Proposals/Edit";
+import PageVettedProposalEdit from "./Proposals/EditVetted";
+import PageUnvettedProposalEdit from "./Proposals/EditUnvetted";
+
 import useOnboardModal from "src/hooks/utils/useOnboardModal";
 import PageUserDetail from "./User/Detail";
+import { LIST_HEADER_ADMIN, LIST_HEADER_VETTED } from "src/constants";
 
 const Routes = ({ location }) => {
   useOnboardModal();
@@ -24,9 +28,9 @@ const Routes = ({ location }) => {
         <Switch location={location}>
           <Route
             path="/"
-            title="Public Proposals"
+            title={LIST_HEADER_VETTED}
             exact
-            component={PageProposalsPublicList}
+            component={PageProposalsVettedList}
           />
           {commonRoutes}
           {/* User Route */}
@@ -39,34 +43,52 @@ const Routes = ({ location }) => {
           />
           {/* Record routes */}
           <AdminAuthenticatedRoute
-            path={"/proposals/unvetted"}
-            title={"Unvetted Proposals"}
+            path={"/record/admin"}
+            title={LIST_HEADER_ADMIN}
             exact
-            component={PageProposalsUnvetted}
+            component={PageProposalsAdmin}
           />
           <AuthenticatedRoute
-            path={"/proposals/new"}
+            path={"/record/new"}
             title={"New Proposal"}
             exact
             render={PageProposalNew}
           />
           <Route
-            path={"/proposals/:token"}
+            path={"/record/:token"}
             title={"Proposal Detail"}
             exact
-            component={PageProposalDetail}
+            component={PageProposalVettedDetail}
           />
           <Route
-            path={"/proposals/:token/comments/:commentid"}
+            path={"/record/unvetted/:token"}
             title={"Proposal Detail"}
             exact
-            component={PageProposalDetail}
+            component={PageProposalUnvettedDetail}
+          />
+          <Route
+            path={"/record/:token/comments/:commentid"}
+            title={"Proposal Detail"}
+            exact
+            component={PageProposalVettedDetail}
+          />
+          <Route
+            path={"/record/unvetted/:token/comments/:commentid"}
+            title={"Proposal Detail"}
+            exact
+            component={PageProposalUnvettedDetail}
           />
           <AuthenticatedRoute
-            path={"/proposals/:token/edit"}
+            path={"/record/:token/edit"}
             title={"Edit Proposal"}
             exact
-            render={PageProposalEdit}
+            render={PageVettedProposalEdit}
+          />
+          <AuthenticatedRoute
+            path={"/record/unvetted/:token/edit"}
+            title={"Edit Proposal"}
+            exact
+            render={PageUnvettedProposalEdit}
           />
           <Route title="Page Not Found" path="*" component={PageNotFound} />
         </Switch>

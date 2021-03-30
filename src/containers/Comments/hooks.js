@@ -11,11 +11,12 @@ import { useSelector, useAction } from "src/redux";
 import { useConfig } from "src/containers/Config";
 import { useLoaderContext } from "src/containers/Loader";
 import { or } from "src/lib/fp";
+import { PROPOSAL_STATE_VETTED } from "src/constants";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
-export function useComments(recordToken) {
+export function useComments(recordToken, proposalState) {
   const { enableCommentVote, recordType, constants } = useConfig();
 
   const errorSelector = or(
@@ -57,7 +58,7 @@ export function useComments(recordToken) {
   );
   const loadingLikeAction = useSelector(sel.isApiRequestingLikeComment);
   const onFetchLikes = useAction(act.onFetchLikedComments);
-  const onLikeCommentAction = useAction(act.onLikeComment);
+  const onCommentVoteAction = useAction(act.onCommentVote);
   const onCensorComment = useAction(act.onCensorComment);
 
   const { currentUser } = useLoaderContext();
@@ -67,13 +68,17 @@ export function useComments(recordToken) {
   const userLoggedIn = !!email;
 
   // comments are not public on cms. User needs to be logged in
-  const isPublic = recordType === constants.RECORD_TYPE_PROPOSAL;
-  const needsToFetchComments = isPublic
+  const isProposal = recordType === constants.RECORD_TYPE_PROPOSAL;
+  const needsToFetchComments = isProposal
     ? !!recordToken && !comments
     : !!recordToken && !comments && userLoggedIn;
 
   const needsToFetchCommentsLikes =
-    !!recordToken && !commentsLikes && enableCommentVote && userLoggedIn;
+    !!recordToken &&
+    !commentsLikes &&
+    enableCommentVote &&
+    userLoggedIn &&
+    proposalState === PROPOSAL_STATE_VETTED;
 
   useEffect(
     function handleFetchOfComments() {
@@ -87,17 +92,17 @@ export function useComments(recordToken) {
   useEffect(
     function handleFetchOfLikes() {
       if (needsToFetchCommentsLikes) {
-        onFetchLikes(recordToken);
+        onFetchLikes(recordToken, userid);
       }
     },
-    [onFetchLikes, needsToFetchCommentsLikes, recordToken]
+    [onFetchLikes, needsToFetchCommentsLikes, recordToken, userid]
   );
 
-  const onLikeComment = useCallback(
-    (commentID, action) => {
-      onLikeCommentAction(userid, recordToken, commentID, action);
+  const onCommentVote = useCallback(
+    (commentID, action, token) => {
+      onCommentVoteAction(userid, token, commentID, action, proposalState);
     },
-    [recordToken, userid, onLikeCommentAction]
+    [onCommentVoteAction, userid, proposalState]
   );
 
   const getCommentLikeOption = useCallback(
@@ -115,7 +120,7 @@ export function useComments(recordToken) {
 
   return {
     comments,
-    onLikeComment,
+    onCommentVote,
     onCensorComment,
     getCommentLikeOption,
     enableCommentVote,

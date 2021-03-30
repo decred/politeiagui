@@ -44,7 +44,7 @@ const PaymentFaucet = ({ address, amount, onFail = noop }) => {
         ) : null}
         {payWithFaucetTxId ? (
           <Message kind="info" className={styles.transactionIdMessage}>
-            <span style={{ marginRight: "5px" }}>Sent transaction: </span>
+            <span className={styles.transactionLabel}>Sent transaction: </span>
             <Link
               href={getFaucetUrl(payWithFaucetTxId)}
               target="_blank"

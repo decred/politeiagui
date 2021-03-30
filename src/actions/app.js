@@ -9,7 +9,6 @@ import {
   onSubmitNewDcc
 } from "./api";
 import {
-  onFetchProposal as onFetchProposalApi,
   onSubmitComment as onSubmitCommentApi,
   onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
@@ -122,15 +121,15 @@ export const onEditProposal = ({
       files,
       token
     )
-  ).then(() => dispatch(onFetchProposalApi(token)).then(() => token));
+  );
 };
 
-export const onSaveNewComment = ({ comment, token, parentID }) => (
+export const onSaveNewComment = ({ comment, token, parentID, state }) => (
   dispatch,
   getState
 ) => {
   const userid = sel.currentUserID(getState());
-  return dispatch(onSubmitCommentApi(userid, token, comment, parentID));
+  return dispatch(onSubmitCommentApi(userid, token, comment, parentID, state));
 };
 
 export const onEditInvoice = ({

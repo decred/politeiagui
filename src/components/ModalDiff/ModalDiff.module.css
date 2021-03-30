@@ -9,7 +9,8 @@
 }
 
 .diffTabContent {
-  overflow-y: scroll;
+  min-height: 20rem;
+  overflow-y: auto;
   max-height: calc(70vh - 20rem);
 }
 

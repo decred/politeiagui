@@ -1,11 +1,15 @@
 import * as act from "src/actions/types";
 import cloneDeep from "lodash/cloneDeep";
-import uniqBy from "lodash/uniqBy";
+import uniqWith from "lodash/uniqWith";
 import reverse from "lodash/reverse";
 import unionBy from "lodash/unionBy";
 import compose from "lodash/fp/compose";
 import set from "lodash/fp/set";
 import update from "lodash/fp/update";
+import {
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_STATUS_UNREVIEWED
+} from "../../constants";
 
 const DEFAULT_STATE = {
   comments: { byToken: {}, accessTimeByToken: {}, backup: null },
@@ -19,12 +23,17 @@ const comments = (state = DEFAULT_STATE, action) =>
         {
           [act.RECEIVE_RECORD_COMMENTS]: () => {
             const { token, comments, accesstime } = action.payload;
+            const fullToken = comments[0]?.token || token;
             // Filter duplicated comments by signature. The latest copy found
             // will be kept.
-            const filteredComments = uniqBy(reverse(comments), "signature");
+            const filteredComments = uniqWith(
+              reverse(comments),
+              (arrVal, othVal) =>
+                arrVal.signature && arrVal.signaure !== othVal.signaure
+            );
             return compose(
-              set(["comments", "byToken", token], filteredComments),
-              set(["comments", "accessTimeByToken", token], accesstime)
+              set(["comments", "byToken", fullToken], filteredComments),
+              set(["comments", "accessTimeByToken", fullToken], accesstime)
             )(state);
           },
           [act.RECEIVE_NEW_COMMENT]: () => {
@@ -42,23 +51,20 @@ const comments = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_SYNC_LIKE_COMMENT]: () => {
-            const { token, action: cAction, commentid } = action.payload;
-            const newAction = parseInt(cAction, 10);
+            const { token, vote, commentid } = action.payload;
             const commentsLikes = state.commentsLikes.byToken[token];
             const backupForCommentLikes = cloneDeep(commentsLikes);
             const comments = state.comments.byToken[token];
             const isTargetCommentLike = (commentLike) =>
               commentLike.commentid === commentid &&
               commentLike.token === token;
-            const oldCommentLike =
+            const oldCommentVote =
               commentsLikes && commentsLikes.find(isTargetCommentLike);
-            const oldAction = oldCommentLike
-              ? parseInt(oldCommentLike.action, 10)
-              : 0;
+            const oldVote = oldCommentVote ? oldCommentVote.vote : 0;
             const newCommentLike = {
               token,
               commentid,
-              action: newAction === oldAction ? 0 : newAction
+              vote: vote === oldVote ? 0 : vote
             };
             const newCommentsLikes = unionBy(
               [newCommentLike],
@@ -68,21 +74,19 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             const updateCommentResultAndTotalVotes = (comment) => {
               if (comment.commentid !== commentid) return comment;
-              const oldActionEqualsNewAction = oldAction === newAction;
+              const oldActionEqualsNewAction = oldVote === vote;
 
               const calcNewTotalVotes = (value) =>
-                value +
-                (oldActionEqualsNewAction ? -1 : oldAction === 0 ? 1 : 0);
+                value + (oldActionEqualsNewAction ? -1 : oldVote === 0 ? 1 : 0);
               const calcNewResultVotes = (value) =>
-                value +
-                (oldActionEqualsNewAction ? -oldAction : newAction - oldAction);
+                value + (oldActionEqualsNewAction ? -oldVote : vote - oldVote);
 
-              const calcPerActionVotes = (action) => (value = 0) => {
-                if (newAction === action) {
+              const calcPerActionVotes = (v) => (value = 0) => {
+                if (vote === v) {
                   if (oldActionEqualsNewAction) return --value;
                   return ++value;
                 }
-                if (oldAction === action) return --value;
+                if (oldVote === v) return --value;
                 return value;
               };
 
@@ -126,7 +130,7 @@ const comments = (state = DEFAULT_STATE, action) =>
               if (comment.commentid !== commentid) return comment;
               return {
                 ...comment,
-                censored: true,
+                deleted: true,
                 comment: ""
               };
             };
@@ -135,6 +139,16 @@ const comments = (state = DEFAULT_STATE, action) =>
                 comments.map(censorTargetComment)
               )
             )(state);
+          },
+          [act.RECEIVE_SETSTATUS_PROPOSAL]: () => {
+            const { proposal, oldStatus } = action.payload;
+            if (
+              proposal.status === PROPOSAL_STATUS_PUBLIC &&
+              oldStatus === PROPOSAL_STATUS_UNREVIEWED
+            ) {
+              delete state.comments.byToken[proposal.censorshiprecord.token];
+            }
+            return state;
           },
           [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE,
           [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE

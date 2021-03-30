@@ -68,19 +68,17 @@ Currently, two presets are supported, they are:
 
 The full table of configuration options is presented below:
 
-| Option               | POLITEIA (default)                                         | CMS                          | Description                                                                                                      |
-| -------------------- | ---------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| title                | "Politeia"                                                 | "Contractor Management"      | The title to be used for the website                                                                             |
-| logoLight            | "pi-logo-light.svg"                                        | "cms-logo-light.svg"         | Indicates what is the name of the light logo file under `src/assets/images`                                      |
-| logoDark             | "pi-logo-dark.svg"                                         | "cms-logo-dark.svg"          | Indicates what is the name of the dark logo file under `src/assets/images`                                       |
-| recordType           | "proposal"                                                 | "invoice"                    | The main record type name                                                                                        |
-| enableAdminInvite    | false                                                      | true                         | To enable or not the UI elements required for admin invite                                                       |
-| enableCommentVote    | true                                                       | false                        | To enable or not the vote on comments                                                                            |
-| testnetGitRepository | "https://github.com/decred-proposals/testnet3/tree/master" | ""                           | The testnet git repository where the public records are stored                                                   |
-| mainnetGitRepository | "https://github.com/decred-proposals/mainnet/tree/master"  | ""                           | The mainnet git repository where the public records are stored                                                   |
-| paywallContent       | "paywall-politeia"                                         | ""                           | Indicates what is the name of the markdown file under `src/assets/copies` to be used for the paywall copy        |
-| privacyPolicyContent | "privacy-policy"                                           | "privacy-policy-cms"         | Indicates what is the name of the markdown file under `src/assets/copies` to be used for the privacy policy copy |
-| navMenuPaths         | see src/apps/politeia/config.json                          | see src/apps/cms/config.json | Custom menu paths to be shown in the navigation menu dropdown                                                    |
+| Option               | POLITEIA (default)                | CMS                          | Description                                                                                                      |
+| -------------------- | --------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| title                | "Politeia"                        | "Contractor Management"      | The title to be used for the website                                                                             |
+| logoLight            | "pi-logo-light.svg"               | "cms-logo-light.svg"         | Indicates what is the name of the light logo file under `src/assets/images`                                      |
+| logoDark             | "pi-logo-dark.svg"                | "cms-logo-dark.svg"          | Indicates what is the name of the dark logo file under `src/assets/images`                                       |
+| recordType           | "proposal"                        | "invoice"                    | The main record type name                                                                                        |
+| enableAdminInvite    | false                             | true                         | To enable or not the UI elements required for admin invite                                                       |
+| enableCommentVote    | true                              | false                        | To enable or not the vote on comments                                                                            |
+| paywallContent       | "paywall-politeia"                | ""                           | Indicates what is the name of the markdown file under `src/assets/copies` to be used for the paywall copy        |
+| privacyPolicyContent | "privacy-policy"                  | "privacy-policy-cms"         | Indicates what is the name of the markdown file under `src/assets/copies` to be used for the privacy policy copy |
+| navMenuPaths         | see src/apps/politeia/config.json | see src/apps/cms/config.json | Custom menu paths to be shown in the navigation menu dropdown                                                    |
 
 **Important:** Currently it's only possible to use the CMS or the POLITEIA presets fully. If you want to create your own app config, you'll need to modify the code and the API accordingly.
 

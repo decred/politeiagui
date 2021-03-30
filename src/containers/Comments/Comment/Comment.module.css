@@ -69,7 +69,7 @@ span.censor:hover {
 }
 
 .recordAuthor {
-  color: var(--color-gold);
+  color: var(--color-gold) !important;
 }
 
 .permalinkTooltip {

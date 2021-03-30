@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, classNames } from "pi-ui";
 import {
-  isPublicProposal,
   isUnreviewedProposal,
-  isAbandonedProposal,
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal,
-  isRfpReadyToRunoff,
-  isVoteActiveProposal,
-  isVotingFinishedProposal
+  isRfpReadyToRunoff
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
@@ -17,6 +13,7 @@ import {
 import AdminContent from "src/components/AdminContent";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./ProposalActions.module.css";
+import { PROPOSAL_STATE_UNVETTED } from "../../constants";
 
 const UnvettedActions = ({ proposal }) => {
   if (!useUnvettedProposalActions()) {
@@ -68,7 +65,8 @@ const PublicActions = ({
     onRevokeVote,
     onAbandon,
     onStartVote,
-    onStartRunoffVote
+    onStartRunoffVote,
+    onCensor
   } = usePublicProposalActions();
 
   const withProposal = (fn, cb) => () => {
@@ -76,38 +74,30 @@ const PublicActions = ({
   };
 
   const isProposalOwner =
-    currentUser && proposal && currentUser.userid === proposal.userid;
+    currentUser && proposal && currentUser.username === proposal.username;
 
   const isRfpSubmission = !!proposal.linkto;
 
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
 
-  const rfpLinkedSubmissions = proposal.linkedfrom;
-  const [submssionsDidntVote, setSubmissionDidntVote] = useState(false);
-  useEffect(() => {
-    // check if RFP submissions are already under vote => hide `start runoff vote` action
-    if (rfpSubmissionsVoteSummaries) {
-      setSubmissionDidntVote(
-        !isVoteActiveProposal(
-          rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
-        ) &&
-          !isVotingFinishedProposal(
-            rfpSubmissionsVoteSummaries[rfpLinkedSubmissions[0]]
-          )
-      );
-    } else {
-      setSubmissionDidntVote(false);
-    }
-  }, [
-    rfpLinkedSubmissions,
-    rfpSubmissionsVoteSummaries,
-    setSubmissionDidntVote,
-    submssionsDidntVote
-  ]);
+  const isReadyToRunoff = isRfpReadyToRunoff(
+    proposal,
+    voteSummary,
+    rfpSubmissionsVoteSummaries
+  );
+
+  const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
   return (
     <>
-      {isUnderDiscussionProposal(proposal, voteSummary) && (
+      {isUnderDiscussion && (
         <div className="justify-right margin-top-m">
+          <Button
+            onClick={withProposal(onCensor)}
+            className={classNames("margin-right-s", styles.reportButton)}
+            noBorder
+            kind="secondary">
+            Report as spam
+          </Button>
           {isProposalOwner &&
             !isRfpSubmission &&
             (!isVotingStartAuthorized ? (
@@ -128,7 +118,7 @@ const PublicActions = ({
           </AdminContent>
         </div>
       )}
-      {isRfpReadyToRunoff(proposal, voteSummary) && submssionsDidntVote && (
+      {isReadyToRunoff && (
         <AdminContent>
           <div className="justify-right margin-top-m">
             <Button
@@ -146,10 +136,10 @@ const PublicActions = ({
 };
 
 const ProposalActions = ({ proposal, ...props }) => {
-  return isPublicProposal(proposal) || isAbandonedProposal(proposal) ? (
-    <PublicActions {...{ ...props, proposal }} />
-  ) : (
+  return proposal.state === PROPOSAL_STATE_UNVETTED ? (
     <UnvettedActions proposal={proposal} />
+  ) : (
+    <PublicActions {...{ ...props, proposal }} />
   );
 };
 

@@ -9,10 +9,11 @@ import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
 import {
-  isPublicProposal,
-  isAbandonedProposal,
   isVotingFinishedProposal,
-  getProposalToken
+  getProposalToken,
+  isCensoredProposal,
+  isAbandonedProposal,
+  getProposalLink
 } from "../helpers";
 import {
   UnvettedActionsProvider,
@@ -21,26 +22,26 @@ import {
 import { useProposalVote } from "../hooks";
 import useDocumentTitle from "src/hooks/utils/useDocumentTitle";
 import { GoBackLink } from "src/components/Router";
+import { useConfig } from "src/containers/Config";
 
 const SetPageTitle = ({ title }) => {
   useDocumentTitle(title);
   return null;
 };
 
-const ProposalDetail = ({ Main, match }) => {
+const ProposalDetail = ({ Main, match, state }) => {
   const tokenFromUrl = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
   const { proposal, loading, threadParentID, error } = useProposal(
     tokenFromUrl,
+    state,
     threadParentCommentID
   );
   const proposalToken = getProposalToken(proposal);
-  const { voteSummary } = useProposalVote(proposalToken);
-  const showCommentArea =
-    proposal && (isPublicProposal(proposal) || isAbandonedProposal(proposal));
+  const { voteSummary } = useProposalVote(proposalToken || tokenFromUrl);
   const canReceiveComments =
-    isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
-
+    !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
+  const { javascriptEnabled } = useConfig();
   return (
     <>
       <Main className={styles.customMain} fillScreen>
@@ -59,14 +60,18 @@ const ProposalDetail = ({ Main, match }) => {
                 collapseBodyContent={!!threadParentID}
               />
             )}
-            {showCommentArea && (
+            {!isCensoredProposal(proposal) && (
               <Comments
-                recordAuthorID={proposal.userid}
-                recordToken={proposalToken}
-                numOfComments={proposal.numcomments}
+                recordAuthorID={proposal?.userid} // this will be deprecated after tlog
+                recordAuthorUsername={proposal?.username}
+                recordToken={tokenFromUrl}
+                recordTokenFull={proposalToken}
+                numOfComments={proposal?.comments}
                 threadParentID={threadParentID}
                 readOnly={!canReceiveComments}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
+                proposalState={state}
+                recordBaseLink={getProposalLink(proposal, javascriptEnabled)}
               />
             )}
           </PublicActionsProvider>

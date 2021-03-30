@@ -102,7 +102,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_USER_PROPOSALS]: () => receive("userProposals", state),
       [act.REQUEST_TOKEN_INVENTORY]: () =>
         request("tokenInventory", state, action),
-      [act.RECEIVE_TOKEN_INVENTORY]: () =>
+      [act.RECEIVE_VOTES_INVENTORY]: () =>
         receive("tokenInventory", state, action),
       [act.REQUEST_PROPOSALS_BATCH]: () =>
         request("proposalsBatch", state, action),
@@ -183,6 +183,8 @@ const api = (state = DEFAULT_STATE, action) =>
         request("proposalVoteResults", state, action),
       [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () =>
         receive("proposalVoteResults", state, action),
+      [act.REQUEST_VOTES_DETAILS]: () => request("votesDetails", state, action),
+      [act.RECEIVE_VOTES_DETAILS]: () => receive("votesDetails", state, action),
       [act.REQUEST_AUTHORIZE_VOTE]: () =>
         request("authorizeVote", state, action),
       [act.RECEIVE_AUTHORIZE_VOTE]: () => receive("authorizeVote", state, {}),

@@ -5,6 +5,7 @@ import compose from "lodash/fp/compose";
 
 // state transition actions
 export const FETCH = "FETCH";
+export const START = "START";
 export const RESOLVE = "RESOLVE";
 export const VERIFY = "VERIFY";
 export const REJECT = "REJECT";
@@ -12,6 +13,7 @@ export const RETRY = "RETRY";
 // machine states
 const LOADING = "loading";
 const IDLE = "idle";
+const STARTING = "starting";
 const FAILURE = "failure";
 const SUCCESS = "success";
 const VERIFYING = "verifying";
@@ -26,7 +28,8 @@ const mapStateTransitionActions = {
   [VERIFY]: VERIFYING,
   [REJECT]: FAILURE,
   [RESOLVE]: SUCCESS,
-  [RETRY]: IDLE
+  [RETRY]: IDLE,
+  [START]: STARTING
 };
 
 const getNextState = (action) => get(mapStateTransitionActions, action.type);
@@ -43,13 +46,19 @@ const fetchReducer = (state, action) => {
         set("loading", true),
         set("verifying", false)
       )(state);
+    case START:
+      return compose(
+        set("status", nextState),
+        set("loading", false),
+        set("verifying", false)
+      )(state);
     case RESOLVE:
       return {
         ...state,
         loading: false,
         verifying: false,
         status: nextState,
-        ...action.payload
+        ...(action.payload || {})
       };
     case VERIFY:
       return compose(
@@ -82,6 +91,8 @@ export default function useFetchMachine({ actions, initialValues }) {
       switch (status) {
         case IDLE:
           return actions.initial && actions.initial();
+        case STARTING:
+          return actions.initial && actions.start();
         case LOADING:
           return actions.load && actions.load();
         case VERIFYING:
@@ -102,5 +113,5 @@ export default function useFetchMachine({ actions, initialValues }) {
     [dispatch]
   );
 
-  return [currentState, send, { FETCH, RESOLVE, VERIFY, REJECT, RETRY }];
+  return [currentState, send, { FETCH, RESOLVE, VERIFY, REJECT, RETRY, START }];
 }

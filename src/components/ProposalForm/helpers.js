@@ -36,3 +36,21 @@ export const getProposalTypeOptionsForSelect = () =>
       value
     })
   );
+
+/**
+ * Returns the deadline timestamp from given date
+ * @param {Object} date
+ */
+export const getRfpDeadlineTimestamp = (rfpDeadline) => {
+  if (!rfpDeadline) return 0;
+  const now = new Date();
+  const deadline = new Date(
+    rfpDeadline.year,
+    rfpDeadline.month - 1,
+    rfpDeadline.day,
+    now.getHours(),
+    now.getMinutes(),
+    now.getSeconds()
+  );
+  return deadline.getTime() / 1000;
+};

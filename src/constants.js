@@ -8,7 +8,7 @@ export const RECORD_TYPE_INVOICE = "invoices";
 
 export const EXPLORER = "dcrdata";
 
-export const CENSORSHIP_TOKEN_LENGTH = 64;
+export const CENSORSHIP_TOKEN_LENGTH = 16;
 
 // DCC
 export const DCC_STATUS_ACTIVE = 1;
@@ -33,10 +33,16 @@ export const INITIAL_YEAR = 2018;
 
 export const PROPOSAL_FILTER_ALL = 0;
 
-export const PROPOSAL_STATUS_UNREVIEWED = 2;
+// XXX double check the mapping is correct - ?unreviewed_changes? isn't
+// defined in BE!
+export const PROPOSAL_STATUS_UNREVIEWED = 1;
+export const PROPOSAL_STATUS_PUBLIC = 2;
 export const PROPOSAL_STATUS_CENSORED = 3;
-export const PROPOSAL_STATUS_PUBLIC = 4;
-export const PROPOSAL_STATUS_UNREVIEWED_CHANGES = 5;
+export const PROPOSAL_STATUS_UNREVIEWED_CHANGES = 4;
+export const PROPOSAL_STATUS_ARCHIVED = 4;
+
+export const PROPOSAL_STATE_UNVETTED = 1;
+export const PROPOSAL_STATE_VETTED = 2;
 
 export const PROPOSAL_TYPE_REGULAR = 1;
 export const PROPOSAL_TYPE_RFP = 2;
@@ -47,6 +53,11 @@ export const VOTE_TYPE_RUNOFF = 2;
 
 export const PROPOSAL_USER_FILTER_SUBMITTED = 1;
 export const PROPOSAL_USER_FILTER_DRAFT_PROPOSALS = 2;
+
+export const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
+export const VOTE_METADATA_FILENAME = "votemetadata.json";
+
+export const USER_METADATA_PLUGIN = "usermd";
 
 export const PAYWALL_STATUS_WAITING = 0;
 export const PAYWALL_STATUS_LACKING_CONFIRMATIONS = 1;
@@ -62,9 +73,32 @@ export const PROPOSAL_VOTING_NOT_AUTHORIZED = 1;
 export const PROPOSAL_VOTING_AUTHORIZED = 2;
 export const PROPOSAL_VOTING_ACTIVE = 3;
 export const PROPOSAL_VOTING_FINISHED = 4;
-export const PROPOSAL_STATUS_ABANDONED = 6;
-export const PROPOSAL_REJECTED = 7;
+export const PROPOSAL_VOTING_APPROVED = 5;
+export const PROPOSAL_VOTING_REJECTED = 6;
+export const PROPOSAL_VOTING_INELIGIBLE = 7;
 export const PROPOSAL_APPROVED = 8;
+
+export const PROPOSAL_COMMENT_UPVOTE = 1;
+export const PROPOSAL_COMMENT_DOWNVOTE = -1;
+
+export const PROPOSAL_PAGE_SIZE = 5;
+export const INVENTORY_PAGE_SIZE = 20;
+
+// Proposals presentational statuses returned by the 'voteinv' &
+// 'proposalinv' endpoints from the API.
+export const UNREVIEWED = "unreviewed";
+export const VETTEDCENSORED = "vettedcensored";
+export const UNVETTEDCENSORED = "unvettedcensored";
+export const ABANDONED = "abandoned";
+export const PRE_VOTE = "pre";
+export const ACTIVE_VOTE = "started";
+export const APPROVED = "approved";
+export const AUTHORIZED = "authorized";
+export const REJECTED = "rejected";
+export const INELIGIBLE = "ineligible";
+export const ARCHIVED = "archived";
+export const PUBLIC = "public";
+export const CENSORED = "censored";
 
 export const USER_DETAIL_TAB_GENERAL = 0;
 export const USER_DETAIL_TAB_PREFERENCES = 1;
@@ -80,8 +114,8 @@ export const MANAGE_USER_CLEAR_USER_PAYWALL = 4;
 export const MANAGE_USER_UNLOCK = 5;
 export const MANAGE_USER_DEACTIVATE = 6;
 export const MANAGE_USER_REACTIVATE = 7;
-export const LIST_HEADER_PUBLIC = "Public Proposals";
-export const LIST_HEADER_UNVETTED = "Unvetted Proposals";
+export const LIST_HEADER_VETTED = "Proposals";
+export const LIST_HEADER_ADMIN = "Admin Proposals";
 export const LIST_HEADER_USER = "Your Proposals";
 export const SORT_BY_OLD = "OLD";
 export const SORT_BY_NEW = "NEW";
@@ -111,10 +145,6 @@ export const LOAD_KEY_FAILED =
 export const PI_DOCS = "https://docs.decred.org/governance/politeia/politeia/";
 export const PROPOSAL_GUIDELINES =
   "https://docs.decred.org/governance/politeia/proposal-guidelines/";
-export const TESTNET_PROPOSALS_REPOSITORY =
-  "https://github.com/decred-proposals/testnet3";
-export const MAINNET_PROPOSALS_REPOSITORY =
-  "https://github.com/decred-proposals/mainnet/";
 
 export const INVOICE_STATUS_INVALID = 0; // Invalid status XXX?
 export const INVOICE_STATUS_NOTFOUND = 1; // Invoice not found XXX?

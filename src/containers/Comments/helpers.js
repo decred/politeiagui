@@ -1,5 +1,4 @@
 import orderBy from "lodash/fp/orderBy";
-import { isAnchoring } from "src/helpers";
 
 export const NUMBER_OF_LIST_PLACEHOLDERS = 3;
 
@@ -56,26 +55,11 @@ export const sortComments = (sortOption, comments) => {
 
 /**
  * This function use currying to efficiently handle comment censoring
- * @param {int} id
- * @param {string} reason
+ * @param {Function} cb
+ * @param {Args} args callback args
  */
 export function handleCommentCensoringInfo(cb, ...args) {
   return function handleSubmitReason(reason) {
     return cb(...args, reason);
-  };
-}
-
-export function handleCommentSubmission(cb, token, parentID = 0) {
-  return (comment) => {
-    if (isAnchoring()) {
-      throw new Error(
-        "Commenting temporarily unavailable while a daily censorship resistance routine is in progress. Sorry for the inconvenience. This will be fixed soon. Check back in 10 minutes."
-      );
-    }
-    return cb({
-      comment,
-      token,
-      parentID
-    });
   };
 }

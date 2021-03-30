@@ -26,18 +26,19 @@ import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
 import {
-  isAnchoring,
   replaceBlobsByDigestsAndGetFiles,
   replaceImgDigestByBlob
 } from "src/helpers";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
-  PROPOSAL_TYPE_RFP_SUBMISSION
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  PROPOSAL_STATE_VETTED
 } from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
-  getRfpMinMaxDates
+  getRfpMinMaxDates,
+  getRfpDeadlineTimestamp
 } from "./helpers.js";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -238,6 +239,7 @@ const ProposalForm = React.memo(function ProposalForm({
       />
       <MarkdownEditor
         allowImgs={true}
+        tabIndex={1}
         name="description"
         className="margin-top-s"
         data-testid="text-area"
@@ -302,7 +304,9 @@ const ProposalFormWrapper = ({
   onSubmit,
   disableSubmit,
   history,
-  isPublic
+  isPublic,
+  isCreateRecordPage,
+  proposalState
 }) => {
   const { text, markdownFiles } = replaceImgDigestByBlob(
     initialValues,
@@ -322,17 +326,15 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        if (isAnchoring()) {
-          throw new Error(
-            "Submitting proposals is temporarily unavailable while a daily censorship resistance routine is in progress. Sorry for the inconvenience. This will be fixed soon. Check back in 10 minutes."
-          );
-        }
-        const { type, rfpLink, ...others } = values;
+        const { type, rfpLink, rfpDeadline, ...others } = values;
+        const deadline = getRfpDeadlineTimestamp(rfpDeadline);
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
-            [rfpLink]
+            [rfpLink],
+            PROPOSAL_STATE_VETTED
           )) || [[], null];
-          const [[proposal], summaries] = rfpWithVoteSummaries;
+          const [proposals, summaries] = rfpWithVoteSummaries;
+          const proposal = proposals[rfpLink];
           const voteSummary = summaries && summaries[rfpLink];
           const isInvalidToken = !proposal || !voteSummary;
           if (isInvalidToken) {
@@ -352,20 +354,40 @@ const ProposalFormWrapper = ({
           ...others,
           description,
           type,
+          state: proposalState,
           files: [...others.files, ...files],
-          rfpLink
+          rfpLink,
+          rfpDeadline: deadline
         });
         setSubmitting(false);
         setSubmitSuccess(true);
-        // use short prefix when navigating to propsoal page
-        history.push(`/proposals/${proposalToken.substring(0, 7)}`);
+        // If we are creating proposal then we should nvaigate to unvetted
+        // proposal detail page, in case of editing proposal we check the
+        // proposal's state to determine the proposal state.
+        // Also, we use short prefix when navigating to propsoal page
+        history.push(
+          `/record${
+            isCreateRecordPage
+              ? "/unvetted"
+              : proposalState === PROPOSAL_STATE_VETTED
+              ? ""
+              : "/unvetted"
+          }/${proposalToken.substring(0, 7)}`
+        );
         resetForm();
       } catch (e) {
         setSubmitting(false);
         setFieldError("global", e);
       }
     },
-    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
+    [
+      history,
+      onSubmit,
+      onFetchProposalsBatchWithoutState,
+      isPublic,
+      isCreateRecordPage,
+      proposalState
+    ]
   );
   const newInitialValues = initialValues
     ? {

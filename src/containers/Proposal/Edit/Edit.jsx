@@ -18,10 +18,11 @@ import {
 } from "src/constants";
 import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
+import { getAttachmentsFiles } from "src/helpers";
 
-const EditProposal = ({ match }) => {
+const EditProposal = ({ match, state }) => {
   const tokenFromUrl = get("params.token", match);
-  const { proposal, loading } = useProposal(tokenFromUrl);
+  const { proposal, loading } = useProposal(tokenFromUrl, state);
   const isPublic = isPublicProposal(proposal);
   const { onEditProposal, currentUser } = useEditProposal();
   const { userid } = currentUser || {};
@@ -29,7 +30,7 @@ const EditProposal = ({ match }) => {
   const [, identityError] = useIdentity();
   const initialValues = proposal
     ? {
-        token: match.params.token,
+        token: tokenFromUrl,
         name: proposal.name,
         type:
           proposal && proposal.linkby
@@ -41,9 +42,7 @@ const EditProposal = ({ match }) => {
           proposal.linkby && formatUnixTimestampToObj(proposal.linkby),
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
-        files: proposal.files.filter(
-          (p) => p.name !== "index.md" && p.name !== "data.json"
-        )
+        files: getAttachmentsFiles(proposal.files)
       }
     : null;
 
@@ -67,6 +66,7 @@ const EditProposal = ({ match }) => {
           initialValues={initialValues}
           onSubmit={onEditProposal}
           isPublic={isPublic}
+          proposalState={state}
         />
       ) : (
         <ProposalFormLoader />

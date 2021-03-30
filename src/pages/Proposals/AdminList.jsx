@@ -1,13 +1,13 @@
 import React from "react";
 import MultipleContentPage from "src/components/layout/MultipleContentPage";
-import PublicProposals from "src/containers/Proposal/Public";
+import AdminProposals from "src/containers/Proposal/Admin";
 
-const PublicList = () => {
+const AdminList = () => {
   return (
     <MultipleContentPage disableScrollToTop>
-      {(props) => <PublicProposals {...props} />}
+      {(props) => <AdminProposals {...props} />}
     </MultipleContentPage>
   );
 };
 
-export default PublicList;
+export default AdminList;

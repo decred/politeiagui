@@ -63,8 +63,6 @@ ConfigProvider.propTypes = {
   onBoardContent: PropTypes.string,
   onBoardLink: PropTypes.string,
   privacyPolicyContent: PropTypes.string,
-  testnetGitRepository: PropTypes.string,
-  mainnetGitRepository: PropTypes.string,
   navMenuPaths: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,

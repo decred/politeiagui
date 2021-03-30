@@ -4,12 +4,16 @@ import flow from "lodash/fp/flow";
 import filter from "lodash/fp/filter";
 import gte from "lodash/fp/gt";
 import range from "lodash/fp/range";
+import map from "lodash/fp/map";
+import splitFp from "lodash/fp/split";
+import reduce from "lodash/fp/reduce";
+import compose from "lodash/fp/compose";
 import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
 import { capitalize } from "./utils/strings";
 
-import { INVALID_FILE } from "./constants";
 import {
+  INVALID_FILE,
   INVOICE_STATUS_APPROVED,
   INVOICE_STATUS_DISPUTED,
   INVOICE_STATUS_NEW,
@@ -20,9 +24,16 @@ import {
   PROPOSAL_VOTING_ACTIVE,
   PROPOSAL_VOTING_AUTHORIZED,
   PROPOSAL_VOTING_FINISHED,
-  PROPOSAL_VOTING_NOT_AUTHORIZED
+  PROPOSAL_VOTING_NOT_AUTHORIZED,
+  PROPOSAL_METADATA_FILENAME,
+  PROPOSAL_STATUS_PUBLIC,
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_ARCHIVED,
+  VOTE_METADATA_FILENAME,
+  USER_METADATA_PLUGIN
 } from "./constants.js";
 
+// XXX find usage and ensure this still works as expected
 export const getProposalStatus = (proposalStatus) =>
   get(proposalStatus, [
     "Invalid",
@@ -46,6 +57,133 @@ export const digest = (payload) => sha3_256(payload);
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
 export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 
+// parseReceivedProposalsMap iterates over BE returned proposals map[token] => proposal, parses the
+// metadata file & the proposal statuses
+export const parseReceivedProposalsMap = (proposals) => {
+  const parsedProps = {};
+  for (const [token, prop] of Object.entries(proposals)) {
+    parsedProps[token] = parseRawProposal(prop);
+  }
+  return parsedProps;
+};
+
+// parseProposalStatuses iterate over proposal's status changes array returned
+// from BE and returns proposal's timestamps accordingly
+const parseProposalStatuses = (sChanges) => {
+  let publishedat = 0,
+    censoredat = 0,
+    abandonedat = 0;
+
+  sChanges.forEach((sChange) => {
+    if (sChange.status === PROPOSAL_STATUS_PUBLIC) {
+      publishedat = sChange.timestamp;
+    }
+    if (sChange.status === PROPOSAL_STATUS_CENSORED) {
+      censoredat = sChange.timestamp;
+    }
+    if (sChange.status === PROPOSAL_STATUS_ARCHIVED) {
+      abandonedat = sChange.timestamp;
+    }
+  });
+  return { publishedat, censoredat, abandonedat };
+};
+
+// parseProposalMetadata accepts a proposal object parses it's metadata
+// and returns it as object of the form { name }
+//
+// censored proposals won't have metadata, in this case this function will
+// return an empty object
+const parseProposalMetadata = (proposal = {}) => {
+  const metadata =
+    proposal.files &&
+    proposal.files.find((f) => f.name === PROPOSAL_METADATA_FILENAME);
+  return metadata ? JSON.parse(atob(metadata.payload)) : {};
+};
+
+// parseVoteMetadata accepts a proposal object parses it's metadata
+// and returns it as object of the form { linkto, linkby }
+//
+// censored proposals won't have metadata, in this case this function will
+// return an empty object
+const parseVoteMetadata = (proposal = {}) => {
+  const metadata =
+    proposal.files &&
+    proposal.files.find((f) => f.name === VOTE_METADATA_FILENAME);
+  return metadata ? JSON.parse(atob(metadata.payload)) : {};
+};
+
+// parseUserMetadata accepts a proposal object parses it's metadata
+// and returns it as object of the form { userid, token }
+//
+// proposals without any user metadata will return an empty object
+const parseUserPluginMetadata = (proposal = {}) =>
+  compose(
+    reduce((acc, curr) => ({ ...acc, ...curr }), {}),
+    map(({ payload }) => {
+      try {
+        const parsedPayload = JSON.parse(payload);
+        return parsedPayload;
+      } catch (e) {
+        // parses metadata payload manually
+        return compose(
+          map((parsed) => JSON.parse(`{${parsed}}`)),
+          splitFp(/\{(.*?)\}/)
+        )(payload);
+      }
+    }),
+    filter(({ pluginid }) => pluginid === USER_METADATA_PLUGIN),
+    get("metadata")
+  )(proposal);
+
+// parseProposalIndexFile accepts a proposal object parses it's metadata
+// and returns it as object of the form { description }
+//
+// censored proposals won't have metadata, in this case this function will
+// return an empty object
+const parseProposalIndexFile = (proposal = {}) => {
+  const index =
+    proposal.files && proposal.files.find((f) => f.name === "index.md");
+  return index ? { description: getTextFromIndexMd(index) } : {};
+};
+
+// parseRawProposal accepts raw proposal object received from BE and parses
+// it's metadata & status changes
+export const parseRawProposal = (proposal) => {
+  // Parse statuses
+  const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
+    proposal.statuses || []
+  );
+  // Parse metdata
+  // Censored proposal's metadata isn't available
+  const { name } = parseProposalMetadata(proposal);
+  const { linkby, linkto } = parseVoteMetadata(proposal);
+  const { description } = parseProposalIndexFile(proposal);
+  const { userid } = parseUserPluginMetadata(proposal);
+  return {
+    ...proposal,
+    description: description || proposal.description,
+    name: name || proposal.name,
+    linkby,
+    userid: userid || proposal.userid,
+    linkto,
+    publishedat,
+    commentsCount: proposal.commentsCount || 0,
+    censoredat,
+    abandonedat
+  };
+};
+
+// parseRawProposalsBatch accepts raw proposal batch object received from BE and parses
+// the respective metadata & status changes for each proposal
+export const parseRawProposalsBatch = (proposals) =>
+  Object.keys(proposals).reduce(
+    (acc, curr) => ({
+      ...acc,
+      [curr]: parseRawProposal(proposals[curr])
+    }),
+    {}
+  );
+
 // This function extracts the content of index.md's payload. The payload is
 // formatted as:
 //
@@ -54,8 +192,7 @@ export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 //
 export const getTextFromIndexMd = (file = {}) => {
   if (!file.payload) return "";
-  const text = atou(file.payload);
-  return text.substring(text.indexOf("\n\n") + 1).trim();
+  return atou(file.payload);
 };
 
 export const getIndexMdFromText = (text = "") => ({
@@ -77,11 +214,9 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     2: "The provided email address is invalid.",
     3: "The provided verification token is invalid. Please ensure you click the link or copy and paste it exactly as it appears in the verification email.",
     4: "The provided verification token is expired. Please register again to receive another email with a new verification token.",
-    5: `The provided proposal is missing the following file(s): ${errorContext.join(
-      ", "
-    )}`,
+    5: `The provided proposal is missing the following file(s): ${errorContext}`,
     6: "The requested proposal does not exist.",
-    7: `The provided proposal has duplicate files: ${errorContext.join(", ")}`,
+    7: `The provided proposal has duplicate files: ${errorContext}`,
     8: "The provided proposal does not have a valid title.",
     9: "The submitted proposal has too many markdown files.",
     10: "The submitted proposal has too many images.",
@@ -92,7 +227,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     15: "The provided proposal name was invalid.",
     16: "The SHA256 checksum for one of the files was incorrect.",
     17: "The Base64 encoding for one of the files was incorrect.",
-    18: `The MIME type detected for ${errorContext[0]} is not supported.`,
+    18: `The MIME type detected for ${errorContext} is not supported.`,
     19: "The MIME type for one of the files is not supported.",
     20: "The proposal cannot be set to that status.",
     21: "The provided public key was invalid.",
@@ -109,13 +244,12 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     32: "The username you provided is invalid; it's either too short, too long, or has unsupported characters.",
     33: "Another user already has that username, please choose another.",
     34: `A verification email has already been sent recently. Please check your email, or wait until it expires and send another one.\n\nYour verification email is set to expire on ${new Date(
-      parseInt(errorContext[0] + "000", 10)
+      parseInt(errorContext + "000", 10)
     )}. If you did not receive an email, please contact Politeia administrators.`,
     35: "The server cannot verify the payment at this time, please try again later or contact Politeia administrators.",
     36: "The public key provided is already taken by another user.",
     37: "The proposal cannot be set to that voting status.",
     38: "Your account has been locked due to too many login attempts.",
-    39: "You do not have any proposal credits; you must purchase one before you can submit a proposal.",
     40: "That is an invalid user edit action.",
     41: "You are not authorized to perform this action.",
     42: "This proposal is in the wrong state for that action.",
@@ -149,14 +283,16 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     70: "Invalid vote option",
     71: "Linkby not met yet",
     72: "No linked proposals",
-    73: `Invalid propsoal linkto. ${errorContext[0]}`,
-    74: `Invalid proposal linkby. ${errorContext[0]}`,
-    75: `Invalid runoff vote. ${errorContext[0]}`,
-    76: `Wrong proposal type. ${errorContext[0]}`,
+    73: `Invalid propsoal linkto. ${errorContext}`,
+    74: `Invalid proposal linkby. ${errorContext}`,
+    75: `Invalid runoff vote. ${errorContext}`,
+    76: `Wrong proposal type. ${errorContext}`,
     77: "The provided code does not match the saved key",
     78: "Invalid TOTP Type",
     79: "User has verified TOTP secret and login requires code.",
     80: "Must wait until next TOTP code window before another login attempt.",
+    88: "User cannot vote on his own comment",
+    101: "You do not have any proposal credits; you must purchase one before you can submit a proposal.",
 
     // CMS Errors
     1001: "Malformed name",
@@ -207,7 +343,7 @@ export const getHumanReadableError = (errorCode, errorContext = []) => {
     1047: "You must be a Supervisor Contractor to submit a Sub Contractor line item",
     1048: "You must supply a UserID for a Sub Contractor line item",
     1049: "Invalid SubContractor",
-    1050: `Supervisor Error - ${errorContext[0]}`
+    1050: `Supervisor Error - ${errorContext}`
   };
 
   const error = errorMessages[errorCode];
@@ -306,17 +442,6 @@ export const multiplyFloatingNumbers = (num1, num2) => {
     cont2++;
   }
   return (num1 * num2) / Math.pow(10, cont1 + cont2);
-};
-
-export const isProposalApproved = (vs) => {
-  const hasReachedQuorom =
-    vs.totalvotes >= (vs.numofeligiblevotes * vs.quorumpercentage) / 100;
-  const yesOption = vs.optionsresult && vs.optionsresult[1];
-  const hasPassed =
-    yesOption &&
-    vs.totalvotes > 0 &&
-    yesOption.votesreceived >= (vs.totalvotes * vs.passpercentage) / 100;
-  return hasReachedQuorom && hasPassed;
 };
 
 export const countPublicProposals = (proposals) => {
@@ -470,26 +595,6 @@ export const getTimeDiffInMinutes = (d1, d2) => {
   return (d1 - d2) / 60e3;
 };
 
-/** This is a temporary fix to prevent comments and proposals submissions during anchoring time  */
-/**
- * @function isAnchoring
- * @param {string} anchoringStartTime UTC time to prevent submissions in HH:MM format
- * @param {number} anchoringDuration Duration in minutes
- */
-export const isAnchoring = (
-  anchoringStartTime = "06:58",
-  anchoringDuration = 10
-) => {
-  const targetDate = new Date();
-  const [startHour, startMinute] = anchoringStartTime.split(":");
-  targetDate.setUTCHours(startHour);
-  targetDate.setUTCMinutes(startMinute);
-  const timeDiffMinutes = getTimeDiffInMinutes(
-    new Date().getTime(),
-    targetDate.getTime()
-  );
-  return timeDiffMinutes >= 0 && timeDiffMinutes < anchoringDuration;
-};
 /**
  * Function to format supported domains in the format for Select/Dropdown
  * components
@@ -596,4 +701,21 @@ export function replaceImgDigestByBlob(vals, map) {
     }
   }
   return { text: newText, markdownFiles };
+}
+
+/**
+ * getAttachmentsFiles removes the metadata and index files
+ * @param {Array} files
+ * @returns {Array} [attachments]
+ */
+export function getAttachmentsFiles(files) {
+  return files.filter(
+    (f) =>
+      ![
+        "index.md",
+        "data.json",
+        PROPOSAL_METADATA_FILENAME,
+        VOTE_METADATA_FILENAME
+      ].includes(f.name)
+  );
 }

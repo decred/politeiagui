@@ -34,11 +34,7 @@ const DefaultNewButton = () => {
   const { isPaid } = usePaywall();
   const mapRecordTypeToButton = {
     [RECORD_TYPE_PROPOSAL]: (
-      <NewButton
-        disabled={!isPaid}
-        label="New Proposal"
-        goTo="/proposals/new"
-      />
+      <NewButton disabled={!isPaid} label="New Proposal" goTo="/record/new" />
     ),
     [RECORD_TYPE_INVOICE]: (
       <NewButton label="New Invoice" goTo="/invoices/new" />

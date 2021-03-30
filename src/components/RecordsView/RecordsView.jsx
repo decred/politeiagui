@@ -1,14 +1,10 @@
-import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { Tabs, Tab, useMediaQuery } from "pi-ui";
-import difference from "lodash/difference";
+import React, { useState, useMemo, useEffect } from "react";
+import { Tabs, Tab } from "pi-ui";
 import LazyList from "src/components/LazyList";
-import { getRecordsByTabOption, getRecordToken } from "./helpers";
-import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import { getRecordsByTabOption } from "./helpers";
 import HelpMessage from "src/components/HelpMessage";
 import { useConfig } from "src/containers/Config";
-import { NOJS_ROUTE_PREFIX } from "src/constants";
-
-const DEFAULT_PAGE_SIZE = 4;
+import { NOJS_ROUTE_PREFIX, PROPOSAL_STATUS_CENSORED } from "src/constants";
 
 const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   const Item = placeholder;
@@ -19,13 +15,18 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   return <>{placeholders}</>;
 };
 
-const getFilteredRecordsAndToken = (records, tokens, tab) => {
+const getFilteredRecordsAndToken = (records, tokens, tab, filterCensored) => {
   const filteredTokens = tokens[tab];
-  const filteredRecords =
+  let filteredRecords =
     (records &&
       filteredTokens &&
       getRecordsByTabOption(records, filteredTokens)) ||
     [];
+  if (filterCensored) {
+    filteredRecords = filteredRecords.filter(
+      ({ status }) => status !== PROPOSAL_STATUS_CENSORED
+    );
+  }
   return [filteredRecords, filteredTokens];
 };
 
@@ -37,72 +38,46 @@ const RecordsView = ({
   tabLabels,
   recordTokensByTab,
   renderRecord,
-  displayTabCount,
-  pageSize = DEFAULT_PAGE_SIZE,
   placeholder,
   getEmptyMessage = getDefaultEmptyMessage,
-  dropdownTabsForMobile,
-  setRemainingTokens,
-  isLoading
+  onFetchMoreProposals,
+  onTabChange,
+  isLoading,
+  index,
+  onSetIndex,
+  hasMore,
+  filterCensored
 }) => {
-  const [hasMoreToLoad, setHasMore] = useState(true);
   const [loadingItems, setLoadingItems] = useState(0);
   const { javascriptEnabled } = useConfig();
 
-  const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
-  const tabOption = tabLabels[index];
-  const isMobileScreen = useMediaQuery("(max-width:560px)");
-
-  const [filteredRecords, filteredTokens] = useMemo(
-    () => getFilteredRecordsAndToken(records, recordTokensByTab, tabOption),
-    [recordTokensByTab, records, tabOption]
+  useEffect(
+    function onTabIndexChange() {
+      onTabChange && onTabChange(index);
+    },
+    [index, onTabChange]
   );
-
-  const hasMoreRecordsToLoad =
-    filteredTokens && filteredRecords.length < filteredTokens.length;
+  const tabOption = tabLabels[index];
+  const [filteredRecords, filteredTokens] = useMemo(
+    () =>
+      getFilteredRecordsAndToken(
+        records,
+        recordTokensByTab,
+        tabOption,
+        filterCensored
+      ),
+    [recordTokensByTab, records, tabOption, filterCensored]
+  );
 
   const handleFetchMoreRecords = () => {
-    if (!filteredTokens || isLoading) {
-      return;
-    }
-    // make sure tokens being requested are different from the ones
-    // already requested or fetched
-    const fetchedTokens = filteredRecords.map(getRecordToken);
-    const recordTokensToBeFetched = difference(
-      filteredTokens,
-      fetchedTokens
-    ).slice(0, pageSize); // handle pagination
-
-    setRemainingTokens(recordTokensToBeFetched);
-    setHasMore(hasMoreRecordsToLoad);
-    setLoadingItems(recordTokensToBeFetched.length);
+    if (!filteredTokens || isLoading) return;
+    onFetchMoreProposals && onFetchMoreProposals();
+    setLoadingItems(4);
   };
 
-  useEffect(
-    function setHasMoreOnTabChange() {
-      setHasMore(true);
-    },
-    [index]
-  );
-
-  const getPropsCountByTab = useCallback(
-    (tab) => {
-      if (!recordTokensByTab) return "";
-      return recordTokensByTab[tab] ? recordTokensByTab[tab].length : "";
-    },
-    [recordTokensByTab]
-  );
-
   const tabs = useMemo(
-    () =>
-      tabLabels.map((label) => (
-        <Tab
-          key={`tab-${label}`}
-          count={displayTabCount ? getPropsCountByTab(label) : ""}
-          label={label}
-        />
-      )),
-    [tabLabels, displayTabCount, getPropsCountByTab]
+    () => tabLabels.map((label) => <Tab key={`tab-${label}`} label={label} />),
+    [tabLabels]
   );
 
   const nojsTabs = useMemo(
@@ -110,7 +85,6 @@ const RecordsView = ({
       tabLabels.map((label) => (
         <Tab
           key={`tab2-${label}`}
-          count={displayTabCount ? getPropsCountByTab(label) : ""}
           label={
             <a href={`${NOJS_ROUTE_PREFIX}/?tab=${label.toLowerCase()}`}>
               {label}
@@ -118,7 +92,7 @@ const RecordsView = ({
           }
         />
       )),
-    [tabLabels, displayTabCount, getPropsCountByTab]
+    [tabLabels]
   );
 
   const loadingPlaceholders = useMemo(
@@ -131,15 +105,9 @@ const RecordsView = ({
     [loadingItems, placeholder]
   );
 
-  const useDropdownTabs = isMobileScreen && dropdownTabsForMobile;
-
   return children({
     tabs: (
-      <Tabs
-        onSelectTab={onSetIndex}
-        activeTabIndex={index}
-        className={useDropdownTabs ? "padding-bottom-s" : ""}
-        mode={useDropdownTabs ? "dropdown" : "horizontal"}>
+      <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode="horizontal">
         {javascriptEnabled ? tabs : nojsTabs}
       </Tabs>
     ),
@@ -148,7 +116,7 @@ const RecordsView = ({
         items={filteredRecords}
         renderItem={renderRecord}
         onFetchMore={handleFetchMoreRecords}
-        hasMore={hasMoreToLoad}
+        hasMore={hasMore}
         emptyListComponent={
           <HelpMessage>{getEmptyMessage(tabOption)}</HelpMessage>
         }

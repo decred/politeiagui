@@ -35,22 +35,24 @@ import { useRouter } from "src/components/Router";
 
 const ProposalItem = ({
   proposal,
-  proposal: { numcomments, name, censorshiprecord },
+  proposal: { comments, name, censorshiprecord },
   voteSummary
 }) => {
   const { history } = useRouter();
   const isVoteActive = isVoteActiveProposal(voteSummary);
-  const hasvoteSummary = !!voteSummary && !!voteSummary.endheight;
+  const hasvoteSummary = !!voteSummary && !!voteSummary.endblockheight;
   const isAbandoned = isAbandonedProposal(proposal);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const proposalToken = censorshiprecord && censorshiprecord.token;
   const { commentsURL, proposalURL } = useProposalURLs(
     proposalToken,
-    null,
-    null,
-    null
+    proposal.userid,
+    !!proposal.linkto,
+    proposal.linkto,
+    proposal.state
   );
+
   const { voteEndTimestamp } = useProposalVoteTimeInfo(voteSummary);
 
   const mobile = useMediaQuery("(max-width: 760px)");
@@ -73,7 +75,7 @@ const ProposalItem = ({
           </Link>
           <CommentsLink
             showIcon={false}
-            numOfComments={numcomments}
+            numOfComments={comments}
             url={commentsURL}
             className={styles.commentsLink}
           />

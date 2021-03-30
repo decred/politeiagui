@@ -4,7 +4,11 @@ import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import Link from "src/components/Link";
 import { useComment } from "../hooks";
 import Comment from "./Comment";
-import { handleCommentSubmission } from "../helpers";
+import {
+  PROPOSAL_STATE_UNVETTED,
+  PROPOSAL_COMMENT_UPVOTE,
+  PROPOSAL_COMMENT_DOWNVOTE
+} from "src/constants";
 
 const ContextLink = React.memo(({ parentid, recordToken, recordType }) => (
   <Link
@@ -62,14 +66,17 @@ const CommentWrapper = ({
   children,
   numOfReplies,
   isFlatMode,
+  proposalState,
+  recordBaseLink,
   ...props
 }) => {
   const {
     onSubmitComment,
-    onLikeComment,
+    onCommentVote,
     getCommentLikeOption,
     enableCommentVote,
     recordAuthorID,
+    recordAuthorUsername,
     loadingLikes,
     loadingLikeAction,
     userLoggedIn,
@@ -80,13 +87,14 @@ const CommentWrapper = ({
     paywallMissing,
     openCensorModal,
     openLoginModal,
-    isAdmin
+    isAdmin,
+    currentUser
   } = useComment();
   const {
     comment: commentText,
     token,
     commentid,
-    censored,
+    deleted: censored,
     timestamp,
     username,
     userid,
@@ -97,7 +105,8 @@ const CommentWrapper = ({
     parentid
   } = comment;
 
-  const isRecordAuthor = recordAuthorID === userid;
+  const isRecordAuthor =
+    recordAuthorID === userid || recordAuthorUsername === username;
   const censorable = isAdmin && !readOnly;
 
   const [showReplyForm, setShowReplyForm] = useState(false);
@@ -123,8 +132,14 @@ const CommentWrapper = ({
   }, [showReplies]);
 
   const handleSubmitComment = useCallback(
-    handleCommentSubmission(onSubmitComment, token, commentid),
-    [onSubmitComment, token, commentid]
+    (comment) =>
+      onSubmitComment({
+        comment,
+        token,
+        parentID: commentid,
+        state: proposalState
+      }),
+    [onSubmitComment, token, commentid, proposalState]
   );
 
   const handleCommentSubmitted = useCallback(() => {
@@ -137,16 +152,16 @@ const CommentWrapper = ({
       openLoginModal();
       return;
     }
-    return onLikeComment(commentid, "1");
-  }, [openLoginModal, userLoggedIn, onLikeComment, commentid]);
+    return onCommentVote(commentid, PROPOSAL_COMMENT_UPVOTE);
+  }, [openLoginModal, userLoggedIn, onCommentVote, commentid]);
 
   const handleDislikeComment = useCallback(() => {
     if (!userLoggedIn) {
       openLoginModal();
       return;
     }
-    return onLikeComment(commentid, "-1");
-  }, [openLoginModal, onLikeComment, userLoggedIn, commentid]);
+    return onCommentVote(commentid, PROPOSAL_COMMENT_DOWNVOTE);
+  }, [openLoginModal, onCommentVote, userLoggedIn, commentid]);
 
   const handleClickCensor = useCallback(() => {
     return openCensorModal(commentid);
@@ -160,11 +175,17 @@ const CommentWrapper = ({
     />
   );
 
-  const shortRecord = recordToken.substring(0, 7);
+  const isLikeCommentDisabled =
+    loadingLikes ||
+    !!loadingLikeAction ||
+    readOnly ||
+    (userLoggedIn &&
+      (identityError || paywallMissing || currentUser.username === username));
+
   return (
     <>
       <Comment
-        permalink={`/${recordType}s/${shortRecord}/comments/${commentid}`}
+        permalink={`${recordBaseLink}/comments/${commentid}`}
         seeInContextLink={contextLink}
         censorable={censorable}
         author={username}
@@ -173,13 +194,10 @@ const CommentWrapper = ({
         censored={censored}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
-        disableLikes={!enableCommentVote}
-        disableLikesClick={
-          loadingLikes ||
-          !!loadingLikeAction ||
-          readOnly ||
-          (userLoggedIn && (identityError || paywallMissing))
+        disableLikes={
+          !enableCommentVote || proposalState === PROPOSAL_STATE_UNVETTED
         }
+        disableLikesClick={isLikeCommentDisabled}
         disableReply={readOnly || !!identityError || paywallMissing}
         likesUpCount={upvotes}
         likesDownCount={downvotes}

@@ -4,74 +4,94 @@ import set from "lodash/fp/set";
 import get from "lodash/fp/get";
 import update from "lodash/fp/update";
 import {
-  PROPOSAL_STATUS_ABANDONED,
+  PROPOSAL_STATUS_ARCHIVED,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_UNREVIEWED_CHANGES
+  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
+  UNREVIEWED,
+  PRE_VOTE,
+  ACTIVE_VOTE,
+  APPROVED,
+  REJECTED,
+  CENSORED,
+  ARCHIVED,
+  INELIGIBLE,
+  PROPOSAL_STATE_UNVETTED
 } from "../../constants";
-import { getIndexMdFromText } from "src/helpers";
-
-// Proposals presentational status returned by the 'tokeninventory' endpoint
-// from the API.
-export const UNREVIEWED = "unreviewed";
-export const CENSORED = "censored";
-export const ABANDONED = "abandoned";
-export const PRE_VOTE = "pre";
-export const ACTIVE_VOTE = "active";
-export const APPROVED = "approved";
-export const REJECTED = "rejected";
+import {
+  getIndexMdFromText,
+  parseReceivedProposalsMap,
+  parseRawProposal
+} from "src/helpers";
 
 const DEFAULT_STATE = {
   byToken: {},
-  allByStatus: {
-    [UNREVIEWED]: [],
-    [CENSORED]: [],
-    [ABANDONED]: [],
+  allByVoteStatus: {
     [PRE_VOTE]: [],
     [ACTIVE_VOTE]: [],
     [APPROVED]: [],
-    [REJECTED]: []
+    [REJECTED]: [],
+    [INELIGIBLE]: []
+  },
+  allByRecordStatus: {
+    [ARCHIVED]: [],
+    [CENSORED]: [],
+    [UNREVIEWED]: []
   },
   allProposalsByUserId: {},
   numOfProposalsByUserId: {},
   newProposalToken: null
 };
 
-const mapReviewStatusToTokenInventoryStatus = {
-  [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
-  [PROPOSAL_STATUS_UNREVIEWED_CHANGES]: UNREVIEWED,
-  [PROPOSAL_STATUS_CENSORED]: CENSORED,
-  [PROPOSAL_STATUS_PUBLIC]: PRE_VOTE,
-  [PROPOSAL_STATUS_ABANDONED]: ABANDONED
+// mapReviewStatusToTokenInventoryStatus accepts proposal's status & state and
+// returns presentational string status
+const mapReviewStatusToTokenInventoryStatus = (status, state) => {
+  switch (status) {
+    case PROPOSAL_STATUS_UNREVIEWED:
+      return UNREVIEWED;
+    case PROPOSAL_STATUS_UNREVIEWED_CHANGES:
+      return UNREVIEWED;
+    case PROPOSAL_STATUS_CENSORED:
+      return state !== PROPOSAL_STATE_UNVETTED ? INELIGIBLE : CENSORED;
+    case PROPOSAL_STATUS_PUBLIC:
+      return PRE_VOTE;
+    case PROPOSAL_STATUS_ARCHIVED:
+      return state !== PROPOSAL_STATE_UNVETTED ? INELIGIBLE : ARCHIVED;
+    default:
+      throw Error(
+        `mapReviewStatusToTokenInventoryStatus: Invalid proposal status: 
+      ${status}`
+      );
+  }
 };
 
 const proposalToken = (proposal) => proposal.censorshiprecord.token;
 
-const proposalArrayToByTokenObject = (proposals) =>
-  proposals.reduce(
-    (proposalsByToken, proposal) => ({
-      ...proposalsByToken,
-      [proposalToken(proposal)]: proposal
-    }),
-    {}
-  );
-
 const proposalIndexFile = (name = "", description = "") =>
   getIndexMdFromText([name, description].join("\n\n"));
 
-const updateAllByStatus = (allByStatus, newStatus, token) =>
-  Object.keys(allByStatus).reduce((inv, key) => {
-    const tokens = allByStatus[key] || [];
-    const foundToken = tokens.find((t) => t === token);
-    if (foundToken && key !== newStatus)
-      return { ...inv, [key]: tokens.filter((t) => t !== token) };
+const updateAllByVoteStatus = (allByVoteStatus, newStatus, tokens) => {
+  let res = {};
+  tokens.forEach((token) => {
+    const updatedByStatus = Object.keys(allByVoteStatus).reduce((inv, key) => {
+      const tokens = res[key] || allByVoteStatus[key] || [];
+      const foundToken = tokens.find((t) => t === token);
+      if (foundToken && key !== newStatus)
+        return { ...inv, [key]: tokens.filter((t) => t !== token) };
 
-    if (!foundToken && key === newStatus)
-      return { ...inv, [key]: [token].concat(tokens) };
+      if (!foundToken && key === newStatus)
+        return { ...inv, [key]: [token].concat(tokens) };
 
-    return { ...inv, [key]: tokens };
-  }, {});
+      return { ...inv, [key]: tokens };
+    }, res);
+    res = {
+      ...res,
+      ...updatedByStatus
+    };
+  });
+  return res;
+};
 
 const updateProposalRfpLinks = (proposal) => (state) => {
   if (!proposal.linkto) return state;
@@ -82,6 +102,19 @@ const updateProposalRfpLinks = (proposal) => (state) => {
   )(state);
 };
 
+const updateInventory = (payload) => (allProps) => {
+  return {
+    ...allProps,
+    ...Object.keys(payload).reduce(
+      (res, status) => ({
+        ...res,
+        [status]: [...(allProps[status] || []), ...(payload[status] || [])]
+      }),
+      {}
+    )
+  };
+};
+
 const proposals = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -90,28 +123,16 @@ const proposals = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_PROPOSALS_BATCH]: () =>
             update("byToken", (proposals) => ({
               ...proposals,
-              ...proposalArrayToByTokenObject(action.payload.proposals)
+              ...parseReceivedProposalsMap(action.payload.proposals)
             }))(state),
-          [act.RECEIVE_TOKEN_INVENTORY]: () =>
-            update("allByStatus", (allProps) => ({
-              ...allProps,
-              ...Object.keys(action.payload).reduce(
-                (res, status) => ({
-                  ...res,
-                  [status]: action.payload[status] || []
-                }),
-                {}
-              )
-            }))(state),
-          [act.RECEIVE_PROPOSAL]: () =>
-            set(
-              ["byToken", proposalToken(action.payload.proposal)],
-              action.payload.proposal
-            )(state),
+          [act.RECEIVE_VOTES_INVENTORY]: () =>
+            update("allByVoteStatus", updateInventory(action.payload))(state),
+          [act.RECEIVE_RECORDS_INVENTORY]: () =>
+            update("allByRecordStatus", updateInventory(action.payload))(state),
           [act.RECEIVE_EDIT_PROPOSAL]: () =>
             set(
               ["byToken", proposalToken(action.payload.proposal)],
-              action.payload.proposal
+              parseRawProposal(action.payload.proposal)
             )(state),
           [act.RECEIVE_NEW_PROPOSAL]: () => {
             // creates the index.md file
@@ -121,17 +142,27 @@ const proposals = (state = DEFAULT_STATE, action) =>
             );
 
             return compose(
-              set(["byToken", proposalToken(action.payload)], {
-                ...action.payload,
-                files: [...action.payload.files, indexFile]
-              }),
-              update(["allByStatus", UNREVIEWED], (unreviewdProps = []) =>
-                unreviewdProps.concat([proposalToken(action.payload)])
+              set(
+                ["byToken", proposalToken(action.payload)],
+                parseRawProposal({
+                  ...action.payload,
+                  files: [...action.payload.files, indexFile],
+                  commentsCount: 0
+                })
+              ),
+              update(
+                ["allByRecordStatus", UNREVIEWED],
+                (unreviewdProps = []) => [
+                  proposalToken(action.payload),
+                  ...unreviewdProps
+                ]
               ),
               update(
                 ["allProposalsByUserId", action.payload.userid],
-                (userProposals = []) =>
-                  userProposals.concat([proposalToken(action.payload)])
+                (userProposals = []) => [
+                  proposalToken(action.payload),
+                  ...userProposals
+                ]
               ),
               update(
                 ["numOfProposalsByUserId", action.payload.userid],
@@ -145,15 +176,21 @@ const proposals = (state = DEFAULT_STATE, action) =>
               updateProposalRfpLinks(action.payload.proposal),
               set(
                 ["byToken", proposalToken(action.payload.proposal)],
-                action.payload.proposal
+                parseRawProposal(action.payload.proposal)
               ),
-              update(["allByStatus"], (allProps) =>
-                updateAllByStatus(
+              update(["allByVoteStatus"], (allProps) =>
+                updateAllByVoteStatus(
                   allProps,
-                  mapReviewStatusToTokenInventoryStatus[
-                    action.payload.proposal.status
-                  ],
-                  proposalToken(action.payload.proposal)
+                  mapReviewStatusToTokenInventoryStatus(
+                    action.payload.proposal.status,
+                    action.payload.proposal.state
+                  ),
+                  [proposalToken(action.payload.proposal)]
+                )
+              ),
+              update(["allByRecordStatus"], (props) =>
+                props[UNREVIEWED]?.filter(
+                  (p) => p !== action.payload.proposal.censorshiprecord.token
                 )
               )
             )(state),
@@ -161,13 +198,13 @@ const proposals = (state = DEFAULT_STATE, action) =>
             compose(
               update("byToken", (proposals) => ({
                 ...proposals,
-                ...proposalArrayToByTokenObject(action.payload.proposals)
+                ...parseReceivedProposalsMap(action.payload.proposals)
               })),
               update(
                 ["allProposalsByUserId", action.payload.userid],
                 (userProposals = []) => [
                   ...userProposals,
-                  ...action.payload.proposals.map(proposalToken)
+                  ...Object.keys(action.payload.proposals)
                 ]
               ),
               set(
@@ -176,8 +213,12 @@ const proposals = (state = DEFAULT_STATE, action) =>
               )
             )(state),
           [act.RECEIVE_START_VOTE]: () =>
-            update("allByStatus", (allProps) =>
-              updateAllByStatus(allProps, ACTIVE_VOTE, action.payload.token)
+            update("allByVoteStatus", (allProps) =>
+              updateAllByVoteStatus(
+                allProps,
+                ACTIVE_VOTE,
+                action.payload.tokens
+              )
             )(state),
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
@@ -189,8 +230,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_LOGOUT]: () => {
             const privateProps = [
-              ...state.allByStatus[UNREVIEWED],
-              ...state.allByStatus[CENSORED]
+              ...(state.allByRecordStatus[UNREVIEWED] || []),
+              ...(state.allByRecordStatus[ARCHIVED] || []),
+              ...(state.allByRecordStatus[CENSORED] || [])
             ];
             const filterPrivateProps = update("byToken", (propsByToken) =>
               Object.keys(propsByToken)
@@ -202,8 +244,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
             );
             return compose(
               filterPrivateProps,
-              set(["allByStatus", UNREVIEWED], []),
-              set(["allByStatus", CENSORED], [])
+              set("allByRecordStatus", DEFAULT_STATE.allByRecordStatus)
             )(state);
           }
         }[action.type] || (() => state)
