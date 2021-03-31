@@ -13,7 +13,7 @@ const DownloadComments = ({ recordToken, className, label }) => {
       label={label}
       fileName={`${recordToken}-comments`}
       content={{
-        ...comments,
+        comments: comments,
         serverpublickey: apiInfo.pubkey
       }}
       className={className}

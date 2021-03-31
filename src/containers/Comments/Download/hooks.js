@@ -7,7 +7,6 @@ import take from "lodash/fp/take";
 import takeRight from "lodash/fp/takeRight";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import fileDownload from "js-file-download";
-import { useLoader } from "src/containers/Loader";
 import {
   handleSaveCommentsTimetamps,
   loadCommentsTimestamps
@@ -28,7 +27,6 @@ export function useDownloadComments(token) {
 
 const TIMESTAMPS_PAGE_SIZE = 100;
 export function useDownloadCommentsTimestamps(recordToken) {
-  const { apiInfo } = useLoader();
   const [timestamps, setTimestamps] = useState(null);
   const [remaining, setRemaining] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -56,8 +54,7 @@ export function useDownloadCommentsTimestamps(recordToken) {
   const makeTimestampsBundle = (timestamps) =>
     JSON.stringify(
       {
-        comments: timestamps.comments,
-        serverpublickey: apiInfo.pubkey
+        comments: timestamps.comments
       },
       null,
       2
@@ -136,8 +133,7 @@ export function useDownloadCommentsTimestamps(recordToken) {
     error: state.error,
     progress: progress,
     timestamps: {
-      comments: state.timestamps?.comments,
-      serverpublickey: apiInfo.pubkey
+      comments: state.timestamps?.comments
     }
   };
 }
