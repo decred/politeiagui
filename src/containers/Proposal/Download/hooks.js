@@ -57,7 +57,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
         return send(FETCH);
       },
       verify: () => {
-        if (timestamps?.length === votesCount) {
+        if (timestamps?.votes?.length === votesCount) {
           // all timestamps loaded, resolve
           handleSaveVotesTimetamps(token, timestamps);
           setProgress(100);
@@ -76,7 +76,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
                   ...resp.votes
                 ]
               });
-              setProgress(((timestamps.length * 100) / votesCount).toFixed(2));
+              setProgress(((timestamps.votes.length * 100) / votesCount).toFixed(2));
               setPage(page + 1);
               return send(VERIFY);
             })
