@@ -33,20 +33,27 @@ export function useDownloadVoteTimestamps(token, votesCount) {
         return;
       },
       start: () => {
-        // fetch first page of vote timestamps
-        onFetchTicketVoteTimestamps(token, page)
+        // fetch unpaginated data from vote timestamps
+        onFetchTicketVoteTimestamps(token)
           .then((resp) => {
             setTimestamps({
               auths: resp.auths,
-              details: resp.details,
-              votes: resp.votes
+              details: resp.details
             });
-            setProgress(((resp.votes.length * 100) / votesCount).toFixed(2));
-            setPage(page + 1);
-            return send(VERIFY);
+            // fetch first page of vote timestamps
+            onFetchTicketVoteTimestamps(token, page)
+              .then((resp) => {
+                setTimestamps({
+                  ...timestamps,
+                  votes: resp.votes
+                });
+                setProgress(((resp.votes.length * 100) / votesCount).toFixed(2));
+                setPage(page + 1);
+                return send(VERIFY);
+              })
+              .catch((e) => send(REJECT, e));
           })
           .catch((e) => send(REJECT, e));
-
         return send(FETCH);
       },
       verify: () => {
@@ -63,11 +70,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
           onFetchTicketVoteTimestamps(token, page)
             .then((resp) => {
               setTimestamps({
-                auths: [
-                  ...timestamps.auths,
-                  ...resp.auths
-                ],
-                details: resp.details,
+                ...timestamps,
                 votes: [
                   ...timestamps.votes,
                   ...resp.votes
