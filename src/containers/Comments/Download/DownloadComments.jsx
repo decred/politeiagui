@@ -13,7 +13,7 @@ const DownloadComments = ({ recordToken, className, label }) => {
       label={label}
       fileName={`${recordToken}-comments`}
       content={{
-        ...comments,
+        comments: comments.sort((a, b) => a.commentid - b.commentid),
         serverpublickey: apiInfo.pubkey
       }}
       className={className}

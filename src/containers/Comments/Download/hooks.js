@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState, useEffect } from "react";
+import { createContext, useContext, useMemo, useState, useEffect, useCallback } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
@@ -7,7 +7,6 @@ import take from "lodash/fp/take";
 import takeRight from "lodash/fp/takeRight";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import fileDownload from "js-file-download";
-import { useLoader } from "src/containers/Loader";
 import {
   handleSaveCommentsTimetamps,
   loadCommentsTimestamps
@@ -28,7 +27,6 @@ export function useDownloadComments(token) {
 
 const TIMESTAMPS_PAGE_SIZE = 100;
 export function useDownloadCommentsTimestamps(recordToken) {
-  const { apiInfo } = useLoader();
   const [timestamps, setTimestamps] = useState(null);
   const [remaining, setRemaining] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -50,18 +48,23 @@ export function useDownloadCommentsTimestamps(recordToken) {
     takeRight(commentIds.length - TIMESTAMPS_PAGE_SIZE)(commentIds)
   ];
 
-  const getProgressPercentage = (timestamps) =>
-    (Object.keys(timestamps.length * 100) / commentsLength).toFixed(2);
+  const getProgressPercentage = useCallback((timestamps) => timestamps ?
+    (Object.keys(timestamps.length * 100) / commentsLength).toFixed(2) : 0,
+    [commentsLength]
+  );
 
   const makeTimestampsBundle = (timestamps) =>
     JSON.stringify(
       {
-        comments: timestamps.comments,
-        serverpublickey: apiInfo.pubkey
+        comments: timestamps.comments
       },
       null,
       2
     );
+
+  useEffect(() => {
+    setProgress(getProgressPercentage(timestamps?.comments));
+  }, [getProgressPercentage, timestamps]);
 
   const [
     state,
@@ -86,7 +89,6 @@ export function useDownloadCommentsTimestamps(recordToken) {
         onFetchCommentsTimestamps(recordToken, fetch)
           .then(({ comments }) => {
             setTimestamps({ comments });
-            setProgress(getProgressPercentage(comments));
             setRemaining(next);
             return send(VERIFY);
           })
@@ -114,7 +116,6 @@ export function useDownloadCommentsTimestamps(recordToken) {
                   ...resp.comments
                 }
               });
-              setProgress(getProgressPercentage(comments));
               setRemaining(next);
               return send(VERIFY);
             })
@@ -136,8 +137,7 @@ export function useDownloadCommentsTimestamps(recordToken) {
     error: state.error,
     progress: progress,
     timestamps: {
-      comments: state.timestamps?.comments,
-      serverpublickey: apiInfo.pubkey
+      comments: state.timestamps?.comments
     }
   };
 }

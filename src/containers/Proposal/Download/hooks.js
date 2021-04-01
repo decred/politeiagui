@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as act from "src/actions";
 import fileDownload from "js-file-download";
 import { useAction } from "src/redux";
@@ -9,12 +9,23 @@ import {
 } from "src/lib/local_storage";
 
 export function useDownloadVoteTimestamps(token, votesCount) {
-  const [timestamps, setTimestamps] = useState(null);
+  const [votes, setVotes] = useState(null);
+  const [auths, setAuths] = useState(null);
+  const [details, setDetails] = useState(null);
   const [page, setPage] = useState(1);
   const [progress, setProgress] = useState(0);
   const onFetchTicketVoteTimestamps = useAction(
     act.onFetchTicketVoteTimestamps
   );
+
+  const getProgressPercentage = useCallback((total) => total ?
+    ((total * 100) / votesCount).toFixed(2) : 0,
+    [votesCount]
+  );
+
+  useEffect(() => {
+    setProgress(getProgressPercentage(votes?.length));
+  }, [getProgressPercentage, votes]);
 
   const [
     state,
@@ -24,46 +35,52 @@ export function useDownloadVoteTimestamps(token, votesCount) {
     actions: {
       initial: () => {
         const ts = loadVotesTimestamps(token);
-        if (ts?.length === votesCount) {
-          return send(RESOLVE, { timestamps: ts });
+        const hasProofs = ts?.votes?.reduce((acc, v) =>
+          acc && v.proofs.length > 0, true
+        );
+        if (ts?.votes?.length === votesCount && hasProofs) {
+          return send(RESOLVE, ts);
         }
-        if (token && !timestamps) {
+        if (token && !votes) {
           return send(START);
         }
         return;
       },
       start: () => {
-        // fetch first page of vote timestamps
-        onFetchTicketVoteTimestamps(token, page)
+        // fetch unpaginated data from vote timestamps
+        onFetchTicketVoteTimestamps(token)
           .then((resp) => {
-            setTimestamps(resp.votes);
-            setProgress(((resp.votes.length * 100) / votesCount).toFixed(2));
-            setPage(page + 1);
-            return send(VERIFY);
+            setAuths([ ...resp.auths ]);
+            setDetails({ ...resp.details });
+            // fetch first page of vote timestamps
+            onFetchTicketVoteTimestamps(token, page)
+              .then((resp) => {
+                setVotes([...resp.votes]);
+                setPage(page + 1);
+                return send(VERIFY);
+              })
+              .catch((e) => send(REJECT, e));
           })
           .catch((e) => send(REJECT, e));
-
         return send(FETCH);
       },
       verify: () => {
-        if (timestamps?.length === votesCount) {
+        if (votes?.length === votesCount) {
           // all timestamps loaded, resolve
-          handleSaveVotesTimetamps(token, timestamps);
-          setProgress(100);
+          handleSaveVotesTimetamps(token, { auths, details, votes });
           fileDownload(
-            JSON.stringify(timestamps, null, 2),
+            JSON.stringify({ auths, details, votes }, null, 2),
             `${token}-votes-timestamps.json`
           );
-          return send(RESOLVE, { timestamps });
+          return send(RESOLVE, { auths, details, votes });
         } else {
+          // more timestamps remaining, fetch next page
           onFetchTicketVoteTimestamps(token, page)
             .then((resp) => {
-              if (resp.votes) {
-                setTimestamps([...timestamps, ...resp.votes]);
-              } else {
-                return send(REJECT, "fetching outbound vote pages");
-              }
-              setProgress(((timestamps.length * 100) / votesCount).toFixed(2));
+              setVotes([
+                ...votes,
+                ...resp.votes
+              ]);
               setPage(page + 1);
               return send(VERIFY);
             })
@@ -77,7 +94,9 @@ export function useDownloadVoteTimestamps(token, votesCount) {
     initialValues: {
       status: "idle",
       loading: false,
-      timestamps: null,
+      auths: null,
+      details: null,
+      votes: null,
       progress: 0
     }
   });
@@ -86,6 +105,10 @@ export function useDownloadVoteTimestamps(token, votesCount) {
     loading: state.loading || state.verifying,
     error: state.error,
     progress: progress,
-    timestamps: state.timestamps
+    timestamps: {
+      auths: state.auths,
+      details: state.details,
+      votes: state.votes
+    }
   };
 }

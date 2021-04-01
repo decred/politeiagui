@@ -281,9 +281,9 @@ export const DownloadVotes = ({
   serverpublickey
 }) => {
   const bundle = {
-    auths: voteSummary.details.auths,
-    details: voteSummary.details.details,
-    votes: voteSummary.votes,
+    auths: voteSummary?.details?.auths,
+    details: voteSummary?.details?.details,
+    votes: voteSummary?.votes,
     serverpublickey
   };
   return <DownloadJSON fileName={fileName} label={label} content={bundle} />;
