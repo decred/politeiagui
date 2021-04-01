@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as act from "src/actions";
 import fileDownload from "js-file-download";
 import { useAction } from "src/redux";
@@ -7,7 +7,6 @@ import {
   handleSaveVotesTimetamps,
   loadVotesTimestamps
 } from "src/lib/local_storage";
-import { useEffect } from "react";
 
 export function useDownloadVoteTimestamps(token, votesCount) {
   const [votes, setVotes] = useState(null);
@@ -19,8 +18,10 @@ export function useDownloadVoteTimestamps(token, votesCount) {
     act.onFetchTicketVoteTimestamps
   );
 
-  const getProgressPercentage = (total) => total ?
-    ((total * 100) / votesCount).toFixed(2) : 0;
+  const getProgressPercentage = useCallback((total) => total ?
+    ((total * 100) / votesCount).toFixed(2) : 0,
+    [votesCount]
+  );
 
   useEffect(() => {
     setProgress(getProgressPercentage(votes?.length));
