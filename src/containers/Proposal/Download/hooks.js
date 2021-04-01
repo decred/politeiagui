@@ -7,6 +7,7 @@ import {
   handleSaveVotesTimetamps,
   loadVotesTimestamps
 } from "src/lib/local_storage";
+import { useEffect } from "react";
 
 export function useDownloadVoteTimestamps(token, votesCount) {
   const [votes, setVotes] = useState(null);
@@ -17,6 +18,13 @@ export function useDownloadVoteTimestamps(token, votesCount) {
   const onFetchTicketVoteTimestamps = useAction(
     act.onFetchTicketVoteTimestamps
   );
+
+  const getProgressPercentage = (total) => total ?
+    ((total * 100) / votesCount).toFixed(2) : 0;
+
+  useEffect(() => {
+    setProgress(getProgressPercentage(votes?.length));
+  }, [getProgressPercentage, votes]);
 
   const [
     state,
@@ -47,7 +55,6 @@ export function useDownloadVoteTimestamps(token, votesCount) {
             onFetchTicketVoteTimestamps(token, page)
               .then((resp) => {
                 setVotes([...resp.votes]);
-                setProgress(((resp.votes?.length * 100) / votesCount).toFixed(2));
                 setPage(page + 1);
                 return send(VERIFY);
               })
@@ -59,7 +66,6 @@ export function useDownloadVoteTimestamps(token, votesCount) {
       verify: () => {
         if (votes?.length === votesCount) {
           // all timestamps loaded, resolve
-          setProgress(100);
           handleSaveVotesTimetamps(token, { auths, details, votes });
           fileDownload(
             JSON.stringify({ auths, details, votes }, null, 2),
@@ -74,7 +80,6 @@ export function useDownloadVoteTimestamps(token, votesCount) {
                 ...votes,
                 ...resp.votes
               ]);
-              setProgress(((votes?.length * 100) / votesCount).toFixed(2));
               setPage(page + 1);
               return send(VERIFY);
             })

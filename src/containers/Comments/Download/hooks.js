@@ -48,8 +48,8 @@ export function useDownloadCommentsTimestamps(recordToken) {
     takeRight(commentIds.length - TIMESTAMPS_PAGE_SIZE)(commentIds)
   ];
 
-  const getProgressPercentage = (timestamps) =>
-    (Object.keys(timestamps.length * 100) / commentsLength).toFixed(2);
+  const getProgressPercentage = (timestamps) => timestamps ?
+    (Object.keys(timestamps.length * 100) / commentsLength).toFixed(2) : 0;
 
   const makeTimestampsBundle = (timestamps) =>
     JSON.stringify(
@@ -59,6 +59,10 @@ export function useDownloadCommentsTimestamps(recordToken) {
       null,
       2
     );
+
+  useEffect(() => {
+    setProgress(getProgressPercentage(timestamps?.comments));
+  }, [getProgressPercentage, timestamps]);
 
   const [
     state,
@@ -83,7 +87,6 @@ export function useDownloadCommentsTimestamps(recordToken) {
         onFetchCommentsTimestamps(recordToken, fetch)
           .then(({ comments }) => {
             setTimestamps({ comments });
-            setProgress(getProgressPercentage(comments));
             setRemaining(next);
             return send(VERIFY);
           })
@@ -111,7 +114,6 @@ export function useDownloadCommentsTimestamps(recordToken) {
                   ...resp.comments
                 }
               });
-              setProgress(getProgressPercentage(comments));
               setRemaining(next);
               return send(VERIFY);
             })
