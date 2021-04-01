@@ -26,7 +26,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
     actions: {
       initial: () => {
         const ts = loadVotesTimestamps(token);
-        const hasProofs = ts?.votes?.reduce((acc, v) => 
+        const hasProofs = ts?.votes?.reduce((acc, v) =>
           acc && v.proofs.length > 0, true
         );
         if (ts?.votes?.length === votesCount && hasProofs) {

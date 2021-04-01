@@ -34,14 +34,14 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
             const normalizedSummaries = keys.reduce((acc, key) => ({
               ...acc,
               [key.substring(0, 7)]: action.payload.summaries[key]
-            }), {}) 
+            }), {});
             return compose(
               update("byToken", (voteSummaries) => ({
                 ...voteSummaries,
                 ...normalizedSummaries
               })),
               set("bestBlock", action.payload.bestblock)
-            )(state)
+            )(state);
           },
           [act.RECEIVE_VOTES_DETAILS]: () => {
             return update(["byToken", action.payload.token.substring(0, 7)], (voteSummaries) => ({
@@ -50,13 +50,13 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
                 auths: action.payload.auths,
                 details: action.payload.vote
               }
-            }))(state)
+            }))(state);
           },
           [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () => {
             return update(["byToken", action.payload.token.substring(0, 7)], (propVotes) => ({
               ...propVotes,
               votes: action.payload.votes
-            }))(state)
+            }))(state);
           },
           [act.RECEIVE_AUTHORIZE_VOTE]: () =>
             receiveVoteStatusChange(
@@ -75,7 +75,7 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
               state,
               action.payload.tokens,
               PROPOSAL_VOTING_ACTIVE
-            ),
+            )
         }[action.type] || (() => state)
       )();
 
