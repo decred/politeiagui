@@ -1327,7 +1327,7 @@ export const onFetchVotesDetails = (token) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_VOTES_DETAILS({ token }));
     return api
-      .votesDetails(csrf, token)
+      .proposalVoteDetails(csrf, token)
       .then((response) =>
         dispatch(
           act.RECEIVE_VOTES_DETAILS({

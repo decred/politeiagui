@@ -638,6 +638,9 @@ export const proposalsBatchVoteSummary = (csrf, tokens) =>
 export const proposalVoteResults = (csrf, token) =>
   POST("/results", csrf, { token }, apiTicketVote).then(getResponse);
 
+export const proposalVoteDetails = (csrf, token) =>
+  POST("/details", csrf, { token }, apiTicketVote).then(getResponse);
+
 export const proposalSubmissions = (token) =>
   POST("/submissions", "", { token }, apiTicketVote).then(getResponse);
 
@@ -699,8 +702,6 @@ export const votesInventory = (status, page) =>
 export const recordsTimestamp = (csrf, token, version) =>
   POST("/timestamps", csrf, { token, version }, apiRecords).then(getResponse);
 
-export const votesDetails = (csrf, token) =>
-  POST("/details", csrf, { token }, apiTicketVote).then(getResponse);
 
 // CMS
 

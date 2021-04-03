@@ -38,6 +38,7 @@ const getProposalRfpLinksTokens = (proposal) => {
 };
 
 export function useProposal(token, proposalState, threadParentID) {
+  const tokenShort = token.substring(0, 7);
   const onFetchProposalDetails = useAction(act.onFetchProposalDetails);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchProposalsVoteSummary = useAction(
@@ -51,7 +52,7 @@ export function useProposal(token, proposalState, threadParentID) {
   const proposal = useSelector(proposalSelector);
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.summaryByToken);
-
+  const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
   const rfpLinks = getProposalRfpLinksTokens(proposal);
 
   const unfetchedProposalTokens =
@@ -68,6 +69,11 @@ export function useProposal(token, proposalState, threadParentID) {
   const isRfp = proposal && !!proposal.linkby;
 
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
+  const isMissingVoteSummary = !(
+    voteSummaries[tokenShort] && 
+    voteSummaries[tokenShort].details &&
+    voteSummaries[tokenShort].votes
+  );
 
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
@@ -76,9 +82,6 @@ export function useProposal(token, proposalState, threadParentID) {
           onFetchProposalDetails(token)
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
-          onFetchProposalsVoteSummary([token]);
-          onFetchVotesDetails(token);
-          onFetchProposalVoteResults(token);
           return send(FETCH);
         }
         return send(VERIFY);
@@ -104,8 +107,9 @@ export function useProposal(token, proposalState, threadParentID) {
           return send(FETCH);
         }
         if (
-          !isEmpty(unfetchedSummariesTokens) &&
-          proposal?.state === PROPOSAL_STATE_VETTED
+          (!isEmpty(unfetchedSummariesTokens) || isMissingVoteSummary) &&
+          proposal?.state === PROPOSAL_STATE_VETTED &&
+          !loadingVoteSummary
         ) {
           Promise.all([
             onFetchProposalsVoteSummary(unfetchedSummariesTokens),
