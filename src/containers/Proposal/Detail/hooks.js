@@ -63,7 +63,10 @@ export function useProposal(token, proposalState, threadParentID) {
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
       proposals: values(pick(proposals, rfpLinks)),
-      voteSummaries: pick(voteSummaries, rfpLinks)
+      voteSummaries: pick(
+        voteSummaries,
+        rfpLinks.map((l) => l.substring(0, 7))
+      )
     };
 
   const isRfp = proposal && !!proposal.linkby;

@@ -35,7 +35,7 @@ import { useRouter } from "src/components/Router";
 
 const ProposalItem = ({
   proposal,
-  proposal: { comments, name, censorshiprecord },
+  proposal: { commentsCount, name, censorshiprecord },
   voteSummary
 }) => {
   const { history } = useRouter();
@@ -75,7 +75,7 @@ const ProposalItem = ({
           </Link>
           <CommentsLink
             showIcon={false}
-            numOfComments={comments}
+            numOfComments={commentsCount}
             url={commentsURL}
             className={styles.commentsLink}
           />

@@ -40,7 +40,9 @@ const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
               key={index}
               proposal={proposal}
               voteSummary={
-                voteSummaries[proposals[index].censorshiprecord.token]
+                voteSummaries[
+                  proposals[index]?.censorshiprecord.token.substring(0, 7)
+                ]
               }
             />
           ))
