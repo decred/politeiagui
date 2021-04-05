@@ -302,7 +302,7 @@ function PiUserPluginError(code) {
     2: "You do not have any proposal credits; you must purchase one before you can submit a proposal."
   };
 
-  this.message = errorMap[code] || defaultErrorMessage(code, PluginIdPi);
+  this.message = errorMap[code] || defaultErrorMessage(code, PluginIdPiUser);
   this.errorcode = code;
 }
 
