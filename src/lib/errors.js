@@ -5,6 +5,7 @@ const APITicketvote = "ticketvote";
 const APIWww = "v1"; // www api has no prefix so it's identified by v1
 
 const PluginIdPi = "pi";
+const PluginIdPiUser = "piuser";
 const PluginIdComments = "comments";
 const PluginIdTicketvote = "ticketvote";
 
@@ -39,6 +40,8 @@ export function APIPluginError(pluginId, code, context) {
   switch (pluginId) {
     case PluginIdPi:
       throw new PiPluginError(code, context);
+    case PluginIdPiUser:
+      throw new PiUserPluginError(code);
     case PluginIdComments:
       throw new CommentsPluginError(code, context);
     case PluginIdTicketvote:
@@ -293,6 +296,17 @@ function PiPluginError(code, context) {
 }
 
 PiPluginError.prototype = new Error();
+
+function PiUserPluginError(code) {
+  const errorMap = {
+    2: "You do not have any proposal credits; you must purchase one before you can submit a proposal."
+  };
+
+  this.message = errorMap[code] || defaultErrorMessage(code, PluginIdPiUser);
+  this.errorcode = code;
+}
+
+PiUserPluginError.prototype = new Error();
 
 function CommentsPluginError(code, context) {
   const errorMap = {
