@@ -10,9 +10,10 @@ function usePaywall(userID) {
   const paywallAddress = useSelector(sel.currentUserPaywallAddress);
   const paywallAmount = useSelector(sel.currentUserPaywallAmount);
   const paywallTxNotBefore = useSelector(sel.currentUserPaywallTxNotBefore);
+  const paywallTxId = useSelector(sel.currentUserPaywallTxid);
   const userIsPaidSelector = useMemo(() => sel.makeGetUserIsPaid(uuid), [uuid]);
   const userPaywallStatusSelector = useMemo(
-    () => sel.makeGetPaywallAddress(uuid),
+    () => sel.makeGetUserPaywallStatus(uuid),
     [uuid]
   );
   const userIsPaid = useSelector(userIsPaidSelector);
@@ -24,6 +25,7 @@ function usePaywall(userID) {
     currentUserEmail,
     paywallAddress,
     paywallAmount,
+    paywallTxId,
     paywallTxNotBefore,
     userPaywallStatus,
     isPaid: userIsPaid,
