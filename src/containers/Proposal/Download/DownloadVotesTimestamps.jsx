@@ -9,8 +9,9 @@ const DownloadVotesTimestampsWrapper = ({ label, recordToken, votesCount }) => {
   const [start, setStart] = useState(false);
 
   const ts = loadVotesTimestamps(recordToken);
-  const hasProofs = ts?.votes?.reduce((acc, v) =>
-    acc && v.proofs.length > 0, true
+  const hasProofs = ts?.votes?.reduce(
+    (acc, v) => acc && v.proofs.length > 0,
+    true
   );
   const hasLoadedTimestamps = ts?.votes?.length === votesCount && hasProofs;
 

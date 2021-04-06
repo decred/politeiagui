@@ -18,8 +18,8 @@ export function useDownloadVoteTimestamps(token, votesCount) {
     act.onFetchTicketVoteTimestamps
   );
 
-  const getProgressPercentage = useCallback((total) => total ?
-    ((total * 100) / votesCount).toFixed(2) : 0,
+  const getProgressPercentage = useCallback(
+    (total) => (total ? ((total * 100) / votesCount).toFixed(2) : 0),
     [votesCount]
   );
 
@@ -35,8 +35,9 @@ export function useDownloadVoteTimestamps(token, votesCount) {
     actions: {
       initial: () => {
         const ts = loadVotesTimestamps(token);
-        const hasProofs = ts?.votes?.reduce((acc, v) =>
-          acc && v.proofs.length > 0, true
+        const hasProofs = ts?.votes?.reduce(
+          (acc, v) => acc && v.proofs.length > 0,
+          true
         );
         if (ts?.votes?.length === votesCount && hasProofs) {
           return send(RESOLVE, ts);
@@ -50,7 +51,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
         // fetch unpaginated data from vote timestamps
         onFetchTicketVoteTimestamps(token)
           .then((resp) => {
-            setAuths([ ...resp.auths ]);
+            setAuths([...resp.auths]);
             setDetails({ ...resp.details });
             // fetch first page of vote timestamps
             onFetchTicketVoteTimestamps(token, page)
@@ -77,10 +78,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
           // more timestamps remaining, fetch next page
           onFetchTicketVoteTimestamps(token, page)
             .then((resp) => {
-              setVotes([
-                ...votes,
-                ...resp.votes
-              ]);
+              setVotes([...votes, ...resp.votes]);
               setPage(page + 1);
               return send(VERIFY);
             })

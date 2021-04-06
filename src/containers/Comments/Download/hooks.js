@@ -1,4 +1,11 @@
-import { createContext, useContext, useMemo, useState, useEffect, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback
+} from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
@@ -48,8 +55,11 @@ export function useDownloadCommentsTimestamps(recordToken) {
     takeRight(commentIds.length - TIMESTAMPS_PAGE_SIZE)(commentIds)
   ];
 
-  const getProgressPercentage = useCallback((timestamps) => timestamps ?
-    (Object.keys(timestamps.length * 100) / commentsLength).toFixed(2) : 0,
+  const getProgressPercentage = useCallback(
+    (timestamps) =>
+      timestamps
+        ? (Object.keys(timestamps.length * 100) / commentsLength).toFixed(2)
+        : 0,
     [commentsLength]
   );
 

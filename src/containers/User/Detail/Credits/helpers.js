@@ -26,12 +26,11 @@ const getRowDataForPurchase = (purchase) => ({
   "DCRs Paid": purchase.price
     ? (purchase.price * purchase.numberPurchased).toFixed(1)
     : 0,
-  Transaction:
-    manuallyCleared.includes(purchase.txId) ? (
-      purchase.txId
-    ) : (
-      <DcrTransactionLink txID={purchase.txId} />
-    ),
+  Transaction: manuallyCleared.includes(purchase.txId) ? (
+    purchase.txId
+  ) : (
+    <DcrTransactionLink txID={purchase.txId} />
+  ),
   Status: purchase.confirming ? (
     <StatusTag type="bluePending" text="Waiting for confirmations" />
   ) : (
@@ -49,7 +48,8 @@ export const getTableContentFromPurchases = (
   purchases,
   pendingTransaction,
   creditPrice
-) => orderBy(
+) =>
+  orderBy(
     ["timestamp"],
     ["desc"]
   )(

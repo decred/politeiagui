@@ -31,7 +31,10 @@ export default ({ proposalCreditPrice, user }) => {
     txId: paywallTxId,
     type: "fee"
   };
-  const allPurchases = PAYWALL_STATUS_PAID === userPaywallStatus ? [...proposalCreditsPurchases, paywallPayment] : proposalCreditsPurchases;
+  const allPurchases =
+    PAYWALL_STATUS_PAID === userPaywallStatus
+      ? [...proposalCreditsPurchases, paywallPayment]
+      : proposalCreditsPurchases;
   const data = getTableContentFromPurchases(
     allPurchases,
     {
