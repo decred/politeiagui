@@ -70,7 +70,7 @@ export function useProposal(token, proposalState, threadParentID) {
 
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !(
-    voteSummaries[tokenShort] && 
+    voteSummaries[tokenShort] &&
     voteSummaries[tokenShort].details &&
     voteSummaries[tokenShort].votes
   );
