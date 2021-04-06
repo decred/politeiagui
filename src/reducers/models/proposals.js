@@ -113,17 +113,14 @@ const updateProposalRfpLinks = (proposal) => (state) => {
 const updateInventory = (payload) => (allProps) => {
   return {
     ...allProps,
-    ...Object.keys(payload).reduce(
-      (res, status) => {
-        const propsStatus = allProps[status] ? allProps[status] : [];
-        const payloadStatus = payload[status] ? payload[status] : [];
-        return ({
-          ...res,
-          [status]: [...new Set([...propsStatus, ...payloadStatus])]
-        });
-      },
-      {}
-    )
+    ...Object.keys(payload).reduce((res, status) => {
+      const propsStatus = allProps[status] ? allProps[status] : [];
+      const payloadStatus = payload[status] ? payload[status] : [];
+      return {
+        ...res,
+        [status]: [...new Set([...propsStatus, ...payloadStatus])]
+      };
+    }, {})
   };
 };
 
@@ -201,16 +198,20 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 )
               ),
               update(["allByRecordStatus"], (props) => {
-                const statusTokensArray = props[mapStatusToName[action.payload.proposal.status]];
-                const proposalToken = action.payload.proposal.censorshiprecord.token;
-                const newArr = statusTokensArray ? [...statusTokensArray, proposalToken] : [proposalToken];
+                const statusTokensArray =
+                  props[mapStatusToName[action.payload.proposal.status]];
+                const proposalToken =
+                  action.payload.proposal.censorshiprecord.token;
+                const newArr = statusTokensArray
+                  ? [...statusTokensArray, proposalToken]
+                  : [proposalToken];
                 return {
                   ...props,
-                  [mapStatusToName[action.payload.oldStatus]]: props[mapStatusToName[action.payload.oldStatus]].filter(
-                  (p) => p !== proposalToken
-                  ),
+                  [mapStatusToName[action.payload.oldStatus]]: props[
+                    mapStatusToName[action.payload.oldStatus]
+                  ].filter((p) => p !== proposalToken),
                   [mapStatusToName[action.payload.proposal.status]]: newArr
-              };
+                };
               })
             )(state);
           },
