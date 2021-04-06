@@ -180,8 +180,8 @@ const proposals = (state = DEFAULT_STATE, action) =>
               set("newProposalToken", action.payload.censorshiprecord.token)
             )(state);
           },
-          [act.RECEIVE_SETSTATUS_PROPOSAL]: () => {
-            return compose(
+          [act.RECEIVE_SETSTATUS_PROPOSAL]: () =>
+            compose(
               updateProposalRfpLinks(action.payload.proposal),
               set(
                 ["byToken", proposalToken(action.payload.proposal)],
@@ -213,8 +213,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
                   [mapStatusToName[action.payload.proposal.status]]: newArr
                 };
               })
-            )(state);
-          },
+            )(state),
           [act.RECEIVE_USER_PROPOSALS]: () =>
             compose(
               update("byToken", (proposals) => ({
