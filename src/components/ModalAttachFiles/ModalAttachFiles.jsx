@@ -10,7 +10,7 @@ const ModalAttachFiles = ({
   onChange,
   onClose
 }) => {
-  const { policy } = usePolicy();
+  const { policyPi: policy } = usePolicy();
   return (
     <Modal title={title} show={show} onClose={onClose}>
       <div className={styles.wrapper}>
@@ -19,7 +19,7 @@ const ModalAttachFiles = ({
           <P>
             Valid MIME types - image/png <br />
             Max image size - 512kb <br />
-            Max number of files - {policy.maximages}
+            Max number of files - {policy.imagefilecountmax}
           </P>
         )}
         <P className={styles.greyText}>

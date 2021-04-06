@@ -9,12 +9,12 @@ import {
 function checkProposalName(props, values) {
   const name = values.name.trim();
   return (
-    (props.policy.minproposalnamelength &&
-      name.length < props.policy.minproposalnamelength) ||
+    (props.policy.pi.namelengthmin &&
+      name.length < props.policy.pi.namelengthmin) ||
     (props.policy.maxproposalnamelength &&
-      name.length > props.policy.maxproposalnamelength) ||
-    (props.policy.proposalnamesupportedchars &&
-      !proposalNameValidator(name, props.policy.proposalnamesupportedchars))
+      name.length > props.policy.pi.namelengthmax) ||
+    (props.policy.pi.namesupportedchars &&
+      !proposalNameValidator(name, props.policy.pi.namesupportedchars))
   );
 }
 
@@ -31,8 +31,8 @@ const validate = (values, dispatch, props) => {
   if (checkProposalName(props, values)) {
     throw new SubmissionError({
       _error:
-        `The proposal name must be between ${props.policy.minproposalnamelength} and ${props.policy.maxproposalnamelength} characters long ` +
-        `and only contain the following characters: ${props.policy.proposalnamesupportedchars.join(
+        `The proposal name must be between ${props.policy.pi.namelengthmin} and ${props.policy.pi.namelengthmax} characters long ` +
+        `and only contain the following characters: ${props.policy.pi.namesupportedchars.join(
           " "
         )}`
     });
@@ -40,9 +40,9 @@ const validate = (values, dispatch, props) => {
   validateURL(values.description);
 
   if (values.files) {
-    if (values.files.length > props.policy.maximages) {
+    if (values.files.length > props.policy.pi.imagefilecountmax) {
       throw new SubmissionError({
-        _error: `Only ${props.policy.maximages} attachments are allowed.`
+        _error: `Only ${props.policy.pi.imagefilecountmax} attachments are allowed.`
       });
     }
 

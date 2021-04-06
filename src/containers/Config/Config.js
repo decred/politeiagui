@@ -44,9 +44,7 @@ const Config = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [configOptions, setConfig] = useState(null);
-  const {
-    policy: { paywallenabled }
-  } = usePolicy();
+  const { policy } = usePolicy();
 
   useEffect(() => {
     async function initConfig() {
@@ -67,8 +65,8 @@ const Config = ({ children }) => {
     <ConfigProvider
       {...{
         ...configOptions,
-        enablePaywall: !!paywallenabled,
-        enableCredits: !!paywallenabled
+        enablePaywall: !!policy?.paywallenabled,
+        enableCredits: !!policy?.paywallenabled
       }}>
       {!loading && !error && configOptions && children}
       {error}

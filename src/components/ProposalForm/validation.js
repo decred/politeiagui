@@ -13,9 +13,9 @@ import {
 } from "src/constants";
 
 export const proposalValidation = ({
-  proposalnamesupportedchars,
-  maxproposalnamelength,
-  minproposalnamelength
+  namesupportedchars,
+  namelengthmax,
+  namelengthmin
 }) => (values) => {
   const errors = {};
   if (!values) {
@@ -48,9 +48,9 @@ export const proposalValidation = ({
   // name validation
   const nameErrors = validateProposalName(
     values.name,
-    proposalnamesupportedchars,
-    minproposalnamelength,
-    maxproposalnamelength
+    namesupportedchars,
+    namelengthmin,
+    namelengthmax
   );
   if (nameErrors) errors.name = nameErrors;
 
@@ -77,21 +77,21 @@ const validateRfpSubmissionToken = (rfpLink) => {
 
 const validateProposalName = (
   name,
-  proposalnamesupportedchars,
-  minproposalnamelength,
-  maxproposalnamelength
+  namesupportedchars,
+  namelengthmin,
+  namelengthmax
 ) => {
   if (!name) {
     return "Required";
   }
-  const nameRegex = buildRegexFromSupportedChars(proposalnamesupportedchars);
+  const nameRegex = buildRegexFromSupportedChars(namesupportedchars);
   if (!name.match(nameRegex)) {
-    return invalidMessage("name", proposalnamesupportedchars);
+    return invalidMessage("name", namesupportedchars);
   }
-  if (name.trim().length < minproposalnamelength) {
-    return minLengthMessage("name", minproposalnamelength);
+  if (name.trim().length < namelengthmin) {
+    return minLengthMessage("name", namelengthmin);
   }
-  if (name.trim().length > maxproposalnamelength) {
-    return maxLengthMessage("name", maxproposalnamelength);
+  if (name.trim().length > namelengthmax) {
+    return maxLengthMessage("name", namelengthmax);
   }
 };

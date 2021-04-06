@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
 import * as sel from "src/selectors";
+import isEmpty from "lodash/isEmpty";
 
 function usePolicy() {
   const policy = useSelector(sel.policy);
@@ -10,7 +11,7 @@ function usePolicy() {
   const [error, setError] = useState();
   useEffect(
     function handleSetValidationSchemaFromPolicy() {
-      if (!policy) {
+      if (isEmpty(policy)) {
         onFetchPolicy().catch((e) => {
           setError(e);
         });
@@ -18,7 +19,15 @@ function usePolicy() {
     },
     [policy, onFetchPolicy]
   );
-  return { policy, loading, error };
+
+  return {
+    policy: policy.www,
+    policyTicketVote: policy.ticketvote,
+    policyComments: policy.comments,
+    policyPi: policy.pi,
+    loading,
+    error
+  };
 }
 
 export default usePolicy;

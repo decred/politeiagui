@@ -4,13 +4,13 @@ import * as act from "src/actions";
 import { proposalValidation } from "./validation";
 
 export function useProposalForm() {
-  const { policy } = usePolicy();
+  const { policyPi } = usePolicy();
   const onFetchProposalsBatchWithoutState = useAction(
     act.onFetchProposalsBatchWithoutState
   );
   return {
-    proposalFormValidation: policy && proposalValidation(policy),
+    proposalFormValidation: policyPi && proposalValidation(policyPi),
     onFetchProposalsBatchWithoutState,
-    policy
+    policy: policyPi
   };
 }
