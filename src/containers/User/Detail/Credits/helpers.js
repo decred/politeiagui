@@ -18,18 +18,19 @@ export const tableHeaders = [
   "Date"
 ];
 
-const getRowDataForCreditsPurchase = (purchase) => ({
-  Type: "Credits",
+const manuallyCleared = ["created_by_dbutil", "cleared_by_admin"];
+
+const getRowDataForPurchase = (purchase) => ({
+  Type: purchase.type === "fee" ? "Registration Fee" : "Credits",
   Amount: purchase.numberPurchased,
   "DCRs Paid": purchase.price
     ? (purchase.price * purchase.numberPurchased).toFixed(1)
     : 0,
-  Transaction:
-    purchase.txId === "created_by_dbutil" ? (
-      purchase.txId
-    ) : (
-      <DcrTransactionLink txID={purchase.txId} />
-    ),
+  Transaction: manuallyCleared.includes(purchase.txId) ? (
+    purchase.txId
+  ) : (
+    <DcrTransactionLink txID={purchase.txId} />
+  ),
   Status: purchase.confirming ? (
     <StatusTag type="bluePending" text="Waiting for confirmations" />
   ) : (
@@ -44,7 +45,7 @@ const getRowDataForCreditsPurchase = (purchase) => ({
 });
 
 export const getTableContentFromPurchases = (
-  proposalCreditPurchases,
+  purchases,
   pendingTransaction,
   creditPrice
 ) =>
@@ -52,10 +53,10 @@ export const getTableContentFromPurchases = (
     ["timestamp"],
     ["desc"]
   )(
-    proposalCreditPurchases.map(getRowDataForCreditsPurchase).concat(
+    purchases.map(getRowDataForPurchase).concat(
       pendingTransaction && pendingTransaction.txID
         ? [
-            getRowDataForCreditsPurchase({
+            getRowDataForPurchase({
               numberPurchased: Math.round(
                 (pendingTransaction.amount * 1) / (creditPrice * 100000000)
               ),
@@ -80,7 +81,7 @@ export const getCsvData = (data) =>
       datePurchased: d.datePurchased
         ? formatUnixTimestamp(d.datePurchased)
         : "",
-      price: d.type === "fee" ? "" : d.price,
+      price: d.price,
       type: d.type === "fee" ? "registration fee" : "credits"
     }));
 

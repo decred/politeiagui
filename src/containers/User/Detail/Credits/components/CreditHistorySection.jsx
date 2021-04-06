@@ -4,6 +4,8 @@ import {
   getTableContentFromPurchases,
   tableHeaders
 } from "../helpers.js";
+import { PAYWALL_STATUS_PAID } from "src/constants";
+import usePaywall from "src/hooks/api/usePaywall";
 import { useCredits } from "../hooks.js";
 import { Table, Text, Link, useMediaQuery } from "pi-ui";
 import ExportToCsv from "src/components/ExportToCsv.jsx";
@@ -16,8 +18,25 @@ export default ({ proposalCreditPrice, user }) => {
     proposalPaywallPaymentTxid,
     proposalPaywallPaymentAmount
   } = useCredits(userID);
+  const {
+    paywallTxNotBefore,
+    paywallAmount,
+    paywallTxId,
+    userPaywallStatus
+  } = usePaywall(userID);
+  const paywallPayment = {
+    datePurchased: paywallTxNotBefore,
+    numberPurchased: 1,
+    price: paywallAmount,
+    txId: paywallTxId,
+    type: "fee"
+  };
+  const allPurchases =
+    PAYWALL_STATUS_PAID === userPaywallStatus
+      ? [...proposalCreditsPurchases, paywallPayment]
+      : proposalCreditsPurchases;
   const data = getTableContentFromPurchases(
-    proposalCreditsPurchases,
+    allPurchases,
     {
       confirmations: proposalPaywallPaymentConfirmations,
       txID: proposalPaywallPaymentTxid,
@@ -34,7 +53,7 @@ export default ({ proposalCreditPrice, user }) => {
       style={!extraSmall ? { overflowX: "scroll" } : {}}>
       <Text className="margin-right-xs">Credit History</Text>
       <ExportToCsv
-        data={getCsvData(proposalCreditsPurchases)}
+        data={getCsvData(allPurchases)}
         fields={["numberPurchased", "price", "txId", "datePurchased", "type"]}
         filename="payment_history">
         <Link style={{ cursor: "pointer" }}>Export to csv</Link>
