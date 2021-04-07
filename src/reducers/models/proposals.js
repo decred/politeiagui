@@ -198,6 +198,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 )
               ),
               update(["allByRecordStatus"], (props) => {
+                if (!props[
+                  mapStatusToName[action.payload.oldStatus]
+                ]) return { ...props };
                 const statusTokensArray =
                   props[mapStatusToName[action.payload.proposal.status]];
                 const proposalToken =
@@ -242,10 +245,12 @@ const proposals = (state = DEFAULT_STATE, action) =>
             )(state),
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
+            console.log(comment);
+            console.log(state);
             if (!state.byToken[comment.token]) return state;
             return update(
-              ["byToken", comment.token, "numcomments"],
-              (numComments) => ++numComments
+              ["byToken", comment.token, "commentsCount"],
+              (commentsCount) => ++commentsCount
             )(state);
           },
           [act.RECEIVE_LOGOUT]: () => {

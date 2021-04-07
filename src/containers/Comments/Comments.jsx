@@ -79,7 +79,7 @@ const Comments = ({
     currentUser,
     error,
     ...commentsCtx
-  } = useComments(recordToken, proposalState);
+  } = useComments(recordTokenFull, proposalState);
 
   const commentsCount = comments ? comments.length : 0;
 
