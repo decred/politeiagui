@@ -33,6 +33,7 @@ const apiBase = "/api/";
 const apiRecords = `${apiBase}records/`;
 const apiTicketVote = `${apiBase}ticketvote/`;
 const apiComments = `${apiBase}comments/`;
+const apiPi = `${apiBase}pi/`;
 
 const getUrl = (path, version, api = apiBase) => {
   if (!path && !version) return api;
@@ -520,7 +521,17 @@ export const verifyKeyRequest = (csrf, userid, verificationtoken) =>
       )
     );
 
-export const policy = () => GET("/policy").then(getResponse);
+export const policyWWW = () => GET("/policy").then(getResponse);
+
+export const policyTicketVote = (csrf) =>
+  POST("/policy", csrf, {}, apiTicketVote).then(getResponse);
+
+export const policyComments = (csrf) =>
+  POST("/policy", csrf, {}, apiComments).then(getResponse);
+  
+export const policyPi = (csrf) =>
+  POST("/policy", csrf, {}, apiPi).then(getResponse);
+
 
 export const userProposals = (csrf, userid) =>
   POST("/userrecords", csrf, { userid }, apiRecords).then(getResponse);

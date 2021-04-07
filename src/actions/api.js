@@ -112,15 +112,26 @@ export const onPollUserPayment = () => (dispatch, getState) => {
     });
 };
 
-export const onGetPolicy = () => (dispatch) => {
+export const onGetPolicy = () => (dispatch, getState) => {
+  const isCMS = sel.isCMS(getState());
   dispatch(act.REQUEST_POLICY());
-  return api
-    .policy()
-    .then((response) => dispatch(act.RECEIVE_POLICY(response)))
-    .catch((error) => {
-      dispatch(act.RECEIVE_POLICY(null, error));
-      throw error;
-    });
+  return Promise.all([
+    api.policyWWW(),
+    !isCMS && api.policyTicketVote(),
+    !isCMS && api.policyComments(),
+    !isCMS && api.policyPi(),
+  ]).then((response) => {
+    const policyOnRedux = { www: response[0] };
+    if (!isCMS) {
+      policyOnRedux.ticketvote = response[1];
+      policyOnRedux.comments = response[2];
+      policyOnRedux.pi = response[3];
+    }
+    return dispatch(act.RECEIVE_POLICY(policyOnRedux));
+  }).catch((error) => {
+    dispatch(act.RECEIVE_POLICY(null, error));
+    throw error;
+  });
 };
 
 export const withCsrf = (fn) => (dispatch, getState) => {

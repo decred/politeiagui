@@ -51,7 +51,7 @@ const ModalStartVote = ({
   const { apiInfo } = useLoaderContext();
   const { theme } = useTheme();
   const {
-    policy: { minlinkbyperiod, minvoteduration, maxvoteduration }
+    policyTicketVote: { linkbyperiodmin, votedurationmin, votedurationmax }
   } = usePolicy();
   const successIconBgColor = getThemeProperty(
     theme,
@@ -71,9 +71,9 @@ const ModalStartVote = ({
       if (
         isRfp &&
         voteType === VOTE_TYPE_STANDARD &&
-        !isRfpReadyToVote(linkby, minlinkbyperiod)
+        !isRfpReadyToVote(linkby, linkbyperiodmin)
       ) {
-        const days = minlinkbyperiod / (24 * 3600);
+        const days = linkbyperiodmin / (24 * 3600);
         throw Error(
           `RFP deadline should meet the minimum period to start voting which is about ${days} days from when the vote starts`
         );
@@ -96,7 +96,7 @@ const ModalStartVote = ({
   );
 
   const initialValues = {
-    duration: getBlockDurationArray(minvoteduration, maxvoteduration)[0],
+    duration: getBlockDurationArray(votedurationmin, votedurationmax)[0],
     quorumPercentage: 20,
     passPercentage: 60
   };
@@ -174,8 +174,8 @@ const ModalStartVote = ({
                   vertical
                   options={getDurationOptions(
                     apiInfo.testnet,
-                    minvoteduration,
-                    maxvoteduration
+                    votedurationmin,
+                    votedurationmax
                   )}
                   value={values.duration}
                   onChange={handleChangeDuration}
