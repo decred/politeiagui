@@ -20,6 +20,7 @@ export const isApiRequestingPropVoteResults = getIsApiRequesting(
 export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
   "proposalsVoteSummary"
 );
+export const isApiRequestingVotesDetails = getIsApiRequesting("votesDetails");
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequestingProposalPaywall = getIsApiRequesting(
   "proposalPaywallDetails"
@@ -35,6 +36,11 @@ export const isApiRequestingLikeComment = get([
 export const proposalIsRequesting = or(
   isApiRequestingInit,
   isApiRequestingProposal
+);
+export const isApiRequestingVoteSummary = or(
+  isApiRequestingProposalsVoteSummary,
+  isApiRequestingPropVoteResults,
+  isApiRequestingVotesDetails
 );
 export const isApiRequestingRescanUserPayments = getIsApiRequesting(
   "rescanUserPayments"
