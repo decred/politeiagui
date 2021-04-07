@@ -244,8 +244,6 @@ const proposals = (state = DEFAULT_STATE, action) =>
             )(state),
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
-            console.log(comment);
-            console.log(state);
             if (!state.byToken[comment.token]) return state;
             return update(
               ["byToken", comment.token, "commentsCount"],
