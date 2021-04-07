@@ -14,6 +14,7 @@ import {
   ACTIVE_VOTE,
   APPROVED,
   REJECTED,
+  PUBLIC,
   CENSORED,
   ARCHIVED,
   INELIGIBLE,
@@ -24,6 +25,13 @@ import {
   parseReceivedProposalsMap,
   parseRawProposal
 } from "src/helpers";
+
+const mapStatusToName = {
+  [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
+  [PROPOSAL_STATUS_ARCHIVED]: ARCHIVED,
+  [PROPOSAL_STATUS_CENSORED]: CENSORED,
+  [PROPOSAL_STATUS_PUBLIC]: PUBLIC
+};
 
 const DEFAULT_STATE = {
   byToken: {},
@@ -60,7 +68,7 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
       return state !== PROPOSAL_STATE_UNVETTED ? INELIGIBLE : ARCHIVED;
     default:
       throw Error(
-        `mapReviewStatusToTokenInventoryStatus: Invalid proposal status: 
+        `mapReviewStatusToTokenInventoryStatus: Invalid proposal status:
       ${status}`
       );
   }
@@ -105,13 +113,14 @@ const updateProposalRfpLinks = (proposal) => (state) => {
 const updateInventory = (payload) => (allProps) => {
   return {
     ...allProps,
-    ...Object.keys(payload).reduce(
-      (res, status) => ({
+    ...Object.keys(payload).reduce((res, status) => {
+      const propsStatus = allProps[status] ? allProps[status] : [];
+      const payloadStatus = payload[status] ? payload[status] : [];
+      return {
         ...res,
-        [status]: [...(allProps[status] || []), ...(payload[status] || [])]
-      }),
-      {}
-    )
+        [status]: [...new Set([...propsStatus, ...payloadStatus])]
+      };
+    }, {})
   };
 };
 
@@ -188,11 +197,22 @@ const proposals = (state = DEFAULT_STATE, action) =>
                   [proposalToken(action.payload.proposal)]
                 )
               ),
-              update(["allByRecordStatus"], (props) =>
-                props[UNREVIEWED]?.filter(
-                  (p) => p !== action.payload.proposal.censorshiprecord.token
-                )
-              )
+              update(["allByRecordStatus"], (props) => {
+                const statusTokensArray =
+                  props[mapStatusToName[action.payload.proposal.status]];
+                const proposalToken =
+                  action.payload.proposal.censorshiprecord.token;
+                const newArr = statusTokensArray
+                  ? [...statusTokensArray, proposalToken]
+                  : [proposalToken];
+                return {
+                  ...props,
+                  [mapStatusToName[action.payload.oldStatus]]: props[
+                    mapStatusToName[action.payload.oldStatus]
+                  ].filter((p) => p !== proposalToken),
+                  [mapStatusToName[action.payload.proposal.status]]: newArr
+                };
+              })
             )(state),
           [act.RECEIVE_USER_PROPOSALS]: () =>
             compose(
