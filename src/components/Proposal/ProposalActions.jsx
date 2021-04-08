@@ -91,13 +91,15 @@ const PublicActions = ({
     <>
       {isUnderDiscussion && (
         <div className="justify-right margin-top-m">
-          <Button
-            onClick={withProposal(onCensor)}
-            className={classNames("margin-right-s", styles.reportButton)}
-            noBorder
-            kind="secondary">
-            Report as spam
-          </Button>
+          <AdminContent>
+            <Button
+              onClick={withProposal(onCensor)}
+              className={classNames("margin-right-s", styles.reportButton)}
+              noBorder
+              kind="secondary">
+              Report as spam
+            </Button>
+          </AdminContent>
           {isProposalOwner &&
             !isRfpSubmission &&
             (!isVotingStartAuthorized ? (

@@ -528,10 +528,9 @@ export const policyTicketVote = (csrf) =>
 
 export const policyComments = (csrf) =>
   POST("/policy", csrf, {}, apiComments).then(getResponse);
-  
+
 export const policyPi = (csrf) =>
   POST("/policy", csrf, {}, apiPi).then(getResponse);
-
 
 export const userProposals = (csrf, userid) =>
   POST("/userrecords", csrf, { userid }, apiRecords).then(getResponse);
@@ -701,7 +700,6 @@ export const votesInventory = (status, page) =>
 
 export const recordsTimestamp = (csrf, token, version) =>
   POST("/timestamps", csrf, { token, version }, apiRecords).then(getResponse);
-
 
 // CMS
 

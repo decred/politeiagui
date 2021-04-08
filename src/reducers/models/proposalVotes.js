@@ -31,13 +31,16 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
         {
           [act.RECEIVE_PROPOSALS_VOTE_SUMMARY]: () => {
             const keys = Object.keys(action.payload.summaries);
-            const normalizedSummaries = keys.reduce((acc, key) => ({
-              ...acc,
-              [key.substring(0, 7)]: {
-                ...state.byToken[key.substring(0, 7)],
-                ...action.payload.summaries[key]
-              }
-            }), {});
+            const normalizedSummaries = keys.reduce(
+              (acc, key) => ({
+                ...acc,
+                [key.substring(0, 7)]: {
+                  ...state.byToken[key.substring(0, 7)],
+                  ...action.payload.summaries[key]
+                }
+              }),
+              {}
+            );
             return compose(
               update("byToken", (voteSummaries) => ({
                 ...voteSummaries,
@@ -47,19 +50,25 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_VOTES_DETAILS]: () => {
-            return update(["byToken", action.payload.token.substring(0, 7)], (voteSummary) => ({
-              ...voteSummary,
-              details: {
-                auths: action.payload.auths,
-                details: action.payload.vote
-              }
-            }))(state);
+            return update(
+              ["byToken", action.payload.token.substring(0, 7)],
+              (voteSummary) => ({
+                ...voteSummary,
+                details: {
+                  auths: action.payload.auths,
+                  details: action.payload.vote
+                }
+              })
+            )(state);
           },
           [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () => {
-            return update(["byToken", action.payload.token.substring(0, 7)], (voteSummary) => ({
-              ...voteSummary,
-              votes: action.payload.votes
-            }))(state);
+            return update(
+              ["byToken", action.payload.token.substring(0, 7)],
+              (voteSummary) => ({
+                ...voteSummary,
+                votes: action.payload.votes
+              })
+            )(state);
           },
           [act.RECEIVE_AUTHORIZE_VOTE]: () =>
             receiveVoteStatusChange(
