@@ -2,7 +2,11 @@ import { useMemo } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
-import { getProposalRfpLinks, getProposalToken } from "../helpers";
+import {
+  getProposalRfpLinks,
+  getProposalToken,
+  getTokensForProposalsPagination
+} from "../helpers";
 import { getDetailsFile } from "./helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
@@ -63,7 +67,10 @@ export function useProposal(token, proposalState, threadParentID) {
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
       proposals: values(pick(proposals, rfpLinks)),
-      voteSummaries: pick(voteSummaries, rfpLinks)
+      voteSummaries: pick(
+        voteSummaries,
+        rfpLinks.map((l) => l.substring(0, 7))
+      )
     };
 
   const isRfp = proposal && !!proposal.linkby;
@@ -74,11 +81,12 @@ export function useProposal(token, proposalState, threadParentID) {
     voteSummaries[tokenShort].details &&
     voteSummaries[tokenShort].votes
   );
+  const needsInitialFetch = isRfp || (token && isMissingDetails);
 
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
       initial: () => {
-        if (token && isMissingDetails) {
+        if (needsInitialFetch) {
           onFetchProposalDetails(token)
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
@@ -101,7 +109,10 @@ export function useProposal(token, proposalState, threadParentID) {
       },
       verify: () => {
         if (!isEmpty(unfetchedProposalTokens)) {
-          onFetchProposalsBatch(unfetchedProposalTokens, isRfp)
+          const [tokensBatch] = getTokensForProposalsPagination(
+            unfetchedProposalTokens
+          );
+          onFetchProposalsBatch(tokensBatch, isRfp)
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);

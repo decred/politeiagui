@@ -17,8 +17,6 @@ import uniq from "lodash/fp/uniq";
 import map from "lodash/fp/map";
 import reduce from "lodash/fp/reduce";
 import flow from "lodash/fp/flow";
-import take from "lodash/fp/take";
-import takeRight from "lodash/fp/takeRight";
 import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
@@ -30,7 +28,8 @@ import {
 } from "src/constants";
 import {
   getRfpLinkedProposals,
-  getProposalStatusLabel
+  getProposalStatusLabel,
+  getTokensForProposalsPagination
 } from "src/containers/Proposal/helpers";
 
 const getRfpLinks = (proposals) =>
@@ -51,11 +50,6 @@ const getRfpSubmissions = (proposals) =>
 
 const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens)(keys(proposals));
-
-const getTokensForProposalsPagination = (
-  tokens,
-  pageSize = PROPOSAL_PAGE_SIZE
-) => [take(pageSize)(tokens), takeRight(tokens.length - pageSize)(tokens)];
 
 const getCurrentPage = (tokens) => {
   return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;

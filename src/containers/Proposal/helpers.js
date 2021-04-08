@@ -25,13 +25,16 @@ import {
   NOJS_ROUTE_PREFIX,
   PROPOSAL_VOTING_REJECTED,
   PROPOSAL_VOTING_INELIGIBLE,
-  INELIGIBLE
+  INELIGIBLE,
+  PROPOSAL_PAGE_SIZE
 } from "../../constants";
 import { getTextFromIndexMd } from "src/helpers";
 import set from "lodash/fp/set";
 import values from "lodash/fp/values";
 import pick from "lodash/pick";
 import isEmpty from "lodash/fp/isEmpty";
+import take from "lodash/fp/take";
+import takeRight from "lodash/fp/takeRight";
 import get from "lodash/fp/get";
 
 /**
@@ -365,7 +368,7 @@ export const getProposalRfpLinks = (proposal, rfpSubmissions, proposals) => {
   return hasRfpSubmissions
     ? { ...proposal, rfpSubmissions }
     : isSubmissionWithProposals
-    ? { ...proposal, proposedFor: proposals[proposal.linkto].name }
+    ? { ...proposal, proposedFor: proposals[proposal.linkto]?.name }
     : proposal;
 };
 
@@ -402,3 +405,13 @@ export const getProposalLink = (proposal, isJsEnabled) =>
         proposal.state
       )
     : "";
+
+/**
+ * Returns a [batch, rest] pair given the batch page size from tokens array
+ * @param {*} tokens
+ * @param {*} pageSize
+ */
+export const getTokensForProposalsPagination = (
+  tokens,
+  pageSize = PROPOSAL_PAGE_SIZE
+) => [take(pageSize)(tokens), takeRight(tokens.length - pageSize)(tokens)];
