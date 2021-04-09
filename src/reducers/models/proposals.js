@@ -8,7 +8,6 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   UNREVIEWED,
   PRE_VOTE,
   ACTIVE_VOTE,
@@ -58,8 +57,6 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
   switch (status) {
     case PROPOSAL_STATUS_UNREVIEWED:
       return UNREVIEWED;
-    case PROPOSAL_STATUS_UNREVIEWED_CHANGES:
-      return UNREVIEWED;
     case PROPOSAL_STATUS_CENSORED:
       return state !== PROPOSAL_STATE_UNVETTED ? INELIGIBLE : CENSORED;
     case PROPOSAL_STATUS_PUBLIC:
@@ -76,7 +73,8 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
 
 const proposalToken = (proposal) => proposal.censorshiprecord.token;
 
-const shortProposalToken = (proposal) => proposalToken(proposal).substring(0, 7);
+const shortProposalToken = (proposal) =>
+  proposalToken(proposal).substring(0, 7);
 
 const proposalIndexFile = (name = "", description = "") =>
   getIndexMdFromText([name, description].join("\n\n"));
@@ -200,8 +198,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 )
               ),
               update(["allByRecordStatus"], (props) => {
-                if (!props[mapStatusToName[action.payload.oldStatus]])
-                  return { ...props };
+                console.log(props[mapStatusToName[action.payload.oldStatus]]);
+                console.log(action.payload.oldStatus);
+                console.log(props);
+                console.log(mapStatusToName);
                 const statusTokensArray =
                   props[mapStatusToName[action.payload.proposal.status]];
                 const proposalToken =
@@ -209,6 +209,11 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 const newArr = statusTokensArray
                   ? [...statusTokensArray, proposalToken]
                   : [proposalToken];
+                if (!props[mapStatusToName[action.payload.oldStatus]])
+                  return {
+                    ...props,
+                    [mapStatusToName[action.payload.proposal.status]]: newArr
+                  };
                 return {
                   ...props,
                   [mapStatusToName[action.payload.oldStatus]]: props[

@@ -2,7 +2,6 @@ import {
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_ARCHIVED,
-  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED
 } from "src/constants";
@@ -22,9 +21,7 @@ export const tabValues = {
 export const getProposalsByTabOption = (tabOption, proposals) => {
   if (tabOption === tabValues.UNREVIEWED) {
     return proposals.filter(
-      (prop) =>
-        prop.status === PROPOSAL_STATUS_UNREVIEWED ||
-        prop.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES
+      (prop) => prop.status === PROPOSAL_STATUS_UNREVIEWED
     );
   }
 
