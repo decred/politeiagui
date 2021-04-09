@@ -76,6 +76,8 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
 
 const proposalToken = (proposal) => proposal.censorshiprecord.token;
 
+const shortProposalToken = (proposal) => proposalToken(proposal).substring(0, 7);
+
 const proposalIndexFile = (name = "", description = "") =>
   getIndexMdFromText([name, description].join("\n\n"));
 
@@ -140,7 +142,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
             update("allByRecordStatus", updateInventory(action.payload))(state),
           [act.RECEIVE_EDIT_PROPOSAL]: () =>
             set(
-              ["byToken", proposalToken(action.payload.proposal)],
+              ["byToken", shortProposalToken(action.payload.proposal)],
               parseRawProposal(action.payload.proposal)
             )(state),
           [act.RECEIVE_NEW_PROPOSAL]: () => {
