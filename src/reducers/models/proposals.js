@@ -198,10 +198,6 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 )
               ),
               update(["allByRecordStatus"], (props) => {
-                console.log(props[mapStatusToName[action.payload.oldStatus]]);
-                console.log(action.payload.oldStatus);
-                console.log(props);
-                console.log(mapStatusToName);
                 const statusTokensArray =
                   props[mapStatusToName[action.payload.proposal.status]];
                 const proposalToken =
