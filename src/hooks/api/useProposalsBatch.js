@@ -90,17 +90,11 @@ export default function useProposalsBatch({
 
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
-  const isInventoryEmpty = !Object.values(allByStatus).some((st) => st.length);
   const hasRemainingTokens = !isEmpty(remainingTokens);
 
   const [state, send] = useFetchMachine({
     actions: {
-      initial: () => {
-        if (isInventoryEmpty) {
-          return send(START);
-        }
-        return send(VERIFY);
-      },
+      initial: () => send(START),
       start: () => {
         if (hasRemainingTokens) return send(VERIFY);
         if (page && page === previousPage) return send(RESOLVE);
