@@ -9,7 +9,6 @@ import {
   PROPOSAL_VOTING_APPROVED,
   PROPOSAL_STATUS_ARCHIVED,
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_UNREVIEWED_CHANGES,
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED,
@@ -136,9 +135,7 @@ export const isRfpReadyToRunoff = (
  * @returns {Boolean} isUnreviewed
  */
 export const isUnreviewedProposal = (proposal) =>
-  proposal.status === PROPOSAL_STATUS_UNREVIEWED ||
-  proposal.status === PROPOSAL_STATUS_UNREVIEWED_CHANGES;
-
+  proposal.status === PROPOSAL_STATUS_UNREVIEWED;
 /**
  * Returns true if the given proposal is censored
  * @param {Object} proposal
