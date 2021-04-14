@@ -1,5 +1,4 @@
 import {
-  Text,
   Dropdown,
   DropdownItem,
   Toggle,
@@ -9,7 +8,7 @@ import {
   DEFAULT_LIGHT_THEME_NAME
 } from "pi-ui";
 import React, { useEffect, useMemo } from "react";
-import { NavLink, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import useNavigation from "src/hooks/api/useNavigation";
 import { useConfig } from "src/containers/Config";
@@ -20,7 +19,7 @@ import { isUserValidContractor } from "src/containers/DCC";
 
 const HeaderNav = ({ history }) => {
   const { user, username, onLogout, isCMS } = useNavigation();
-  const { navMenuPaths, enableCredits, enableAdminInvite } = useConfig();
+  const { navMenuPaths, enableCredits } = useConfig();
   const { isadmin, userid } = user || {};
   const { themeName, setThemeName } = useTheme();
   const userIsAdmin = user && isadmin;
@@ -122,24 +121,6 @@ const HeaderNav = ({ history }) => {
           Dark Mode
         </div>
       </div>
-      {!enableAdminInvite && (
-        <>
-          <NavLink
-            className={styles.navLink}
-            activeClassName={styles.activeNavLink}
-            to="/user/login">
-            <Text className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
-              Log in
-            </Text>
-          </NavLink>
-          <NavLink
-            className={styles.navLink}
-            activeClassName={styles.activeNavLink}
-            to="/user/signup">
-            <Text className={styles.navLinkText}>Sign up</Text>
-          </NavLink>
-        </>
-      )}
     </nav>
   );
 };

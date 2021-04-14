@@ -6,7 +6,6 @@ import {
   AdminAuthenticatedRoute,
   AuthenticatedRoute
 } from "src/containers/Routes";
-import commonRoutes from "./commonRoutes";
 import PageNotFound from "./NotFound";
 import PageProposalDetail from "./Proposals/Detail";
 import PageProposalsPublicList from "./Proposals/PublicList";
@@ -14,7 +13,6 @@ import PageProposalsUnvetted from "./Proposals/UnvettedList";
 import PageProposalNew from "./Proposals/New";
 import PageProposalEdit from "./Proposals/Edit";
 import useOnboardModal from "src/hooks/utils/useOnboardModal";
-import PageUserDetail from "./User/Detail";
 
 const Routes = ({ location }) => {
   useOnboardModal();
@@ -27,15 +25,6 @@ const Routes = ({ location }) => {
             title="Public Proposals"
             exact
             component={PageProposalsPublicList}
-          />
-          {commonRoutes}
-          {/* User Route */}
-          <Route
-            path="/user/:userid"
-            title="User Detail"
-            exact
-            key="user-detail-route"
-            component={PageUserDetail}
           />
           {/* Record routes */}
           <AdminAuthenticatedRoute
