@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo } from "react";
+import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
 import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
+import useLegacyVettedProposals from "src/hooks/api/useLegacyVettedProposals";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
@@ -38,6 +40,28 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     proposalPageSize: 4
   });
 
+  // TODO: remove legacy
+  const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(!hasMoreProposals, statusByTab[tabLabels[index]]);
+
+  const mergedProposalsTokens = !isEmpty(legacyProposalsTokens) ? Object.keys(proposalsTokens).reduce((acc, cur) => {
+    if (cur === "started" || cur === "pre") {
+      return {
+        ...acc,
+        [cur]: proposalsTokens[cur]
+      };
+    }
+    if (cur === "ineligible") {
+      return {
+        ...acc,
+        [cur]: [...proposalsTokens[cur], ...legacyProposalsTokens["abandoned"]]
+      };
+    }
+    return {
+      ...acc,
+      [cur]: [...proposalsTokens[cur], ...legacyProposalsTokens[cur]]
+    };
+  }, {}) : proposalsTokens;
+
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
       [tabValues.IN_DISCUSSION]: "No proposals under discussion",
@@ -49,9 +73,10 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     return mapTabToMessage[tab];
   }, []);
 
+  // TODO: remove legacy
   const recordTokensByTab = useMemo(
-    () => mapProposalsTokensByTab(tabLabels, proposalsTokens),
-    [proposalsTokens]
+    () => mapProposalsTokensByTab(tabLabels, mergedProposalsTokens),
+    [mergedProposalsTokens]
   );
 
   const content = useCallback(
@@ -78,7 +103,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   return (
     <RecordsView
-      records={proposals}
+      records={{ ...proposals, ...legacyProposals }}
       tabLabels={tabLabels}
       recordTokensByTab={recordTokensByTab}
       renderRecord={renderProposal}

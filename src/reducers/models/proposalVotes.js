@@ -7,9 +7,26 @@ import {
   PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_VOTING_ACTIVE
 } from "../../constants";
+import votesstatus from "src/legacyvotestatuses";
 
 const DEFAULT_STATE = {
-  byToken: {},
+  // TODO: remove legacy
+  byToken: votesstatus.votesstatus
+    .map(st => {
+      return {
+        ...st,
+        results: st.results.map(res => ({
+          id: res.option.id,
+          description: res.option.description,
+          votebit: res.option.bits,
+          votes: res.votesreceived
+        }))
+      };
+    })
+    .reduce((acc, cur) => ({
+      ...acc,
+      [cur.token]: cur
+    }), {}),
   bestBlock: null
 };
 

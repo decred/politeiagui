@@ -66,15 +66,22 @@ export const RecordToken = ({ token, isCopyable }) => {
   );
 };
 
-export const Title = ({ children, url, ...props }) => {
+// TODO: remove legacy
+export const Title = ({ children, url, isLegacy, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
-  return (
+  return !isLegacy ? (
     <Wrapper to={url} className={styles.title}>
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>
     </Wrapper>
+  ) : (
+    <a href={url}>
+      <H2 {...props} data-testid="record-title">
+        {children}
+      </H2>
+    </a>
   );
 };
 
