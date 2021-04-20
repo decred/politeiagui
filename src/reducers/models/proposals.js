@@ -51,7 +51,9 @@ const DEFAULT_STATE = {
   allProposalsByUserId: {},
   numOfProposalsByUserId: {},
   // TODO: remove legacy
-  legacyProposals: legacyProposals.proposals.map(p => p.censorshiprecord.token),
+  legacyProposals: legacyProposals.proposals.map(
+    (p) => p.censorshiprecord.token
+  ),
   newProposalToken: null
 };
 

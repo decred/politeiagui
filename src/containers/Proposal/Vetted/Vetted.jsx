@@ -41,26 +41,34 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   });
 
   // TODO: remove legacy
-  const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(!hasMoreProposals, statusByTab[tabLabels[index]]);
+  const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
+    !hasMoreProposals,
+    statusByTab[tabLabels[index]]
+  );
 
-  const mergedProposalsTokens = !isEmpty(legacyProposalsTokens) ? Object.keys(proposalsTokens).reduce((acc, cur) => {
-    if (cur === "started" || cur === "pre") {
-      return {
-        ...acc,
-        [cur]: proposalsTokens[cur]
-      };
-    }
-    if (cur === "ineligible") {
-      return {
-        ...acc,
-        [cur]: [...proposalsTokens[cur], ...legacyProposalsTokens["abandoned"]]
-      };
-    }
-    return {
-      ...acc,
-      [cur]: [...proposalsTokens[cur], ...legacyProposalsTokens[cur]]
-    };
-  }, {}) : proposalsTokens;
+  const mergedProposalsTokens = !isEmpty(legacyProposalsTokens)
+    ? Object.keys(proposalsTokens).reduce((acc, cur) => {
+        if (cur === "started" || cur === "pre") {
+          return {
+            ...acc,
+            [cur]: proposalsTokens[cur]
+          };
+        }
+        if (cur === "ineligible") {
+          return {
+            ...acc,
+            [cur]: [
+              ...proposalsTokens[cur],
+              ...legacyProposalsTokens["abandoned"]
+            ]
+          };
+        }
+        return {
+          ...acc,
+          [cur]: [...proposalsTokens[cur], ...legacyProposalsTokens[cur]]
+        };
+      }, {})
+    : proposalsTokens;
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {

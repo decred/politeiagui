@@ -1,6 +1,10 @@
 // TODO: remove legacy
 import { useEffect, useState } from "react";
-import { PROPOSAL_VOTING_APPROVED, PROPOSAL_VOTING_REJECTED, PROPOSAL_VOTING_INELIGIBLE } from "src/constants";
+import {
+  PROPOSAL_VOTING_APPROVED,
+  PROPOSAL_VOTING_REJECTED,
+  PROPOSAL_VOTING_INELIGIBLE
+} from "src/constants";
 import legacyProposalsInfo from "src/legacyproposals.json";
 import tokenInventory from "src/legacytokeninventory.json";
 
@@ -11,7 +15,10 @@ const mapOldToNewStatus = {
   6: 4
 };
 
-const newLegacyProposalsInfo = legacyProposalsInfo.proposals.map(p => ({ ...p, status: mapOldToNewStatus[p.status] }));
+const newLegacyProposalsInfo = legacyProposalsInfo.proposals.map((p) => ({
+  ...p,
+  status: mapOldToNewStatus[p.status]
+}));
 
 const mapStatusToString = {
   [PROPOSAL_VOTING_APPROVED]: "approved",
@@ -27,7 +34,16 @@ export default function useLegacyVettedProposals(shouldReturn, status) {
     if (shouldReturn) {
       const proposalsTokensList = tokenInventory[mapStatusToString[status]];
       // filter propsals by tab and transform from Array to Object where the key is the proposal token and the value is the proposal info
-      const finalList = newLegacyProposalsInfo.filter(p => proposalsTokensList && proposalsTokensList.includes(p.censorshiprecord.token)).reduce((acc, cur) => ({ ...acc, [cur.censorshiprecord.token]: cur }), {});
+      const finalList = newLegacyProposalsInfo
+        .filter(
+          (p) =>
+            proposalsTokensList &&
+            proposalsTokensList.includes(p.censorshiprecord.token)
+        )
+        .reduce(
+          (acc, cur) => ({ ...acc, [cur.censorshiprecord.token]: cur }),
+          {}
+        );
       setLegacyProposals(finalList);
       setLegacyProposalsTokens(tokenInventory);
     } else {

@@ -12,10 +12,10 @@ import votesstatus from "src/legacyvotestatuses";
 const DEFAULT_STATE = {
   // TODO: remove legacy
   byToken: votesstatus.votesstatus
-    .map(st => {
+    .map((st) => {
       return {
         ...st,
-        results: st.results.map(res => ({
+        results: st.results.map((res) => ({
           id: res.option.id,
           description: res.option.description,
           votebit: res.option.bits,
@@ -23,10 +23,13 @@ const DEFAULT_STATE = {
         }))
       };
     })
-    .reduce((acc, cur) => ({
-      ...acc,
-      [cur.token]: cur
-    }), {}),
+    .reduce(
+      (acc, cur) => ({
+        ...acc,
+        [cur.token]: cur
+      }),
+      {}
+    ),
   bestBlock: null
 };
 

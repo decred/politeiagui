@@ -17,7 +17,9 @@ export default function useProposalURLs(
   // TODO: remove legacy
   const legacyProposals = useSelector(sel.legacyProposals);
   const isLegacy = legacyProposals.includes(proposalToken);
-  const proposalURL = !isLegacy ? getProposalUrl(proposalToken, javascriptEnabled, state, isLegacy) : `${ARCHIVE_URL}proposals/${proposalToken.substring(0, 7)}`;
+  const proposalURL = !isLegacy
+    ? getProposalUrl(proposalToken, javascriptEnabled, state, isLegacy)
+    : `${ARCHIVE_URL}proposals/${proposalToken.substring(0, 7)}`;
   const commentsURL = useMemo(
     () => getCommentsUrl(proposalToken, javascriptEnabled, state),
     [javascriptEnabled, proposalToken, state]
