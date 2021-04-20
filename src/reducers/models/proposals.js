@@ -24,6 +24,8 @@ import {
   parseReceivedProposalsMap,
   parseRawProposal
 } from "src/helpers";
+// TODO: remove legacy
+import legacyProposals from "src/legacyproposals.json";
 
 const mapStatusToName = {
   [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
@@ -48,6 +50,10 @@ const DEFAULT_STATE = {
   },
   allProposalsByUserId: {},
   numOfProposalsByUserId: {},
+  // TODO: remove legacy
+  legacyProposals: legacyProposals.proposals.map(
+    (p) => p.censorshiprecord.token
+  ),
   newProposalToken: null
 };
 
@@ -118,7 +124,7 @@ const updateInventory = (payload) => (allProps) => {
       const payloadStatus = payload[status] ? payload[status] : [];
       return {
         ...res,
-        [status]: [...new Set([...propsStatus, ...payloadStatus])]
+        [status]: [...new Set([...payloadStatus, ...propsStatus])]
       };
     }, {})
   };

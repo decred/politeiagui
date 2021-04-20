@@ -4,6 +4,7 @@ import orderBy from "lodash/fp/orderBy";
 import { createDeepEqualSelector } from "../helpers";
 
 export const proposalsByToken = get(["proposals", "byToken"]);
+export const legacyProposals = get(["proposals", "legacyProposals"]);
 export const allProposalsByUserID = get(["proposals", "allProposalsByUserId"]);
 export const numOfProposalsByUserId = get([
   "proposals",

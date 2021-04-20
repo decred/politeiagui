@@ -1,0 +1,2535 @@
+{
+  "proposals": [
+    {
+      "name": "Video Content Production for Decred Phase 3",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1616835515,
+      "userid": "65706d2f-f82b-4aa5-b4eb-4b1140f4f41f",
+      "username": "exitus",
+      "publickey": "1d3a6202cf928d4c53ea9a4cc3df59f819d2ffc6a2d703bdd6ea001a7bc460f3",
+      "signature": "20667734b151ddb34608fb817377d8f41c25c81d4e43ca89b3561d707f9d4a847287d986441261cd4162c311e4ae16665dddf00d69c80344206efaed8eceb80a",
+      "commentsCount": 6,
+      "version": "1",
+      "publishedat": 1616835515,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "03e8129de2b8f7a5aab95d38c2b1c162a91f88ad02bb95af9055f2f841876866",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiVmlkZW8gQ29udGVudCBQcm9kdWN0aW9uIGZvciBEZWNyZWQgUGhhc2UgMyJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "95a14094485c92ed3f578b650bd76c5f8c3fd6392650c16bd4ae37e6167c040d",
+        "merkle": "62fdd81f3e15c8fcd4fa85d27d88147a321ca75e1f4ec9eaf126ab58c4121b59",
+        "signature": "9620effb382d3d9dc323ff5edd37b0586e31c34f40f70113d81845f3a1733bcaa1a26e8f03d0646db9c14dd5a37f003bf5945e035afdac021f4872aae432f70f"
+      }
+    },
+    {
+      "name": "Design domain budgets: 03.21 - 12.21",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1616713513,
+      "userid": "ba96e181-abff-4c1a-b2be-9bb916ea4083",
+      "username": "linnutee",
+      "publickey": "a7b3acc694ef1f1ae33660ed0f1a5197761950f3089b8c6778e18b308dadc61e",
+      "signature": "9cb4a3727ae0d1d4b415d0e44a5b3ea7d135cedb98118bf76347c725d0f339c2521ef207625662c61038a6d4d7b8de7eb4f238a850f07bf8c409381ef658fa03",
+      "commentsCount": 2,
+      "version": "1",
+      "publishedat": 1616713513,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "34f45ed72a80de98a2ee9d261208f327674491791adb350a093a52cba6e026d1",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVzaWduIGRvbWFpbiBidWRnZXRzOiAwMy4yMSAtIDEyLjIxIn0="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "76eba5ac3ffbedc0d5d5f679a5f47693782bebaf30f66e741a70a37d4fdcef15",
+        "merkle": "f3fc95e453b0ccaf6db66ca96af3d47a8ab23b787202dac704ffb2f7d666d9de",
+        "signature": "161fada63b96960b17c1403d6bebe0b59b13202ec7ae49d5a64982238838844b427a3ace1ef7fbfdc2ff082334c5fff2cee406fa92ace704364e1dfc1c9aac0c"
+      }
+    },
+    {
+      "name": "Moderation 2021",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1615843623,
+      "userid": "b4c6eeb6-68f6-4967-a04b-33c0a22c46b3",
+      "username": "bee",
+      "publickey": "a717216ef1999f84d71aec664b4d14f90616a09b67c7c68892b8e8fe9e8b1441",
+      "signature": "a4b12bbf2a0e7d885cf4162349e68532fe7af49b76efc50d3066496b46f2c3c61d223a333b7acd86f55067e77130119cf534bb384edf0c4b04a73b12b30eb402",
+      "commentsCount": 3,
+      "version": "2",
+      "publishedat": 1615468769,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "3070b01b96e46c6d3ee7f6204c7a4681f0449a9d34e3e5573dbaf2ac53c3bf89",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiTW9kZXJhdGlvbiAyMDIxIn0="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "e1cda440a0cae8439658f90ee24741d34c6bb61b0c3f19572e0131c2c9737b6c",
+        "merkle": "4da2f9722a8a9f84d73afebff100cbd2cb072ae7ed6aaded9132ec596b863371",
+        "signature": "e2b53f86e4a0b55352a5a4b9f06dd2d6336fdb64ad77d179c0d1332fb0ca066407bf7da7bb1d86b9948c4a15572d5134b1dec2039aa15a6f9063a1d53d20200f"
+      }
+    },
+    {
+      "name": "Decred Journal 2021",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1612294044,
+      "userid": "b4c6eeb6-68f6-4967-a04b-33c0a22c46b3",
+      "username": "bee",
+      "publickey": "a717216ef1999f84d71aec664b4d14f90616a09b67c7c68892b8e8fe9e8b1441",
+      "signature": "fbed7f26ce117b6e07826274a6448cb183db441b693b2ec7f91ff1f83801053393208960c9844f2962116f4de91a31b61ccdc816797c99ae8a28d33a3d3dee0f",
+      "commentsCount": 6,
+      "version": "1",
+      "publishedat": 1612294044,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "29935674d28b8063c62739fc7825d4dd76618ed15f931169da47822be60610f9",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIEpvdXJuYWwgMjAyMSJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "1d74b888cbb62ede376e4bfa101ab4eb42e18a417038b963082a9ff55d293f29",
+        "merkle": "52cfc2654ba964e60a3faa84785a2c1cc27cd6467839d0898a16f8ca80e11d01",
+        "signature": "82e7969a7baff1574f47cc15f4038772a6dcfad41a611700900f5b9defe799174386dc55c52ae92f9223ef9a7e5d92ccce2dc4046fd9bf277779c614ad250a05"
+      }
+    },
+    {
+      "name": "Open Source Research 2021",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1612203541,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "c55ecdf3101a95429b83bdda2e6683f36cd19ef80e8ffdcc0da40eea524a8f1ece7a11b6e1ae6e27d51c8298109ca0d97263426afa207ace8269a4a521848f08",
+      "commentsCount": 20,
+      "version": "1",
+      "publishedat": 1612203541,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "a1d70ca467b33abbafb0cfdbdd057cf11fdcacc937980b49ed69771927fe2acf",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiT3BlbiBTb3VyY2UgUmVzZWFyY2ggMjAyMSJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "020b8b0b4309fbbf18e56c03ef3e0f93b650e2ad3f8d5034d9d2d544866e616a",
+        "merkle": "668e313dfbd24eda194a672c80dffcede2cd92299797b79dccd759d6718a5e7d",
+        "signature": "045335023e6add869f8b0476d930e24972393e05aa6d635e129eaa4521b16d8f433acf223984969560ed5a722a8beb5b5efd06569dfc92f15b25ef2ccb3e880e"
+      }
+    },
+    {
+      "name": "Decentralized Credits: The Digitization of Money and State (Book)",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1611803604,
+      "userid": "8ff8bdd1-8c15-4a2a-aed6-43a039d7be95",
+      "username": "ammarooni",
+      "publickey": "7bf956c858f4e123edba7c87b37bf819200c0588abc1ac00d5f8e0f0732bd3e4",
+      "signature": "f6ca85b558daa972be6b25b09445ac7e3bfd7c6af4357d06e24866889cbb00d76f0cdc8410f14a16cd5749ae821510bc13c3c12632c2520739ccf8bf2a403001",
+      "commentsCount": 40,
+      "version": "5",
+      "publishedat": 1610896594,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "925882df28b361550830f0ca44d42581d6758540363dcab86ed84d3895290a01",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjZW50cmFsaXplZCBDcmVkaXRzOiBUaGUgRGlnaXRpemF0aW9uIG9mIE1vbmV5IGFuZCBTdGF0ZSAoQm9vaykifQ=="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "9e1d644ab6a7f30ecc83b471e9aa3d9afe99dd121c1f69b50c098c495a1388da",
+        "merkle": "5e947563f09270f846dab919b7e77a8e9bf17f0e5794a4a77b877324e5b009ed",
+        "signature": "5f39568e4b188002dbcb2f12848c3880df997ecf7fa4bc44b1f03bac9796d1042253c1313f6fb0022169ee2e756a94003d72226a007bbaf32349e560032b9900"
+      }
+    },
+    {
+      "name": "Decred Arabia Communications and Content Creation",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1611222332,
+      "userid": "eb0907b6-96e5-42ae-b89a-49aa53e4ebe0",
+      "username": "arij",
+      "publickey": "f5ebe7dcb0c272d0d59b9aa23f09dc231d7b9f088f2a0282b837d2a537ccbce4",
+      "signature": "3f8cff4b73f472bd65b927baf86f74890ad82d924e02e5ebab887d07a8ae9cf5dff16669461c76551550afb4580c8a704936d2d66ac8feb6e020a3ce4732fa08",
+      "commentsCount": 34,
+      "version": "2",
+      "publishedat": 1610896581,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "09d10cc1f15096240893e557742c9a050d7e016db2424d082dfdc046b9fd4b63",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIEFyYWJpYSBDb21tdW5pY2F0aW9ucyBhbmQgQ29udGVudCBDcmVhdGlvbiJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "d0c32d53670711ed4ac928dfd4ee2c4c8e046db79dd270ab27cc95d8bf0d4f0b",
+        "merkle": "d9fca5c9ad7bc4da9965f2a04944f34c2661c38c936863fcd9012770b8731767",
+        "signature": "61b3a15cad6c7f61ed3bb484b72cfff42b54e44e7e2b3707f011f611249ac99669d83cb87bdd6fbc23d61dc7fce83f99eab9c4622be3dc1e87af231d6f013000"
+      }
+    },
+    {
+      "name": "Decred DEX Development Phase II",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1610814871,
+      "userid": "7f3a60e9-a8d1-4e43-a68a-94bb2409d75c",
+      "username": "chappjc",
+      "publickey": "22b54aa3030d05ebb4ab31c5c719b8fec9d979928ce517222fe80195e0d3596d",
+      "signature": "34c3a9c0a13449349ddf57ce82291bd960cb22603ba9319a09a6eb6cd7ff5c0405b6ca1eb52a687b54119bf3bdbb70e78adf9e609495e602997a06b5f522e405",
+      "commentsCount": 32,
+      "version": "3",
+      "publishedat": 1609875537,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "8b964b307c3083cfb0f74a4d1b65db211c48d405b9ea344fa76075ead50f85d9",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIERFWCBEZXZlbG9wbWVudCBQaGFzZSBJSSJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "d462ac3de7ed3706c185262ed15a2ecf454c7e0d76eeaf13231ad5d393ef4e9a",
+        "merkle": "e22cb9e60ad15243cffc282b09b53f76d041a5b21591ff7194e3068246af811c",
+        "signature": "0379ca78ac33eb688e23c1fc8fe21cfe88745630c8236001e6406a89041ed12574df20157ab15b38f68683cc8f43d5da183d1ccb9fb2ba2472156dbdb3bb1b0e"
+      }
+    },
+    {
+      "name": "Decred in Depth (Live)",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1609978880,
+      "userid": "70553162-d5c9-42ca-9f22-3d1b0050c243",
+      "username": "elima_iii",
+      "publickey": "c271daeb6a3e4b94720efe4c3a924e4bf9cf08fa160263453881eba07de542ce",
+      "signature": "46811e4c3e70c8a0bfd6dbd0a3d82b2c8157e8e01de94d94504831b4b104556d885b3384d046497b38bbca4bb94397f2894a8edbe0279b70f031efffa235b307",
+      "commentsCount": 32,
+      "version": "2",
+      "publishedat": 1609955668,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "d976dc9f323ce2490cc405b443d7e4d48931ed2b9ad3fdebc78cf6e34a521565",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIGluIERlcHRoIChMaXZlKSJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "391108ebf0038ed6bd7da17b446a47fa9e61ddf1d95df833b627214591d6668e",
+        "merkle": "8a98adbfbee364a898acea8b7c6005da39f1285c7efc186f7fbd6a3a8ffefd16",
+        "signature": "1b4a4d5aed23641e863330c473aa4f00219c78a71d5bc8fa042de553a53b9ae7b76156618d050268f654421b72ab4e92f37b20c992798d6ab93d776f1ba30805"
+      }
+    },
+    {
+      "name": "Decred Hackathons and LATAM Initial Chapter",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1607564195,
+      "userid": "65b2d0d7-44a3-4f5d-9d45-8f6a9a9d3364",
+      "username": "pablito",
+      "publickey": "921b6fbcf54d69288802373a6060df03efdaa60ef3843f8e102b68146b2cc96f",
+      "signature": "6a3fce4ddac969cff08860105058da8fc96bb8551897124d2b4b13633d10ce6a56afaaa9409a33ac6e22c35dfcb789f99dd43f93a94f00c12fd5017ecda8ee0e",
+      "commentsCount": 9,
+      "version": "1",
+      "publishedat": 1607564195,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "3fa5f4e6f4baf2ded83a1b2b42d74b4ffa7c267271ba92b86e1ee2e90ebd9ae7",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIEhhY2thdGhvbnMgYW5kIExBVEFNIEluaXRpYWwgQ2hhcHRlciJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "5ce163684f4fd680bd378a9b5bb234e58f3ce4f0509cd896aa64a669fb39eaee",
+        "merkle": "91937c2ed9e995e18a13aa79ddad0d8a28fe3960abfdc644c5edf7f9bb712ad8",
+        "signature": "9a57ac03b2ab45f67e9551055e49556f9225b002ba5a7257c1cf96907c6496cab8318220260f78c331ed2b4ff3b009c470036e5d69491ced25ded6a7bcc0070d"
+      }
+    },
+    {
+      "name": "Decred in Spanish Communications and Content Creation Proposal 3",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1607467291,
+      "userid": "0a6edc44-3a04-439e-af08-261854673cf9",
+      "username": "3lian",
+      "publickey": "f9da0bd73ab97e9e4b3097c71cfbac5273466eeac44520872fc65ae5c24274b0",
+      "signature": "cb8cb541ae4692bc2e694a9e1fc47d4d750b50738d2b6c619bcbaaf625ba9b01016068d16f062d2288afddd8c70dbf2c3e7e2fb3d9ebe734f32ae2877fad4400",
+      "commentsCount": 67,
+      "version": "10",
+      "publishedat": 1606865471,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "05fee7ef1f27e4619e56a670088ddb816c650fb6666bcddbe1f92f1b3e7b32ad",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIGluIFNwYW5pc2ggQ29tbXVuaWNhdGlvbnMgYW5kIENvbnRlbnQgQ3JlYXRpb24gUHJvcG9zYWwgMyJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "350f64b09cc3d2dbae453f49177ca70505ba701fb141a8fc446698460fd5e221",
+        "merkle": "9df8c72396eb799455e32e89943963571b86c563df5c72ef3d6933210176eeeb",
+        "signature": "e8a9f512b03d94ee2d6f778fd906007063fe9efe9e95547a2a3b759b9096c9abfa88fe7cca21acdc0f095aff86b4fae2969e3e08f4d7c864b98627285c731f01"
+      }
+    },
+    {
+      "name": "WhyDecred.com - Communicating Decred's Value - FINAL UPDATE: going MVP",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1606767938,
+      "userid": "5f05329d-fdea-406c-b68e-62210e29785b",
+      "username": "paris_smithson",
+      "publickey": "5e8b2261d0c8fc18844094b5386fd398c828cec2db1bce7de0e4843d37c6028f",
+      "signature": "c02bad74afc71282c405b1c7581cc1143aab35c2a3df54feccaa3678ad40b3a51afda85136952697e1fe8b31ca3274292a8d5229101078352d10c2b8fe372008",
+      "commentsCount": 58,
+      "version": "5",
+      "statuschangemessage": "Requested by proposal owner",
+      "publishedat": 1604951176,
+      "abandonedat": 1606767937,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "bbe3ac27b87eb9378113df3ca21907552e820bafe1b63dc542363350f483eb52",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiV2h5RGVjcmVkLmNvbSAtIENvbW11bmljYXRpbmcgRGVjcmVkJ3MgVmFsdWUgLSBGSU5BTCBVUERBVEU6IGdvaW5nIE1WUCJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "8a0932475eba2139df82f885fbdff9845e98551b47c44c378bf51840ae616334",
+        "merkle": "525ced054f9e63b7ff087cbaf35971b91a87cbd5f7a9254f26c41122289c1974",
+        "signature": "58ac637c9301032d1ee6805e237a6ab94579ef4aedac47cf795bc15b198938d40dfa13c3f02ac880c6cf5e04f68502c8299d574fda337c4fed4c98583100420c"
+      }
+    },
+    {
+      "name": "Mobile Wallets 2020-2021",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1605551455,
+      "userid": "01ed6d12-2e09-4905-8135-33b863b8496b",
+      "username": "raedah",
+      "publickey": "eb82b264d3dad64ca85f5167f6bd5cf64897d546159cdb12303edd50cc7b47d1",
+      "signature": "822acba79ba4bae4738641a8fb31b11fe0d8ac1f63a8ccbd27097fa2c61e1e8214451cd547553e0952fd80eca9dab945ebd193c6fe1f590c450e37f6860bc703",
+      "commentsCount": 22,
+      "version": "3",
+      "publishedat": 1604432044,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "0399b36ad2d9c97607431da6187aa831f6b3d69099bfe4c9dea0e623f81e2fb1",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiTW9iaWxlIFdhbGxldHMgMjAyMC0yMDIxIn0="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "bc499c98329736d5b8d61c0fc86edd9e2e7b72f89961ca5b9073692ade4476b7",
+        "merkle": "b13d54762d4b5f069385ef1f36e4386812067c7133b33f480f251802f08a1196",
+        "signature": "749fe58f236abaee9f9ce1b2033a6f5b0eaae99481544e41eae09da8af59ba06cc05d3ed006141aa1742b4a3023b734e7937af6b7a2b362e526fd6b858fa9200"
+      }
+    },
+    {
+      "name": "Decred Address Scanner",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1604969652,
+      "userid": "b7d9b286-6793-49f4-9a6d-4197747eec50",
+      "username": "joegruff",
+      "publickey": "3b528e5d87f70c355118ff473c05334d7496f1df808208328626eee96770118a",
+      "signature": "f70a02664d4867c9a9b9b3f27795fc0c97ad63f33fb7fe6624979fb94118fae9c92647cb4828ad8f19ef911bc951ad07fdd07b3092c349cc622a2320e1ad910d",
+      "commentsCount": 16,
+      "version": "2",
+      "publishedat": 1604951190,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "4498a4e4a1f852dc5ec146e18ce3c032b9ac916e36c090957ff2385a657dacfd",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIEFkZHJlc3MgU2Nhbm5lciJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "3943bffdf14b4c8ac32c17ff4a4ecaf7406a115a642567d50eb6f70804b0097c",
+        "merkle": "3457a0e5ae0e7dad6c68b11716c54445f35a84c925bc8e824de2a78bf2f6261f",
+        "signature": "544cc08c2f631552edd75e562107622251c46e798326c79660288d114b079e903a07be3cd8f909f5748a4a5c69d1797d27b9f89114652e76a66b2ee765d9260f"
+      }
+    },
+    {
+      "name": "GoDCR: GoLang Native Desktop Wallet",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1604597439,
+      "userid": "01ed6d12-2e09-4905-8135-33b863b8496b",
+      "username": "raedah",
+      "publickey": "eb82b264d3dad64ca85f5167f6bd5cf64897d546159cdb12303edd50cc7b47d1",
+      "signature": "b36430a57a54df77136ef0b3cec21b9b4c60a90d9db4f6c254aaa205ec6d380394302032556002bc53ff3c5bb4ce67a54412549e3c224b6685a578681c50730d",
+      "commentsCount": 18,
+      "version": "2",
+      "publishedat": 1604432012,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "8ee0b35d946172a683927cc8c530334da7cce3426306e37724e28dae49ad7bb5",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiR29EQ1I6IEdvTGFuZyBOYXRpdmUgRGVza3RvcCBXYWxsZXQifQ=="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "e5c8051d7426a754b3642aa2895839666a360abbdee3c1c1edd56ba152702875",
+        "merkle": "5075b627e1b12385117b0cf1ec9a98860eedbb89aa1268ae3c120b96964f781a",
+        "signature": "f550357af2f335da76d2a249c2ef2e3efcab64c0ec47ae80a8ce796326398496fab6195e0b5effb08d9fed9fb308c5689b0525bbed718a27d95cf3a305ed790d"
+      }
+    },
+    {
+      "name": "Decred Content and Asset Translation Proposal",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1603640969,
+      "userid": "b4a3e837-6636-41d7-bc2f-bc252fd961ee",
+      "username": "kozel",
+      "publickey": "49912d8dd296ce00a4b6afce4f300481ed5403142740e8b510276dccd1cbaccd",
+      "signature": "0829ce1cbcb44055afb4377c1899294d034d2d58ba26db51e236376d27318c61879bad28f32c557c2c66664b3b49e0007be6e6461c6e8b836fb9f76b278d970c",
+      "commentsCount": 22,
+      "version": "3",
+      "publishedat": 1602530047,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "60d6027844870b017a55acd468ff05e9d9255b73e02ca5bf4c96ae547470a395",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIENvbnRlbnQgYW5kIEFzc2V0IFRyYW5zbGF0aW9uIFByb3Bvc2FsIn0="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "c093b8a808ef68665709995a5a741bd02502b9c6c48a99a4b179fef742ca6b2a",
+        "merkle": "f080b8c0cbbcf735271954e115f3ac8efc717e6084cbee3ba98321bf39f97cdc",
+        "signature": "21d357d19fbde8b54461551e7c36d10670ce36c9ce0167b9cee03ce1ecadded3e0d97a0e1469ed4f3be6a74e9e559cbedf9c63d0e3acb6d96fc276ef0c1e7803"
+      }
+    },
+    {
+      "name": "\"Money Evolved\" tagline with minimal changes to the site",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1602626317,
+      "userid": "2c5bda40-90ef-4741-bd51-13c805b8b955",
+      "username": "haon",
+      "publickey": "62bfae59f14200726edce2ad6e75d0e9190307b23442e99b0cba78a84fdad4c8",
+      "signature": "063b5fe548ce84b2b8f0a41df9fe31023f039891f0b2a9a28bd292ffd9e061d8890e13cf4eab3db9c287a82052fddc1150254c02f7f2863fd69eaa5874fbc501",
+      "commentsCount": 12,
+      "version": "3",
+      "publishedat": 1601065639,
+      "linkto": "91beceac460d9b790a01fb2e537320820bab66babfeb5eb49a022ea5952b5d73",
+      "files": [],
+      "metadata": [
+        {
+          "digest": "25222069a6dd159937d8582a0532ae631f9727b6a22cf19f1a1bf3e4419141df",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiXCJNb25leSBFdm9sdmVkXCIgdGFnbGluZSB3aXRoIG1pbmltYWwgY2hhbmdlcyB0byB0aGUgc2l0ZSIsImxpbmt0byI6IjkxYmVjZWFjNDYwZDliNzkwYTAxZmIyZTUzNzMyMDgyMGJhYjY2YmFiZmViNWViNDlhMDIyZWE1OTUyYjVkNzMifQ=="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "02d9fc23d20017503a615459e2e0c7b333660bd5e44cde7f2c40db2ebeb986bd",
+        "merkle": "23ecade567d84abe27fb20cedc14e64780cfd71a48f8e537adad55497ed5645a",
+        "signature": "70aa49dce19764cce9503bc945feea6ce5c8051e33cfe1b3eb01c1ec466f23a554fbaf262fdbcf5a04b3d95aad646c804cc4720ea7f9a304d23372e4a24dc90e"
+      }
+    },
+    {
+      "name": "\"Money Evolved\" tagline - plus \"Fair\" box and page added to the site",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1602416211,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "f69430f4632cdead0c7fbb8c18bb69e378b2385cc9897d24b3f39d8946b90549fee3125d17c29851f11491315a776438c622843c456a6c8c7c2a5baf43573405",
+      "commentsCount": 25,
+      "version": "6",
+      "publishedat": 1600871134,
+      "linkto": "91beceac460d9b790a01fb2e537320820bab66babfeb5eb49a022ea5952b5d73",
+      "files": [],
+      "metadata": [
+        {
+          "digest": "2b9850b17fdb538210943204d051666cd33cc878f310f3dfdc459241c101ef81",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiXCJNb25leSBFdm9sdmVkXCIgdGFnbGluZSAtIHBsdXMgXCJGYWlyXCIgYm94IGFuZCBwYWdlIGFkZGVkIHRvIHRoZSBzaXRlIiwibGlua3RvIjoiOTFiZWNlYWM0NjBkOWI3OTBhMDFmYjJlNTM3MzIwODIwYmFiNjZiYWJmZWI1ZWI0OWEwMjJlYTU5NTJiNWQ3MyJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "f0a00d5f7598251820e8ab5bdc184adba980e404216124da91538625ac7c4e0a",
+        "merkle": "33409a57b962c0915d4f2bf288e8afd091eb716b74be9e039a94dc65ffc47bd5",
+        "signature": "62e8edd83cab4517d65a1eea476fa38b3cb327a7522952467fc5a3f21d6d43311f186cf2c3dc8ea3020f1f03212a7d341ad241f52337321d443754cff1631008"
+      }
+    },
+    {
+      "name": "Decred - Building Revolutionary Infrastructure ",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1602091859,
+      "userid": "9f00b29e-1b51-4f28-a5e0-c9c1adc959b9",
+      "username": "mrbulb",
+      "publickey": "e0b17a0e47a987c30451df36bea7237604b9adc022bf791dd8c12ce597757dc9",
+      "signature": "26630152f6ab1beca499e5843ceda31b75387e5ffe284ae5bdca0ada73f5cdd7d6717d723dc484df6a43fd8dbf30e4b5b3f5a0acd56d0777c094ff64ac67db0c",
+      "commentsCount": 7,
+      "version": "7",
+      "publishedat": 1601250764,
+      "linkto": "91beceac460d9b790a01fb2e537320820bab66babfeb5eb49a022ea5952b5d73",
+      "files": [],
+      "metadata": [
+        {
+          "digest": "dac6963ebaaca30c59420a00f9e1d7bb739a8d17bdec3599f0b84a513cd9bd9a",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIC0gQnVpbGRpbmcgUmV2b2x1dGlvbmFyeSBJbmZyYXN0cnVjdHVyZSAiLCJsaW5rdG8iOiI5MWJlY2VhYzQ2MGQ5Yjc5MGEwMWZiMmU1MzczMjA4MjBiYWI2NmJhYmZlYjVlYjQ5YTAyMmVhNTk1MmI1ZDczIn0="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "d6ff458cf0dcfed1d45f5a93af2a681ef220732f07a09fb4de934ada928bf1b3",
+        "merkle": "b9fed37df3703cc1bf2e2e1d65339c4f9637f4036e7e16e3022c207593a8a89e",
+        "signature": "b8c7eeed30bede8ff864348552c2613825955fafd57ae6aadf1f45625831652b3553a5f6b20f8727623987e1186d113bdf7691007dccb8dc9044aa63d95ed00f"
+      }
+    },
+    {
+      "name": "Grassroots Marketing - growing the Decred community (withDecred.org)",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1601361206,
+      "userid": "e11fbdb2-f47f-4524-ae0f-a9ce96538517",
+      "username": "pavel_",
+      "publickey": "ab30c62fdee8ec6e89429481acd652a3501d166383ffd46b57fd9d65a4d2b138",
+      "signature": "e5755d64706d74dbbc156b80a49b3580ec1d7cfd8454328369d390962f405cf94bd4d32dc698b13667fce4bfc185c2b8b834257279f7128592d72b86dbbbb70a",
+      "commentsCount": 18,
+      "version": "6",
+      "publishedat": 1600283351,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "38b7a26f686c0a814d0ccbb1fe2b21fadaa3771b2d1954cba780c8f80c5fd16f",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiR3Jhc3Nyb290cyBNYXJrZXRpbmcgLSBncm93aW5nIHRoZSBEZWNyZWQgY29tbXVuaXR5ICh3aXRoRGVjcmVkLm9yZykifQ=="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "2bf72e68ff0702e4efce82dcefd0168893bae60af235f26014e5d7a7907e8255",
+        "merkle": "79b1a132c9085ee6200703fd36377e2ec09fcef4bc64d7410d8773c86288ea31",
+        "signature": "536129ba575912c7a429965a6a9ebfa3edb8cb1a9d2742d4905bea550fab5803ff2514a8d9b67c597181636adb7a185bbfdb93269b987cbfbfbd356c2acba50d"
+      }
+    },
+    {
+      "name": "D.R.E.A.M.",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1601250813,
+      "userid": "69934791-d575-44fc-9816-e7e58ff53726",
+      "username": "jz_bz",
+      "publickey": "db4f9959fdc395bf2db48e1992d58d5366f05397345e3985b901b0294993a6f8",
+      "signature": "7937b97d6db2a2af7bce024afb6dee59857bc9f62b61d97658d701b0bc58e2a332da3e7463035a923bd7af61cf11539f84b93cf0d26dab1eb1d6354b1e130d03",
+      "commentsCount": 14,
+      "version": "1",
+      "publishedat": 1601250813,
+      "linkto": "91beceac460d9b790a01fb2e537320820bab66babfeb5eb49a022ea5952b5d73",
+      "files": [],
+      "metadata": [
+        {
+          "digest": "4d96f8e05ad7185e523c3a1de99954f192f1c5e691ac558e0a175119e4cda563",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRC5SLkUuQS5NLiIsImxpbmt0byI6IjkxYmVjZWFjNDYwZDliNzkwYTAxZmIyZTUzNzMyMDgyMGJhYjY2YmFiZmViNWViNDlhMDIyZWE1OTUyYjVkNzMifQ=="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "45323975f533d2c07db33b06dc3e2af5e1c452eb1a68abffb8296aace53ec9a6",
+        "merkle": "a5386c3f367d550e6099bd86dc68877051be809b92d52ca25e37a684777f5da2",
+        "signature": "e2117b87253206377d6fc71015acee393dddb41b9dfa7b20273b7c80882e4df1e97a4405dc5fd6ebd73b8b9ed181ae8cf64ac5ffdcd91156e6dd40b0f6429900"
+      }
+    },
+    {
+      "name": "Invoice PR/HR/Marketing for Decred 2016/2017/2018",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1600871110,
+      "userid": "d2038cc7-4de8-412f-8963-b42d3e37ad2e",
+      "username": "alexsolo",
+      "publickey": "c02dfd733bcca10c5cd774e97f8e5b8611ae86dafd58313ef30a6476d48f1aa4",
+      "signature": "9bcfb484608b7f0c110763af64a1e611ec6ac85fbb6d2276f64185e2bef4c58c6262e694f5e519c3b9e2c45f49dfa7af034c9e52aa8873c0dc8628464d021906",
+      "commentsCount": 79,
+      "version": "1",
+      "publishedat": 1600871110,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "8c74e2da472568a8897108739bd3d08dbf830378e818b82f289e202ea920f825",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiSW52b2ljZSBQUi9IUi9NYXJrZXRpbmcgZm9yIERlY3JlZCAyMDE2LzIwMTcvMjAxOCJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "f279ed5695c9aff93e935a4665b67cff2f1032a2baffc6f3474cd0c97f9dde53",
+        "merkle": "b41993a6f0521c20c1986c8cb3caa6196cd9918239d4567857a8006d1ddcbc9a",
+        "signature": "c2b35d2a7bc88bf8947dcdb8c9855345ddbb569cc15ac2db39b02815c033847306db0d5afd80326ea49568b5dcff00af1f3111a7fd79054bb9749eba6b0ca409"
+      }
+    },
+    {
+      "name": "RFP: Change the messaging on decred.org",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1600114715,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "e01ce1a113b6d1ee694306dcda3adccbb3c1d14710001e758530e7670a44c4590fd720e6ab6191070ab9f75e32857e583df0cb49bc469550b63a153da126fc0e",
+      "commentsCount": 7,
+      "version": "2",
+      "publishedat": 1599674304,
+      "linkby": 1601337540,
+      "linkedfrom": [
+        "02d9fc23d20017503a615459e2e0c7b333660bd5e44cde7f2c40db2ebeb986bd",
+        "45323975f533d2c07db33b06dc3e2af5e1c452eb1a68abffb8296aace53ec9a6",
+        "d6ff458cf0dcfed1d45f5a93af2a681ef220732f07a09fb4de934ada928bf1b3",
+        "f0a00d5f7598251820e8ab5bdc184adba980e404216124da91538625ac7c4e0a"
+      ],
+      "files": [],
+      "metadata": [
+        {
+          "digest": "d869b485547960fd34db817d9678129b470064430051443eb31bf9ec332438ee",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiUkZQOiBDaGFuZ2UgdGhlIG1lc3NhZ2luZyBvbiBkZWNyZWQub3JnIiwibGlua2J5IjoxNjAxMzM3NTQwfQ=="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "91beceac460d9b790a01fb2e537320820bab66babfeb5eb49a022ea5952b5d73",
+        "merkle": "bc3fd653db55b1089de864cedc876908c0126fd856f5780ae4ae2c6842a8b2f6",
+        "signature": "d8f638ef4e940f34361d147fc74a76695b3a3ceb6cc1a11acaf81d8e30dde8eac6edb7efc695664cba658f1f8102f8aaba8afe3158c71f3ac76a55f2818ac404"
+      }
+    },
+    {
+      "name": "Decred Poker Series",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1599090919,
+      "userid": "a86929ae-9815-4c6d-8602-b18fc1484151",
+      "username": "darthcrypto",
+      "publickey": "16e4a5900b3ad8c4c2c770323e97a30fcaf9bf05da8b0cf9246476adb856054b",
+      "signature": "3721f6ffbcef1251ea7e2c761272928a56f32003fd4e6bf161c705ddc7160fd6ff9b765ce10842f9db4018265d5ac5e9ee2a7706814c3280121770156cb09601",
+      "commentsCount": 15,
+      "version": "5",
+      "statuschangemessage": "No activity for some time",
+      "publishedat": 1596290539,
+      "abandonedat": 1599090919,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "d025443b8aef52d3998f1ef5d6bd830cbbb3d4d3a067af9c1a8f17c2d99678dc",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVjcmVkIFBva2VyIFNlcmllcyJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "7a67ed5a1f9965c034d87ff2b6f3580f07e3567250394b5c885c9392ccd85134",
+        "merkle": "9f706bb24058e236e4b8fc6388812768170352289cf1009189837e0981253ec9",
+        "signature": "9f7e9eae2d6efcf5dccf925bef0cc55f4237904f614bfb5d3e3ccb0db37493c4816bb81054c2c1dd94ef8db30c1aac07621518963489d13570fb7360e6e5080b"
+      }
+    },
+    {
+      "name": "Augmented Reality posters",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1599090887,
+      "userid": "1b0a123a-e6dc-444b-8b7c-dd842835ca3f",
+      "username": "mission",
+      "publickey": "6b0cc17d37de38beb81d4310e63583c0b96ae301000fba62d447413822c7a81e",
+      "signature": "be691a7560165b51204d147eb7e56b81b6ffd4cc571ee69e0e3fec4e6d502f2a9ef26f5323a358c9d737dbac88875d5ae0273e8a46cd0dd6cbad31fd7c527305",
+      "commentsCount": 14,
+      "version": "1",
+      "statuschangemessage": "No activity for some time",
+      "publishedat": 1594921365,
+      "abandonedat": 1599090887,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "dedf452074752d7e29304a0566643feb26d1d130596e04c613e15de113ac2d08",
+        "merkle": "d424aaec3f2976afa0ea61ef44c655a08138d551e3f6a3cb2e7ae776b78455fd",
+        "signature": "7de464f3005515714626d4a8a3c1c61c1d90fdde488884a52711771c692d08893d5e402ea6cea2bd9f69f4266b9792a3f7842b250733d64f39f9d905c3015b02"
+      }
+    },
+    {
+      "name": "Video Content Production for Decred Phase 2",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1599090849,
+      "userid": "65706d2f-f82b-4aa5-b4eb-4b1140f4f41f",
+      "username": "exitus",
+      "publickey": "1d3a6202cf928d4c53ea9a4cc3df59f819d2ffc6a2d703bdd6ea001a7bc460f3",
+      "signature": "054b4b79a5f96d29416bc4cd1723729c3f2eff83d7ca9b1e3a7c7815555282258e82001d46565b115cd94d25309056894cfaadf64991337cb523046485189302",
+      "commentsCount": 17,
+      "version": "1",
+      "publishedat": 1599090849,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "ef212519ba5b669dda6d8cb319c5d25f696317b96052c146d639fb667e8e2a50",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiVmlkZW8gQ29udGVudCBQcm9kdWN0aW9uIGZvciBEZWNyZWQgUGhhc2UgMiJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "1e55a417bc61a6b4890c4b73811ca0cdb10258da6d29fbe08abb794bfc84285d",
+        "merkle": "9f868a4b61e0feca303f328bad28ab82dbad4209a979408abc179ed17d1c37df",
+        "signature": "d9a8983759971cbef623092f76ac355762c880fc3f17fd6ae3c5acfaf3ea1331143685b26e34a42c7aa002bb9826c931d5a43556d2aa0ab34af264b0927e0206"
+      }
+    },
+    {
+      "name": "Marketing Decred - Twitter/Social Media, Educational Videos, Ads --- by fst_nml",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1597855451,
+      "userid": "84ed7a25-4aa1-4cb4-a70e-8b5f98deb068",
+      "username": "fst_nml",
+      "publickey": "32897bbb15aecbb302093b61a5b037f86e2c5f73a1b9268009edcd331d958e29",
+      "signature": "05b22b9acb469b67307d2d2ffd46b87ffa840f9a1cdcac84f3f10b051bf04c76d9a552fd6930bf801cc57f5e5b117482082bee8aa3f30cd8342bb1380f0cd602",
+      "commentsCount": 12,
+      "version": "2",
+      "statuschangemessage": "Abandoned due to issue with payment in advance",
+      "publishedat": 1596194862,
+      "abandonedat": 1597855451,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "da43b28f26d12a7e8eec9a3ac188c6137505251b4ea3a5cdceab0fdab3eaeacc",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiTWFya2V0aW5nIERlY3JlZCAtIFR3aXR0ZXIvU29jaWFsIE1lZGlhLCBFZHVjYXRpb25hbCBWaWRlb3MsIEFkcyAtLS0gYnkgZnN0X25tbCJ9"
+        }
+      ],
+      "censorshiprecord": {
+        "token": "3372cfce1218ba81d9c8ca0535cd9dd590f60c92adc068c0089218ae7e3e99e1",
+        "merkle": "c8bb8d736c0d71ad987d51dcf5cb0b959ef9aa32ee0716ac05a578ae6334a511",
+        "signature": "258787f75c768a989f771a39a6b98f135ccf8bdfe60209ac7efe18407bb0f6fce90df9f4d5d2c91f30422e788e5c749e39e4a9f760f13747ca62dc64219bea0a"
+      }
+    },
+    {
+      "name": "Design of Social Media Memes for Decred",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1597352889,
+      "userid": "7602425c-d221-4154-aeb8-a7ddd2fa4649",
+      "username": "cryptoarchitect",
+      "publickey": "a57b21e8de3853a817cdaebdab9fe6d661d79434eb9528cd4f1431a3598b9931",
+      "signature": "452d14d62fb58846751314c20c6023613174c6fee0e79c23cfe8c07546bc2dc681dd74ccbf7d46cabed8da9203dcb4e1dc4a42ebba8391e985bf37cf6646a407",
+      "commentsCount": 23,
+      "version": "2",
+      "statuschangemessage": "Proposal withdrawn by its owner",
+      "publishedat": 1596194875,
+      "abandonedat": 1597352889,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "596948a7218a5ef5ebc6490362dd175d71ab7a132a43f3664bf4a14db3af85ca",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVzaWduIG9mIFNvY2lhbCBNZWRpYSBNZW1lcyBmb3IgRGVjcmVkIn0="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "4f810317e07d134520faa6fd98a14b4c3e08c38227501558a90c1457c939ecd1",
+        "merkle": "64f1c3b62724d11707a93fb1e1f0070d446b4e9b1e8d280f12d13f257ee26692",
+        "signature": "0a0a52e7a2d96b19058cdbbc30c6786ecc1b8de506a512bafec4a05f20ee316aa3f88ef3b02c2ca8cf0e20ad07e4eadfd7e41cfa3e2d0fdf403388fdd80fb50d"
+      }
+    },
+    {
+      "name": "Design domain budgets: 08.20 - 02.21",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1597187194,
+      "userid": "ba96e181-abff-4c1a-b2be-9bb916ea4083",
+      "username": "linnutee",
+      "publickey": "3ebccc98869770517dbf6fd787b9bc02f2e75ea1d42089b90e26dde3b2499859",
+      "signature": "632ee01883cc401665f6ecd6c7f97ca6af4b1cf8c2ae6171443de815e4338dc448836c2de473b6fe7b2e112ae70e6d99e795ff58940eb6df7939c6f57f1a4c05",
+      "commentsCount": 35,
+      "version": "1",
+      "publishedat": 1597187194,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "49f0859efdce5c349656f70a99445034bde88ddca17989720a7b37f630951e04",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiRGVzaWduIGRvbWFpbiBidWRnZXRzOiAwOC4yMCAtIDAyLjIxIn0="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "1dc1571b1fb8a401dc90a6f8e7349998ec4459e015c8c0d4d243de05ffad8d12",
+        "merkle": "cd40ae7a38a372f6009f48b016a8a6126dff0c7b469d0a21a692fcf8c40dcf63",
+        "signature": "09e619a1a39c9f9c40d6cb9cba68b93915d4536966a8e8b8f06966152a8d155b75bc44c644b62c20f74c0e8251b26ed96e2bdc28c85cc2aa932d8429eca84200"
+      }
+    },
+    {
+      "name": "A practical marketing opportunity - Massively boost the use case for DCR",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1595982902,
+      "userid": "bc745ec4-4c2b-4b64-8e20-6a2d6d97a3de",
+      "username": "travelwithben",
+      "publickey": "30e06b8e4c8e90bb5a8ebda73cba4ef2e8a86a16e5696e75455667df83d93bf9",
+      "signature": "dfa102e9d881362465aed9b1fc58c73c4cf4cd28b54fc7f315c5b3fcedcae7c1d3e45357d518491c8782f7673ec9ad113048f2454d2c36313871785cf2adf80c",
+      "commentsCount": 15,
+      "version": "1",
+      "publishedat": 1595982902,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "b52f6d1231ada7ee1ecdf8789f8d1cf256f54408ae0e79984b6df0abb23602bb",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiQSBwcmFjdGljYWwgbWFya2V0aW5nIG9wcG9ydHVuaXR5IC0gTWFzc2l2ZWx5IGJvb3N0IHRoZSB1c2UgY2FzZSBmb3IgRENSIn0="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "2dcbc3e14c06c6e84449f5e2756b944d5ed23be41c23a9f5225f3eef424ce0ae",
+        "merkle": "9e39bd75051200a0c3eefc7d3013a1130bca6e0a6bd60468e687f9d442fcfb67",
+        "signature": "b10549f2fdd1d7466424ab2b1169784941d6fb70c737bde706a17244ce5e42baa1c7da6777596f08cd88d565361d5ecf0153b1b64b40d3bb176a249eb623fc04"
+      }
+    },
+    {
+      "name": "Moderation of Decred Communications",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1595962332,
+      "userid": "b4c6eeb6-68f6-4967-a04b-33c0a22c46b3",
+      "username": "bee",
+      "publickey": "a717216ef1999f84d71aec664b4d14f90616a09b67c7c68892b8e8fe9e8b1441",
+      "signature": "f3b26776fcf9dc202a8ff4526a1d29b43af0dad5050e9ff82a6481ba3f0003bc5bfc0a91473b5647d33c757836b989811639fad35e83f962e46c106f5473b205",
+      "commentsCount": 31,
+      "version": "2",
+      "publishedat": 1595711296,
+      "files": [],
+      "metadata": [
+        {
+          "digest": "80ba75d2fd7285539f96bb69900b28e85f50fa81c28d21ccb2d59885aa737c5a",
+          "hint": "proposalmetadata",
+          "payload": "eyJuYW1lIjoiTW9kZXJhdGlvbiBvZiBEZWNyZWQgQ29tbXVuaWNhdGlvbnMifQ=="
+        }
+      ],
+      "censorshiprecord": {
+        "token": "32cba00b8bb0f41689ca8216e2e14a0e3d91a724c83369b3fcda02490dc119f4",
+        "merkle": "901199ccbad7c425fe6e05288b3a391b88445da407b6795a7054e0386cce9074",
+        "signature": "83a1d3b2f3ab074a88e19b2856874dfd4daf9e46e65d27130cde727549656b69544b64861fcecd7c0d832823a6d06d5a9e44f7b506951caf339343842c63a205"
+      }
+    },
+    {
+      "name": "PR by Monde Public Relations - Phase Two",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1595279739,
+      "userid": "c6571041-054f-4668-8f58-e85990e452c7",
+      "username": "lindseymmc",
+      "publickey": "6372f765ddeafbf4ed403f022256f4ab00cb813b01f2ca6582641cf7e48be003",
+      "signature": "bcd20ddf78bb72e8e48efd28fd5665376121f0b91d0e5ed8385b30bdff00eb9c31ce94469a334d02393397607599a8a92a0c42461fb0c2249492df21ebd06002",
+      "commentsCount": 21,
+      "version": "2",
+      "publishedat": 1594421165,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "c81926b1958e54b2f294085da4ab03e9a63223f8ccd32e74a43493bf62de6185",
+        "merkle": "a7f0769f847b34e0b5cb2c0810fb1326f82d81906dec532db71f751d31ea2ab6",
+        "signature": "cf768a4e1208a79c1090ae8bd6f921f7f3d68fa7c5666c428bb3910d5c3aaf1e931f01ee3bc17ecab8ae44f6d2e8ba145cd0b96840455fdf83ce7f07fcea7f07"
+      }
+    },
+    {
+      "name": "Content Production for Decred in russian",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1592880375,
+      "userid": "f79c499b-35bf-4e4d-b033-ec8b90154d6f",
+      "username": "ivandecredfan",
+      "publickey": "c98646cf771f1c2fbbf2e81524ad6ea4f2d4e1acd72d7e2de7084a5cb5e09661",
+      "signature": "ef7f95dbc0855a47b977c39d60bf3c91a75d45ac66aa0a8210316619e81c0d406ca555106d6aa5419e46902f83fc053f2c066714459be1b47b965efb30a16407",
+      "commentsCount": 23,
+      "version": "2",
+      "publishedat": 1592575830,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "df11d7ac85061e6a02d6503555e585a1a37fffd82101eeea14670537c951926f",
+        "merkle": "b3dbacfd96194cd3b10b2428357ca2db0856d7f91be99510aa4e202a5e47f1ca",
+        "signature": "0b4f7a134fd9a0eeabf30b7a5b1962417ecea982439fdca017e2bff3ae921b303863ba1105a955c2b6e5691fa6b3f9e8827537ef8773fc3d9ce81bbd8e98e60f"
+      }
+    },
+    {
+      "name": "Planet Decred launch proposal",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1591839519,
+      "userid": "01ed6d12-2e09-4905-8135-33b863b8496b",
+      "username": "raedah",
+      "publickey": "eb82b264d3dad64ca85f5167f6bd5cf64897d546159cdb12303edd50cc7b47d1",
+      "signature": "d848de80ccd8c538ce453406011766bbc48df5c38373c87bd0011be55ae01d11e099639af4d5a03e7adfb3fd26696fd5baa20f058ece3c359c6df11d4e88150b",
+      "commentsCount": 32,
+      "version": "3",
+      "statuschangemessage": "Proposal owner has withdrawn it",
+      "publishedat": 1591106322,
+      "abandonedat": 1591839519,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "6b7ba5b9b8fd37a7a842de5a3d891a3847adfe1816a7b052491ff999d7f65965",
+        "merkle": "a4b68a9ab7c345dae2e05b00029b913ae7eaf6ca734837d13680e13416014037",
+        "signature": "66912390a509d14d56767c634f0f5420dd6c37b05979597ca46b7ba89346861e9b05997efa164421eec94d509db36fc62c576c78a99d37a8cefbd4a3c8725e05"
+      }
+    },
+    {
+      "name": "Decred Bug Bounty Program: Phase 3",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1591476826,
+      "userid": "391ab82f-84e2-422b-90e2-d6e0bf532152",
+      "username": "degeri",
+      "publickey": "d18e6dc2871b96d4e0966f3a5d95acc3c1024b7557b15d24597080e4daa68a66",
+      "signature": "11c2a2cd63aa70086775733eab6e4004efe7f47493cec46ef6e642f3aa603e3eeb49fb2c0977bda63a7631a42a1a360aaee0f0b308e48ca2e5e1b723e1ce0607",
+      "commentsCount": 8,
+      "version": "3",
+      "publishedat": 1591001865,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "2170df6af2cda7d048039d893cc8438b001577989441a33709820f56df7075c0",
+        "merkle": "279c26b51ae84f569737bf827c02e4f8833996bb236e9c52ab3c6b5bce552e5c",
+        "signature": "45bed94c5be28fa58f2639ebfce4b6b07ba4ac00d84cdf09a6b4dfb047f25ab267237c9f64a05b9494a4d2f3effa28d896197b27d6b1e5c7bc650f28a065e80b"
+      }
+    },
+    {
+      "name": "Decred Latam Marketing and Events Proposal 2",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1591021303,
+      "userid": "0a6edc44-3a04-439e-af08-261854673cf9",
+      "username": "3lian",
+      "publickey": "f9da0bd73ab97e9e4b3097c71cfbac5273466eeac44520872fc65ae5c24274b0",
+      "signature": "4975938e64f30cd59625b4767345944d9e4409b13bb7e79c8d865d6a5ff2ce89e6cffc68e1b75bb0f4ca92b062b1f7199901304a582800da2642e36f4d722407",
+      "commentsCount": 24,
+      "version": "8",
+      "publishedat": 1589888131,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "3c02b677462d6d22d61bf786798e975b38df7a203c2467429d4ec91f75ef0c40",
+        "merkle": "bc4a2ed8ab41c9feae341dedc4044e404bae23a66bfd1809d331cc6d741f3905",
+        "signature": "29909cacba1a9c75bbdad3c816308f610240026db302b86a17b0d52228a95807af6bb1de6e9efb873e58ea20737fec570feec77205c822098f4fd1e4d42bf00a"
+      }
+    },
+    {
+      "name": "CoinStory - The History and Evolution of Cryptocurrencies (Book)",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1590150098,
+      "userid": "7ef62ca2-7235-4573-a362-cd546d61cc29",
+      "username": "spider333",
+      "publickey": "94926ba3db7d6013326665c24f850c798c077736680fbd2cc3d94996068531f2",
+      "signature": "f794b55b594e90d068ad6334fd67efa7b144ca7d35d6a06f92914a91bc7b4abd6e094adc7bea79b5eab9b8b88f6de6e57cd3bd5f25958438ea4e3f150974860c",
+      "commentsCount": 24,
+      "version": "4",
+      "publishedat": 1589834241,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "4affceb07f5b8126366e8b73ed3d164ebc010bc6fefba19375c4c2e2b252beb0",
+        "merkle": "a16adc2c3d5b04b0a9087287c17b2c7f502e64c0d3760c1cc64920c896f7e3fd",
+        "signature": "ba94b43b34a5a6ed5d723c347a2c1d57057ffe52010f100b461ad1edf2f7369c67b183c7691f1340d12c6afb612d4c8b46a514057d925b9226b4b143eb427602"
+      }
+    },
+    {
+      "name": "TV Marketing For Decred (DCR)",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1589834213,
+      "userid": "bd7d643a-7547-467f-96c3-7537a6d083be",
+      "username": "w3bt",
+      "publickey": "31bb1aefa7db037443b8dfc58fd7f21ccf011f804193dc0add8f426f77a0ca3d",
+      "signature": "7022f1de51a27e89ea4a4c60cbea37af5b480e23a5d7fe84ca83d13d223605086dc41880c9b1f7983028634efa0d28fefa61c50b545a52cebb19406b8c66a40b",
+      "commentsCount": 55,
+      "version": "1",
+      "publishedat": 1589834213,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "9eaafc20f206776e38642e272233390f351c5562c3835369a558cc7d7e341018",
+        "merkle": "404030cb86c491eb9e42d964502facf4ebfb8d8a381ef8c0de34dd46300192c6",
+        "signature": "e1ab6b1c2b26555fb223563fcc4a1d4bc7547a64f489aeb41629f28994d561fbb79d6b9f3b24b35a6e4751b3355a2ba79ffe95336fd616fc7aeb4e2c89894e00"
+      }
+    },
+    {
+      "name": "Decred OnChain - A Research and Charting Resource",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1589748936,
+      "userid": "eb486ed6-bbb3-4815-9547-599cc0f28325",
+      "username": "_checkmate_",
+      "publickey": "bd0f6b20cb6665cf1f07725d75c81b3fa9752be3ba0c4136a143224b3c07f9dd",
+      "signature": "35d5a96cf2e6dd6ea34ed966cb8a6de9d4adbb622f49a5a6f06f5db6c4b6781bd37278b90c9d636ea2d2207f6d422ea3b8caecbd742bffab084d8e0ca1c2c806",
+      "commentsCount": 71,
+      "version": "2",
+      "publishedat": 1589737222,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "023091831f6434f743f3a317aacf8c73a123b30d758db854a2f294c0b3341bcc",
+        "merkle": "1f0170b9b39094ee2b97f70948605b8d8c7810ac1765fb14abfe90b0706f948c",
+        "signature": "170e4096e01ded9d4f09d35f98517e84e024f6fd486f2a7c863001937df48d999c13aa34b3eed48b2c7fbf157664b9b113744aabb9005dca790c21efa0118202"
+      }
+    },
+    {
+      "name": "DCR On-Chain Research: Phase 2",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1589394387,
+      "userid": "2d14fd6f-b0b6-4dc1-9bfa-4d6d5793da27",
+      "username": "permabullnino",
+      "publickey": "8f9fa531b543c6e0b805a1abcc858400f8316cd937785c40e36f4d05171e83b5",
+      "signature": "d8dcb5336df6e03de7697c4af7b80c35cddbad105abda4cf05843dcdf9af9a7be2e2dd6828b2ba806ec719b29afd2d526e2396e2e1bccdc1cf7fc48a1b7de30b",
+      "commentsCount": 35,
+      "version": "1",
+      "publishedat": 1589394387,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "68a32c1f36d24a17e5eb69d6d1b6adb587ca45c9c7e64e85c353e7dba7fca545",
+        "merkle": "19db2921219d2dd7fbd0b9fce040c72e79692a9b48e73648b3b3bce456480604",
+        "signature": "6c917f0889a6cb6dc3f2bec11898a1796707a476961ebdf1e35880d07f565c8d2d7d6005e57e73a8017e57cc2624de27e3bf00a1363957c20de449dc61256d0c"
+      }
+    },
+    {
+      "name": "High-Profile Billboard Marketing Campaign",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1587183807,
+      "userid": "5847dcd5-1406-416d-94df-5d495178acca",
+      "username": "remihoh",
+      "publickey": "022bf617616f1511236e2ea051dd5cbe6b46ec359e7beacfdb212ee44bdafe33",
+      "signature": "e882f2492b746fa8aa2509a4eaca5e1adf73bd1e0ede543d948c696c129a8dc8f30b39bf3a6c85bb8883940a174d95b5f19c3ad7bd696cfdd0183f8f4ef12205",
+      "commentsCount": 26,
+      "version": "8",
+      "publishedat": 1586433912,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "bce7bf3cd1f74d571d23ac8a330ddf29a14a547ed0cc9c995f1a97dce733d1e1",
+        "merkle": "05ccf6bb8244606e4650bb787eb4578cbfb63d686b5369be5f9e6732f2e19d09",
+        "signature": "adaf9323f16e6a80c47295b6c331eaf448dafcd5a0c97919e46f8956c85fc167b8d4b2ace295e94edd3e16b853cdbd89590932e159ab029118c136cfe462e801"
+      }
+    },
+    {
+      "name": "DCR to PolisPay App - Gift Cards, Mobile TopUps and Debit Card",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1586894208,
+      "userid": "42acd3a4-f6c5-4fa9-9517-1824741cd68e",
+      "username": "eabz",
+      "publickey": "de238961b681492c1a0949a5784d2ce7e09eae8803ba98e4db72b8099d3906c7",
+      "signature": "b0c61133e26d38fe7adf02f275a84797467de3fa02ef1d313924dd6302c12b6453afeb635edd978b3a8d93dd69df461ababef6da93608f4e346c32f5be9f660c",
+      "commentsCount": 6,
+      "version": "3",
+      "statuschangemessage": "No response from proposal owner for 25 days, only 1 comment in total in the last 17 days.",
+      "publishedat": 1584652370,
+      "abandonedat": 1586894208,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "d3b16861a7e555db2fdd25b589123f4b6c4289c857fbdff329a4ffb1cb60c4d9",
+        "merkle": "65d04821b8ded5348f0d380474eb8eb0b90c01d40332b57d570eda4a966763c9",
+        "signature": "3218ebe24ac112dbc19d7b4449cb24df5cb0705a1d7887e31d4fa5ce5eef33c152b3365c2997e1cd0bdcf6c0287c6707ba9f16868a7e3e507b5b16d3d8bae50f"
+      }
+    },
+    {
+      "name": "Decred Content Marketing with CriptoNoticias",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1586743488,
+      "userid": "8765c905-2de3-451c-b9d4-af82ddd0f69b",
+      "username": "criptonoticias",
+      "publickey": "1fff82a5bb4a5c60d169e873a5f1be40c9a129b58471d062c9a15c151bb383e9",
+      "signature": "250432d1c1e1568c96e17051af10a4c5090153c692d5f4c7cddd67f60c448d6933a326ccb404d10b110a458438f3565284c031ee72b926f5fc56a56bf8e47d04",
+      "commentsCount": 10,
+      "version": "2",
+      "publishedat": 1586641260,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "83b59ef5ab40193a86073abbd93cea13ed6d071eecc78918ab5cf98cba7c7a67",
+        "merkle": "c2436910f99051c13ad1f601722cc57a4ba9664f6e730a6ce13490f112ebe05a",
+        "signature": "148e6908bb01d1269f0f043f0e0dbce0d66ba915fe2f0c121446e9c275cf5dfcb5cc4a8990384f2af9af794c7d29cf4e002e6a948cb797b0b1ab049e4e39020c"
+      }
+    },
+    {
+      "name": "DCR Comic: a visual guide to Decred - Season 2",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1586197076,
+      "userid": "65b2d0d7-44a3-4f5d-9d45-8f6a9a9d3364",
+      "username": "pablito",
+      "publickey": "903bf04614196f0fa36bb4aaf806df54b104a3f68ef039f5f51feb049b2c5464",
+      "signature": "80234b7b3fd59066d1dce5ba3556ae9c4cf551e934c7bc9dc98c994f144e4fb36f65c6478a074d9e4a9f43b837e68d78f1441c187bb69e14b4afa12ee776750d",
+      "commentsCount": 22,
+      "version": "3",
+      "publishedat": 1584992149,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "2f08f8518bc7672069a10ac6461fd9ab341d4a9e4c343fd4a7ec426250f3896f",
+        "merkle": "2e5c98fb3696a9d8e21b58238658d58f658271cb892675a7ada0bba249182b46",
+        "signature": "39223284979d9504fa4c07739bc182c1914247c89a490629488e501b93afe4408240fe4a53ae93d02d6a1e0f20ce61d95e73eba2585a0e2a0e37e13adae50c07"
+      }
+    },
+    {
+      "name": "Decred Daily Initiatives Proposal",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1585987003,
+      "userid": "2dc569b8-a0f5-40ef-8892-e18a8f4f5e47",
+      "username": "coin4",
+      "publickey": "ae0f4e642ae723191c0c487b5283763b2ad60d9de83cad6be12d44ca9c708b01",
+      "signature": "0d0256e8840e4fddad3f5a9faf8e12bfd07e347a9659e8e5251af6dbf69ed56f2d470193d6fa5efa20841bbc1dcc37a8d0d41bf8550689c7fb1337f5af97e90e",
+      "commentsCount": 17,
+      "version": "4",
+      "publishedat": 1585259408,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "7d42c6f4bf3059b64789185af615c1df97cb61a379425933be5ff01d074ed4d5",
+        "merkle": "5b1d4fb5c3cbff3750b3cd9b1237794cf1f247f2bee2d770b4f4d53fca8f11bf",
+        "signature": "706f0b289ad48c45b07f9a91ecbf072bac497a23dd3d83d11ab22f7badb04266e94d74428440cc8eb043d62f64063d5d5a5c66e3d44b907d5a37b974ab7d0d0e"
+      }
+    },
+    {
+      "name": "Decred Brazil Marketing and Events Proposal",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1584720456,
+      "userid": "2c5adebc-b861-447c-90c1-6af50f012ce8",
+      "username": "emiliomann",
+      "publickey": "c1cd38140c03bf6c34130ae6f89e592fb13ecad9b83aa660ffd8a74da4655d38",
+      "signature": "45182eea885c586ff193abe4b76bf1c3a7a1f869ef4e77d94876d5fd605e114e1adb39da725ca34bcb45f4ba3b0ee93129e5a2da2b50b7ce914fe4f783d41d04",
+      "commentsCount": 66,
+      "version": "3",
+      "publishedat": 1583523514,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "bc20f986c3ea2fed2ea074c377a89f1a4b956ea0d527a8b6c099a5a8f175beb5",
+        "merkle": "3ad877f52c0a09c9b114748f629f3a53bf38b468c971f0505e9d8c4463407cf5",
+        "signature": "3b3f2c7ecf37a61a61af6c5fe828e9f8b62e2a449c6e5331eed00821c2272f03500518e8cf353adcbe43cd3a82e1a0a87eba8e1df1835ffcca0357fbb333eb07"
+      }
+    },
+    {
+      "name": "US Marketing \u0026 Project Release Coordination 2020",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1584374643,
+      "userid": "c2adc10c-375d-4399-a4b7-0fbbc827034d",
+      "username": "dustorf",
+      "publickey": "f3f7cc551f53c4532026f57a27477e7c057b15ce55d093f5129971a7bcfac087",
+      "signature": "f5ed75194d80d8585b39c4d8f97c6655989e86e760fc75b5ac0fe51969b3a2a387b14ed87e7d0f3c2d03273eebfb57d4183ca81252cba43a2b29ae3eb6d27a02",
+      "commentsCount": 58,
+      "version": "5",
+      "publishedat": 1583853237,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "c830ea5afea45a0aabf4092d1bea51fb10b8bfa2d8474aac03224f0f94d3d1af",
+        "merkle": "75a491745da4493632dbb2e8c231a99105088c6c60a8b1d4e133898ef3d89a31",
+        "signature": "a15e58a872bfa6e0b2f89e9403d92692a99dfea9b604a8d66803a398ebd757964e986682d94ebd1ac8ec9e9450784a6b30b6a7e0a44a14aae2e9e79622f39d02"
+      }
+    },
+    {
+      "name": "Decred Europe - Grassroots Marketing and Events Proposal",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1581996014,
+      "userid": "2c5bda40-90ef-4741-bd51-13c805b8b955",
+      "username": "haon",
+      "publickey": "a854b650432a639cacba20b1e84627418c4a408f215c76f0754748746b436da6",
+      "signature": "bdf68265f0c5bedfdf50c16b5606889f764c08ff5b8c57e4f5445a8e9b63a055533e9bfd9a9ba7400959f7280edd7af9550b295852696cecb2067cbfac1de40b",
+      "commentsCount": 34,
+      "version": "2",
+      "publishedat": 1581259020,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "6ceb278ecd96589f5c9dabcd7ce986bc58ebfe2d4dbb793dd5b21818711b453b",
+        "merkle": "dd5b4dbfc3fc6767e28fbcd97b561437298f887a2c88ed9469fa38532e7c17d8",
+        "signature": "fa0fc8be9a9a82dbc31ede8aa1269c2e4777148a9bab6e3b39c70f8540f6de6b18f2b57164c93decf2c66b6e7ae97ae14e22d7b199ad4e88dcf46b863150800e"
+      }
+    },
+    {
+      "name": "Decred - Creative Economy I + D + R [Research and Education proposal]",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1581799292,
+      "userid": "4c67f4f9-e0f9-47b8-8f72-de46b48c9073",
+      "username": "oscargamboae",
+      "publickey": "3738ddd976bb8a7f9d79dbfbdce6bd6f86e71962d14ddbb2a1332a424cded680",
+      "signature": "c492047eda775b6923b26a0cd916f07cc9668df263ccad82916f219cf8c7df0f74fa5ac120e24851f949ae2376a8c80248768e94403cc85f34a523f8b2557f05",
+      "commentsCount": 26,
+      "version": "3",
+      "publishedat": 1581259030,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "d5203291271ad7399dbdf57050e53bbd074a40e746d5778cb5f78596570dc162",
+        "merkle": "47583ab4c89756da7bc08502b2d925107c0de2a230b26797e3621f5da436cc5f",
+        "signature": "a35788ace97a0f983ec97c01a54b3e4dcd52e3126ca386ec43af87e496b18d7d9b907e1a5fd8ea05891162aefbed0e31dec5ab3514ba6577d5c80ba0e882fc03"
+      }
+    },
+    {
+      "name": "Content Production for Decred in russian",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1581259006,
+      "userid": "f79c499b-35bf-4e4d-b033-ec8b90154d6f",
+      "username": "ivandecredfan",
+      "publickey": "c98646cf771f1c2fbbf2e81524ad6ea4f2d4e1acd72d7e2de7084a5cb5e09661",
+      "signature": "97be493a99017eb557bc529b7f0fb911c1898df9e4250f7c55070f6c92097ddc7f353541a61566ef6ee95a7da4c2b2b1ec1a6e7e53d380732f07ababb8a17502",
+      "commentsCount": 10,
+      "version": "1",
+      "publishedat": 1581259006,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "92e3f2176b332c1aea5887acd2324c2cd730ec450e563df52ddae9d5927d5d36",
+        "merkle": "8d8ebaa92d852c03272b511c6a1b7030b8f98a1e94dd9d8a80485bc183aea1ea",
+        "signature": "4c0abe24ee9c23015da91556b7236f15c9506760aa18e31a14f37c63f9cba18aaeb2611284b193a5a423e0ea6d24e6f203dc6db2aeede9db411c15e66a3a2f09"
+      }
+    },
+    {
+      "name": "Decred Fundamental Metrics Research Proposal - Phase 2",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1580922732,
+      "userid": "eb486ed6-bbb3-4815-9547-599cc0f28325",
+      "username": "_checkmate_",
+      "publickey": "ee69df0bdf51299b5b2db07c0ae8eab99968632632eba228271a68c661142323",
+      "signature": "b35cf4f63a693f89abfb16ae800b129357612b9fe47b31473e835c2d690e8ddc01ce930cfea8a396e508b9a8c2e957a470d4506c77cac8331b7ee7d1e28eb706",
+      "commentsCount": 39,
+      "version": "2",
+      "publishedat": 1580744013,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "a677e236cb2e0fdd485980cd5d789e668d00fdc5235d01e7345d2195b8679066",
+        "merkle": "a25a15ff7989a9c82a96d399da3ac1130b9634c13d90fe8d6ca5b5dda70d95c9",
+        "signature": "c82aca62f0365f1c5beee4981d56f3431fa824cd4826726b3c1c9cf0ec95b0641f1788eb4c7e5825c2372d7a8a5c46e2866f10628db506968a427229f52afd0e"
+      }
+    },
+    {
+      "name": "Video Content Production for Decred",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1580493711,
+      "userid": "65706d2f-f82b-4aa5-b4eb-4b1140f4f41f",
+      "username": "exitus",
+      "publickey": "988e824870740811a14e955ba8749e1f100f8cbc777af7dd3d6d9a9295646458",
+      "signature": "933999a3db7e4effd5d3c11ffee54bf724f27a3b90086fcd4a5aa5523b6028eb00b761ba888759825baaf8c2055c2bc8d3807e9ff9616d68c105a1de8bd3dc0e",
+      "commentsCount": 40,
+      "version": "1",
+      "publishedat": 1580493682,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "95cfb73254a032b2c199c37bb499d6f172d044b1f38016279c5bbca6572251f0",
+        "merkle": "6520c13e38e20fadc676422a76628e5d555f62726b1ee942b8b9571c4f73ade2",
+        "signature": "13b64bd7c03ce375b1374d858ef939150bb80ca035c0429e369b05657a02c4381da3cb9a56d7e487e7bc08ce76204d0df919f04084defd1acbfc070c3cb4690c"
+      }
+    },
+    {
+      "name": "Facebook Manager and Events Individual Contractor Budget",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1579390184,
+      "userid": "3178a82f-7140-44ab-93f8-b4cd6294de15",
+      "username": "dezryth",
+      "publickey": "cc0f0a8bf403d8516049d9764e49fac0cf10ce3019eac27fd980ff4ba4d582c9",
+      "signature": "1b623e4a335cf549bd5ece019e743670b1ee39661af6089443f33540221c5312b928d477f88a77b6d06c387a36cfcc0a4d3077c1ac0b4167040ab4b314a05605",
+      "commentsCount": 26,
+      "version": "2",
+      "publishedat": 1579271358,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "063e38270b475ad680e98c12d1a48e322f4e8defe40b265272ea60c6d2202b13",
+        "merkle": "d9ff5a08427a17c9fb2b306f750a88109a531b4ff31024c14053bcc76e9fca54",
+        "signature": "067e5029b49e42145f31d067118a8a8662f5eab47a18fce1e24b9602796624a53ff3ae072cac7ea87bf0696cad2e1508d8fa6d431874600aab867b7b2de2ca01"
+      }
+    },
+    {
+      "name": "Decred Open Source Research Program: Phase 3",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1579262616,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "c9b6b6291c0f449ead2fd1926ca45da841791b6c497cf5b4de296916a30a5c1e7ddab3b605e1ef3738040ea80e0a7ec6e39985400069b22f9cd16f75f88af408",
+      "commentsCount": 27,
+      "version": "2",
+      "publishedat": 1578935475,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "e3675649075a2f92269d8cdc2e1dfd71b16796477df31de7d2868cccfcffb13f",
+        "merkle": "59d5f93bcc3ab4202485dabb74dc71441911450a9e5f264c97be14e26f7f3198",
+        "signature": "0a8a51a934ff739107a11ee686ae0b12268871ee636d9890302d9f35cfee08ff39ddc989cc806b44191bc1d07b862a25f38685e0871eb8b3d4ab33cdb28a090f"
+      }
+    },
+    {
+      "name": "Decred Stickers: Enlarge Decred community",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1578826900,
+      "userid": "5dd9511d-60d8-4727-846b-41f2be9081b1",
+      "username": "block25",
+      "publickey": "9c69a9dd4e4593ae171fda06fbd2624850a16fae9358a99150b2ed2c3f626195",
+      "signature": "9da1f31d78c6fb216b62e0302db6fc5f2b851703ca0896424d324b8127f8b422b3c24043be46a992c81caeadff66de81ff56cfceb40071399b87e967283d2a0e",
+      "commentsCount": 24,
+      "version": "3",
+      "publishedat": 1578415257,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "4acb95564d36488a7ee64683a84dd7954982b2f4743e2f7a15477231f863442f",
+        "merkle": "df37354ea6bc5f2b8d17186b07c4d3ae7ff3ed53f933321730757dce90052813",
+        "signature": "e801973a637d7dc638f13c7f7de403f5b5fd1ebcb72249aa28083bd2b80eed99d40025f46c66c739c001a811ea69e23c11307f7a0b22254fb333755dcf7d480e"
+      }
+    },
+    {
+      "name": "PR Proposal for Decred by Monde Public Relations ",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1578758546,
+      "userid": "c6571041-054f-4668-8f58-e85990e452c7",
+      "username": "lindseymmc",
+      "publickey": "648456696a107c67c7c09cc361f7b464869010a644957cde6f43775576e0f360",
+      "signature": "72be8c15cd9ee7afbab695f89c6d64e052b6a7c9c03ea31615f1172336d2407ab9b5d7d4f8d52504cd73627f137215ded987afddc38eaf8b80550e85fa7eef06",
+      "commentsCount": 26,
+      "version": "9",
+      "publishedat": 1578677790,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "bdd02d82547bd78fc95939c1e2b3df21ebec6e8d31444df5bea3c133b0199f05",
+        "merkle": "b6ce52e81b322c442f90ef4f1f688dfb3e378f821ee9ef5d7511dc75512c4608",
+        "signature": "d58d341d45dcc0946d04a37cbc28255ace8cd8e43e4e451c6ebc1be951db7fe590c933c7f0d46af5977ef5cd380ce5ccd6959b788b517eec13565aa3f267c00b"
+      }
+    },
+    {
+      "name": "Ditto Communications Proposal for Decred: Phase 3",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1578681193,
+      "userid": "5ab4ff5f-0872-41f0-a2e1-af95bafe2e2a",
+      "username": "lizbagot",
+      "publickey": "c6e4610c5a6c12076673c93c8817bb10b9bae651d36d5f6fa97d73b465d8e051",
+      "signature": "ab3ca48c27ec74821f0cffa5289d27e67dbb54b76a4f34afcb973ead26b27e6fbcf32ef5d4445805daffaa01342e38bcb890aa11f9b925967139cf9f8540f90d",
+      "commentsCount": 89,
+      "version": "7",
+      "publishedat": 1578415236,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "012b4e335f25704e28ef196d650316dca421f730225d39e37b31b3c646eb8497",
+        "merkle": "8a88e34b08511d7a9e275e858ebe14cbbe8a16cc005c17f52869f410f22cf748",
+        "signature": "0056121e5d8155ae14efeb18c086fb96813b4beca556ccfcd00472138baef0b9c80b59cef460bbce402ced4d9a0dce692df2c29fc62badd6f2586d2ba331dd03"
+      }
+    },
+    {
+      "name": "PlusBit-POS-App for Decred (DCR)",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1575039250,
+      "userid": "fdcf3c6f-f8b1-45cb-99ee-690157afa306",
+      "username": "plusbit",
+      "publickey": "8a7e5fbcdea923ce9d27a4545d9f33ea0a4a400fe6a5de5a81a8bbd8f682e264",
+      "signature": "ddd9e32a05c758cad2e8882fe3bea87b81a0e0714eab71691f39a4c16025db20cc6195248afbe57405bebd604d72de1f495e65b6557f866271098af8dc5f8402",
+      "commentsCount": 26,
+      "version": "1",
+      "publishedat": 1575039250,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "e559188b0febcab29c49c1f7dd5c66645e31be00894a150ef7d0b8ceb6486605",
+        "merkle": "cdb7fd31612b1e431ea2ab8873d2dddff4d833cfd9c6da3c0b583c515d25c76c",
+        "signature": "a86cb0047a6dad6e848abcfce0ac9174c5316a4d2a59b2fe7cd65b64e391eadf475dcf7a409dafb84da2e6601d2a45657b79fd2ec4e28c08d136b86714881e01"
+      }
+    },
+    {
+      "name": "TinyDecred Budget",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1574807303,
+      "userid": "4bfa47b8-b43c-4c7d-a385-5e1787829624",
+      "username": "buck54321",
+      "publickey": "7e0d27a299b37423a7951e30361c178fdd6cbdc731b62a6c33c1185aabd5e60a",
+      "signature": "b5414868b8ce0c1e769d2e5f2d68a67e69e09eb1da3db164bab5219bd05805223843872d9ec3a0e6a18e59ba1fde1a07535bb582724f8a7d37ea2ac75142ec06",
+      "commentsCount": 19,
+      "version": "4",
+      "publishedat": 1573777557,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "ad0f9688b3467734e2581604914b2cc32c6eb7991dff460eff41d21f66d88451",
+        "merkle": "f6d265bf3846cf13a089b178f0033ad38642a0c7468821ea3125023bf974ae30",
+        "signature": "eca92a9a3885b409df5b500cd31c86c6f9e39ec15575ee819159bc416075e3e0634df5d4c4d5f4f880350b655ab72a00604d6b1c80f402da45ae91df11a2fd03"
+      }
+    },
+    {
+      "name": "Decred Latam Marketing and Events Proposal",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1574270326,
+      "userid": "0a6edc44-3a04-439e-af08-261854673cf9",
+      "username": "3lian",
+      "publickey": "f9da0bd73ab97e9e4b3097c71cfbac5273466eeac44520872fc65ae5c24274b0",
+      "signature": "920582e3615a4816082169af2ed0aee520dc78bec7dbd59e73d9650c0ed0493989673c0e57ca91671ad16b8bd0d1f498b9204c68f049a39d323606475eada30e",
+      "commentsCount": 30,
+      "version": "11",
+      "publishedat": 1573089464,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "5af0ce1cd325be6be39109c2750f34095c4e8feeea962ede058a1e4f4a61473e",
+        "merkle": "1d074aa1fd34ac105c3725d7b55345d053b3bc54d3c726104e8f0e94bbb0711a",
+        "signature": "cf2ea22789a96aa358e6db580d0df8a33bbc2e21723d2b458b788655eed85f77d63d3dc4b78efbadd1945eae80f9c1c307f69bad01a6b85e808e4e94b754b701"
+      }
+    },
+    {
+      "name": "Amin Rafiee: Decred Hackers Congress",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1573065020,
+      "userid": "9ef8f464-c45a-4b74-9024-0c64e060e52c",
+      "username": "evok3d",
+      "publickey": "cb50a534eec341f5b0f1fb50cf30e05bf15e86dcc15bb8331ae0bafd1212b033",
+      "signature": "caec875fc6b683d64b64f39db8710f5477da356999540305873b984dd098d14fc147cd4c728ddb5ae123c93c14c6774c0441f11fcc51026a745f25dae02d9102",
+      "commentsCount": 15,
+      "version": "4",
+      "statuschangemessage": "Proposal owner does not intend to move forward with voting",
+      "publishedat": 1570189253,
+      "abandonedat": 1573065020,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "42b16d2741d58903963d8535e04017bbc3a8193391a83b305f44c082b62e3aa8",
+        "merkle": "345c820c38888fb19584d55e06d9ee4105b071167ee83a05e4d183202db70cd8",
+        "signature": "58736754ef2bd704dfd6d7b47ca399cc9829bd57e76996fcaed8a7a8139ced653f1a9e4d7f81619929661a570547fc244009393a8e11c80eabca6ce54193a703"
+      }
+    },
+    {
+      "name": "Open DotA 2 Pubs for Decred Purse",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1571666770,
+      "userid": "c99c217c-a489-473e-aab4-bc9beee54859",
+      "username": "zebbu",
+      "publickey": "bf01d76a9fcec9a2f7a718085da3759c92c7f6237695a3b6b7577f4b565897ca",
+      "signature": "1fb3aaabd2d82f0f17d4888636a682a4d9edbfb24c949999970feed282bc8a321950d51963430045692a77c38039bc7e943f9d95113de99985316b0490abbe09",
+      "commentsCount": 16,
+      "version": "2",
+      "publishedat": 1571663347,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "5a1bd4116565d107c1672799ed16cae9e92ec633c6e39d9b463b8218e66ff759",
+        "merkle": "ca49afa93e79d3c0a60e1c4d2fe3393d590eda58c56c6d46fdc30a9588d3b7d1",
+        "signature": "b105da01290d5dc74a8033527b50011794de1d49c02c78d4741f08af6da9afa02bfa7aa9116753af75eead35a39a112076f6db47bd9429393e6b1a8424e42c0c"
+      }
+    },
+    {
+      "name": "DECRED OFFLINE ECOSYSTEM BUILDING AND FIAT BACKING",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1571397057,
+      "userid": "74695286-843b-4722-a4d6-046a177feb4f",
+      "username": "cryptoagents",
+      "publickey": "b35c168ed828f32e730c95949d19b1d74ce52b5ea3870db2d7bae6dd8df169bf",
+      "signature": "85498d25f5856e5219dac79d53f10a454e54e0201ecbd5c25f1f00b713a10b9352a898d86069829d986ea30fd167e1c9ba6412d1103da21a447943fd29cf790b",
+      "commentsCount": 30,
+      "version": "6",
+      "publishedat": 1570189234,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "1b4b72fa08792b6500ef770546c24ee751c2b0fee2975db769722524a2754829",
+        "merkle": "1431ec1022ddb1c7d30c5907731876ab0c14e1f8f5486d14eac9a8fb84fcf5a2",
+        "signature": "c1e6d804f3fb23de2f04c2ca7a3a372a244f20c56399003fcd49c10a070ccf338f1ef6feadf663872502767c998c5d34418504b812b3ea556b266cca78c0be00"
+      }
+    },
+    {
+      "name": "Decred - An economic phenomenon [Research and Education proposal]",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1571318218,
+      "userid": "8ff8bdd1-8c15-4a2a-aed6-43a039d7be95",
+      "username": "ammarooni",
+      "publickey": "d688413dc7b1c88f115915c8ea0fd9afbcb33642da6816f625be2c131767827d",
+      "signature": "7112bc6028a23cac05afc5871fc814ac424c1f67808faf9b8c54efe1cb918867d32ca6a553942895cf3bf9d84b2563b646473de5641fbe5cf37382be4e23970e",
+      "commentsCount": 26,
+      "version": "1",
+      "publishedat": 1571318218,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "65bde4146b845e7e839d6916d4d8f642bc39c250df5379c2f1e26c4ab778ec1a",
+        "merkle": "931853f819b9e3a8cb6eb1025e12f014d24a8bed88eed1bb6717888903df6ac6",
+        "signature": "50f292f2c6ee8afad0865597daeb475ade5ae33f47384e114dafc8b09cdb245921666d399e65a6c06210b19baae45af17f5d7b0fcf530a613f720b2fb6a1a20e"
+      }
+    },
+    {
+      "name": "DCR Comic: a visual guide to Decred",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1570469502,
+      "userid": "65b2d0d7-44a3-4f5d-9d45-8f6a9a9d3364",
+      "username": "pablito",
+      "publickey": "61fd66ef5eeb39a53997662796b5c0e1e47d92c8fbd540ee826cf59d9c45f746",
+      "signature": "4d1e55b06cf8479811a208b42ff854201797e3a9e697434143d8a9037f0d1c9fe2577e83c3fab95d68b11e7140407659b04ff0509973410514b9b44c2662ae0f",
+      "commentsCount": 27,
+      "version": "1",
+      "publishedat": 1570469502,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "2ef74fa5f0b558442cb85b1235c8c551a51ff5d8b8de44dead48b8b59c8fc1de",
+        "merkle": "c5c2c527dd6a7157403e388a015967b3aa3e5a58c7f34098c30568cf16b61c04",
+        "signature": "891d4f65d5e2974ca7a86f30d5afb7cf4006ff632b4d7ee487c47f57729253acb4170caa675a9447359ed6948a20e61f38548d9729425fbd36a35bf1a90d3b06"
+      }
+    },
+    {
+      "name": "Incrementalist Proposal as Small Step to Solving Decred's Liquidity Problem",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1570221545,
+      "userid": "0b4b0bb2-e406-40e2-9d08-8b6711fefb18",
+      "username": "betterfuture",
+      "publickey": "dd92f95dd474977f48f25dbc0f7a61f0733d9911703711187676ce8d8aad0079",
+      "signature": "718452e44eb7a83b506135a44a426c63896cde17de098fd658eb720d8c8beebe487db555eae0f3bb8072b3458dafed66583e76f183dd407bc385094e772c1307",
+      "commentsCount": 15,
+      "version": "3",
+      "statuschangemessage": "No activity.",
+      "publishedat": 1567244908,
+      "abandonedat": 1570221545,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "c9604f7879e4b2cd4f2582d238a7ccea210005c63481bec1ddae44ff93e1340f",
+        "merkle": "c42c96fbb95590901a3cabc6a981be6b099b304013c7971592832bc30e06e286",
+        "signature": "5c8946603639ade8e3429678f84719ecad93c5faee343feb337b1e98637f8bbd9ecb501339c5f164197d8b9b3eb399e5625eb370b160937ce5a2e37e5ad68307"
+      }
+    },
+    {
+      "name": "Research \u0026 Publication of On-Chain DCRUSD \u0026 DCRBTC Indicators",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1568663208,
+      "userid": "2d14fd6f-b0b6-4dc1-9bfa-4d6d5793da27",
+      "username": "permabullnino",
+      "publickey": "1b71a61a2b246e60a358f3a3a9f19704e8dece58ca58f2955b1774b522bbc731",
+      "signature": "1be218ebe66c5a0eee1f8fe2cb14edee7089e6648564d49ba236a9bc7ef2ed66772ad03a2713e32cfabad9fb8e8e469fcbed76ab16ca492c1d5cf1fa06ff2609",
+      "commentsCount": 44,
+      "version": "4",
+      "publishedat": 1567731626,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "f0d1bd7447182328b44c691de88cb660b63df17f1f3a94990af19acea57c09bb",
+        "merkle": "e74c1f8d0ba0d541e45dd760039d1cbc790e419f79e06c46ffea37d633c80947",
+        "signature": "1f8b39ac79d0d71435bbecb58bbb0709b6a9e64ba8d2b1943cbb216109547b056a398ab5e2e3dbe35a1e025fd4dd5c75dcbc0a22801979dc6893b00dba8c2807"
+      }
+    },
+    {
+      "name": "DECRED Events \u0026 Meetups in the CIS in 2019-2020",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1568141040,
+      "userid": "9a7a9b5d-4fa8-4b71-9556-e465eea3f692",
+      "username": "bogdan_rud",
+      "publickey": "184280b7c662fa1a8291335f2329bb7e49c606ecd6cdc9f52b637ee6de5b2856",
+      "signature": "a655fe537849b986f0428179903fc9c1b18b643a70a344ce5e33775a65eb60c81fdcee3b271c9037dd86624a13c1667a3c5e13d1f7b77427f82a27e1fb530601",
+      "commentsCount": 18,
+      "version": "1",
+      "publishedat": 1568141040,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "fdd68c87961549750adf29e178128210cb310294080211cf6a35792aa1bb7f63",
+        "merkle": "8c3b39b4bc95e38d68cf1633469d4b87f45be24d7e2e20101f85f7a4aac85c16",
+        "signature": "fef3a1f6bfa33d36f21066fb9bb394a72352b7206c8cf0a9eeadef2c83a57362e8018afa91bb7f8bb7d094d290fbaa79cd271a0f15f0c44de482f21b2658f304"
+      }
+    },
+    {
+      "name": "Tantra Labs - Market Making Proposal",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1567569471,
+      "userid": "e9172423-e790-4da1-8616-0d43a5eee50f",
+      "username": "tantralabs",
+      "publickey": "46282ad3959b0f5f492aa782dbac7112b9f48bdb4346e20100224f1a2c478f18",
+      "signature": "826da58748c9691c841d6c4407d0f298807af19e954a256cdea1151eff2720aa62366d209bf822d5a13299081009bef6ba57644ddecb26046f8012cec5d6d604",
+      "commentsCount": 50,
+      "version": "2",
+      "publishedat": 1566957869,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "82ce113827140caaaf8b5779ab30402d3ed39f1911fdd2e8fa64cf0dc9e09ecb",
+        "merkle": "56790ced83067fada54819c374757b0c5e972dcc5f04cb032796f5bc5f347a8c",
+        "signature": "f99089fc54a8c89d0902d3430186c71137b51db53ee893ba77d9f5bfed2f4063e5b1dcedfd533140c0f49ddbafc6853e5d3324cc189e7604040109ba6a153d08"
+      }
+    },
+    {
+      "name": "i2 Trading: DCR Market Making",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1566935043,
+      "userid": "2112ae15-fe6c-40ac-adfb-ec80faf5f996",
+      "username": "i2trading",
+      "publickey": "9772402a280884cdfa9a6708ab4e2e09ddc06ae2ac2c1a920eb33398c0a8a456",
+      "signature": "3de40dfee89231d201002e2f67fbf8c7deb59db9bcae2035bd1a8692e508dc91a5bc403d765e00aa784120bf0b94982ff13a1bd299f3c8f6f36e14abdfb81005",
+      "commentsCount": 55,
+      "version": "9",
+      "publishedat": 1565204176,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "2eb7ddb29f151691ba14ac8c54d53f6692c1f5e8fe06244edf7d3c33fb440bd9",
+        "merkle": "f3faed21f472fbae1e0e989f36c8c47108fd2b46dd07f62efcceacbfe9898532",
+        "signature": "4b572379ced4baa630b50a434fcdcf274849ecbeb114d051867e035cfb77e398a07df8892ad00d6121df49d97db5ce1b08de9916e707901b206bdfe42f549409"
+      }
+    },
+    {
+      "name": "Grapefruit Trading Market Making proposal",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1566840648,
+      "userid": "23c22d1b-134b-41f2-9c83-d9af6fb866a5",
+      "username": "grapefruittrading",
+      "publickey": "4e745973d789988916efc0bedc426a5f253910ef37255fbe650a5bcfd39663fc",
+      "signature": "b8b4a9aab9fd5a19497e6384c005e3e56dfc8169fb69b32b2bb5e005d12bb54afc59df213138dd7caf5fcbde7b48dd55911a7214d23f7a4c14f046b3882f6e04",
+      "commentsCount": 41,
+      "version": "2",
+      "publishedat": 1565204195,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "4becbe00bd5ae93312426a8cf5eeef78050f5b8b8430b45f3ea54ca89213f82b",
+        "merkle": "a80fb1ec9c19dc56fc0bafa4abf4ac69ce1a3690e374ec8a225134fadc5a8ff1",
+        "signature": "3a8d5c879f2a8451e37afa9215919eb54a5012ed34f44c4f8526d2ae5136cb1a828df39a212051711d2f18c20871585e034bc242c057a04d7ad61bb33eb4710c"
+      }
+    },
+    {
+      "name": "Proposal Withdraw",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1566250926,
+      "userid": "4ab8946b-6ba5-416f-818d-4239e0ee5b08",
+      "username": "someone",
+      "publickey": "0d003e0b388cb8f86f98eafa56fa69a6c0f336c5037bc5b8c7f6ea8e4c08873b",
+      "signature": "e5e7ae5c1f5837963589e48989db8d5faed5e0cb744a4ee21f6d5662e9bd222cb3d5cdb09de44bd26a363c41776606023e839fdfe1ef3210bda5e61eea2faf05",
+      "commentsCount": 42,
+      "version": "4",
+      "statuschangemessage": "Proposal owner stated that they wish to withdraw the proposal.",
+      "publishedat": 1565204148,
+      "abandonedat": 1566250926,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "772d083fef79fa2e443d8424b353deadc3af69c8d8764e473cb200f98f356c60",
+        "merkle": "f7b8994286ada2bca4b780383062745152378dd1cdc73a5952f7dcf73f5ca642",
+        "signature": "8fc1b0c7556f2bd5a4fb6c633304bae99cd8e313777f68accc05d67259dcf0897df163e1444b2511793a75d7789df1aeca050edd47c30f39233e3786c8095c07"
+      }
+    },
+    {
+      "name": "Decentralized Exchange Development",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1565480531,
+      "userid": "7f3a60e9-a8d1-4e43-a68a-94bb2409d75c",
+      "username": "chappjc",
+      "publickey": "22b54aa3030d05ebb4ab31c5c719b8fec9d979928ce517222fe80195e0d3596d",
+      "signature": "22d8150b2aeb9252deda7b1b765f84b44a76d9d6320524241c829ef447a9b2c30d4518ac9a9a9c0b315e46f1021ad55480ff960bf10b358222d6ad5bdcdc280b",
+      "commentsCount": 16,
+      "version": "2",
+      "publishedat": 1565204204,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "417607aaedff2942ff3701cdb4eff76637eca4ed7f7ba816e5c0bd2e971602e1",
+        "merkle": "a0a049c8beb2120a1564881872da6dbf285c34c5edf9bc624043fabe03d41d75",
+        "signature": "2d132261eaf5a7c308afba4cd297eb7b308f2fd8962d5c3834b9aa39afa714d050d6f4523b575c89be219fdecf0556438d8843f6c3bc111e1796d0da6c497508"
+      }
+    },
+    {
+      "name": "RFP: Decred Designated Market Maker",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1565473151,
+      "userid": "69934791-d575-44fc-9816-e7e58ff53726",
+      "username": "jz_bz",
+      "publickey": "db4f9959fdc395bf2db48e1992d58d5366f05397345e3985b901b0294993a6f8",
+      "signature": "cd1c587141bcbfa29bed0d066a2cebd67be917a3df97b8ef9285e826cb2a3651c3613b1891d747ae1456ea167bbcadd5d075d21be22d3e9406306784659deb00",
+      "commentsCount": 89,
+      "version": "2",
+      "publishedat": 1565471933,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "30822c16533890abc6e243eb6d12264b207c3923c14af42cd9b883e71c7003cd",
+        "merkle": "dd9cac876f41892cfde262fe98af6b4a0d574b73d02fb200f24cad119d512ec2",
+        "signature": "6a70c43dd9bdecf3868ae761020a52fe9632f34e59d224abaf6c1a8550767a3a64f38d9b984fa757d4ad1773368b9f33975c5d94e3dc763b4c108da191923d0e"
+      }
+    },
+    {
+      "name": "TinyDecred: A Python Toolkit for Decred",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1564504224,
+      "userid": "4bfa47b8-b43c-4c7d-a385-5e1787829624",
+      "username": "buck54321",
+      "publickey": "7e0d27a299b37423a7951e30361c178fdd6cbdc731b62a6c33c1185aabd5e60a",
+      "signature": "1f059c3d27d7e6587410486f911e927e80ca3cdc86e520d153ea0b8062e6a3ccdc5bd271adc42527173195ff0d5a83084eb2c17f9fc42ae6e487ed0b81a2b90c",
+      "commentsCount": 21,
+      "version": "1",
+      "publishedat": 1564504224,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "20e967dad9e7398901decf3cfe0acf4e0853f6558a62607265c63fe791b8b124",
+        "merkle": "77c9587984b74beb36b57f413eb2f2e686ea226c385de3ba66daf9146b46e1ee",
+        "signature": "c9dc6714c1a97f009aaf54e1333e3c63cd89068e5bf60bc2236746b89963edc83f694868dd2b1030edd0d8e9d545e784225b7751497ba0ba528c604e67040402"
+      }
+    },
+    {
+      "name": "Supplemental Proposal For Decred Tutorials By Denni Lovejoy",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1564482412,
+      "userid": "3d61682a-d38c-4cca-9482-640b89dd838f",
+      "username": "dennilovejoy",
+      "publickey": "b6e65c0df66747e82d2671b95bf32b90b77d6ec29c392b71d6710bae149a59d0",
+      "signature": "4551b1cdd386e17f60b9788310c3222cac9f60abe1fb045c5bf65addac7c672767634822f2b8f9eb71266baaad3bbe5e5cc43b12ba99b5b6b52e5d1a77fb330b",
+      "commentsCount": 13,
+      "version": "2",
+      "statuschangemessage": "Proposal owner stated that they no longer wish to put this proposal to a vote.",
+      "publishedat": 1561464197,
+      "abandonedat": 1564482412,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "d8d7ff7ad138ed322422aaa4d2a3e1c61f296ae56a2c2316cc5ecd10cf8dd8bd",
+        "merkle": "75d7edd6177ef098f64c5ef18562e9a3c821b5115668675c0b0054fd5993577e",
+        "signature": "24508af0f7dc687d3bb62ea293817846fbd94b8b3500ed5bf3b2dd03070e0e3ad114dd05495971fe30b4c4096e6e6145a38dbb75bb8b389ff767919749cefb06"
+      }
+    },
+    {
+      "name": "Decred Fundamental Metrics Research Proposal - Phase 1",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1563517368,
+      "userid": "eb486ed6-bbb3-4815-9547-599cc0f28325",
+      "username": "_checkmate_",
+      "publickey": "ee69df0bdf51299b5b2db07c0ae8eab99968632632eba228271a68c661142323",
+      "signature": "99d961468b1c31fc181fe75846e0959fc7730c45cf81748d1b0c313f5517c17b818148d480779326d9b7792f19c605270110ebaad920dcd3f46844a76da62004",
+      "commentsCount": 19,
+      "version": "3",
+      "publishedat": 1563451299,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "78b50f218106f5de40f9bd7f604b048da168f2afbec32c8662722b70d62e4d36",
+        "merkle": "f6f01253f481e17d520b6fcc85de6df015604451c13087275c66b0ce1ade4b0d",
+        "signature": "64e5733199ea67c24c616cd1da16889fad43c3e3bcc7ceef5bf133fec4a85f59939692ff26a7551e584b5eb90c8e4f4a3135b24c8453a5b16edea69f2b166e0f"
+      }
+    },
+    {
+      "name": "Decred Bug Bounty Proposal: Phase 2",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1561194253,
+      "userid": "391ab82f-84e2-422b-90e2-d6e0bf532152",
+      "username": "degeri",
+      "publickey": "d18e6dc2871b96d4e0966f3a5d95acc3c1024b7557b15d24597080e4daa68a66",
+      "signature": "096deba7488e292f88a3b0ca1e1ecdacad67a6eaf802de39868e35aca805f94c162a4c379c55015e5bd91d4cece7335e0733cba36fe8a3fb3e341c28558d050d",
+      "commentsCount": 15,
+      "version": "3",
+      "publishedat": 1560618984,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "073694ed82d34b2bfff51e35220e8052ad4060899b23bc25791a9383375cae70",
+        "merkle": "c6cbbc5899b7b46b5b85231d853563f8b3005502591a672af0260c353b60c9ae",
+        "signature": "f09fd8e849b143a04bf998d1e818b8fc694dbe75e17444a383a8d737019744d14de19b656f1bf5f63402d8c2e4ba826ad7a804fb0634d75adffc80a097f3fb02"
+      }
+    },
+    {
+      "name": "Incentivizing BD Evangelists within the Decred Ecosystem",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1560619205,
+      "userid": "0b4b0bb2-e406-40e2-9d08-8b6711fefb18",
+      "username": "betterfuture",
+      "publickey": "dd92f95dd474977f48f25dbc0f7a61f0733d9911703711187676ce8d8aad0079",
+      "signature": "c835e42b7d9f9a73cb488b72d7092432d3500d6506aae3f1d36a51ef5673d7baa9d90c043d15e5ce6ca8ed46b6a713b4bc678c8439fcb327bef56470aef64e05",
+      "commentsCount": 14,
+      "version": "6",
+      "statuschangemessage": "Proposal owner stated that they no longer wish to put this proposal to a vote.",
+      "publishedat": 1558981422,
+      "abandonedat": 1560619205,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "cb446a469987d6603d93f442ef0d4e45bacbea47a72b5ce89f9c3cac3868d627",
+        "merkle": "7499a826e0e0b1b05f46562898104a4de175456eb38e82e027f3c4853ba5c8de",
+        "signature": "60b1e5cfb29f1695bcc386ccfe7a193d3a03926f9f0da7144573d4438ce8657b4305db00892de7d4237f426a3f48b5cbcfafcc27b86e4e6aae35d94bd29f2603"
+      }
+    },
+    {
+      "name": "Decred  Media Campaign Proposal - Crypto Economy - 2019/2020",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1560619149,
+      "userid": "0a7f2aec-6366-43cb-bf6f-0e585d991649",
+      "username": "cryptoeconomy",
+      "publickey": "6bf827030057fcc9fc6c8d4719dad36cd985014f9ebbf06aca10c0b152b5b406",
+      "signature": "abb98cf2d8f4c8f211839c8c538fc1d69a5d062d95006645c681a9f1bbeeb68555278c2bdaf34ae9f6f36a2904d9a55b069bbe0d9468c54fb17fdeaad6601b0b",
+      "commentsCount": 9,
+      "version": "3",
+      "statuschangemessage": "Proposal owner stated that they no longer wish to put this proposal to a vote.",
+      "publishedat": 1560298768,
+      "abandonedat": 1560619149,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "1a367dcb91b55c60ad5fd038b219201154fcab965edd7a4639f157e409b1f4bf",
+        "merkle": "12bde0c5c3a6c7a10102567d205c7051edc19f3017451a9ded2718ed4ede174b",
+        "signature": "13d31b5dc31199cad4dc65389e890edc3fa96ccda010403f606423cd4ca312e079018a3c404ade43f62fbb83a270124f339c48c8c557f8aa5ed5d4bef71b2c07"
+      }
+    },
+    {
+      "name": "Decentralized Exchange Specification Document",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1559325653,
+      "userid": "fe62dd6a-2cc6-4d41-abd0-522528d33ae7",
+      "username": "jy-p",
+      "publickey": "e575447e1acb624bedb7c7934f291e3c1b51bb7223f2c06647e551e4cf93f360",
+      "signature": "cef96be2ed79b72286a6c44d94578c46127e3a092fa7e8633b743ea41dfa129533b61b27d5198c425722e1889534540811336cfec37ce09801b85d25abf22a06",
+      "commentsCount": 11,
+      "version": "1",
+      "publishedat": 1559325653,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "a4f2a91c8589b2e5a955798d6c0f4f77f2eec13b62063c5f4102c21913dcaf32",
+        "merkle": "7d59e3fc1af5d22cd8f33e8af2d8165f74cfd05bd535cb5d844b076243d6c16a",
+        "signature": "057e6252e63e9a63b9025c28f0b9de1b7160d55ec0067a6d702ac09dc7588c7c8b514bb8edb177648cd60308125802456eacab1b0677818a4a50641a1317840c"
+      }
+    },
+    {
+      "name": "Decred Open Source Research proposal: Phase 2",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1559242090,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "4e1a91658ac0075863e0c1ea8838d1bfc6b85e1d4da530af7d0ca51880c2f73ecbf00c31570b8166a1aa66a1f848cd24e5248b62aada1f181e0cae87636a6202",
+      "commentsCount": 10,
+      "version": "2",
+      "publishedat": 1559232253,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "67de0e901143400ae2f247391c4d5028719ffea8308fbc5854745ad859fb993f",
+        "merkle": "fb4337d0e744891c2bb23209fbc6dc1abfcbf2bc638201f2b47d6f68defd8cc1",
+        "signature": "2d96af62db3ecb9f4ed739503ad6f9d1133a99dc494e1a7e2dc2d9b842a88806312ba2fce02c8e47a22d0dc3f4ebd9c8b342daea408947a5aedf51a3b9b48a08"
+      }
+    },
+    {
+      "name": "Block Header Commitments Consensus Change",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1559232228,
+      "userid": "7a982526-e44b-4ced-9924-0f4401861c05",
+      "username": "davecgh",
+      "publickey": "937e0161deb065604266635e24506e1e79c8cbbd27c7a83483a56ff1b2293f9b",
+      "signature": "6d9a8205d126ac64aae257dc9058cff479133df2e54d0a84c98bfcdcf91c9a8f5765f237764a9d97e7ce5c537ea8e64f18bbdb7aeb431f3eac240f256e846f00",
+      "commentsCount": 11,
+      "version": "1",
+      "publishedat": 1559232228,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "0a1ff846ec271184ea4e3a921a3ccd8d478f69948b984445ee1852f272d54c58",
+        "merkle": "11e9335e97e3345370c99192481e34a3304e859086f485765e4893ba5a23afbd",
+        "signature": "4460dcc5b723177bd4745f4c99b9440efd29e5dd16175c3038929131b8d285236186f27ebcabdf09c8dbd19946540180156ef6f3224400cfa68e10eb708f9d00"
+      }
+    },
+    {
+      "name": "Ditto Communications Proposal for Decred: Phase 2",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1559147404,
+      "userid": "5ab4ff5f-0872-41f0-a2e1-af95bafe2e2a",
+      "username": "lizbagot",
+      "publickey": "c6e4610c5a6c12076673c93c8817bb10b9bae651d36d5f6fa97d73b465d8e051",
+      "signature": "efcce7e35c4eea412764da854273d05519268d7744d7ecd385facf622539dbfa5fad0e1a70dc00e3b2dfe23294ac180a265e9e917a7cddb57a2eac863e13840c",
+      "commentsCount": 35,
+      "version": "2",
+      "publishedat": 1559141875,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "52ea110ea061c72d3b31ed2f5635720b212ce5e3eaddf868d60f53a3d18b8c04",
+        "merkle": "67df68a3154a9ab3e50f89873716f35d2bcba92f1df4fecc5bd9552d6a3290dd",
+        "signature": "9ecd788f650d21884144e496eb99c64cc0b601768e95a7004a59afcb079b8333d111abb441d09e4ad8931131d380ce876164f665eb4199e3963b61e4abf7050a"
+      }
+    },
+    {
+      "name": "A Journey to the Future of Work- Telling the DCR story through Politeia",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1558044169,
+      "userid": "2200f65d-0fe9-43f7-b2f4-369a41b2357f",
+      "username": "jer979",
+      "publickey": "947e2d3d5ed7dfaff737bb90163b46d68d7dafe02c31566184af2c71b224b2e7",
+      "signature": "4d44e577c26134657bcc802421a14ec678d6c63f6bc91063d5e57b387f82ffec3df591545809b73121c9d6f747ee946cd56490662a53085dbd53a12da3310a03",
+      "commentsCount": 66,
+      "version": "2",
+      "publishedat": 1557161014,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "b9f342a0f917abb7a2ab25d5ed0aca63c06fe6dcc9d09565a9cde3b6fe7e6737",
+        "merkle": "3073125564c71257d8214d31a994713ec4fc68cf2095c6a54a2b98a7e793ce5d",
+        "signature": "cc4e25440587387ddc18e64215b4f03e9850b64792807e57a293b308bc5848b9540d2fede05589020d764af36f295d3b3a1a6bbc69ae01e949d1e33f5005f50d"
+      }
+    },
+    {
+      "name": "Fiat Pairs integration on EXMO Exchange",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1554735906,
+      "userid": "0e4730d2-bdd4-4f34-b8df-cda5a7b7d16f",
+      "username": "vadymprykhodko",
+      "publickey": "915f08766972d9dcad6202bc53b8c4f7b9ca4c0ae05ce3dc193ba48921ddcd75",
+      "signature": "b1a34cc7ae55d25731a6fa78c06be05644a0f5da2026322d052f6364e3c61bb289e4a76ce29656e6bece0a75ac309451687a654f3288fd7400ada1591a357d0d",
+      "commentsCount": 25,
+      "version": "2",
+      "publishedat": 1554215813,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "950e8149e594b01c010c1199233ab11e82c9da39174ba375d286dc72bb0a54d7",
+        "merkle": "1425ac825fbd51db185250d7681812df383cca3d346cde1d044c725ffbf39405",
+        "signature": "a8b4a5bcf2f317556ec6824f97c6a054494c2e561740449f984575d91a0c5671f237e4e7726846341df203bfca774f13c993f20246049cb6922c70d2c978ba00"
+      }
+    },
+    {
+      "name": "Decred Open Source Research proposal 2 - research projects",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1554489987,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "f0dc5953840adf3af43bd0c307e3b12c2ff117255a06bd99ee6a02af489811e4861e3854d4d148e1de087fbcf14aa2d0a6d4c6760727e8fd07004e442e78220b",
+      "commentsCount": 45,
+      "version": "2",
+      "statuschangemessage": "richard-red used this proposal to solicit ideas from the community for research.  That process has effectively stopped, so this proposal is being closed.",
+      "publishedat": 1543249744,
+      "abandonedat": 1554489985,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "5d9cfb07aefb338ba1b74f97de16ee651beabc851c7f2b5f790bd88aea23b3cb",
+        "merkle": "edbe8826d7fb971d3c01b0d6086bdc90af054bb0c37b76045b10a4851e8c36f1",
+        "signature": "0640daeb8ccf2b144e405737aed96f0f6ca371b232eb1b540316a576ce4f6bb5dd96824e4448b1f0839b7f04d98ec5fa8388cd7305b1a745dd5a1e0666b9b400"
+      }
+    },
+    {
+      "name": "Amendment to Decred Constitution - 001",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1554489649,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "66fc03e1b150776b9d445d5afc0c91b78a8af4da33b9e94d4a924932b057905961a37c2368f2b2b5ac51aa5543d38670c163e12df8c1ec571d5f21e90bf7450a",
+      "commentsCount": 7,
+      "version": "1",
+      "publishedat": 1554489647,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "fd56bb79e0383f40fc2d92f4473634c59f1aa0abda7aabe29079216202c83114",
+        "merkle": "ee734abb585f2669875ab6523359b5173472b20e44b5952fa490e13200181ae9",
+        "signature": "16e525ef805141a2b2133733b47c89ba5761fe867895134b585e12c5145bfe7b196a615c9cecab1bf31e080f4db40f3420588714e931251eb23d08577784ea02"
+      }
+    },
+    {
+      "name": "Decentralize Treasury Spending",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1554215828,
+      "userid": "74b04212-9310-4fa9-9ce5-d1d3bf00d566",
+      "username": "moo31337",
+      "publickey": "a3cabbac727b0bce49f1dd2466f38ca62681cd6d48880e1c5ddf28635bf6681e",
+      "signature": "445f4ba5a2d5b5ad36c30f2dd2261cb5c37984eb60045fead5b05057d03c0f519b23cbf7dc9f18edcbc27bed6aef2d575da208c0a56cded4332ea700102cdb0c",
+      "commentsCount": 43,
+      "version": "1",
+      "publishedat": 1554215825,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "c96290a2478d0a1916284438ea2c59a1215fe768a87648d04d45f6b7ecb82c3f",
+        "merkle": "c6e329c3577a39432bd140ed67efb79738e513fd8134e25910fabb466fc98f9e",
+        "signature": "598bc3fc82ea75f86503525b6d7bdf0dadc3d7d4e3717230adce7785273661c486e48f17f9e2b710b6947c7d05b591bf2b214adb0439fc4d635c6bc8464bf503"
+      }
+    },
+    {
+      "name": "Bring decred to Africa (Ghana) Adoption program for merchants and businesses",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1554192998,
+      "userid": "dbdd4436-a435-49aa-9a7b-253d0524fc41",
+      "username": "georgepro",
+      "publickey": "9a21d841e209056eb58e97a10a3d97a17e63b5d2456dd0129f1fa06c11a7b818",
+      "signature": "7cdce67713518efd0d16f751bdf63694e91d8442c0664704da183888296df824c5d81016200d19e07d40d1cdef663b610f3f4d3051e786d0ce5640e9bd4b7909",
+      "commentsCount": 45,
+      "version": "3",
+      "publishedat": 1553095414,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "dac06f18bfeb5f7667e56554774de3bb99151018ce16a64f5353bab45819763b",
+        "merkle": "511fc02df421ce65a3bf791b410f6b90b178599d4667f449a6b4bdaf99491e71",
+        "signature": "5a703ab1b1e78f94f653db371c53b9db0ee9fc51b4956dd58eef8a002fb08f772c06daf36a45ba049381efb0a5c4881985aa7cdece2cd20aff09129145f1df0e"
+      }
+    },
+    {
+      "name": "Trust Wallet - Integration with Decred",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1553112515,
+      "userid": "8f252e88-3c3d-437f-b982-9329b0d510dc",
+      "username": "oregonisaac",
+      "publickey": "6336046c6f360e4a86f360e7802a5939642f2a4b668fdc01bfeef6040608f43b",
+      "signature": "0a8c9e8eaccaec195f73c762955288d2d8d60921e5c40df02a35040a195db12a1a21b2f44bc3b184a42a17c0079823998fd74460ebd67b248c72166f98f1c902",
+      "commentsCount": 21,
+      "version": "2",
+      "publishedat": 1551794294,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "2ababdea7da2b3d8312a773d477272135a883ed772ba99cdf31eddb5f261d571",
+        "merkle": "d5fe1d07f038184288cace47bfc575e246ea0f046a27fbe7043640ebe06cc408",
+        "signature": "79fa6008954cc32df1a26379f734ade464ff4fc3bf4c473bef1cf695c771a0c115ed2089d845fce11f2c42e23f0f0f44cff775008acc4959f990a26aed7a090c"
+      }
+    },
+    {
+      "name": "RFP: Decred Decentralized Exchange Infrastructure",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1551795058,
+      "userid": "fe62dd6a-2cc6-4d41-abd0-522528d33ae7",
+      "username": "jy-p",
+      "publickey": "e575447e1acb624bedb7c7934f291e3c1b51bb7223f2c06647e551e4cf93f360",
+      "signature": "d66e6cef448ae93bc5aff2f2864b709e55e70235dd00241adeeffcabd622168ca15f75d00f8f482b23efc1a767953241ca3448f85c4143f724ce675db3897003",
+      "commentsCount": 84,
+      "version": "3",
+      "publishedat": 1549292418,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "5431da8ff4eda8cdbf8f4f2e08566ffa573464b97ef6d6bae78e749f27800d3a",
+        "merkle": "f7051e9e947676e48cb3850d84545c84772afde4c87e9db676aafa14a8957aa2",
+        "signature": "611a14a52439b3fe84d18c4c34fcb3fc752a26f229176dd4141a74e5cc64524ba67792ec7d938acd99b7217f9ddc3f98f7308f8addce3a9b567c60ff425e7b07"
+      }
+    },
+    {
+      "name": "Decred Integration for IDAX Exchange",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1551184809,
+      "userid": "3f652e9b-bde8-447e-9247-dfeaac016830",
+      "username": "acean",
+      "publickey": "3ec408dc7c50dd4dfc02c3264c4a40037ec06b05a6a802ca4a770998049c3786",
+      "signature": "576e45b0fdc6e06540fd26f26659951bcd63f8d5a4938a56ed737ce17ce8102d4df3376b9c130cb3ba8db0b6782df66021af1f2eece6193e089234c9d1176a02",
+      "commentsCount": 31,
+      "version": "1",
+      "publishedat": 1551184807,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "60adb9c0946482492889e85e9bce05c309665b3438dd85cb1a837df31fbf57fb",
+        "merkle": "d180e6e2d2bbaff19a22d76909fb8367c2bc5820ea82821de5dff20df1c0a186",
+        "signature": "2e3545a1ab0d7b0105b6dda09cfe94a94fc0315a5d4fc5ca39edcfa59cc123634904579b57d780ea188d94ddba60138e881e8a042070b3ed856a080076b68107"
+      }
+    },
+    {
+      "name": "Decred ATM Integration - Approval for Planning Phase",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1551073781,
+      "userid": "8f252e88-3c3d-437f-b982-9329b0d510dc",
+      "username": "oregonisaac",
+      "publickey": "6336046c6f360e4a86f360e7802a5939642f2a4b668fdc01bfeef6040608f43b",
+      "signature": "985d84196aebdb720bd745f77d6f72283475e1e52026af55a3827b33baa1d0f93261d932b8a69181afe845234d799e0f8c86325ecf39406e056b1b58ae307c0e",
+      "commentsCount": 39,
+      "version": "3",
+      "publishedat": 1550504501,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "aea224a561cfed183f514a9ac700d68ba8a6c71dfbee71208fb9bff5fffab51d",
+        "merkle": "0509febd724ef91b81ef7950894bbc51c568eb9c67cc808198108b1957f97dbc",
+        "signature": "561fb5c4290e87c4941e48b0e7239bdc66371f4de8fa0d307a6adff1b2e37f8c9f7391064efdde4e3bfac585274eda7f680b5cda7312238812b0082f344dca0b"
+      }
+    },
+    {
+      "name": "Website for the Decred community",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1551006613,
+      "userid": "596e75b6-1037-4402-9470-ff99639a08f2",
+      "username": "karamble",
+      "publickey": "e0e3133b3d628b5975dc30151aa9e1c66491595d90a84f5fde5a2ef5edb4d831",
+      "signature": "ff00755628b30611bd0efa0ce3e673ceea5bd950bf281a4655487323b82bf8ff9e8a3e9fe43b86fc592d7cf9695c51aa98f91350ec06169460fce7153212f502",
+      "commentsCount": 59,
+      "version": "2",
+      "publishedat": 1550862462,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "fb8e6ca361c807168ea0bd6ddbfb7e05896b78f2576daf92f07315e6f8b5cd83",
+        "merkle": "475750ea4116042aee3fde9ff2a9ec4c97dd004210ded11c62398f7a27a02781",
+        "signature": "cd0b404406e5e80b26240bf564cc4b94d2b711df1172466978087bdd471a827a716830acf94d7ac2ce165f506ab7d66971e12aab00211dd28d33f639256d7304"
+      }
+    },
+    {
+      "name": "Proposed Statement Of Work (SOW) For Decred Blockchain Wallet Tutorial Campaign",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1550618250,
+      "userid": "3d61682a-d38c-4cca-9482-640b89dd838f",
+      "username": "dennilovejoy",
+      "publickey": "cd71155ab0f7944118e8a9ed46bdde77d4724f61f2c9ebffaf898308f0185b92",
+      "signature": "0092fefff324384a6f26131c6cc8d0c938beb968e96580d2e65391d90e835238f69b6213aaf8f5c5296c8eec871b46117a51d5774df99eb803febf484a6fa407",
+      "commentsCount": 37,
+      "version": "6",
+      "publishedat": 1550504515,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "a3def199af812b796887f4eae22e11e45f112b50c2e17252c60ed190933ec14f",
+        "merkle": "d0ff624c0253f93943322e0928367dce6752e61621a71516ce5ec87d051c7477",
+        "signature": "246aaff90be3eecdb4c06749ce7587b8ac1b1676c49742ed4d285aba5e68ba27d67fa22bac2a96ac5fc8486a1ddc290820bf59af1a6aeef80e6ca1d35038670c"
+      }
+    },
+    {
+      "name": "2019 Marketing Plan Funding",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1550504525,
+      "userid": "c2adc10c-375d-4399-a4b7-0fbbc827034d",
+      "username": "dustorf",
+      "publickey": "2cfe1335346e419a3f00fc3672c1a53ebcc1c15f48d3e9e174af7356be14bc5a",
+      "signature": "41444d4fc6b077682ff43c26bda63e1aeede92e908258586c61f53a71e10bc7ef7a2a62e4f03b5b3687eb33edb0fa62a9827f304749d8008aa9f59aa48c8d504",
+      "commentsCount": 68,
+      "version": "1",
+      "publishedat": 1550504523,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "c84a76685e4437a15760033725044a15ad832f68f9d123eb837337060a09f86e",
+        "merkle": "8458836dea52fa0123073d95754b36ad1c3402318676d46a50e45d0208f01dc6",
+        "signature": "764855904410f952672902fe97a479d6d5362c555b07b1ab5adc6cdb9c307c0e682b195282e88e0b8d78d9baefdfe4e0a522b0d07c755e9d6cf18fe24457950b"
+      }
+    },
+    {
+      "name": "2019 Events Funding",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1550504508,
+      "userid": "c2adc10c-375d-4399-a4b7-0fbbc827034d",
+      "username": "dustorf",
+      "publickey": "2cfe1335346e419a3f00fc3672c1a53ebcc1c15f48d3e9e174af7356be14bc5a",
+      "signature": "ad3a7576b565dfacd6459e9564477da83f4c554891c12cfe0bce93df306e0d10af91c854d424f2d4fd948369fac3e11baa8a7b8026cd7938f75efeb093299706",
+      "commentsCount": 16,
+      "version": "1",
+      "publishedat": 1550504507,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "d3e7f159b9680c059a3d4b398de2c8f6627108f28b7d61a3f10397acb4b5e509",
+        "merkle": "a7832b13edfca6636c0e5ebc6c78d609878ff74e7722dc105db8c392a5ca4637",
+        "signature": "ae4ba866bdb5f0c928e879e52d1c208cf3ff752c50f94c98b27ec492fa1aa03489b59f2bf182df1cd4d0a0f7cd3c0cab73daabd79b62d6c7faf5319159145c0b"
+      }
+    },
+    {
+      "name": "Smart Reach Partnership Proposal -- Jan 2019",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1548425366,
+      "userid": "7f67bbdb-d388-475a-8342-ca7868ca3574",
+      "username": "cryptosi",
+      "publickey": "5f05194577a6bd5b733a700463ed8421191baf8d22678ad2c486c83d118d5f0c",
+      "signature": "a4ec0186da364b2093035eb5b0c4acba4adc8c9fc0db60ce58e70fd6e4803af12cb727c06ee28039a6b69535642b592dc23f08488ceee9db637fab06e647e403",
+      "commentsCount": 5,
+      "version": "1",
+      "statuschangemessage": "No updates in 3 weeks, author has not authorized voting on the proposal.",
+      "publishedat": 1546213409,
+      "abandonedat": 1548425364,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "cf7143c93d35f886be03d749396e9202c7837a3d3cbbe876f93c3a7d18ec2028",
+        "merkle": "5d235a5798c4e4d239aa213ac6286ca52153cebb9efa95e46bec428ea2d750d2",
+        "signature": "61510112a71fc3d723460eb90121dda5e7e931c9de6184dd4b90981e26ae9bcc49e0a85fa7e3416c3672d1d68d53d70b7b4820633047b1fc81a7b3a270a9bb0c"
+      }
+    },
+    {
+      "name": "Baeond: The Futurepunk Autonomous Card Game",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1547137526,
+      "userid": "ee04b0ca-a894-4956-bbb7-cb46748f7a38",
+      "username": "burst",
+      "publickey": "60e2e94c873e505adb18ec7b8fe78b58593adf7a6cb6e1b952a70505006e32b4",
+      "signature": "efb88655d42ea8f5ca7dbdcc0c246683b79f3527abf17f2d67e5244c874daab70a8ea38fff2235ed8556a96690150e7987d5e2bf0cdbaee7177537aaaf9d8a0c",
+      "commentsCount": 24,
+      "version": "8",
+      "publishedat": 1546266210,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "f545b359fcf1b40b356e9cb556cb422cc7ff01b628b577f804cdc45ce414f5dd",
+        "merkle": "ff36d46c7e4209ed0324f319ce25ec8659952eebb173a4335b6f8e8a7f9d93fb",
+        "signature": "cdce44962c92bb79a40804440b9979f0249cc29ab4e5d5230e083c2d9ab934801c3bd7ff5ac0ccf69218afe128cd1b3d198c5cf68ae3087d130b369fb4a6b70a"
+      }
+    },
+    {
+      "name": "Stable coin - USDD",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1546216241,
+      "userid": "e3daf2e1-c418-4595-90ff-60a6a58ea6bc",
+      "username": "limited",
+      "publickey": "80d0f5e284283546a78433efa7ccf3c3d07f139a8a6175fca85bef0179e0f141",
+      "signature": "04c10a9a352d1aa36c4e51278714bafe8c4693f52a984c465b116f2c152da675efdba7fad6e0d96bb62813de77b2e83566da90c2e955724cb5dab11024114100",
+      "commentsCount": 9,
+      "version": "4",
+      "statuschangemessage": "Author appears to have retracted their proposal by editing it to say \"Canceled\".",
+      "publishedat": 1543932250,
+      "abandonedat": 1546216240,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "85fc65cef080cfc3564906fd3d488b827d74fc99bb29143ed8aa6c400b765be9",
+        "merkle": "85306facd80b2b4812794ed087e1b4bba810affdcf8071b078b8c1eff362773c",
+        "signature": "9322c212384f4de899141ced67d57466d603fea02d4989b206d7dfc318e65c908a755523aeb019b5dbab70ac59bb7817c28679681b63a801f74d41a0653cff08"
+      }
+    },
+    {
+      "name": "Add Decred support to Coffee Wallet",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1546216189,
+      "userid": "880212e1-b928-4ad2-87d5-8d9dda8c5f42",
+      "username": "francio",
+      "publickey": "95118e6033b2f9aa19366eb5aca78b52f0e8f9cb125fddbf8629ddab500a3dbf",
+      "signature": "bc097f78a044d687b19e7854f925f3633d370ed7f5e950650678a61f707e4168dd9d6c63a9434fd25b8937277e1c409ab5abb9f89e35e0e0b19b6dd05843a70a",
+      "commentsCount": 7,
+      "version": "1",
+      "statuschangemessage": "Author never authorized for voting and proposal has sat for weeks.",
+      "publishedat": 1543932285,
+      "abandonedat": 1546216187,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "45de9806c952c5ffc2fc6782fddbc74c852c26e3fb0e950144b92d75082c4731",
+        "merkle": "d3ea5dd207054013bee9a0c3ad2b4cd9cd13efc3664db476769f06a788e79e8d",
+        "signature": "32269ada9a538ecabce80c84ab815a7adbde128f2e786edca681621d87335b7810cabad4e3ee1207939aa56262c86ff825c90d46769b6f6b2faf3a650537a007"
+      }
+    },
+    {
+      "name": "Decred Bug Bounty Proposal",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1544287242,
+      "userid": "391ab82f-84e2-422b-90e2-d6e0bf532152",
+      "username": "degeri",
+      "publickey": "d18e6dc2871b96d4e0966f3a5d95acc3c1024b7557b15d24597080e4daa68a66",
+      "signature": "1d666abd85ffd9bb9f8924ee985d2e82cbeb7307eb905563c5fae2acf4a3b9954469affdfac96467cd2bcba4cc9b33b1ee77275b44f7e8746f84c8502963dc01",
+      "commentsCount": 15,
+      "version": "4",
+      "publishedat": 1543932213,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "d33a2667469b56942adf42453def6cc2292325251e4cf791e806939ea9efc9e1",
+        "merkle": "674eda9aa5fc5c31f2ab6a0656263951153d06892c44fa58691982dd115d89cc",
+        "signature": "662d834623523eb8bd9387736879403a279447ea26c5ff64d89fce7b04d2ae37b10833b1ee2eb5aad7a4ba603537ab4e05f6618be6657c8e25a2dd8de7e99e00"
+      }
+    },
+    {
+      "name": "Testing of the funding-request mechanism by a non expert",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1543946333,
+      "userid": "cc7d49db-dfeb-4441-92d5-af9b7f111817",
+      "username": "hashfunction8",
+      "publickey": "45b18597a89b30e2d6eb1b7ec0039bc3144acc39302fe19bfdf2148aefc27550",
+      "signature": "c8536c7f2e7f3300a628eb83d8c011f133347bc0833bf2f95befe334dff5a22c33f9620ffa3cffda399133444194f39fda1eae0137186448a9ae15a3fdeba900",
+      "commentsCount": 6,
+      "version": "1",
+      "statuschangemessage": "No responses to legitimate comments have been made by the author, and the proposal has not been authorized to vote by author.",
+      "publishedat": 1540149061,
+      "abandonedat": 1543946331,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "3575a65bbc3616c939acf6edf801e1168485dc864efef910034268f695351b5d",
+        "merkle": "7ec30aefda89000fe53c6c39eaf231c4a881bbfffad54edfbef2128620f4101a",
+        "signature": "bc00ac374edc45313a43934f185539568e0af82795204c6b5ffbd7cc50f9ab94c910bac37bc9a5dc5e1cdfd817fd59ddd77d7e18a585029e93991f5c1090cf0e"
+      }
+    },
+    {
+      "name": "Sweepstakes",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1543946326,
+      "userid": "e75ae091-21d1-4997-8974-8c089740502d",
+      "username": "geraldoneto",
+      "publickey": "0fe670ba75902fb0af76fc24e7148218059153068032c5cec281bd2d19a3b527",
+      "signature": "3bf9f0318c1b843d39d78b1bcd50f06faf48156c850c61ff8e295ddfecda7d754b310411d97b003e621bdde78f851fa365f3f644f8babc990aac999100727809",
+      "commentsCount": 17,
+      "version": "1",
+      "statuschangemessage": "No responses to legitimate comments have been made by the author, and the proposal has not been authorized to vote by author.",
+      "publishedat": 1541448514,
+      "abandonedat": 1543946324,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "517ac6598031e17e3e301d41e73a62e4a7c10ee6dafb3dc65fbdd32f550971b0",
+        "merkle": "58a99f4b126040eaf3c5078af10ad94896d6c1407e917f2dff949ad50713bb2f",
+        "signature": "bb96454f0ee52bf9eb029a1f3b5e081487f2cf07608fd24a15f371b8e4a87300e1b7dbab65662198304af91339b71c223d50f9d219c323cad2641ff82aab5d06"
+      }
+    },
+    {
+      "name": "Upgrade mining algorithm to ProgPoW",
+      "state": 2,
+      "status": 6,
+      "timestamp": 1543946268,
+      "userid": "18b24b6c-14a8-45f6-ab2e-a34127840fb3",
+      "username": "engineerking",
+      "publickey": "c7580e9d13a21a2046557f7ef0148a5be89fbe8db8c98d0fb9fe11b2535f06ad",
+      "signature": "ac8a1b69eb08b413b3ad3161c9b43b6a65a25c537f6151866d391a352cdfd2906bbd5713577b5b80ffc4c5b69ea5d246ba8151814596cdd079c3f7fc95c2ca05",
+      "commentsCount": 9,
+      "version": "1",
+      "statuschangemessage": "No responses to legitimate comments have been made, and the proposal has not been put up for a vote.",
+      "publishedat": 1542042719,
+      "abandonedat": 1543946266,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "0aaab331075d08cb03333d5a1bef04b99a708dcbfebc8f8c94040ceb1676e684",
+        "merkle": "cfaf772010b439db2fa175b407f7c61fc7b06fbd844192a89551abe40791b6bb",
+        "signature": "6f8a7740c518972c4dc607e877afc794be9f99a1c4790837a7104b7eb6228d4db2190a8b83fa2513a777a8669975d2bfa9e7bea1c88c7043fd2bdd84988f3804"
+      }
+    },
+    {
+      "name": "Decred integration into Crypto-ATMs",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1543757264,
+      "userid": "58dbc2f5-a4df-45f8-84f3-e3aa060c4cb8",
+      "username": "bcashgr",
+      "publickey": "478ba6d394b0a2252f7fcb65ed0727097367e1f747c4e65008ac7ac5db1f9b1d",
+      "signature": "3cce8e98e564c0e59e2f13fa062fa99391139921f35f6657a50765c2e62c28d352866ed0e991f6fff3aa4c0568df7848f668e8ada67d50416010280f5990da0f",
+      "commentsCount": 34,
+      "version": "3",
+      "publishedat": 1543414261,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "bb7e19283d5c65fed598d5a2f4afcc2b5d2eab187b9cb84fc4304430f80b5ad1",
+        "merkle": "8b889ff8309152273291bcedd4532eaeb7d954e7899f2f85a29155cb134116d3",
+        "signature": "664228486ed8a58c2e7e48ad08787dcea8a295899731e26526f1010a1c3facca8ff28073f003bce16035e4006791d7e998c9bed7912f89034f88e1e877a33307"
+      }
+    },
+    {
+      "name": "Decred Radio Advertising, 190+ FM and AM Stations, + Intl. Satellite",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1543414254,
+      "userid": "be19e500-e8ff-43f7-a7db-a4c93b643cde",
+      "username": "ftl_ian",
+      "publickey": "b719b0bee46a2fb08a1d31f5b81577f886c1d51707da860645757ea28cc19e03",
+      "signature": "1f57e689bfbf940022a93af6420bd54ec65be6370eb23a4c156786b03a86bbdcb6c37c15d422ea376d7a382c09f92044911083534ca4b32383eef05326389d03",
+      "commentsCount": 52,
+      "version": "1",
+      "publishedat": 1543414252,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "7fe5d07a4ffff7dc6a83383018823d880b1c1db0a29305e74934817cf2b4e2ce",
+        "merkle": "cd47dc4e8879167ab00dc4fc919bcf12d6e12b6ce4493ec11c43d7dae7eff943",
+        "signature": "28aea98b13119f4319c0249f77a6c1070890f8b789a2df2d2b5b7f04275d2dd22abb078430bd0711e52c3647145ee53e6e543e2a9da17ac885004e4291046209"
+      }
+    },
+    {
+      "name": "Decredex",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1543414241,
+      "userid": "e3daf2e1-c418-4595-90ff-60a6a58ea6bc",
+      "username": "limited",
+      "publickey": "6f944b67bd09628415ad4fed7535db423651b9932609aa17d82ff9c42fb3732e",
+      "signature": "5d4d77301c7645edbed40c906032d5afa76506182a3e2d55fa13be7c843f892d74d3e6d8940915d486ecafd1ec4b4dfc4fe27c45e96446231f2d19a1038b1c08",
+      "commentsCount": 43,
+      "version": "1",
+      "publishedat": 1543414240,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "e78bc28631d0e682912e3ece25944481bf978b906ea44b1ed36470c0f48b27fc",
+        "merkle": "86264d63cec802431fcd32fafbf4dc4131c2a15eb3a8674a90fde90fa0b30f8f",
+        "signature": "e1f9bd7838313c59a471dbc3cd319e663694db809eb7306e06ab812679035619ac480615c77b40b0f3fade240c581fcc3b56374941c3674258e7432a6f422504"
+      }
+    },
+    {
+      "name": "Decred Contractor Clearance Process",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1542149535,
+      "userid": "fe62dd6a-2cc6-4d41-abd0-522528d33ae7",
+      "username": "jy-p",
+      "publickey": "e575447e1acb624bedb7c7934f291e3c1b51bb7223f2c06647e551e4cf93f360",
+      "signature": "0eb353238b502c68bdd25d6605845ebc2ede9f896370535c6038caf13c606d85aed2eda52e116dd5dff5d96b88e80e36b7cac89649adbc436f59372d37e1d103",
+      "commentsCount": 44,
+      "version": "2",
+      "publishedat": 1539899019,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "fa38a3593d9a3f6cb2478a24c25114f5097c572f6dadf24c78bb521ed10992a4",
+        "merkle": "c68fcbb924dad04dfaaed1fee6f4f2376fa83f555274707b58b5b1f604855f44",
+        "signature": "4760760ef459179dfa09381b4cfc1265af31a7c0637e801e71a4612db229f1a727d3daa009276b3a6119c914a0bf2e5f6a170edd36ec522dfdc085aad9efb80c"
+      }
+    },
+    {
+      "name": "Premium Listing for Decred on Easyrabbit",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1540992752,
+      "userid": "7f5ab2a4-b0c7-4e03-a7ae-b9a345e876d1",
+      "username": "easyrabbit",
+      "publickey": "8e78378b2558eb2617dec4c446ec97991fdfd47ce4e0543877015f3f2cbb5b7b",
+      "signature": "46041fbfce9a934eb7e1ed031c46d40c305f48f54bb0e33868b01791e125b0a0c3f612f96157c12067550759752cdef2bc7e085d794eaf0198b13bda680c8a0a",
+      "commentsCount": 15,
+      "version": "1",
+      "publishedat": 1540992751,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "34707d34b09c3ebcf0d4aa604e8a08244e8f0f082c0af3f33d85778c93c81434",
+        "merkle": "842941785029370d500efbae2ab6972cd1197539cf1170b11f83e30ef7f80f5e",
+        "signature": "b44ef195c98fe446e21e3238b077af48ca3376a19782248e326bb4133fee2326cfe19a3ea43d38549c6ae59889c03de5eb139fc96ed642ef9fe25aac6ba8ab02"
+      }
+    },
+    {
+      "name": "Wachsman Communications Proposal for Decred",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1540478611,
+      "userid": "cb9e6dde-b151-4a34-9317-e3136f0c8eee",
+      "username": "tomcurranlevett",
+      "publickey": "2e7b5d746bc2765a256ca0e379be18f72d1957eb4347247a1a23ee095a57d443",
+      "signature": "17e51e992c486cc7e358a516807cd9f339d26708c0b0a2d7d1ac7e0255f64b716333a9c064554eb32c865097c3967b5e10e3319adf125717389d5383b43cec08",
+      "commentsCount": 73,
+      "version": "6",
+      "publishedat": 1540057797,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "bc8776180b5ea8f5d19e7d08e9fcc35f0d1e3d16974963e3e5ded65139e7b092",
+        "merkle": "6cad7ac5b047b920d209d63247aa99af0dfd46e40febae6d876a1019b87b0b37",
+        "signature": "2cb5acffc1116c0d46e0f476b126733d7ab3307bb0218341e758be51186bb06fa148383f48e0efa71eabd74027a7de3d6029d416dbab91052e2027befef21808"
+      }
+    },
+    {
+      "name": "Ditto Communications Proposal for Decred",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1540415916,
+      "userid": "49d74e49-6be8-4ff3-8687-00e0bcb6da44",
+      "username": "blainr",
+      "publickey": "9f0a8ad970275393d70d9bca8b33847c1747f9a276a0fca5b88ef51767af25fc",
+      "signature": "61305818c942c593c74b51531650add1b78dbcf0307207db5b8a558b11221031733dbf3e8eb3dbbd2255ee410128bbc0ed5033af33a6b2c422a560e0dde8bb03",
+      "commentsCount": 47,
+      "version": "3",
+      "publishedat": 1540149047,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "27f87171d98b7923a1bd2bee6affed929fa2d2a6e178b5c80a9971a92a5c7f50",
+        "merkle": "01cf219617a99b76f4e7757dbfc9afd8d2efae56d62414b0ed8f984fe5d255e3",
+        "signature": "eeac99ebf3de92c4c1be598985b683d17728d9f31d00ed1f8eb7f43b4dda8b5f83bbece3517d7b6318f229cfeb3a80ddf5b0d77d7c1d3dc05041e2fac8c9ed04"
+      }
+    },
+    {
+      "name": "Decred Open Source Research",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1540227908,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "053a2ec036c16303f59af74fb1a92d005a4323c889b7f07642e9dafa55dc586a05e1677db0acf733417a1f3a6df83bd4ad350386e2c835953238c7e20e568a0a",
+      "commentsCount": 40,
+      "version": "2",
+      "publishedat": 1539699915,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "c68bb790ba0843980bb9695de4628995e75e0d1f36c992951db49eca7b3b4bcd",
+        "merkle": "24152314c4dec3a1bbd6446d52b3a035710c658a199417b450549b1e6ff4ffad",
+        "signature": "c0c278a1d18f25429662bd79a8024cb3166cf0bed3ab967105441fc680d20aa35e164a0d955669da4f5d357594c1f866f911f1b7c034547658a3cafcf0cd5d05"
+      }
+    },
+    {
+      "name": "Change language: PoS Mining to PoS Voting, Stakepool to Voting Service Provider",
+      "state": 2,
+      "status": 4,
+      "timestamp": 1539898457,
+      "userid": "350a4b6c-5cdd-4d87-822a-4900dc3a930c",
+      "username": "richard-red",
+      "publickey": "cd6e57b93f95dd0386d670c7ce42cb0ccd1cd5b997e87a716e9359e20251994e",
+      "signature": "c0e3285d447fd2acf1f2e1a0c86a71383dfe71b1b01e0068e56e8e7649dadb7aa503a5f99765fc3a24da8716fd5b89f75bb97762e756f15303e96d135a2e7109",
+      "commentsCount": 19,
+      "version": "1",
+      "publishedat": 1539898457,
+      "files": [],
+      "metadata": [],
+      "censorshiprecord": {
+        "token": "522652954ea7998f3fca95b9c4ca8907820eb785877dcf7fba92307131818c75",
+        "merkle": "20c9234c50e0dc78d28003fd57995192a16ca73349f5d97be456128984e463fc",
+        "signature": "d1d44788cdf8d838aad97aa829b2f27f8a32897010d6373c9d3ca1a42820dcafe2615c1904558c6628c5f9165691ead087c0cb2ada023b9aa3f76b6c587ac90e"
+      }
+    }
+  ]
+}

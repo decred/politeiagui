@@ -144,6 +144,8 @@ const Proposal = React.memo(function Proposal({
     proposalURL,
     authorURL,
     commentsURL,
+    // TODO: remove legacy
+    isLegacy,
     rfpProposalURL
   } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto, state);
   const isPublic = isPublicProposal(proposal);
@@ -219,6 +221,7 @@ const Proposal = React.memo(function Proposal({
                   data-testid={"proposal-title"}
                   id={`proposal-title-${proposalToken}`}
                   truncate
+                  isLegacy={isLegacy}
                   linesBeforeTruncate={2}
                   url={extended ? "" : proposalURL}>
                   {name || proposalToken}

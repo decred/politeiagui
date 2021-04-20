@@ -66,15 +66,29 @@ export const RecordToken = ({ token, isCopyable }) => {
   );
 };
 
-export const Title = ({ children, url, ...props }) => {
+// TODO: remove legacy
+export const Title = ({ children, url, isLegacy, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
-  return (
+  return !isLegacy ? (
     <Wrapper to={url} className={styles.title}>
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>
     </Wrapper>
+  ) : (
+    <>
+      <Tooltip
+        content="This proposal is an archived proposal. Clicking on it will take you to the proposals-archive website."
+        placement="right">
+        <Icon type="info" />
+      </Tooltip>
+      <a href={url} className={classNames(styles.title, "margin-left-s")}>
+        <H2 {...props} data-testid="record-title">
+          {children}
+        </H2>
+      </a>
+    </>
   );
 };
 

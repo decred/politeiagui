@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import { useConfig } from "src/containers/Config";
 import { getProposalUrl, getCommentsUrl, getAuthorUrl } from "../helpers";
+import { ARCHIVE_URL } from "src/constants";
+import * as sel from "src/selectors";
+import { useSelector } from "src/redux";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
 
 export default function useProposalURLs(
@@ -11,11 +14,12 @@ export default function useProposalURLs(
   state
 ) {
   const { javascriptEnabled } = useConfig();
-
-  const proposalURL = useMemo(
-    () => getProposalUrl(proposalToken, javascriptEnabled, state),
-    [proposalToken, javascriptEnabled, state]
-  );
+  // TODO: remove legacy
+  const legacyProposals = useSelector(sel.legacyProposals);
+  const isLegacy = legacyProposals.includes(proposalToken);
+  const proposalURL = !isLegacy
+    ? getProposalUrl(proposalToken, javascriptEnabled, state, isLegacy)
+    : `${ARCHIVE_URL}proposals/${proposalToken.substring(0, 7)}`;
   const commentsURL = useMemo(
     () => getCommentsUrl(proposalToken, javascriptEnabled, state),
     [javascriptEnabled, proposalToken, state]
@@ -32,5 +36,5 @@ export default function useProposalURLs(
     );
   }, [isRfpSubmission, javascriptEnabled, linkto]);
 
-  return { proposalURL, authorURL, commentsURL, rfpProposalURL };
+  return { isLegacy, proposalURL, authorURL, commentsURL, rfpProposalURL };
 }
