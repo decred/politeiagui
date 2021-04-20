@@ -79,7 +79,7 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
   ) : (
     <>
       <Tooltip
-        content="This proposal is an archived proposal. Clicking on it will take you to the proposal-archive website."
+        content="This proposal is an archived proposal. Clicking on it will take you to the proposals-archive website."
         placement="right">
         <Icon type="info" />
       </Tooltip>
