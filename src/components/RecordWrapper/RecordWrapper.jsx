@@ -77,7 +77,7 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
       </H2>
     </Wrapper>
   ) : (
-    <a href={url}>
+    <a href={url} className={styles.title}>
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>

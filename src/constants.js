@@ -195,3 +195,6 @@ export const MONTHS_LABELS = [
 export const TOTP_CODE_LENGTH = 6;
 export const TOTP_DEFAULT_TYPE = 1;
 export const TOTP_MISSING_LOGIN_ERROR = 79;
+
+// TODO: remove legacy
+export const ARCHIVE_URL = "https://proposals-archive.decred.org/";

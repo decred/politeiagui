@@ -73,15 +73,3 @@ export const payWithFaucet = (address, amount) => {
 
   return POST(FAUCET_URL, data);
 };
-
-// LEGACY GIT BE PROPOSALS
-// TODO: remove legacy
-export const archiveUrl = "https://proposals-archive.decred.org/";
-const archiveTokenInventory = "api/v1/proposals/tokeninventory";
-
-export const getLegacyVettedProposals = () => {
-  const url = `${archiveUrl}${archiveTokenInventory}`;
-  return fetch(url).then((res) => res.json());
-};
-
-
