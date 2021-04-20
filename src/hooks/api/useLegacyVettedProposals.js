@@ -26,7 +26,7 @@ const mapStatusToString = {
   [PROPOSAL_VOTING_INELIGIBLE]: "abandoned"
 };
 
-export default function useLegacyVettedProposals(shouldReturn, status) {
+export default function useLegacyVettedProposals(shouldReturn = false, status) {
   const [legacyProposals, setLegacyProposals] = useState([]);
   const [legacyProposalsTokens, setLegacyProposalsTokens] = useState({});
   useEffect(() => {
