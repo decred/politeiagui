@@ -77,11 +77,19 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
       </H2>
     </Wrapper>
   ) : (
-    <a href={url} className={styles.title}>
+    <>
+    <Tooltip
+      content="This proposal is stored in the git backend, clicking on it will take you to the proposals-archive website"
+      placement="right"
+    >
+      <Icon type="info" />
+    </Tooltip>
+    <a href={url} className={classNames(styles.title, "margin-left-s")}>
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>
     </a>
+    </>
   );
 };
 
