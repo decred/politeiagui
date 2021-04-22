@@ -29,7 +29,8 @@ import rfpTag from "src/assets/images/rfp-tag.svg";
 import useTimestamps from "src/hooks/api/useTimestamps";
 
 // TODO: remove legacy
-export const Author = ({ username, url, isLegacy }) => isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
+export const Author = ({ username, url, isLegacy }) =>
+  isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
 
 export const Event = ({ event, timestamp, className, size }) => (
   <DateTooltip timestamp={timestamp} placement="bottom">

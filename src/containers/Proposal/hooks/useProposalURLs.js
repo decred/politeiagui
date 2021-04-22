@@ -21,7 +21,13 @@ export default function useProposalURLs(
     ? getProposalUrl(proposalToken, javascriptEnabled, state, isLegacy)
     : `${ARCHIVE_URL}proposals/${proposalToken.substring(0, 7)}`;
   const commentsURL = useMemo(
-    () => !isLegacy ? getCommentsUrl(proposalToken, javascriptEnabled, state) : `${ARCHIVE_URL}proposals/${proposalToken.substring(0, 7)}?scrollToComments=true`,
+    () =>
+      !isLegacy
+        ? getCommentsUrl(proposalToken, javascriptEnabled, state)
+        : `${ARCHIVE_URL}proposals/${proposalToken.substring(
+            0,
+            7
+          )}?scrollToComments=true`,
     [isLegacy, javascriptEnabled, proposalToken, state]
   );
   const authorURL = useMemo(() => getAuthorUrl(userid, javascriptEnabled), [
