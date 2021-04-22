@@ -2,10 +2,11 @@ import { Link as UILink } from "pi-ui";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
-const Link = ({ to, children, ...props }) => (
+// TODO: remove legacy
+const Link = ({ to, children, isLegacy, ...props  }) => (
   <UILink
     {...props}
-    customComponent={(otherProps) => <RouterLink to={to} {...otherProps} />}>
+    customComponent={isLegacy ? (otherProps) => <a href={to} {...otherProps}>{children}</a> : (otherProps) => <RouterLink to={to} {...otherProps} />}>
     {children}
   </UILink>
 );

@@ -154,7 +154,7 @@ const Proposal = React.memo(function Proposal({
   const isPublicAccessible = isPublic || isAbandoned;
   const isAuthor = currentUser && currentUser.username === username;
   const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
-  const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
+  const isEditable = isAuthor && isEditableProposal(proposal, voteSummary) && !isLegacy;
   const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate =
@@ -256,7 +256,7 @@ const Proposal = React.memo(function Proposal({
               }
               subtitle={
                 <Subtitle>
-                  <Author username={username} url={authorURL} />
+                  <Author username={username} url={authorURL} isLegacy={isLegacy} />
                   {isRfp && linkby && (
                     <Event
                       event={`${isRfpActive ? "expires" : "expired"}`}
@@ -347,7 +347,7 @@ const Proposal = React.memo(function Proposal({
                       isVoteActive={isVoteActive}
                       quorumVotes={getQuorumInVotes(voteSummary)}
                       votesReceived={getVotesReceived(voteSummary)}
-                      onSearchVotes={openSearchVotesModal}
+                      onSearchVotes={!isLegacy ? openSearchVotesModal : null}
                     />
                   }
                 />
@@ -374,7 +374,7 @@ const Proposal = React.memo(function Proposal({
             )}
             {isPublicAccessible && !extended && (
               <Row justify="space-between">
-                <CommentsLink numOfComments={commentsCount} url={commentsURL} />
+                <CommentsLink numOfComments={commentsCount} url={commentsURL} isLegacy={isLegacy} />
                 <div>
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />

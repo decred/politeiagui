@@ -28,7 +28,8 @@ import CopyLink from "../CopyLink";
 import rfpTag from "src/assets/images/rfp-tag.svg";
 import useTimestamps from "src/hooks/api/useTimestamps";
 
-export const Author = ({ username, url }) => <Link to={url}>{username}</Link>;
+// TODO: remove legacy
+export const Author = ({ username, url, isLegacy }) => isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
 
 export const Event = ({ event, timestamp, className, size }) => (
   <DateTooltip timestamp={timestamp} placement="bottom">
@@ -209,9 +210,11 @@ export const ChartsLink = ({ token }) => {
   );
 };
 
+// TODO: remove legacy
 export const CommentsLink = ({
   numOfComments,
   url,
+  isLegacy,
   showIcon = true,
   className
 }) => {
@@ -220,6 +223,7 @@ export const CommentsLink = ({
   return (
     <Link
       to={url}
+      isLegacy={isLegacy}
       gray={!isDarkTheme}
       dark={isDarkTheme}
       className={classNames(styles.commentsLink, className)}>
