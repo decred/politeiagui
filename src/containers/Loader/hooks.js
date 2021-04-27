@@ -10,7 +10,7 @@ export function useLoader() {
   const localLogout = useAction(act.handleLogout);
   const onPollUserPayment = useAction(act.onPollUserPayment);
   const onUserProposalCredits = useAction(act.onUserProposalCredits);
-  const onGetPolicy = useAction(act.onGetPolicy);
+
   return {
     user,
     apiInfo,
@@ -18,7 +18,6 @@ export function useLoader() {
     onRequestCurrentUser,
     localLogout,
     onPollUserPayment,
-    onUserProposalCredits,
-    onGetPolicy
+    onUserProposalCredits
   };
 }
