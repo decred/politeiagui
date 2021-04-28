@@ -21,7 +21,7 @@ export const loginValidationSchema = ({
     //   .min(minusernamelength, minLengthMessage("username", minusernamelength))
     //   .max(maxusernamelength, maxLengthMessage("username", maxusernamelength))
     //   .required("Required"),
-    email: Yup.string().email("Invalid email").required("Required"),
+    email: Yup.string().trim().email("Invalid email").required("Required"),
     password: Yup.string()
       .min(
         minpasswordlength,

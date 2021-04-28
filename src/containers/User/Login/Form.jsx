@@ -29,7 +29,7 @@ const LoginForm = ({
     { resetForm, setSubmitting, setFieldError }
   ) => {
     try {
-      await onLogin(values);
+      await onLogin({ ...values, email: values.email.trim() });
       setSubmitting(false);
       resetForm();
       onLoggedIn && onLoggedIn();
