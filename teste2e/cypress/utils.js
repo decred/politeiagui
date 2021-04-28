@@ -3,9 +3,14 @@ import get from "lodash/fp/get";
 import * as pki from "./pki";
 import MerkleTree from "./merkle";
 
-const PROPOSAL_TYPE_REGULAR = 1;
-const PROPOSAL_TYPE_RFP = 2;
-const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
+export const PROPOSAL_TYPE_REGULAR = 1;
+export const PROPOSAL_TYPE_RFP = 2;
+export const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
+
+export const addDays = (date, days) => {
+  date.setDate(date.getDate() + days);
+  return date;
+};
 
 export const requestWithCsrfToken = (url, body) => {
   return cy.request("/api").then((res) => {

@@ -186,6 +186,7 @@ const ProposalForm = React.memo(function ProposalForm({
               years={deadlineRange}
               value={values.RfpDeadline}
               name="rfpDeadline"
+              data-testid="rfp-proposal-date-picker"
               placeholder="Deadline"
             />
             <Tooltip
