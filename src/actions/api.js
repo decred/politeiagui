@@ -990,6 +990,7 @@ export const onCommentVote = (currentUserID, token, commentid, vote, state) =>
   });
 
 export const onCensorComment = (userid, token, commentid, state, reason) => {
+  console.log(userid);
   return withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token, state }));
     return Promise.resolve(
