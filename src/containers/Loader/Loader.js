@@ -18,8 +18,7 @@ const Loader = ({ children }) => {
     user,
     localLogout,
     onPollUserPayment,
-    onUserProposalCredits,
-    onGetPolicy
+    onUserProposalCredits
   } = useLoader();
   const [
     userActiveOnLocalStorage,
@@ -32,7 +31,6 @@ const Loader = ({ children }) => {
       try {
         const apiInfo = await onRequestApiInfo(false);
         setApiInfo(apiInfo);
-        await onGetPolicy();
         if (apiInfo.activeusersession) {
           await onRequestCurrentUser();
         }
@@ -42,7 +40,7 @@ const Loader = ({ children }) => {
       }
     }
     onInit();
-  }, [onRequestApiInfo, onRequestCurrentUser, onGetPolicy]);
+  }, [onRequestApiInfo, onRequestCurrentUser]);
 
   const hasUser = !!user;
 
