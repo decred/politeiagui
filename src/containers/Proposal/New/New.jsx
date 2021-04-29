@@ -13,6 +13,7 @@ const NewProposal = () => {
   const { userid } = currentUser || {};
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
+
   return (
     <Card className="container">
       <Or>
@@ -31,7 +32,6 @@ const NewProposal = () => {
       <ProposalForm
         disableSubmit={!isPaid || !!identityError}
         onSubmit={onSubmitProposal}
-        isCreateRecordPage={true}
       />
     </Card>
   );

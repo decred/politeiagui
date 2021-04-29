@@ -8,14 +8,11 @@ import {
 } from "src/containers/Routes";
 import commonRoutes from "./commonRoutes";
 import PageNotFound from "./NotFound";
-import PageProposalVettedDetail from "./Proposals/DetailVetted";
-import PageProposalUnvettedDetail from "./Proposals/DetailUnvetted";
+import PageProposalDetail from "./Proposals/Detail";
 import PageProposalsVettedList from "./Proposals/VettedList";
 import PageProposalsAdmin from "./Proposals/AdminList";
 import PageProposalNew from "./Proposals/New";
-import PageVettedProposalEdit from "./Proposals/EditVetted";
-import PageUnvettedProposalEdit from "./Proposals/EditUnvetted";
-
+import PageProposalEdit from "./Proposals/Edit";
 import useOnboardModal from "src/hooks/utils/useOnboardModal";
 import PageUserDetail from "./User/Detail";
 import { LIST_HEADER_ADMIN, LIST_HEADER_VETTED } from "src/constants";
@@ -43,52 +40,34 @@ const Routes = ({ location }) => {
           />
           {/* Record routes */}
           <AdminAuthenticatedRoute
-            path={"/record/admin"}
+            path="/record/admin"
             title={LIST_HEADER_ADMIN}
             exact
             component={PageProposalsAdmin}
           />
           <AuthenticatedRoute
-            path={"/record/new"}
-            title={"New Proposal"}
+            path="/record/new"
+            title="New Proposal"
             exact
             render={PageProposalNew}
           />
           <Route
-            path={"/record/:token"}
-            title={"Proposal Detail"}
+            path="/record/:token"
+            title="Proposal Detail"
             exact
-            component={PageProposalVettedDetail}
+            component={PageProposalDetail}
           />
           <Route
-            path={"/record/unvetted/:token"}
-            title={"Proposal Detail"}
+            path="/record/:token/comments/:commentid"
+            title="Proposal Detail"
             exact
-            component={PageProposalUnvettedDetail}
-          />
-          <Route
-            path={"/record/:token/comments/:commentid"}
-            title={"Proposal Detail"}
-            exact
-            component={PageProposalVettedDetail}
-          />
-          <Route
-            path={"/record/unvetted/:token/comments/:commentid"}
-            title={"Proposal Detail"}
-            exact
-            component={PageProposalUnvettedDetail}
+            component={PageProposalDetail}
           />
           <AuthenticatedRoute
-            path={"/record/:token/edit"}
-            title={"Edit Proposal"}
+            path="/record/:token/edit"
+            title="Edit Proposal"
             exact
-            render={PageVettedProposalEdit}
-          />
-          <AuthenticatedRoute
-            path={"/record/unvetted/:token/edit"}
-            title={"Edit Proposal"}
-            exact
-            render={PageUnvettedProposalEdit}
+            render={PageProposalEdit}
           />
           <Route title="Page Not Found" path="*" component={PageNotFound} />
         </Switch>

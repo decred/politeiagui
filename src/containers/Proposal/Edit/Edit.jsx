@@ -20,9 +20,9 @@ import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
 import { getAttachmentsFiles } from "src/helpers";
 
-const EditProposal = ({ match, state }) => {
+const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
-  const { proposal, loading } = useProposal(tokenFromUrl, state);
+  const { proposal, loading } = useProposal(tokenFromUrl);
   const isPublic = isPublicProposal(proposal);
   const { onEditProposal, currentUser } = useEditProposal();
   const { userid } = currentUser || {};
@@ -47,7 +47,7 @@ const EditProposal = ({ match, state }) => {
     : null;
 
   return (
-    <Card className={"container"}>
+    <Card className="container">
       <Or>
         {!isPaid && (
           <Message kind="error">
@@ -66,7 +66,6 @@ const EditProposal = ({ match, state }) => {
           initialValues={initialValues}
           onSubmit={onEditProposal}
           isPublic={isPublic}
-          proposalState={state}
         />
       ) : (
         <ProposalFormLoader />

@@ -3,7 +3,6 @@ import { Button, useMediaQuery } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import MultipleContentPage from "src/components/layout/MultipleContentPage";
 import ProposalEdit from "src/containers/Proposal/Edit";
-import { PROPOSAL_STATE_VETTED } from "src/constants";
 
 const PageProposalEdit = ({ history, match }) => {
   const mobile = useMediaQuery("(max-width: 560px)");
@@ -29,7 +28,7 @@ const PageProposalEdit = ({ history, match }) => {
             />
           </TopBanner>
           <Main fillScreen>
-            <ProposalEdit state={PROPOSAL_STATE_VETTED} />
+            <ProposalEdit />
           </Main>
         </>
       )}

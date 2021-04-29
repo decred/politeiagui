@@ -304,9 +304,7 @@ const ProposalFormWrapper = ({
   onSubmit,
   disableSubmit,
   history,
-  isPublic,
-  isCreateRecordPage,
-  proposalState
+  isPublic
 }) => {
   const { text, markdownFiles } = replaceImgDigestByBlob(
     initialValues,
@@ -354,41 +352,23 @@ const ProposalFormWrapper = ({
           ...others,
           description,
           type,
-          state: proposalState,
           files: [...others.files, ...files],
           rfpLink,
           rfpDeadline: deadline
         });
         setSubmitting(false);
         setSubmitSuccess(true);
-        // If we are creating proposal then we should nvaigate to unvetted
-        // proposal detail page, in case of editing proposal we check the
-        // proposal's state to determine the proposal state.
-        // Also, we use short prefix when navigating to propsoal page
-        history.push(
-          `/record${
-            isCreateRecordPage
-              ? "/unvetted"
-              : proposalState === PROPOSAL_STATE_VETTED
-              ? ""
-              : "/unvetted"
-          }/${proposalToken.substring(0, 7)}`
-        );
+        // Navigate to record page.
+        history.push(`/record/${proposalToken.substring(0, 7)}`);
         resetForm();
       } catch (e) {
         setSubmitting(false);
         setFieldError("global", e);
       }
     },
-    [
-      history,
-      onSubmit,
-      onFetchProposalsBatchWithoutState,
-      isPublic,
-      isCreateRecordPage,
-      proposalState
-    ]
+    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
   );
+
   const newInitialValues = initialValues
     ? {
         ...initialValues,

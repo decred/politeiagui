@@ -1,12 +1,11 @@
 import React from "react";
 import MultipleContentPage from "src/components/layout/MultipleContentPage";
 import ProposalDetail from "src/containers/Proposal/Detail";
-import { PROPOSAL_STATE_UNVETTED } from "src/constants";
 
-const UnvettedProposalDetailPage = () => (
+const ProposalDetailPage = () => (
   <MultipleContentPage topBannerHeight={0}>
-    {(props) => <ProposalDetail state={PROPOSAL_STATE_UNVETTED} {...props} />}
+    {(props) => <ProposalDetail {...props} />}
   </MultipleContentPage>
 );
 
-export default UnvettedProposalDetailPage;
+export default ProposalDetailPage;
