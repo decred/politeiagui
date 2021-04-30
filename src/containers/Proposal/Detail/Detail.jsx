@@ -62,7 +62,6 @@ const ProposalDetail = ({ Main, match }) => {
             )}
             {!isCensoredProposal(proposal) && (
               <Comments
-                // this will be deprecated after tlog
                 recordAuthorID={proposal?.userid}
                 recordAuthorUsername={proposal?.username}
                 recordToken={tokenFromUrl}

@@ -40,7 +40,7 @@ const Routes = ({ location }) => {
           />
           {/* Record routes */}
           <AdminAuthenticatedRoute
-            path="/record/admin"
+            path="/admin/records"
             title={LIST_HEADER_ADMIN}
             exact
             component={PageProposalsAdmin}
