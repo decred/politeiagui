@@ -10,10 +10,10 @@ import {
   PROPOSAL_COMMENT_DOWNVOTE
 } from "src/constants";
 
-const ContextLink = React.memo(({ parentid, recordToken, recordType }) => (
+const ContextLink = React.memo(({ parentid, recordToken }) => (
   <Link
     className={styles.contextLink}
-    to={`/${recordType}s/${recordToken}/comments/${parentid}`}>
+    to={`/record/${recordToken}/comments/${parentid}`}>
     see in context
   </Link>
 ));
@@ -81,7 +81,6 @@ const CommentWrapper = ({
     loadingLikeAction,
     userLoggedIn,
     recordToken,
-    recordType,
     readOnly,
     identityError,
     paywallMissing,
@@ -171,7 +170,6 @@ const CommentWrapper = ({
     <ContextLink
       parentid={parentid}
       recordToken={recordToken}
-      recordType={recordType}
     />
   );
 
