@@ -289,7 +289,7 @@ const Proposal = React.memo(function Proposal({
                         styles.versionPicker,
                         isDarkTheme && styles.darkVersionPicker
                       )}
-                      version={version}
+                      version={`${version}`}
                       token={proposalToken}
                       proposalState={state}
                     />
