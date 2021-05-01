@@ -310,7 +310,12 @@ export const signCensorComment = (userid, comment) =>
       pki
         .signStringHex(
           userid,
-          [comment.state, comment.token, comment.commentid, comment.reason].join("")
+          [
+            comment.state,
+            comment.token,
+            comment.commentid,
+            comment.reason
+          ].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
     );

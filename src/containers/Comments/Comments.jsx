@@ -190,7 +190,14 @@ const Comments = ({
         onClose: () => handleCloseModal()
       });
     },
-    [onCensorComment, userid, recordTokenFull, proposalState, handleOpenModal, handleCloseModal]
+    [
+      onCensorComment,
+      userid,
+      recordTokenFull,
+      proposalState,
+      handleOpenModal,
+      handleCloseModal
+    ]
   );
 
   const handleCommentsModeToggle = useCallback(() => {
