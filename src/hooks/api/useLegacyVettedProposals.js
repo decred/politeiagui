@@ -30,26 +30,38 @@ export default function useLegacyVettedProposals(shouldReturn = false, status) {
   const [legacyProposals, setLegacyProposals] = useState([]);
   const [legacyProposalsTokens, setLegacyProposalsTokens] = useState({});
   useEffect(() => {
+    console.log("----- useLegacyVettedProposals -------")
     // shouldReturn is a boolean to control when the proposals are done fetching so we can return the legacy props.
     if (shouldReturn) {
-      const proposalsTokensList = tokenInventory[mapStatusToString[status]];
+      const proposalsTokensList = 
+        tokenInventory[mapStatusToString[status]] &&
+        tokenInventory[mapStatusToString[status]]
+        .map((token) => token.substring(0, 7));
+      console.log("proposalsTokensList")
+      console.log(proposalsTokensList)
       // filter propsals by tab and transform from Array to Object where the key is the proposal token and the value is the proposal info
       const finalList = newLegacyProposalsInfo
         .filter(
           (p) =>
             proposalsTokensList &&
-            proposalsTokensList.includes(p.censorshiprecord.token)
+            proposalsTokensList.includes(
+              p.censorshiprecord.token.substring(0, 7)
+            )
         )
         .reduce(
-          (acc, cur) => ({ ...acc, [cur.censorshiprecord.token]: cur }),
+          (acc, cur) => ({ ...acc, [cur.censorshiprecord.token.substring(0, 7)]: cur }),
           {}
         );
+      console.log("final list")
+      console.log(finalList)
       setLegacyProposals(finalList);
       setLegacyProposalsTokens(tokenInventory);
     } else {
       setLegacyProposals([]);
       setLegacyProposalsTokens({});
     }
+    console.log("----- ------------------------ -------")
+
   }, [legacyProposals.proposals, shouldReturn, status]);
   return { legacyProposals, legacyProposalsTokens };
 }

@@ -16,7 +16,13 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
 };
 
 const getFilteredRecordsAndToken = (records, tokens, tab, filterCensored) => {
-  const filteredTokens = tokens[tab];
+  console.log("getFilteredRecordsAndToken")
+  // const tokens = fullTokens.map((token) => token.substring(0, 7));
+  console.log(tokens)
+  console.log(records)
+  const filteredTokens = tokens[tab].map((token) => token.substring(0, 7));
+  console.log("filteredTokens")
+  console.log(filteredTokens)
   let filteredRecords =
     (records &&
       filteredTokens &&

@@ -62,7 +62,7 @@ export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 export const parseReceivedProposalsMap = (proposals) => {
   const parsedProps = {};
   for (const [token, prop] of Object.entries(proposals)) {
-    parsedProps[token] = parseRawProposal(prop);
+    parsedProps[token.substring(0, 7)] = parseRawProposal(prop);
   }
   return parsedProps;
 };

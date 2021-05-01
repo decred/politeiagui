@@ -40,6 +40,9 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     proposalPageSize: 4
   });
 
+  console.log("proposals")
+  console.log(proposals)
+
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
     !hasMoreProposals,

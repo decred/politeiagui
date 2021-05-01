@@ -27,16 +27,9 @@ export const tokenInventory = createDeepEqualSelector(
 export const newProposalToken = get(["proposals", "newProposalToken"]);
 
 export const makeGetProposalByToken = (token) =>
-  createSelector(proposalsByToken, (propsByToken) => {
-    const proposal = propsByToken[token];
-    if (proposal) return proposal;
-    const proposalsTokens = Object.keys(propsByToken);
-    // check if the provided token is prefix of original token
-    const matchedTokenByPrefix = proposalsTokens.find(
-      (key) => key.substring(0, 7) === token
-    );
-    return propsByToken[matchedTokenByPrefix];
-  });
+  createSelector(proposalsByToken, (propsByToken) =>
+    propsByToken[token.substring(0, 7)]
+  );
 
 export const makeGetNumOfProposalsByUserId = (userId) =>
   createSelector(numOfProposalsByUserId, get(userId));
@@ -47,7 +40,7 @@ export const makeGetUserProposals = (userId) =>
     proposalsByToken,
     (propsByUserID = {}, propsByToken) => {
       const userProps = (propsByUserID[userId] || [])
-        .map((token) => propsByToken[token])
+        .map((token) => propsByToken[token.substring(0, 7)])
         .filter(Boolean);
       const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
       return sortByNewestFirst(userProps);
@@ -55,6 +48,7 @@ export const makeGetUserProposals = (userId) =>
   );
 
 export const makeGetProposalName = (token) =>
-  createSelector(makeGetProposalByToken(token), (proposal) =>
+  createSelector(
+    makeGetProposalByToken(token.substring(0, 7)), (proposal) =>
     proposal ? proposal.name : null
   );
