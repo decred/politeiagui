@@ -40,10 +40,12 @@ const getUrl = (path, version, api = apiBase) => {
   return `${api}${version}${path}`;
 };
 
-const GET = (path, version = "v1", withoutVersion, api = apiBase) =>
-  fetch(getUrl(path, !withoutVersion ? version : undefined, api), {
+const GET = (path, version = "v1", withoutVersion, api = apiBase) => {
+  console.log(getUrl(path, !withoutVersion ? version : undefined, api));
+  return fetch(getUrl(path, !withoutVersion ? version : undefined, api), {
     credentials: "include"
   }).then(parseResponse);
+};
 
 const getOptions = (csrf, json, method) => ({
   headers: {
@@ -310,7 +312,12 @@ export const signCensorComment = (userid, comment) =>
       pki
         .signStringHex(
           userid,
-          [comment.state, comment.token, comment.commentid, comment.reason].join("")
+          [
+            comment.state,
+            comment.token,
+            comment.commentid,
+            comment.reason
+          ].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
     );
@@ -326,34 +333,44 @@ const parseResponseBody = (response) => {
 };
 
 export const parseResponse = (response) =>
-  parseResponseBody(response).then((json) => {
-    // in case no response body is returned but response is successful
-    if (!json && response.status === 200)
-      return { response: {}, csrfToken: response.headers.get("X-Csrf-Token") };
-    let errorcode = json.errorcode;
-    let errorcontext = json.errorcontext;
+  new Promise((resolve, reject) => {
+    try {
+      parseResponseBody(response).then((json) => {
+        // in case no response body is returned but response is successful
+        console.log({ json, url: response.url });
+        if (!json && response.status === 200)
+          resolve({
+            response: {},
+            csrfToken: response.headers.get("X-Csrf-Token")
+          });
+        let errorcode = json.errorcode;
+        let errorcontext = json.errorcontext;
 
-    if (isAPIWww(response.url)) {
-      errorcode = json.ErrorCode;
-      errorcontext = json.ErrorContext;
+        if (isAPIWww(response.url)) {
+          errorcode = json.ErrorCode;
+          errorcontext = json.ErrorContext;
+        }
+
+        if (json.pluginid) {
+          reject(new APIPluginError(json.pluginid, errorcode, errorcontext));
+        }
+
+        if (errorcode) {
+          reject(new APIUserError(response, errorcode, errorcontext));
+        }
+
+        if (STATUS_ERR[response.status]) {
+          reject(new Error(STATUS_ERR[response.status]));
+        }
+
+        resolve({
+          response: json,
+          csrfToken: response.headers.get("X-Csrf-Token")
+        });
+      });
+    } catch (e) {
+      reject(e);
     }
-
-    if (json.pluginid) {
-      throw new APIPluginError(json.pluginid, errorcode, errorcontext);
-    }
-
-    if (errorcode) {
-      throw new APIUserError(response, errorcode, errorcontext);
-    }
-
-    if (STATUS_ERR[response.status]) {
-      throw new Error(STATUS_ERR[response.status]);
-    }
-
-    return {
-      response: json,
-      csrfToken: response.headers.get("X-Csrf-Token")
-    };
   });
 
 export const me = () => GET("/user/me").then(getResponse);
@@ -364,7 +381,7 @@ export const apiInfo = () =>
       csrfToken,
       response: { version, route, pubkey, testnet, mode, activeusersession }
     }) => ({
-      csrfToken: csrfToken,
+      csrfToken,
       version,
       route,
       pubkey,

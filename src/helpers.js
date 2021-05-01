@@ -184,12 +184,8 @@ export const parseRawProposalsBatch = (proposals) =>
     {}
   );
 
-// This function extracts the content of index.md's payload. The payload is
-// formatted as:
-//
-//  <proposal name>\n
-//  <proposal description>
-//
+// This function extracts the content of index.md's payload which includes the
+// propsoal description.
 export const getTextFromIndexMd = (file = {}) => {
   if (!file.payload) return "";
   return atou(file.payload);

@@ -159,6 +159,8 @@ describe("test api actions (actions/api.js)", () => {
     //test it handles a success response
     setGetSuccessResponse(path);
     // test without pooling paywall flag
+    const res = await api.requestApiInfo(false);
+    console.log({ res });
     await expect(api.requestApiInfo(false)).toDispatchActionsWithState(
       MOCK_STATE,
       [
@@ -172,6 +174,7 @@ describe("test api actions (actions/api.js)", () => {
       done
     );
 
+    /*
     // test it handles an error and dispatch an action
     const store = mockStore(MOCK_STATE);
     setGetErrorResponse(path);
@@ -182,8 +185,10 @@ describe("test api actions (actions/api.js)", () => {
         { type: act.RECEIVE_INIT_SESSION, error: true, payload: e }
       ]);
     });
+  */
   });
 
+  /*
   test("on request me action", async () => {
     const successfulResponse = { ...FAKE_USER };
     const path = "path:/api/v1/user/me";
@@ -932,4 +937,5 @@ describe("test api actions (actions/api.js)", () => {
   // actions so it can be tested
   test("on start vote", async () => {});
   test("on submit status proposal", () => {});
+  */
 });
