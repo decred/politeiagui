@@ -190,7 +190,14 @@ const Comments = ({
         onClose: () => handleCloseModal()
       });
     },
-    [onCensorComment, userid, recordTokenFull, proposalState, handleOpenModal, handleCloseModal]
+    [
+      onCensorComment,
+      userid,
+      recordTokenFull,
+      proposalState,
+      handleOpenModal,
+      handleCloseModal
+    ]
   );
 
   const handleCommentsModeToggle = useCallback(() => {
@@ -305,7 +312,7 @@ const Comments = ({
             {isSingleThread && (
               <div className="justify-right">
                 <Text className="margin-right-xs">Single comment thread. </Text>
-                <Link to={`/${recordType}s/${recordToken}`}> View all.</Link>
+                <Link to={`/record/${recordToken}`}> View all.</Link>
               </div>
             )}
           </div>
