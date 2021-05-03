@@ -60,7 +60,7 @@
     "cy:run": "cd teste2e && npm install && cypress run",
     "cy:open": "cd teste2e && cypress open",
     "test:e2e:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start https-get://localhost:3000 cy:run",
-    "test:e2e:dev": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start https-get://localhost:3000 cy:open",
+    "test:e2e:browser": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start https-get://localhost:3000 cy:open",
     "eject": "react-app-rewired eject",
     "prettify": "prettier --write 'src/**/*.{js,jsx,css,json}'",
     "prettify:diff": "prettier --list-different 'src/**/*.{js,jsx,css,json}'",

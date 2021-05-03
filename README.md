@@ -96,6 +96,14 @@ Relevant libraries/modules used for testing are:
 - [fetch-mock](https://www.wheresrhys.co.uk/fetch-mock/) - Mock http requests
 - [redux-mock-store](https://github.com/dmitry-zaets/redux-mock-store) and [redux-actions-assertions](https://github.com/redux-things/redux-actions-assertions) for testing redux actions.
 
+## E2E tests
+
+Politeiagui has e2e tests using `cypress` and `react-testing-library/cypress`. Backend should be running when running e2e tests.
+There are two ways two run e2e test, either in terminal or in browser:
+
+1. To run e2e tests in terminal use: `test:e2e:run`.
+2. To run e2e tests in browser use: `test:e2e:runbrowser`. 
+
 ## Contributing
 
 We encourage you to contribute to Politeiagui. Please check [How to contribute to Politeiagui](../master/CONTRIBUTING.md) for guidelines about how to proceed.
