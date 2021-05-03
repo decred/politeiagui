@@ -17,6 +17,7 @@ import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/components/Link";
 import Or from "src/components/Or";
 import useQueryString from "src/hooks/utils/useQueryString";
+import useScrollTo from "src/hooks/utils/useScrollTo";
 import {
   getSortOptionsForSelect,
   createSelectOptionFromSortOption,
@@ -122,20 +123,10 @@ const Comments = ({
   );
 
   const hasComments = !!comments;
-
-  useEffect(
-    function handleScrollToComments() {
-      const scrollToComments = () =>
-        setTimeout(() => {
-          document.getElementById("commentArea").scrollIntoView();
-        }, 100);
-      const shouldScrollToComments = getQueryStringValue("scrollToComments");
-      if (shouldScrollToComments && hasComments) {
-        scrollToComments();
-      }
-    },
-    [hasComments]
-  );
+  const hasScrollToQuery = !!getQueryStringValue("scrollToComments");
+  const shouldScrollToComments =
+    (hasScrollToQuery || isSingleThread) && hasComments;
+  useScrollTo("commentArea", shouldScrollToComments);
 
   useEffect(
     function handleUpdateComments() {
