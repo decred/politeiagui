@@ -99,10 +99,10 @@ Relevant libraries/modules used for testing are:
 ## E2E tests
 
 Politeiagui has e2e tests using `cypress` and `react-testing-library/cypress`. Backend should be running when running e2e tests.
-There are two ways two run e2e test, either in terminal or in browser:
+There are two ways two run the e2e tests, either in terminal or in browser:
 
 1. To run e2e tests in terminal use: `test:e2e:run`.
-2. To run e2e tests in browser use: `test:e2e:runbrowser`. 
+2. To run e2e tests in browser use: `test:e2e:browser`. 
 
 ## Contributing
 
