@@ -40,12 +40,10 @@ const getUrl = (path, version, api = apiBase) => {
   return `${api}${version}${path}`;
 };
 
-const GET = (path, version = "v1", withoutVersion, api = apiBase) => {
-  console.log(getUrl(path, !withoutVersion ? version : undefined, api));
-  return fetch(getUrl(path, !withoutVersion ? version : undefined, api), {
+const GET = (path, version = "v1", withoutVersion, api = apiBase) =>
+  fetch(getUrl(path, !withoutVersion ? version : undefined, api), {
     credentials: "include"
   }).then(parseResponse);
-};
 
 const getOptions = (csrf, json, method) => ({
   headers: {
@@ -340,7 +338,6 @@ export const parseResponse = (response) =>
     parseResponseBody(response)
       .then((json) => {
         // in case no response body is returned but response is successful
-        console.log({ json, url: response.url });
         if (!json && response.status === 200)
           resolve({
             response: {},
@@ -371,10 +368,7 @@ export const parseResponse = (response) =>
           csrfToken: response.headers.get("X-Csrf-Token")
         });
       })
-      .catch((e) => {
-        console.log({ e });
-        reject(e);
-      })
+      .catch((e) => reject(e))
   );
 
 export const me = () => GET("/user/me").then(getResponse);
