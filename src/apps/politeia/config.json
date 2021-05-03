@@ -12,7 +12,7 @@
   "privacyPolicyContent": "privacy-policy",
   "navMenuPaths": [
     { "label": "Proposals", "path": "/", "admin": false },
-    { "label": "Admin", "path": "/record/admin", "admin": true },
+    { "label": "Admin", "path": "/admin/records", "admin": true },
     { "label": "Search for users", "path": "/user/search", "admin": true },
     { "label": "Account", "path": "/user", "admin": false }
   ]

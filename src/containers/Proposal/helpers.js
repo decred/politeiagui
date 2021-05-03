@@ -279,28 +279,22 @@ export const getProposalToken = (proposal) =>
  * if full token is passed (64 chars hex) then first 7 chars used
  * @param {String} token proposal token
  * @param {boolean} isJsEnabled true if Javascript is enabled
- * @param {Number} state proposal state constant
  */
-export const getProposalUrl = (token, isJsEnabled, state) => {
-  const stateStr = state === PROPOSAL_STATE_VETTED ? "" : "/unvetted";
-  return isJsEnabled
-    ? `/record${stateStr}/${token.substring(0, 7)}`
-    : `${NOJS_ROUTE_PREFIX}/record${stateStr}/${token}`;
-};
+export const getProposalUrl = (token, isJsEnabled) =>
+  isJsEnabled
+    ? `/record/${token.substring(0, 7)}`
+    : `${NOJS_ROUTE_PREFIX}/record/${token}`;
 
 /**
  * Retruns the url proposal's comments section using a given token
  * if full token is passed (64 chars hex) then first 7 chars used
  * @param {String} token proposal token
  * @param {boolean} isJsEnabled true if Javascript is enabled
- * @param {Number} state proposal state constant
  */
-export const getCommentsUrl = (token, isJsEnabled, state) => {
-  const stateStr = state === PROPOSAL_STATE_VETTED ? "" : "/unvetted";
-  return isJsEnabled
-    ? `/record${stateStr}/${token.substring(0, 7)}?scrollToComments=true`
-    : `${NOJS_ROUTE_PREFIX}/record${stateStr}/${token}?scrollToComments=true`;
-};
+export const getCommentsUrl = (token, isJsEnabled) =>
+  isJsEnabled
+    ? `/record/${token.substring(0, 7)}?scrollToComments=true`
+    : `${NOJS_ROUTE_PREFIX}/record/${token}?scrollToComments=true`;
 
 /**
  * Returns author's account URL

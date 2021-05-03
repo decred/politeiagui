@@ -54,7 +54,7 @@ const getUnfetchedTokens = (proposals, tokens) =>
 const getCurrentPage = (tokens) => {
   return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
 };
-// XXX add includefiles options param ?
+
 export default function useProposalsBatch({
   fetchRfpLinks,
   fetchVoteSummaries = false,
