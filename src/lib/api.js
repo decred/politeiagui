@@ -322,20 +322,23 @@ export const signCensorComment = (userid, comment) =>
         .then((signature) => ({ ...comment, publickey, signature }))
     );
 
-const parseResponseBody = (response) => {
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json"))
-    return response.json();
-  const err = new Error(STATUS_ERR[response.status] || "Internal server error");
-  err.internalError = true;
-  err.statusCode = response.status;
-  throw err;
-};
+const parseResponseBody = (response) =>
+  new Promise((resolve, reject) => {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json"))
+      resolve(response.json());
+    const err = new Error(
+      STATUS_ERR[response.status] || "Internal server error"
+    );
+    err.internalError = true;
+    err.statusCode = response.status;
+    reject(err);
+  });
 
 export const parseResponse = (response) =>
-  new Promise((resolve, reject) => {
-    try {
-      parseResponseBody(response).then((json) => {
+  new Promise((resolve, reject) =>
+    parseResponseBody(response)
+      .then((json) => {
         // in case no response body is returned but response is successful
         console.log({ json, url: response.url });
         if (!json && response.status === 200)
@@ -367,11 +370,12 @@ export const parseResponse = (response) =>
           response: json,
           csrfToken: response.headers.get("X-Csrf-Token")
         });
-      });
-    } catch (e) {
-      reject(e);
-    }
-  });
+      })
+      .catch((e) => {
+        console.log({ e });
+        reject(e);
+      })
+  );
 
 export const me = () => GET("/user/me").then(getResponse);
 
