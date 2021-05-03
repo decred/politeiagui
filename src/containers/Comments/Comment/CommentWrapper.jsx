@@ -167,10 +167,7 @@ const CommentWrapper = ({
   }, [commentid, openCensorModal]);
 
   const contextLink = isFlatReply && (
-    <ContextLink
-      parentid={parentid}
-      recordToken={recordToken}
-    />
+    <ContextLink parentid={parentid} recordToken={recordToken} />
   );
 
   const isLikeCommentDisabled =
