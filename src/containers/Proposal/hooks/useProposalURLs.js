@@ -10,25 +10,24 @@ export default function useProposalURLs(
   proposalToken,
   userid,
   isRfpSubmission,
-  linkto,
-  state
+  linkto
 ) {
   const { javascriptEnabled } = useConfig();
   // TODO: remove legacy
   const legacyProposals = useSelector(sel.legacyProposals);
   const isLegacy = legacyProposals.includes(proposalToken);
   const proposalURL = !isLegacy
-    ? getProposalUrl(proposalToken, javascriptEnabled, state, isLegacy)
+    ? getProposalUrl(proposalToken, javascriptEnabled, isLegacy)
     : `${ARCHIVE_URL}proposals/${proposalToken.substring(0, 7)}`;
   const commentsURL = useMemo(
     () =>
       !isLegacy
-        ? getCommentsUrl(proposalToken, javascriptEnabled, state)
+        ? getCommentsUrl(proposalToken, javascriptEnabled)
         : `${ARCHIVE_URL}proposals/${proposalToken.substring(
             0,
             7
           )}?scrollToComments=true`,
-    [isLegacy, javascriptEnabled, proposalToken, state]
+    [isLegacy, javascriptEnabled, proposalToken]
   );
   const authorURL = useMemo(() => getAuthorUrl(userid, javascriptEnabled), [
     userid,

@@ -29,12 +29,11 @@ const SetPageTitle = ({ title }) => {
   return null;
 };
 
-const ProposalDetail = ({ Main, match, state }) => {
+const ProposalDetail = ({ Main, match }) => {
   const tokenFromUrl = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
   const { proposal, loading, threadParentID, error } = useProposal(
     tokenFromUrl,
-    state,
     threadParentCommentID
   );
   const proposalToken = getProposalToken(proposal);
@@ -42,6 +41,7 @@ const ProposalDetail = ({ Main, match, state }) => {
   const canReceiveComments =
     !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
   const { javascriptEnabled } = useConfig();
+
   return (
     <>
       <Main className={styles.customMain} fillScreen>
@@ -62,7 +62,7 @@ const ProposalDetail = ({ Main, match, state }) => {
             )}
             {!isCensoredProposal(proposal) && (
               <Comments
-                recordAuthorID={proposal?.userid} // this will be deprecated after tlog
+                recordAuthorID={proposal?.userid}
                 recordAuthorUsername={proposal?.username}
                 recordToken={tokenFromUrl}
                 recordTokenFull={proposalToken}
@@ -70,7 +70,7 @@ const ProposalDetail = ({ Main, match, state }) => {
                 threadParentID={threadParentID}
                 readOnly={!canReceiveComments}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
-                proposalState={state}
+                proposalState={proposal?.state}
                 recordBaseLink={getProposalLink(proposal, javascriptEnabled)}
               />
             )}

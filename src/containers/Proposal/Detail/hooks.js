@@ -41,7 +41,7 @@ const getProposalRfpLinksTokens = (proposal) => {
   return isSubmission ? [proposal.linkto] : proposal.linkedfrom;
 };
 
-export function useProposal(token, proposalState, threadParentID) {
+export function useProposal(token, threadParentID) {
   const tokenShort = token.substring(0, 7);
   const onFetchProposalDetails = useAction(act.onFetchProposalDetails);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
@@ -61,9 +61,10 @@ export function useProposal(token, proposalState, threadParentID) {
 
   const unfetchedProposalTokens =
     rfpLinks && difference(rfpLinks)(keys(proposals));
-  const unfetchedSummariesTokens =
-    proposalState === PROPOSAL_STATE_VETTED &&
-    getUnfetchedVoteSummaries(proposal, voteSummaries);
+  const unfetchedSummariesTokens = getUnfetchedVoteSummaries(
+    proposal,
+    voteSummaries
+  );
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
       proposals: values(pick(proposals, rfpLinks)),
@@ -74,7 +75,6 @@ export function useProposal(token, proposalState, threadParentID) {
     };
 
   const isRfp = proposal && !!proposal.linkby;
-
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !(
     voteSummaries[tokenShort] &&

@@ -14,11 +14,7 @@ import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
 import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
-import {
-  PROPOSAL_TYPE_RFP,
-  PROPOSAL_TYPE_RFP_SUBMISSION,
-  PROPOSAL_STATE_VETTED
-} from "src/constants";
+import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -147,7 +143,7 @@ const Proposal = React.memo(function Proposal({
     // TODO: remove legacy
     isLegacy,
     rfpProposalURL
-  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto, state);
+  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
@@ -235,11 +231,7 @@ const Proposal = React.memo(function Proposal({
                * */
               edit={
                 isEditable ? (
-                  <Edit
-                    url={`/record${
-                      state === PROPOSAL_STATE_VETTED ? "" : "/unvetted"
-                    }/${proposalToken}/edit`}
-                  />
+                  <Edit url={`/record/${proposalToken}/edit`} />
                 ) : showEditIcon ? (
                   <Tooltip
                     placement={mobile ? "left" : "right"}
@@ -289,7 +281,7 @@ const Proposal = React.memo(function Proposal({
                         styles.versionPicker,
                         isDarkTheme && styles.darkVersionPicker
                       )}
-                      version={version}
+                      version={`${version}`}
                       token={proposalToken}
                       proposalState={state}
                     />
