@@ -111,28 +111,27 @@ export const onPollUserPayment = () => (dispatch, getState) => {
     });
 };
 
-export const onGetPolicy = () => (dispatch, getState) => {
+export const onGetPolicy = () => async (dispatch, getState) => {
   const isCMS = sel.isCMS(getState());
   dispatch(act.REQUEST_POLICY());
-  return Promise.all([
-    api.policyWWW(),
-    !isCMS && api.policyTicketVote(),
-    !isCMS && api.policyComments(),
-    !isCMS && api.policyPi()
-  ])
-    .then((response) => {
-      const policyOnRedux = { www: response[0] };
-      if (!isCMS) {
-        policyOnRedux.ticketvote = response[1];
-        policyOnRedux.comments = response[2];
-        policyOnRedux.pi = response[3];
-      }
-      return dispatch(act.RECEIVE_POLICY(policyOnRedux));
-    })
-    .catch((error) => {
-      dispatch(act.RECEIVE_POLICY(null, error));
-      throw error;
-    });
+  try {
+    const [www, ticketvote, comments, pi] = await Promise.all([
+      api.policyWWW(),
+      !isCMS && api.policyTicketVote(),
+      !isCMS && api.policyComments(),
+      !isCMS && api.policyPi()
+    ]);
+    const policyOnRedux = { www };
+    if (!isCMS) {
+      policyOnRedux.ticketvote = ticketvote;
+      policyOnRedux.comments = comments;
+      policyOnRedux.pi = pi;
+    }
+    dispatch(act.RECEIVE_POLICY(policyOnRedux));
+  } catch (error) {
+    dispatch(act.RECEIVE_POLICY(null, error));
+    throw error;
+  }
 };
 
 export const withCsrf = (fn) => (dispatch, getState) => {
@@ -175,9 +174,7 @@ export const onCreateNewUser = ({ email, username, password }) =>
     dispatch(act.REQUEST_NEW_USER({ email }));
     return api
       .newUser(csrf, email, username, password)
-      .then((response) => {
-        dispatch(act.RECEIVE_NEW_USER(response));
-      })
+      .then((response) => dispatch(act.RECEIVE_NEW_USER(response)))
       .catch((error) => {
         if (error.toString() === "Error: No available storage method found.") {
           //local storage error

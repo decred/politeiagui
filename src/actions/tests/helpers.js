@@ -29,10 +29,14 @@ export const setGetErrorResponse = (
   options = {},
   response = RANDOM_ERROR_RESPONSE
 ) =>
-  fetchMock.get(path, response, {
-    overwriteRoutes: true,
-    ...options
-  });
+  fetchMock.get(
+    path,
+    { throws: response },
+    {
+      overwriteRoutes: true,
+      ...options
+    }
+  );
 export const setPostSuccessResponse = (
   path,
   options = {},
@@ -47,10 +51,14 @@ export const setPostErrorResponse = (
   options = {},
   response = RANDOM_ERROR_RESPONSE
 ) =>
-  fetchMock.post(path, response, {
-    overwriteRoutes: true,
-    ...options
-  });
+  fetchMock.post(
+    path,
+    { throws: response },
+    {
+      overwriteRoutes: true,
+      ...options
+    }
+  );
 
 export const setPutSuccessResponse = (
   path,
@@ -67,10 +75,14 @@ export const setPutErrorResponse = (
   options = {},
   response = RANDOM_ERROR_RESPONSE
 ) =>
-  fetchMock.put(path, response, {
-    overwriteRoutes: true,
-    ...options
-  });
+  fetchMock.put(
+    path,
+    { throws: response },
+    {
+      overwriteRoutes: true,
+      ...options
+    }
+  );
 
 export const methods = {
   GET: "get",

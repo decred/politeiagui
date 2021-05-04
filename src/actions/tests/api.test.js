@@ -133,13 +133,11 @@ describe("test api actions (actions/api.js)", () => {
     }
 
     const store = getMockedStore();
-    const expectedError = new Error(
-      getHumanReadableError(RANDOM_ERROR_RESPONSE.errorcode)
-    );
-
     try {
       await store.dispatch(fn.apply(null, params));
-      const expectedActions = callbackWithError(expectedError);
+      const expectedActions = callbackWithError(
+        RANDOM_ERROR_RESPONSE.errorcode
+      );
       expect(store.getActions()).toEqual(expectedActions);
     } catch (e) {
       const expectedActions = callbackWithError(e);
@@ -186,10 +184,10 @@ describe("test api actions (actions/api.js)", () => {
 
   test("on request me action", async () => {
     const successfulResponse = { ...FAKE_USER };
-    const path = "path:/api/v1/user/me";
+    const path = "/api/v1/user/me";
     setGetSuccessResponse(path, {}, successfulResponse);
 
-    assertApiActionOnSuccess(
+    await assertApiActionOnSuccess(
       path,
       api.onRequestMe,
       [],
@@ -218,32 +216,46 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on get policy action", async () => {
-    const path = "/api/v1/policy";
     //test it handles a successful response
+    setPostSuccessResponse("/api/ticketvote/v1/policy");
+    setPostSuccessResponse("/api/comments/v1/policy");
+    setPostSuccessResponse("/api/pi/v1/policy");
+    const path = "/api/v1/policy";
     await assertApiActionOnSuccess(
       path,
       api.onGetPolicy,
       [],
       [
-        { type: act.REQUEST_POLICY },
+        { type: act.REQUEST_POLICY, error: false },
         {
           type: act.RECEIVE_POLICY,
           error: false,
-          payload: RANDOM_SUCCESS_RESPONSE
+          payload: {
+            www: RANDOM_SUCCESS_RESPONSE,
+            ticketvote: RANDOM_SUCCESS_RESPONSE,
+            comments: RANDOM_SUCCESS_RESPONSE,
+            pi: RANDOM_SUCCESS_RESPONSE
+          }
         }
       ]
     );
 
     //test it handles an error response
-    await assertApiActionOnError(path, api.onGetPolicy, [], (e) => [
+    setPostErrorResponse("/api/ticketvote/v1/policy");
+    setPostErrorResponse("/api/comments/v1/policy");
+    setPostErrorResponse("/api/pi/v1/policy");
+    await assertApiActionOnError(path, api.onGetPolicy, [], (errorcode) => [
       { type: act.REQUEST_POLICY, error: false, payload: undefined },
-      { type: act.RECEIVE_POLICY, error: true, payload: e }
+      {
+        type: act.RECEIVE_POLICY,
+        error: true,
+        payload: errorcode
+      }
     ]);
   });
 
-  /*
   test("on search users action", async () => {
-    const path = "path:/api/v1/users";
+    const path = `/api/v1/users?email=${encodeURIComponent(FAKE_USER.email)}`;
     const searchQuery = { email: FAKE_USER.email };
     //test it handles a successful response
     await assertApiActionOnSuccess(
@@ -258,8 +270,7 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on create a new user action", async () => {
-    const path = "path:/api/v1/user/new";
-
+    const path = "/api/v1/user/new";
     setPostSuccessResponse(path);
     //test it handles a successful response
     const store = getMockedStore();
@@ -277,13 +288,13 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onCreateNewUser,
       [FAKE_USER],
-      (e) => [
+      (errorcode) => [
         {
           type: act.REQUEST_NEW_USER,
           payload: { email: FAKE_USER.email },
           error: false
         },
-        { type: act.RECEIVE_NEW_USER, error: true, payload: e }
+        { type: act.RECEIVE_NEW_USER, error: true, payload: errorcode }
       ],
       {},
       methods.POST
@@ -335,6 +346,7 @@ describe("test api actions (actions/api.js)", () => {
     );
   });
 
+  /*
   test("on login action", async () => {
     setGetSuccessResponse("path:/api/v1/user/me");
     const path = "/api/v1/login";
