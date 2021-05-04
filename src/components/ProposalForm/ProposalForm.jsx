@@ -228,7 +228,7 @@ const ProposalForm = React.memo(function ProposalForm({
             <Tooltip
               contentClassName={styles.deadlineTooltip}
               className={styles.tooltipWrapper}
-              placement={smallTablet ? "left" : "bottom"}
+              placement="left"
               content="The token for the RFP you are submitting on,
               it can be found on the RFP proposal page.">
               <div className={styles.iconWrapper}>
