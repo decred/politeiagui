@@ -11,8 +11,15 @@ export const doneWithError = (...args) => {
 export const RANDOM_SUCCESS_RESPONSE = {
   success: true
 };
+
 export const RANDOM_ERROR_RESPONSE = {
   errorcode: 29
+};
+
+export const restoreFetchMock = () => {
+  fetchMock.restore();
+  // Return status 200 for any unmatched request.
+  fetchMock.postOnce("/", {}).catch({});
 };
 
 export const setGetSuccessResponse = (
@@ -24,6 +31,7 @@ export const setGetSuccessResponse = (
     overwriteRoutes: true,
     ...options
   });
+
 export const setGetErrorResponse = (
   path,
   options = {},
@@ -37,6 +45,7 @@ export const setGetErrorResponse = (
       ...options
     }
   );
+
 export const setPostSuccessResponse = (
   path,
   options = {},
@@ -46,6 +55,7 @@ export const setPostSuccessResponse = (
     overwriteRoutes: true,
     ...options
   });
+
 export const setPostErrorResponse = (
   path,
   options = {},

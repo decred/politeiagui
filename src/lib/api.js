@@ -575,11 +575,7 @@ export const commentsTimestamps = (csrf, token, commentids) =>
 export const invoiceComments = (token) =>
   GET(`/invoices/${token}/comments`).then(getResponse);
 
-export const logout = (csrf) =>
-  POST("/logout", csrf, {}).then(() => {
-    localStorage.removeItem("state");
-    return {};
-  });
+export const logout = (csrf) => POST("/logout", csrf, {});
 
 export const proposalSetStatus = (
   userid,

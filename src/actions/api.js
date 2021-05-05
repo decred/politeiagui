@@ -255,16 +255,15 @@ export const onLogin = ({ email, password, code }) =>
       .then((response) => {
         dispatch(act.RECEIVE_LOGIN(response));
         const { userid, username } = response;
-        pki.needStorageKeyReplace(email, username).then((keyNeedsReplace) => {
-          if (keyNeedsReplace) {
-            pki.replaceStorageKey(keyNeedsReplace, userid);
-          }
-          return response;
-        });
+        return pki
+          .needStorageKeyReplace(email, username)
+          .then((keyNeedsReplace) => {
+            if (keyNeedsReplace) {
+              pki.replaceStorageKey(keyNeedsReplace, userid);
+            }
+          });
       })
-      .then(() => {
-        dispatch(onRequestMe());
-      })
+      .then(() => dispatch(onRequestMe()))
       .catch((error) => {
         dispatch(act.RECEIVE_LOGIN(null, error));
         throw error;
@@ -300,11 +299,11 @@ export const onLogout = (isCMS, isPermanent) =>
     dispatch(act.REQUEST_LOGOUT());
     return api
       .logout(csrf)
-      .then((response) => {
+      .then((response) =>
         isCMS
           ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
-          : dispatch(act.RECEIVE_LOGOUT(response));
-      })
+          : dispatch(act.RECEIVE_LOGOUT(response))
+      )
       .then(() => handleLogout(isPermanent, userid))
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
@@ -892,7 +891,7 @@ export const onSubmitEditedProposal = (
       .then(({ record }) => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL({ proposal: record }));
         resetNewProposalData();
-        return record.censorshiprecord.token;
+        return record?.censorshiprecord?.token;
       })
       .catch((error) => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(null, error));
