@@ -8,10 +8,11 @@ div.commentsWrapper {
 }
 
 .commentsHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-top: 2rem;
+}
+
+div.titleWrapper {
+  margin-bottom: var(--spacing-small);
 }
 
 h2.commentsTitle {
@@ -38,12 +39,11 @@ h2.commentsTitle {
 
 .modeToggleWrapper {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  margin-top: var(--spacing-small);
 }
 
 .modeToggleLabel {
-  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   margin-top: 0.1rem;
 }
 

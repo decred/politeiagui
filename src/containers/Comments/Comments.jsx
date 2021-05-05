@@ -278,32 +278,29 @@ const Comments = ({
             )}
             <div className={styles.sortContainer}>
               {!!comments && !!comments.length && (
-                <>
-                  {!isSingleThread && (
-                    <div className={styles.modeToggleWrapper}>
-                      <Toggle
-                        onToggle={handleCommentsModeToggle}
-                        toggled={isFlatCommentsMode}
-                      />
-                      <div
-                        onClick={handleCommentsModeToggle}
-                        className={styles.modeToggleLabel}>
-                        Flat Mode
-                      </div>
-                    </div>
-                  )}
-                  <Select
-                    value={selectValue}
-                    onChange={handleSetSortOption}
-                    options={selectOptions}
-                  />
-                </>
+                <Select
+                  value={selectValue}
+                  onChange={handleSetSortOption}
+                  options={selectOptions}
+                />
               )}
             </div>
-            {isSingleThread && (
-              <div className="justify-right">
+            {isSingleThread ? (
+              <div className="justify-left margin-top-s">
                 <Text className="margin-right-xs">Single comment thread. </Text>
                 <Link to={`/record/${recordToken}`}> View all.</Link>
+              </div>
+            ) : (
+              <div className={styles.modeToggleWrapper}>
+                <div
+                  onClick={handleCommentsModeToggle}
+                  className={styles.modeToggleLabel}>
+                  Flat Mode
+                </div>
+                <Toggle
+                  onToggle={handleCommentsModeToggle}
+                  toggled={isFlatCommentsMode}
+                />
               </div>
             )}
           </div>
