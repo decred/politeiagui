@@ -16,7 +16,6 @@ import {
   RANDOM_SUCCESS_RESPONSE,
   RANDOM_ERROR_RESPONSE
 } from "./helpers";
-import { getHumanReadableError } from "../../helpers";
 import {
   MANAGE_USER_CLEAR_USER_PAYWALL,
   PROPOSAL_TYPE_REGULAR,
