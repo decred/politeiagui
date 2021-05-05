@@ -177,7 +177,12 @@ const users = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_SET_TOTP]: () =>
             set(["byID", state.currentUserID, "totp"], action.payload)(state),
           [act.RECEIVE_VERIFY_TOTP]: () =>
-            set(["byID", state.currentUserID, "totp"], action.payload)(state)
+            set(["byID", state.currentUserID, "totp"], action.payload)(state),
+          [act.SET_HAS_TOTP]: () =>
+            update(["byID", state.currentUserID], (user) => ({
+              ...user,
+              totpverified: action.payload
+            }))(state)
         }[action.type] || (() => state)
       )();
 

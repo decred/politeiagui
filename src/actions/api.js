@@ -37,6 +37,9 @@ export const onResetNewUser = act.RESET_NEW_USER;
 export const onResetRescanUserPayments = (userid) => (dispatch) =>
   dispatch(act.RESET_RESCAN_USER_PAYMENTS(userid));
 
+export const onSetHasTotp = (payload) => (dispatch) =>
+  dispatch(act.SET_HAS_TOTP(payload));
+
 export const requestApiInfo = (fetchUser = true) => (dispatch) => {
   dispatch(act.REQUEST_INIT_SESSION());
   return api
