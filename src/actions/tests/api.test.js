@@ -343,8 +343,6 @@ describe("test api actions (actions/api.js)", () => {
   });
 
   test("on login action", async () => {
-    // XXX this isn't mocking the me request for some reason resulting in
-    // unmatched GET /api/v1/user/me.
     setGetSuccessResponse("/api/v1/user/me");
     const path = "/api/v1/login";
     await assertApiActionOnSuccess(

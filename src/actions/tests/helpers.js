@@ -16,11 +16,7 @@ export const RANDOM_ERROR_RESPONSE = {
   errorcode: 29
 };
 
-export const restoreFetchMock = () => {
-  fetchMock.restore();
-  // Return status 200 for any unmatched request.
-  fetchMock.postOnce("/", {}).catch({});
-};
+export const restoreFetchMock = () => fetchMock.restore();
 
 export const setGetSuccessResponse = (
   path,

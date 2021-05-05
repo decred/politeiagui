@@ -248,44 +248,41 @@ export const onSearchUser = (query, isCMS) => (dispatch) => {
 // after registering, his key will be saved under his email. If so, it
 // changes the storage key to his uuid.
 export const onLogin = ({ email, password, code }) =>
-  withCsrf((dispatch, _, csrf) => {
+  withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_LOGIN({ email }));
-    return api
-      .login(csrf, email, password, code)
-      .then((response) => {
-        dispatch(act.RECEIVE_LOGIN(response));
-        const { userid, username } = response;
-        return pki
-          .needStorageKeyReplace(email, username)
-          .then((keyNeedsReplace) => {
-            if (keyNeedsReplace) {
-              pki.replaceStorageKey(keyNeedsReplace, userid);
-            }
-          });
-      })
-      .then(() => dispatch(onRequestMe()))
-      .catch((error) => {
-        dispatch(act.RECEIVE_LOGIN(null, error));
-        throw error;
-      });
+    try {
+      const response = await api.login(csrf, email, password, code);
+      await dispatch(onRequestMe());
+      dispatch(act.RECEIVE_LOGIN(response));
+      const { userid, username } = response;
+      const keyNeedsReplace = await pki.needStorageKeyReplace(email, username);
+      if (keyNeedsReplace) {
+        pki.replaceStorageKey(keyNeedsReplace, userid);
+      }
+      return;
+    } catch (error) {
+      dispatch(act.RECEIVE_LOGIN(null, error));
+      throw error;
+    }
   });
 
-// handleLogout calls the correct logout handler according to the user selected
-// option between a normal logout or a permanent logout.
+// handleLogout calls the correct logout handler according to the user
+// selected option between a normal logout or a permanent logout.
 export const handleLogout = (isPermanent, userid) => () =>
   isPermanent ? handlePermanentLogout(userid) : handleNormalLogout;
 
-// handleNormalLogout handles all the procedure to be done once the user is logged out.
-// It can be called either when the logout request has been successful or when the
-// session has already expired
+// handleNormalLogout handles all the procedure to be done once the user is
+// logged out.
+// It can be called either when the logout request has been successful or
+// when the session has already expired.
 export const handleNormalLogout = () => {
   clearStateLocalStorage();
   clearPollingPointer();
   clearProposalPaymentPollingPointer();
 };
 
-// handlePermanentLogout handles the logout procedures while deleting all user related
-// information from the browser storage and cache.
+// handlePermanentLogout handles the logout procedures while deleting all
+// user related information from the browser storage and cache.
 export const handlePermanentLogout = (userid) =>
   pki.removeKeys(userid).then(() => {
     clearStateLocalStorage(userid);
