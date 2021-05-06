@@ -360,6 +360,7 @@ TicketvotePluginError.prototype = new Error();
 
 // Helpers
 export function isAPIWww(url) {
+  if (url.startsWith("/api")) return true;
   const apiType = new URL(url).pathname.split("/")[2];
   return apiType === APIWww;
 }

@@ -9,10 +9,10 @@ const FILE = {
 const MD_FILE = {
   mime: "text/plain; charset=utf-8",
   name: "index.md",
-  payload: "cHJvcG9zYWwgbmFtZQoKcHJvcG9zYWwgZGVzY3JpcHRpb24="
+  payload: "cHJvcG9zYWwgZGVzY3JpcHRpb24="
 };
 
-const PROPOSAL_TEXT = "proposal name\n\nproposal description";
+const PROPOSAL_TEXT = "proposal description";
 
 const FILE_DIGESTED_PAYLOAD =
   "3973715772c4e0d41fc98fb67e97ad2436dca47961ac78a0757be43053d5af8c";

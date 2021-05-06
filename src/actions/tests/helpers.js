@@ -11,9 +11,12 @@ export const doneWithError = (...args) => {
 export const RANDOM_SUCCESS_RESPONSE = {
   success: true
 };
+
 export const RANDOM_ERROR_RESPONSE = {
   errorcode: 29
 };
+
+export const restoreFetchMock = () => fetchMock.restore();
 
 export const setGetSuccessResponse = (
   path,
@@ -24,15 +27,21 @@ export const setGetSuccessResponse = (
     overwriteRoutes: true,
     ...options
   });
+
 export const setGetErrorResponse = (
   path,
   options = {},
   response = RANDOM_ERROR_RESPONSE
 ) =>
-  fetchMock.get(path, response, {
-    overwriteRoutes: true,
-    ...options
-  });
+  fetchMock.get(
+    path,
+    { throws: response },
+    {
+      overwriteRoutes: true,
+      ...options
+    }
+  );
+
 export const setPostSuccessResponse = (
   path,
   options = {},
@@ -42,15 +51,20 @@ export const setPostSuccessResponse = (
     overwriteRoutes: true,
     ...options
   });
+
 export const setPostErrorResponse = (
   path,
   options = {},
   response = RANDOM_ERROR_RESPONSE
 ) =>
-  fetchMock.post(path, response, {
-    overwriteRoutes: true,
-    ...options
-  });
+  fetchMock.post(
+    path,
+    { throws: response },
+    {
+      overwriteRoutes: true,
+      ...options
+    }
+  );
 
 export const setPutSuccessResponse = (
   path,
@@ -67,10 +81,14 @@ export const setPutErrorResponse = (
   options = {},
   response = RANDOM_ERROR_RESPONSE
 ) =>
-  fetchMock.put(path, response, {
-    overwriteRoutes: true,
-    ...options
-  });
+  fetchMock.put(
+    path,
+    { throws: response },
+    {
+      overwriteRoutes: true,
+      ...options
+    }
+  );
 
 export const methods = {
   GET: "get",
