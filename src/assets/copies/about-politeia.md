@@ -7,8 +7,8 @@ cryptocurrency DAO.
 ## About Politeia
 
 Politeia is Decred's proposal system. It is used to request funding from the
-Decred treasury. Anyone can submit a proposal to Politeia and the Decred
-stakeholders vote on what proposals to fund.
+Decred treasury. Anyone can submit a proposal to Politeia. The Decred
+stakeholders vote on whether to fund or reject the proposal.
 
 Politeia was built around the concept of cryptographic auditability. All data
 saved to Politeia is accompanied by cryptographic proof of who, what, and when.
