@@ -11,7 +11,8 @@ import votesstatus from "src/legacyvotestatuses";
 
 const DEFAULT_STATE = {
   // TODO: remove legacy
-  byToken: votesstatus.votesstatus
+  // In tests votesstatus.votesstatus is undefined, thus the need for `|| []`.
+  byToken: (votesstatus.votesstatus || [])
     .map((st) => {
       return {
         ...st,

@@ -96,6 +96,7 @@ export const needStorageKeyReplace = (email, username) =>
     }
     return null;
   });
+
 export const replaceStorageKey = (oldKey, newKey) =>
   myKeyPair(oldKey).then((keys) =>
     loadKeys(newKey, keys).then(() =>

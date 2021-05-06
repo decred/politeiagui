@@ -46,7 +46,6 @@ export const requestApiInfo = (fetchUser = true) => (dispatch) => {
     .apiInfo()
     .then((response) => {
       dispatch(act.RECEIVE_INIT_SESSION(response));
-
       // if there is an active session, try to fetch the user information
       // otherwise we make sure there are no user data saved into localstorage
       if (!response.activeusersession) {
@@ -115,28 +114,27 @@ export const onPollUserPayment = () => (dispatch, getState) => {
     });
 };
 
-export const onGetPolicy = () => (dispatch, getState) => {
+export const onGetPolicy = () => async (dispatch, getState) => {
   const isCMS = sel.isCMS(getState());
   dispatch(act.REQUEST_POLICY());
-  return Promise.all([
-    api.policyWWW(),
-    !isCMS && api.policyTicketVote(),
-    !isCMS && api.policyComments(),
-    !isCMS && api.policyPi()
-  ])
-    .then((response) => {
-      const policyOnRedux = { www: response[0] };
-      if (!isCMS) {
-        policyOnRedux.ticketvote = response[1];
-        policyOnRedux.comments = response[2];
-        policyOnRedux.pi = response[3];
-      }
-      return dispatch(act.RECEIVE_POLICY(policyOnRedux));
-    })
-    .catch((error) => {
-      dispatch(act.RECEIVE_POLICY(null, error));
-      throw error;
-    });
+  try {
+    const [www, ticketvote, comments, pi] = await Promise.all([
+      api.policyWWW(),
+      !isCMS && api.policyTicketVote(),
+      !isCMS && api.policyComments(),
+      !isCMS && api.policyPi()
+    ]);
+    const policyOnRedux = { www };
+    if (!isCMS) {
+      policyOnRedux.ticketvote = ticketvote;
+      policyOnRedux.comments = comments;
+      policyOnRedux.pi = pi;
+    }
+    dispatch(act.RECEIVE_POLICY(policyOnRedux));
+  } catch (error) {
+    dispatch(act.RECEIVE_POLICY(null, error));
+    throw error;
+  }
 };
 
 export const withCsrf = (fn) => (dispatch, getState) => {
@@ -179,9 +177,7 @@ export const onCreateNewUser = ({ email, username, password }) =>
     dispatch(act.REQUEST_NEW_USER({ email }));
     return api
       .newUser(csrf, email, username, password)
-      .then((response) => {
-        dispatch(act.RECEIVE_NEW_USER(response));
-      })
+      .then((response) => dispatch(act.RECEIVE_NEW_USER(response)))
       .catch((error) => {
         if (error.toString() === "Error: No available storage method found.") {
           //local storage error
@@ -255,45 +251,41 @@ export const onSearchUser = (query, isCMS) => (dispatch) => {
 // after registering, his key will be saved under his email. If so, it
 // changes the storage key to his uuid.
 export const onLogin = ({ email, password, code }) =>
-  withCsrf((dispatch, _, csrf) => {
+  withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_LOGIN({ email }));
-    return api
-      .login(csrf, email, password, code)
-      .then((response) => {
-        dispatch(act.RECEIVE_LOGIN(response));
-        const { userid, username } = response;
-        pki.needStorageKeyReplace(email, username).then((keyNeedsReplace) => {
-          if (keyNeedsReplace) {
-            pki.replaceStorageKey(keyNeedsReplace, userid);
-          }
-          return response;
-        });
-      })
-      .then(() => {
-        dispatch(onRequestMe());
-      })
-      .catch((error) => {
-        dispatch(act.RECEIVE_LOGIN(null, error));
-        throw error;
-      });
+    try {
+      const response = await api.login(csrf, email, password, code);
+      await dispatch(onRequestMe());
+      dispatch(act.RECEIVE_LOGIN(response));
+      const { userid, username } = response;
+      const keyNeedsReplace = await pki.needStorageKeyReplace(email, username);
+      if (keyNeedsReplace) {
+        pki.replaceStorageKey(keyNeedsReplace, userid);
+      }
+      return;
+    } catch (error) {
+      dispatch(act.RECEIVE_LOGIN(null, error));
+      throw error;
+    }
   });
 
-// handleLogout calls the correct logout handler according to the user selected
-// option between a normal logout or a permanent logout.
+// handleLogout calls the correct logout handler according to the user
+// selected option between a normal logout or a permanent logout.
 export const handleLogout = (isPermanent, userid) => () =>
   isPermanent ? handlePermanentLogout(userid) : handleNormalLogout;
 
-// handleNormalLogout handles all the procedure to be done once the user is logged out.
-// It can be called either when the logout request has been successful or when the
-// session has already expired
+// handleNormalLogout handles all the procedure to be done once the user is
+// logged out.
+// It can be called either when the logout request has been successful or
+// when the session has already expired.
 export const handleNormalLogout = () => {
   clearStateLocalStorage();
   clearPollingPointer();
   clearProposalPaymentPollingPointer();
 };
 
-// handlePermanentLogout handles the logout procedures while deleting all user related
-// information from the browser storage and cache.
+// handlePermanentLogout handles the logout procedures while deleting all
+// user related information from the browser storage and cache.
 export const handlePermanentLogout = (userid) =>
   pki.removeKeys(userid).then(() => {
     clearStateLocalStorage(userid);
@@ -307,11 +299,11 @@ export const onLogout = (isCMS, isPermanent) =>
     dispatch(act.REQUEST_LOGOUT());
     return api
       .logout(csrf)
-      .then((response) => {
+      .then((response) =>
         isCMS
           ? dispatch(act.RECEIVE_CMS_LOGOUT(response))
-          : dispatch(act.RECEIVE_LOGOUT(response));
-      })
+          : dispatch(act.RECEIVE_LOGOUT(response))
+      )
       .then(() => handleLogout(isPermanent, userid))
       .catch((error) => {
         dispatch(act.RECEIVE_LOGOUT(null, error));
@@ -899,7 +891,7 @@ export const onSubmitEditedProposal = (
       .then(({ record }) => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL({ proposal: record }));
         resetNewProposalData();
-        return record.censorshiprecord.token;
+        return record?.censorshiprecord?.token;
       })
       .catch((error) => {
         dispatch(act.RECEIVE_EDIT_PROPOSAL(null, error));

@@ -51,7 +51,8 @@ const DEFAULT_STATE = {
   allProposalsByUserId: {},
   numOfProposalsByUserId: {},
   // TODO: remove legacy
-  legacyProposals: legacyProposals.proposals.map(
+  // In tests legacyProposals.proposals is undefined, thus the need for `|| []`.
+  legacyProposals: (legacyProposals.proposals || []).map(
     (p) => p.censorshiprecord.token
   ),
   newProposalToken: null

@@ -320,46 +320,56 @@ export const signCensorComment = (userid, comment) =>
         .then((signature) => ({ ...comment, publickey, signature }))
     );
 
-const parseResponseBody = (response) => {
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json"))
-    return response.json();
-  const err = new Error(STATUS_ERR[response.status] || "Internal server error");
-  err.internalError = true;
-  err.statusCode = response.status;
-  throw err;
-};
+const parseResponseBody = (response) =>
+  new Promise((resolve, reject) => {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json"))
+      resolve(response.json());
+    const err = new Error(
+      STATUS_ERR[response.status] || "Internal server error"
+    );
+    err.internalError = true;
+    err.statusCode = response.status;
+    reject(err);
+  });
 
 export const parseResponse = (response) =>
-  parseResponseBody(response).then((json) => {
-    // in case no response body is returned but response is successful
-    if (!json && response.status === 200)
-      return { response: {}, csrfToken: response.headers.get("X-Csrf-Token") };
-    let errorcode = json.errorcode;
-    let errorcontext = json.errorcontext;
+  new Promise((resolve, reject) =>
+    parseResponseBody(response)
+      .then((json) => {
+        // in case no response body is returned but response is successful
+        if (!json && response.status === 200)
+          resolve({
+            response: {},
+            csrfToken: response.headers.get("X-Csrf-Token")
+          });
+        let errorcode = json.errorcode;
+        let errorcontext = json.errorcontext;
 
-    if (isAPIWww(response.url)) {
-      errorcode = json.ErrorCode;
-      errorcontext = json.ErrorContext;
-    }
+        if (isAPIWww(response.url)) {
+          errorcode = json.ErrorCode;
+          errorcontext = json.ErrorContext;
+        }
 
-    if (json.pluginid) {
-      throw new APIPluginError(json.pluginid, errorcode, errorcontext);
-    }
+        if (json.pluginid) {
+          reject(new APIPluginError(json.pluginid, errorcode, errorcontext));
+        }
 
-    if (errorcode) {
-      throw new APIUserError(response, errorcode, errorcontext);
-    }
+        if (errorcode) {
+          reject(new APIUserError(response, errorcode, errorcontext));
+        }
 
-    if (STATUS_ERR[response.status]) {
-      throw new Error(STATUS_ERR[response.status]);
-    }
+        if (STATUS_ERR[response.status]) {
+          reject(new Error(STATUS_ERR[response.status]));
+        }
 
-    return {
-      response: json,
-      csrfToken: response.headers.get("X-Csrf-Token")
-    };
-  });
+        resolve({
+          response: json,
+          csrfToken: response.headers.get("X-Csrf-Token")
+        });
+      })
+      .catch((e) => reject(e))
+  );
 
 export const me = () => GET("/user/me").then(getResponse);
 
@@ -369,7 +379,7 @@ export const apiInfo = () =>
       csrfToken,
       response: { version, route, pubkey, testnet, mode, activeusersession }
     }) => ({
-      csrfToken: csrfToken,
+      csrfToken,
       version,
       route,
       pubkey,
@@ -565,11 +575,7 @@ export const commentsTimestamps = (csrf, token, commentids) =>
 export const invoiceComments = (token) =>
   GET(`/invoices/${token}/comments`).then(getResponse);
 
-export const logout = (csrf) =>
-  POST("/logout", csrf, {}).then(() => {
-    localStorage.removeItem("state");
-    return {};
-  });
+export const logout = (csrf) => POST("/logout", csrf, {});
 
 export const proposalSetStatus = (
   userid,

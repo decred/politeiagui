@@ -92,7 +92,7 @@
     "eslint-config-standard-react": "^9.2.0",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-react": "^7.21.5",
-    "fetch-mock": "^7.7.3",
+    "fetch-mock": "^9.11.0",
     "https": "^1.0.0",
     "nightwatch": "^1.5.1",
     "pem": "^1.14.4",

@@ -45,7 +45,7 @@ export const makeGetUserProposals = (userId) =>
   createSelector(
     allProposalsByUserID,
     proposalsByToken,
-    (propsByUserID, propsByToken) => {
+    (propsByUserID = {}, propsByToken) => {
       const userProps = (propsByUserID[userId] || [])
         .map((token) => propsByToken[token])
         .filter(Boolean);
