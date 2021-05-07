@@ -15,12 +15,13 @@ export const commentsLikesByToken = get([
 ]);
 
 const getCommentsByToken = (token) => (commentsByToken) => {
-  const comment = commentsByToken[token];
+  const shortToken = token && shortRecordToken(token);
+  const comment = commentsByToken[shortToken];
   if (comment) return comment;
   const commentsTokens = Object.keys(commentsByToken);
   // check if the provided token is prefix of original token
   const matchedTokenByPrefix = commentsTokens.find(
-    (key) => shortRecordToken(key) === token
+    (key) => key === shortToken
   );
   return commentsByToken[matchedTokenByPrefix];
 };

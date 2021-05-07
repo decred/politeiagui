@@ -6,6 +6,7 @@ import unionBy from "lodash/unionBy";
 import compose from "lodash/fp/compose";
 import set from "lodash/fp/set";
 import update from "lodash/fp/update";
+import { shortRecordToken } from "src/helpers";
 import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED
@@ -56,7 +57,7 @@ const comments = (state = DEFAULT_STATE, action) =>
         {
           [act.RECEIVE_RECORD_COMMENTS]: () => {
             const { token, comments, accesstime } = action.payload;
-            const fullToken = comments[0]?.token || token;
+            const shortToken = shortRecordToken(token);
             // Filter duplicated comments by signature. The latest copy found
             // will be kept.
             const filteredComments = uniqWith(
@@ -65,29 +66,30 @@ const comments = (state = DEFAULT_STATE, action) =>
                 arrVal.signature && arrVal.signaure !== othVal.signaure
             );
             return compose(
-              set(["comments", "byToken", fullToken], filteredComments),
-              set(["comments", "accessTimeByToken", fullToken], accesstime)
+              set(["comments", "byToken", shortToken], filteredComments),
+              set(["comments", "accessTimeByToken", shortToken], accesstime)
             )(state);
           },
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
             return update(
-              ["comments", "byToken", comment.token],
+              ["comments", "byToken", shortRecordToken(comment.token)],
               (comments = []) => [...comments, comment]
             )(state);
           },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
             const { token, votes } = action.payload;
-            return set(["commentsLikes", "byToken", token], votes)(state);
+            return set(["commentsLikes", "byToken", shortRecordToken(token)], votes)(state);
           },
           [act.RECEIVE_SYNC_LIKE_COMMENT]: () => {
             const { token, vote, commentid } = action.payload;
-            const commentsLikes = state.commentsLikes.byToken[token];
+            const shortToken = shortRecordToken(token);
+            const commentsLikes = state.commentsLikes.byToken[shortToken];
             const backupForCommentLikes = cloneDeep(commentsLikes);
-            const comments = state.comments.byToken[token];
+            const comments = state.comments.byToken[shortToken];
             const isTargetCommentLike = (commentLike) =>
               commentLike.commentid === commentid &&
-              commentLike.token === token;
+              commentLike.token === shortToken;
             const oldCommentVote =
               commentsLikes && commentsLikes.find(isTargetCommentLike);
 
@@ -95,7 +97,7 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             const newCommentLike = {
               ...oldCommentVote,
-              token,
+              shortToken,
               commentid,
               vote: vote === oldVote ? 0 : vote
             };
@@ -123,9 +125,9 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             return compose(
               set(["commentsLikes", "backup"], backupForCommentLikes),
-              set(["commentsLikes", "byToken", token], newCommentsLikes),
+              set(["commentsLikes", "byToken", shortToken], newCommentsLikes),
               set(["comments", "backup"], comments),
-              update(["comments", "byToken", token], (value) =>
+              update(["comments", "byToken", shortToken], (value) =>
                 value.map(updateCommentVotes)
               )
             )(state);
@@ -147,7 +149,7 @@ const comments = (state = DEFAULT_STATE, action) =>
               };
             };
             return compose(
-              update(["comments", "byToken", token], (comments) =>
+              update(["comments", "byToken", shortRecordToken(token)], (comments) =>
                 comments.map(censorTargetComment)
               )
             )(state);
@@ -158,7 +160,9 @@ const comments = (state = DEFAULT_STATE, action) =>
               proposal.status === PROPOSAL_STATUS_PUBLIC &&
               oldStatus === PROPOSAL_STATUS_UNREVIEWED
             ) {
-              delete state.comments.byToken[proposal.censorshiprecord.token];
+              delete state.comments.byToken[
+                shortRecordToken(proposal.censorshiprecord.token)
+              ];
             }
             return state;
           },
