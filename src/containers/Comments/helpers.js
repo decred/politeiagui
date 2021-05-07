@@ -38,7 +38,7 @@ export const getSort = (sortOption) => {
     [commentSortOptions.SORT_BY_OLD]: orderBy(["timestamp"], ["asc"]),
     [commentSortOptions.SORT_BY_TOP]: orderBy(
       ["resultvotes", "timestamp"],
-      ["desc", "desc"]
+      ["desc", "asc"]
     )
   };
 
@@ -50,7 +50,7 @@ export const getSort = (sortOption) => {
 
 export const sortComments = (sortOption, comments) => {
   const sorter = getSort(sortOption);
-  return sorter(comments);
+  return sorter(comments.map(comment => ({ ...comment, resultvotes: comment.upvotes - comment.downvotes })));
 };
 
 /**
