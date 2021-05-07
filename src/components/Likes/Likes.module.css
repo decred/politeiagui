@@ -33,10 +33,10 @@
   color: var(--color-gray) !important;
 }
 
-.likeDisabled .likeBtn {
+.likeDisabled {
   cursor: not-allowed;
 }
 
-.likeBtn:hover > svg {
-  fill: black;
+.likeBtn:not(.likeDisabled):hover svg > g > path {
+  fill: var(--comment-like-color-active) !important;
 }

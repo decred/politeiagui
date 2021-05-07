@@ -6,7 +6,6 @@ import {
   useTheme,
   Text,
   getThemeProperty,
-  useHover,
   Spinner,
   classNames
 } from "pi-ui";
@@ -25,16 +24,14 @@ const Likes = ({
   apiLoading
 }) => {
   const [loading, setLoading] = useState(false);
-  const [likeRef, isLikeHovered] = useHover();
-  const [dislikeRef, isDislikeHovered] = useHover();
   const { theme } = useTheme();
   const defaultColor = getThemeProperty(theme, "comment-like-color");
   const activeColor = getThemeProperty(theme, "comment-like-color-active");
   const liked = isLiked(option);
   const disliked = isDisliked(option);
-  const likeColor = liked || isLikeHovered ? activeColor : defaultColor;
+  const likeColor = liked ? activeColor : defaultColor;
   const dislikeColor =
-    disliked || isDislikeHovered ? activeColor : defaultColor;
+    disliked ? activeColor : defaultColor;
 
   useEffect(() => {
     if (apiLoading) {
@@ -74,7 +71,7 @@ const Likes = ({
 
   return (
     <div
-      className={classNames("align-center", disabled && styles.likeDisabled)}>
+      className={"align-center"}>
       {loading && apiLoading ? (
         <div className={styles.likeBoxSpinner}>
           <Spinner invert />
@@ -83,8 +80,7 @@ const Likes = ({
         <>
           <div className={styles.leftLikeBox}>
             <button
-              ref={likeRef}
-              className={styles.likeBtn}
+              className={classNames(styles.likeBtn, disabled && styles.likeDisabled)}
               data-testid="like-btn"
               onClick={handleLike}>
               <Icon
@@ -97,8 +93,7 @@ const Likes = ({
           </div>
           <div className={styles.rightLikeBox}>
             <button
-              ref={dislikeRef}
-              className={styles.likeBtn}
+              className={classNames(styles.likeBtn, disabled && styles.likeDisabled)}
               data-testid="dislike-btn"
               onClick={handleDislike}>
               <Icon

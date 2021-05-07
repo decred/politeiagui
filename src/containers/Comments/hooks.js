@@ -111,9 +111,9 @@ export function useComments(recordToken, proposalState) {
         (cl) => cl.commentid === commentID
       );
       if (actionData) {
-        return actionData.action;
+        return actionData.vote;
       }
-      return actionData ? actionData.action : 0;
+      return actionData ? actionData.vote : 0;
     },
     [commentsLikes]
   );

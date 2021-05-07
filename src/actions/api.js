@@ -976,7 +976,8 @@ export const onCommentVote = (currentUserID, token, commentid, vote, state) =>
         dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, vote }));
       })
       .catch((error) => {
-        dispatch(act.RESET_SYNC_LIKE_COMMENT({ token }));
+        // xxx: why reset on error?
+        // dispatch(act.RESET_SYNC_LIKE_COMMENT({ token }));
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
       });
   });

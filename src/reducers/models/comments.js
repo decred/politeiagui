@@ -129,6 +129,7 @@ const comments = (state = DEFAULT_STATE, action) =>
               )
             )(state);
           },
+          // xxx: is this really needed?
           [act.RESET_SYNC_LIKE_COMMENT]: () => {
             const { backup: commentsBackup } = state.comments;
             const { backup: commentsLikesBackup } = state.commentsLikes;
