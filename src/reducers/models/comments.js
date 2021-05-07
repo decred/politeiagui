@@ -64,6 +64,7 @@ const comments = (state = DEFAULT_STATE, action) =>
             const oldVote = oldCommentVote ? oldCommentVote.vote : 0;
 
             const newCommentLike = {
+              ...oldCommentVote,
               token,
               commentid,
               vote: vote === oldVote ? 0 : vote
@@ -76,21 +77,45 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             const updateCommentVotes = (comment) => {
               if (comment.commentid !== commentid) return comment;
-              const oldActionEqualsNewAction = oldVote === vote;
 
-              const calcPerActionVotes = (v) => (value = 0) => {
-                if (vote === v) {
-                  if (oldActionEqualsNewAction) return --value;
-                  return ++value;
+              let newUpvotes = comment.upvotes;
+              let newDownvotes = comment.downvotes;
+              // if prev vote equals vote, reset the vote
+              if (oldVote === vote) {
+                if (vote > 0) {
+                  // means upvote, reset upvotes and leave downvotes
+                  newUpvotes--;
+                } else {
+                  // means downvote, reset downvotes and leave upvotes
+                  newDownvotes--;
                 }
-                if (oldVote === v) return --value;
-                return value;
-              };
+              } else if (oldVote !== 0) {
+                // if prev vote and vote are different and oldVote is different than 0, decrement prev vote and increment vote
+                if (vote > 0) {
+                  // means upvote, inc upvote and dec downvote
+                  newUpvotes++;
+                  newDownvotes--;
+                } else {
+                  // means downvote, dec upvote and inc downvote
+                  newUpvotes--;
+                  newDownvotes++;
+                }
+              } else if (vote > 0) {
+                // if oldVote is 0 (no option selected), just increment the vote option
+                newUpvotes++;
+              } else {
+                newDownvotes++;
+              }
 
-              return compose(
-                update("upvotes", calcPerActionVotes(1)),
-                update("downvotes", calcPerActionVotes(-1))
-              )(comment);
+              console.log("ooopa");
+              console.log(oldVote);
+              console.log(vote);
+
+              return {
+                ...comment,
+                upvotes: newUpvotes,
+                downvotes: newDownvotes
+              };
             };
 
             return compose(
