@@ -100,7 +100,10 @@ Relevant libraries/modules used for testing are:
 
 Politeiagui has e2e tests using `cypress` and `react-testing-library/cypress`. Backend should be running when running e2e tests.
 
-**Note:** Before running the e2e tests, make sure to run `/teste2e/setup-test-users.sh` script to setup the users needed for the e2e tests.
+Before running the e2e tests make sure to:
+
+ 1. Run `/teste2e/setup-test-users.sh` script to setup the users needed for the tests.
+ 2. Enable paywall on backend side.
 
 There are two ways two run the e2e tests, either in terminal or in browser:
 
