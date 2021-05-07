@@ -16,6 +16,39 @@ const DEFAULT_STATE = {
   commentsLikes: { byToken: {}, backup: null }
 };
 
+const calcVotes = (comment, oldVote, vote) => {
+  let newUpvotes = comment.upvotes;
+  let newDownvotes = comment.downvotes;
+  // if prev vote equals vote, reset the vote
+  if (oldVote === vote) {
+    if (vote > 0) {
+      // means upvote, reset upvotes and leave downvotes
+      newUpvotes--;
+    } else {
+      // means downvote, reset downvotes and leave upvotes
+      newDownvotes--;
+    }
+  } else if (oldVote !== 0) {
+    // if prev vote and vote are different and oldVote is different than 0, decrement prev vote and increment vote
+    if (vote > 0) {
+      // means upvote, inc upvote and dec downvote
+      newUpvotes++;
+      newDownvotes--;
+    } else {
+      // means downvote, dec upvote and inc downvote
+      newUpvotes--;
+      newDownvotes++;
+    }
+  } else if (vote > 0) {
+    // if oldVote is 0 (no option selected), just increment the vote option
+    newUpvotes++;
+  } else {
+    newDownvotes++;
+  }
+
+  return { newUpvotes, newDownvotes };
+};
+
 const comments = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -78,38 +111,7 @@ const comments = (state = DEFAULT_STATE, action) =>
             const updateCommentVotes = (comment) => {
               if (comment.commentid !== commentid) return comment;
 
-              let newUpvotes = comment.upvotes;
-              let newDownvotes = comment.downvotes;
-              // if prev vote equals vote, reset the vote
-              if (oldVote === vote) {
-                if (vote > 0) {
-                  // means upvote, reset upvotes and leave downvotes
-                  newUpvotes--;
-                } else {
-                  // means downvote, reset downvotes and leave upvotes
-                  newDownvotes--;
-                }
-              } else if (oldVote !== 0) {
-                // if prev vote and vote are different and oldVote is different than 0, decrement prev vote and increment vote
-                if (vote > 0) {
-                  // means upvote, inc upvote and dec downvote
-                  newUpvotes++;
-                  newDownvotes--;
-                } else {
-                  // means downvote, dec upvote and inc downvote
-                  newUpvotes--;
-                  newDownvotes++;
-                }
-              } else if (vote > 0) {
-                // if oldVote is 0 (no option selected), just increment the vote option
-                newUpvotes++;
-              } else {
-                newDownvotes++;
-              }
-
-              console.log("ooopa");
-              console.log(oldVote);
-              console.log(vote);
+              const { newUpvotes, newDownvotes } = calcVotes(comment, oldVote, vote);
 
               return {
                 ...comment,
