@@ -1,29 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Card, Spinner, P } from "pi-ui";
-import useTotp from "../hooks/useTotp";
+import useTotp, { useUserTotpVerified } from "../hooks/useTotp";
 import VerifyTotp from "./Verify";
 import SetTotp from "./Set";
 import useModalContext from "src/hooks/utils/useModalContext";
 import ModalConfirm from "src/components/ModalConfirm";
 
 const Totp = () => {
-  const { loading, alreadySet, totp, onVerifyTotp, onSetTotp } = useTotp();
+  const { loading, totp, onVerifyTotp, onSetTotp } = useTotp();
+  const { hasTotp, onSetHasTotp } = useUserTotpVerified();
   const [handleOpenModal, handleCloseModal] = useModalContext();
-  const [isTotpSet, setIsTotpSet] = useState(alreadySet);
-
-  useEffect(() => {
-    setIsTotpSet(alreadySet);
-  }, [alreadySet]);
 
   const handleResetTotp = (code, cb) => () =>
     onSetTotp(code).then(() => {
-      setIsTotpSet(false);
+      onSetHasTotp(false);
       cb();
     });
 
   const handleVerifyTotp = (code, cb) => () =>
     onVerifyTotp(code).then(() => {
-      setIsTotpSet(true);
+      onSetHasTotp(true);
       cb();
     });
 
@@ -73,17 +69,17 @@ const Totp = () => {
     );
   };
 
-  return loading ? (
+  return loading && !hasTotp ? (
     <div className="justify-center">
       <Spinner invert />
     </div>
   ) : (
     <Card paddingSize="small">
-      <SetTotp totp={totp} isAlreadySet={isTotpSet} />
+      <SetTotp totp={totp} isAlreadySet={hasTotp} />
       <VerifyTotp
-        onVerify={handleOpenTOTPModal(isTotpSet)}
-        title={isTotpSet ? "Reset 2FA" : "Verify Code"}
-        buttonLabel={isTotpSet ? "Reset" : "Verify"}
+        onVerify={handleOpenTOTPModal(hasTotp)}
+        title={hasTotp ? "Reset 2FA" : "Verify Code"}
+        buttonLabel={hasTotp ? "Reset" : "Verify"}
       />
     </Card>
   );
