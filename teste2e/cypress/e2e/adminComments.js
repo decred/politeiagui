@@ -1,4 +1,5 @@
 import { buildProposal, buildComment } from "../support/generate";
+import { shortRecordToken } from "src/helpers";
 
 describe("User admin comments", () => {
   it("Can censor comments", () => {
@@ -14,7 +15,7 @@ describe("User admin comments", () => {
     cy.identity();
     cy.createProposal(proposal).then(({ body: { record } }) => {
       cy.approveProposal(record.censorshiprecord);
-      cy.visit(`record/${record.censorshiprecord.token.substring(0, 7)}`);
+      cy.visit(`record/${shortRecordToken(record.censorshiprecord.token)}`);
       cy.findByText(/waiting for author/i).should("exist");
       const { text } = buildComment();
       cy.findByTestId(/text-area/i).type(text);

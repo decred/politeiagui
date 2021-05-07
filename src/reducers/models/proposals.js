@@ -20,6 +20,7 @@ import {
   PROPOSAL_STATE_UNVETTED
 } from "../../constants";
 import {
+  shortRecordToken,
   getIndexMdFromText,
   parseReceivedProposalsMap,
   parseRawProposal
@@ -53,7 +54,7 @@ const DEFAULT_STATE = {
   // TODO: remove legacy
   // In tests legacyProposals.proposals is undefined, thus the need for `|| []`.
   legacyProposals: (legacyProposals.proposals || []).map(
-    (p) => p.censorshiprecord.token
+    (p) => shortRecordToken(p.censorshiprecord.token)
   ),
   newProposalToken: null
 };
@@ -79,9 +80,6 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
 };
 
 const proposalToken = (proposal) => proposal.censorshiprecord.token;
-
-const shortProposalToken = (proposal) =>
-  proposalToken(proposal).substring(0, 7);
 
 const proposalIndexFile = (name = "", description = "") =>
   getIndexMdFromText([name, description].join("\n\n"));
@@ -147,7 +145,12 @@ const proposals = (state = DEFAULT_STATE, action) =>
             update("allByRecordStatus", updateInventory(action.payload))(state),
           [act.RECEIVE_EDIT_PROPOSAL]: () =>
             set(
-              ["byToken", shortProposalToken(action.payload.proposal)],
+              [
+                "byToken",
+                shortRecordToken(
+                  action.payload.proposal.censorshiprecord.token
+                )
+              ],
               parseRawProposal(action.payload.proposal)
             )(state),
           [act.RECEIVE_NEW_PROPOSAL]: () => {

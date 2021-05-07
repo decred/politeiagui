@@ -22,6 +22,7 @@ import isUndefined from "lodash/fp/isUndefined";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
 import { INVENTORY_PAGE_SIZE, PROPOSAL_PAGE_SIZE } from "src/constants";
+import { shortRecordToken } from "src/helpers";
 import {
   getRfpLinkedProposals,
   getProposalStatusLabel,
@@ -45,10 +46,7 @@ const getRfpSubmissions = (proposals) =>
   )(proposals);
 
 const getUnfetchedTokens = (proposals, tokens) =>
-  difference(
-    tokens.map((token) => token.substring(0, 7))
-    // tokens
-  )(keys(proposals));
+  difference(tokens.map((token) => shortRecordToken(token)))(keys(proposals));
 
 const getCurrentPage = (tokens) => {
   return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;

@@ -1,4 +1,5 @@
 import { buildProposal, buildComment } from "../support/generate";
+import { shortRecordToken } from "src/helpers";
 
 describe("User comments", () => {
   it("Can not comment if hasn't paid the paywall", () => {
@@ -28,7 +29,7 @@ describe("User comments", () => {
           password: "password"
         };
         cy.login(user3);
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         cy.findByRole("button", { name: /add comment/i }).should("be.disabled");
         cy.findByText(
           /you won't be able to submit comments or proposals before paying the paywall/i
@@ -65,7 +66,7 @@ describe("User comments", () => {
         };
         cy.login(user1);
         cy.identity();
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         const { text } = buildComment();
         cy.findByTestId(/text-area/i).type(text);
         cy.route("POST", "/api/comments/v1/new").as("newComment");

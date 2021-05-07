@@ -29,6 +29,7 @@ import * as pki from "../pki";
 // TODO: consider moving general functions like makeProposal and signRegister
 // to a more general lib file other than api.
 import { makeProposal, signRegister } from "../utils";
+import { shortRecordToken } from "src/helpers";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -38,7 +39,7 @@ Cypress.Commands.add("assertProposalPage", (proposal) => {
   cy.findAllByText(proposal.name, { timeout: 20000 }).should("be.visible");
   cy.url().should(
     "eq",
-    `${Cypress.config().baseUrl}/record/${proposal.token.substring(0, 7)}`
+    `${Cypress.config().baseUrl}/record/${shortRecordToken(proposal.token)}`
   );
 });
 

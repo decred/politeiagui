@@ -7,6 +7,7 @@ import {
   PROPOSAL_VOTING_NOT_AUTHORIZED,
   PROPOSAL_VOTING_ACTIVE
 } from "../../constants";
+import { shortRecordToken } from "src/helpers";
 import votesstatus from "src/legacyvotestatuses";
 
 const DEFAULT_STATE = {
@@ -27,7 +28,7 @@ const DEFAULT_STATE = {
     .reduce(
       (acc, cur) => ({
         ...acc,
-        [cur.token]: cur
+        [shortRecordToken(cur.token)]: cur
       }),
       {}
     ),
@@ -35,7 +36,7 @@ const DEFAULT_STATE = {
 };
 
 const receiveVoteStatusChange = (state, token, newStatus) =>
-  update(["byToken", token.substring(0, 7)], (voteSummary) => ({
+  update(["byToken", shortRecordToken(token)], (voteSummary) => ({
     ...voteSummary,
     status: newStatus
   }))(state);
@@ -55,8 +56,8 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
             const normalizedSummaries = keys.reduce(
               (acc, key) => ({
                 ...acc,
-                [key.substring(0, 7)]: {
-                  ...state.byToken[key.substring(0, 7)],
+                [shortRecordToken(key)]: {
+                  ...state.byToken[shortRecordToken(key)],
                   ...action.payload.summaries[key]
                 }
               }),
@@ -72,7 +73,7 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_VOTES_DETAILS]: () => {
             return update(
-              ["byToken", action.payload.token.substring(0, 7)],
+              ["byToken", shortRecordToken(action.payload.token)],
               (voteSummary) => ({
                 ...voteSummary,
                 details: {
@@ -84,7 +85,7 @@ const proposalVotes = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () => {
             return update(
-              ["byToken", action.payload.token.substring(0, 7)],
+              ["byToken", shortRecordToken(action.payload.token)],
               (voteSummary) => ({
                 ...voteSummary,
                 votes: action.payload.votes

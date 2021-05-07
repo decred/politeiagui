@@ -8,6 +8,7 @@ import {
   getTokensForProposalsPagination
 } from "../helpers";
 import { getDetailsFile } from "./helpers";
+import { shortRecordToken } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import isEmpty from "lodash/fp/isEmpty";
@@ -23,11 +24,11 @@ const getUnfetchedVoteSummaries = (proposal, voteSummaries) => {
   const rfpLinks = getProposalRfpLinksTokens(proposal);
   const proposalToken = getProposalToken(proposal);
   const tokens = concat(rfpLinks || [])(proposalToken);
-  // compare tokens by substring
+  // compare tokens by short form
   return tokens.filter(
     (t) =>
       !keys(voteSummaries).some(
-        (vs) => vs.substring(0, 7) === t.substring(0, 7)
+        (vs) => shortRecordToken(vs) === shortRecordToken(t)
       )
   );
 };
@@ -42,7 +43,7 @@ const getProposalRfpLinksTokens = (proposal) => {
 };
 
 export function useProposal(token, threadParentID) {
-  const tokenShort = token.substring(0, 7);
+  const tokenShort = shortRecordToken(token);
   const onFetchProposalDetails = useAction(act.onFetchProposalDetails);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchProposalsVoteSummary = useAction(
@@ -50,10 +51,9 @@ export function useProposal(token, threadParentID) {
   );
   const onFetchVotesDetails = useAction(act.onFetchVotesDetails);
   const onFetchProposalVoteResults = useAction(act.onFetchProposalVoteResults);
-  const proposalSelector = useMemo(
-    () => sel.makeGetProposalByToken(token),
-    [token]
-  );
+  const proposalSelector = useMemo(() => sel.makeGetProposalByToken(tokenShort), [
+    tokenShort
+  ]);
   const proposal = useSelector(proposalSelector);
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.summaryByToken);
@@ -71,7 +71,7 @@ export function useProposal(token, threadParentID) {
       proposals: values(pick(proposals, rfpLinks)),
       voteSummaries: pick(
         voteSummaries,
-        rfpLinks.map((l) => l.substring(0, 7))
+        rfpLinks.map((l) => shortRecordToken(l))
       )
     };
 

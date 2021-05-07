@@ -4,6 +4,7 @@ import LazyList from "src/components/LazyList";
 import { getRecordsByTabOption } from "./helpers";
 import HelpMessage from "src/components/HelpMessage";
 import { useConfig } from "src/containers/Config";
+import { shortRecordToken } from "src/helpers";
 import { NOJS_ROUTE_PREFIX, PROPOSAL_STATUS_CENSORED } from "src/constants";
 
 const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
@@ -16,13 +17,7 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
 };
 
 const getFilteredRecordsAndToken = (records, tokens, tab, filterCensored) => {
-  console.log("getFilteredRecordsAndToken")
-  // const tokens = fullTokens.map((token) => token.substring(0, 7));
-  console.log(tokens)
-  console.log(records)
-  const filteredTokens = tokens[tab].map((token) => token.substring(0, 7));
-  console.log("filteredTokens")
-  console.log(filteredTokens)
+  const filteredTokens = tokens[tab].map((token) => shortRecordToken(token));
   let filteredRecords =
     (records &&
       filteredTokens &&

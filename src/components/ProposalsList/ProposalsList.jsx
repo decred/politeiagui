@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Text, classNames, useTheme, getThemeProperty } from "pi-ui";
 import styles from "./ProposalsList.module.css";
+import { shortRecordToken } from "src/helpers";
 import ProposalItem from "./ProposalItem";
 import LoadingPlaceholders from "src/components/LoadingPlaceholders";
 import ContentLoader from "react-content-loader";
@@ -41,7 +42,7 @@ const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
               proposal={proposal}
               voteSummary={
                 voteSummaries[
-                  proposals[index]?.censorshiprecord.token.substring(0, 7)
+                  shortRecordToken(proposals[index]?.censorshiprecord.token)
                 ]
               }
             />

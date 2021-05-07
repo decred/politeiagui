@@ -26,6 +26,7 @@ import DraftSaver from "./DraftSaver";
 import { useProposalForm } from "./hooks";
 import usePolicy from "src/hooks/api/usePolicy";
 import {
+  shortRecordToken,
   replaceBlobsByDigestsAndGetFiles,
   replaceImgDigestByBlob
 } from "src/helpers";
@@ -367,7 +368,7 @@ const ProposalFormWrapper = ({
         setSubmitting(false);
         setSubmitSuccess(true);
         // Navigate to record page.
-        history.push(`/record/${proposalToken.substring(0, 7)}`);
+        history.push(`/record/${shortRecordToken(proposalToken)}`);
         resetForm();
       } catch (e) {
         setSubmitting(false);

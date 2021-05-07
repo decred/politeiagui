@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 import get from "lodash/fp/get";
 import orderBy from "lodash/fp/orderBy";
+import { shortRecordToken } from "src/helpers";
 import { createDeepEqualSelector } from "../helpers";
 
 export const proposalsByToken = get(["proposals", "byToken"]);
@@ -28,7 +29,7 @@ export const newProposalToken = get(["proposals", "newProposalToken"]);
 
 export const makeGetProposalByToken = (token) =>
   createSelector(proposalsByToken, (propsByToken) =>
-    propsByToken[token.substring(0, 7)]
+    propsByToken[shortRecordToken(token)]
   );
 
 export const makeGetNumOfProposalsByUserId = (userId) =>
@@ -40,7 +41,7 @@ export const makeGetUserProposals = (userId) =>
     proposalsByToken,
     (propsByUserID = {}, propsByToken) => {
       const userProps = (propsByUserID[userId] || [])
-        .map((token) => propsByToken[token.substring(0, 7)])
+        .map((token) => propsByToken[shortRecordToken(token)])
         .filter(Boolean);
       const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
       return sortByNewestFirst(userProps);
@@ -49,6 +50,6 @@ export const makeGetUserProposals = (userId) =>
 
 export const makeGetProposalName = (token) =>
   createSelector(
-    makeGetProposalByToken(token.substring(0, 7)), (proposal) =>
+    makeGetProposalByToken(shortRecordToken(token)), (proposal) =>
     proposal ? proposal.name : null
   );
