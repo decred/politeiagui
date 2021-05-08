@@ -78,7 +78,6 @@ const CommentWrapper = ({
     recordAuthorID,
     recordAuthorUsername,
     loadingLikes,
-    loadingLikeAction,
     userLoggedIn,
     recordToken,
     readOnly,
@@ -198,7 +197,6 @@ const CommentWrapper = ({
         likeOption={getCommentLikeOption(commentid)}
         onLike={handleLikeComment}
         onDislike={handleDislikeComment}
-        loadingLikeAction={loadingLikeAction[commentid]}
         showReplies={showReplies}
         isFlatMode={isFlatMode}
         onClickCensor={handleClickCensor}
