@@ -50,7 +50,12 @@ export const getSort = (sortOption) => {
 
 export const sortComments = (sortOption, comments) => {
   const sorter = getSort(sortOption);
-  return sorter(comments.map(comment => ({ ...comment, resultvotes: comment.upvotes - comment.downvotes })));
+  return sorter(
+    comments.map((comment) => ({
+      ...comment,
+      resultvotes: comment.upvotes - comment.downvotes
+    }))
+  );
 };
 
 /**

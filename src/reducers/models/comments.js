@@ -78,10 +78,7 @@ const comments = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
             const { token, votes } = action.payload;
-            return set(
-              ["commentsLikes", "byToken", token],
-              votes
-            )(state);
+            return set(["commentsLikes", "byToken", token], votes)(state);
           },
           [act.RECEIVE_SYNC_LIKE_COMMENT]: () => {
             const { token, vote, commentid } = action.payload;
@@ -111,7 +108,11 @@ const comments = (state = DEFAULT_STATE, action) =>
             const updateCommentVotes = (comment) => {
               if (comment.commentid !== commentid) return comment;
 
-              const { newUpvotes, newDownvotes } = calcVotes(comment, oldVote, vote);
+              const { newUpvotes, newDownvotes } = calcVotes(
+                comment,
+                oldVote,
+                vote
+              );
 
               return {
                 ...comment,
