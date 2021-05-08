@@ -1,8 +1,21 @@
+## About Decred
+
+Decred is money evolved. It is secure, adaptable, and sustainable. Decred is
+governed and controlled by the Decred stakeholders, making it the world's first
+cryptocurrency DAO.
+
 ## About Politeia
 
-Decred is an autonomous digital currency. With a hybrid consensus system, it is built to be a decentralized, sustainable, and self-ruling currency where stakeholders make the rules.
+Politeia is Decred's proposal system. It is used to request funding from the
+Decred treasury. Anyone can submit a proposal to Politeia. The Decred
+stakeholders vote on whether to fund or reject the proposal.
 
+Politeia was built around the concept of cryptographic auditability. All data
+saved to Politeia is accompanied by cryptographic proof of who, what, and when.
 
-Politeia (Pi) is a censorship-resistant blockchain-anchored public proposal system, which empowers users to submit their own projects for self-funding from DCR’s block subsidy. Pi ensures the ecosystem remains sustainable and thrives.
+**Who** submitted the data.  
+**What** data was submitted.  
+**When** was the data submitted.  
 
 [Learn More about Politeia](https://docs.decred.org/governance/politeia/overview/)
+

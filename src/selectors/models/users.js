@@ -140,3 +140,8 @@ export const userTotp = createSelector(
   currentUser,
   (user) => user && user.totp
 );
+
+export const userTotpVerified = createSelector(
+  currentUser,
+  (user) => user && user.totpverified
+);
