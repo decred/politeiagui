@@ -1,12 +1,11 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-import { delay } from "lodash";
+import { debounce } from "lodash";
 import {
   Icon,
   useTheme,
   Text,
   getThemeProperty,
-  Spinner,
   classNames
 } from "pi-ui";
 import styles from "./Likes.module.css";
@@ -20,10 +19,8 @@ const Likes = ({
   onLike,
   onDislike,
   option,
-  disabled,
-  apiLoading
+  disabled
 }) => {
-  const [loading, setLoading] = useState(false);
   const { theme } = useTheme();
   const defaultColor = getThemeProperty(theme, "comment-like-color");
   const activeColor = getThemeProperty(theme, "comment-like-color-active");
@@ -33,29 +30,18 @@ const Likes = ({
   const dislikeColor =
     disliked ? activeColor : defaultColor;
 
-  useEffect(() => {
-    if (apiLoading) {
-      delay(() => setLoading(true), 1000);
-    } else if (loading) {
-      setLoading(false);
-    }
-  }, [apiLoading, loading, setLoading]);
+  async function handleLike() {
+    if (disabled) return;
+    await onLike();
+  }
 
-  const handleLike = useCallback(
-    async function handleLike() {
-      if (disabled) return;
-      await onLike();
-    },
-    [disabled, onLike]
-  );
+  async function handleDislike() {
+    if (disabled) return;
+    await onDislike();
+  }
 
-  const handleDislike = useCallback(
-    async function handleDislike() {
-      if (disabled) return;
-      await onDislike();
-    },
-    [disabled, onDislike]
-  );
+  const debouncedHandleDislike = debounce(handleDislike, 500);
+  const debouncedHandleLike = debounce(handleLike, 500);
 
   const renderCount = useCallback(
     (count) => (
@@ -72,17 +58,11 @@ const Likes = ({
   return (
     <div
       className={"align-center"}>
-      {loading && apiLoading ? (
-        <div className={styles.likeBoxSpinner}>
-          <Spinner invert />
-        </div>
-      ) : (
-        <>
           <div className={styles.leftLikeBox}>
             <button
               className={classNames(styles.likeBtn, disabled && styles.likeDisabled)}
               data-testid="like-btn"
-              onClick={handleLike}>
+              onClick={debouncedHandleLike}>
               <Icon
                 iconColor={likeColor}
                 backgroundColor={likeColor}
@@ -95,7 +75,7 @@ const Likes = ({
             <button
               className={classNames(styles.likeBtn, disabled && styles.likeDisabled)}
               data-testid="dislike-btn"
-              onClick={handleDislike}>
+              onClick={debouncedHandleDislike}>
               <Icon
                 iconColor={dislikeColor}
                 backgroundColor={dislikeColor}
@@ -104,8 +84,6 @@ const Likes = ({
             </button>
             {renderCount(downLikes)}
           </div>
-        </>
-      )}
     </div>
   );
 };

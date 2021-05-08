@@ -172,7 +172,6 @@ const CommentWrapper = ({
 
   const isLikeCommentDisabled =
     loadingLikes ||
-    !!loadingLikeAction ||
     readOnly ||
     (userLoggedIn &&
       (identityError || paywallMissing || currentUser.username === username));
