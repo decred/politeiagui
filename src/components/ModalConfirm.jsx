@@ -55,10 +55,10 @@ const ModalConfirm = ({
       onClose={success && onCloseSuccess ? onCloseSuccess : onClose}
       iconComponent={
         !success ? (
-          <Icon type={"info"} size={26} />
+          <Icon type="info" size={26} />
         ) : (
           <Icon
-            type={"checkmark"}
+            type="checkmark"
             iconColor={iconCheckmarkColor}
             backgroundColor={successIconBgColor}
             size={26}

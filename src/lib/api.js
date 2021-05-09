@@ -86,8 +86,8 @@ export const makeProposal = (
   type,
   linkto = 0,
   attachments = []
-) => {
-  [
+) => ({
+  files: [
     convertMarkdownToFile(markdown),
     {
       // Proposal metadata file
@@ -112,8 +112,8 @@ export const makeProposal = (
     mime,
     payload,
     digest: digest ? digest : digestPayload(payload)
-  }));
-};
+  }))
+});
 
 export const makeInvoice = (
   month,

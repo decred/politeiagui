@@ -20,7 +20,8 @@ const ModalConfirmWithReason = ({
   title,
   reasonLabel,
   successMessage,
-  successTitle
+  successTitle,
+  onCloseSuccess
 }) => {
   const [success, setSuccess] = useState(false);
 
@@ -58,7 +59,7 @@ const ModalConfirmWithReason = ({
       style={{ width: "600px" }}
       title={(success && successTitle) || title}
       show={show}
-      onClose={onClose}
+      onClose={success && onCloseSuccess ? onCloseSuccess : onClose}
       iconComponent={
         !success ? (
           <Icon type={"info"} size={26} />
@@ -128,7 +129,9 @@ const ModalConfirmWithReason = ({
         <>
           {successMessage}
           <div className="justify-right margin-top-m">
-            <Button data-testid="reason-confirm-success" onClick={onClose}>
+            <Button
+              data-testid="reason-confirm-success"
+              onClick={onCloseSuccess || onClose}>
               Ok
             </Button>
           </div>

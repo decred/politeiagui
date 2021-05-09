@@ -13,8 +13,9 @@ const UnvettedActionsProvider = ({ children, history }) => {
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
   const handleOpenCensorModal = (proposal) => {
-    const handleClose = () => {
+    const handleCloseSuccess = () => {
       handleCloseModal();
+      history.push(`/record/${proposal.censorshiprecord.token}`);
     };
     handleOpenModal(ModalConfirmWithReason, {
       title: `Censor proposal - ${proposal.name}`,
@@ -26,18 +27,16 @@ const UnvettedActionsProvider = ({ children, history }) => {
         <Text>
           The proposal has been successfully censored! Now it will appear under
           under{" "}
-          <Link to={"/admin/records?tab=unvetted censored"}>Censored</Link> tab
+          <Link to="/admin/records?tab=unvetted censored">Censored</Link> tab
           among Admin Proposals.
         </Text>
       ),
-      onClose: handleClose
+      onClose: handleCloseModal,
+      onCloseSuccess: handleCloseSuccess
     });
   };
 
   const handleOpenApproveModal = (proposal) => {
-    const handleClose = () => {
-      handleCloseModal();
-    };
     const handleCloseSuccess = () => {
       handleCloseModal();
       history.push(`/record/${proposal.censorshiprecord.token}`);
@@ -50,11 +49,11 @@ const UnvettedActionsProvider = ({ children, history }) => {
       successMessage: (
         <Text>
           The proposal has been successfully approved! Now it will appear under{" "}
-          <Link to={"/?tab=in%20discussion"}>In discussion</Link> tab among
+          <Link to="/?tab=in%20discussion">In discussion</Link> tab among
           Public Proposals.
         </Text>
       ),
-      onClose: handleClose,
+      onClose: handleCloseModal,
       onCloseSuccess: handleCloseSuccess
     });
   };
