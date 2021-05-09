@@ -12,9 +12,9 @@ describe("User admin comments", () => {
     const proposal = buildProposal();
     cy.login(user);
     cy.identity();
-    cy.createProposal(proposal).then(({ body }) => {
-      cy.approveProposal(body.record.censorshiprecord);
-      cy.visit(`record/${body.record.censorshiprecord.token.substring(0, 7)}`);
+    cy.createProposal(proposal).then(({ body: { record } }) => {
+      cy.approveProposal(record.censorshiprecord);
+      cy.visit(`record/${record.censorshiprecord.token.substring(0, 7)}`);
       cy.findByText(/waiting for author/i).should("exist");
       const { text } = buildComment();
       cy.findByTestId(/text-area/i).type(text);

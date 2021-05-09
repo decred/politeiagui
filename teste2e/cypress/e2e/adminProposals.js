@@ -13,16 +13,24 @@ describe("Admin proposals actions", () => {
     const proposal = buildProposal();
     cy.login(user);
     cy.identity();
-    cy.createProposal(proposal).then((res) => {
-      cy.visit(`proposals/${res.body.censorshiprecord.token.substring(0, 7)}`);
-      // Manually approve proposal
-      cy.findByText(/approve/i).click();
-      cy.route("POST", "/api/v1/proposals/**/status").as("confirm");
-      cy.findByText(/confirm/i).click();
-      cy.wait("@confirm");
-      cy.findByText(/ok/i).click();
-      cy.findByText(/waiting for author/i).should("be.visible");
-    });
+    cy.createProposal(proposal).then(
+      ({
+        body: {
+          record: {
+            censorshiprecord: { token }
+          }
+        }
+      }) => {
+        cy.visit(`record/${token.substring(0, 7)}`);
+        // Manually approve proposal
+        cy.findByText(/approve/i).click();
+        cy.route("POST", "/api/records/v1/setstatus").as("confirm");
+        cy.findByText(/confirm/i).click();
+        cy.wait("@confirm");
+        cy.findByText(/ok/i).click();
+        cy.findByText(/waiting for author/i).should("be.visible");
+      }
+    );
   });
 
   it("Can report a proposal as a spam", () => {
@@ -42,7 +50,7 @@ describe("Admin proposals actions", () => {
       // Manually report proposal
       cy.findByText(/report/i).click();
       cy.findByLabelText(/censor reason/i).type("censor!");
-      cy.route("POST", "/api/v1/proposals/**/status").as("confirm");
+      cy.route("POST", "/api/records/v1/setstatus").as("confirm");
       cy.findByText(/confirm/i).click();
       cy.wait("@confirm");
       cy.findByText(/ok/i).click();
