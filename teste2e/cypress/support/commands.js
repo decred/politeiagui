@@ -100,24 +100,27 @@ Cypress.Commands.add("identity", () => {
 
 Cypress.Commands.add("createProposal", (proposal) => {
   const createdProposal = makeProposal(proposal.name, proposal.description);
-  return cy.request("api/v1/user/me").then((res) => {
-    return signRegister(res.body.userid, createdProposal).then((res) =>
-      requestWithCsrfToken("api/v1/proposals/new", res)
+  return cy
+    .request("api/v1/user/me")
+    .then((res) =>
+      signRegister(res.body.userid, createdProposal).then((res) =>
+        requestWithCsrfToken("/api/records/v1/new", res)
+      )
     );
-  });
 });
 
-Cypress.Commands.add("approveProposal", (proposal) => {
-  return setProposalStatus(proposal, 4);
-});
+Cypress.Commands.add("approveProposal", ({ token }) =>
+  setProposalStatus(token, 2, 1, "")
+);
 
 Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.server();
   cy.findByTestId("proposal-name").type(proposal.name);
   cy.findByTestId("text-area").type(proposal.description);
-  cy.route("POST", "/api/v1/proposals/new").as("newProposal");
+  cy.route("POST", "/api/records/v1/new").as("newProposal");
   cy.findByText(/submit/i).click();
-  // needs more time in general to complete this request so we increase the responseTimeout
+  // needs more time in general to complete this request so we increase the
+  // responseTimeout
   cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
     expect(xhr.status).to.equal(200);
     expect(xhr.response.body)

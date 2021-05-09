@@ -87,34 +87,32 @@ export const makeProposal = (
   linkto = 0,
   attachments = []
 ) => {
-  return {
-    files: [
-      convertMarkdownToFile(markdown),
-      {
-        //proposal metadata file
-        name: PROPOSAL_METADATA_FILENAME,
-        mime: "text/plain; charset=utf-8",
-        digest: objectToSHA256({ name }),
-        payload: bufferToBase64String(objectToBuffer({ name }))
-      },
-      ...(linkby || linkto
-        ? [
-            {
-              name: VOTE_METADATA_FILENAME,
-              mime: "text/plain; charset=utf-8",
-              digest: objectToSHA256({ linkto, linkby }),
-              payload: bufferToBase64String(objectToBuffer({ linkto, linkby }))
-            }
-          ]
-        : []),
-      ...(attachments || [])
-    ].map(({ name, mime, payload, digest }) => ({
-      name,
-      mime,
-      payload,
-      digest: digest ? digest : digestPayload(payload)
-    }))
-  };
+  [
+    convertMarkdownToFile(markdown),
+    {
+      // Proposal metadata file
+      name: PROPOSAL_METADATA_FILENAME,
+      mime: "text/plain; charset=utf-8",
+      digest: objectToSHA256({ name }),
+      payload: bufferToBase64String(objectToBuffer({ name }))
+    },
+    ...(linkby || linkto
+      ? [
+          {
+            name: VOTE_METADATA_FILENAME,
+            mime: "text/plain; charset=utf-8",
+            digest: objectToSHA256({ linkto, linkby }),
+            payload: bufferToBase64String(objectToBuffer({ linkto, linkby }))
+          }
+        ]
+      : []),
+    ...(attachments || [])
+  ].map(({ name, mime, payload, digest }) => ({
+    name,
+    mime,
+    payload,
+    digest: digest ? digest : digestPayload(payload)
+  }));
 };
 
 export const makeInvoice = (
