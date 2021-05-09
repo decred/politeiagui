@@ -123,13 +123,13 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   // responseTimeout
   cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
     expect(xhr.status).to.equal(200);
-    expect(xhr.response.body)
+    expect(xhr.response.body.record)
       .to.have.property("censorshiprecord")
       .and.be.a("object")
       .and.have.all.keys("token", "signature", "merkle");
     cy.assertProposalPage({
       ...proposal,
-      token: xhr.response.body.censorshiprecord.token
+      token: xhr.response.body.record.censorshiprecord.token
     });
   });
 });
