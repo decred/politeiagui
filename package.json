@@ -15,7 +15,7 @@
     "js-file-download": "^0.4.9",
     "js-sha3": "^0.8.0",
     "localforage": "^1.9.0",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
     "pi-ui": "https://github.com/decred/pi-ui",
     "prop-types": "^15.7.2",
