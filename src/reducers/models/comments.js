@@ -81,14 +81,16 @@ const comments = (state = DEFAULT_STATE, action) =>
               const calcNewResultVotes = (value) =>
                 value + (oldActionEqualsNewAction ? -oldVote : vote - oldVote);
 
-              const calcPerActionVotes = (v) => (value = 0) => {
-                if (vote === v) {
-                  if (oldActionEqualsNewAction) return --value;
-                  return ++value;
-                }
-                if (oldVote === v) return --value;
-                return value;
-              };
+              const calcPerActionVotes =
+                (v) =>
+                (value = 0) => {
+                  if (vote === v) {
+                    if (oldActionEqualsNewAction) return --value;
+                    return ++value;
+                  }
+                  if (oldVote === v) return --value;
+                  return value;
+                };
 
               return compose(
                 update("totalvotes", calcNewTotalVotes),

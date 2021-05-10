@@ -20,12 +20,8 @@ const Proposals = (props) => {
   const [hasMoreToLoad, setHasMore] = useState(false);
 
   const { userID } = props;
-  const {
-    proposals,
-    loading,
-    numOfUserProposals,
-    onFetchUserProposals
-  } = useUserProposals(userID);
+  const { proposals, loading, numOfUserProposals, onFetchUserProposals } =
+    useUserProposals(userID);
 
   const amountOfProposalsFetched = proposals ? proposals.length : 0;
 

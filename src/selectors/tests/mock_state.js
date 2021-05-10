@@ -32,8 +32,7 @@ export const MOCK_STATE = {
       response: {
         proposals: [
           {
-            name:
-              "Interaction design investor validation social media hypotheses value proposition entrepreneur iteration partner network technology crowdsource research & development paradigm shift.",
+            name: "Interaction design investor validation social media hypotheses value proposition entrepreneur iteration partner network technology crowdsource research & development paradigm shift.",
             status: 0,
             numcomments: 3,
             timestamp: 1505940196,
@@ -48,8 +47,7 @@ export const MOCK_STATE = {
             files: []
           },
           {
-            name:
-              "Beta release creative investor business-to-business incubator pivot user experience iPhone startup hackathon responsive web design pitch.",
+            name: "Beta release creative investor business-to-business incubator pivot user experience iPhone startup hackathon responsive web design pitch.",
             status: 2,
             numcomments: 3,
             timestamp: 1505940196,

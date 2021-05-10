@@ -207,9 +207,10 @@ const DccFormWrapper = ({
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { policy } = usePolicy();
   const { user } = useUserDetail();
-  const dccFormValidation = useMemo(() => dccValidationSchema(policy), [
-    policy
-  ]);
+  const dccFormValidation = useMemo(
+    () => dccValidationSchema(policy),
+    [policy]
+  );
 
   const FORM_INITIAL_VALUES = {
     type: 0,

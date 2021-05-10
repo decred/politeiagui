@@ -9,11 +9,8 @@ const TABLE_HEADERS = ["Proposal", "Amount"];
 
 const ProposalBillingSummary = ({ TopBanner, PageDetails, Main }) => {
   const [error, setError] = useState();
-  const {
-    getSpendingSummary,
-    proposalsBilled,
-    loading
-  } = useProposalBillingSummary();
+  const { getSpendingSummary, proposalsBilled, loading } =
+    useProposalBillingSummary();
   const [proposals, setProposals] = useState(proposalsBilled);
   useEffect(() => {
     !proposalsBilled && getSpendingSummary().catch((e) => setError(e));

@@ -476,7 +476,8 @@ export const convertObjectToUnixTimestamp = ({ day, month, year }) =>
  * @returns {object} { description, files }
  */
 export function replaceBlobsByDigestsAndGetFiles(description, map) {
-  const imageRegexParser = /!\[[^\]]*\]\((?<blob>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imageRegexParser =
+    /!\[[^\]]*\]\((?<blob>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const imgs = description.matchAll(imageRegexParser);
   let newDescription = description;
   const files = [];
@@ -522,7 +523,8 @@ const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
 export function replaceImgDigestByBlob(vals, map) {
   if (!vals) return { text: "", markdownFiles: [] };
   const { description, files } = vals;
-  const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imageRegexParser =
+    /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const imgs = description.matchAll(imageRegexParser);
   let newText = description;
   const markdownFiles = [];

@@ -27,77 +27,74 @@ export function useDownloadVoteTimestamps(token, votesCount) {
     setProgress(getProgressPercentage(votes?.length));
   }, [getProgressPercentage, votes]);
 
-  const [
-    state,
-    send,
-    { START, VERIFY, FETCH, RESOLVE, REJECT }
-  ] = useFetchMachine({
-    actions: {
-      initial: () => {
-        const ts = loadVotesTimestamps(token);
-        const hasProofs = ts?.votes?.reduce(
-          (acc, v) => acc && v.proofs.length > 0,
-          true
-        );
-        if (ts?.votes?.length === votesCount && hasProofs) {
-          return send(RESOLVE, ts);
-        }
-        if (token && !votes) {
-          return send(START);
-        }
-        return;
-      },
-      start: () => {
-        // fetch unpaginated data from vote timestamps
-        onFetchTicketVoteTimestamps(token)
-          .then((resp) => {
-            setAuths([...resp.auths]);
-            setDetails({ ...resp.details });
-            // fetch first page of vote timestamps
+  const [state, send, { START, VERIFY, FETCH, RESOLVE, REJECT }] =
+    useFetchMachine({
+      actions: {
+        initial: () => {
+          const ts = loadVotesTimestamps(token);
+          const hasProofs = ts?.votes?.reduce(
+            (acc, v) => acc && v.proofs.length > 0,
+            true
+          );
+          if (ts?.votes?.length === votesCount && hasProofs) {
+            return send(RESOLVE, ts);
+          }
+          if (token && !votes) {
+            return send(START);
+          }
+          return;
+        },
+        start: () => {
+          // fetch unpaginated data from vote timestamps
+          onFetchTicketVoteTimestamps(token)
+            .then((resp) => {
+              setAuths([...resp.auths]);
+              setDetails({ ...resp.details });
+              // fetch first page of vote timestamps
+              onFetchTicketVoteTimestamps(token, page)
+                .then((resp) => {
+                  setVotes([...resp.votes]);
+                  setPage(page + 1);
+                  return send(VERIFY);
+                })
+                .catch((e) => send(REJECT, e));
+            })
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        },
+        verify: () => {
+          if (votes?.length === votesCount) {
+            // all timestamps loaded, resolve
+            handleSaveVotesTimetamps(token, { auths, details, votes });
+            fileDownload(
+              JSON.stringify({ auths, details, votes }, null, 2),
+              `${token}-votes-timestamps.json`
+            );
+            return send(RESOLVE, { auths, details, votes });
+          } else {
+            // more timestamps remaining, fetch next page
             onFetchTicketVoteTimestamps(token, page)
               .then((resp) => {
-                setVotes([...resp.votes]);
+                setVotes([...votes, ...resp.votes]);
                 setPage(page + 1);
                 return send(VERIFY);
               })
-              .catch((e) => send(REJECT, e));
-          })
-          .catch((e) => send(REJECT, e));
-        return send(FETCH);
-      },
-      verify: () => {
-        if (votes?.length === votesCount) {
-          // all timestamps loaded, resolve
-          handleSaveVotesTimetamps(token, { auths, details, votes });
-          fileDownload(
-            JSON.stringify({ auths, details, votes }, null, 2),
-            `${token}-votes-timestamps.json`
-          );
-          return send(RESOLVE, { auths, details, votes });
-        } else {
-          // more timestamps remaining, fetch next page
-          onFetchTicketVoteTimestamps(token, page)
-            .then((resp) => {
-              setVotes([...votes, ...resp.votes]);
-              setPage(page + 1);
-              return send(VERIFY);
-            })
-            .catch((e) => {
-              send(REJECT, e);
-            });
-          return send(FETCH);
+              .catch((e) => {
+                send(REJECT, e);
+              });
+            return send(FETCH);
+          }
         }
+      },
+      initialValues: {
+        status: "idle",
+        loading: false,
+        auths: null,
+        details: null,
+        votes: null,
+        progress: 0
       }
-    },
-    initialValues: {
-      status: "idle",
-      loading: false,
-      auths: null,
-      details: null,
-      votes: null,
-      progress: 0
-    }
-  });
+    });
 
   return {
     loading: state.loading || state.verifying,

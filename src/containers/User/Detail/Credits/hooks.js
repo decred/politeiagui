@@ -38,9 +38,10 @@ export function useCredits(userID) {
     () => sel.makeGetPaywallFaucetTxid(userID),
     [userID]
   );
-  const creditsSelector = useMemo(() => sel.makeGetUnspentUserCredits(userID), [
-    userID
-  ]);
+  const creditsSelector = useMemo(
+    () => sel.makeGetUnspentUserCredits(userID),
+    [userID]
+  );
   const creditsPurchasesSelector = useMemo(
     () => sel.makeGetUserCreditsPurchasesByTx(userID),
     [userID]

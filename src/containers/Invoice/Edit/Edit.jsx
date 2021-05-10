@@ -36,10 +36,8 @@ const EditInvoice = ({ match }) => {
       }
     : null;
 
-  const {
-    proposalsNotRFP: proposals,
-    error: proposalsError
-  } = useApprovedProposals();
+  const { proposalsNotRFP: proposals, error: proposalsError } =
+    useApprovedProposals();
   return (
     <Card className="container margin-bottom-l">
       {error ? (

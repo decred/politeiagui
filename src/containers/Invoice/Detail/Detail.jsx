@@ -18,14 +18,8 @@ const InvoiceDetail = ({ Main, match }) => {
   const invoiceToken = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
 
-  const {
-    invoice,
-    loading,
-    currentUser,
-    error,
-    proposals,
-    proposalsError
-  } = useInvoice(invoiceToken);
+  const { invoice, loading, currentUser, error, proposals, proposalsError } =
+    useInvoice(invoiceToken);
 
   const { subContractors, error: subContractorsError } = useSubContractors();
   let subContractorsInLineItems;

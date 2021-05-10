@@ -35,19 +35,21 @@ const auditIdentity = (keys, userPubkey, setFileError) => {
   setFileError(null);
 };
 
-const onSelectFiles = (setFileError, setFieldValue) => ({ base64 }) => {
-  try {
-    const json = getJsonData(base64);
-    if (!json || !json.publicKey || !json.secretKey)
-      throw new Error(INVALID_FILE);
-    setFieldValue("publicKey", json.publicKey);
-    setFieldValue("secretKey", json.secretKey);
-    setFileError(null);
-  } catch (e) {
-    console.error(e.stack);
-    setFileError(e);
-  }
-};
+const onSelectFiles =
+  (setFileError, setFieldValue) =>
+  ({ base64 }) => {
+    try {
+      const json = getJsonData(base64);
+      if (!json || !json.publicKey || !json.secretKey)
+        throw new Error(INVALID_FILE);
+      setFieldValue("publicKey", json.publicKey);
+      setFieldValue("secretKey", json.secretKey);
+      setFileError(null);
+    } catch (e) {
+      console.error(e.stack);
+      setFileError(e);
+    }
+  };
 
 const ModalImportIdentity = ({
   show,
@@ -56,12 +58,8 @@ const ModalImportIdentity = ({
   successMessage,
   successTitle
 }) => {
-  const {
-    onIdentityImported,
-    userPubkey,
-    currentUserID,
-    keyMismatchAction
-  } = useUserIdentity();
+  const { onIdentityImported, userPubkey, currentUserID, keyMismatchAction } =
+    useUserIdentity();
   const [fileError, setFileError] = useState(null);
   const [success, setSuccess] = useState(null);
 

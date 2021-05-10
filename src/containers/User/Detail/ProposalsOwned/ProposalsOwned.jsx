@@ -6,9 +6,8 @@ import isEmpty from "lodash/fp/isEmpty";
 import styles from "./ProposalsOwned.module.css";
 
 const ProposalsOwned = ({ proposalsOwned }) => {
-  const { proposalsByToken, isLoading, error } = useApprovedProposals(
-    proposalsOwned
-  );
+  const { proposalsByToken, isLoading, error } =
+    useApprovedProposals(proposalsOwned);
   const loading = (isLoading || isEmpty(proposalsByToken)) && !error;
 
   return loading ? (

@@ -107,11 +107,8 @@ const getDetailsData = (invoices, subContractors) =>
 const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
   const [error, setError] = useState();
   const tokenFromUrl = get("params.token", match);
-  const {
-    getSpendingDetails,
-    proposalBillingDetails,
-    loading
-  } = useProposalBillingDetails(tokenFromUrl);
+  const { getSpendingDetails, proposalBillingDetails, loading } =
+    useProposalBillingDetails(tokenFromUrl);
 
   const {
     subContractors,

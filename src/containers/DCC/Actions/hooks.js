@@ -26,9 +26,10 @@ export const useDccActions = (dccToken) => {
   const onSupportDcc = () => onSupportOpposeDcc(dccToken, DCC_SUPPORT_ACTION);
   const onOpposeDcc = () => onSupportOpposeDcc(dccToken, DCC_OPPOSE_ACTION);
 
-  const isContractor = useMemo(() => user && isUserValidContractor(user), [
-    user
-  ]);
+  const isContractor = useMemo(
+    () => user && isUserValidContractor(user),
+    [user]
+  );
 
   return {
     onSupportDcc,

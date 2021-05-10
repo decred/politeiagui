@@ -147,9 +147,8 @@ const ProposalTitle = ({ title, onClick }) => (
 );
 
 const ProposalBilling = ({ token, title }) => {
-  const { billingInfo, getProposalBillingInfo } = useProposalsOwnedBilling(
-    token
-  );
+  const { billingInfo, getProposalBillingInfo } =
+    useProposalsOwnedBilling(token);
   const [showInfo, setShowInfo] = useState(false);
   const handleProposalClick = () => {
     if (!billingInfo) getProposalBillingInfo(token);

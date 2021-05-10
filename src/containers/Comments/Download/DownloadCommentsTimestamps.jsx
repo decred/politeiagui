@@ -23,9 +23,8 @@ const DownloadCommentsTimestampsWrapper = ({
 };
 
 const DownloadCommentsTimestamps = ({ recordToken }) => {
-  const { loading, progress, timestamps } = useDownloadCommentsTimestamps(
-    recordToken
-  );
+  const { loading, progress, timestamps } =
+    useDownloadCommentsTimestamps(recordToken);
 
   return loading ? (
     <div>

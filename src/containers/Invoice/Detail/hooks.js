@@ -33,43 +33,43 @@ export function useInvoice(invoiceToken) {
     loading: true
   };
 
-  const [
-    state,
-    send,
-    { FETCH, VERIFY, REJECT, RESOLVE, RETRY }
-  ] = useFetchMachine({
-    actions: {
-      initial: () => {
-        if (!invoice || (invoice && !invoice.payout)) {
-          onFetchInvoice(invoiceToken)
-            .then(() => send(VERIFY))
-            .catch((e) => send(REJECT, e));
-          return send(FETCH);
+  const [state, send, { FETCH, VERIFY, REJECT, RESOLVE, RETRY }] =
+    useFetchMachine({
+      actions: {
+        initial: () => {
+          if (!invoice || (invoice && !invoice.payout)) {
+            onFetchInvoice(invoiceToken)
+              .then(() => send(VERIFY))
+              .catch((e) => send(REJECT, e));
+            return send(FETCH);
+          }
+          return send(VERIFY);
+        },
+        load: () => {
+          if (!invoice || hasUnfetchedProposalsTokens) {
+            return;
+          }
+          return send(VERIFY);
+        },
+        verify: function verifyRemainingProposalsTokens() {
+          if (invoice && hasUnfetchedProposalsTokens) {
+            onFetchProposalsBatch(unfetchedProposalsTokens, false)
+              .then(() => send(VERIFY))
+              .catch((e) => send(REJECT, e));
+          }
+          return send(RESOLVE, {
+            invoice,
+            proposals: values(proposalsByToken)
+          });
+        },
+        done: () => {
+          if (!isEqual(state.invoice, invoice)) {
+            return send(RETRY, initialValues);
+          }
         }
-        return send(VERIFY);
       },
-      load: () => {
-        if (!invoice || hasUnfetchedProposalsTokens) {
-          return;
-        }
-        return send(VERIFY);
-      },
-      verify: function verifyRemainingProposalsTokens() {
-        if (invoice && hasUnfetchedProposalsTokens) {
-          onFetchProposalsBatch(unfetchedProposalsTokens, false)
-            .then(() => send(VERIFY))
-            .catch((e) => send(REJECT, e));
-        }
-        return send(RESOLVE, { invoice, proposals: values(proposalsByToken) });
-      },
-      done: () => {
-        if (!isEqual(state.invoice, invoice)) {
-          return send(RETRY, initialValues);
-        }
-      }
-    },
-    initialValues
-  });
+      initialValues
+    });
 
   return {
     invoice: state.invoice,

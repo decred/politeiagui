@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "@testing-library/cypress": "^7.0.1",
+    "@testing-library/cypress": "^7.0.6",
     "crypto-js": "^4.0.0",
-    "eslint-plugin-cypress": "^2.11.2",
+    "eslint-plugin-cypress": "^2.11.3",
     "js-sha3": "^0.8.0",
     "localforage": "^1.9.0",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "test-data-bot": "^0.8.0",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1"
