@@ -29,10 +29,10 @@ export default function useProposalURLs(
           )}?scrollToComments=true`,
     [isLegacy, javascriptEnabled, proposalToken]
   );
-  const authorURL = useMemo(() => getAuthorUrl(userid, javascriptEnabled), [
-    userid,
-    javascriptEnabled
-  ]);
+  const authorURL = useMemo(
+    () => getAuthorUrl(userid, javascriptEnabled),
+    [userid, javascriptEnabled]
+  );
   const rfpProposalURL = useMemo(() => {
     return (
       isRfpSubmission &&

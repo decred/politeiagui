@@ -5,9 +5,10 @@ import { useSelector, useAction } from "src/redux";
 import useAPIAction from "src/hooks/utils/useAPIAction";
 
 export function useDcc(dccToken) {
-  const dccSelector = useMemo(() => sel.makeGetDccByToken(dccToken), [
-    dccToken
-  ]);
+  const dccSelector = useMemo(
+    () => sel.makeGetDccByToken(dccToken),
+    [dccToken]
+  );
   const dcc = useSelector(dccSelector);
   const onFetchDcc = useAction(act.onFetchDcc);
 

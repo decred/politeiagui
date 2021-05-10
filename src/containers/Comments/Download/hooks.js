@@ -23,9 +23,10 @@ export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
 
 export function useDownloadComments(token) {
-  const commentsSelector = useMemo(() => sel.makeGetRecordComments(token), [
-    token
-  ]);
+  const commentsSelector = useMemo(
+    () => sel.makeGetRecordComments(token),
+    [token]
+  );
   const comments = useSelector(commentsSelector);
   const { onFetchCommentsTimestamps } = useTimestamps();
 
@@ -76,71 +77,69 @@ export function useDownloadCommentsTimestamps(recordToken) {
     setProgress(getProgressPercentage(timestamps?.comments));
   }, [getProgressPercentage, timestamps]);
 
-  const [
-    state,
-    send,
-    { START, VERIFY, FETCH, RESOLVE, REJECT }
-  ] = useFetchMachine({
-    actions: {
-      initial: () => {
-        const ts = loadCommentsTimestamps(recordToken);
-        const loaded = ts && Object.keys(ts.comments).length === commentsLength;
-        if (loaded) {
-          return send(RESOLVE, { timestamps: ts });
-        }
-        if (recordToken && !timestamps) {
-          return send(START);
-        }
-        return;
-      },
-      start: () => {
-        // fetch first page of comments timestamps
-        const [fetch, next] = getCommentIdsForPagination(remaining);
-        onFetchCommentsTimestamps(recordToken, fetch)
-          .then(({ comments }) => {
-            setTimestamps({ comments });
-            setRemaining(next);
-            return send(VERIFY);
-          })
-          .catch((e) => send(REJECT, e));
-        return send(FETCH);
-      },
-      verify: () => {
-        if (remaining.length === 0) {
-          // all timestamps loaded, resolve
-          handleSaveCommentsTimetamps(recordToken, timestamps);
-          setProgress(100);
-          fileDownload(
-            makeTimestampsBundle(timestamps),
-            `${recordToken}-comments-timestamps.json`
-          );
-          return send(RESOLVE, { timestamps });
-        } else {
-          // fetch remaining timestamps
+  const [state, send, { START, VERIFY, FETCH, RESOLVE, REJECT }] =
+    useFetchMachine({
+      actions: {
+        initial: () => {
+          const ts = loadCommentsTimestamps(recordToken);
+          const loaded =
+            ts && Object.keys(ts.comments).length === commentsLength;
+          if (loaded) {
+            return send(RESOLVE, { timestamps: ts });
+          }
+          if (recordToken && !timestamps) {
+            return send(START);
+          }
+          return;
+        },
+        start: () => {
+          // fetch first page of comments timestamps
           const [fetch, next] = getCommentIdsForPagination(remaining);
           onFetchCommentsTimestamps(recordToken, fetch)
-            .then((resp) => {
-              setTimestamps({
-                comments: {
-                  ...timestamps.comments,
-                  ...resp.comments
-                }
-              });
+            .then(({ comments }) => {
+              setTimestamps({ comments });
               setRemaining(next);
               return send(VERIFY);
             })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
+        },
+        verify: () => {
+          if (remaining.length === 0) {
+            // all timestamps loaded, resolve
+            handleSaveCommentsTimetamps(recordToken, timestamps);
+            setProgress(100);
+            fileDownload(
+              makeTimestampsBundle(timestamps),
+              `${recordToken}-comments-timestamps.json`
+            );
+            return send(RESOLVE, { timestamps });
+          } else {
+            // fetch remaining timestamps
+            const [fetch, next] = getCommentIdsForPagination(remaining);
+            onFetchCommentsTimestamps(recordToken, fetch)
+              .then((resp) => {
+                setTimestamps({
+                  comments: {
+                    ...timestamps.comments,
+                    ...resp.comments
+                  }
+                });
+                setRemaining(next);
+                return send(VERIFY);
+              })
+              .catch((e) => send(REJECT, e));
+            return send(FETCH);
+          }
         }
+      },
+      initialValues: {
+        status: "idle",
+        loading: false,
+        timestamps: null,
+        progress: 0
       }
-    },
-    initialValues: {
-      status: "idle",
-      loading: false,
-      timestamps: null,
-      progress: 0
-    }
-  });
+    });
 
   return {
     loading: state.loading || state.verifying,

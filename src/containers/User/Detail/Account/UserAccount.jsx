@@ -22,10 +22,8 @@ const UserAccount = ({
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
-  const {
-    onChangePassword,
-    validationSchema: changePasswordValidationSchema
-  } = useChangePassword();
+  const { onChangePassword, validationSchema: changePasswordValidationSchema } =
+    useChangePassword();
 
   const handleChangePasswordModal = () => {
     handleOpenModal(ModalChangePassword, {

@@ -10,8 +10,9 @@ export const DccProvider = ({ children }) => (
   <CustomConfigProvider {...{ children, ...customConfigDcc }} />
 );
 
-export const withDcc = (Component) => (props) => (
-  <CustomConfigProvider {...customConfigDcc}>
-    <Component {...props} />
-  </CustomConfigProvider>
-);
+export const withDcc = (Component) => (props) =>
+  (
+    <CustomConfigProvider {...customConfigDcc}>
+      <Component {...props} />
+    </CustomConfigProvider>
+  );

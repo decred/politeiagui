@@ -11,10 +11,11 @@ function findTicket(ticketToken, votes) {
 
 const ModalSearchVotes = ({ show, onClose, proposal }) => {
   const [ticketFound, setTicketFound] = useState(null);
-  const { votes, loading, error: apiError } = useSearchVotes(
-    proposal.censorshiprecord.token,
-    show
-  );
+  const {
+    votes,
+    loading,
+    error: apiError
+  } = useSearchVotes(proposal.censorshiprecord.token, show);
   function updateFoundTicket(ticket) {
     setTicketFound({
       Ticket: ticket.ticket,

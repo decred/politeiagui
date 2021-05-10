@@ -18,12 +18,8 @@ const InvoiceActions = ({ invoice, extended }) => {
     );
   }
   const mobile = useMediaQuery("(max-width: 560px)");
-  const {
-    onApprove,
-    onReject,
-    onDispute,
-    nextInvoice
-  } = useAdminInvoiceActions();
+  const { onApprove, onReject, onDispute, nextInvoice } =
+    useAdminInvoiceActions();
   const withInvoice = useCallback(
     (fn) => () => {
       fn(invoice);

@@ -18,12 +18,8 @@ export default ({ proposalCreditPrice, user }) => {
     proposalPaywallPaymentTxid,
     proposalPaywallPaymentAmount
   } = useCredits(userID);
-  const {
-    paywallTxNotBefore,
-    paywallAmount,
-    paywallTxId,
-    userPaywallStatus
-  } = usePaywall(userID);
+  const { paywallTxNotBefore, paywallAmount, paywallTxId, userPaywallStatus } =
+    usePaywall(userID);
   const paywallPayment = {
     datePurchased: paywallTxNotBefore,
     numberPurchased: 1,

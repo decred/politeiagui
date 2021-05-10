@@ -20,23 +20,13 @@ import ModalConfirm from "src/components/ModalConfirm";
 import useModalContext from "src/hooks/utils/useModalContext";
 
 const SupportOpposeActions = ({ dcc, token, className, buttonsClassName }) => {
-  const {
-    onSupportDcc,
-    onOpposeDcc,
-    userID,
-    isContractor,
-    loading,
-    error
-  } = useDccActions(token);
+  const { onSupportDcc, onOpposeDcc, userID, isContractor, loading, error } =
+    useDccActions(token);
 
   const mobile = useMediaQuery("(max-width: 560px)");
 
-  const {
-    supportuserids,
-    supportusernames,
-    againstuserids,
-    againstusernames
-  } = dcc;
+  const { supportuserids, supportusernames, againstuserids, againstusernames } =
+    dcc;
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 

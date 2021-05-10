@@ -50,10 +50,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
     supervisors,
     error: supervisorsError
   } = useSupervisors();
-  const {
-    supervisorsOptions,
-    initialSupervisorOptions
-  } = getInitialAndOptionsSupervisors(supervisors, supervisoruserids);
+  const { supervisorsOptions, initialSupervisorOptions } =
+    getInitialAndOptionsSupervisors(supervisors, supervisoruserids);
 
   // Parse owned proposals initial values and options
   const {
@@ -61,10 +59,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
     isLoading: loadingOwnedProposals,
     error: approvedProposalsError
   } = useApprovedProposals();
-  const {
-    proposalsOptions,
-    initialOwnedProposals
-  } = getInitialAndOptionsProposals(proposals, proposalsowned);
+  const { proposalsOptions, initialOwnedProposals } =
+    getInitialAndOptionsProposals(proposals, proposalsowned);
 
   const handleSubmitForm = useCallback(
     async (values, { setSubmitting, setFieldError, resetForm }) => {

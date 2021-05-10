@@ -89,7 +89,12 @@ export const convertLineItemsToGrid = (
     invoicefieldsupportedchars: policySupportedChars
   } = policy;
   const grid = [];
-  const { grid: gridBody, expenseTotal, laborTotal, total } = lineItems.reduce(
+  const {
+    grid: gridBody,
+    expenseTotal,
+    laborTotal,
+    total
+  } = lineItems.reduce(
     (acc, line, idx) => {
       const newLine = line;
       const isLaborReadonly =

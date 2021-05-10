@@ -68,9 +68,10 @@ export function useDraftProposals() {
 }
 
 export function useUserProposals(userID) {
-  const proposalsSelector = useMemo(() => sel.makeGetUserProposals(userID), [
-    userID
-  ]);
+  const proposalsSelector = useMemo(
+    () => sel.makeGetUserProposals(userID),
+    [userID]
+  );
   const numOfUserProposalsSelector = useMemo(
     () => sel.makeGetNumOfProposalsByUserId(userID),
     [userID]

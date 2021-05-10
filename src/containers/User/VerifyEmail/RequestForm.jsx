@@ -7,10 +7,8 @@ import FormWrapper from "src/components/FormWrapper";
 import { useRequestResendVerificationEmail } from "./hooks";
 
 const RequestVerificationEmailForm = () => {
-  const {
-    validationSchema,
-    onResendVerificationEmail
-  } = useRequestResendVerificationEmail();
+  const { validationSchema, onResendVerificationEmail } =
+    useRequestResendVerificationEmail();
 
   const [email, setEmail] = useState();
   const [devToken, setDevToken] = useState();

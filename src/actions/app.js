@@ -23,173 +23,157 @@ import { onEditUser } from "./api";
 import { loadStateLocalStorage } from "../lib/local_storage";
 import { fromUSDUnitsToUSDCents, uniqueID } from "../helpers";
 
-export const onSaveNewInvoice = ({
-  month,
-  year,
-  name,
-  location,
-  contact,
-  rate,
-  address,
-  lineitems,
-  exchangerate,
-  files
-}) => (dispatch, getState) => {
-  const { userid: id, username } = sel.currentUser(getState());
-  return dispatch(
-    onSubmitInvoice(
-      id,
-      username,
-      +month,
-      +year,
-      exchangerate,
-      name,
-      location,
-      contact,
-      fromUSDUnitsToUSDCents(+rate),
-      address,
-      lineitems,
-      files
+export const onSaveNewInvoice =
+  ({
+    month,
+    year,
+    name,
+    location,
+    contact,
+    rate,
+    address,
+    lineitems,
+    exchangerate,
+    files
+  }) =>
+  (dispatch, getState) => {
+    const { userid: id, username } = sel.currentUser(getState());
+    return dispatch(
+      onSubmitInvoice(
+        id,
+        username,
+        +month,
+        +year,
+        exchangerate,
+        name,
+        location,
+        contact,
+        fromUSDUnitsToUSDCents(+rate),
+        address,
+        lineitems,
+        files
+      )
+    ).then(() => sel.newInvoiceToken(getState()));
+  };
+
+export const onSaveNewProposal =
+  ({ name, description, files, rfpDeadline, rfpLink, type }) =>
+  (dispatch, getState) => {
+    const { userid, username } = sel.currentUser(getState());
+    return dispatch(
+      onSubmitProposal(
+        userid,
+        username,
+        name.trim(),
+        description,
+        rfpDeadline,
+        type,
+        rfpLink,
+        files
+      )
     )
-  ).then(() => sel.newInvoiceToken(getState()));
-};
+      .then(() => dispatch(onUserProposalCredits()))
+      .then(() => sel.newProposalToken(getState()));
+  };
 
-export const onSaveNewProposal = ({
-  name,
-  description,
-  files,
-  rfpDeadline,
-  rfpLink,
-  type
-}) => (dispatch, getState) => {
-  const { userid, username } = sel.currentUser(getState());
-  return dispatch(
-    onSubmitProposal(
-      userid,
-      username,
-      name.trim(),
-      description,
-      rfpDeadline,
-      type,
-      rfpLink,
-      files
-    )
-  )
-    .then(() => dispatch(onUserProposalCredits()))
-    .then(() => sel.newProposalToken(getState()));
-};
+export const onSaveNewDcc =
+  ({ type, nomineeid, statement, domain, contractortype }) =>
+  (dispatch, getState) => {
+    const { userid, username } = sel.currentUser(getState());
+    return dispatch(
+      onSubmitNewDcc(
+        userid,
+        username,
+        type,
+        nomineeid,
+        statement,
+        domain,
+        contractortype
+      )
+    ).then(() => sel.newDccToken(getState()));
+  };
 
-export const onSaveNewDcc = ({
-  type,
-  nomineeid,
-  statement,
-  domain,
-  contractortype
-}) => (dispatch, getState) => {
-  const { userid, username } = sel.currentUser(getState());
-  return dispatch(
-    onSubmitNewDcc(
-      userid,
-      username,
-      type,
-      nomineeid,
-      statement,
-      domain,
-      contractortype
-    )
-  ).then(() => sel.newDccToken(getState()));
-};
+export const onEditProposal =
+  ({ token, name, description, files, rfpDeadline, type, rfpLink }) =>
+  (dispatch, getState) => {
+    const userid = sel.currentUserID(getState());
+    return dispatch(
+      onSubmitEditedProposal(
+        userid,
+        name,
+        description,
+        rfpDeadline,
+        type,
+        rfpLink,
+        files,
+        token
+      )
+    );
+  };
 
-export const onEditProposal = ({
-  token,
-  name,
-  description,
-  files,
-  rfpDeadline,
-  type,
-  rfpLink
-}) => (dispatch, getState) => {
-  const userid = sel.currentUserID(getState());
-  return dispatch(
-    onSubmitEditedProposal(
-      userid,
-      name,
-      description,
-      rfpDeadline,
-      type,
-      rfpLink,
-      files,
-      token
-    )
-  );
-};
+export const onSaveNewComment =
+  ({ comment, token, parentID, state }) =>
+  (dispatch, getState) => {
+    const userid = sel.currentUserID(getState());
+    return dispatch(
+      onSubmitCommentApi(userid, token, comment, parentID, state)
+    );
+  };
 
-export const onSaveNewComment = ({ comment, token, parentID, state }) => (
-  dispatch,
-  getState
-) => {
-  const userid = sel.currentUserID(getState());
-  return dispatch(onSubmitCommentApi(userid, token, comment, parentID, state));
-};
+export const onEditInvoice =
+  ({
+    token,
+    month,
+    year,
+    name,
+    location,
+    contact,
+    rate,
+    address,
+    lineitems,
+    exchangerate,
+    files
+  }) =>
+  (dispatch, getState) => {
+    const { userid, username } = sel.currentUser(getState());
+    return dispatch(
+      onSubmitEditedInvoice(
+        userid,
+        username,
+        +month,
+        +year,
+        exchangerate,
+        name,
+        location,
+        contact,
+        fromUSDUnitsToUSDCents(+rate),
+        address,
+        lineitems,
+        files,
+        token
+      )
+    );
+  };
 
-export const onEditInvoice = ({
-  token,
-  month,
-  year,
-  name,
-  location,
-  contact,
-  rate,
-  address,
-  lineitems,
-  exchangerate,
-  files
-}) => (dispatch, getState) => {
-  const { userid, username } = sel.currentUser(getState());
-  return dispatch(
-    onSubmitEditedInvoice(
-      userid,
-      username,
-      +month,
-      +year,
-      exchangerate,
-      name,
-      location,
-      contact,
-      fromUSDUnitsToUSDCents(+rate),
-      address,
-      lineitems,
-      files,
-      token
-    )
-  );
-};
-
-export const onSaveDraftProposal = ({
-  name,
-  description,
-  rfpDeadline,
-  type,
-  rfpLink,
-  files,
-  draftId
-}) => (dispatch) => {
-  resetNewProposalData();
-  const id = draftId || uniqueID("draft");
-  dispatch(
-    act.SAVE_DRAFT_PROPOSAL({
-      name: name ? name.trim() : "",
-      description,
-      files,
-      rfpDeadline,
-      type,
-      rfpLink,
-      timestamp: Math.floor(Date.now() / 1000),
-      id
-    })
-  );
-  return id;
-};
+export const onSaveDraftProposal =
+  ({ name, description, rfpDeadline, type, rfpLink, files, draftId }) =>
+  (dispatch) => {
+    resetNewProposalData();
+    const id = draftId || uniqueID("draft");
+    dispatch(
+      act.SAVE_DRAFT_PROPOSAL({
+        name: name ? name.trim() : "",
+        description,
+        files,
+        rfpDeadline,
+        type,
+        rfpLink,
+        timestamp: Math.floor(Date.now() / 1000),
+        id
+      })
+    );
+    return id;
+  };
 
 export const onLoadDraftProposals = (uuid) => (dispatch, getState) => {
   const key = uuid || sel.currentUserID(getState());
@@ -201,22 +185,21 @@ export const onLoadDraftProposals = (uuid) => (dispatch, getState) => {
 export const onDeleteDraftProposal = (draftId) =>
   act.DELETE_DRAFT_PROPOSAL(draftId);
 
-export const onSaveDraftInvoice = ({ draftId, ...rest }) => (
-  dispatch,
-  getState
-) => {
-  const policy = sel.policy(getState());
-  resetNewInvoiceData(policy);
-  const id = draftId || uniqueID("draft");
-  dispatch(
-    act.SAVE_DRAFT_INVOICE({
-      id,
-      timestamp: Date.now() / 1000,
-      ...rest
-    })
-  );
-  return id;
-};
+export const onSaveDraftInvoice =
+  ({ draftId, ...rest }) =>
+  (dispatch, getState) => {
+    const policy = sel.policy(getState());
+    resetNewInvoiceData(policy);
+    const id = draftId || uniqueID("draft");
+    dispatch(
+      act.SAVE_DRAFT_INVOICE({
+        id,
+        timestamp: Date.now() / 1000,
+        ...rest
+      })
+    );
+    return id;
+  };
 
 export const onLoadDraftInvoices = (uuid) => (dispatch, getState) => {
   const key = uuid || sel.currentUserID(getState());
@@ -229,12 +212,15 @@ export const onDeleteDraftInvoice = (draftId) => {
   return act.DELETE_DRAFT_INVOICE(draftId);
 };
 
-export const onSaveChangeUsername = ({ password, newUsername }) => (dispatch) =>
-  dispatch(onChangeUsername(password, newUsername));
+export const onSaveChangeUsername =
+  ({ password, newUsername }) =>
+  (dispatch) =>
+    dispatch(onChangeUsername(password, newUsername));
 
-export const onSaveChangePassword = ({ existingPassword, newPassword }) => (
-  dispatch
-) => dispatch(onChangePassword(existingPassword, newPassword));
+export const onSaveChangePassword =
+  ({ existingPassword, newPassword }) =>
+  (dispatch) =>
+    dispatch(onChangePassword(existingPassword, newPassword));
 
 export const onIdentityImported = (successMsg, errorMsg = "") =>
   act.IDENTITY_IMPORTED({ errorMsg, successMsg });
@@ -251,39 +237,40 @@ export const toggleProposalPaymentReceived = (bool) =>
 export const onEditUserPreferences = (preferences) => (dispatch) =>
   dispatch(onEditUser(sel.resolveEditUserValues(preferences)));
 
-export const onSaveNewDccComment = ({ comment, token, parentID }) => (
-  dispatch,
-  getState
-) => {
-  const userid = sel.currentUserID(getState());
-  return dispatch(onSubmitDccCommentApi(userid, token, comment, parentID));
-};
+export const onSaveNewDccComment =
+  ({ comment, token, parentID }) =>
+  (dispatch, getState) => {
+    const userid = sel.currentUserID(getState());
+    return dispatch(onSubmitDccCommentApi(userid, token, comment, parentID));
+  };
 
-export const onSaveDraftDcc = ({
-  type,
-  nomineeid,
-  statement,
-  domain,
-  contractortype,
-  id: draftId,
-  nomineeusername
-}) => (dispatch) => {
-  resetNewDccData();
-  const id = draftId || uniqueID("draft");
-  dispatch(
-    act.SAVE_DRAFT_DCC({
-      type,
-      nomineeid,
-      statement,
-      domain,
-      contractortype,
-      id,
-      nomineeusername,
-      timestamp: Date.now() / 1000
-    })
-  );
-  return id;
-};
+export const onSaveDraftDcc =
+  ({
+    type,
+    nomineeid,
+    statement,
+    domain,
+    contractortype,
+    id: draftId,
+    nomineeusername
+  }) =>
+  (dispatch) => {
+    resetNewDccData();
+    const id = draftId || uniqueID("draft");
+    dispatch(
+      act.SAVE_DRAFT_DCC({
+        type,
+        nomineeid,
+        statement,
+        domain,
+        contractortype,
+        id,
+        nomineeusername,
+        timestamp: Date.now() / 1000
+      })
+    );
+    return id;
+  };
 
 export const onLoadDraftDccs = (uuid) => (dispatch, getState) => {
   const key = uuid || sel.currentUserID(getState());

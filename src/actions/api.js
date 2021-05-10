@@ -40,27 +40,29 @@ export const onResetRescanUserPayments = (userid) => (dispatch) =>
 export const onSetHasTotp = (payload) => (dispatch) =>
   dispatch(act.SET_HAS_TOTP(payload));
 
-export const requestApiInfo = (fetchUser = true) => (dispatch) => {
-  dispatch(act.REQUEST_INIT_SESSION());
-  return api
-    .apiInfo()
-    .then((response) => {
-      dispatch(act.RECEIVE_INIT_SESSION(response));
-      // if there is an active session, try to fetch the user information
-      // otherwise we make sure there are no user data saved into localstorage
-      if (!response.activeusersession) {
-        clearStateLocalStorage();
-      } else if (fetchUser) {
-        dispatch(onRequestMe());
-      }
+export const requestApiInfo =
+  (fetchUser = true) =>
+  (dispatch) => {
+    dispatch(act.REQUEST_INIT_SESSION());
+    return api
+      .apiInfo()
+      .then((response) => {
+        dispatch(act.RECEIVE_INIT_SESSION(response));
+        // if there is an active session, try to fetch the user information
+        // otherwise we make sure there are no user data saved into localstorage
+        if (!response.activeusersession) {
+          clearStateLocalStorage();
+        } else if (fetchUser) {
+          dispatch(onRequestMe());
+        }
 
-      return response;
-    })
-    .catch((error) => {
-      dispatch(act.RECEIVE_INIT_SESSION(null, error));
-      throw error;
-    });
-};
+        return response;
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_INIT_SESSION(null, error));
+        throw error;
+      });
+  };
 
 export const onRequestMe = () => (dispatch, getState) => {
   dispatch(act.REQUEST_ME());
@@ -223,18 +225,17 @@ export const onCreateNewUserCMS = ({
       });
   });
 
-export const onVerifyNewUser = (email, verificationToken, username) => (
-  dispatch
-) => {
-  dispatch(act.REQUEST_VERIFY_NEW_USER({ email, verificationToken }));
-  return api
-    .verifyNewUser(email, verificationToken, username)
-    .then((res) => dispatch(act.RECEIVE_VERIFY_NEW_USER(res)))
-    .catch((err) => {
-      dispatch(act.RECEIVE_VERIFY_NEW_USER(null, err));
-      throw err;
-    });
-};
+export const onVerifyNewUser =
+  (email, verificationToken, username) => (dispatch) => {
+    dispatch(act.REQUEST_VERIFY_NEW_USER({ email, verificationToken }));
+    return api
+      .verifyNewUser(email, verificationToken, username)
+      .then((res) => dispatch(act.RECEIVE_VERIFY_NEW_USER(res)))
+      .catch((err) => {
+        dispatch(act.RECEIVE_VERIFY_NEW_USER(null, err));
+        throw err;
+      });
+  };
 
 export const onSearchUser = (query, isCMS) => (dispatch) => {
   dispatch(act.REQUEST_USER_SEARCH());
@@ -445,13 +446,11 @@ export const onFetchProposalsBatchWithoutState = (
     return [parsedProposals, summaries];
   });
 
-export const onFetchProposalDetailsWithoutState = (
-  token,
-  version
-) => async () => {
-  const res = await api.proposalDetails({ token, version });
-  return res.record;
-};
+export const onFetchProposalDetailsWithoutState =
+  (token, version) => async () => {
+    const res = await api.proposalDetails({ token, version });
+    return res.record;
+  };
 
 // state should be the state of requested proposals
 export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
@@ -538,84 +537,86 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
   }
 };
 
-export const onFetchTokenInventory = (
-  state,
-  status,
-  page = 0,
-  isVoteStatus
-) => async (dispatch) => {
-  dispatch(act.REQUEST_TOKEN_INVENTORY());
-  try {
-    return await Promise.all([
-      !isVoteStatus && api.proposalsInventory(state, status, page),
-      isVoteStatus &&
-        state !== PROPOSAL_STATE_UNVETTED &&
-        api.votesInventory(status, page)
-    ]).then(([proposals, votes]) => {
-      const byRecords = {
-        [UNREVIEWED]:
-          (proposals && proposals.unvetted && proposals.unvetted.unreviewed) ||
-          [],
-        [CENSORED]: [
-          ...((proposals &&
-            proposals.unvetted &&
-            proposals.unvetted.censored) ||
-            []),
-          ...((proposals && proposals.vetted && proposals.vetted.censored) ||
-            [])
-        ],
-        [ARCHIVED]: [
-          ...((proposals && proposals.vetted && proposals.vetted.archived) ||
-            []),
-          ...((proposals &&
-            proposals.unvetted &&
-            proposals.unvetted.archived) ||
-            [])
-        ]
-      };
-      const byVotes = {
-        [PRE_VOTE]: [
-          ...((votes && votes.vetted && votes.vetted.authorized) || []),
-          ...((votes && votes.vetted && votes.vetted.unauthorized) || [])
-        ],
-        [ACTIVE_VOTE]: (votes && votes.vetted && votes.vetted.started) || [],
-        [APPROVED]: (votes && votes.vetted && votes.vetted.approved) || [],
-        [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
-        [INELIGIBLE]: (votes && votes.vetted && votes.vetted.ineligible) || []
-      };
-      dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
-      dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
-      return { records: byRecords, votes: byVotes };
-    });
-  } catch (error) {
-    dispatch(act.RECEIVE_VOTES_INVENTORY(null, error));
-    throw error;
-  }
-};
-
-export const onFetchInvoice = (token, version = null) => (dispatch) => {
-  dispatch(act.REQUEST_INVOICE(token));
-  return api
-    .invoice(token, version)
-    .then((response) => {
-      response && response.invoice && Object.keys(response.invoice).length > 0
-        ? dispatch(act.RECEIVE_INVOICE(response))
-        : dispatch(
-            act.RECEIVE_INVOICE(
-              null,
-              new Error("The requested invoice does not exist.")
-            )
-          );
-    })
-    .catch((error) => {
-      dispatch(act.RECEIVE_INVOICE(null, error));
+export const onFetchTokenInventory =
+  (state, status, page = 0, isVoteStatus) =>
+  async (dispatch) => {
+    dispatch(act.REQUEST_TOKEN_INVENTORY());
+    try {
+      return await Promise.all([
+        !isVoteStatus && api.proposalsInventory(state, status, page),
+        isVoteStatus &&
+          state !== PROPOSAL_STATE_UNVETTED &&
+          api.votesInventory(status, page)
+      ]).then(([proposals, votes]) => {
+        const byRecords = {
+          [UNREVIEWED]:
+            (proposals &&
+              proposals.unvetted &&
+              proposals.unvetted.unreviewed) ||
+            [],
+          [CENSORED]: [
+            ...((proposals &&
+              proposals.unvetted &&
+              proposals.unvetted.censored) ||
+              []),
+            ...((proposals && proposals.vetted && proposals.vetted.censored) ||
+              [])
+          ],
+          [ARCHIVED]: [
+            ...((proposals && proposals.vetted && proposals.vetted.archived) ||
+              []),
+            ...((proposals &&
+              proposals.unvetted &&
+              proposals.unvetted.archived) ||
+              [])
+          ]
+        };
+        const byVotes = {
+          [PRE_VOTE]: [
+            ...((votes && votes.vetted && votes.vetted.authorized) || []),
+            ...((votes && votes.vetted && votes.vetted.unauthorized) || [])
+          ],
+          [ACTIVE_VOTE]: (votes && votes.vetted && votes.vetted.started) || [],
+          [APPROVED]: (votes && votes.vetted && votes.vetted.approved) || [],
+          [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
+          [INELIGIBLE]: (votes && votes.vetted && votes.vetted.ineligible) || []
+        };
+        dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
+        dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
+        return { records: byRecords, votes: byVotes };
+      });
+    } catch (error) {
+      dispatch(act.RECEIVE_VOTES_INVENTORY(null, error));
       throw error;
-    });
-};
+    }
+  };
+
+export const onFetchInvoice =
+  (token, version = null) =>
+  (dispatch) => {
+    dispatch(act.REQUEST_INVOICE(token));
+    return api
+      .invoice(token, version)
+      .then((response) => {
+        response && response.invoice && Object.keys(response.invoice).length > 0
+          ? dispatch(act.RECEIVE_INVOICE(response))
+          : dispatch(
+              act.RECEIVE_INVOICE(
+                null,
+                new Error("The requested invoice does not exist.")
+              )
+            );
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_INVOICE(null, error));
+        throw error;
+      });
+  };
 
 export const onFetchUser = (userId) => (dispatch, getState) => {
   dispatch(act.REQUEST_USER(userId));
-  const regexp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const regexp =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const valid = regexp.test(userId);
   if (!valid) {
     const error = new Error("This is not a valid user ID.");
@@ -1399,44 +1400,42 @@ export const clearProposalPaymentPollingPointer = () => {
 export const setProposalPaymentPollingPointer = (proposalPaymentPolling) =>
   (globalProposalPaymentPollingPointer = proposalPaymentPolling);
 
-export const onPollProposalPaywallPayment = (isLimited) => (
-  dispatch,
-  getState
-) => {
-  const userid = sel.currentUserID(getState());
-  const proposalPaymentReceived = sel.proposalPaymentReceived(getState());
-  if (proposalPaymentReceived) {
-    clearProposalPaymentPollingPointer();
-    dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING(false));
-    return;
-  }
-  dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
-  return api
-    .proposalPaywallPayment()
-    .then((response) => {
-      if (isLimited && !response.txid) {
-        numOfRequests++;
-      }
-      if (!isLimited || numOfRequests < maxRequestLimit) {
-        const paymentpolling = setTimeout(
-          () => dispatch(onPollProposalPaywallPayment(isLimited)),
-          POLL_INTERVAL
-        );
-        setProposalPaymentPollingPointer(paymentpolling);
-      } else if (isLimited && numOfRequests === maxRequestLimit) {
-        dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING_REACHED_LIMIT(true));
-        dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING(false));
-      }
-      return response;
-    })
-    .then((response) =>
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT({ ...response, userid }))
-    )
-    .catch((error) => {
-      dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));
-      throw error;
-    });
-};
+export const onPollProposalPaywallPayment =
+  (isLimited) => (dispatch, getState) => {
+    const userid = sel.currentUserID(getState());
+    const proposalPaymentReceived = sel.proposalPaymentReceived(getState());
+    if (proposalPaymentReceived) {
+      clearProposalPaymentPollingPointer();
+      dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING(false));
+      return;
+    }
+    dispatch(act.REQUEST_PROPOSAL_PAYWALL_PAYMENT());
+    return api
+      .proposalPaywallPayment()
+      .then((response) => {
+        if (isLimited && !response.txid) {
+          numOfRequests++;
+        }
+        if (!isLimited || numOfRequests < maxRequestLimit) {
+          const paymentpolling = setTimeout(
+            () => dispatch(onPollProposalPaywallPayment(isLimited)),
+            POLL_INTERVAL
+          );
+          setProposalPaymentPollingPointer(paymentpolling);
+        } else if (isLimited && numOfRequests === maxRequestLimit) {
+          dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING_REACHED_LIMIT(true));
+          dispatch(act.TOGGLE_CREDITS_PAYMENT_POLLING(false));
+        }
+        return response;
+      })
+      .then((response) =>
+        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT({ ...response, userid }))
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_PROPOSAL_PAYWALL_PAYMENT(null, error));
+        throw error;
+      });
+  };
 
 export const onRescanUserPayments = (userid) =>
   withCsrf((dispatch, _, csrf) => {

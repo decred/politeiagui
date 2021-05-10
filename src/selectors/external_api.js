@@ -8,9 +8,8 @@ export const getExtApiResponse = (key) =>
   get(["external_api", key, "response"]);
 export const getExtApiError = (key) => get(["external_api", key, "error"]);
 
-export const isApiRequestingPayWithFaucet = getIsExtApiRequesting(
-  "payWithFaucet"
-);
+export const isApiRequestingPayWithFaucet =
+  getIsExtApiRequesting("payWithFaucet");
 export const payWithFaucetError = getExtApiError("payWithFaucet");
 export const payWithFaucetTxId = compose(
   get("txid"),

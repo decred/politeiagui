@@ -7,27 +7,28 @@ export default function useIdentityWarningModal({ asyncSubmit, isCms }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
 
-  const onConfirm = (
-    values,
-    { setSubmitting, resetForm, setFieldError }
-  ) => async () => {
-    handleCloseModal();
-    try {
-      await asyncSubmit(values);
-      setSubmitting(false);
-      setEmail(values.email);
-      setUsername(values.username);
-      resetForm();
-    } catch (e) {
-      setSubmitting(false);
-      setFieldError("global", e);
-    }
-  };
+  const onConfirm =
+    (values, { setSubmitting, resetForm, setFieldError }) =>
+    async () => {
+      handleCloseModal();
+      try {
+        await asyncSubmit(values);
+        setSubmitting(false);
+        setEmail(values.email);
+        setUsername(values.username);
+        resetForm();
+      } catch (e) {
+        setSubmitting(false);
+        setFieldError("global", e);
+      }
+    };
 
-  const onCancel = (_, { setSubmitting }) => () => {
-    setSubmitting(false);
-    handleCloseModal();
-  };
+  const onCancel =
+    (_, { setSubmitting }) =>
+    () => {
+      setSubmitting(false);
+      handleCloseModal();
+    };
 
   const onSubmit = (...args) => {
     handleOpenModal(ModalIdentityWarning, {

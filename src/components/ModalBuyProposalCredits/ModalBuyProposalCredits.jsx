@@ -36,11 +36,8 @@ const ModalBuyProposalCredits = ({
     setNumber(+values.creditsNumber);
   }
 
-  const {
-    isPollingCreditsPayment,
-    status,
-    amount
-  } = useProposalCreditsPaymentInfo(userID);
+  const { isPollingCreditsPayment, status, amount } =
+    useProposalCreditsPaymentInfo(userID);
 
   useEffect(() => {
     setModalType(initialStep);

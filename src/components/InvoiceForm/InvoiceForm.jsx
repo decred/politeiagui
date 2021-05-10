@@ -203,12 +203,8 @@ const InvoiceFormWrapper = ({
 }) => {
   const { policy } = usePolicy();
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const {
-    user,
-    loading,
-    requireGitHubName,
-    onUpdateContractorInfo
-  } = useContractor();
+  const { user, loading, requireGitHubName, onUpdateContractorInfo } =
+    useContractor();
 
   const invoiceFormValidation = useMemo(
     () =>
@@ -218,9 +214,10 @@ const InvoiceFormWrapper = ({
       ]),
     [policy, approvedProposals]
   );
-  const validateFiles = useMemo(() => generateFilesValidatorByPolicy(policy), [
-    policy
-  ]);
+  const validateFiles = useMemo(
+    () => generateFilesValidatorByPolicy(policy),
+    [policy]
+  );
   const FORM_INITIAL_VALUES = {
     name: user ? user.contractorname : "",
     location: user ? user.contractorlocation : "",

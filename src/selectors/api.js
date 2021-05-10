@@ -42,9 +42,8 @@ export const isApiRequestingVoteSummary = or(
   isApiRequestingPropVoteResults,
   isApiRequestingVotesDetails
 );
-export const isApiRequestingRescanUserPayments = getIsApiRequesting(
-  "rescanUserPayments"
-);
+export const isApiRequestingRescanUserPayments =
+  getIsApiRequesting("rescanUserPayments");
 
 export const isApiRequestingProposalOwnerBilling = getIsApiRequesting(
   "proposalOwnerBilling"
@@ -85,14 +84,11 @@ export const apiLikeCommentsError = getApiError("likeComment");
 export const apiCommentsLikesError = getApiError("commentslikes");
 
 // CMS Selectors
-export const isApiRequestingInvoicePayouts = getIsApiRequesting(
-  "invoicePayouts"
-);
+export const isApiRequestingInvoicePayouts =
+  getIsApiRequesting("invoicePayouts");
 
-export const isApiRequestingProposalBillingSummary = getIsApiRequesting(
-  "spendingSummary"
-);
+export const isApiRequestingProposalBillingSummary =
+  getIsApiRequesting("spendingSummary");
 
-export const isApiRequestingProposalBillingDetails = getIsApiRequesting(
-  "spendingDetails"
-);
+export const isApiRequestingProposalBillingDetails =
+  getIsApiRequesting("spendingDetails");

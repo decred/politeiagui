@@ -12,55 +12,53 @@ import {
   CENSORSHIP_TOKEN_LENGTH
 } from "src/constants";
 
-export const proposalValidation = ({
-  namesupportedchars,
-  namelengthmax,
-  namelengthmin
-}) => (values) => {
-  const errors = {};
-  if (!values) {
-    values = {
-      name: "",
-      description: "",
-      type: null,
-      rfpLink: "",
-      rfpDeadline: null,
-      files: []
-    };
-  }
+export const proposalValidation =
+  ({ namesupportedchars, namelengthmax, namelengthmin }) =>
+  (values) => {
+    const errors = {};
+    if (!values) {
+      values = {
+        name: "",
+        description: "",
+        type: null,
+        rfpLink: "",
+        rfpDeadline: null,
+        files: []
+      };
+    }
 
-  // type validation
-  if (!values.type) {
-    errors.type = "Required";
-  }
+    // type validation
+    if (!values.type) {
+      errors.type = "Required";
+    }
 
-  // RFP deadline validation
-  if (values.type === PROPOSAL_TYPE_RFP && !values.rfpDeadline) {
-    errors.rfpDeadline = "Required";
-  }
+    // RFP deadline validation
+    if (values.type === PROPOSAL_TYPE_RFP && !values.rfpDeadline) {
+      errors.rfpDeadline = "Required";
+    }
 
-  // RFP submission token validation
-  if (values.type === PROPOSAL_TYPE_RFP_SUBMISSION) {
-    const rfpLinkErrors = validateRfpSubmissionToken(values.rfpLink);
-    if (rfpLinkErrors) errors.rfpLink = rfpLinkErrors;
-  }
+    // RFP submission token validation
+    if (values.type === PROPOSAL_TYPE_RFP_SUBMISSION) {
+      const rfpLinkErrors = validateRfpSubmissionToken(values.rfpLink);
+      if (rfpLinkErrors) errors.rfpLink = rfpLinkErrors;
+    }
 
-  // name validation
-  const nameErrors = validateProposalName(
-    values.name,
-    namesupportedchars,
-    namelengthmin,
-    namelengthmax
-  );
-  if (nameErrors) errors.name = nameErrors;
+    // name validation
+    const nameErrors = validateProposalName(
+      values.name,
+      namesupportedchars,
+      namelengthmin,
+      namelengthmax
+    );
+    if (nameErrors) errors.name = nameErrors;
 
-  // description validation
-  if (!values.description) {
-    errors.description = "Required";
-  }
+    // description validation
+    if (!values.description) {
+      errors.description = "Required";
+    }
 
-  return errors;
-};
+    return errors;
+  };
 
 const validateRfpSubmissionToken = (rfpLink) => {
   if (!rfpLink) {
