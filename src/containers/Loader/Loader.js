@@ -20,10 +20,8 @@ const Loader = ({ children }) => {
     onPollUserPayment,
     onUserProposalCredits
   } = useLoader();
-  const [
-    userActiveOnLocalStorage,
-    setUserActiveOnLocalStorage
-  ] = useLocalStorage("userActive", false);
+  const [userActiveOnLocalStorage, setUserActiveOnLocalStorage] =
+    useLocalStorage("userActive", false);
 
   // fetch api info and current user if any
   useEffect(() => {

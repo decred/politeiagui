@@ -87,32 +87,30 @@ export const invoiceValidationSchema = (
     files: Yup.array()
   });
 
-export const generateFilesValidatorByPolicy = ({
-  validmimetypes,
-  maximagesize,
-  maximages
-}) => (files) => {
-  const validMimeTypes = validmimetypes.filter((m) => m.startsWith("image/"));
-  const validatedFiles = [];
-  const errors = {
-    files: []
-  };
+export const generateFilesValidatorByPolicy =
+  ({ validmimetypes, maximagesize, maximages }) =>
+  (files) => {
+    const validMimeTypes = validmimetypes.filter((m) => m.startsWith("image/"));
+    const validatedFiles = [];
+    const errors = {
+      files: []
+    };
 
-  for (const file of files) {
-    if (validatedFiles.length > maximages - 1 || files > maximages - 1) {
-      errors.files.push(maxFilesExceededMessage(maximages));
-    } else if (!validMimeTypes.includes(file.mime)) {
-      errors.files.push(validMimeTypesMessage(validMimeTypes));
-    } else if (file.mime.startsWith("image/") && file.size > maximagesize) {
-      errors.files.push(maxFileSizeMessage());
-    } else {
-      validatedFiles.push(file);
+    for (const file of files) {
+      if (validatedFiles.length > maximages - 1 || files > maximages - 1) {
+        errors.files.push(maxFilesExceededMessage(maximages));
+      } else if (!validMimeTypes.includes(file.mime)) {
+        errors.files.push(validMimeTypesMessage(validMimeTypes));
+      } else if (file.mime.startsWith("image/") && file.size > maximagesize) {
+        errors.files.push(maxFileSizeMessage());
+      } else {
+        validatedFiles.push(file);
+      }
     }
-  }
 
-  if (errors.files.length === 0) delete errors.files;
-  return errors;
-};
+    if (errors.files.length === 0) delete errors.files;
+    return errors;
+  };
 
 /** Captures a value such as 'lineitems[0].description' */
 const lineItemPathRegex = /[A-z]*\[[0-9]*\]\.[A-z]*/gm;

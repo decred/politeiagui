@@ -9,9 +9,10 @@ import { handleSaveAppDraftInvoices } from "src/lib/local_storage";
 export function useUserInvoices(userid) {
   const currentUserID = useSelector(sel.currentUserID);
   const userID = userid || currentUserID;
-  const invoicesSelector = useMemo(() => sel.makeGetInvoicesByUserID(userID), [
-    userID
-  ]);
+  const invoicesSelector = useMemo(
+    () => sel.makeGetInvoicesByUserID(userID),
+    [userID]
+  );
   const invoices = useSelector(invoicesSelector);
   const onFetchUserInvoices = useAction(act.onFetchUserInvoices);
 

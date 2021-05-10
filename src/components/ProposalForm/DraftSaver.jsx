@@ -79,14 +79,8 @@ const DraftSaver = ({
       const foundDraftProposal =
         !!draftProposals && draftId && draftProposals[draftId];
       if (foundDraftProposal && !dirty) {
-        const {
-          name,
-          files,
-          type,
-          description,
-          rfpDeadline,
-          rfpLink
-        } = foundDraftProposal;
+        const { name, files, type, description, rfpDeadline, rfpLink } =
+          foundDraftProposal;
         const { text, markdownFiles } = replaceImgDigestByBlob(
           { description, files },
           mapBlobToFile

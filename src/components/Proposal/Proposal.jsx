@@ -55,7 +55,8 @@ import { isEmpty, getKeyByValue } from "src/helpers";
  * @returns {object} { text, markdownFiles }
  */
 function replaceImgDigestWithPayload(text, files) {
-  const imageRegexParser = /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imageRegexParser =
+    /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const imgs = text.matchAll(imageRegexParser);
   let newText = text;
   const markdownFiles = [];
@@ -77,12 +78,8 @@ function replaceImgDigestWithPayload(text, files) {
 }
 
 const ProposalWrapper = (props) => {
-  const {
-    voteSummary,
-    voteBlocksLeft,
-    voteActive,
-    voteEndTimestamp
-  } = useProposalVote(getProposalToken(props.proposal));
+  const { voteSummary, voteBlocksLeft, voteActive, voteEndTimestamp } =
+    useProposalVote(getProposalToken(props.proposal));
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (

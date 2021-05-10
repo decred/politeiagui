@@ -11,10 +11,10 @@ export const useDispatch = createDispatchHook(reduxContext);
 
 export function useAction(action) {
   const dispatch = useDispatch();
-  const boundAction = useMemo(() => bindActionCreators(action, dispatch), [
-    action,
-    dispatch
-  ]);
+  const boundAction = useMemo(
+    () => bindActionCreators(action, dispatch),
+    [action, dispatch]
+  );
   return boundAction;
 }
 

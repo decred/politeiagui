@@ -28,18 +28,22 @@ const renderComponent = (componentMap, recordType, props) => {
   );
 };
 
-export const renderNewRecordRoute = ({ recordType, constants }) => (props) => {
-  const mapRecordTypeToComponent = {
-    [constants.RECORD_TYPE_INVOICE]: PageInvoicesNew,
-    [constants.RECORD_TYPE_PROPOSAL]: PageProposalsNew
+export const renderNewRecordRoute =
+  ({ recordType, constants }) =>
+  (props) => {
+    const mapRecordTypeToComponent = {
+      [constants.RECORD_TYPE_INVOICE]: PageInvoicesNew,
+      [constants.RECORD_TYPE_PROPOSAL]: PageProposalsNew
+    };
+    return renderComponent(mapRecordTypeToComponent, recordType, props);
   };
-  return renderComponent(mapRecordTypeToComponent, recordType, props);
-};
 
-export const renderEditRecordRoute = ({ recordType, constants }) => (props) => {
-  const mapRecordTypeToComponent = {
-    [constants.RECORD_TYPE_INVOICE]: PageInvoiceEdit,
-    [constants.RECORD_TYPE_PROPOSAL]: PageProposalEdit
+export const renderEditRecordRoute =
+  ({ recordType, constants }) =>
+  (props) => {
+    const mapRecordTypeToComponent = {
+      [constants.RECORD_TYPE_INVOICE]: PageInvoiceEdit,
+      [constants.RECORD_TYPE_PROPOSAL]: PageProposalEdit
+    };
+    return renderComponent(mapRecordTypeToComponent, recordType, props);
   };
-  return renderComponent(mapRecordTypeToComponent, recordType, props);
-};

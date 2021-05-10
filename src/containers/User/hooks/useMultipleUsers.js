@@ -8,9 +8,10 @@ export default function useMultipleUsers(userIDs) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const onFetchUser = useAction(act.onFetchUser);
-  const usersSelector = useMemo(() => sel.makeGetUsersByArrayOfIDs(userIDs), [
-    userIDs
-  ]);
+  const usersSelector = useMemo(
+    () => sel.makeGetUsersByArrayOfIDs(userIDs),
+    [userIDs]
+  );
   const users = useSelector(usersSelector);
   const userIDsToBeFeched = useMemo(() => {
     const idsFromState = Object.keys(users);

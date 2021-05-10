@@ -21,11 +21,10 @@ const RouterProvider = ({ location, children, ...rest }) => {
     }
   }, [location, pastLocations]);
 
-  const ctxValue = useMemo(() => ({ ...rest, location, pastLocations }), [
-    rest,
-    location,
-    pastLocations
-  ]);
+  const ctxValue = useMemo(
+    () => ({ ...rest, location, pastLocations }),
+    [rest, location, pastLocations]
+  );
 
   return <routerCtx.Provider value={ctxValue}>{children}</routerCtx.Provider>;
 };

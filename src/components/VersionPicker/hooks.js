@@ -32,9 +32,8 @@ export function useVersionPicker(version, token) {
       );
 
       // parse proposal to get its formatted data
-      const { description: oldDescription, name: oldName } = parseRawProposal(
-        prevProposal
-      );
+      const { description: oldDescription, name: oldName } =
+        parseRawProposal(prevProposal);
       const { description, name } = parseRawProposal(proposal);
 
       return {

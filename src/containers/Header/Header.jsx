@@ -15,10 +15,10 @@ const Header = ({ noBorder }) => {
   const [showMenu, setShowMenu] = useState(false);
   const { javascriptEnabled } = useConfig();
   const url = javascriptEnabled ? "/" : NOJS_ROUTE_PREFIX + "/";
-  const toggleShowMenu = useCallback(() => setShowMenu(!showMenu), [
-    showMenu,
-    setShowMenu
-  ]);
+  const toggleShowMenu = useCallback(
+    () => setShowMenu(!showMenu),
+    [showMenu, setShowMenu]
+  );
   return (
     <UIHeader className={classNames(noBorder && styles.noBorder)}>
       <NavLink

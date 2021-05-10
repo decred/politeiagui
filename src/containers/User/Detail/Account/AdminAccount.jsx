@@ -51,26 +51,20 @@ const AdminAccount = ({
     MANAGE_USER_REACTIVATE,
     userid
   );
-  const [
-    markVerificationTokenAsExpired,
-    isApiRequestingMarkNewUserAsExpired
-  ] = useManageUser(MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION, userid);
+  const [markVerificationTokenAsExpired, isApiRequestingMarkNewUserAsExpired] =
+    useManageUser(MANAGE_USER_EXPIRE_NEW_USER_VERIFICATION, userid);
   const [
     markResetPasswordTokenAsExpired,
     isApiRequestingMarkResetPasswordAsExpired
   ] = useManageUser(MANAGE_USER_EXPIRE_RESET_PASSWORD_VERIFICATION, userid);
-  const [
-    markUpdateKeyAsExpired,
-    isApiRequestingMarkUpdateKeyAsExpired
-  ] = useManageUser(MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION, userid);
+  const [markUpdateKeyAsExpired, isApiRequestingMarkUpdateKeyAsExpired] =
+    useManageUser(MANAGE_USER_EXPIRE_UPDATE_KEY_VERIFICATION, userid);
 
   const isActivationLoading =
     isApiRequestingDeactivateUser || isApiRequestingReactivateUser;
 
-  const {
-    onChangePassword,
-    validationSchema: changePasswordValidationSchema
-  } = useChangePassword();
+  const { onChangePassword, validationSchema: changePasswordValidationSchema } =
+    useChangePassword();
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 

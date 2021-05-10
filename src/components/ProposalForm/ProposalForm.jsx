@@ -327,10 +327,8 @@ const ProposalFormWrapper = ({
     });
   }, [handleCloseModal, handleOpenModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const {
-    proposalFormValidation,
-    onFetchProposalsBatchWithoutState
-  } = useProposalForm();
+  const { proposalFormValidation, onFetchProposalsBatchWithoutState } =
+    useProposalForm();
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {

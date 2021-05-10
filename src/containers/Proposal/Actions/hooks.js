@@ -21,28 +21,30 @@ export function useUnvettedActions() {
   const onSetProposalStatus = useAction(act.onSetProposalStatus);
 
   const onCensorProposal = useCallback(
-    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
-      onSetProposalStatus({
-        token,
-        status: PROPOSAL_STATUS_CENSORED,
-        oldStatus: status,
-        reason,
-        version,
-        state
-      }),
+    ({ censorshiprecord: { token }, version, state, status }) =>
+      (reason) =>
+        onSetProposalStatus({
+          token,
+          status: PROPOSAL_STATUS_CENSORED,
+          oldStatus: status,
+          reason,
+          version,
+          state
+        }),
     [onSetProposalStatus]
   );
 
   const onApproveProposal = useCallback(
-    ({ censorshiprecord: { token }, version, linkto, state, status }) => () =>
-      onSetProposalStatus({
-        token,
-        status: PROPOSAL_STATUS_PUBLIC,
-        oldStatus: status,
-        linkto,
-        version,
-        state
-      }),
+    ({ censorshiprecord: { token }, version, linkto, state, status }) =>
+      () =>
+        onSetProposalStatus({
+          token,
+          status: PROPOSAL_STATUS_PUBLIC,
+          oldStatus: status,
+          linkto,
+          version,
+          state
+        }),
     [onSetProposalStatus]
   );
 
@@ -64,28 +66,30 @@ export function usePublicActions() {
   const currentUserID = useSelector(sel.currentUserID);
 
   const onCensorProposal = useCallback(
-    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
-      onSetProposalStatus({
-        token,
-        status: PROPOSAL_STATUS_CENSORED,
-        oldStatus: status,
-        reason,
-        version,
-        state
-      }),
+    ({ censorshiprecord: { token }, version, state, status }) =>
+      (reason) =>
+        onSetProposalStatus({
+          token,
+          status: PROPOSAL_STATUS_CENSORED,
+          oldStatus: status,
+          reason,
+          version,
+          state
+        }),
     [onSetProposalStatus]
   );
 
   const onAbandonProposal = useCallback(
-    ({ censorshiprecord: { token }, version, state, status }) => (reason) =>
-      onSetProposalStatus({
-        token,
-        status: PROPOSAL_STATUS_ARCHIVED,
-        oldStatus: status,
-        reason,
-        version,
-        state
-      }),
+    ({ censorshiprecord: { token }, version, state, status }) =>
+      (reason) =>
+        onSetProposalStatus({
+          token,
+          status: PROPOSAL_STATUS_ARCHIVED,
+          oldStatus: status,
+          reason,
+          version,
+          state
+        }),
     [onSetProposalStatus]
   );
 
@@ -112,27 +116,24 @@ export function usePublicActions() {
   // votes param is an array of object : [{ token, version, parent }] - where
   // parent is RFP propsoals in case of runoff vote
   const onStartVote = useCallback(
-    (votes, type, cb) => async ({
-      duration,
-      quorumPercentage,
-      passPercentage
-    }) => {
-      await onStart(
-        currentUserID,
-        votes.map(({ token, version, parent }) =>
-          fullVoteParamObject({
-            type,
-            version,
-            duration,
-            quorumpercentage: quorumPercentage,
-            passpercentage: passPercentage,
-            token,
-            parent
-          })
-        )
-      );
-      cb && cb();
-    },
+    (votes, type, cb) =>
+      async ({ duration, quorumPercentage, passPercentage }) => {
+        await onStart(
+          currentUserID,
+          votes.map(({ token, version, parent }) =>
+            fullVoteParamObject({
+              type,
+              version,
+              duration,
+              quorumpercentage: quorumPercentage,
+              passpercentage: passPercentage,
+              token,
+              parent
+            })
+          )
+        );
+        cb && cb();
+      },
     [onStart, currentUserID]
   );
 

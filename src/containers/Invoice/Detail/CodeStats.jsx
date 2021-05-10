@@ -25,18 +25,20 @@ const Headers = () => (
  * Pathname: repos/decred/politeiagui/commits/1688505e91dc86e5f2251cdd72fdcb53fa5bfd99
  * Split: ["", "repos", "decred", "politeiagui", "commits", "1688505e91dc86e5f2251cdd72fdcb53fa5bfd99"]
  */
-const getUrlEnd = (lastIndex, numberPos = 4) => (prUrl, i) => {
-  const url = new URL(prUrl);
-  const prNumber = url.pathname.split("/")[numberPos];
-  return (
-    <Fragment key={i}>
-      <Link to={{ pathname: prUrl }} target="_blank">
-        {prNumber.substring(0, 7)}
-      </Link>
-      {i === lastIndex ? "" : ", "}
-    </Fragment>
-  );
-};
+const getUrlEnd =
+  (lastIndex, numberPos = 4) =>
+  (prUrl, i) => {
+    const url = new URL(prUrl);
+    const prNumber = url.pathname.split("/")[numberPos];
+    return (
+      <Fragment key={i}>
+        <Link to={{ pathname: prUrl }} target="_blank">
+          {prNumber.substring(0, 7)}
+        </Link>
+        {i === lastIndex ? "" : ", "}
+      </Fragment>
+    );
+  };
 
 const Statistic = ({ add, del }) => (
   <div className={styles.singleStat}>

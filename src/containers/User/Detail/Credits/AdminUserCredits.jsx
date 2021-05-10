@@ -51,10 +51,8 @@ const Credits = ({ user }) => {
     toggleProposalPaymentReceived
   ]);
 
-  const {
-    handleOpenPaywallModal,
-    handleOpenBuyCreditsModal
-  } = useUserPaymentModals(user);
+  const { handleOpenPaywallModal, handleOpenBuyCreditsModal } =
+    useUserPaymentModals(user);
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 

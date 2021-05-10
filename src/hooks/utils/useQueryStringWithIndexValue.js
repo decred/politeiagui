@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import useQueryString from "./useQueryString";
 
 function useQueryStringWithIndexValue(key, initialIndex, values) {
-  const computedValues = useMemo(() => values.map((v) => v.toLowerCase()), [
-    values
-  ]);
+  const computedValues = useMemo(
+    () => values.map((v) => v.toLowerCase()),
+    [values]
+  );
   const [value, onSetValue] = useQueryString(key, values[initialIndex]);
   const [index, setIndex] = useState(initialIndex);
 
