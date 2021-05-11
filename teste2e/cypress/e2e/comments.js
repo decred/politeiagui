@@ -71,7 +71,7 @@ describe("User comments", () => {
         cy.route("POST", "/api/comments/v1/new").as("newComment");
         cy.findByText(/add comment/i).click();
         cy.wait("@newComment").its("status").should("eq", 200);
-        // Comment author can't comment on his own comment so we login as the
+        // Comment author can't vote on his own comment so we login as the
         // admin user again to vote on the comment.
         cy.logout(user1);
         cy.login(user);
