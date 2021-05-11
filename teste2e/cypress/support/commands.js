@@ -29,7 +29,7 @@ import * as pki from "../pki";
 // TODO: consider moving general functions like makeProposal and signRegister
 // to a more general lib file other than api.
 import { makeProposal, signRegister } from "../utils";
-import { shortRecordToken } from "src/helpers";
+import { shortRecordToken } from "../utils";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);

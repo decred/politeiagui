@@ -1,4 +1,5 @@
 import { buildProposal } from "../support/generate";
+import { shortRecordToken } from "../utils";
 
 describe("Proposal Edit", () => {
   const user = {

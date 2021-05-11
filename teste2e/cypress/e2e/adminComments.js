@@ -1,5 +1,5 @@
 import { buildProposal, buildComment } from "../support/generate";
-import { shortRecordToken } from "src/helpers";
+import { shortRecordToken } from "../utils";
 
 describe("User admin comments", () => {
   it("Can censor comments", () => {

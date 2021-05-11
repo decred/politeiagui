@@ -1,5 +1,5 @@
 import { buildProposal } from "../support/generate";
-import { shortRecordToken } from "src/helpers";
+import { shortRecordToken } from "../utils";
 
 describe("Admin proposals actions", () => {
   it("Can approve proposals", () => {
