@@ -30,7 +30,6 @@ import usePaywall from "src/hooks/api/usePaywall";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
-import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
@@ -44,8 +43,7 @@ const Comments = ({
   threadParentID,
   readOnly,
   readOnlyReason,
-  className,
-  history
+  className
 }) => {
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
@@ -82,10 +80,6 @@ const Comments = ({
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { userid } = currentUser || {};
-
-  const onRedirectToSignup = () => {
-    history.push("/user/signup");
-  };
 
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
@@ -211,13 +205,7 @@ const Comments = ({
         id="commentArea"
         className={classNames(styles.commentAreaContainer, className)}>
         <div className={classNames("container", styles.commentsHeaderWrapper)}>
-          <LoggedInContent
-            fallback={
-              <WhatAreYourThoughts
-                onLoginClick={handleOpenLoginModal}
-                onSignupClick={onRedirectToSignup}
-              />
-            }>
+          <LoggedInContent>
             <Or>
               {readOnly && (
                 <Message kind="blocked" title={"Comments are not allowed"}>
