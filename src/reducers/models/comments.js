@@ -16,6 +16,39 @@ const DEFAULT_STATE = {
   commentsLikes: { byToken: {}, backup: null }
 };
 
+const calcVotes = (comment, oldVote, vote) => {
+  let newUpvotes = comment.upvotes;
+  let newDownvotes = comment.downvotes;
+  // if prev vote equals vote, reset the vote
+  if (oldVote === vote) {
+    if (vote > 0) {
+      // means upvote, reset upvotes and leave downvotes
+      newUpvotes--;
+    } else {
+      // means downvote, reset downvotes and leave upvotes
+      newDownvotes--;
+    }
+  } else if (oldVote !== 0) {
+    // if prev vote and vote are different and oldVote is different than 0, decrement prev vote and increment vote
+    if (vote > 0) {
+      // means upvote, inc upvote and dec downvote
+      newUpvotes++;
+      newDownvotes--;
+    } else {
+      // means downvote, dec upvote and inc downvote
+      newUpvotes--;
+      newDownvotes++;
+    }
+  } else if (vote > 0) {
+    // if oldVote is 0 (no option selected), just increment the vote option
+    newUpvotes++;
+  } else {
+    newDownvotes++;
+  }
+
+  return { newUpvotes, newDownvotes };
+};
+
 const comments = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -44,11 +77,8 @@ const comments = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
-            const { token, commentslikes } = action.payload;
-            return set(
-              ["commentsLikes", "byToken", token],
-              commentslikes
-            )(state);
+            const { token, votes } = action.payload;
+            return set(["commentsLikes", "byToken", token], votes)(state);
           },
           [act.RECEIVE_SYNC_LIKE_COMMENT]: () => {
             const { token, vote, commentid } = action.payload;
@@ -60,8 +90,11 @@ const comments = (state = DEFAULT_STATE, action) =>
               commentLike.token === token;
             const oldCommentVote =
               commentsLikes && commentsLikes.find(isTargetCommentLike);
+
             const oldVote = oldCommentVote ? oldCommentVote.vote : 0;
+
             const newCommentLike = {
+              ...oldCommentVote,
               token,
               commentid,
               vote: vote === oldVote ? 0 : vote
@@ -72,32 +105,20 @@ const comments = (state = DEFAULT_STATE, action) =>
               "commentid"
             );
 
-            const updateCommentResultAndTotalVotes = (comment) => {
+            const updateCommentVotes = (comment) => {
               if (comment.commentid !== commentid) return comment;
-              const oldActionEqualsNewAction = oldVote === vote;
 
-              const calcNewTotalVotes = (value) =>
-                value + (oldActionEqualsNewAction ? -1 : oldVote === 0 ? 1 : 0);
-              const calcNewResultVotes = (value) =>
-                value + (oldActionEqualsNewAction ? -oldVote : vote - oldVote);
+              const { newUpvotes, newDownvotes } = calcVotes(
+                comment,
+                oldVote,
+                vote
+              );
 
-              const calcPerActionVotes =
-                (v) =>
-                (value = 0) => {
-                  if (vote === v) {
-                    if (oldActionEqualsNewAction) return --value;
-                    return ++value;
-                  }
-                  if (oldVote === v) return --value;
-                  return value;
-                };
-
-              return compose(
-                update("totalvotes", calcNewTotalVotes),
-                update("resultvotes", calcNewResultVotes),
-                update("upvotes", calcPerActionVotes(1)),
-                update("downvotes", calcPerActionVotes(-1))
-              )(comment);
+              return {
+                ...comment,
+                upvotes: newUpvotes,
+                downvotes: newDownvotes
+              };
             };
 
             return compose(
@@ -105,19 +126,8 @@ const comments = (state = DEFAULT_STATE, action) =>
               set(["commentsLikes", "byToken", token], newCommentsLikes),
               set(["comments", "backup"], comments),
               update(["comments", "byToken", token], (value) =>
-                value.map(updateCommentResultAndTotalVotes)
+                value.map(updateCommentVotes)
               )
-            )(state);
-          },
-          [act.RESET_SYNC_LIKE_COMMENT]: () => {
-            const { backup: commentsBackup } = state.comments;
-            const { backup: commentsLikesBackup } = state.commentsLikes;
-            const { token } = action.payload;
-            return compose(
-              set(["commentsLikes", "backup"], null),
-              set(["commentsLikes", "byToken", token], commentsLikesBackup),
-              set(["comments", "backup"], null),
-              set(["comments", "byToken", token], commentsBackup)
             )(state);
           },
           [act.RECEIVE_LIKE_COMMENT]: () => {

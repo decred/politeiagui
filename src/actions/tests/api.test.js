@@ -670,11 +670,6 @@ describe("test api actions (actions/api.js)", () => {
           payload: { commentid, token: FAKE_PROPOSAL_TOKEN }
         },
         {
-          type: act.RESET_SYNC_LIKE_COMMENT,
-          error: false,
-          payload: { token: FAKE_PROPOSAL_TOKEN }
-        },
-        {
           error: true,
           payload: { errorcode },
           type: act.RECEIVE_LIKE_COMMENT

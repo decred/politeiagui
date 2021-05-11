@@ -1,64 +1,33 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-import { delay } from "lodash";
-import {
-  Icon,
-  useTheme,
-  Text,
-  getThemeProperty,
-  useHover,
-  Spinner,
-  classNames
-} from "pi-ui";
+import { debounce } from "lodash";
+import { Icon, useTheme, Text, getThemeProperty, classNames } from "pi-ui";
 import styles from "./Likes.module.css";
 
 export const isLiked = (action) => action === 1 || action === "1";
 export const isDisliked = (action) => action === -1 || action === "-1";
 
-const Likes = ({
-  upLikes,
-  downLikes,
-  onLike,
-  onDislike,
-  option,
-  disabled,
-  apiLoading
-}) => {
-  const [loading, setLoading] = useState(false);
-  const [likeRef, isLikeHovered] = useHover();
-  const [dislikeRef, isDislikeHovered] = useHover();
+const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
   const { theme } = useTheme();
   const defaultColor = getThemeProperty(theme, "comment-like-color");
   const activeColor = getThemeProperty(theme, "comment-like-color-active");
   const liked = isLiked(option);
   const disliked = isDisliked(option);
-  const likeColor = liked || isLikeHovered ? activeColor : defaultColor;
-  const dislikeColor =
-    disliked || isDislikeHovered ? activeColor : defaultColor;
+  const likeColor = liked ? activeColor : defaultColor;
+  const dislikeColor = disliked ? activeColor : defaultColor;
 
-  useEffect(() => {
-    if (apiLoading) {
-      delay(() => setLoading(true), 1000);
-    } else if (loading) {
-      setLoading(false);
-    }
-  }, [apiLoading, loading, setLoading]);
+  async function handleLike() {
+    if (disabled) return;
+    await onLike();
+  }
 
-  const handleLike = useCallback(
-    async function handleLike() {
-      if (disabled) return;
-      await onLike();
-    },
-    [disabled, onLike]
-  );
+  async function handleDislike() {
+    if (disabled) return;
+    await onDislike();
+  }
 
-  const handleDislike = useCallback(
-    async function handleDislike() {
-      if (disabled) return;
-      await onDislike();
-    },
-    [disabled, onDislike]
-  );
+  const debouncedHandleDislike = debounce(handleDislike, 500);
+  const debouncedHandleLike = debounce(handleLike, 500);
 
   const renderCount = useCallback(
     (count) => (
@@ -73,44 +42,35 @@ const Likes = ({
   );
 
   return (
-    <div
-      className={classNames("align-center", disabled && styles.likeDisabled)}>
-      {loading && apiLoading ? (
-        <div className={styles.likeBoxSpinner}>
-          <Spinner invert />
-        </div>
-      ) : (
-        <>
-          <div className={styles.leftLikeBox}>
-            <button
-              ref={likeRef}
-              className={styles.likeBtn}
-              data-testid="like-btn"
-              onClick={handleLike}>
-              <Icon
-                iconColor={likeColor}
-                backgroundColor={likeColor}
-                type="like"
-              />
-            </button>
-            {renderCount(upLikes)}
-          </div>
-          <div className={styles.rightLikeBox}>
-            <button
-              ref={dislikeRef}
-              className={styles.likeBtn}
-              data-testid="dislike-btn"
-              onClick={handleDislike}>
-              <Icon
-                iconColor={dislikeColor}
-                backgroundColor={dislikeColor}
-                type="dislike"
-              />
-            </button>
-            {renderCount(downLikes)}
-          </div>
-        </>
-      )}
+    <div className={"align-center"}>
+      <div className={styles.leftLikeBox}>
+        <button
+          className={classNames(
+            styles.likeBtn,
+            disabled && styles.likeDisabled
+          )}
+          data-testid="like-btn"
+          onClick={debouncedHandleLike}>
+          <Icon iconColor={likeColor} backgroundColor={likeColor} type="like" />
+        </button>
+        {renderCount(upLikes)}
+      </div>
+      <div className={styles.rightLikeBox}>
+        <button
+          className={classNames(
+            styles.likeBtn,
+            disabled && styles.likeDisabled
+          )}
+          data-testid="dislike-btn"
+          onClick={debouncedHandleDislike}>
+          <Icon
+            iconColor={dislikeColor}
+            backgroundColor={dislikeColor}
+            type="dislike"
+          />
+        </button>
+        {renderCount(downLikes)}
+      </div>
     </div>
   );
 };

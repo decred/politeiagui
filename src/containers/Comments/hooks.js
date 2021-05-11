@@ -56,7 +56,6 @@ export function useComments(recordToken, proposalState) {
       ? act.onFetchDccComments
       : act.onFetchInvoiceComments
   );
-  const loadingLikeAction = useSelector(sel.isApiRequestingLikeComment);
   const onFetchLikes = useAction(act.onFetchLikedComments);
   const onCommentVoteAction = useAction(act.onCommentVote);
   const onCensorComment = useAction(act.onCensorComment);
@@ -111,9 +110,9 @@ export function useComments(recordToken, proposalState) {
         (cl) => cl.commentid === commentID
       );
       if (actionData) {
-        return actionData.action;
+        return actionData.vote;
       }
-      return actionData ? actionData.action : 0;
+      return actionData ? actionData.vote : 0;
     },
     [commentsLikes]
   );
@@ -131,7 +130,6 @@ export function useComments(recordToken, proposalState) {
     lastVisitTimestamp,
     loading,
     loadingLikes,
-    loadingLikeAction,
     onSubmitComment,
     error
   };
