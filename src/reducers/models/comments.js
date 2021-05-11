@@ -130,18 +130,6 @@ const comments = (state = DEFAULT_STATE, action) =>
               )
             )(state);
           },
-          // xxx: is this really needed?
-          [act.RESET_SYNC_LIKE_COMMENT]: () => {
-            const { backup: commentsBackup } = state.comments;
-            const { backup: commentsLikesBackup } = state.commentsLikes;
-            const { token } = action.payload;
-            return compose(
-              set(["commentsLikes", "backup"], null),
-              set(["commentsLikes", "byToken", token], commentsLikesBackup),
-              set(["comments", "backup"], null),
-              set(["comments", "byToken", token], commentsBackup)
-            )(state);
-          },
           [act.RECEIVE_LIKE_COMMENT]: () => {
             return compose(
               set(["commentsLikes", "backup"], null),
