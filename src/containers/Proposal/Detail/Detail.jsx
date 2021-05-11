@@ -60,7 +60,7 @@ const ProposalDetail = ({ Main, match }) => {
                 numOfComments={proposal.numcomments}
                 threadParentID={threadParentID}
                 readOnly={true}
-                readOnlyReason={"Can't comment on archive website"}
+                readOnlyReason="Can't comment on archive website"
               />
             )}
           </PublicActionsProvider>
