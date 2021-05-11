@@ -58,7 +58,7 @@
     "test": "react-app-rewired test --env=jsdom",
     "up": "docker-compose up --abort-on-container-exit --exit-code-from e2e",
     "cy:run": "cd teste2e && npm install && cypress run",
-    "cy:open": "cd teste2e && cypress open",
+    "cy:open": "cd teste2e && npm install && cypress open",
     "test:e2e:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start https-get://localhost:3000 cy:run",
     "test:e2e:browser": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start https-get://localhost:3000 cy:open",
     "eject": "react-app-rewired eject",

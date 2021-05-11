@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { withRouter } from "react-router-dom";
 import { Text } from "pi-ui";
 import Link from "src/components/Link";
 import { PublicProposalsActionsContext, usePublicActions } from "./hooks";
@@ -17,7 +18,7 @@ import {
   PROPOSAL_STATE_VETTED
 } from "src/constants";
 
-const PublicActionsProvider = ({ children }) => {
+const PublicActionsProvider = ({ children, history }) => {
   const {
     onCensorProposal,
     onAbandonProposal,
@@ -31,6 +32,10 @@ const PublicActionsProvider = ({ children }) => {
 
   const handleOpenAbandonModal = useCallback(
     (proposal) => {
+      const handleCloseSuccess = () => {
+        handleCloseModal();
+        history.push(`/record/${proposal.censorshiprecord.token}`);
+      };
       handleOpenModal(ModalConfirmWithReason, {
         title: `Abandon - ${proposal.name}`,
         reasonLabel: "Abandon reason",
@@ -43,10 +48,11 @@ const PublicActionsProvider = ({ children }) => {
             under the <Link to="/?tab=abandoned">Abandoned</Link> tab.
           </Text>
         ),
-        onClose: handleCloseModal
+        onClose: handleCloseModal,
+        onCloseSuccess: handleCloseSuccess
       });
     },
-    [handleCloseModal, handleOpenModal, onAbandonProposal]
+    [handleCloseModal, handleOpenModal, onAbandonProposal, history]
   );
 
   const handleOpenAuthorizeVoteModal = useCallback(
@@ -166,9 +172,8 @@ const PublicActionsProvider = ({ children }) => {
       successMessage: (
         <Text>
           The proposal has been successfully censored! Now it will appear under
-          under{" "}
-          <Link to={"/admin/records?tab=unvetted censored"}>Censored</Link> tab
-          among Admin Proposals.
+          under <Link to="/admin/records?tab=unvetted censored">Censored</Link>{" "}
+          tab among Admin Proposals.
         </Text>
       ),
       onClose: handleCloseModal
@@ -190,4 +195,4 @@ const PublicActionsProvider = ({ children }) => {
   );
 };
 
-export default PublicActionsProvider;
+export default withRouter(PublicActionsProvider);

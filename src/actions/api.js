@@ -838,9 +838,7 @@ export const onSubmitProposal = (
     return Promise.resolve(
       api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
     )
-      .then((proposal) => {
-        return api.signRegister(userid, proposal);
-      })
+      .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))
       .then(({ record }) => {
         dispatch(

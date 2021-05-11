@@ -6,6 +6,7 @@ import MerkleTree from "./merkle";
 const PROPOSAL_TYPE_REGULAR = 1;
 const PROPOSAL_TYPE_RFP = 2;
 const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
+const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 
 export const requestWithCsrfToken = (url, body) => {
   return cy.request("/api").then((res) => {
@@ -21,26 +22,23 @@ export const requestWithCsrfToken = (url, body) => {
   });
 };
 
-export const setProposalStatus = (proposal, status, censorMsg = "") => {
-  return cy.request("api/v1/user/me").then((res) => {
-    return pki.myPubKeyHex(res.body.userid).then((publickey) =>
+export const setProposalStatus = (token, status, version, reason) =>
+  cy.request("api/v1/user/me").then(({ body: { userid } }) =>
+    pki.myPubKeyHex(userid).then((publickey) =>
       pki
-        .signStringHex(res.body.userid, proposal.token + status + censorMsg)
-        .then((signature) => {
-          return requestWithCsrfToken(
-            `/api/v1/proposals/${proposal.token}/status`,
-            {
-              proposalstatus: status,
-              token: proposal.token,
-              signature,
-              publickey,
-              statuschangemessage: censorMsg
-            }
-          );
-        })
-    );
-  });
-};
+        .signStringHex(userid, token + version + status + reason)
+        .then((signature) =>
+          requestWithCsrfToken("/api/records/v1/setstatus", {
+            status,
+            version,
+            token,
+            signature,
+            publickey,
+            reason
+          })
+        )
+    )
+  );
 
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
 
@@ -97,7 +95,7 @@ export const signRegister = (userid, record) => {
     throw Error("signRegister: Invalid params");
   }
   return pki.myPubKeyHex(userid).then((publickey) => {
-    const digests = [...record.files, ...(record.metadata || [])]
+    const digests = record.files
       .map((x) => Buffer.from(get("digest", x), "hex"))
       .sort(Buffer.compare);
     const tree = new MerkleTree(digests);
@@ -118,6 +116,13 @@ export const makeProposal = (
 ) => ({
   files: [
     convertMarkdownToFile(name + "\n\n" + markdown),
+    {
+      //proposal metadata file
+      name: PROPOSAL_METADATA_FILENAME,
+      mime: "text/plain; charset=utf-8",
+      digest: objectToSHA256({ name }),
+      payload: bufferToBase64String(objectToBuffer({ name }))
+    },
     ...(attachments || [])
   ].map(({ name, mime, payload }) => ({
     name,
