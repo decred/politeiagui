@@ -106,9 +106,6 @@ describe("Proposal Edit", () => {
         cy.wait(1000);
         cy.findByTestId(/record-edit-button/i).click();
         cy.findByRole("button", { name: /submit/i }).should("be.disabled");
-        cy.findByTestId("proposal-name").type(`{selectAll}${proposal.name}`);
-        cy.findByTestId("text-area").type(`{selectAll}${proposal.description}`);
-        cy.findByRole("button", { name: /submit/i }).should("be.disabled");
       }
     );
   });
