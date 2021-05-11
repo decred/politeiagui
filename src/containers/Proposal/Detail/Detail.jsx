@@ -7,18 +7,15 @@ import styles from "./Detail.module.css";
 import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
-import { getCommentBlockedReason } from "./helpers";
 import {
   isPublicProposal,
   isAbandonedProposal,
-  isVotingFinishedProposal,
   getProposalToken
 } from "../helpers";
 import {
   UnvettedActionsProvider,
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
-import { useProposalVote } from "../hooks";
 import useDocumentTitle from "src/hooks/utils/useDocumentTitle";
 import { GoBackLink } from "src/components/Router";
 
@@ -35,11 +32,8 @@ const ProposalDetail = ({ Main, match }) => {
     threadParentCommentID
   );
   const proposalToken = getProposalToken(proposal);
-  const { voteSummary } = useProposalVote(proposalToken);
   const showCommentArea =
     proposal && (isPublicProposal(proposal) || isAbandonedProposal(proposal));
-  const canReceiveComments =
-    isPublicProposal(proposal) && !isVotingFinishedProposal(voteSummary);
 
   return (
     <>
@@ -65,8 +59,8 @@ const ProposalDetail = ({ Main, match }) => {
                 recordToken={proposalToken}
                 numOfComments={proposal.numcomments}
                 threadParentID={threadParentID}
-                readOnly={!canReceiveComments}
-                readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
+                readOnly={true}
+                readOnlyReason={"Can't comment on archive website"}
               />
             )}
           </PublicActionsProvider>
