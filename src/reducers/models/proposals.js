@@ -194,7 +194,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
             compose(
               updateProposalRfpLinks(action.payload.proposal),
               set(
-                ["byToken", proposalToken(action.payload.proposal)],
+                [
+                  "byToken",
+                  shortRecordToken(proposalToken(action.payload.proposal))
+                ],
                 parseRawProposal(action.payload.proposal)
               ),
               update(["allByVoteStatus"], (allProps) =>
@@ -204,14 +207,16 @@ const proposals = (state = DEFAULT_STATE, action) =>
                     action.payload.proposal.status,
                     action.payload.proposal.state
                   ),
-                  [proposalToken(action.payload.proposal)]
+                  [shortRecordToken(proposalToken(action.payload.proposal))]
                 )
               ),
               update(["allByRecordStatus"], (props) => {
                 const statusTokensArray =
                   props[mapStatusToName[action.payload.proposal.status]];
                 const proposalToken =
-                  action.payload.proposal.censorshiprecord.token;
+                  shortRecordToken(
+                    action.payload.proposal.censorshiprecord.token
+                  );
                 const newArr = statusTokensArray
                   ? [proposalToken, ...statusTokensArray]
                   : [proposalToken];
@@ -239,7 +244,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 ["allProposalsByUserId", action.payload.userid],
                 (userProposals = []) => [
                   ...userProposals,
-                  ...Object.keys(action.payload.proposals)
+                  ...Object
+                    .keys(action.payload.proposals)
+                    .map((token) => shortRecordToken(token))
                 ]
               ),
               set(
