@@ -11,18 +11,11 @@ const paywall = (state = DEFAULT_STATE, action) =>
     ? state
     : (
         {
-          [act.RECEIVE_ME || act.RECEIVE_LOGIN]: () => {
-            const { userid, paywalladdress } = action.payload;
-
-            return update(["byUserID", userid], (paywall) => ({
-              ...paywall,
-              isPaid: paywalladdress === ""
-            }))(state);
-          },
           [act.RECEIVE_USER]: () => {
             const { userid, newuserpaywalltx } = action.payload.user;
             const paywall = state.byUserID[userid];
             const isPaid = paywall ? paywall.isPaid : false;
+
             return update(["byUserID", userid], (paywall) => ({
               ...paywall,
               isPaid: isPaid || newuserpaywalltx !== ""

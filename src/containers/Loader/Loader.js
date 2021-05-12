@@ -14,7 +14,6 @@ const Loader = ({ children }) => {
   const [apiInfo, setApiInfo] = useState(null);
   const {
     onRequestApiInfo,
-    onRequestCurrentUser,
     user,
     localLogout,
     onPollUserPayment,
@@ -29,16 +28,13 @@ const Loader = ({ children }) => {
       try {
         const apiInfo = await onRequestApiInfo(false);
         setApiInfo(apiInfo);
-        if (apiInfo.activeusersession) {
-          await onRequestCurrentUser();
-        }
         setInitDone(true);
       } catch (e) {
         setError(e);
       }
     }
     onInit();
-  }, [onRequestApiInfo, onRequestCurrentUser]);
+  }, [onRequestApiInfo]);
 
   const hasUser = !!user;
 
@@ -59,8 +55,8 @@ const Loader = ({ children }) => {
 
   // poll user paywall if applicable
   useEffect(() => {
-    const userPaywallNotPaid = !!user && !!user.paywalladdress;
-    if (enablePaywall && userPaywallNotPaid) {
+    const userFetched = !!user;
+    if (enablePaywall && userFetched) {
       onPollUserPayment().catch(() => {
         setError(new Error("Unable to Poll User Payment"));
       });
