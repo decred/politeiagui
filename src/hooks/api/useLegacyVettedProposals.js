@@ -35,8 +35,9 @@ export default function useLegacyVettedProposals(shouldReturn = false, status) {
     if (shouldReturn) {
       const proposalsTokensList =
         tokenInventory[mapStatusToString[status]] &&
-        tokenInventory[mapStatusToString[status]]
-        .map((token) => shortRecordToken(token));
+        tokenInventory[mapStatusToString[status]].map((token) =>
+          shortRecordToken(token)
+        );
       // filter propsals by tab and transform from Array to Object where the key is the proposal token and the value is the proposal info
       const finalList = newLegacyProposalsInfo
         .filter(

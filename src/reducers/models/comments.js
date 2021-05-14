@@ -79,7 +79,10 @@ const comments = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
             const { token, votes } = action.payload;
-            return set(["commentsLikes", "byToken", shortRecordToken(token)], votes)(state);
+            return set(
+              ["commentsLikes", "byToken", shortRecordToken(token)],
+              votes
+            )(state);
           },
           [act.RECEIVE_SYNC_LIKE_COMMENT]: () => {
             const { token, vote, commentid } = action.payload;
@@ -149,8 +152,9 @@ const comments = (state = DEFAULT_STATE, action) =>
               };
             };
             return compose(
-              update(["comments", "byToken", shortRecordToken(token)], (comments) =>
-                comments.map(censorTargetComment)
+              update(
+                ["comments", "byToken", shortRecordToken(token)],
+                (comments) => comments.map(censorTargetComment)
               )
             )(state);
           },

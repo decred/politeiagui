@@ -28,8 +28,9 @@ export const tokenInventory = createDeepEqualSelector(
 export const newProposalToken = get(["proposals", "newProposalToken"]);
 
 export const makeGetProposalByToken = (token) =>
-  createSelector(proposalsByToken, (propsByToken) =>
-    propsByToken[shortRecordToken(token)]
+  createSelector(
+    proposalsByToken,
+    (propsByToken) => propsByToken[shortRecordToken(token)]
   );
 
 export const makeGetNumOfProposalsByUserId = (userId) =>
@@ -49,7 +50,6 @@ export const makeGetUserProposals = (userId) =>
   );
 
 export const makeGetProposalName = (token) =>
-  createSelector(
-    makeGetProposalByToken(shortRecordToken(token)), (proposal) =>
+  createSelector(makeGetProposalByToken(shortRecordToken(token)), (proposal) =>
     proposal ? proposal.name : null
   );

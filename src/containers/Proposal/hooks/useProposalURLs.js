@@ -24,15 +24,15 @@ export default function useProposalURLs(
     () =>
       !isLegacy
         ? getCommentsUrl(proposalToken, javascriptEnabled)
-        : `${ARCHIVE_URL}proposals/${
-          shortRecordToken(proposalToken)
-        }?scrollToComments=true`,
+        : `${ARCHIVE_URL}proposals/${shortRecordToken(
+            proposalToken
+          )}?scrollToComments=true`,
     [isLegacy, javascriptEnabled, proposalToken]
   );
-  const authorURL = useMemo(
-    () => getAuthorUrl(userid, javascriptEnabled),
-    [userid, javascriptEnabled]
-  );
+  const authorURL = useMemo(() => getAuthorUrl(userid, javascriptEnabled), [
+    userid,
+    javascriptEnabled
+  ]);
   const rfpProposalURL = useMemo(() => {
     return (
       isRfpSubmission &&

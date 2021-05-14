@@ -51,9 +51,10 @@ export function useProposal(token, threadParentID) {
   );
   const onFetchVotesDetails = useAction(act.onFetchVotesDetails);
   const onFetchProposalVoteResults = useAction(act.onFetchProposalVoteResults);
-  const proposalSelector = useMemo(() => sel.makeGetProposalByToken(tokenShort), [
-    tokenShort
-  ]);
+  const proposalSelector = useMemo(
+    () => sel.makeGetProposalByToken(tokenShort),
+    [tokenShort]
+  );
   const proposal = useSelector(proposalSelector);
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.summaryByToken);

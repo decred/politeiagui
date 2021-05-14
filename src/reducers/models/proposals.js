@@ -53,8 +53,8 @@ const DEFAULT_STATE = {
   numOfProposalsByUserId: {},
   // TODO: remove legacy
   // In tests legacyProposals.proposals is undefined, thus the need for `|| []`.
-  legacyProposals: (legacyProposals.proposals || []).map(
-    (p) => shortRecordToken(p.censorshiprecord.token)
+  legacyProposals: (legacyProposals.proposals || []).map((p) =>
+    shortRecordToken(p.censorshiprecord.token)
   ),
   newProposalToken: null
 };
@@ -147,9 +147,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
             set(
               [
                 "byToken",
-                shortRecordToken(
-                  action.payload.proposal.censorshiprecord.token
-                )
+                shortRecordToken(action.payload.proposal.censorshiprecord.token)
               ],
               parseRawProposal(action.payload.proposal)
             )(state),
@@ -213,10 +211,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
               update(["allByRecordStatus"], (props) => {
                 const statusTokensArray =
                   props[mapStatusToName[action.payload.proposal.status]];
-                const proposalToken =
-                  shortRecordToken(
-                    action.payload.proposal.censorshiprecord.token
-                  );
+                const proposalToken = shortRecordToken(
+                  action.payload.proposal.censorshiprecord.token
+                );
                 const newArr = statusTokensArray
                   ? [proposalToken, ...statusTokensArray]
                   : [proposalToken];
@@ -244,9 +241,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 ["allProposalsByUserId", action.payload.userid],
                 (userProposals = []) => [
                   ...userProposals,
-                  ...Object
-                    .keys(action.payload.proposals)
-                    .map((token) => shortRecordToken(token))
+                  ...Object.keys(action.payload.proposals).map((token) =>
+                    shortRecordToken(token)
+                  )
                 ]
               ),
               set(

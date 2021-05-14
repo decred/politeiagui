@@ -20,9 +20,7 @@ const getCommentsByToken = (token) => (commentsByToken) => {
   if (comment) return comment;
   const commentsTokens = Object.keys(commentsByToken);
   // check if the provided token is prefix of original token
-  const matchedTokenByPrefix = commentsTokens.find(
-    (key) => key === shortToken
-  );
+  const matchedTokenByPrefix = commentsTokens.find((key) => key === shortToken);
   return commentsByToken[matchedTokenByPrefix];
 };
 
