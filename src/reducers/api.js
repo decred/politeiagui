@@ -84,7 +84,7 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_VERIFY_NEW_USER]: () =>
         receive("verifyNewUser", state, action),
       [act.REQUEST_USER]: () => request("user", state, action),
-      [act.RECEIVE_USER]: () => receive("user", state),
+      [act.RECEIVE_USER]: () => receive("user", state, action),
       [act.REQUEST_LOGIN]: () => request("login", state, action),
       [act.RECEIVE_LOGIN]: () => receive("login", state, action),
       [act.REQUEST_LOGOUT]: () => request("logout", state, action),
