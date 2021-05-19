@@ -28,7 +28,7 @@ function usePaywall(userID) {
     paywallTxId,
     paywallTxNotBefore,
     userPaywallStatus,
-    isPaid: userIsPaid || !enablePaywall,
+    isPaid: userIsPaid,
     paywallEnabled: enablePaywall,
     creditsEnabled: enableCredits
   };
