@@ -17,7 +17,8 @@ const PaywallMessage = ({ wrapper, ...props }) => {
       title: "Complete your registration",
       onClose: handleCloseModal
     });
-  const showMessage = !!currentUserEmail && !isPaid;
+  const showMessage = !!currentUserEmail && isPaid === false && isPaid !== null;
+
   return (
     showMessage && (
       <>

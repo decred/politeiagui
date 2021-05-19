@@ -6,7 +6,6 @@ export function useLoader() {
   const user = useSelector(sel.currentUser);
   const apiInfo = useSelector(sel.init);
   const onRequestApiInfo = useAction(act.requestApiInfo);
-  const onRequestCurrentUser = useAction(act.onRequestMe);
   const localLogout = useAction(act.handleLogout);
   const onPollUserPayment = useAction(act.onPollUserPayment);
   const onUserProposalCredits = useAction(act.onUserProposalCredits);
@@ -15,7 +14,6 @@ export function useLoader() {
     user,
     apiInfo,
     onRequestApiInfo,
-    onRequestCurrentUser,
     localLogout,
     onPollUserPayment,
     onUserProposalCredits

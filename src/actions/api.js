@@ -42,26 +42,24 @@ export const onSetHasTotp = (payload) => (dispatch) =>
 
 export const requestApiInfo =
   (fetchUser = true) =>
-  (dispatch) => {
+  async (dispatch) => {
     dispatch(act.REQUEST_INIT_SESSION());
-    return api
-      .apiInfo()
-      .then((response) => {
-        dispatch(act.RECEIVE_INIT_SESSION(response));
-        // if there is an active session, try to fetch the user information
-        // otherwise we make sure there are no user data saved into localstorage
-        if (!response.activeusersession) {
-          clearStateLocalStorage();
-        } else if (fetchUser) {
-          dispatch(onRequestMe());
-        }
+    try {
+      const response = await api.apiInfo();
+      dispatch(act.RECEIVE_INIT_SESSION(response));
+      // if there is an active session, try to fetch the user information
+      // otherwise we make sure there are no user data saved into localstorage
+      if (!response.activeusersession) {
+        clearStateLocalStorage();
+      } else if (fetchUser || response.activeusersession) {
+        await dispatch(onRequestMe());
+      }
 
-        return response;
-      })
-      .catch((error) => {
-        dispatch(act.RECEIVE_INIT_SESSION(null, error));
-        throw error;
-      });
+      return response;
+    } catch (error) {
+      dispatch(act.RECEIVE_INIT_SESSION(null, error));
+      throw error;
+    }
   };
 
 export const onRequestMe = () => (dispatch, getState) => {
@@ -95,14 +93,13 @@ export const onPollUserPayment = () => (dispatch, getState) => {
     .verifyUserPayment()
     .then((response) => response.haspaid)
     .then((verified) => {
-      if (verified) {
-        dispatch(
-          act.UPDATE_USER_PAYWALL_STATUS({
-            status: PAYWALL_STATUS_PAID,
-            userid
-          })
-        );
-      } else {
+      dispatch(
+        act.UPDATE_USER_PAYWALL_STATUS({
+          status: verified ? PAYWALL_STATUS_PAID : null,
+          userid
+        })
+      );
+      if (!verified) {
         const paymentpolling = setTimeout(
           () => dispatch(onPollUserPayment()),
           POLL_INTERVAL
