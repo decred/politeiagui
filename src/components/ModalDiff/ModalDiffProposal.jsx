@@ -64,6 +64,11 @@ const ModalDiffProposal = ({
           </Subtitle>
         }
       />
+      <DownloadTimestamps
+        label="Download the timestamps for this version"
+        version={proposalDetails.version}
+        token={proposalDetails.censorshiprecord.token}
+      />
       <Tabs
         onSelectTab={setActiveTabIndex}
         activeTabIndex={activeTabIndex}
@@ -76,11 +81,6 @@ const ModalDiffProposal = ({
           <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />
         </Tab>
       </Tabs>
-      <DownloadTimestamps
-        label="Download the Timestamp for this version"
-        version={proposalDetails.version}
-        token={proposalDetails.censorshiprecord.token}
-      />
     </Modal>
   );
 };
