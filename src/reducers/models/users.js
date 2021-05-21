@@ -3,20 +3,25 @@ import compose from "lodash/fp/compose";
 import set from "lodash/fp/set";
 import update from "lodash/fp/update";
 
+const DEFAULT_SEARCH_STATE = {
+  results: [],
+  resultsByID: {},
+  queryByEmail: {},
+  queryByUsername: {}
+};
+
+const DEFAULT_CMS_USERS_STATE = {
+  results: [],
+  resultsByID: {},
+  queryByEmail: {},
+  queryByUsername: {}
+};
+
 const DEFAULT_STATE = {
   byID: {},
   currentUserID: null,
-  search: {
-    results: [],
-    resultsByID: {},
-    queryByEmail: {},
-    queryByUsername: {}
-  },
-  cms: {
-    byContractorType: {},
-    byDomain: {},
-    byID: {}
-  },
+  search: DEFAULT_SEARCH_STATE,
+  cms: DEFAULT_CMS_USERS_STATE,
   newUser: {}
 };
 
@@ -24,6 +29,7 @@ const skip = () => (value) => value;
 
 const onReceiveLogout = (state) =>
   compose(
+    set("search", DEFAULT_SEARCH_STATE),
     set("currentUserID", null),
     update("byID", (data) => {
       const publicData = {};
