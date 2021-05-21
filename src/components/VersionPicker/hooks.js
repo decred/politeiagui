@@ -38,23 +38,23 @@ export function useVersionPicker(version, token) {
           oldTitle: ""
         };
       } else {
-      // Fetch prev version if version > 1
-      const prevProposal = await onFetchProposalDetailsWithoutState(
-        token,
-        version - 1
-      );
-      // Parse prev version proposal
-      const { description: oldDescription, name: oldName } =
-        parseRawProposal(prevProposal);
-      return {
-        details: proposal,
-        oldFiles: getAttachmentsFiles(prevProposal.files),
-        newFiles: getAttachmentsFiles(proposal.files),
-        newText: description,
-        oldText: oldDescription,
-        newTitle: name,
-        oldTitle: oldName
-      };
+        // Fetch prev version if version > 1
+        const prevProposal = await onFetchProposalDetailsWithoutState(
+          token,
+          version - 1
+        );
+        // Parse prev version proposal
+        const { description: oldDescription, name: oldName } =
+          parseRawProposal(prevProposal);
+        return {
+          details: proposal,
+          oldFiles: getAttachmentsFiles(prevProposal.files),
+          newFiles: getAttachmentsFiles(proposal.files),
+          newText: description,
+          oldText: oldDescription,
+          newTitle: name,
+          oldTitle: oldName
+        };
       }
     },
     []
