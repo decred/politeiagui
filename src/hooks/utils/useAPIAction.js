@@ -17,10 +17,8 @@ function useApplyAction(action, args = DEFAULT_ARGS, enabled = true) {
           setResponse(res);
         }
       } catch (e) {
-        if (mounted) {
-          setLoading(false);
-          setError(e);
-        }
+        setLoading(false);
+        setError(e);
       }
     }
     if (enabled) {
