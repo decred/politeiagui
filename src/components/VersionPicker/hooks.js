@@ -76,7 +76,7 @@ export function useVersionPicker(version, token) {
       newText: getProposalText(proposal),
       oldText: getProposalText(prevProposal),
       newTitle: proposal.name,
-      oldTitle: prevProposal.name
+      oldTitle: prevProposal ? prevProposal.name : ""
     };
   }
 
