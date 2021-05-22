@@ -62,13 +62,8 @@ describe("Admin proposals actions", () => {
         cy.wait("@confirm");
         cy.findByText(/ok/i).click();
         cy.findByText(/approve/i).should("not.exist");
-        // XXX THIS IS KNOWN ISSUE AND THIS TEST SHOULD BE ADDED BACK WHEN
-        // ADDRESSING THE ADMIN TABS ISSUE:
-        //
-        //cy.route("POST", "/api/ticketvote/v1/summaries").as("unvettedLoaded");
-        //cy.visit("/proposals/unvetted?tab=censored");
-        //cy.wait("@unvettedLoaded");
-        //cy.findByText(proposal.name).should("be.visible");
+        cy.visit("/admin/records?tab=censored");
+        cy.findByText(token).should("be.visible");
       }
     );
   });
