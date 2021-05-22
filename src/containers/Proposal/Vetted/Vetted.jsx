@@ -36,7 +36,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
-    proposalStatus: statusByTab[tabLabels[index]],
+    status: statusByTab[tabLabels[index]],
     proposalPageSize: 4
   });
 

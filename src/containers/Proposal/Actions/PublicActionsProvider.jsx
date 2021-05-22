@@ -172,7 +172,7 @@ const PublicActionsProvider = ({ children, history }) => {
       successMessage: (
         <Text>
           The proposal has been successfully censored! Now it will appear under
-          under <Link to="/admin/records?tab=unvetted censored">Censored</Link>{" "}
+          under <Link to="/admin/records?tab=censored">Censored</Link>{" "}
           tab among Admin Proposals.
         </Text>
       ),

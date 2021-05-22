@@ -1,7 +1,8 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
+import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
 // XXX change to AdminActionsProvider
 import {
@@ -15,14 +16,14 @@ const renderProposal = (prop) => (
   <Proposal key={prop.censorshiprecord.token} proposal={prop} />
 );
 
-const tabLabels = [
-  tabValues.UNREVIEWED,
-  tabValues.CENSORED,
-  tabValues.ARCHIVED
-];
+const tabLabels = [tabValues.UNREVIEWED, tabValues.CENSORED];
 
 const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useQueryStringWithIndexValue(
+    "tab",
+    0,
+    tabLabels
+  );
   const {
     proposals,
     proposalsTokens,
@@ -34,16 +35,13 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: false,
-    unvetted: true,
-    isByRecordStatus: true,
-    status: statusByTab[tabLabels[tabIndex]]
+    proposalStatus: statusByTab[tabLabels[tabIndex]]
   });
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
       [tabValues.UNREVIEWED]: "No proposals unreviewed",
-      [tabValues.CENSORED]: "No proposals censored",
-      [tabValues.ARCHIVED]: "No proposals archived"
+      [tabValues.CENSORED]: "No proposals censored"
     };
     return mapTabToMessage[tab];
   }, []);

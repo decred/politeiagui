@@ -1,15 +1,11 @@
 import {
   PROPOSAL_STATUS_UNREVIEWED,
-  PROPOSAL_STATUS_CENSORED,
-  PROPOSAL_STATUS_ARCHIVED,
-  PROPOSAL_STATE_VETTED,
-  PROPOSAL_STATE_UNVETTED
+  PROPOSAL_STATUS_CENSORED
 } from "src/constants";
 
 export const tabValues = {
   UNREVIEWED: "Unreviewed",
-  CENSORED: "Censored",
-  ARCHIVED: "Archived"
+  CENSORED: "Censored"
 };
 
 /**
@@ -25,21 +21,10 @@ export const getProposalsByTabOption = (tabOption, proposals) => {
     );
   }
 
-  if (tabOption === tabValues.VETTEDCENSORED) {
-    return proposals.filter(
-      (prop) =>
-        prop.status === PROPOSAL_STATUS_CENSORED &&
-        prop.state === PROPOSAL_STATE_VETTED
-    );
+  if (tabOption === tabValues.CENSORED) {
+    return proposals.filter((prop) => prop.status === PROPOSAL_STATUS_CENSORED);
   }
 
-  if (tabOption === tabValues.UNVETTEDCENSORED) {
-    return proposals.filter(
-      (prop) =>
-        prop.status === PROPOSAL_STATUS_CENSORED &&
-        prop.state === PROPOSAL_STATE_UNVETTED
-    );
-  }
   return proposals;
 };
 
@@ -51,14 +36,12 @@ export const getProposalsByTabOption = (tabOption, proposals) => {
  */
 export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
   if (!proposalsTokens) return [];
-  const { unreviewed, censored, archived } = proposalsTokens;
+  const { unreviewed, censored } = proposalsTokens;
   switch (tabOption) {
     case tabValues.UNREVIEWED:
       return unreviewed;
     case tabValues.CENSORED:
       return censored;
-    case tabValues.ARCHIVED:
-      return archived;
     default:
       return [];
   }
@@ -79,7 +62,6 @@ export const mapProposalsTokensByTab = (tabLabels, proposalsTokens) =>
   );
 
 export const statusByTab = {
-  [tabValues.ARCHIVED]: PROPOSAL_STATUS_ARCHIVED,
-  [tabValues.CENSORED]: PROPOSAL_STATUS_CENSORED,
-  [tabValues.UNREVIEWED]: PROPOSAL_STATUS_UNREVIEWED
+  [tabValues.UNREVIEWED]: PROPOSAL_STATUS_UNREVIEWED,
+  [tabValues.CENSORED]: PROPOSAL_STATUS_CENSORED
 };

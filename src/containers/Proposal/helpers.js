@@ -369,22 +369,22 @@ export const getProposalStateLabel = (proposalState) =>
     [PROPOSAL_STATE_UNVETTED]: "unvetted"
   });
 
-export const getProposalStatusLabel = (proposalStatus, isVotingStatus) =>
-  get(proposalStatus)(
-    isVotingStatus
+export const getProposalStatusLabel = (status, isByRecordStatus) =>
+  get(status)(
+    isByRecordStatus
       ? {
+          [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
+          [PROPOSAL_STATUS_ARCHIVED]: ARCHIVED,
+          [PROPOSAL_STATUS_CENSORED]: CENSORED,
+          [PROPOSAL_STATUS_PUBLIC]: PUBLIC
+        }
+      : {
           [PROPOSAL_VOTING_NOT_AUTHORIZED]: PRE_VOTE,
           [PROPOSAL_VOTING_AUTHORIZED]: AUTHORIZED,
           [PROPOSAL_VOTING_ACTIVE]: ACTIVE_VOTE,
           [PROPOSAL_VOTING_APPROVED]: APPROVED,
           [PROPOSAL_VOTING_REJECTED]: REJECTED,
           [PROPOSAL_VOTING_INELIGIBLE]: INELIGIBLE
-        }
-      : {
-          [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
-          [PROPOSAL_STATUS_ARCHIVED]: ARCHIVED,
-          [PROPOSAL_STATUS_CENSORED]: CENSORED,
-          [PROPOSAL_STATUS_PUBLIC]: PUBLIC
         }
   );
 
