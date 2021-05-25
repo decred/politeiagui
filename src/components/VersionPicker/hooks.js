@@ -24,27 +24,38 @@ export function useVersionPicker(version, token) {
 
       // Fetch provided version
       const proposal = await onFetchProposalDetailsWithoutState(token, version);
-
-      // Fetch prev version
-      const prevProposal = await onFetchProposalDetailsWithoutState(
-        token,
-        version - 1
-      );
-
-      // parse proposal to get its formatted data
-      const { description: oldDescription, name: oldName } =
-        parseRawProposal(prevProposal);
+      // Parse current version
       const { description, name } = parseRawProposal(proposal);
 
-      return {
-        details: proposal,
-        oldFiles: getAttachmentsFiles(prevProposal.files),
-        newFiles: getAttachmentsFiles(proposal.files),
-        newText: description,
-        oldText: oldDescription,
-        newTitle: name,
-        oldTitle: oldName
-      };
+      if (version <= 1) {
+        return {
+          details: proposal,
+          oldFiles: getAttachmentsFiles([]),
+          newFiles: getAttachmentsFiles(proposal.files),
+          newText: description,
+          oldText: "",
+          newTitle: name,
+          oldTitle: ""
+        };
+      } else {
+        // Fetch prev version if version > 1
+        const prevProposal = await onFetchProposalDetailsWithoutState(
+          token,
+          version - 1
+        );
+        // Parse prev version proposal
+        const { description: oldDescription, name: oldName } =
+          parseRawProposal(prevProposal);
+        return {
+          details: proposal,
+          oldFiles: getAttachmentsFiles(prevProposal.files),
+          newFiles: getAttachmentsFiles(proposal.files),
+          newText: description,
+          oldText: oldDescription,
+          newTitle: name,
+          oldTitle: oldName
+        };
+      }
     },
     []
   );
