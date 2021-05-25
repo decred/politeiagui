@@ -11,10 +11,9 @@ const DEFAULT_SEARCH_STATE = {
 };
 
 const DEFAULT_CMS_USERS_STATE = {
-  results: [],
-  resultsByID: {},
-  queryByEmail: {},
-  queryByUsername: {}
+  byContractorType: {},
+  byDomain: {},
+  byID: {}
 };
 
 const DEFAULT_STATE = {
