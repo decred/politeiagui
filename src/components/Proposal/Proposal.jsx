@@ -163,7 +163,11 @@ const Proposal = React.memo(function Proposal({
     !isEmpty(rfpSubmissions.proposals) &&
     !isEmpty(rfpSubmissions.voteSummaries);
   const showEditIcon =
-    isAuthor && isVotingAuthorized && !isVotingFinished && !isVoteActive;
+    isAuthor &&
+    isVotingAuthorized &&
+    !isVotingFinished &&
+    !isVoteActive &&
+    isPublic;
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
 

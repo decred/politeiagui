@@ -14,7 +14,6 @@ import {
   PAYWALL_STATUS_PAID,
   DCC_SUPPORT_VOTE,
   TOTP_DEFAULT_TYPE,
-  PROPOSAL_STATE_UNVETTED,
   UNREVIEWED,
   CENSORED,
   PRE_VOTE,
@@ -535,15 +534,13 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
 };
 
 export const onFetchTokenInventory =
-  (state, status, page = 0, isVoteStatus) =>
+  (page = 0) =>
   async (dispatch) => {
     dispatch(act.REQUEST_TOKEN_INVENTORY());
     try {
       return await Promise.all([
-        !isVoteStatus && api.proposalsInventory(state, status, page),
-        isVoteStatus &&
-          state !== PROPOSAL_STATE_UNVETTED &&
-          api.votesInventory(status, page)
+        api.proposalsInventory(page),
+        api.votesInventory(page)
       ]).then(([proposals, votes]) => {
         const byRecords = {
           [UNREVIEWED]:
@@ -552,11 +549,11 @@ export const onFetchTokenInventory =
               proposals.unvetted.unreviewed) ||
             [],
           [CENSORED]: [
+            ...((proposals && proposals.vetted && proposals.vetted.censored) ||
+              []),
             ...((proposals &&
               proposals.unvetted &&
               proposals.unvetted.censored) ||
-              []),
-            ...((proposals && proposals.vetted && proposals.vetted.censored) ||
               [])
           ],
           [ARCHIVED]: [
@@ -1128,7 +1125,6 @@ export const onSetProposalStatus = ({
         }
       })
       .catch((error) => {
-        console.log(error);
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
         throw error;
       });

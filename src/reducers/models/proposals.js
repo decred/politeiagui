@@ -210,7 +210,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 const proposalToken =
                   action.payload.proposal.censorshiprecord.token;
                 const newArr = statusTokensArray
-                  ? [...statusTokensArray, proposalToken]
+                  ? [proposalToken, ...statusTokensArray]
                   : [proposalToken];
                 if (!props[mapStatusToName[action.payload.oldStatus]])
                   return {
