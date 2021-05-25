@@ -341,7 +341,7 @@ const ProposalFormWrapper = ({
             PROPOSAL_STATE_VETTED
           )) || [[], null];
           const [proposals, summaries] = rfpWithVoteSummaries;
-          const proposal = proposals[rfpLink];
+          const proposal = proposals[shortRecordToken(rfpLink)];
           const voteSummary = summaries && summaries[rfpLink];
           const isInvalidToken = !proposal || !voteSummary;
           if (isInvalidToken) {
