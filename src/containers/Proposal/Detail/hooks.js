@@ -77,8 +77,7 @@ export function useProposal(token, threadParentID) {
   const isRfp = proposal && !!proposal.linkby;
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !(
-    voteSummaries[tokenShort] &&
-    voteSummaries[tokenShort].details
+    voteSummaries[tokenShort] && voteSummaries[tokenShort].details
   );
   const needsInitialFetch = isRfp || (token && isMissingDetails);
 
