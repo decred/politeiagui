@@ -33,7 +33,7 @@ const EditProposal = ({ match }) => {
 
   const initialValues = proposal
     ? {
-        token: tokenFromUrl,
+        token: proposal.censorshiprecord.token,
         name: proposal.name,
         type:
           proposal && proposal.linkby

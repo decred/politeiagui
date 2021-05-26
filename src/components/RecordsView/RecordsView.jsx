@@ -108,8 +108,6 @@ const RecordsView = ({
     [loadingItems, placeholder]
   );
 
-  console.log(filteredRecords);
-
   return children({
     tabs: (
       <Tabs onSelectTab={onSetIndex} activeTabIndex={index} mode="horizontal">
