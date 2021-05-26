@@ -49,7 +49,6 @@ export function useProposal(token, threadParentID) {
     act.onFetchProposalsBatchVoteSummary
   );
   const onFetchVotesDetails = useAction(act.onFetchVotesDetails);
-  const onFetchProposalVoteResults = useAction(act.onFetchProposalVoteResults);
   const proposalSelector = useMemo(
     () => sel.makeGetProposalByToken(token),
     [token]
@@ -79,8 +78,7 @@ export function useProposal(token, threadParentID) {
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !(
     voteSummaries[tokenShort] &&
-    voteSummaries[tokenShort].details &&
-    voteSummaries[tokenShort].votes
+    voteSummaries[tokenShort].details
   );
   const needsInitialFetch = isRfp || (token && isMissingDetails);
 
@@ -125,8 +123,7 @@ export function useProposal(token, threadParentID) {
         ) {
           Promise.all([
             onFetchProposalsVoteSummary(unfetchedSummariesTokens),
-            onFetchVotesDetails(token),
-            onFetchProposalVoteResults(token)
+            onFetchVotesDetails(token)
           ])
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
