@@ -19,6 +19,7 @@ import Sidebar from "../../Sidebar";
 import styles from "../layouts.module.css";
 import { useConfig } from "src/containers/Config";
 import usePaywall from "src/hooks/api/usePaywall";
+import isNull from "lodash/fp/isNull";
 
 const renderError = (error) => (
   <Main className={styles.singleContentMain}>
@@ -34,7 +35,13 @@ const DefaultNewButton = () => {
   const { isPaid } = usePaywall();
   const mapRecordTypeToButton = {
     [RECORD_TYPE_PROPOSAL]: (
-      <NewButton disabled={!isPaid} label="New Proposal" goTo="/record/new" />
+      // When paywall is off `isPaid` is null, in that case the new proposal
+      // button should be enabled.
+      <NewButton
+        disabled={!isNull(isPaid) && !isPaid}
+        label="New Proposal"
+        goTo="/record/new"
+      />
     ),
     [RECORD_TYPE_INVOICE]: (
       <NewButton label="New Invoice" goTo="/invoices/new" />
