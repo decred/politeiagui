@@ -28,9 +28,12 @@ const EditProposal = ({ match }) => {
   const { userid } = currentUser || {};
   const { isPaid } = usePaywall();
   const [, identityError] = useIdentity();
+  const hasDetails =
+    proposal?.files.filter((f) => f.name === "index.md").length > 0;
+
   const initialValues = proposal
     ? {
-        token: tokenFromUrl,
+        token: proposal.censorshiprecord.token,
         name: proposal.name,
         type:
           proposal && proposal.linkby
@@ -61,7 +64,7 @@ const EditProposal = ({ match }) => {
         )}
         {!!identityError && <IdentityMessageError />}
       </Or>
-      {!loading && !!proposal ? (
+      {!loading && !!proposal && hasDetails ? (
         <ProposalForm
           initialValues={initialValues}
           onSubmit={onEditProposal}

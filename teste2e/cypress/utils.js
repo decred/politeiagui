@@ -154,3 +154,5 @@ export const makeProposal = (
     }
   ]
 });
+
+export const shortRecordToken = (token) => token.substring(0, 7);

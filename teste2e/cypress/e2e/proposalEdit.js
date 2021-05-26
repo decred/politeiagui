@@ -1,4 +1,5 @@
 import { buildProposal } from "../support/generate";
+import { shortRecordToken } from "../utils";
 
 describe("Proposal Edit", () => {
   const user = {
@@ -24,7 +25,7 @@ describe("Proposal Edit", () => {
         }
       }) => {
         cy.approveProposal(censorshiprecord);
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         // user is able to edit the proposal
         cy.wait(1000);
         cy.findByTestId(/record-edit-button/i).click();
@@ -60,7 +61,7 @@ describe("Proposal Edit", () => {
         };
         cy.login(user1);
         cy.identity();
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         cy.findByTestId(/record-edit-button/i).should("not.exist");
       }
     );
@@ -75,7 +76,7 @@ describe("Proposal Edit", () => {
         }
       }) => {
         cy.approveProposal(censorshiprecord);
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         cy.route("POST", "api/ticketvote/v1/authorize").as("authorizeVote");
         cy.findByRole("button", { name: /authorize voting/i }).click();
         cy.findByRole("button", { name: /confirm/i }).click();
@@ -102,7 +103,7 @@ describe("Proposal Edit", () => {
         }
       }) => {
         cy.approveProposal(censorshiprecord);
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         cy.wait(1000);
         cy.findByTestId(/record-edit-button/i).click();
         cy.findByRole("button", { name: /submit/i }).should("be.disabled");

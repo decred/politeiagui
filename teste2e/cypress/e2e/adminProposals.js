@@ -1,4 +1,5 @@
 import { buildProposal } from "../support/generate";
+import { shortRecordToken } from "../utils";
 
 describe("Admin proposals actions", () => {
   it("Can approve proposals", () => {
@@ -21,7 +22,7 @@ describe("Admin proposals actions", () => {
           }
         }
       }) => {
-        cy.visit(`record/${token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(token)}`);
         // Manually approve proposal
         cy.findByText(/approve/i).click();
         cy.route("POST", "/api/records/v1/setstatus").as("confirm");
@@ -53,7 +54,7 @@ describe("Admin proposals actions", () => {
           }
         }
       }) => {
-        cy.visit(`record/${token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(token)}`);
         // Manually report proposal
         cy.findByText(/report/i).click();
         cy.findByLabelText(/censor reason/i).type("censor!");
@@ -86,7 +87,7 @@ describe("Admin proposals actions", () => {
         }
       }) => {
         cy.approveProposal(censorshiprecord);
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         cy.findByText(/waiting for author/i).should("exist");
         // Manually abandon
         cy.findByText(/abandon/i).click();
@@ -118,7 +119,7 @@ describe("Admin proposals actions", () => {
         }
       }) => {
         cy.approveProposal(censorshiprecord);
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         cy.findByText(/waiting for author/i).should("exist");
         // Manually authorize vote
         cy.findByRole("button", { name: /authorize voting/i }).click();

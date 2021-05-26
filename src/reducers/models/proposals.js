@@ -20,6 +20,7 @@ import {
   PROPOSAL_STATE_UNVETTED
 } from "../../constants";
 import {
+  shortRecordToken,
   getIndexMdFromText,
   parseReceivedProposalsMap,
   parseRawProposal
@@ -52,8 +53,8 @@ const DEFAULT_STATE = {
   numOfProposalsByUserId: {},
   // TODO: remove legacy
   // In tests legacyProposals.proposals is undefined, thus the need for `|| []`.
-  legacyProposals: (legacyProposals.proposals || []).map(
-    (p) => p.censorshiprecord.token
+  legacyProposals: (legacyProposals.proposals || []).map((p) =>
+    shortRecordToken(p.censorshiprecord.token)
   ),
   newProposalToken: null
 };
@@ -80,15 +81,13 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
 
 const proposalToken = (proposal) => proposal.censorshiprecord.token;
 
-const shortProposalToken = (proposal) =>
-  proposalToken(proposal).substring(0, 7);
-
 const proposalIndexFile = (name = "", description = "") =>
   getIndexMdFromText([name, description].join("\n\n"));
 
 const updateAllByVoteStatus = (allByVoteStatus, newStatus, tokens) => {
   let res = {};
-  tokens.forEach((token) => {
+  const shortTokens = tokens.map((token) => shortRecordToken(token));
+  shortTokens.forEach((token) => {
     const updatedByStatus = Object.keys(allByVoteStatus).reduce((inv, key) => {
       const tokens = res[key] || allByVoteStatus[key] || [];
       const foundToken = tokens.find((t) => t === token);
@@ -110,10 +109,16 @@ const updateAllByVoteStatus = (allByVoteStatus, newStatus, tokens) => {
 
 const updateProposalRfpLinks = (proposal) => (state) => {
   if (!proposal.linkto) return state;
-  const linkedProposal = get(["byToken", proposal.linkto])(state);
+  const linkedProposal = get(["byToken", shortRecordToken(proposal.linkto)])(
+    state
+  );
   if (!linkedProposal) return state;
-  return update(["byToken", proposal.linkto, "linkedfrom"], (links) =>
-    links ? [...links, proposalToken(proposal)] : [proposalToken(proposal)]
+  return update(
+    ["byToken", shortRecordToken(proposal.linkto), "linkedfrom"],
+    (links) =>
+      links
+        ? [...links, shortRecordToken(proposalToken(proposal))]
+        : [shortRecordToken(proposalToken(proposal))]
   )(state);
 };
 
@@ -125,7 +130,12 @@ const updateInventory = (payload) => (allProps) => {
       const payloadStatus = payload[status] ? payload[status] : [];
       return {
         ...res,
-        [status]: [...new Set([...payloadStatus, ...propsStatus])]
+        [status]: [
+          ...new Set([
+            ...payloadStatus.map((token) => shortRecordToken(token)),
+            ...propsStatus
+          ])
+        ]
       };
     }, {})
   };
@@ -147,7 +157,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
             update("allByRecordStatus", updateInventory(action.payload))(state),
           [act.RECEIVE_EDIT_PROPOSAL]: () =>
             set(
-              ["byToken", shortProposalToken(action.payload.proposal)],
+              [
+                "byToken",
+                shortRecordToken(action.payload.proposal.censorshiprecord.token)
+              ],
               parseRawProposal(action.payload.proposal)
             )(state),
           [act.RECEIVE_NEW_PROPOSAL]: () => {
@@ -159,7 +172,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
 
             return compose(
               set(
-                ["byToken", proposalToken(action.payload)],
+                ["byToken", shortRecordToken(proposalToken(action.payload))],
                 parseRawProposal({
                   ...action.payload,
                   files: [...action.payload.files, indexFile],
@@ -169,14 +182,14 @@ const proposals = (state = DEFAULT_STATE, action) =>
               update(
                 ["allByRecordStatus", UNREVIEWED],
                 (unreviewdProps = []) => [
-                  proposalToken(action.payload),
+                  shortRecordToken(proposalToken(action.payload)),
                   ...unreviewdProps
                 ]
               ),
               update(
                 ["allProposalsByUserId", action.payload.userid],
                 (userProposals = []) => [
-                  proposalToken(action.payload),
+                  shortRecordToken(proposalToken(action.payload)),
                   ...userProposals
                 ]
               ),
@@ -184,14 +197,20 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 ["numOfProposalsByUserId", action.payload.userid],
                 (numOfProps = 0) => ++numOfProps
               ),
-              set("newProposalToken", action.payload.censorshiprecord.token)
+              set(
+                "newProposalToken",
+                shortRecordToken(action.payload.censorshiprecord.token)
+              )
             )(state);
           },
           [act.RECEIVE_SETSTATUS_PROPOSAL]: () =>
             compose(
               updateProposalRfpLinks(action.payload.proposal),
               set(
-                ["byToken", proposalToken(action.payload.proposal)],
+                [
+                  "byToken",
+                  shortRecordToken(proposalToken(action.payload.proposal))
+                ],
                 parseRawProposal(action.payload.proposal)
               ),
               update(["allByVoteStatus"], (allProps) =>
@@ -201,14 +220,15 @@ const proposals = (state = DEFAULT_STATE, action) =>
                     action.payload.proposal.status,
                     action.payload.proposal.state
                   ),
-                  [proposalToken(action.payload.proposal)]
+                  [shortRecordToken(proposalToken(action.payload.proposal))]
                 )
               ),
               update(["allByRecordStatus"], (props) => {
                 const statusTokensArray =
                   props[mapStatusToName[action.payload.proposal.status]];
-                const proposalToken =
-                  action.payload.proposal.censorshiprecord.token;
+                const proposalToken = shortRecordToken(
+                  action.payload.proposal.censorshiprecord.token
+                );
                 const newArr = statusTokensArray
                   ? [proposalToken, ...statusTokensArray]
                   : [proposalToken];
@@ -236,7 +256,9 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 ["allProposalsByUserId", action.payload.userid],
                 (userProposals = []) => [
                   ...userProposals,
-                  ...Object.keys(action.payload.proposals)
+                  ...Object.keys(action.payload.proposals).map((token) =>
+                    shortRecordToken(token)
+                  )
                 ]
               ),
               set(

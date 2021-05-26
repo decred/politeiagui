@@ -1,6 +1,7 @@
 import React, { useState, memo } from "react";
 import { Spinner, Text, H4, Table, Link as UiLink, classNames } from "pi-ui";
 import Link from "src/components/Link";
+import { shortRecordToken } from "src/helpers";
 import { useInvoices } from "./hooks";
 import { formatCentsToUSD } from "src/utils";
 import useAdminInvoices from "src/hooks/api/useAdminInvoices";
@@ -16,7 +17,7 @@ const printInvoiceInfo = ({
   Date: `${month}/${year}`,
   Invoice: (
     <Link to={`/invoices/${token}`} className={styles.invoiceLinkWrapper}>
-      <Text color="primary">{token.substring(0, 7)}</Text>
+      <Text color="primary">{shortRecordToken(token)}</Text>
     </Link>
   ),
   "Total (USD)": formatCentsToUSD(total)

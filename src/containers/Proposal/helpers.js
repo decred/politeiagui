@@ -27,7 +27,7 @@ import {
   INELIGIBLE,
   PROPOSAL_PAGE_SIZE
 } from "../../constants";
-import { getTextFromIndexMd } from "src/helpers";
+import { getTextFromIndexMd, shortRecordToken } from "src/helpers";
 import set from "lodash/fp/set";
 import values from "lodash/fp/values";
 import pick from "lodash/pick";
@@ -282,7 +282,7 @@ export const getProposalToken = (proposal) =>
  */
 export const getProposalUrl = (token, isJsEnabled) =>
   isJsEnabled
-    ? `/record/${token.substring(0, 7)}`
+    ? `/record/${shortRecordToken(token)}`
     : `${NOJS_ROUTE_PREFIX}/record/${token}`;
 
 /**
@@ -293,7 +293,7 @@ export const getProposalUrl = (token, isJsEnabled) =>
  */
 export const getCommentsUrl = (token, isJsEnabled) =>
   isJsEnabled
-    ? `/record/${token.substring(0, 7)}?scrollToComments=true`
+    ? `/record/${shortRecordToken(token)}?scrollToComments=true`
     : `${NOJS_ROUTE_PREFIX}/record/${token}?scrollToComments=true`;
 
 /**

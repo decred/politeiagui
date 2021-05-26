@@ -46,7 +46,7 @@ import ThumbnailGrid from "src/components/Files";
 import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
-import { isEmpty, getKeyByValue } from "src/helpers";
+import { shortRecordToken, isEmpty, getKeyByValue } from "src/helpers";
 
 /**
  * replaceImgDigestWithPayload uses a regex to parse images
@@ -232,7 +232,9 @@ const Proposal = React.memo(function Proposal({
                * */
               edit={
                 isEditable ? (
-                  <Edit url={`/record/${proposalToken}/edit`} />
+                  <Edit
+                    url={`/record/${shortRecordToken(proposalToken)}/edit`}
+                  />
                 ) : showEditIcon ? (
                   <Tooltip
                     placement={mobile ? "left" : "right"}

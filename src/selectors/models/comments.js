@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import get from "lodash/fp/get";
+import { shortRecordToken } from "src/helpers";
 
 export const commentsByToken = get(["comments", "comments", "byToken"]);
 export const accessTimeByToken = get([
@@ -14,13 +15,12 @@ export const commentsLikesByToken = get([
 ]);
 
 const getCommentsByToken = (token) => (commentsByToken) => {
-  const comment = commentsByToken[token];
+  const shortToken = token && shortRecordToken(token);
+  const comment = commentsByToken[shortToken];
   if (comment) return comment;
   const commentsTokens = Object.keys(commentsByToken);
   // check if the provided token is prefix of original token
-  const matchedTokenByPrefix = commentsTokens.find(
-    (key) => key.substring(0, 7) === token
-  );
+  const matchedTokenByPrefix = commentsTokens.find((key) => key === shortToken);
   return commentsByToken[matchedTokenByPrefix];
 };
 

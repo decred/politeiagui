@@ -57,12 +57,16 @@ export const digest = (payload) => sha3_256(payload);
 export const utoa = (str) => window.btoa(unescape(encodeURIComponent(str)));
 export const atou = (str) => decodeURIComponent(escape(window.atob(str)));
 
+// shortToken receives a full lengthed record token and parses to its short
+// form
+export const shortRecordToken = (token) => token.substring(0, 7);
+
 // parseReceivedProposalsMap iterates over BE returned proposals map[token] => proposal, parses the
 // metadata file & the proposal statuses
 export const parseReceivedProposalsMap = (proposals) => {
   const parsedProps = {};
   for (const [token, prop] of Object.entries(proposals)) {
-    parsedProps[token] = parseRawProposal(prop);
+    parsedProps[shortRecordToken(token)] = parseRawProposal(prop);
   }
   return parsedProps;
 };

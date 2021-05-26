@@ -5,6 +5,7 @@ import {
   PROPOSAL_VOTING_REJECTED,
   PROPOSAL_VOTING_INELIGIBLE
 } from "src/constants";
+import { shortRecordToken } from "src/helpers";
 import legacyProposalsInfo from "src/legacyproposals.json";
 import tokenInventory from "src/legacytokeninventory.json";
 
@@ -32,16 +33,25 @@ export default function useLegacyVettedProposals(shouldReturn = false, status) {
   useEffect(() => {
     // shouldReturn is a boolean to control when the proposals are done fetching so we can return the legacy props.
     if (shouldReturn) {
-      const proposalsTokensList = tokenInventory[mapStatusToString[status]];
+      const proposalsTokensList =
+        tokenInventory[mapStatusToString[status]] &&
+        tokenInventory[mapStatusToString[status]].map((token) =>
+          shortRecordToken(token)
+        );
       // filter propsals by tab and transform from Array to Object where the key is the proposal token and the value is the proposal info
       const finalList = newLegacyProposalsInfo
         .filter(
           (p) =>
             proposalsTokensList &&
-            proposalsTokensList.includes(p.censorshiprecord.token)
+            proposalsTokensList.includes(
+              shortRecordToken(p.censorshiprecord.token)
+            )
         )
         .reduce(
-          (acc, cur) => ({ ...acc, [cur.censorshiprecord.token]: cur }),
+          (acc, cur) => ({
+            ...acc,
+            [shortRecordToken(cur.censorshiprecord.token)]: cur
+          }),
           {}
         );
       setLegacyProposals(finalList);
