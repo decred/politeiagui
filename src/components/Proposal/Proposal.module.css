@@ -118,6 +118,16 @@ span.statusTag > span {
   color: var(--tab-text-active-color) !important;
 }
 
+.rawMarkdownPre {
+  padding: 0;
+  background: transparent;
+  border-left: 0;
+}
+
+.toggleMarkdownLink {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 560px) {
   .rfpProposal {
     border-left: 1px solid #1b41b3;

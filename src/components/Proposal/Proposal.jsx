@@ -6,9 +6,10 @@ import {
   useMediaQuery,
   useTheme,
   Tooltip,
+  Link,
   DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
@@ -82,6 +83,8 @@ const ProposalWrapper = (props) => {
     useProposalVote(getProposalToken(props.proposal));
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
+  const [showRaw, setShowRaw] = useState(false);
+  const toggleSeeRawMarkdown = () => setShowRaw(!showRaw);
   return (
     <Proposal
       {...{
@@ -91,7 +94,9 @@ const ProposalWrapper = (props) => {
         voteActive,
         voteEndTimestamp,
         currentUser,
-        history
+        history,
+        toggleSeeRawMarkdown,
+        showRaw
       }}
     />
   );
@@ -106,7 +111,9 @@ const Proposal = React.memo(function Proposal({
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
-  history
+  history,
+  toggleSeeRawMarkdown,
+  showRaw
 }) {
   const {
     censorshiprecord,
@@ -181,9 +188,10 @@ const Proposal = React.memo(function Proposal({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
+  const rawMarkdown = getMarkdownContent(files);
   const { text, markdownFiles } = useMemo(
-    () => replaceImgDigestWithPayload(getMarkdownContent(files), files),
-    [files]
+    () => replaceImgDigestWithPayload(rawMarkdown, files),
+    [files, rawMarkdown]
   );
 
   return (
@@ -355,14 +363,40 @@ const Proposal = React.memo(function Proposal({
             )}
             {showRfpSubmissions && <ProposalsList data={rfpSubmissions} />}
             {extended && files && !!files.length && !collapseBodyContent && (
-              <Markdown
-                className={classNames(
-                  styles.markdownContainer,
-                  isDarkTheme && "dark",
-                  showRfpSubmissions && styles.rfpMarkdownContainer
+              <>
+                {showRaw ? (
+                  <div
+                    className={classNames(
+                      styles.markdownContainer,
+                      isDarkTheme && "dark",
+                      showRfpSubmissions && styles.rfpMarkdownContainer
+                    )}>
+                    <pre
+                      className={classNames(
+                        "markdown-body",
+                        styles.rawMarkdownPre
+                      )}>
+                      {rawMarkdown}
+                    </pre>
+                  </div>
+                ) : (
+                  <Markdown
+                    className={classNames(
+                      styles.markdownContainer,
+                      isDarkTheme && "dark",
+                      showRfpSubmissions && styles.rfpMarkdownContainer
+                    )}
+                    body={text}
+                  />
                 )}
-                body={text}
-              />
+                <div className="margin-top-m">
+                  <Link
+                    className={styles.toggleMarkdownLink}
+                    onClick={toggleSeeRawMarkdown}>
+                    {showRaw ? "See rendered markdown" : "See raw markdown"}
+                  </Link>
+                </div>
+              </>
             )}
             {collapseBodyContent && (
               <IconButton
