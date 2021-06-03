@@ -9,6 +9,7 @@
     "A-z", "0-9", ".", ":", ";", ",", "-", " ", "@", "+"
   ],
   "minproposalnamelength": 8,
+  "minconfirmationsrequired": 2,
   "maxproposalnamelength": 80,
   "maxmdsize":524288,
   "validmimetypes":[

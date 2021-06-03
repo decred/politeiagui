@@ -32,7 +32,7 @@ const getRowDataForPurchase = (purchase) => ({
     <DcrTransactionLink txID={purchase.txId} />
   ),
   Status: purchase.confirming ? (
-    <StatusTag type="bluePending" text="Waiting for confirmations" />
+    <StatusTag type="bluePending" text={`Waiting for confirmations(${purchase.confirmations}/${purchase.minRequiredConfirmations})`} />
   ) : (
     <StatusTag type="greenCheck" text="Confirmed" />
   ),
@@ -63,6 +63,8 @@ export const getTableContentFromPurchases = (
               price: creditPrice,
               txId: pendingTransaction.txID,
               confirming: true,
+              confirmations: pendingTransaction.confirmations,
+              minRequiredConfirmations: pendingTransaction.minRequiredConfirmations,
               datePurchased: "just now"
             })
           ]
