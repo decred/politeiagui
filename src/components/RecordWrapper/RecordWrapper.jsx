@@ -195,8 +195,8 @@ export const ChartsLink = ({ token }) => {
   return (
     <Tooltip
       className={classNames(
-        styles.seeOnGithubTooltip,
-        isDarkTheme && styles.darkSeeOnGithubTooltip
+        styles.actionsTooltip,
+        isDarkTheme && styles.darkActionsTooltip
       )}
       placement="bottom"
       content="Voting Charts">
@@ -206,6 +206,42 @@ export const ChartsLink = ({ token }) => {
         rel="nofollow noopener noreferrer"
         href={`https://${hostName}/proposal/${token}`}>
         <Icon type="chart" iconColor={iconColor} backgroundColor={bgColor} />
+      </UILink>
+    </Tooltip>
+  );
+};
+
+export const MarkdownLink = ({ to, active = false, onClick }) => {
+  const { theme, themeName } = useTheme();
+  const color = getThemeProperty(theme, "icon-color");
+  const hoverColor = getThemeProperty(theme, "icon-hover-color");
+  const darkIconColor = getThemeProperty(theme, "text-color");
+  const [ref, isHovered] = useHover();
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
+  const iconColor = isHovered
+    ? hoverColor
+    : isDarkTheme
+    ? darkIconColor
+    : color;
+  return (
+    <Tooltip
+      className={classNames(
+        styles.actionsTooltip,
+        isDarkTheme && styles.darkActionsTooltip
+      )}
+      placement="bottom"
+      content={active ? "See rendered markdown" : "See raw markdown"}>
+      <UILink
+        target="_blank"
+        rel="nofollow noopener noreferrer"
+        href={to}
+        onClick={onClick}>
+        <Icon
+          ref={ref}
+          type="markdown"
+          viewBox="0 0 208 128"
+          iconColor={iconColor}
+        />
       </UILink>
     </Tooltip>
   );
@@ -327,6 +363,7 @@ const RecordWrapper = ({ children, className }) => (
       CommentsLink,
       Link,
       ChartsLink,
+      MarkdownLink,
       CopyLink,
       DownloadRecord,
       DownloadTimestamps,

@@ -6,10 +6,9 @@ import {
   useMediaQuery,
   useTheme,
   Tooltip,
-  Link,
   DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
@@ -83,8 +82,6 @@ const ProposalWrapper = (props) => {
     useProposalVote(getProposalToken(props.proposal));
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
-  const [showRaw, setShowRaw] = useState(false);
-  const toggleSeeRawMarkdown = () => setShowRaw(!showRaw);
   return (
     <Proposal
       {...{
@@ -94,9 +91,7 @@ const ProposalWrapper = (props) => {
         voteActive,
         voteEndTimestamp,
         currentUser,
-        history,
-        toggleSeeRawMarkdown,
-        showRaw
+        history
       }}
     />
   );
@@ -111,9 +106,7 @@ const Proposal = React.memo(function Proposal({
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
-  history,
-  toggleSeeRawMarkdown,
-  showRaw
+  history
 }) {
   const {
     censorshiprecord,
@@ -210,6 +203,7 @@ const Proposal = React.memo(function Proposal({
           CommentsLink,
           ChartsLink,
           CopyLink,
+          MarkdownLink,
           DownloadRecord,
           DownloadTimestamps,
           DownloadVotes,
@@ -363,40 +357,14 @@ const Proposal = React.memo(function Proposal({
             )}
             {showRfpSubmissions && <ProposalsList data={rfpSubmissions} />}
             {extended && files && !!files.length && !collapseBodyContent && (
-              <>
-                {showRaw ? (
-                  <div
-                    className={classNames(
-                      styles.markdownContainer,
-                      isDarkTheme && "dark",
-                      showRfpSubmissions && styles.rfpMarkdownContainer
-                    )}>
-                    <pre
-                      className={classNames(
-                        "markdown-body",
-                        styles.rawMarkdownPre
-                      )}>
-                      {rawMarkdown}
-                    </pre>
-                  </div>
-                ) : (
-                  <Markdown
-                    className={classNames(
-                      styles.markdownContainer,
-                      isDarkTheme && "dark",
-                      showRfpSubmissions && styles.rfpMarkdownContainer
-                    )}
-                    body={text}
-                  />
+              <Markdown
+                className={classNames(
+                  styles.markdownContainer,
+                  isDarkTheme && "dark",
+                  showRfpSubmissions && styles.rfpMarkdownContainer
                 )}
-                <div className="margin-top-m">
-                  <Link
-                    className={styles.toggleMarkdownLink}
-                    onClick={toggleSeeRawMarkdown}>
-                    {showRaw ? "See rendered markdown" : "See raw markdown"}
-                  </Link>
-                </div>
-              </>
+                body={text}
+              />
             )}
             {collapseBodyContent && (
               <IconButton
@@ -418,6 +386,11 @@ const Proposal = React.memo(function Proposal({
                     <ChartsLink token={proposalToken} />
                   )}
                 </div>
+                {extended && (
+                  <MarkdownLink
+                    to={`/record/${shortRecordToken(proposalToken)}/raw`}
+                  />
+                )}
               </Row>
             )}
             {extended && files.length > 1 && (
@@ -483,6 +456,11 @@ const Proposal = React.memo(function Proposal({
                   />
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />
+                  )}
+                  {extended && (
+                    <MarkdownLink
+                      to={`/record/${shortRecordToken(proposalToken)}/raw`}
+                    />
                   )}
                 </Row>
               </Row>
