@@ -181,9 +181,10 @@ const Proposal = React.memo(function Proposal({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
+  const rawMarkdown = getMarkdownContent(files);
   const { text, markdownFiles } = useMemo(
-    () => replaceImgDigestWithPayload(getMarkdownContent(files), files),
-    [files]
+    () => replaceImgDigestWithPayload(rawMarkdown, files),
+    [files, rawMarkdown]
   );
 
   return (
@@ -202,6 +203,7 @@ const Proposal = React.memo(function Proposal({
           CommentsLink,
           ChartsLink,
           CopyLink,
+          MarkdownLink,
           DownloadRecord,
           DownloadTimestamps,
           DownloadVotes,
@@ -384,6 +386,11 @@ const Proposal = React.memo(function Proposal({
                     <ChartsLink token={proposalToken} />
                   )}
                 </div>
+                {extended && (
+                  <MarkdownLink
+                    to={`/record/${shortRecordToken(proposalToken)}/raw`}
+                  />
+                )}
               </Row>
             )}
             {extended && files.length > 1 && (
@@ -449,6 +456,11 @@ const Proposal = React.memo(function Proposal({
                   />
                   {(isVoteActive || isVotingFinished) && (
                     <ChartsLink token={proposalToken} />
+                  )}
+                  {extended && (
+                    <MarkdownLink
+                      to={`/record/${shortRecordToken(proposalToken)}/raw`}
+                    />
                   )}
                 </Row>
               </Row>

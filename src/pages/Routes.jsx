@@ -13,6 +13,7 @@ import PageProposalsVettedList from "./Proposals/VettedList";
 import PageProposalsAdmin from "./Proposals/AdminList";
 import PageProposalNew from "./Proposals/New";
 import PageProposalEdit from "./Proposals/Edit";
+import PageProposalRaw from "./Proposals/Raw";
 import useOnboardModal from "src/hooks/utils/useOnboardModal";
 import PageUserDetail from "./User/Detail";
 import { LIST_HEADER_ADMIN, LIST_HEADER_VETTED } from "src/constants";
@@ -56,6 +57,12 @@ const Routes = ({ location }) => {
             title="Proposal Detail"
             exact
             component={PageProposalDetail}
+          />
+          <Route
+            path="/record/:token/raw"
+            title="Proposal Detail"
+            exact
+            component={PageProposalRaw}
           />
           <Route
             path="/record/:token/comments/:commentid"

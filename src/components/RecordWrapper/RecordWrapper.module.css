@@ -92,7 +92,7 @@
   color: var(--tab-text-active-color);
 }
 
-div.seeOnGithubTooltip {
+div.actionsTooltip {
   white-space: nowrap;
   font-size: var(--font-size-small);
   margin-right: 1.2rem;
@@ -100,7 +100,7 @@ div.seeOnGithubTooltip {
   color: var(--color-gray);
 }
 
-div.darkSeeOnGithubTooltip {
+div.darkActionsTooltip {
   color: var(--text-color);
 }
 
