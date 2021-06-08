@@ -16,7 +16,7 @@ export default function useProposalURLs(
   const { javascriptEnabled } = useConfig();
   // TODO: remove legacy
   const legacyProposals = useSelector(sel.legacyProposals);
-  const isLegacy = legacyProposals.includes(proposalToken);
+  const isLegacy = legacyProposals.includes(shortRecordToken(proposalToken));
   const proposalURL = !isLegacy
     ? getProposalUrl(proposalToken, javascriptEnabled, isLegacy)
     : `${ARCHIVE_URL}proposals/${shortRecordToken(proposalToken)}`;
