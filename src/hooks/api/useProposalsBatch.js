@@ -21,6 +21,7 @@ import isEmpty from "lodash/fp/isEmpty";
 import isUndefined from "lodash/fp/isUndefined";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
+import assign from "lodash/fp/assign";
 import { INVENTORY_PAGE_SIZE, PROPOSAL_PAGE_SIZE } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import {
@@ -46,7 +47,9 @@ const getRfpSubmissions = (proposals) =>
   )(proposals);
 
 const getUnfetchedTokens = (proposals, tokens) =>
-  difference(tokens.map((token) => shortRecordToken(token)))(keys(proposals));
+  difference(tokens.map((token) => shortRecordToken(token)))(
+    keys(proposals).map((token) => shortRecordToken(token))
+  );
 
 const getCurrentPage = (tokens) => {
   return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
@@ -138,7 +141,10 @@ export default function useProposalsBatch({
                   return send(FETCH);
                 }
               }
-              const unfetchedTokens = getUnfetchedTokens(proposals, fetch);
+              const unfetchedTokens = getUnfetchedTokens(
+                assign(proposals, fetchedProposals),
+                fetch
+              );
               setRemainingTokens([...unfetchedTokens, ...next]);
               return send(RESOLVE);
             })
