@@ -484,7 +484,7 @@ export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({ proposals: proposalsWithCommentsCount })
       );
-      return [parseRawProposalsBatch(proposals), summaries];
+      return [parseRawProposalsBatch(proposalsWithCommentsCount), summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
       throw e;
