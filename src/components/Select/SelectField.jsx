@@ -18,7 +18,7 @@ const SelectField = ({ name, options, disabled, ...props }) => {
             value={getSelectValue(values[name], options)}
             onChange={onSelectChange}
             options={options}
-            isDisabled={disabled}
+            disabled={disabled}
             {...props}></Select>
         );
       }}

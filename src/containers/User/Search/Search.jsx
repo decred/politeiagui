@@ -177,7 +177,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                         options={selectTypeOptions}
                         value={values.contractortype}
                         onChange={handleChangeSelectField("contractortype")}
-                        placeholder="Choose contractor type"
+                        label="Choose contractor type"
                       />
                     )}
                     {isByDomain && (
@@ -187,7 +187,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                         options={contractorDomains}
                         value={values.domain}
                         onChange={handleChangeSelectField("domain")}
-                        placeholder="Choose a domain"
+                        label="Choose a domain"
                       />
                     )}
                     <Button

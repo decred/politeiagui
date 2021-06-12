@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { classNames, Select } from "pi-ui";
+import { classNames, MultiSelect } from "pi-ui";
 import PropTypes from "prop-types";
 import { useReactiveSearchUser } from "./hooks";
 import styles from "./SearchSelector.module.css";
@@ -11,23 +11,24 @@ const SearchSelector = ({ onChange, value, className, styles: extStyles }) => {
     value: result.id,
     label: `${result.username} | ${result.email}`
   }));
+
   return (
-    <Select
-      placeholder="Search by User"
+    <MultiSelect
+      label="Search by User"
       className={classNames(styles.select, className)}
       value={value}
+      inputValue={inputValue}
       onInputChange={(newV) => setInputValue(newV)}
       onChange={onChange}
-      isMulti
       options={options}
       styles={extStyles}
-      isSearchable
-      noOptionsMessage={() =>
+      searchable
+      clearable={false}
+      noOptionsMessage={
         inputValue === ""
           ? "Insert a username or email"
           : "No options available"
       }
-      escapeClearsValue
     />
   );
 };
