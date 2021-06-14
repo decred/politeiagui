@@ -71,24 +71,31 @@ export const parseReceivedProposalsMap = (proposals) => {
   return parsedProps;
 };
 
-// parseProposalStatuses iterate over proposal's status changes array returned
-// from BE and returns proposal's timestamps accordingly
-const parseProposalStatuses = (sChanges) => {
+/**
+ * getProposalTimestamps
+ * @param {Object} proposal
+ * @returns {{publishedat: number, censoredat: number, abandonedat: number}} Object with publishedat, censoredat, abandonedat
+ */
+const getProposalTimestamps = (proposal, publishedts) => {
+  const { status, timestamp, version } = proposal;
   let publishedat = 0,
     censoredat = 0,
     abandonedat = 0;
+  // publlished but not edited
+  if (status === PROPOSAL_STATUS_PUBLIC && version <= 1) {
+    publishedat = timestamp;
+  }
+  // edited, have to grab published timestamp from metadata
+  if (status === PROPOSAL_STATUS_PUBLIC && version > 1) {
+    publishedat = publishedts;
+  }
+  if (status === PROPOSAL_STATUS_CENSORED) {
+    censoredat = timestamp;
+  }
+  if (status === PROPOSAL_STATUS_ARCHIVED) {
+    abandonedat = timestamp;
+  }
 
-  sChanges.forEach((sChange) => {
-    if (sChange.status === PROPOSAL_STATUS_PUBLIC) {
-      publishedat = sChange.timestamp;
-    }
-    if (sChange.status === PROPOSAL_STATUS_CENSORED) {
-      censoredat = sChange.timestamp;
-    }
-    if (sChange.status === PROPOSAL_STATUS_ARCHIVED) {
-      abandonedat = sChange.timestamp;
-    }
-  });
   return { publishedat, censoredat, abandonedat };
 };
 
@@ -153,16 +160,17 @@ const parseProposalIndexFile = (proposal = {}) => {
 // parseRawProposal accepts raw proposal object received from BE and parses
 // it's metadata & status changes
 export const parseRawProposal = (proposal) => {
-  // Parse statuses
-  const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
-    proposal.statuses || []
-  );
   // Parse metdata
   // Censored proposal's metadata isn't available
   const { name } = parseProposalMetadata(proposal);
   const { linkby, linkto } = parseVoteMetadata(proposal);
   const { description } = parseProposalIndexFile(proposal);
-  const { userid } = parseUserPluginMetadata(proposal);
+  const { userid, timestamp } = parseUserPluginMetadata(proposal);
+  // get prop timestamps
+  const { publishedat, censoredat, abandonedat } = getProposalTimestamps(
+    proposal,
+    timestamp
+  );
   return {
     ...proposal,
     description: description || proposal.description,
