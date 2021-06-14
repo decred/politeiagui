@@ -32,8 +32,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     verifying,
     onRestartMachine,
     hasMoreProposals,
-    onFetchMoreProposals,
-    isFetchDone
+    onFetchMoreProposals
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
@@ -43,7 +42,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
-    isFetchDone,
+    !hasMoreProposals,
     statusByTab[tabLabels[index]]
   );
 

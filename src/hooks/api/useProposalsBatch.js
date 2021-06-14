@@ -215,7 +215,6 @@ export default function useProposalsBatch({
     proposalsTokens: allByStatus,
     loading: state.loading,
     verifying: state.verifying,
-    isFetchDone: state.status === "success" && !hasRemainingTokens,
     onRestartMachine,
     onFetchMoreProposals,
     hasMoreProposals: !!remainingTokens.length,
