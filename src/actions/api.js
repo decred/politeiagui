@@ -23,7 +23,8 @@ import {
   INELIGIBLE,
   ARCHIVED,
   PROPOSAL_METADATA_FILENAME,
-  VOTE_METADATA_FILENAME
+  VOTE_METADATA_FILENAME,
+  PROPOSAL_STATE_UNVETTED
 } from "../constants";
 import {
   parseReceivedProposalsMap,
@@ -534,15 +535,17 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
 };
 
 export const onFetchTokenInventory =
-  (page = 0) =>
+  (state, status, page = 0, isVoteStatus) =>
   async (dispatch) => {
     dispatch(act.REQUEST_TOKEN_INVENTORY());
     try {
       return await Promise.all([
-        api.proposalsInventory(page),
-        api.votesInventory(page)
+        !isVoteStatus && api.proposalsInventory(state, status, page),
+        isVoteStatus &&
+          state !== PROPOSAL_STATE_UNVETTED &&
+          api.votesInventory(status, page)
       ]).then(([proposals, votes]) => {
-        const byRecords = {
+        const byRecords = !isVoteStatus && {
           [UNREVIEWED]:
             (proposals &&
               proposals.unvetted &&
@@ -565,7 +568,7 @@ export const onFetchTokenInventory =
               [])
           ]
         };
-        const byVotes = {
+        const byVotes = isVoteStatus && {
           [PRE_VOTE]: [
             ...((votes && votes.vetted && votes.vetted.authorized) || []),
             ...((votes && votes.vetted && votes.vetted.unauthorized) || [])
@@ -575,8 +578,8 @@ export const onFetchTokenInventory =
           [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
           [INELIGIBLE]: (votes && votes.vetted && votes.vetted.ineligible) || []
         };
-        dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
-        dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
+        !isVoteStatus && dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
+        isVoteStatus && dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
         return { records: byRecords, votes: byVotes };
       });
     } catch (error) {
