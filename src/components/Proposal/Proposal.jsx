@@ -139,7 +139,8 @@ const Proposal = React.memo(function Proposal({
     commentsURL,
     // TODO: remove legacy
     isLegacy,
-    rfpProposalURL
+    rfpProposalURL,
+    legacyRfpName
   } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
@@ -250,7 +251,11 @@ const Proposal = React.memo(function Proposal({
               isRfp={isRfp}
               isRfpSubmission={isRfpSubmission}
               rfpProposalLink={
-                <RfpProposalLink url={rfpProposalURL} rfpTitle={proposedFor} />
+                <RfpProposalLink
+                  url={rfpProposalURL}
+                  rfpTitle={isLegacy ? legacyRfpName : proposedFor}
+                  isLegacy={isLegacy}
+                />
               }
               subtitle={
                 <Subtitle>

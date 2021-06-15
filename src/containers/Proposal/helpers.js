@@ -316,7 +316,6 @@ export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
     const isRfp = !!proposal.linkby;
     const isSubmission = !!proposal.linkto;
     if (!isSubmission && !isRfp) return acc;
-
     if (isSubmission) {
       const linkedProposal = proposalsByToken[proposal.linkto];
       if (!linkedProposal) return acc;

@@ -6,6 +6,7 @@ import * as sel from "src/selectors";
 import { useSelector } from "src/redux";
 import { shortRecordToken } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
+import legacyProposalsInfo from "src/legacyproposals.json";
 
 export default function useProposalURLs(
   proposalToken,
@@ -37,9 +38,25 @@ export default function useProposalURLs(
     return (
       isRfpSubmission &&
       linkto &&
-      getProposalUrl(linkto, javascriptEnabled, PROPOSAL_STATE_VETTED)
+      (!isLegacy
+        ? getProposalUrl(linkto, javascriptEnabled, PROPOSAL_STATE_VETTED)
+        : `${ARCHIVE_URL}proposals/${shortRecordToken(linkto)}`)
     );
-  }, [isRfpSubmission, javascriptEnabled, linkto]);
+  }, [isLegacy, isRfpSubmission, javascriptEnabled, linkto]);
 
-  return { isLegacy, proposalURL, authorURL, commentsURL, rfpProposalURL };
+  let legacyRfpName = "";
+  if (isLegacy) {
+    legacyRfpName = legacyProposalsInfo.proposals.filter((p) => {
+      return p.censorshiprecord.token === linkto;
+    })[0]?.name;
+  }
+
+  return {
+    isLegacy,
+    proposalURL,
+    authorURL,
+    commentsURL,
+    rfpProposalURL,
+    legacyRfpName
+  };
 }

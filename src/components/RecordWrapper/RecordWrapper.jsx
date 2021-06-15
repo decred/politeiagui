@@ -277,7 +277,7 @@ export const CommentsLink = ({
   );
 };
 
-export const RfpProposalLink = ({ url, rfpTitle }) => {
+export const RfpProposalLink = ({ url, rfpTitle, isLegacy }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
@@ -289,7 +289,11 @@ export const RfpProposalLink = ({ url, rfpTitle }) => {
         )}>
         Proposed for{" "}
       </span>
-      <Link to={url}>{rfpTitle}</Link>
+      {isLegacy ? (
+        <a href={url}>{rfpTitle}</a>
+      ) : (
+        <Link to={url}>{rfpTitle}</Link>
+      )}
     </div>
   );
 };
