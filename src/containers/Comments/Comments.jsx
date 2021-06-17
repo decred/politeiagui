@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { Card, H2, Text, Message, classNames, Toggle, P, Select } from "pi-ui";
+import { Card, H2, Text, Message, classNames, P, Select } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
@@ -36,6 +36,23 @@ import { getQueryStringValue } from "src/lib/queryString";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 
 const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
+
+const FlatModeButton = ({ isActive, onClick }) => (
+  <div
+    className={classNames(
+      styles.flatButtonWrapper,
+      isActive && styles.flatModeActive
+    )}>
+    <Text
+      className={classNames(
+        styles.flatButtonText,
+        isActive && styles.flatModeActive
+      )}
+      onClick={onClick}>
+      Flat mode
+    </Text>
+  </div>
+);
 
 const Comments = ({
   numOfComments,
@@ -278,29 +295,25 @@ const Comments = ({
             )}
             <div className={styles.sortContainer}>
               {!!comments && !!comments.length && (
-                <Select
-                  value={selectValue}
-                  onChange={handleSetSortOption}
-                  options={selectOptions}
-                />
+                <>
+                  <Select
+                    value={selectValue}
+                    onChange={handleSetSortOption}
+                    options={selectOptions}
+                  />
+                  {!isSingleThread && (
+                    <FlatModeButton
+                      isActive={isFlatCommentsMode}
+                      onClick={handleCommentsModeToggle}
+                    />
+                  )}
+                </>
               )}
             </div>
-            {isSingleThread ? (
+            {isSingleThread && (
               <div className="justify-left margin-top-s">
                 <Text className="margin-right-xs">Single comment thread. </Text>
                 <Link to={`/record/${recordToken}`}> View all.</Link>
-              </div>
-            ) : (
-              <div className={styles.modeToggleWrapper}>
-                <div
-                  onClick={handleCommentsModeToggle}
-                  className={styles.modeToggleLabel}>
-                  Flat Mode
-                </div>
-                <Toggle
-                  onToggle={handleCommentsModeToggle}
-                  toggled={isFlatCommentsMode}
-                />
               </div>
             )}
           </div>
