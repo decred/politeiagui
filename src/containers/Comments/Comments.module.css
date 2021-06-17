@@ -60,10 +60,6 @@ span.flatModeActive {
   align-items: flex-start;
 }
 
-.modeToggleWrapper {
-  display: flex;
-}
-
 .modeToggleLabel {
   margin-right: 0.5rem;
   margin-top: 0.1rem;
