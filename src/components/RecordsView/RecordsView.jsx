@@ -19,7 +19,10 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
 
 const getFilteredRecordsAndToken = (records, tokens, tab, filterCensored) => {
   const filteredTokens = tokens[tab].map((token) => shortRecordToken(token));
-  const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
+  const sortByNewestFirst = orderBy(
+    ["voteStatus", "timestamp"],
+    ["desc", "desc"]
+  );
   let filteredRecords =
     (records &&
       filteredTokens &&
