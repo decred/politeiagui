@@ -62,6 +62,6 @@ export const mapProposalsTokensByTab = (tabLabels, proposalsTokens) =>
   );
 
 export const statusByTab = {
-  [tabValues.UNREVIEWED]: PROPOSAL_STATUS_UNREVIEWED,
-  [tabValues.CENSORED]: PROPOSAL_STATUS_CENSORED
+  [tabValues.UNREVIEWED]: [PROPOSAL_STATUS_UNREVIEWED],
+  [tabValues.CENSORED]: [PROPOSAL_STATUS_CENSORED]
 };

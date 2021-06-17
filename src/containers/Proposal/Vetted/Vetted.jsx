@@ -16,8 +16,7 @@ const renderProposal = (record) => (
 );
 
 const tabLabels = [
-  tabValues.IN_DISCUSSION,
-  tabValues.VOTING,
+  tabValues.UNDER_REVIEW,
   tabValues.APPROVED,
   tabValues.REJECTED,
   tabValues.INELIGIBLE
@@ -37,7 +36,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
-    status: statusByTab[tabLabels[index]]
+    statuses: statusByTab[tabLabels[index]],
+    proposalPageSize: 4
   });
 
   // TODO: remove legacy
@@ -72,8 +72,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
-      [tabValues.IN_DISCUSSION]: "No proposals under discussion",
-      [tabValues.VOTING]: "No proposals voting",
+      [tabValues.UNDER_REVIEW]: "No proposals under review",
       [tabValues.APPROVED]: "No proposals approved",
       [tabValues.REJECTED]: "No proposals rejected",
       [tabValues.INELIGIBLE]: "No proposals archived or censored"
@@ -108,7 +107,6 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     onSetIndex(newIndex);
     onRestartMachine(statusByTab[tabLabels[newIndex]]);
   };
-
   return (
     <RecordsView
       records={{ ...proposals, ...legacyProposals }}

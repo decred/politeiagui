@@ -27,17 +27,26 @@ const mapStatusToString = {
   [PROPOSAL_VOTING_INELIGIBLE]: "abandoned"
 };
 
-export default function useLegacyVettedProposals(shouldReturn = false, status) {
+export default function useLegacyVettedProposals(
+  shouldReturn = false,
+  statuses
+) {
   const [legacyProposals, setLegacyProposals] = useState([]);
   const [legacyProposalsTokens, setLegacyProposalsTokens] = useState({});
   useEffect(() => {
     // shouldReturn is a boolean to control when the proposals are done fetching so we can return the legacy props.
     if (shouldReturn) {
-      const proposalsTokensList =
-        tokenInventory[mapStatusToString[status]] &&
-        tokenInventory[mapStatusToString[status]].map((token) =>
-          shortRecordToken(token)
-        );
+      let proposalsTokensList = [];
+      statuses.forEach((status) => {
+        const tokensListByStatus =
+          tokenInventory[mapStatusToString[status]] &&
+          tokenInventory[mapStatusToString[status]].map((token) =>
+            shortRecordToken(token)
+          );
+        if (Array.isArray(tokensListByStatus)) {
+          proposalsTokensList = [...proposalsTokensList, ...tokensListByStatus];
+        }
+      });
       // filter propsals by tab and transform from Array to Object where the key is the proposal token and the value is the proposal info
       const finalList = newLegacyProposalsInfo
         .filter(
@@ -60,6 +69,6 @@ export default function useLegacyVettedProposals(shouldReturn = false, status) {
       setLegacyProposals([]);
       setLegacyProposalsTokens({});
     }
-  }, [legacyProposals.proposals, shouldReturn, status]);
+  }, [legacyProposals.proposals, shouldReturn, statuses]);
   return { legacyProposals, legacyProposalsTokens };
 }

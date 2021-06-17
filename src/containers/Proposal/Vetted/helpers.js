@@ -7,8 +7,7 @@ import {
 } from "src/constants";
 
 export const tabValues = {
-  IN_DISCUSSION: "In Discussion",
-  VOTING: "Voting",
+  UNDER_REVIEW: "Under Review",
   APPROVED: "Approved",
   REJECTED: "Rejected",
   INELIGIBLE: "Abandoned"
@@ -26,10 +25,8 @@ export const getProposalTokensByTabOption = (tabOption, proposalsTokens) => {
   if (!proposalsTokens) return [];
   const { pre, started, approved, rejected, ineligible } = proposalsTokens;
   switch (tabOption) {
-    case tabValues.IN_DISCUSSION:
-      return pre;
-    case tabValues.VOTING:
-      return started;
+    case tabValues.UNDER_REVIEW:
+      return [...started, ...pre];
     case tabValues.APPROVED:
       return approved;
     case tabValues.REJECTED:
@@ -56,9 +53,11 @@ export const mapProposalsTokensByTab = (tabLabels, proposalsTokens) => {
 };
 
 export const statusByTab = {
-  [tabValues.IN_DISCUSSION]: PROPOSAL_VOTING_NOT_AUTHORIZED,
-  [tabValues.VOTING]: PROPOSAL_VOTING_ACTIVE,
-  [tabValues.APPROVED]: PROPOSAL_VOTING_APPROVED,
-  [tabValues.REJECTED]: PROPOSAL_VOTING_REJECTED,
-  [tabValues.INELIGIBLE]: PROPOSAL_VOTING_INELIGIBLE
+  [tabValues.UNDER_REVIEW]: [
+    PROPOSAL_VOTING_ACTIVE,
+    PROPOSAL_VOTING_NOT_AUTHORIZED
+  ],
+  [tabValues.APPROVED]: [PROPOSAL_VOTING_APPROVED],
+  [tabValues.REJECTED]: [PROPOSAL_VOTING_REJECTED],
+  [tabValues.INELIGIBLE]: [PROPOSAL_VOTING_INELIGIBLE]
 };

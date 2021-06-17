@@ -482,7 +482,8 @@ export const onFetchProposalsBatch = (
             ...acc,
             [curr]: {
               ...proposals[curr],
-              commentsCount: commentsCount[curr]
+              commentsCount: commentsCount[curr],
+              voteStatus: summaries ? summaries[curr].status : null
             }
           };
         },
