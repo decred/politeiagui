@@ -96,6 +96,8 @@ export const INELIGIBLE = "ineligible";
 export const ARCHIVED = "archived";
 export const PUBLIC = "public";
 export const CENSORED = "censored";
+export const VETTED = "vetted";
+export const UNVETTED = "unvetted";
 
 export const USER_DETAIL_TAB_GENERAL = 0;
 export const USER_DETAIL_TAB_PREFERENCES = 1;

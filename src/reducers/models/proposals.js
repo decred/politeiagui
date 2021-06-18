@@ -50,6 +50,7 @@ const DEFAULT_STATE = {
     [UNREVIEWED]: []
   },
   allProposalsByUserId: {},
+  allTokensByUserId: {},
   numOfProposalsByUserId: {},
   // TODO: remove legacy
   // In tests legacyProposals.proposals is undefined, thus the need for `|| []`.
@@ -146,11 +147,22 @@ const proposals = (state = DEFAULT_STATE, action) =>
     ? state
     : (
         {
-          [act.RECEIVE_PROPOSALS_BATCH]: () =>
-            update("byToken", (proposals) => ({
-              ...proposals,
-              ...parseReceivedProposalsMap(action.payload.proposals)
-            }))(state),
+          [act.RECEIVE_PROPOSALS_BATCH]: () => {
+            return compose(
+              update(["allProposalsByUserId"], (prop) => {
+                return {
+                  [action.payload.userid]: {
+                    ...prop[action.payload.userid],
+                    ...parseReceivedProposalsMap(action.payload.proposals)
+                  }
+                };
+              }),
+              update("byToken", (proposals) => ({
+                ...proposals,
+                ...parseReceivedProposalsMap(action.payload.proposals)
+              }))
+            )(state);
+          },
           [act.RECEIVE_VOTES_INVENTORY]: () =>
             update("allByVoteStatus", updateInventory(action.payload))(state),
           [act.RECEIVE_RECORDS_INVENTORY]: () =>
@@ -246,26 +258,19 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 };
               })
             )(state),
-          [act.RECEIVE_USER_PROPOSALS]: () =>
-            compose(
-              update("byToken", (proposals) => ({
-                ...proposals,
-                ...parseReceivedProposalsMap(action.payload.proposals)
-              })),
-              update(
-                ["allProposalsByUserId", action.payload.userid],
-                (userProposals = []) => [
-                  ...userProposals,
-                  ...Object.keys(action.payload.proposals).map((token) =>
-                    shortRecordToken(token)
-                  )
-                ]
-              ),
+          [act.RECEIVE_USER_INVENTORY]: () => {
+            return compose(
+              update(["allTokensByUserId"], () => {
+                return {
+                  [action.payload.userid]: action.payload.proposals
+                };
+              }),
               set(
                 ["numOfProposalsByUserId", action.payload.userid],
                 action.payload.numofproposals
               )
-            )(state),
+            )(state);
+          },
           [act.RECEIVE_START_VOTE]: () =>
             update("allByVoteStatus", (allProps) =>
               updateAllByVoteStatus(
@@ -282,25 +287,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
               (commentsCount) => ++commentsCount
             )(state);
           },
-          [act.RECEIVE_LOGOUT]: () => {
-            const privateProps = [
-              ...(state.allByRecordStatus[UNREVIEWED] || []),
-              ...(state.allByRecordStatus[ARCHIVED] || []),
-              ...(state.allByRecordStatus[CENSORED] || [])
-            ];
-            const filterPrivateProps = update("byToken", (propsByToken) =>
-              Object.keys(propsByToken)
-                .filter((key) => !privateProps.includes(key))
-                .reduce(
-                  (res, token) => ({ ...res, [token]: propsByToken[token] }),
-                  {}
-                )
-            );
-            return compose(
-              filterPrivateProps,
-              set("allByRecordStatus", DEFAULT_STATE.allByRecordStatus)
-            )(state);
-          }
+          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
 

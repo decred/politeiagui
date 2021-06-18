@@ -20,8 +20,8 @@ const Proposals = (props) => {
   const [hasMoreToLoad, setHasMore] = useState(false);
 
   const { userID } = props;
-  const { proposals, loading, numOfUserProposals, onFetchUserProposals } =
-    useUserProposals(userID);
+  const { proposals, loading, numOfUserProposals, onFetchMoreProposals } =
+    useUserProposals({ userID });
 
   const amountOfProposalsFetched = proposals ? proposals.length : 0;
 
@@ -33,7 +33,7 @@ const Proposals = (props) => {
         lastProposal && lastProposal.censorshiprecord.token;
       setHasMore(false);
       if (lastProposalToken) {
-        await onFetchUserProposals(userID, lastProposalToken);
+        await onFetchMoreProposals();
       }
     } catch (e) {
       console.error(e);

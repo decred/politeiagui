@@ -450,7 +450,11 @@ export const onFetchProposalDetailsWithoutState =
   };
 
 // state should be the state of requested proposals
-export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
+export const onFetchProposalsBatch = (
+  tokens,
+  fetchVoteSummary = true,
+  userid
+) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     const requests = tokens?.map((token) => ({
@@ -483,7 +487,10 @@ export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
         {}
       );
       dispatch(
-        act.RECEIVE_PROPOSALS_BATCH({ proposals: proposalsWithCommentsCount })
+        act.RECEIVE_PROPOSALS_BATCH({
+          proposals: proposalsWithCommentsCount,
+          userid
+        })
       );
       return [parseRawProposalsBatch(proposalsWithCommentsCount), summaries];
     } catch (e) {
@@ -1232,47 +1239,20 @@ export const onUserProposalCredits = () => (dispatch, getState) => {
 
 export const onFetchUserProposals = (userid) =>
   withCsrf(async (dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
+    dispatch(act.REQUEST_USER_INVENTORY({ userid }));
     try {
       const response = await api.userProposals(csrf, userid);
-      const cachedUserProposals = sel.makeGetUserProposals(userid)(getState());
-      const unvettedTokens = response.unvetted;
-      const vettedTokens = response.vetted;
-      const tokensLength = unvettedTokens.length + vettedTokens.length;
-
-      let unvettedProposals = [];
-      let vettedProposals = [];
-
-      if (unvettedTokens.length) {
-        const remainingTokens = unvettedTokens
-          .filter(
-            (t) =>
-              !cachedUserProposals.find((up) => up.censorshiprecord.token === t)
-          )
-          .slice(0, 9);
-        unvettedProposals = await dispatch(
-          onFetchProposalsBatch(remainingTokens, false)
-        );
-      }
-      if (vettedTokens.length) {
-        vettedProposals = await dispatch(onFetchProposalsBatch(vettedTokens));
-      }
-      // we access the first array position, which contains the proposals.
-      // second array position refers to the vote summary results.
-      const proposals = {
-        ...unvettedProposals[0],
-        ...vettedProposals[0]
-      };
-
+      const tokensLength = response.vetted.length + response.unvetted.length;
       dispatch(
-        act.RECEIVE_USER_PROPOSALS({
-          proposals,
+        act.RECEIVE_USER_INVENTORY({
+          proposals: { ...response },
           userid,
           numofproposals: tokensLength
         })
       );
+      return response;
     } catch (e) {
-      dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
+      dispatch(act.RECEIVE_USER_INVENTORY(null, e));
       throw e;
     }
   });
