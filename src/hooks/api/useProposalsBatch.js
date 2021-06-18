@@ -152,10 +152,12 @@ export default function useProposalsBatch({
                 ...rfpSubmissions
               ]);
               if (!isEmpty(unfetchedRfpLinks)) {
-                onFetchProposalsBatch(unfetchedRfpLinks, fetchVoteSummaries)
-                  .then(() => send(RESOLVE))
-                  .catch((e) => send(REJECT, e));
-                return send(FETCH);
+                setRemainingTokens([
+                  ...unfetchedRfpLinks,
+                  ...unfetchedTokens,
+                  ...next
+                ]);
+                return send(VERIFY);
               }
             }
             return send(RESOLVE);
