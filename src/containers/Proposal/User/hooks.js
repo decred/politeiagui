@@ -158,7 +158,7 @@ export function useUserProposals({
                   fetchVoteSummaries,
                   userID
                 )
-                  .then(([fetchedProposals]) => {
+                  .then(() => {
                     const unfetchedTokens = getUnfetchedTokens(
                       assign(proposals, fetchedProposals),
                       tokensToFetch
