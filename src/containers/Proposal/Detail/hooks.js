@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
@@ -8,7 +8,7 @@ import {
   getTokensForProposalsPagination
 } from "../helpers";
 import { getDetailsFile } from "./helpers";
-import { shortRecordToken } from "src/helpers";
+import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import isEmpty from "lodash/fp/isEmpty";
@@ -82,12 +82,21 @@ export function useProposal(token, threadParentID) {
   );
   const needsInitialFetch = isRfp || (token && isMissingDetails);
 
+  const [remainingTokens, setRemainingTokens] = useState(unfetchedProposalTokens);
+  const hasRemainingTokens = !isEmpty(remainingTokens);
+
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
       initial: () => {
         if (needsInitialFetch) {
           onFetchProposalDetails(token)
-            .then(() => send(VERIFY))
+            .then((res) => {
+              console.log(parseRawProposal(res));
+              const hasToFetchRfpLinks = getProposalRfpLinksTokens(parseRawProposal(res));
+              console.log(hasToFetchRfpLinks);
+              setRemainingTokens(hasToFetchRfpLinks);
+              send(VERIFY);
+            })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
@@ -99,7 +108,7 @@ export function useProposal(token, threadParentID) {
           !isEmpty(unfetchedSummariesTokens) ||
           (proposal &&
             rfpLinks &&
-            (!isEmpty(unfetchedProposalTokens) ||
+            (hasRemainingTokens ||
               !isEmpty(unfetchedSummariesTokens)))
         ) {
           return;
@@ -107,12 +116,15 @@ export function useProposal(token, threadParentID) {
         return send(VERIFY);
       },
       verify: () => {
-        if (!isEmpty(unfetchedProposalTokens)) {
-          const [tokensBatch] = getTokensForProposalsPagination(
-            unfetchedProposalTokens
+        if (hasRemainingTokens) {
+          const [tokensBatch, next] = getTokensForProposalsPagination(
+            remainingTokens
           );
           onFetchProposalsBatch(tokensBatch, isRfp)
-            .then(() => send(VERIFY))
+            .then(() => {
+                setRemainingTokens(next);
+                return send(RESOLVE);
+            })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }

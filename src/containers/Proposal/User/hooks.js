@@ -152,17 +152,19 @@ export function useUserProposals({
                 ...rfpLinks,
                 ...rfpSubmissions
               ]);
+              console.log("rfp", unfetchedRfpLinks);
               if (!isEmpty(unfetchedRfpLinks)) {
                 onFetchProposalsBatch(
                   unfetchedRfpLinks,
                   fetchVoteSummaries,
                   userID
                 )
-                  .then(() => {
+                  .then(([fetchedProposals]) => {
                     const unfetchedTokens = getUnfetchedTokens(
                       assign(proposals, fetchedProposals),
                       tokensToFetch
                     );
+                    console.log(unfetchedTokens, fetchedProposals);
                     setRemainingTokens([...unfetchedTokens, ...next]);
                     return send(RESOLVE);
                   })
@@ -195,6 +197,7 @@ export function useUserProposals({
   const anyError = error || state.error;
   useThrowError(anyError);
 
+  console.log(proposals);
   return {
     proposals: proposals
       ? Object.values(getRfpLinkedProposals(proposals, voteSummaries))
