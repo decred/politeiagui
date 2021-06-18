@@ -509,7 +509,6 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
     const record = response.find((res) => res && res.record).record;
     const commentsCount = response.find((res) => res && res.counts).counts;
     const { linkby } = parseRawProposal(record);
-    console.log(linkby);
     if (linkby) {
       const { submissions } = await api.proposalSubmissions(token);
       dispatch(
@@ -523,11 +522,11 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
           }
         })
       );
-      return ({
+      return {
         ...record,
         linkedfrom: submissions,
         commentsCount: commentsCount[token]
-      });
+      };
     } else {
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({
@@ -539,10 +538,10 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
           }
         })
       );
-      return ({
+      return {
         ...record,
         commentsCount: commentsCount[token]
-      });
+      };
     }
   } catch (e) {
     act.RECEIVE_PROPOSALS_BATCH(null, e);

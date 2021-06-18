@@ -55,7 +55,7 @@ const Proposals = (props) => {
   const itemsToBeLoaded =
     amountOfMissingProposals > PAGE_SIZE ? PAGE_SIZE : amountOfMissingProposals;
 
-    console.log(proposals);
+  console.log(proposals);
   return (
     <UnvettedActionsProvider>
       <PublicActionsProvider>
