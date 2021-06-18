@@ -522,6 +522,11 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
           }
         })
       );
+      return {
+        ...record,
+        linkedfrom: submissions,
+        commentsCount: commentsCount[token]
+      };
     } else {
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({
@@ -533,8 +538,11 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
           }
         })
       );
+      return {
+        ...record,
+        commentsCount: commentsCount[token]
+      };
     }
-    return response.record;
   } catch (e) {
     act.RECEIVE_PROPOSALS_BATCH(null, e);
     throw e;

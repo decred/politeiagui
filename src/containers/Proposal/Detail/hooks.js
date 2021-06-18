@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
@@ -8,7 +8,7 @@ import {
   getTokensForProposalsPagination
 } from "../helpers";
 import { getDetailsFile } from "./helpers";
-import { shortRecordToken } from "src/helpers";
+import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import isEmpty from "lodash/fp/isEmpty";
@@ -61,14 +61,23 @@ export function useProposal(token, threadParentID) {
   const rfpLinks = getProposalRfpLinksTokens(proposal);
 
   const unfetchedProposalTokens =
-    rfpLinks && difference(rfpLinks)(keys(proposals));
+    rfpLinks &&
+    difference(
+      rfpLinks.map((r) => shortRecordToken(r)),
+      keys(proposals)
+    );
   const unfetchedSummariesTokens = getUnfetchedVoteSummaries(
     proposal,
     voteSummaries
   );
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
-      proposals: values(pick(proposals, rfpLinks)),
+      proposals: values(
+        pick(
+          proposals,
+          rfpLinks.map((l) => shortRecordToken(l))
+        )
+      ),
       voteSummaries: pick(
         voteSummaries,
         rfpLinks.map((l) => shortRecordToken(l))
@@ -82,12 +91,23 @@ export function useProposal(token, threadParentID) {
   );
   const needsInitialFetch = isRfp || (token && isMissingDetails);
 
+  const [remainingTokens, setRemainingTokens] = useState(
+    unfetchedProposalTokens
+  );
+  const hasRemainingTokens = !isEmpty(remainingTokens);
+
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
       initial: () => {
         if (needsInitialFetch) {
           onFetchProposalDetails(token)
-            .then(() => send(VERIFY))
+            .then((res) => {
+              const hasToFetchRfpLinks = getProposalRfpLinksTokens(
+                parseRawProposal(res)
+              );
+              setRemainingTokens(hasToFetchRfpLinks);
+              send(VERIFY);
+            })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
@@ -99,20 +119,21 @@ export function useProposal(token, threadParentID) {
           !isEmpty(unfetchedSummariesTokens) ||
           (proposal &&
             rfpLinks &&
-            (!isEmpty(unfetchedProposalTokens) ||
-              !isEmpty(unfetchedSummariesTokens)))
+            (hasRemainingTokens || !isEmpty(unfetchedSummariesTokens)))
         ) {
           return;
         }
         return send(VERIFY);
       },
       verify: () => {
-        if (!isEmpty(unfetchedProposalTokens)) {
-          const [tokensBatch] = getTokensForProposalsPagination(
-            unfetchedProposalTokens
-          );
+        if (hasRemainingTokens) {
+          const [tokensBatch, next] =
+            getTokensForProposalsPagination(remainingTokens);
           onFetchProposalsBatch(tokensBatch, isRfp)
-            .then(() => send(VERIFY))
+            .then(() => {
+              setRemainingTokens(next);
+              return send(RESOLVE);
+            })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
@@ -130,6 +151,7 @@ export function useProposal(token, threadParentID) {
           return send(FETCH);
         }
         if (rfpLinks && rfpSubmissions) {
+          // is a RFP
           return send(RESOLVE, { proposal, rfpSubmissions });
         }
         return send(RESOLVE, { proposal });

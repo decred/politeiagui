@@ -359,7 +359,10 @@ export const getProposalRfpLinks = (proposal, rfpSubmissions, proposals) => {
   return hasRfpSubmissions
     ? { ...proposal, rfpSubmissions }
     : isSubmissionWithProposals
-    ? { ...proposal, proposedFor: proposals[proposal.linkto]?.name }
+    ? {
+        ...proposal,
+        proposedFor: proposals[shortRecordToken(proposal.linkto)]?.name
+      }
     : proposal;
 };
 
