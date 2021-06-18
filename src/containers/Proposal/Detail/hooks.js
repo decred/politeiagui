@@ -19,9 +19,10 @@ import values from "lodash/fp/values";
 import pick from "lodash/pick";
 import concat from "lodash/fp/concat";
 
-const getUnfetchedVoteSummaries = (proposal, voteSummaries) => {
+const getUnfetchedVoteSummaries = (proposal, voteSummaries, isSubmission) => {
   if (!proposal) return [];
-  const rfpLinks = getProposalRfpLinksTokens(proposal);
+  // no need to fetch vote summary if its submission
+  const rfpLinks = isSubmission ? [] : getProposalRfpLinksTokens(proposal);
   const proposalToken = getProposalToken(proposal);
   const tokens = concat(rfpLinks || [])(proposalToken);
   // compare tokens by short form
@@ -59,6 +60,8 @@ export function useProposal(token, threadParentID) {
   const voteSummaries = useSelector(sel.summaryByToken);
   const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
   const rfpLinks = getProposalRfpLinksTokens(proposal);
+  const isRfp = proposal && !!proposal.linkby;
+  const isSubmission = proposal && !!proposal.linkto;
 
   const unfetchedProposalTokens =
     rfpLinks &&
@@ -68,7 +71,8 @@ export function useProposal(token, threadParentID) {
     );
   const unfetchedSummariesTokens = getUnfetchedVoteSummaries(
     proposal,
-    voteSummaries
+    voteSummaries,
+    isSubmission
   );
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
@@ -84,17 +88,20 @@ export function useProposal(token, threadParentID) {
       )
     };
 
-  const isRfp = proposal && !!proposal.linkby;
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !(
     voteSummaries[tokenShort] && voteSummaries[tokenShort].details
   );
-  const needsInitialFetch = isRfp || (token && isMissingDetails);
+  const needsInitialFetch = token && isMissingDetails;
 
   const [remainingTokens, setRemainingTokens] = useState(
     unfetchedProposalTokens
   );
   const hasRemainingTokens = !isEmpty(remainingTokens);
+
+  const initialValues = {
+    status: "idle"
+  };
 
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
@@ -129,10 +136,11 @@ export function useProposal(token, threadParentID) {
         if (hasRemainingTokens) {
           const [tokensBatch, next] =
             getTokensForProposalsPagination(remainingTokens);
-          onFetchProposalsBatch(tokensBatch, isRfp)
+          // only fetch summaries and count if the proposal is a RFP. If it is a submission, just grab the records info.
+          onFetchProposalsBatch(tokensBatch, isRfp, undefined, !isSubmission)
             .then(() => {
               setRemainingTokens(next);
-              return send(RESOLVE);
+              return send(VERIFY);
             })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
@@ -158,11 +166,13 @@ export function useProposal(token, threadParentID) {
       },
       done: () => {
         // verify proposal on proposal changes
+        // TODO: improve this in the future so we don't need to verify once it should be done
         if (!isEqual(state.proposal, proposal)) {
           return send(VERIFY);
         }
       }
-    }
+    },
+    initialValues
   });
 
   const proposalWithLinks = getProposalRfpLinks(
@@ -174,7 +184,7 @@ export function useProposal(token, threadParentID) {
   return {
     proposal: proposalWithLinks,
     error: state.error,
-    loading: state.loading,
+    loading: state.status === "idle" || state.status === "loading",
     threadParentID
   };
 }
