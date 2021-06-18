@@ -26,7 +26,7 @@ const EditProposal = ({ match }) => {
   const isPublic = isPublicProposal(proposal);
   const { onEditProposal, currentUser } = useEditProposal();
   const { userid } = currentUser || {};
-  const { isPaid } = usePaywall();
+  const { isPaid, paywallEnabled } = usePaywall();
   const [, identityError] = useIdentity();
   const hasDetails =
     proposal?.files.filter((f) => f.name === "index.md").length > 0;
@@ -52,7 +52,7 @@ const EditProposal = ({ match }) => {
   return (
     <Card className="container">
       <Or>
-        {!isPaid && (
+        {!isPaid && paywallEnabled && (
           <Message kind="error">
             <P>
               You won't be able to submit comments or proposals before paying
