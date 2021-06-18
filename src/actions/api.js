@@ -453,7 +453,8 @@ export const onFetchProposalDetailsWithoutState =
 export const onFetchProposalsBatch = (
   tokens,
   fetchVoteSummary = true,
-  userid
+  userid,
+  fetchProposalsCount = true
 ) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
@@ -467,13 +468,13 @@ export const onFetchProposalsBatch = (
           requests
         }),
         fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
-        api.commentsCount(tokens)
+        fetchProposalsCount && api.commentsCount(tokens)
       ]);
       const proposals = response.find((res) => res && res.records).records;
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
-      const commentsCount = response.find((res) => res && res.counts).counts;
+      const commentsCount = fetchProposalsCount && response.find((res) => res && res.counts).counts;
       const proposalsWithCommentsCount = Object.keys(proposals).reduce(
         (acc, curr) => {
           return {
