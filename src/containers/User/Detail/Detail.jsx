@@ -73,8 +73,6 @@ const UserDetail = ({
   const proposalsOwned = user && user.proposalsowned;
   const ownsProposals = proposalsOwned && proposalsOwned.length > 0;
 
-  console.log(enablePaywall);
-
   const tabLabels = useMemo(() => {
     const isTabDisabled = (tabLabel) => {
       if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
