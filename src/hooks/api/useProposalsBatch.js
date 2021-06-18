@@ -139,6 +139,11 @@ export default function useProposalsBatch({
               setRemainingTokens(next);
               return send(RESOLVE);
             }
+            const unfetchedTokens = getUnfetchedTokens(
+              assign(proposals, fetchedProposals),
+              tokensToFetch
+            );
+            setRemainingTokens([...unfetchedTokens, ...next]);
             if (fetchRfpLinks) {
               const rfpLinks = getRfpLinks(fetchedProposals);
               const rfpSubmissions = getRfpSubmissions(fetchedProposals);
@@ -147,17 +152,14 @@ export default function useProposalsBatch({
                 ...rfpSubmissions
               ]);
               if (!isEmpty(unfetchedRfpLinks)) {
-                onFetchProposalsBatch(unfetchedRfpLinks, fetchVoteSummaries)
-                  .then(() => send(RESOLVE))
-                  .catch((e) => send(REJECT, e));
-                return send(FETCH);
+                setRemainingTokens([
+                  ...unfetchedRfpLinks,
+                  ...unfetchedTokens,
+                  ...next
+                ]);
+                return send(VERIFY);
               }
             }
-            const unfetchedTokens = getUnfetchedTokens(
-              assign(proposals, fetchedProposals),
-              tokensToFetch
-            );
-            setRemainingTokens([...unfetchedTokens, ...next]);
             return send(RESOLVE);
           })
           .catch((e) => send(REJECT, e));
@@ -201,10 +203,19 @@ export default function useProposalsBatch({
     return send(START);
   };
 
+  const isFetchDone =
+    !remainingTokens.length &&
+    state.status === "success" &&
+    !getUnfetchedTokens(proposals, tokens).length;
+
+  const isAnotherInventoryCallRequired =
+    tokens && tokens.length && tokens.length % INVENTORY_PAGE_SIZE === 0;
+
   const onFetchMoreProposals = useCallback(() => {
-    if (isEmpty(remainingTokens)) return send(START);
+    if (isEmpty(remainingTokens) && isAnotherInventoryCallRequired)
+      return send(START);
     return send(VERIFY);
-  }, [send, remainingTokens]);
+  }, [send, remainingTokens, isAnotherInventoryCallRequired]);
 
   const anyError = error || state.error;
   useThrowError(anyError);
@@ -218,6 +229,7 @@ export default function useProposalsBatch({
     onRestartMachine,
     onFetchMoreProposals,
     hasMoreProposals: !!remainingTokens.length,
+    isProposalsBatchComplete: isFetchDone && !isAnotherInventoryCallRequired,
     machineCurrentState: state.status
   };
 }

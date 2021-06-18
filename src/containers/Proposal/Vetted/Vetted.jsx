@@ -32,17 +32,17 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     verifying,
     onRestartMachine,
     hasMoreProposals,
-    onFetchMoreProposals
+    onFetchMoreProposals,
+    isProposalsBatchComplete
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
-    status: statusByTab[tabLabels[index]],
-    proposalPageSize: 4
+    status: statusByTab[tabLabels[index]]
   });
 
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
-    !hasMoreProposals,
+    isProposalsBatchComplete,
     statusByTab[tabLabels[index]]
   );
 
@@ -122,7 +122,6 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onSetIndex={handleSetIndex}
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
-      filterCensored={true}
       hasMore={hasMoreProposals}
       isLoading={loading || verifying}>
       {content}
