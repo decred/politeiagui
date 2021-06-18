@@ -271,7 +271,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
               )
             )(state);
           },
-         [act.RECEIVE_START_VOTE]: () =>
+          [act.RECEIVE_START_VOTE]: () =>
             update("allByVoteStatus", (allProps) =>
               updateAllByVoteStatus(
                 allProps,
