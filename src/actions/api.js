@@ -474,7 +474,8 @@ export const onFetchProposalsBatch = (
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
-      const commentsCount = fetchProposalsCount && response.find((res) => res && res.counts).counts;
+      const commentsCount =
+        fetchProposalsCount && response.find((res) => res && res.counts).counts;
       const proposalsWithCommentsCount = Object.keys(proposals).reduce(
         (acc, curr) => {
           return {

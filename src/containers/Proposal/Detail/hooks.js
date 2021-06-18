@@ -92,7 +92,7 @@ export function useProposal(token, threadParentID) {
   const isMissingVoteSummary = !(
     voteSummaries[tokenShort] && voteSummaries[tokenShort].details
   );
-  const needsInitialFetch = (token && isMissingDetails);
+  const needsInitialFetch = token && isMissingDetails;
 
   const [remainingTokens, setRemainingTokens] = useState(
     unfetchedProposalTokens
