@@ -1,38 +1,32 @@
-import { useEffect, useState, useMemo } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
 import { useStoreSubscribe, useSelector, useAction } from "src/redux";
-import { handleSaveAppDraftProposals } from "src/lib/local_storage";
 import useThrowError from "src/hooks/utils/useThrowError";
 import useFetchMachine, {
-  FETCH,
   VERIFY,
+  FETCH,
+  REJECT,
   RESOLVE,
-  REJECT
+  START
 } from "src/hooks/utils/useFetchMachine";
-import { getProposalToken } from "../helpers";
-import isEmpty from "lodash/fp/isEmpty";
-import flow from "lodash/fp/flow";
-import uniq from "lodash/fp/uniq";
+import values from "lodash/fp/values";
 import compact from "lodash/fp/compact";
+import uniq from "lodash/fp/uniq";
 import map from "lodash/fp/map";
+import reduce from "lodash/fp/reduce";
+import flow from "lodash/fp/flow";
+import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
-
-const getProposalsWithRfpLinks = (proposals, generalProposals) =>
-  proposals &&
-  proposals.map((proposal) => {
-    if (!proposal.linkto) return proposal;
-    const linkedProposal = generalProposals[proposal.linkto];
-    const proposedFor = linkedProposal && linkedProposal.name;
-    return { ...proposal, proposedFor };
-  });
-
-// checks if proposals list from the state machine is incomplete, e.g,
-// there are more user proposals on the redux store than the state machine.
-const isStateMachineMissingProposals = (state, proposals) =>
-  state.proposals && proposals && state.proposals.length !== proposals.length;
+import assign from "lodash/fp/assign";
+import { PROPOSAL_PAGE_SIZE } from "src/constants";
+import {
+  getRfpLinkedProposals,
+  getTokensForProposalsPagination
+} from "src/containers/Proposal/helpers";
+import { handleSaveAppDraftProposals } from "src/lib/local_storage";
 
 export function useDraftProposals() {
   const draftProposals = useSelector(sel.draftProposals);
@@ -67,102 +61,151 @@ export function useDraftProposals() {
   };
 }
 
-export function useUserProposals(userID) {
-  const proposalsSelector = useMemo(
-    () => sel.makeGetUserProposals(userID),
-    [userID]
-  );
-  const numOfUserProposalsSelector = useMemo(
-    () => sel.makeGetNumOfProposalsByUserId(userID),
-    [userID]
-  );
-  const loadingSelector = useMemo(
-    () =>
-      or(
-        sel.isApiRequestingUserProposals,
-        sel.isApiRequestingProposalsVoteSummary
-      ),
-    []
-  );
-  const errorSelector = useMemo(
-    () => or(sel.userProposalsError, sel.apiPropsVoteSummaryError),
-    []
-  );
-  const proposals = useSelector(proposalsSelector);
-  const numOfUserProposals = useSelector(numOfUserProposalsSelector);
-  const generalProposals = useSelector(sel.proposalsByToken);
-  const loading = useSelector(loadingSelector);
-  const error = useSelector(errorSelector);
-  const onFetchUserProposals = useAction(act.onFetchUserProposals);
-  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
-  const rfpLinks = flow(
+const getRfpLinks = (proposals) =>
+  flow(
+    values,
     map((p) => p.linkto),
     uniq,
     compact
   )(proposals);
-  const proposalsTokens = useMemo(() => {
-    const userProposalsTokens = proposals
-      ? proposals.map(getProposalToken)
-      : [];
-    const generalProposalsTokens = keys(generalProposals);
-    return uniq([...userProposalsTokens, ...generalProposalsTokens]);
-  }, [proposals, generalProposals]);
-  const unfetchedLinks = difference(rfpLinks)(proposalsTokens);
+
+const getRfpSubmissions = (proposals) =>
+  flow(
+    values,
+    reduce((acc, p) => [...acc, ...(p.linkedfrom || [])], []),
+    uniq,
+    compact
+  )(proposals);
+
+const getUnfetchedTokens = (proposals, tokens) =>
+  difference(tokens)(keys(proposals));
+
+export function useUserProposals({
+  proposalPageSize = PROPOSAL_PAGE_SIZE,
+  fetchRfpLinks = true,
+  fetchVoteSummaries = true,
+  userID
+}) {
+  const [remainingTokens, setRemainingTokens] = useState([]);
+  const voteSummaries = useSelector(sel.summaryByToken);
+  const tokensSelector = useMemo(
+    () => sel.makeGetUserProposalsTokens(userID),
+    [userID]
+  );
+  const proposalsSelector = useMemo(
+    () => sel.makeGetUserProposals(userID),
+    [userID]
+  );
+  const proposals = useSelector(proposalsSelector);
+  const tokensByStatus = useSelector(tokensSelector);
+  const tokens = tokensByStatus
+    ? [...tokensByStatus.unvetted, ...tokensByStatus.vetted]
+    : [];
+  const numOfUserProposalsSelector = useMemo(
+    () => sel.makeGetNumOfProposalsByUserId(userID),
+    [userID]
+  );
+  const numOfUserProposals = useSelector(numOfUserProposalsSelector);
+  const errorSelector = useMemo(
+    () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
+    []
+  );
+
+  const error = useSelector(errorSelector);
+  const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
+  const onFetchUserProposals = useAction(act.onFetchUserProposals);
+  const hasRemainingTokens = !isEmpty(remainingTokens);
 
   const [state, send] = useFetchMachine({
     actions: {
-      initial: () => {
-        if (isEmpty(proposals)) {
-          onFetchUserProposals(userID)
-            .then(() => send(VERIFY))
-            .catch((err) => send(REJECT, err));
-          return send(FETCH);
-        }
-        return send(VERIFY);
-      },
-      load: () => {
-        if (isEmpty(proposals)) {
-          return;
-        }
-        if (!isEmpty(rfpLinks) && !isEmpty(unfetchedLinks)) {
-          return;
-        }
-        return send(VERIFY);
+      initial: () => send(START),
+      start: () => {
+        if (hasRemainingTokens) return send(VERIFY);
+        onFetchUserProposals(userID)
+          .catch((e) => send(REJECT, e))
+          .then((res) => {
+            const resTokens = [...res.unvetted, ...res.vetted];
+            if (!resTokens) return send(RESOLVE);
+            setRemainingTokens(resTokens);
+            return send(VERIFY);
+          });
+        return send(FETCH);
       },
       verify: () => {
-        if (!isEmpty(rfpLinks) && isEmpty(unfetchedLinks)) {
-          return send(RESOLVE, {
-            proposals: getProposalsWithRfpLinks(proposals, generalProposals)
-          });
-        }
-        if (!isEmpty(rfpLinks) && !isEmpty(unfetchedLinks)) {
-          onFetchProposalsBatch(unfetchedLinks, false)
-            .then(() => send(VERIFY))
-            .catch((err) => send(REJECT, err));
-          return send(FETCH);
-        }
-        return send(RESOLVE, { proposals });
+        if (!hasRemainingTokens) return send(RESOLVE, { proposals });
+        if (proposals && numOfUserProposals === proposals.length)
+          return send(RESOLVE, { proposals });
+        const [tokensToFetch, next] = getTokensForProposalsPagination(
+          remainingTokens,
+          proposalPageSize
+        );
+        onFetchProposalsBatch(tokensToFetch, fetchVoteSummaries, userID)
+          .then(([fetchedProposals]) => {
+            if (isEmpty(fetchedProposals)) {
+              setRemainingTokens(next);
+              return send(RESOLVE);
+            }
+            if (fetchRfpLinks) {
+              const rfpLinks = getRfpLinks(fetchedProposals);
+              const rfpSubmissions = getRfpSubmissions(fetchedProposals);
+              const unfetchedRfpLinks = getUnfetchedTokens(proposals, [
+                ...rfpLinks,
+                ...rfpSubmissions
+              ]);
+              if (!isEmpty(unfetchedRfpLinks)) {
+                onFetchProposalsBatch(
+                  unfetchedRfpLinks,
+                  fetchVoteSummaries,
+                  userID
+                )
+                  .then(() => {
+                    const unfetchedTokens = getUnfetchedTokens(
+                      assign(proposals, fetchedProposals),
+                      tokensToFetch
+                    );
+                    setRemainingTokens([...unfetchedTokens, ...next]);
+                    return send(RESOLVE);
+                  })
+                  .catch((e) => send(REJECT, e));
+                return send(FETCH);
+              }
+            }
+            setRemainingTokens([...next]);
+            return send(RESOLVE);
+          })
+          .catch((e) => send(REJECT, e));
+        return send(FETCH);
       },
-      done: () => {
-        // if any proposal is added or removed from use proposals list, verify.
-        if (isStateMachineMissingProposals(state, proposals)) {
-          return send(VERIFY);
-        }
-      }
+      done: () => {}
     },
     initialValues: {
       status: "idle",
       loading: true,
-      proposals: [],
+      proposals: {},
+      proposalsTokens: {},
       verifying: true
     }
   });
-  useThrowError(error);
+
+  const onFetchMoreProposals = useCallback(() => {
+    if (isEmpty(remainingTokens)) return send(START);
+    return send(VERIFY);
+  }, [send, remainingTokens]);
+
+  const anyError = error || state.error;
+  useThrowError(anyError);
+
   return {
-    proposals: state.proposals,
-    numOfUserProposals,
-    loading,
-    error,
-    onFetchUserProposals
+    proposals: proposals
+      ? Object.values(getRfpLinkedProposals(proposals, voteSummaries))
+      : [],
+    onFetchProposalsBatch,
+    proposalsTokens: tokens,
+    loading: state.loading,
+    verifying: state.verifying,
+    onFetchMoreProposals,
+    hasMoreProposals: !!remainingTokens.length,
+    machineCurrentState: state.status,
+    numOfUserProposals
   };
 }

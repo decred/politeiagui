@@ -449,11 +449,11 @@ describe("test api actions (actions/api.js)", () => {
       params,
       [
         {
-          type: act.REQUEST_USER_PROPOSALS,
+          type: act.REQUEST_USER_INVENTORY,
           error: false,
           payload: { userid: FAKE_USER.id }
         },
-        { type: act.RECEIVE_USER_PROPOSALS, error: false }
+        { type: act.RECEIVE_USER_INVENTORY, error: false }
       ],
       {},
       methods.POST,
@@ -468,11 +468,11 @@ describe("test api actions (actions/api.js)", () => {
       params,
       (e) => [
         {
-          type: act.REQUEST_USER_PROPOSALS,
+          type: act.REQUEST_USER_INVENTORY,
           error: false,
           payload: { userid: FAKE_USER.id }
         },
-        { type: act.RECEIVE_USER_PROPOSALS, error: true, payload: e }
+        { type: act.RECEIVE_USER_INVENTORY, error: true, payload: e }
       ],
       {},
       methods.POST
