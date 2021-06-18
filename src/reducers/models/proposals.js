@@ -271,28 +271,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
               )
             )(state);
           },
-
-          // [act.RECEIVE_USER_PROPOSALS]: () =>
-          //   compose(
-          //     update("byToken", (proposals) => ({
-          //       ...proposals,
-          //       ...parseReceivedProposalsMap(action.payload.proposals)
-          //     })),
-          //     update(
-          //       ["allProposalsByUserId", action.payload.userid],
-          //       (userProposals = []) => [
-          //         ...userProposals,
-          //         ...Object.keys(action.payload.proposals).map((token) =>
-          //           shortRecordToken(token)
-          //         )
-          //       ]
-          //     ),
-          //     set(
-          //       ["numOfProposalsByUserId", action.payload.userid],
-          //       action.payload.numofproposals
-          //     )
-          //   )(state),
-          [act.RECEIVE_START_VOTE]: () =>
+         [act.RECEIVE_START_VOTE]: () =>
             update("allByVoteStatus", (allProps) =>
               updateAllByVoteStatus(
                 allProps,
