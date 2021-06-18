@@ -11,13 +11,13 @@ import { useNewProposal } from "./hooks";
 const NewProposal = () => {
   const { onSubmitProposal, currentUser } = useNewProposal();
   const { userid } = currentUser || {};
-  const { isPaid } = usePaywall();
+  const { isPaid, paywallEnabled } = usePaywall();
   const [, identityError] = useIdentity();
 
   return (
     <Card className="container">
       <Or>
-        {!isPaid && (
+        {!isPaid && paywallEnabled && (
           <Message kind="error">
             <P>
               You won't be able to submit comments or proposals before paying
@@ -30,7 +30,7 @@ const NewProposal = () => {
         {!!identityError && <IdentityMessageError />}
       </Or>
       <ProposalForm
-        disableSubmit={!isPaid || !!identityError}
+        disableSubmit={(paywallEnabled && !isPaid) || !!identityError}
         onSubmit={onSubmitProposal}
       />
     </Card>

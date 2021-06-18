@@ -64,6 +64,7 @@ const UserDetail = ({
 
   const {
     recordType,
+    enablePaywall,
     constants: { RECORD_TYPE_INVOICE, RECORD_TYPE_PROPOSAL }
   } = useConfig();
 
@@ -75,7 +76,11 @@ const UserDetail = ({
   const tabLabels = useMemo(() => {
     const isTabDisabled = (tabLabel) => {
       if (tabLabel === tabValues.PREFERENCES && !isUserPageOwner) return true;
-      if (tabLabel === tabValues.CREDITS && !isAdminOrTheUser) return true;
+      if (
+        tabLabel === tabValues.CREDITS &&
+        (!isAdminOrTheUser || !enablePaywall)
+      )
+        return true;
       if (tabLabel === tabValues.MANAGE_DCC && !isAdminOrTheUser) return true;
       if (tabLabel === tabValues.INVOICES && !isAdmin) return true;
       if (tabLabel === tabValues.DRAFTS && !isUserPageOwner) return true;
@@ -120,6 +125,7 @@ const UserDetail = ({
   }, [
     isUserPageOwner,
     isAdminOrTheUser,
+    enablePaywall,
     isAdmin,
     ownsProposals,
     recordType,
