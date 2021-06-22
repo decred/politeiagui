@@ -43,7 +43,8 @@ export function useDownloadCommentsTimestamps(recordToken) {
     [recordToken]
   );
   const comments = useSelector(commentsSelector);
-  const commentsLength = comments.length || 0;
+  const commentsLength = comments?.length || 0;
+  const multiPage = commentsLength > TIMESTAMPS_PAGE_SIZE;
   const onFetchCommentsTimestamps = useAction(act.onFetchCommentsTimestamps);
 
   useEffect(() => {
@@ -94,7 +95,7 @@ export function useDownloadCommentsTimestamps(recordToken) {
         },
         start: () => {
           // fetch first page of comments timestamps
-          const [fetch, next] = getCommentIdsForPagination(remaining);
+          const [fetch, next] = getCommentIdsForPagination(remaining || []);
           onFetchCommentsTimestamps(recordToken, fetch)
             .then(({ comments }) => {
               setTimestamps({ comments });
@@ -147,6 +148,7 @@ export function useDownloadCommentsTimestamps(recordToken) {
     progress: progress,
     timestamps: {
       comments: state.timestamps?.comments
-    }
+    },
+    multiPage: multiPage
   };
 }

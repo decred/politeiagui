@@ -26,14 +26,12 @@ const DownloadVotesTimestampsWrapper = ({ label, recordToken, votesCount }) => {
 };
 
 const DownloadVotesTimestamps = ({ recordToken, votesCount }) => {
-  const { timestamps, progress, loading, error } = useDownloadVoteTimestamps(
-    recordToken,
-    votesCount
-  );
+  const { timestamps, progress, loading, error, multiPage } =
+    useDownloadVoteTimestamps(recordToken, votesCount);
 
   return loading ? (
     <div>
-      <span style={{ marginRight: 10 }}>{progress}%</span>
+      {multiPage ? <span style={{ marginRight: 10 }}>{progress}%</span> : <></>}
       <Spinner invert />
     </div>
   ) : timestamps ? (

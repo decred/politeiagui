@@ -8,18 +8,21 @@ import {
   loadVotesTimestamps
 } from "src/lib/local_storage";
 
+const TIMESTAMPS_PAGE_SIZE = 100;
 export function useDownloadVoteTimestamps(token, votesCount) {
   const [votes, setVotes] = useState(null);
   const [auths, setAuths] = useState(null);
   const [details, setDetails] = useState(null);
   const [page, setPage] = useState(1);
   const [progress, setProgress] = useState(0);
+  const multiPage = votesCount > TIMESTAMPS_PAGE_SIZE;
   const onFetchTicketVoteTimestamps = useAction(
     act.onFetchTicketVoteTimestamps
   );
 
   const getProgressPercentage = useCallback(
-    (total) => (total ? ((total * 100) / votesCount).toFixed(2) : 0),
+    (total) =>
+      total ? ((total * TIMESTAMPS_PAGE_SIZE) / votesCount).toFixed(2) : 0,
     [votesCount]
   );
 
@@ -104,6 +107,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
       auths: state.auths,
       details: state.details,
       votes: state.votes
-    }
+    },
+    multiPage: multiPage
   };
 }
