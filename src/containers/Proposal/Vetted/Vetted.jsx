@@ -26,6 +26,7 @@ const tabLabels = [
 
 const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
+  const statuses = statusByTab[tabLabels[index]];
   const {
     proposals: batchProposals,
     proposalsTokens,
@@ -38,8 +39,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
-    statuses: statusByTab[tabLabels[index]],
-    proposalPageSize: 4
+    statuses: statuses
   });
 
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
@@ -50,7 +50,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
     isProposalsBatchComplete,
-    statusByTab[tabLabels[index]]
+    statuses[0] // hard code because legacy proposals tab always have 1 item in statuses
   );
 
   const mergedProposalsTokens = !isEmpty(legacyProposalsTokens)
