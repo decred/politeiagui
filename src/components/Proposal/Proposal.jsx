@@ -158,7 +158,11 @@ const Proposal = React.memo(function Proposal({
   const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate =
-    version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
+    version > 1 &&
+    timestamp !== publishedat &&
+    !abandonedat &&
+    !censoredat &&
+    !mobile;
   const showPublishedDate = publishedat && !mobile;
   const showExtendedVersionPicker = extended && version > 1;
   const showAbandonedDate = abandonedat && !mobile;
