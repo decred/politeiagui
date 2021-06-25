@@ -5,6 +5,7 @@ import { useAction, useSelector } from "src/redux";
 import head from "lodash/head";
 import isEmpty from "lodash/fp/isEmpty";
 import uniq from "lodash/uniq";
+import compact from "lodash/compact";
 import useFetchMachine, {
   VERIFY,
   FETCH,
@@ -14,11 +15,11 @@ import useFetchMachine, {
 } from "src/hooks/utils/useFetchMachine";
 import { shortRecordToken } from "src/helpers";
 
-// useProposalStatusChangeUser receives a list of proposals and a status.
-// For all proposals that are in the passed in status, the hook adds a
-// 'statuschangeusername' field to the proposal object, which corresponds
-// to the username of the user that submitted the status change action
-// to the server.
+// useProposalsStatusChangeUser receives a key-value object of proposals
+// and a status. For all proposals that are in the passed in status, the
+// hook adds a 'statuschangeusername' field to the proposal object, which
+// corresponds to the username of the user that submitted the status change
+// action to the server.
 export default function useProposalsStatusChangeUser(proposals = {}, status) {
   const [publicKeys, setPublicKeys] = useState([]);
   const onSearchUser = useAction(act.onSearchUser);
@@ -28,9 +29,9 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
   // The public keys for the users we need to search for
   const unfetchedPublicKeys = uniq(
     Object.values(proposals).flatMap((prop) =>
-      prop.status === status ? prop.statuschangepk : []
+      prop?.status === status ? prop?.statuschangepk : []
     )
-  ).filter((pk) => pk && resultsByPk[pk] === undefined);
+  ).filter((pk) => pk && !resultsByPk[pk]);
 
   const hasPublicKeys = !isEmpty(publicKeys);
   const hasUnfetchedPublicKeys = !isEmpty(unfetchedPublicKeys);
@@ -71,24 +72,27 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
   }
 
   // Add statuschangeusername data to proposals that needs it
-  const parsedProposals = Object.values(proposals)
-    .map((prop) => {
-      const userID = resultsByPk[prop.statuschangepk];
-      const user = resultsByID[userID];
-      return prop.status === status
-        ? {
-            ...prop,
-            statuschangeusername: user?.username
-          }
-        : prop;
-    })
-    .reduce(
-      (acc, prop) => ({
-        ...acc,
-        [shortRecordToken(prop.censorshiprecord.token)]: prop
-      }),
-      {}
-    );
+  const hasProposals = !isEmpty(compact(Object.values(proposals)));
+  const parsedProposals = hasProposals
+    ? Object.values(proposals)
+        .map((prop) => {
+          const userID = resultsByPk[prop?.statuschangepk];
+          const user = resultsByID[userID];
+          return prop?.status === status
+            ? {
+                ...prop,
+                statuschangeusername: user?.username
+              }
+            : prop;
+        })
+        .reduce(
+          (acc, prop) => ({
+            ...acc,
+            [shortRecordToken(prop?.censorshiprecord?.token)]: prop
+          }),
+          {}
+        )
+    : proposals;
 
   return {
     proposals: parsedProposals,
