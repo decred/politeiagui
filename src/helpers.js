@@ -123,12 +123,19 @@ const parseVoteMetadata = (proposal = {}) => {
 };
 
 // parseUserMetadata accepts a proposal object and parses its user plugin
-// metadata.
+// metadata. Returns a key-value object where the key is the status for
+// that status change, and the value is their parsed json payload. If
+// the metadata was not a status change one, the data will be inserted
+// plainly in the object.
 //
 // proposals without any user metadata will return an empty object
 const parseUserPluginMetadata = (proposal = {}) =>
   compose(
-    reduce((acc, curr) => ({ ...acc, ...curr }), {}),
+    reduce(
+      (acc, curr) =>
+        curr.status ? { ...acc, [curr.status]: curr } : { ...acc, ...curr },
+      {}
+    ),
     map(({ payload }) => {
       try {
         const parsedPayload = JSON.parse(payload);
@@ -136,11 +143,15 @@ const parseUserPluginMetadata = (proposal = {}) =>
       } catch (e) {
         // Parses metadata payload that may be nested without a json parent
         // on the payload response. This happens when there were more than
-        // one status change to the proposal. Returns a key-value object
-        // where the key is the status for that status change, and the value
-        // is their parsed json payload.
+        // one status change to the proposal.
         return compose(
-          reduce((acc, curr) => ({ ...acc, [curr.status]: curr }), {}),
+          reduce(
+            (acc, curr) =>
+              curr.status
+                ? { ...acc, [curr.status]: curr }
+                : { ...acc, ...curr },
+            {}
+          ),
           filter((md) => Object.keys(md).length),
           map((parsed) => JSON.parse(`{${parsed}}`)),
           splitFp(/\{(.*?)\}/)
@@ -171,11 +182,14 @@ export const parseRawProposal = (proposal) => {
   const { description } = parseProposalIndexFile(proposal);
   const usermds = parseUserPluginMetadata(proposal);
   const statuschangemsg = usermds[proposal.status]?.message;
+  const statuschangepk = usermds[proposal.status]?.publickey;
+
   // get prop timestamps
   const { publishedat, censoredat, abandonedat } = getProposalTimestamps(
     proposal,
     usermds.timestamp
   );
+  
   return {
     ...proposal,
     description: description || proposal.description,
@@ -185,6 +199,7 @@ export const parseRawProposal = (proposal) => {
     linkto,
     commentsCount: proposal.commentsCount || 0,
     statuschangemsg,
+    statuschangepk,
     publishedat,
     censoredat,
     abandonedat

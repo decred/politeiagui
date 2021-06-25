@@ -126,7 +126,9 @@ const Proposal = React.memo(function Proposal({
     type,
     rfpSubmissions,
     state,
-    commentsCount
+    commentsCount,
+    statuschangemsg,
+    statuschangeusername
   } = proposal;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
@@ -148,7 +150,7 @@ const Proposal = React.memo(function Proposal({
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
   const isCensored = isCensoredProposal(proposal);
-  const isPublicAccessible = isPublic || isAbandoned;
+  const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
   const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
   const isEditable =
@@ -288,7 +290,11 @@ const Proposal = React.memo(function Proposal({
                     <Event event="abandoned" timestamp={abandonedat} />
                   )}
                   {showCensoredDate && (
-                    <Event event="censored" timestamp={censoredat} />
+                    <Event
+                      event="censored"
+                      timestamp={censoredat}
+                      username={statuschangeusername}
+                    />
                   )}
                   {showVersionAsText && (
                     <Text
@@ -389,7 +395,7 @@ const Proposal = React.memo(function Proposal({
                   isDarkTheme && "dark",
                   showRfpSubmissions && styles.rfpMarkdownContainer
                 )}
-                body={proposal.statuschangemsg}
+                body={statuschangemsg}
               />
             )}
             {collapseBodyContent && (
