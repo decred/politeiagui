@@ -42,8 +42,10 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     status: statusByTab[tabLabels[index]]
   });
 
-  const { proposals, loading: mdLoading } =
-    useProposalsStatusChangeUser(batchProposals, PROPOSAL_STATUS_CENSORED);
+  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
+    batchProposals,
+    PROPOSAL_STATUS_CENSORED
+  );
 
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(

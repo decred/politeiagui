@@ -41,8 +41,10 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     proposalStatus: statusByTab[tabLabels[tabIndex]]
   });
 
-  const { proposals, loading: mdLoading } =
-    useProposalsStatusChangeUser(batchProposals, PROPOSAL_STATUS_CENSORED);
+  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
+    batchProposals,
+    PROPOSAL_STATUS_CENSORED
+  );
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
