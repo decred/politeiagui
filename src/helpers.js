@@ -189,7 +189,7 @@ export const parseRawProposal = (proposal) => {
     proposal,
     usermds.timestamp
   );
-  
+
   return {
     ...proposal,
     description: description || proposal.description,

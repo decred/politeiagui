@@ -42,7 +42,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     status: statusByTab[tabLabels[index]]
   });
 
-  const { proposals, loading: fullLoading } =
+  const { proposals, loading: mdLoading } =
     useProposalsStatusChangeUser(batchProposals, PROPOSAL_STATUS_CENSORED);
 
   // TODO: remove legacy
@@ -128,7 +128,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying || fullLoading}>
+      isLoading={loading || verifying || mdLoading}>
       {content}
     </RecordsView>
   );
