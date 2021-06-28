@@ -84,7 +84,7 @@ export const makeProposal = (
   markdown,
   linkby = 0,
   type,
-  linkto = 0,
+  linkto = "",
   attachments = []
 ) => ({
   files: [
