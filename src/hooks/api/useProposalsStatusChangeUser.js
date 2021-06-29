@@ -31,10 +31,10 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
   // The public keys for the users we need to search for
   const unfetchedPublicKeys = flow(
     Object.values,
-    flatMap((prop) => prop.status === status ? prop.statuschangepk : []),
+    flatMap((prop) => (prop.status === status ? prop.statuschangepk : [])),
     uniq,
     filter((pk) => pk && !resultsByPk[pk])
-  )(proposals)
+  )(proposals);
 
   const hasPublicKeys = !isEmpty(publicKeys);
   const hasUnfetchedPublicKeys = !isEmpty(unfetchedPublicKeys);
