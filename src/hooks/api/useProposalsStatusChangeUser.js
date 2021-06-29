@@ -4,6 +4,9 @@ import * as sel from "src/selectors";
 import { useAction, useSelector } from "src/redux";
 import head from "lodash/head";
 import isEmpty from "lodash/fp/isEmpty";
+import flow from "lodash/fp/flow";
+import flatMap from "lodash/fp/flatMap";
+import filter from "lodash/fp/filter";
 import uniq from "lodash/uniq";
 import useFetchMachine, {
   VERIFY,
@@ -26,11 +29,12 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
   const resultsByID = useSelector(sel.searchResultsByID);
 
   // The public keys for the users we need to search for
-  const unfetchedPublicKeys = uniq(
-    Object.values(proposals).flatMap((prop) =>
-      prop.status === status ? prop.statuschangepk : []
-    )
-  ).filter((pk) => pk && !resultsByPk[pk]);
+  const unfetchedPublicKeys = flow(
+    Object.values,
+    flatMap((prop) => prop.status === status ? prop.statuschangepk : []),
+    uniq,
+    filter((pk) => pk && !resultsByPk[pk])
+  )(proposals)
 
   const hasPublicKeys = !isEmpty(publicKeys);
   const hasUnfetchedPublicKeys = !isEmpty(unfetchedPublicKeys);
