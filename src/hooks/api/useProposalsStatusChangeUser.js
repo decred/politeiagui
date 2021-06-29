@@ -5,7 +5,6 @@ import { useAction, useSelector } from "src/redux";
 import head from "lodash/head";
 import isEmpty from "lodash/fp/isEmpty";
 import uniq from "lodash/uniq";
-import compact from "lodash/compact";
 import useFetchMachine, {
   VERIFY,
   FETCH,
@@ -29,7 +28,7 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
   // The public keys for the users we need to search for
   const unfetchedPublicKeys = uniq(
     Object.values(proposals).flatMap((prop) =>
-      prop?.status === status ? prop?.statuschangepk : []
+      prop.status === status ? prop.statuschangepk : []
     )
   ).filter((pk) => pk && !resultsByPk[pk]);
 
@@ -41,8 +40,8 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
     actions: {
       initial: () => send(START),
       start: () => {
-        if (hasPublicKeys) return send(VERIFY);
         if (!hasUnfetchedPublicKeys) return send(RESOLVE);
+        if (hasPublicKeys) return send(VERIFY);
         setPublicKeys(unfetchedPublicKeys);
         return send(VERIFY);
       },
@@ -67,32 +66,29 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
   });
 
   // Restart machine if there are unfetched public keys left
-  if (!isEmpty(unfetchedPublicKeys) && state.status === "success") {
+  if (hasUnfetchedPublicKeys && state.status === "success") {
     send(START);
   }
 
   // Add statuschangeusername data to proposals that needs it
-  const hasProposals = !isEmpty(compact(Object.values(proposals)));
-  const parsedProposals = hasProposals
-    ? Object.values(proposals)
-        .map((prop) => {
-          const userID = resultsByPk[prop?.statuschangepk];
-          const user = resultsByID[userID];
-          return prop?.status === status
-            ? {
-                ...prop,
-                statuschangeusername: user?.username
-              }
-            : prop;
-        })
-        .reduce(
-          (acc, prop) => ({
-            ...acc,
-            [shortRecordToken(prop?.censorshiprecord?.token)]: prop
-          }),
-          {}
-        )
-    : proposals;
+  const parsedProposals = Object.values(proposals)
+    .map((prop) => {
+      const userID = resultsByPk[prop?.statuschangepk];
+      const user = resultsByID[userID];
+      return prop.status === status
+        ? {
+            ...prop,
+            statuschangeusername: user?.username
+          }
+        : prop;
+    })
+    .reduce(
+      (acc, prop) => ({
+        ...acc,
+        [shortRecordToken(prop.censorshiprecord.token)]: prop
+      }),
+      {}
+    );
 
   return {
     proposals: parsedProposals,

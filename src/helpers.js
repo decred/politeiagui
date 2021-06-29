@@ -133,8 +133,10 @@ const parseUserPluginMetadata = (proposal = {}) =>
   compose(
     reduce(
       (acc, curr) =>
-        curr.status ? { ...acc, [curr.status]: curr } : { ...acc, ...curr },
-      {}
+        curr.status
+          ? { ...acc, byStatus: { ...acc.byStatus, [curr.status]: curr } }
+          : { ...acc, ...curr },
+      { byStatus: {} }
     ),
     map(({ payload }) => {
       try {
@@ -148,9 +150,15 @@ const parseUserPluginMetadata = (proposal = {}) =>
           reduce(
             (acc, curr) =>
               curr.status
-                ? { ...acc, [curr.status]: curr }
+                ? {
+                    ...acc,
+                    byStatus: {
+                      ...acc.byStatus,
+                      [curr.status]: curr
+                    }
+                  }
                 : { ...acc, ...curr },
-            {}
+            { byStatus: {} }
           ),
           filter((md) => Object.keys(md).length),
           map((parsed) => JSON.parse(`{${parsed}}`)),
@@ -181,8 +189,8 @@ export const parseRawProposal = (proposal) => {
   const { linkby, linkto } = parseVoteMetadata(proposal);
   const { description } = parseProposalIndexFile(proposal);
   const usermds = parseUserPluginMetadata(proposal);
-  const statuschangemsg = usermds[proposal.status]?.message;
-  const statuschangepk = usermds[proposal.status]?.publickey;
+  const statuschangemsg = usermds.byStatus[proposal.status]?.message;
+  const statuschangepk = usermds.byStatus[proposal.status]?.publickey;
 
   // get prop timestamps
   const { publishedat, censoredat, abandonedat } = getProposalTimestamps(
