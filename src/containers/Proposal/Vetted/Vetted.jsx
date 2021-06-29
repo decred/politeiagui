@@ -1,7 +1,12 @@
 import React, { useCallback, useMemo } from "react";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
-import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
+import {
+  tabValues,
+  mapProposalsTokensByTab,
+  statusByTab,
+  sortByTab
+} from "./helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import useLegacyVettedProposals from "src/hooks/api/useLegacyVettedProposals";
 import Proposal from "src/components/Proposal";
@@ -25,6 +30,7 @@ const tabLabels = [
 const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const statuses = statusByTab[tabLabels[index]];
+  const sort = sortByTab[tabLabels[index]];
   const {
     proposals,
     proposalsTokens,
@@ -121,7 +127,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying}>
+      isLoading={loading || verifying}
+      sort={sort}>
       {content}
     </RecordsView>
   );
