@@ -61,3 +61,11 @@ export const statusByTab = {
   [tabValues.REJECTED]: [PROPOSAL_VOTING_REJECTED],
   [tabValues.INELIGIBLE]: [PROPOSAL_VOTING_INELIGIBLE]
 };
+
+export const sortByTab = {
+  [tabValues.UNDER_REVIEW]: {
+    fields: ["voteStatus", "timestamp"],
+    order: ["desc", "desc"]
+  }
+  // For other tabs = undefined (get the default)
+};
