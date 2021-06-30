@@ -31,7 +31,7 @@ const DownloadVotesTimestamps = ({ recordToken, votesCount }) => {
 
   return loading ? (
     <div>
-      {multiPage ? <span style={{ marginRight: 10 }}>{progress}%</span> : <></>}
+      {multiPage && <span style={{ marginRight: 10 }}>{progress}%</span>}
       <Spinner invert />
     </div>
   ) : timestamps ? (

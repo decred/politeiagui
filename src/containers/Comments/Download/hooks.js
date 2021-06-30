@@ -60,7 +60,7 @@ export function useDownloadCommentsTimestamps(recordToken) {
   const getProgressPercentage = useCallback(
     (timestamps) =>
       timestamps
-        ? ((Object.keys(timestamps).length * 100) / commentsLength).toFixed(2)
+        ? ((Object.keys(timestamps).length * 100) / commentsLength).toFixed(0)
         : 0,
     [commentsLength]
   );

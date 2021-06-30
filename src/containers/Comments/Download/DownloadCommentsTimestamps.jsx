@@ -28,17 +28,15 @@ const DownloadCommentsTimestamps = ({ recordToken }) => {
 
   return loading ? (
     <div>
-      {multiPage ? <span style={{ marginRight: 10 }}>{progress}%</span> : <></>}
+      {multiPage && <span style={{ marginRight: 10 }}>{progress}%</span>}
       <Spinner invert />
     </div>
   ) : timestamps ? (
-    <div>
-      <DownloadJSON
-        label={"Comments Timestamps"}
-        fileName={`${recordToken}-comments-timestamps`}
-        content={timestamps}
-      />
-    </div>
+    <DownloadJSON
+      label={"Comments Timestamps"}
+      fileName={`${recordToken}-comments-timestamps`}
+      content={timestamps}
+    />
   ) : null;
 };
 
