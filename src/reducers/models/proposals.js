@@ -200,10 +200,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
               ),
               update(
                 ["allProposalsByUserId", action.payload.userid],
-                (userProposals = []) => [
-                  shortRecordToken(proposalToken(action.payload)),
-                  ...userProposals
-                ]
+                (userProposals = []) => [action.payload, ...userProposals]
               ),
               update(
                 ["numOfProposalsByUserId", action.payload.userid],
