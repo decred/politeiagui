@@ -18,12 +18,12 @@ inventorylen=`pictl voteinv | \
 if [ "$inventorylen" -lt "20" ]
 then 
   # gets proposal token
-  difference="$((max_length-inventorylen+1))"
+  diff="$((max_length-inventorylen+1))"
 
-  echo inventory incomplete. Needs to create $difference proposals
-  # add credits to proposals
-  politeiawww_dbutil -cockroachdb  -testnet -addcredits adminuser $difference
-  for i in $(seq 1 $difference)
+  echo inventory incomplete. Needs to create $diff proposals
+  # add credits to user for proposal submission
+  politeiawww_dbutil -cockroachdb  -testnet -addcredits adminuser $diff
+  for i in $(seq 1 $diff)
   do
     token=`pictl proposalnew --random | \
       jq -R 'match("(?<=Token  : ).*";"g")' | \
@@ -31,7 +31,7 @@ then
     # set status to public
     proposal=`pictl proposalsetstatus $token public`
     # print output
-    echo created new public proposal $token $i/$difference
+    echo created new public proposal $token $i/$diff
   done
 else
   echo inventory length is ok
