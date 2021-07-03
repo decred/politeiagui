@@ -337,15 +337,27 @@ export const DownloadVotes = ({
   label,
   voteSummary,
   fileName,
-  serverpublickey
+  serverpublickey,
+  token,
+  version
 }) => {
-  const bundle = {
+  /*const bundle = {
     auths: voteSummary?.details?.auths,
     details: voteSummary?.details?.details,
     votes: voteSummary?.votes,
     serverpublickey
   };
-  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;
+  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;*/
+  const { onFetchVotesBundle } = useTimestamps();
+  return (
+      <DownloadJSON
+          label={label}
+          fileName={`${token}-v${version}-timestamps`}
+          isAsync={true}
+          content={[]}
+          beforeDownload={() => onFetchVotesBundle(token, version)}
+      />
+  );
 };
 
 export const LinkSection = ({ children, className, title }) => (

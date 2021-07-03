@@ -1730,3 +1730,22 @@ export const onFetchCommentsTimestamps = (token, commentsids) =>
 // Ticket Vote actions
 export const onFetchTicketVoteTimestamps = (token, votespage) =>
   withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token, votespage));
+
+// Votes Bundle
+export const onFetchVotesBundle = (token, version) => withCsrf(async (dispatch, _, csrf) => {
+    dispatch(act.REQUEST_VOTES_BUNDLE());
+    try {
+        return await Promise.all([
+            api.proposalVoteDetails(csrf, token),
+            api.recordsTimestamp(csrf, token, version),
+            api.ticketVoteTimestamps(csrf, token, 1)
+        ]).then(([details, records]) => {
+            console.log(details, records)
+            dispatch(act.RECEIVE_VOTES_BUNDLE(null));
+            return { details, records };
+        });
+    } catch (error) {
+        dispatch(act.RECEIVE_VOTES_BUNDLE(null, error));
+        throw error;
+    }
+});

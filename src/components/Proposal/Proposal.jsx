@@ -442,6 +442,8 @@ const Proposal = React.memo(function Proposal({
                       voteSummary={voteSummary}
                       fileName={`${proposalToken}-votes`}
                       serverpublickey={apiInfo.pubkey}
+                      token={proposalToken}
+                      version={version}
                     />
                   )}
                   {votesCount > 0 && (
