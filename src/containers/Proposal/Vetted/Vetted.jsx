@@ -1,12 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
-import {
-  tabValues,
-  //mapProposalsTokensByTab,
-  statusByTab,
-  sortByTab
-} from "./helpers";
+import { tabValues, statusByTab, sortByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import useLegacyVettedProposals from "src/hooks/api/useLegacyVettedProposals";
@@ -89,7 +84,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   // TODO: remove legacy
   const recordTokensByTab = useMemo(
-    () => mapProposalsTokensByTab(statusByTab, false, mergedProposalsTokens),
+    () => mapProposalsTokensByTab(statusByTab, mergedProposalsTokens),
     [mergedProposalsTokens]
   );
 
