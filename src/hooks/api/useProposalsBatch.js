@@ -174,16 +174,15 @@ export default function useProposalsBatch({
         return send(FETCH);
       },
       done: () => {
+        // Check there are unscanned status or not. If yes, do a new circle of that status
         if (statusIndex + 1 < currentStatuses.length) {
           const newIndex = statusIndex + 1;
+          const newStatus = currentStatuses[newIndex];
           const unfetchedTokens = getUnfetchedTokens(
             proposals,
             uniq(
               allByStatus[
-                getProposalStatusLabel(
-                  currentStatuses[newIndex],
-                  isByRecordStatus
-                )
+                getProposalStatusLabel(newStatus, isByRecordStatus)
               ] || []
             )
           );
@@ -202,6 +201,9 @@ export default function useProposalsBatch({
     }
   });
 
+  // onRestartMachine called when the user clicking on a new tab
+  // The function will find what is the status are inloading in the previous session.
+  // If there are not status found. That mean all the data are loaded in this tab and go to RESOLVE state
   const onRestartMachine = (newStatuses) => {
     let unfetchedTokens = [],
       index = 0;

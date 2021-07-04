@@ -3,10 +3,11 @@ import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
 import {
   tabValues,
-  mapProposalsTokensByTab,
+  //mapProposalsTokensByTab,
   statusByTab,
   sortByTab
 } from "./helpers";
+import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import useLegacyVettedProposals from "src/hooks/api/useLegacyVettedProposals";
 import Proposal from "src/components/Proposal";
@@ -88,7 +89,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   // TODO: remove legacy
   const recordTokensByTab = useMemo(
-    () => mapProposalsTokensByTab(tabLabels, mergedProposalsTokens),
+    () => mapProposalsTokensByTab(statusByTab, false, mergedProposalsTokens),
     [mergedProposalsTokens]
   );
 
