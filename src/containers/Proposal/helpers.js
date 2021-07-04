@@ -409,3 +409,38 @@ export const getTokensForProposalsPagination = (
   tokens,
   pageSize = PROPOSAL_PAGE_SIZE
 ) => [take(pageSize)(tokens), takeRight(tokens.length - pageSize)(tokens)];
+
+/**
+ * Returns the proposal tokens by status from an inventory of tokens
+ * @param {*} statuses
+ * @param {*} isByRecordStatus
+ * @param {*} inventory
+ */
+export const getRecordsTokensByStatusList = (
+  statuses = [],
+  isByRecordStatus,
+  inventory
+) =>
+  statuses.reduce((tokens, status) => {
+    const label = getProposalStatusLabel(status, isByRecordStatus);
+    return [...tokens, ...(inventory[label] || [])];
+  }, []);
+
+/**
+ * Returns a map of proposals tokens with the key is tab name
+ * the tokens are taken from the inventory, filtered by status
+ * @param {*} statusByTab
+ * @param {*} isByRecordStatus
+ * @param {*} inventory
+ */
+export const mapProposalsTokensByTab = (
+  statusByTab,
+  isByRecordStatus,
+  inventory
+) =>
+  Object.entries(statusByTab).reduce((map, [tab, statuses]) => {
+    return {
+      ...map,
+      [tab]: getRecordsTokensByStatusList(statuses, isByRecordStatus, inventory)
+    };
+  }, {});
