@@ -430,13 +430,13 @@ export const getRecordsTokensByStatusList = (
  * Returns a map of proposals tokens with the key is tab name
  * the tokens are taken from the inventory, filtered by status
  * @param {*} statusByTab
- * @param {*} isByRecordStatus
  * @param {*} inventory
+ * @param {*} isByRecordStatus
  */
 export const mapProposalsTokensByTab = (
   statusByTab,
-  isByRecordStatus,
-  inventory
+  inventory,
+  isByRecordStatus
 ) =>
   Object.entries(statusByTab).reduce((map, [tab, statuses]) => {
     return {

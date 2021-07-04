@@ -66,8 +66,8 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       tabLabels={tabLabels}
       recordTokensByTab={mapProposalsTokensByTab(
         statusByTab,
-        true,
-        proposalsTokens
+        proposalsTokens,
+        true
       )}
       renderRecord={renderProposal}
       displayTabCount={!!proposalsTokens}
