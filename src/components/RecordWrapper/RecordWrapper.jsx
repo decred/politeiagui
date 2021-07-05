@@ -333,14 +333,7 @@ export const DownloadTimestamps = ({ token, version, label }) => {
   );
 };
 
-export const DownloadVotes = ({
-  label,
-  voteSummary,
-  fileName,
-  serverpublickey,
-  token,
-  version
-}) => {
+export const DownloadVotes = ({ label, fileName, token }) => {
   /*const bundle = {
     auths: voteSummary?.details?.auths,
     details: voteSummary?.details?.details,
@@ -350,13 +343,13 @@ export const DownloadVotes = ({
   return <DownloadJSON fileName={fileName} label={label} content={bundle} />;*/
   const { onFetchVotesBundle } = useTimestamps();
   return (
-      <DownloadJSON
-          label={label}
-          fileName={`${token}-v${version}-timestamps`}
-          isAsync={true}
-          content={[]}
-          beforeDownload={() => onFetchVotesBundle(token, version)}
-      />
+    <DownloadJSON
+      label={label}
+      fileName={fileName}
+      isAsync={true}
+      content={[]}
+      beforeDownload={() => onFetchVotesBundle(token)}
+    />
   );
 };
 

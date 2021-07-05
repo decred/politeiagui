@@ -1732,20 +1732,20 @@ export const onFetchTicketVoteTimestamps = (token, votespage) =>
   withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token, votespage));
 
 // Votes Bundle
-export const onFetchVotesBundle = (token, version) => withCsrf(async (dispatch, _, csrf) => {
+export const onFetchVotesBundle = (token) =>
+  withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_VOTES_BUNDLE());
     try {
-        return await Promise.all([
-            api.proposalVoteDetails(csrf, token),
-            api.recordsTimestamp(csrf, token, version),
-            api.ticketVoteTimestamps(csrf, token, 1)
-        ]).then(([details, records]) => {
-            console.log(details, records)
-            dispatch(act.RECEIVE_VOTES_BUNDLE(null));
-            return { details, records };
-        });
+      return await Promise.all([
+        api.proposalVoteDetails(csrf, token),
+        api.proposalVoteResults(csrf, token)
+      ]).then(([{ auths, vote }, { votes }]) => {
+        const response = { auths, detail: vote, votes };
+        dispatch(act.RECEIVE_VOTES_BUNDLE(response));
+        return response;
+      });
     } catch (error) {
-        dispatch(act.RECEIVE_VOTES_BUNDLE(null, error));
-        throw error;
+      dispatch(act.RECEIVE_VOTES_BUNDLE(null, error));
+      throw error;
     }
-});
+  });

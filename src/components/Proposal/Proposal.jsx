@@ -439,11 +439,8 @@ const Proposal = React.memo(function Proposal({
                   {votesCount > 0 && (
                     <DownloadVotes
                       label="Votes Bundle"
-                      voteSummary={voteSummary}
                       fileName={`${proposalToken}-votes`}
-                      serverpublickey={apiInfo.pubkey}
                       token={proposalToken}
-                      version={version}
                     />
                   )}
                   {votesCount > 0 && (
