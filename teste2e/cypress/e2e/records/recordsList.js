@@ -1,32 +1,43 @@
-import { proposals } from "../../support/mock/records";
-import * as ticketvote from "../../support/mock/ticketvote";
-beforeEach(() => {
-  // mock inventory requests
+import { makeMockProposalResponse } from "../../support/mock/records";
+import { inventoryByPage } from "../../support/mock/ticketvote";
+
+const interceptInventoryRequest = () =>
   cy.intercept("/api/ticketvote/v1/inventory", (req) => {
-    console.log("REQ", req);
-    if (req.body.status === 0) {
-      req.reply({
-        body: {
-          bestBlock: 718066,
-          vetted: ticketvote.inventory5unauthorized,
-          test: true
-        }
-      });
-    }
+    req.reply({
+      body: {
+        bestBlock: 718066,
+        vetted: inventoryByPage[req.body.page || 0],
+        test: true
+      }
+    });
   });
-});
+
+const interceptRecordsRequest = () =>
+  cy.intercept("/api/records/v1/records", (req) => {
+    const tokens = req.body.requests.map(({ token }) => token);
+    const proposals = tokens.reduce(
+      (acc, t) => ({
+        ...acc,
+        [t]: makeMockProposalResponse(t, {})
+      }),
+      {}
+    );
+    req.reply({
+      body: { records: proposals }
+    });
+  });
+
 describe("Records list", () => {
   describe("proposal list", () => {
     it("can render first proposals batch", () => {
-      // cy.intercept("POST", "/api/ticketvote/v1/inventory", {
-      //   body: {
-      //     bestBlock: 718066,
-      //     vetted: inventory
-      //   }
-      // }).as("inventory");
+      let inv;
+
+      interceptInventoryRequest().as("inventory");
+      interceptRecordsRequest().as("records");
       cy.visit(`/`);
       cy.wait("@inventory").then(({ response: { body } }) => {
         console.log(body);
+        inv = body;
       });
     });
   });

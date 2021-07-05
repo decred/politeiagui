@@ -1,9 +1,29 @@
-export const inventory5unauthorized = {
-  unauthorized: [
-    "c00cc2f587815912",
-    "10e073ec550eb722",
-    "bce57f327b506e59",
-    "8d74795cf7e9a94c",
-    "b3c7348d68e7cd0b"
-  ]
-};
+import { makeCustomInventoryByStatus } from "../generate";
+
+export const inventoryByPage = [
+  // page 0 and 1 are the same
+  makeCustomInventoryByStatus({
+    approved: 4,
+    authorized: 6,
+    ineligible: 10,
+    rejected: 20,
+    started: 3,
+    unauthorized: 20
+  }),
+  makeCustomInventoryByStatus({
+    approved: 4,
+    authorized: 6,
+    ineligible: 10,
+    rejected: 20,
+    started: 3,
+    unauthorized: 20
+  }),
+  makeCustomInventoryByStatus({
+    approved: 0,
+    authorized: 0,
+    ineligible: 0,
+    rejected: 0,
+    started: 0,
+    unauthorized: 5
+  })
+];
