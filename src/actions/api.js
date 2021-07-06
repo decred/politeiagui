@@ -1740,7 +1740,7 @@ export const onFetchVotesBundle = (token, serverpublickey) =>
         api.proposalVoteDetails(csrf, token),
         api.proposalVoteResults(csrf, token)
       ]).then(([{ auths, vote }, { votes }]) => {
-        const response = { auths, detail: vote, votes, serverpublickey };
+        const response = { auths, details: vote, votes, serverpublickey };
         dispatch(act.RECEIVE_VOTES_BUNDLE(response));
         return response;
       });
