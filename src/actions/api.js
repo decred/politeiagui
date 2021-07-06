@@ -1732,7 +1732,7 @@ export const onFetchTicketVoteTimestamps = (token, votespage) =>
   withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token, votespage));
 
 // Votes Bundle
-export const onFetchVotesBundle = (token) =>
+export const onFetchVotesBundle = (token, serverpublickey) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_VOTES_BUNDLE());
     try {
@@ -1740,7 +1740,7 @@ export const onFetchVotesBundle = (token) =>
         api.proposalVoteDetails(csrf, token),
         api.proposalVoteResults(csrf, token)
       ]).then(([{ auths, vote }, { votes }]) => {
-        const response = { auths, detail: vote, votes };
+        const response = { auths, detail: vote, votes, serverpublickey };
         dispatch(act.RECEIVE_VOTES_BUNDLE(response));
         return response;
       });

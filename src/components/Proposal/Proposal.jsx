@@ -440,6 +440,7 @@ const Proposal = React.memo(function Proposal({
                     <DownloadVotes
                       label="Votes Bundle"
                       fileName={`${proposalToken}-votes`}
+                      serverpublickey={apiInfo.pubkey}
                       token={proposalToken}
                     />
                   )}
