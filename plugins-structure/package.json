@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "records",
+      "shared",
+      "shared-hooks"
+    ]
+  },
+  "scripts": {
+    "start": "lerna run --parallel start",
+    "build": "lerna run build"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
