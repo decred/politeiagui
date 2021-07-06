@@ -27,10 +27,10 @@ const DownloadCommentsTimestamps = ({ recordToken }) => {
     useDownloadCommentsTimestamps(recordToken);
 
   return loading ? (
-    <div>
+    <>
       {multiPage && <span style={{ marginRight: 10 }}>{progress}%</span>}
       <Spinner invert />
-    </div>
+    </>
   ) : timestamps ? (
     <DownloadJSON
       label={"Comments Timestamps"}

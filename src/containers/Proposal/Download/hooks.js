@@ -22,7 +22,7 @@ export function useDownloadVoteTimestamps(token, votesCount) {
 
   const getProgressPercentage = useCallback(
     (total) =>
-      total ? ((total * TIMESTAMPS_PAGE_SIZE) / votesCount).toFixed(2) : 0,
+      total ? ((total * TIMESTAMPS_PAGE_SIZE) / votesCount).toFixed(0) : 0,
     [votesCount]
   );
 

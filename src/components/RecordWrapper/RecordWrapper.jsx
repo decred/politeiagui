@@ -334,13 +334,6 @@ export const DownloadTimestamps = ({ token, version, label }) => {
 };
 
 export const DownloadVotes = ({ label, fileName, token }) => {
-  /*const bundle = {
-    auths: voteSummary?.details?.auths,
-    details: voteSummary?.details?.details,
-    votes: voteSummary?.votes,
-    serverpublickey
-  };
-  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;*/
   const { onFetchVotesBundle } = useTimestamps();
   return (
     <DownloadJSON
