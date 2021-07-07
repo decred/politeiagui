@@ -26,8 +26,8 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
     await onDislike();
   }
 
-  const debouncedHandleDislike = debounce(handleDislike, 500);
-  const debouncedHandleLike = debounce(handleLike, 500);
+  const debouncedHandleDislike = debounce(handleDislike, 200);
+  const debouncedHandleLike = debounce(handleLike, 200);
 
   const renderCount = useCallback(
     (count) => (
