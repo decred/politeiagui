@@ -76,7 +76,7 @@ export const onSaveNewProposal =
         userid,
         username,
         name.trim(),
-        amount,
+        amount * 100, // Backend expects value in cents
         sDate,
         eDate,
         domain,

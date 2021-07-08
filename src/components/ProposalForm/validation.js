@@ -13,12 +13,23 @@ import {
 } from "src/constants";
 
 export const proposalValidation =
-  ({ namesupportedchars, namelengthmax, namelengthmin }) =>
+  ({
+    amountmin,
+    amountmax,
+    enddatemax,
+    namesupportedchars,
+    namelengthmax,
+    namelengthmin
+  }) =>
   (values) => {
     const errors = {};
     if (!values) {
       values = {
         name: "",
+        amount: 0,
+        sDate: null,
+        eDate: null,
+        domain: "",
         description: "",
         type: null,
         rfpLink: "",
@@ -51,6 +62,34 @@ export const proposalValidation =
       namelengthmax
     );
     if (nameErrors) errors.name = nameErrors;
+
+    // amount validation
+    if (!values.amount) {
+      errors.amount = "Required";
+    } else if (
+      isNaN(values.amount) ||
+      values.amount < amountmin / 100 ||
+      values.amount > amountmax / 100
+    ) {
+      errors.amount = `Invalid amount, min is ${amountmin / 100}, max is ${
+        amountmax / 100
+      }`;
+    }
+
+    // start date validation
+    if (!values.sDate) {
+      errors.sDate = "Required";
+    }
+
+    // end date validation
+    if (!values.eDate) {
+      errors.eDate = "Required";
+    }
+
+    // domain validation
+    if (!values.domain) {
+      errors.domain = "Required";
+    }
 
     // description validation
     if (!values.description) {

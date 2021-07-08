@@ -106,7 +106,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const { themeName } = useTheme();
   const {
     policyTicketVote: { linkbyperiodmin, linkbyperiodmax },
-    policyPi: { amountmin, amountmax, enddatemax, domains }
+    policyPi: { domains }
   } = usePolicy();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const isRfp = values.type === PROPOSAL_TYPE_RFP;
@@ -118,8 +118,6 @@ const ProposalForm = React.memo(function ProposalForm({
     },
     [setFieldValue]
   );
-
-  console.log({ amountmin, amountmax, enddatemax, domains });
 
   const typeOptions = useMemo(() => getProposalTypeOptionsForSelect(), []);
   const domainOptions = useMemo(
