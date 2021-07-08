@@ -1,4 +1,18 @@
 import { makeCustomInventoryByStatus } from "../generate";
+import upperFirst from "lodash/upperFirst";
+
+export const middlewares = {
+  inventory: () =>
+    cy.intercept("/api/ticketvote/v1/inventory", (req) => {
+      req.reply({
+        body: {
+          bestBlock: 718066,
+          vetted: inventoryByPage[req.body.page || 0],
+          test: true
+        }
+      });
+    })
+};
 
 export const inventoryByPage = [
   // page 0 and 1 are the same

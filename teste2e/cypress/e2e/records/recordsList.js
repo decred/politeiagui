@@ -1,43 +1,29 @@
-import { makeMockProposalResponse } from "../../support/mock/records";
-import { inventoryByPage } from "../../support/mock/ticketvote";
+import { parseRawProposal } from "../../utils";
 
-const interceptInventoryRequest = () =>
-  cy.intercept("/api/ticketvote/v1/inventory", (req) => {
-    req.reply({
-      body: {
-        bestBlock: 718066,
-        vetted: inventoryByPage[req.body.page || 0],
-        test: true
-      }
-    });
-  });
-
-const interceptRecordsRequest = () =>
-  cy.intercept("/api/records/v1/records", (req) => {
-    const tokens = req.body.requests.map(({ token }) => token);
-    const proposals = tokens.reduce(
-      (acc, t) => ({
-        ...acc,
-        [t]: makeMockProposalResponse(t, {})
-      }),
-      {}
-    );
-    req.reply({
-      body: { records: proposals }
-    });
-  });
+// const interceptSummariesRequest = () => cy.intercept("/");
 
 describe("Records list", () => {
   describe("proposal list", () => {
+    beforeEach(() => {
+      cy.middleware("ticketvote.inventory");
+      cy.middleware("record.records");
+    });
     it("can render first proposals batch", () => {
-      let inv;
-
-      interceptInventoryRequest().as("inventory");
-      interceptRecordsRequest().as("records");
+      let inventory, records;
       cy.visit(`/`);
-      cy.wait("@inventory").then(({ response: { body } }) => {
-        console.log(body);
-        inv = body;
+      cy.wait("@ticketvote.inventory").then(({ response: { body } }) => {
+        inventory = body.vetted;
+      });
+      cy.wait("@record.records").then(({ response: { body } }) => {
+        records = Object.values(body.records).map(parseRawProposal);
+        // // fetch first proposals tokens correctly
+        // const expectedTokens = inventory.authorized.slice(0, 5);
+        // const receivedTokens = Object.keys(body.records);
+        // expect(receivedTokens).to.have.ordered.members(expectedTokens);
+      });
+      cy.get('[data-testid="lazy-list"]').as("list");
+      cy.get('[data-testid="record-title"]').each(([el]) => {
+        console.log(el.outerText, this.list);
       });
     });
   });

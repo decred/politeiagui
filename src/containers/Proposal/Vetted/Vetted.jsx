@@ -12,7 +12,11 @@ import { LIST_HEADER_VETTED } from "src/constants";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 
 const renderProposal = (record) => (
-  <Proposal key={record.censorshiprecord.token} proposal={record} />
+  <Proposal
+    key={record.censorshiprecord.token}
+    proposal={record}
+    data-testid="proposal"
+  />
 );
 
 const tabLabels = [

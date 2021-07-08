@@ -1,11 +1,9 @@
 import CryptoJS from "crypto-js";
 import get from "lodash/fp/get";
-import range from "lodash/fp/range";
-import map from "lodash/fp/map";
-import compose from "lodash/fp/compose";
-import slice from "lodash/fp/slice";
 import * as pki from "./pki";
 import MerkleTree from "./merkle";
+
+export { parseRawProposal } from "../../src/helpers";
 
 const PROPOSAL_TYPE_REGULAR = 1;
 const PROPOSAL_TYPE_RFP = 2;
