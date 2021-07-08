@@ -6,6 +6,7 @@ import head from "lodash/head";
 import isEmpty from "lodash/fp/isEmpty";
 import flow from "lodash/fp/flow";
 import flatMap from "lodash/fp/flatMap";
+import compact from "lodash/fp/compact";
 import filter from "lodash/fp/filter";
 import uniq from "lodash/uniq";
 import useFetchMachine, {
@@ -31,7 +32,7 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
   // The public keys for the users we need to search for
   const unfetchedPublicKeys = flow(
     Object.values,
-    flatMap((prop) => (prop.status === status ? prop.statuschangepk : [])),
+    flatMap((prop) => (prop?.status === status ? prop.statuschangepk : [])),
     uniq,
     filter((pk) => pk && !resultsByPk[pk])
   )(proposals);
@@ -75,24 +76,27 @@ export default function useProposalsStatusChangeUser(proposals = {}, status) {
   }
 
   // Add statuschangeusername data to proposals that needs it
-  const parsedProposals = Object.values(proposals)
-    .map((prop) => {
-      const userID = resultsByPk[prop?.statuschangepk];
-      const user = resultsByID[userID];
-      return prop.status === status
-        ? {
-            ...prop,
-            statuschangeusername: user?.username
-          }
-        : prop;
-    })
-    .reduce(
-      (acc, prop) => ({
-        ...acc,
-        [shortRecordToken(prop.censorshiprecord.token)]: prop
-      }),
-      {}
-    );
+  const hasProposals = !isEmpty(compact(Object.values(proposals)));
+  const parsedProposals = hasProposals
+    ? Object.values(proposals)
+        .map((prop) => {
+          const userID = resultsByPk[prop?.statuschangepk];
+          const user = resultsByID[userID];
+          return prop?.status === status
+            ? {
+                ...prop,
+                statuschangeusername: user?.username
+              }
+            : prop;
+        })
+        .reduce(
+          (acc, prop) => ({
+            ...acc,
+            [shortRecordToken(prop?.censorshiprecord?.token)]: prop
+          }),
+          {}
+        )
+    : proposals;
 
   return {
     proposals: parsedProposals,
