@@ -832,6 +832,10 @@ export const onSubmitProposal = (
   userid,
   username,
   name,
+  amount,
+  sDate,
+  eDate,
+  domain,
   description,
   rfpDeadline,
   type,
@@ -849,8 +853,20 @@ export const onSubmitProposal = (
         files
       })
     );
+    console.log({ amount, sDate, eDate, domain });
     return Promise.resolve(
-      api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
+      api.makeProposal(
+        name,
+        +amount,
+        sDate,
+        eDate,
+        domain,
+        description,
+        rfpDeadline,
+        type,
+        rfpLink,
+        files
+      )
     )
       .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))

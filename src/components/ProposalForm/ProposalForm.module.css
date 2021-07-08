@@ -36,10 +36,19 @@
   margin-bottom: 0;
 }
 
-.datePicker {
+.rfpDeadline {
   margin-left: 2rem;
   flex-basis: 20rem;
   height: 4.4rem;
+}
+
+.sDate,
+.eDate {
+  flex-basis: 20rem;
+}
+
+.eDate {
+  margin-left: 2rem;
 }
 
 .iconWrapper {

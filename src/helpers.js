@@ -33,20 +33,6 @@ import {
   USER_METADATA_PLUGIN
 } from "./constants.js";
 
-// XXX find usage and ensure this still works as expected
-export const getProposalStatus = (proposalStatus) =>
-  get(proposalStatus, [
-    "Invalid",
-    "Not found",
-    "Not reviewed",
-    "Censored",
-    "Public",
-    "Unreviewed changes",
-    "Abandoned",
-    "Rejected",
-    "Approved"
-  ]);
-
 export const digestPayload = (payload) =>
   CryptoJS.SHA256(
     arrayBufferToWordArray(base64ToArrayBuffer(payload))
@@ -474,12 +460,16 @@ export const getDomainName = (contractorDomains, op) => {
 };
 
 /**
- * Converts { day, month, year } object to unix second timestamp
+ * Converts { day, month, year } object to an unix second timestamp
  * uses 23:59 of that day as time.
  * @param {object} date
  */
-export const convertObjectToUnixTimestamp = ({ day, month, year }) =>
-  new Date(Date.UTC(year, month - 1, day, 23, 59)).getTime() / 1000;
+export const convertObjectToUnixTimestamp = (date) => {
+  if (!date) return 0;
+  const { day, month, year } = date;
+  return new Date(Date.UTC(year, month - 1, day, 23, 59)).getTime() / 1000;
+};
+
 /** INLINE IMAGES HELPERS */
 /**
  * replaceBlobsByDigestsAndGetFiles uses a regex to parse images and replace blobs by files digests

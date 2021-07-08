@@ -5,10 +5,17 @@ import {
 } from "src/constants";
 import { formatUnixTimestampToObj } from "src/utils";
 
-const typesLabels = {
+const typeLabels = {
   [PROPOSAL_TYPE_REGULAR]: "Regular proposal",
   [PROPOSAL_TYPE_RFP]: "RFP proposal",
   [PROPOSAL_TYPE_RFP_SUBMISSION]: "RFP submission"
+};
+
+const domainLabels = {
+  development: "Development",
+  research: "Research",
+  marketing: "Marketing",
+  design: "Design"
 };
 
 /**
@@ -32,25 +39,13 @@ export const getRfpMinMaxDates = (linkbyperiodmin, linkbyperiodmax) => {
 export const getProposalTypeOptionsForSelect = () =>
   [PROPOSAL_TYPE_REGULAR, PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION].map(
     (value) => ({
-      label: typesLabels[value],
+      label: typeLabels[value],
       value
     })
   );
 
-/**
- * Returns the deadline timestamp from given date
- * @param {Object} date
- */
-export const getRfpDeadlineTimestamp = (rfpDeadline) => {
-  if (!rfpDeadline) return 0;
-  const now = new Date();
-  const deadline = new Date(
-    rfpDeadline.year,
-    rfpDeadline.month - 1,
-    rfpDeadline.day,
-    now.getHours(),
-    now.getMinutes(),
-    now.getSeconds()
-  );
-  return deadline.getTime() / 1000;
-};
+export const getProposalDomainOptionsForSelect = (domains) =>
+  domains.map((domain) => ({
+    label: domainLabels[domain],
+    value: domain
+  }));

@@ -108,6 +108,10 @@ export const signRegister = (userid, record) => {
 
 export const makeProposal = (
   name,
+  amount,
+  startdate,
+  enddate,
+  domain,
   markdown,
   rfpDeadline,
   type,
@@ -120,8 +124,10 @@ export const makeProposal = (
       //proposal metadata file
       name: PROPOSAL_METADATA_FILENAME,
       mime: "text/plain; charset=utf-8",
-      digest: objectToSHA256({ name }),
-      payload: bufferToBase64String(objectToBuffer({ name }))
+      digest: objectToSHA256({ name, amount, startdate, enddate, domain }),
+      payload: bufferToBase64String(
+        objectToBuffer({ name, amount, startdate, enddate, domain })
+      )
     },
     ...(attachments || [])
   ].map(({ name, mime, payload }) => ({
@@ -129,30 +135,7 @@ export const makeProposal = (
     mime,
     payload,
     digest: digestPayload(payload)
-  })),
-  metadata: [
-    {
-      hint: "proposalmetadata",
-      payload: bufferToBase64String(
-        objectToBuffer({
-          name,
-          linkby:
-            type === PROPOSAL_TYPE_RFP
-              ? convertObjectToUnixTimestamp(rfpDeadline)
-              : undefined,
-          linkto: type === PROPOSAL_TYPE_RFP_SUBMISSION ? rfpLink : undefined
-        })
-      ),
-      digest: objectToSHA256({
-        name,
-        linkby:
-          type === PROPOSAL_TYPE_RFP
-            ? convertObjectToUnixTimestamp(rfpDeadline)
-            : undefined,
-        linkto: type === PROPOSAL_TYPE_RFP_SUBMISSION ? rfpLink : undefined
-      })
-    }
-  ]
+  }))
 });
 
 export const shortRecordToken = (token) => token.substring(0, 7);

@@ -57,7 +57,18 @@ export const onSaveNewInvoice =
   };
 
 export const onSaveNewProposal =
-  ({ name, description, files, rfpDeadline, rfpLink, type }) =>
+  ({
+    name,
+    amount,
+    sDate,
+    eDate,
+    domain,
+    description,
+    files,
+    rfpDeadline,
+    rfpLink,
+    type
+  }) =>
   (dispatch, getState) => {
     const { userid, username } = sel.currentUser(getState());
     return dispatch(
@@ -65,6 +76,10 @@ export const onSaveNewProposal =
         userid,
         username,
         name.trim(),
+        amount,
+        sDate,
+        eDate,
+        domain,
         description,
         rfpDeadline,
         type,
