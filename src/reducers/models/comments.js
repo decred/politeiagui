@@ -140,7 +140,11 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             return compose(
               set(["commentsLikes", "byToken", shortToken], newCommentsLikes),
-              // This will cause some delay to update up/downvotes if there are a lot of comments in the page. This happens because we have to recreate the comments array all the time due to the redux immutability pattern. Will be improved when we migrate to the plugins structure.
+              /* This will cause some delay to update up/downvotes if there are
+              a lot of comments in the page. This happens because we have to
+              recreate the comments array all the time due to the redux
+              immutability pattern. Will be improved when we migrate to the
+              plugins structure. */
               update(["comments", "byToken", shortToken], (value) =>
                 value.map(updateCommentVotes)
               )
