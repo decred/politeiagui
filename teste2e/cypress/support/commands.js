@@ -139,12 +139,12 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   });
 });
 
-Cypress.Commands.add("middleware", (path) => {
+Cypress.Commands.add("middleware", (path, ...args) => {
   const mw = get(path)({
     ticketvote: ticketVoteMiddlewares,
     record: recordMiddlewares
   });
-  return mw().as(path);
+  return mw(...args).as(path);
 });
 
 Cypress.on("window:before:load", (win) => {

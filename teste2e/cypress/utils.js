@@ -9,6 +9,28 @@ const PROPOSAL_TYPE_REGULAR = 1;
 const PROPOSAL_TYPE_RFP = 2;
 const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
 const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
+// Proposals presentational statuses returned by the 'voteinv' &
+// 'proposalinv' endpoints from the API.
+const UNREVIEWED = "unreviewed";
+const ACTIVE_VOTE = "started";
+const APPROVED = "approved";
+const AUTHORIZED = "authorized";
+const UNAUTHORIZED = "unauthorized";
+const REJECTED = "rejected";
+const INELIGIBLE = "ineligible";
+const ARCHIVED = "archived";
+const PUBLIC = "public";
+const CENSORED = "censored";
+const PROPOSAL_VOTING_NOT_AUTHORIZED = 1;
+const PROPOSAL_VOTING_AUTHORIZED = 2;
+const PROPOSAL_VOTING_ACTIVE = 3;
+const PROPOSAL_VOTING_APPROVED = 5;
+const PROPOSAL_VOTING_REJECTED = 6;
+const PROPOSAL_VOTING_INELIGIBLE = 7;
+const PROPOSAL_STATUS_UNREVIEWED = 1;
+const PROPOSAL_STATUS_PUBLIC = 2;
+const PROPOSAL_STATUS_CENSORED = 3;
+const PROPOSAL_STATUS_ARCHIVED = 4;
 
 export const requestWithCsrfToken = (url, body) => {
   return cy.request("/api").then((res) => {
@@ -158,3 +180,22 @@ export const makeProposal = (
 });
 
 export const shortRecordToken = (token) => token.substring(0, 7);
+
+export const getProposalStatusLabel = (status, isByRecordStatus) =>
+  get(status)(
+    isByRecordStatus
+      ? {
+          [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
+          [PROPOSAL_STATUS_ARCHIVED]: ARCHIVED,
+          [PROPOSAL_STATUS_CENSORED]: CENSORED,
+          [PROPOSAL_STATUS_PUBLIC]: PUBLIC
+        }
+      : {
+          [PROPOSAL_VOTING_NOT_AUTHORIZED]: UNAUTHORIZED,
+          [PROPOSAL_VOTING_AUTHORIZED]: AUTHORIZED,
+          [PROPOSAL_VOTING_ACTIVE]: ACTIVE_VOTE,
+          [PROPOSAL_VOTING_APPROVED]: APPROVED,
+          [PROPOSAL_VOTING_REJECTED]: REJECTED,
+          [PROPOSAL_VOTING_INELIGIBLE]: INELIGIBLE
+        }
+  );
