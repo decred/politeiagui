@@ -1,8 +1,6 @@
 import * as act from "src/actions/types";
-import cloneDeep from "lodash/cloneDeep";
 import uniqWith from "lodash/uniqWith";
 import reverse from "lodash/reverse";
-import unionBy from "lodash/unionBy";
 import compose from "lodash/fp/compose";
 import set from "lodash/fp/set";
 import update from "lodash/fp/update";
@@ -15,6 +13,27 @@ import {
 const DEFAULT_STATE = {
   comments: { byToken: {}, accessTimeByToken: {}, backup: null },
   commentsLikes: { byToken: {}, backup: null }
+};
+
+const olderVotesFirst = (a, b) => a.timestamp - b.timestamp;
+
+const calcScoreByComment = (votes) => {
+  return votes.sort(olderVotesFirst).reduce((accObj, currentVote) => {
+    const id = currentVote.commentid;
+    if (!accObj[id] || accObj[id] !== currentVote.vote) {
+      // no vote found or old vote is different than new vote. Vote option is the chosen option
+      return {
+        ...accObj,
+        [id]: currentVote.vote
+      };
+    } else {
+      // old vote is equals new vote. Set score to 0
+      return {
+        ...accObj,
+        [id]: 0
+      };
+    }
+  }, {});
 };
 
 const calcVotes = (comment, oldVote, vote) => {
@@ -79,36 +98,29 @@ const comments = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
             const { token, votes } = action.payload;
+            const commentsUserVote = calcScoreByComment(votes);
             return set(
               ["commentsLikes", "byToken", shortRecordToken(token)],
-              votes
+              commentsUserVote
             )(state);
           },
-          [act.RECEIVE_SYNC_LIKE_COMMENT]: () => {
+          [act.RECEIVE_LIKE_COMMENT]: () => {
             const { token, vote, commentid } = action.payload;
             const shortToken = shortRecordToken(token);
             const commentsLikes = state.commentsLikes.byToken[shortToken];
-            const backupForCommentLikes = cloneDeep(commentsLikes);
-            const comments = state.comments.byToken[shortToken];
-            const isTargetCommentLike = (commentLike) =>
-              commentLike.commentid === commentid &&
-              commentLike.token === shortToken;
-            const oldCommentVote =
-              commentsLikes && commentsLikes.find(isTargetCommentLike);
+            const oldVote = commentsLikes
+              ? commentsLikes[commentid]
+                ? commentsLikes[commentid]
+                : 0
+              : 0;
+            const newCommentsLikes = commentsLikes;
 
-            const oldVote = oldCommentVote ? oldCommentVote.vote : 0;
-
-            const newCommentLike = {
-              ...oldCommentVote,
-              shortToken,
-              commentid,
-              vote: vote === oldVote ? 0 : vote
-            };
-            const newCommentsLikes = unionBy(
-              [newCommentLike],
-              commentsLikes,
-              "commentid"
-            );
+            // calc new use option
+            if (oldVote === 0 || oldVote !== vote) {
+              newCommentsLikes[commentid] = vote;
+            } else {
+              newCommentsLikes[commentid] = 0;
+            }
 
             const updateCommentVotes = (comment) => {
               if (comment.commentid !== commentid) return comment;
@@ -127,18 +139,15 @@ const comments = (state = DEFAULT_STATE, action) =>
             };
 
             return compose(
-              set(["commentsLikes", "backup"], backupForCommentLikes),
               set(["commentsLikes", "byToken", shortToken], newCommentsLikes),
-              set(["comments", "backup"], comments),
+              /* This will cause some delay to update up/downvotes if there are
+              a lot of comments in the page. This happens because we have to
+              recreate the comments array all the time due to the redux
+              immutability pattern. Will be improved when we migrate to the
+              plugins structure. */
               update(["comments", "byToken", shortToken], (value) =>
                 value.map(updateCommentVotes)
               )
-            )(state);
-          },
-          [act.RECEIVE_LIKE_COMMENT]: () => {
-            return compose(
-              set(["commentsLikes", "backup"], null),
-              set(["comments", "backup"], null)
             )(state);
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
