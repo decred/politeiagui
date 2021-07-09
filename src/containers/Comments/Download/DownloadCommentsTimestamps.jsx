@@ -23,14 +23,14 @@ const DownloadCommentsTimestampsWrapper = ({
 };
 
 const DownloadCommentsTimestamps = ({ recordToken }) => {
-  const { loading, progress, timestamps } =
+  const { loading, progress, timestamps, multiPage } =
     useDownloadCommentsTimestamps(recordToken);
 
   return loading ? (
-    <div>
-      <span style={{ marginRight: 10 }}>{progress}%</span>
+    <>
+      {multiPage && <span style={{ marginRight: 10 }}>{progress}%</span>}
       <Spinner invert />
-    </div>
+    </>
   ) : timestamps ? (
     <DownloadJSON
       label={"Comments Timestamps"}

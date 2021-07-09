@@ -431,7 +431,7 @@ const Proposal = React.memo(function Proposal({
                   )}
                   {isPublic && commentsCount > 0 && (
                     <DownloadCommentsTimestamps
-                      label="Load Comments Timestamps"
+                      label="Comments Timestamps"
                       recordToken={proposalToken}
                       commentsCount={commentsCount}
                     />
@@ -439,14 +439,14 @@ const Proposal = React.memo(function Proposal({
                   {votesCount > 0 && (
                     <DownloadVotes
                       label="Votes Bundle"
-                      voteSummary={voteSummary}
                       fileName={`${proposalToken}-votes`}
                       serverpublickey={apiInfo.pubkey}
+                      token={proposalToken}
                     />
                   )}
                   {votesCount > 0 && (
                     <DownloadVotesTimestamps
-                      label="Load Votes Timestamp"
+                      label="Votes Timestamp"
                       votesCount={votesCount}
                       recordToken={proposalToken}
                     />

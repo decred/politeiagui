@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import fileDownload from "js-file-download";
-import { Link } from "pi-ui";
+import { Link, Spinner } from "pi-ui";
 
 const isPromise = (obj) => obj && typeof obj.then === "function";
 
@@ -24,13 +24,16 @@ const DownloadJSON = ({
   beforeDownload,
   ...props
 }) => {
+  const [asyncLoading, setAsyncLoading] = useState(false);
   function onDownload() {
     const data = JSON.stringify(content, null, 2);
     fileDownload(data, `${fileName}.json`);
   }
 
   function handleDownload() {
+    setAsyncLoading(true);
     beforeDownload().then((response) => {
+      setAsyncLoading(false);
       const data = JSON.stringify(response, null, 2);
       fileDownload(data, `${fileName}.json`);
     });
@@ -41,14 +44,18 @@ const DownloadJSON = ({
   ) : (
     <Link
       {...props}
-      customComponent={(props) => (
-        <span
-          style={{ cursor: "pointer" }}
-          {...props}
-          onClick={!isAsync ? onDownload : handleDownload}>
-          {label}
-        </span>
-      )}
+      customComponent={(props) =>
+        isAsync && asyncLoading ? (
+          <Spinner invert />
+        ) : (
+          <span
+            style={{ cursor: "pointer" }}
+            {...props}
+            onClick={!isAsync ? onDownload : handleDownload}>
+            {label}
+          </span>
+        )
+      }
     />
   );
 };

@@ -208,6 +208,8 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_SET_TOTP]: () => receive("setTotp", state, action),
       [act.REQUEST_VERIFY_TOTP]: () => request("verifyTotp", state, action),
       [act.RECEIVE_VERIFY_TOTP]: () => receive("verifyTotp", state, action),
+      [act.REQUEST_VOTES_BUNDLE]: () => request("votesBundle", state, action),
+      [act.RECEIVE_VOTES_BUNDLE]: () => receive("votesBundle", state, action),
       // == CMS START ==
       [act.REQUEST_GENERATE_PAYOUTS]: () => request("payouts", state, action),
       [act.RECEIVE_GENERATE_PAYOUTS]: () => receive("payouts", state, action),

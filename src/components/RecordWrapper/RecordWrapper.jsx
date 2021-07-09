@@ -333,19 +333,17 @@ export const DownloadTimestamps = ({ token, version, label }) => {
   );
 };
 
-export const DownloadVotes = ({
-  label,
-  voteSummary,
-  fileName,
-  serverpublickey
-}) => {
-  const bundle = {
-    auths: voteSummary?.details?.auths,
-    details: voteSummary?.details?.details,
-    votes: voteSummary?.votes,
-    serverpublickey
-  };
-  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;
+export const DownloadVotes = ({ label, fileName, serverpublickey, token }) => {
+  const { onFetchVotesBundle } = useTimestamps();
+  return (
+    <DownloadJSON
+      label={label}
+      fileName={fileName}
+      isAsync={true}
+      content={[]}
+      beforeDownload={() => onFetchVotesBundle(token, serverpublickey)}
+    />
+  );
 };
 
 export const LinkSection = ({ children, className, title }) => (
