@@ -9,7 +9,7 @@ import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
-import { LIST_HEADER_VETTED } from "src/constants";
+import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import { PROPOSAL_STATUS_CENSORED } from "src/constants";
 import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
@@ -57,13 +57,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   const mergedProposalsTokens = !isEmpty(legacyProposalsTokens)
     ? Object.keys(proposalsTokens).reduce((acc, cur) => {
-        if (cur === "started" || cur === "pre") {
-          return {
-            ...acc,
-            [cur]: proposalsTokens[cur]
-          };
-        }
-        if (cur === "ineligible") {
+        if (cur === INELIGIBLE) {
           return {
             ...acc,
             [cur]: [
@@ -74,7 +68,10 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
         }
         return {
           ...acc,
-          [cur]: [...proposalsTokens[cur], ...legacyProposalsTokens[cur]]
+          [cur]: [
+            ...(proposalsTokens[cur] || []),
+            ...(legacyProposalsTokens[cur] || [])
+          ]
         };
       }, {})
     : proposalsTokens;
