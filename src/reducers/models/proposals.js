@@ -38,7 +38,7 @@ const mapStatusToName = {
 const DEFAULT_STATE = {
   byToken: {},
   allByVoteStatus: {
-    [PRE_VOTE]: [],
+    //[PRE_VOTE]: [],
     [ACTIVE_VOTE]: [],
     [APPROVED]: [],
     [REJECTED]: [],

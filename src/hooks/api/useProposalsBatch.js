@@ -202,7 +202,7 @@ export default function useProposalsBatch({
   });
 
   // onRestartMachine called when the user clicking on a new tab
-  // The function will find what is the status are inloading in the previous session.
+  // The function will find what is the status has been loading in the previous session.
   // If there are not status found. That mean all the data are loaded in this tab and go to RESOLVE state
   const onRestartMachine = (newStatuses) => {
     let unfetchedTokens = [],
@@ -250,7 +250,6 @@ export default function useProposalsBatch({
 
   const anyError = error || state.error;
   useThrowError(anyError);
-
   return {
     proposals: getRfpLinkedProposals(proposals, voteSummaries),
     onFetchProposalsBatch,
