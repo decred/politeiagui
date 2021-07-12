@@ -31,8 +31,15 @@ export const buildRecord = build("Record").fields({
   signature: fake((f) => f.datatype.hexaDecimal(128, false, /[0-9a-z]/))
 });
 
-export const fakeToken = () => buildRecord().token;
+const fakeToken = () => buildRecord().token;
 
+/**
+ * makeCustomInventoryByStatus returns a custom random token inventory by given
+ * { [status]: amount } defined by tokensAmountByStatus.
+ *
+ * @param {Object} tokensAmountByStatus
+ * @param {Number} pageLimit
+ */
 export const makeCustomInventoryByStatus = (
   tokensAmountByStatus = {},
   pageLimit = 20
@@ -41,7 +48,7 @@ export const makeCustomInventoryByStatus = (
     reduce(
       (acc, [status, amount]) => ({
         ...acc,
-        [status]: compose(chunk(pageLimit), map(fakeToken), range(amount))(0) // range(amount).map(fakeToken)
+        [status]: compose(chunk(pageLimit), map(fakeToken), range(amount))(0)
       }),
       {}
     ),
