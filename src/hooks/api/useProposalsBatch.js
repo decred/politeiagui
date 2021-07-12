@@ -208,7 +208,7 @@ export default function useProposalsBatch({
     let unfetchedTokens = [],
       index = 0;
     const statuses = newStatuses || currentStatuses;
-    const foundStatus = statuses.find((status, i) => {
+    const foundPreviousSessionStatus = statuses.find((status, i) => {
       const statusLabel = getProposalStatusLabel(status, isByRecordStatus);
       unfetchedTokens = getUnfetchedTokens(
         proposals,
@@ -220,7 +220,7 @@ export default function useProposalsBatch({
       }
       return false;
     });
-    if (!foundStatus) {
+    if (!foundPreviousSessionStatus) {
       return send(RESOLVE);
     }
     // machine stop condition: inventory loaded, but no tokens to fetch
