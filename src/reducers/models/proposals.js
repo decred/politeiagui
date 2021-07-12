@@ -12,6 +12,8 @@ import {
   PRE_VOTE,
   ACTIVE_VOTE,
   APPROVED,
+  AUTHORIZED,
+  UNAUTHORIZED,
   REJECTED,
   PUBLIC,
   CENSORED,
@@ -38,7 +40,8 @@ const mapStatusToName = {
 const DEFAULT_STATE = {
   byToken: {},
   allByVoteStatus: {
-    //[PRE_VOTE]: [],
+    [UNAUTHORIZED]: [],
+    [AUTHORIZED]: [],
     [ACTIVE_VOTE]: [],
     [APPROVED]: [],
     [REJECTED]: [],

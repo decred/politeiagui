@@ -41,6 +41,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     fetchVoteSummaries: true,
     statuses: statuses
   });
+
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
     isProposalsBatchComplete,
