@@ -26,8 +26,7 @@ export const middlewares = {
         req.reply({
           body: {
             bestBlock: 718066,
-            vetted: tokens,
-            test: true
+            vetted: tokens
           }
         });
       } else {
@@ -38,8 +37,7 @@ export const middlewares = {
             vetted: {
               [statusLabel]:
                 inv[statusLabel][req.body.page ? req.body.page - 1 : 0]
-            },
-            test: true
+            }
           }
         });
       }

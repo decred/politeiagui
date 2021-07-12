@@ -139,6 +139,10 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   });
 });
 
+Cypress.Commands.add("assertListLength", (testid, expectedLength) =>
+  cy.findAllByTestId(testid).should("have.length", expectedLength)
+);
+
 Cypress.Commands.add("middleware", (path, ...args) => {
   const mw = get(path)({
     ticketvote: ticketVoteMiddlewares,

@@ -5,19 +5,12 @@ import { buildRecord, buildProposal } from "../generate";
 const DEFAULT_STATUS = 2;
 const DEFAULT_STATE = 2;
 
-const getDefaultUserMd = (userid, pubkey, signature) => ({
+const getUserMd = (userid, pubkey, signature) => ({
   pluginid: "usermd",
   payload: `{"userid":"${userid}","publickey":"${pubkey}","signature":"${signature}"}`
 });
 
-const getDefaultRecordMd = (
-  token,
-  version,
-  status,
-  timestamp,
-  pubkey,
-  signature
-) => ({
+const getRecordMd = (token, version, status, timestamp, pubkey, signature) => ({
   pluginid: "usermd",
   payload: `{"token":"${token}","version":${version},"status":${status},"publickey":"${pubkey}","signature":"${signature}","timestamp":${timestamp}}`
 });
@@ -38,15 +31,8 @@ const makeMockProposalResponse = (
     timestamp,
     username,
     metadata: [
-      getDefaultUserMd(userid, publickey, signature),
-      getDefaultRecordMd(
-        token,
-        version,
-        status,
-        timestamp,
-        publickey,
-        signature
-      )
+      getUserMd(userid, publickey, signature),
+      getRecordMd(token, version, status, timestamp, publickey, signature)
     ],
     files: makeProposal(name, description).files,
     censorshiprecord: {

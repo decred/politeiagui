@@ -24,7 +24,7 @@ const SidebarContent = ({ wrapper }) => {
 
   return useMemo(
     () => (
-      <WrapperComponent>
+      <WrapperComponent data-testid="sidebar">
         {enablePaywall && (
           <PaywallMessage
             wrapper={SidebarBlock}
