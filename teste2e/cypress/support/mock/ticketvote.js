@@ -1,6 +1,5 @@
 import { makeCustomInventoryByStatus } from "../generate";
 import { getProposalStatusLabel } from "../../utils";
-import upperFirst from "lodash/upperFirst";
 
 export const middlewares = {
   inventory: (tokensAmountByStatus) =>

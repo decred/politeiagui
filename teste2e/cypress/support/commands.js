@@ -139,14 +139,14 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   });
 });
 
-Cypress.Commands.add("assertListLength", (testid, expectedLength) =>
+Cypress.Commands.add("assertListLengthByTestId", (testid, expectedLength) =>
   cy.findAllByTestId(testid).should("have.length", expectedLength)
 );
 
 Cypress.Commands.add("middleware", (path, ...args) => {
   const mw = get(path)({
     ticketvote: ticketVoteMiddlewares,
-    record: recordMiddlewares
+    records: recordMiddlewares
   });
   return mw(...args).as(path);
 });

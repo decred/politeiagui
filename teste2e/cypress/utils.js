@@ -3,8 +3,6 @@ import get from "lodash/fp/get";
 import * as pki from "./pki";
 import MerkleTree from "./merkle";
 
-export { parseRawProposal } from "../../src/helpers";
-
 const PROPOSAL_TYPE_REGULAR = 1;
 const PROPOSAL_TYPE_RFP = 2;
 const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
