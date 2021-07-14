@@ -81,7 +81,7 @@
 }
 
 .markdown-body a {
-  color: var(--color-primary);
+  color: var(--link-color);
   text-decoration: none;
 }
 
