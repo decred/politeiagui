@@ -8,7 +8,8 @@ import {
 } from "src/constants";
 import {
   isPublicProposal,
-  isAbandonedProposal
+  isAbandonedProposal,
+  isCensoredProposal
 } from "src/containers/Proposal/helpers";
 
 /**
@@ -69,6 +70,13 @@ export const getProposalStatusTagProps = (
     return {
       type: isDarkTheme ? "blueNegative" : "grayNegative",
       text: "Abandoned"
+    };
+  }
+
+  if (isCensoredProposal(proposal)) {
+    return {
+      type: "orangeNegativeCircled",
+      text: "Censored"
     };
   }
 

@@ -32,14 +32,18 @@ import useTimestamps from "src/hooks/api/useTimestamps";
 export const Author = ({ username, url, isLegacy }) =>
   isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
 
-export const Event = ({ event, timestamp, className, size }) => (
+export const Event = ({ event, timestamp, username, className, size }) => (
   <DateTooltip timestamp={timestamp} placement="bottom">
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
         className={classNames(styles.eventTooltip, className)}
         truncate
-        size={size}>{`${event} ${timeAgo}`}</Text>
+        size={size}>
+        {username
+          ? `${event} ${timeAgo} by ${username}`
+          : `${event} ${timeAgo}`}
+      </Text>
     )}
   </DateTooltip>
 );
