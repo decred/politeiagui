@@ -5,7 +5,7 @@ import {
   exactLengthMessage,
   invalidMessage
 } from "src/utils/validation";
-
+import { convertObjectToUnixTimestamp } from "src/helpers";
 import {
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION,
@@ -16,7 +16,6 @@ export const proposalValidation =
   ({
     amountmin,
     amountmax,
-    enddatemax,
     namesupportedchars,
     namelengthmax,
     namelengthmin
@@ -27,8 +26,7 @@ export const proposalValidation =
       values = {
         name: "",
         amount: 0,
-        sDate: null,
-        eDate: null,
+        dates: null,
         domain: "",
         description: "",
         type: null,
@@ -77,13 +75,25 @@ export const proposalValidation =
     }
 
     // start date validation
-    if (!values.sDate) {
-      errors.sDate = "Required";
+    const dates = values.dates;
+    const emptyDates = !dates;
+    const startdate = !emptyDates && dates[0];
+    const enddate = !emptyDates && dates[1];
+    const emptyStartdate = !startdate;
+    const emptyEnddate = !enddate;
+    if (emptyDates || emptyStartdate || emptyEnddate) {
+      errors.dates = "Please pick start & end dates";
     }
 
-    // end date validation
-    if (!values.eDate) {
-      errors.eDate = "Required";
+    // If both start & end dates provided, ensure start
+    // date is smaller.
+    if (!emptyStartdate && !emptyEnddate) {
+      if (
+        convertObjectToUnixTimestamp(enddate) <=
+        convertObjectToUnixTimestamp(startdate)
+      ) {
+        errors.dates = "Start date must be smaller than end date";
+      }
     }
 
     // domain validation

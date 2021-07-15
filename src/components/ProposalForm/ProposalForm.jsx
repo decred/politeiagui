@@ -39,7 +39,8 @@ import {
 import {
   getProposalTypeOptionsForSelect,
   getRfpMinMaxDates,
-  getProposalDomainOptionsForSelect
+  getProposalDomainOptionsForSelect,
+  getStartEndDatesRange
 } from "./helpers";
 import { convertObjectToUnixTimestamp } from "src/helpers";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
@@ -106,7 +107,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const { themeName } = useTheme();
   const {
     policyTicketVote: { linkbyperiodmin, linkbyperiodmax },
-    policyPi: { domains }
+    policyPi: { domains, enddatemax }
   } = usePolicy();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const isRfp = values.type === PROPOSAL_TYPE_RFP;
@@ -130,9 +131,10 @@ const ProposalForm = React.memo(function ProposalForm({
     [linkbyperiodmin, linkbyperiodmax]
   );
 
-  // XXX improve ranges
-  const sDateRange = deadlineRange;
-  const eDateRange = deadlineRange;
+  const datesRange = useMemo(
+    () => getStartEndDatesRange(enddatemax),
+    [enddatemax]
+  );
 
   const handleSelectFiledChange = useCallback(
     (fieldName) => (option) => {
@@ -268,27 +270,20 @@ const ProposalForm = React.memo(function ProposalForm({
         onChange={handleChangeWithTouched("amount")}
         error={touched.amount && errors.amount}
       />
-      <Row noMargin wrap={smallTablet}>
-        <DatePickerField
-          className={styles.sDate}
-          years={sDateRange}
-          value={values.sDate}
-          name="sDate"
-          placeholder="Start Date"
-        />
-        <DatePickerField
-          className={styles.eDate}
-          years={eDateRange}
-          value={values.eDate}
-          name="eDate"
-          placeholder="End Date"
-        />
-      </Row>
+      <DatePickerField
+        years={datesRange}
+        isRange={true}
+        value={values.dates}
+        name="dates"
+        placeholder="Start & End Dates"
+        error={touched.dates && errors.dates}
+      />
       <SelectField
         name="domain"
         onChange={handleSelectFiledChange("domain")}
         options={domainOptions}
         className={classNames(styles.typeSelectWrapper, "margin-top-m")}
+        placeholder="Domain"
       />
       <MarkdownEditor
         allowImgs={true}
@@ -375,7 +370,13 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const { type, rfpLink, rfpDeadline, sDate, eDate, ...others } = values;
+        const {
+          type,
+          rfpLink,
+          rfpDeadline,
+          dates: [sDate, eDate],
+          ...others
+        } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
             [rfpLink],

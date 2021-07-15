@@ -7,7 +7,14 @@ import useBooleanState from "src/hooks/utils/useBooleanState";
 import { Row } from "../layout";
 import { MONTHS_LABELS } from "src/constants";
 
-const DatePickerField = ({ name, placeholder, years, className }) => {
+const DatePickerField = ({
+  name,
+  placeholder,
+  years,
+  className,
+  isRange,
+  error
+}) => {
   const [isOpen, openPicker, closePicker] = useBooleanState(false);
   const togglePicker = () => {
     if (!isOpen) {
@@ -18,35 +25,57 @@ const DatePickerField = ({ name, placeholder, years, className }) => {
   };
   return (
     <FormikConsumer>
-      {({ setFieldValue, values }) => {
-        const onChange = (year, month, day) => {
+      {({ setFieldValue, setFieldTouched, values }) => {
+        const onDateChange = (year, month, day) => {
           if (!!year && !!month && !!day) {
             setFieldValue(name, { year, month, day });
           }
+          setFieldTouched(name, true);
           closePicker();
         };
+
         const value = values[name];
+        const onRangeChange = (year, month, day, idx) => {
+          if (!!year && !!month && !!day) {
+            const newValue = value ? [...value] : [];
+            newValue[idx] = { year, month, day };
+            setFieldValue(name, newValue);
+          }
+
+          setFieldTouched(name, true);
+        };
+
         return (
           <div className={classNames("cursor-pointer", className)}>
             <DatePicker
               show={isOpen}
               years={years}
+              isRange={isRange}
               value={values[name]}
               lang={MONTHS_LABELS}
-              onChange={onChange}>
+              onChange={isRange ? onRangeChange : onDateChange}>
               <Row
                 className={styles.box}
                 justify="space-between"
                 align="center"
                 noMargin
                 onClick={togglePicker}>
-                {value && `${value.month}/${value.day}/${value.year}`}
+                {value &&
+                  (isRange
+                    ? (value[0]
+                        ? `${value[0].month}/${value[0].day}/${value[0].year} - `
+                        : "") +
+                      (value[1]
+                        ? `${value[1].month}/${value[1].day}/${value[1].year}`
+                        : "")
+                    : `${value.month}/${value.day}/${value.year}`)}
                 {!value && (
                   <Text className={styles.placeholder}>{placeholder}</Text>
                 )}
                 <Icon type="calendar" />
               </Row>
             </DatePicker>
+            {error && <p className={styles.errorMsg}>{error}</p>}
           </div>
         );
       }}

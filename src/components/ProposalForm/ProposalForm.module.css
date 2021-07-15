@@ -42,15 +42,6 @@
   height: 4.4rem;
 }
 
-.sDate,
-.eDate {
-  flex-basis: 20rem;
-}
-
-.eDate {
-  margin-left: 2rem;
-}
-
 .iconWrapper {
   display: flex;
   align-items: center;
