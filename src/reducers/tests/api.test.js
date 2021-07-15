@@ -13,6 +13,7 @@ describe("test api reducer", () => {
       user: DEFAULT_REQUEST_STATE,
       login: DEFAULT_REQUEST_STATE,
       logout: DEFAULT_REQUEST_STATE,
+      userInventory: DEFAULT_REQUEST_STATE,
       changeUsername: DEFAULT_REQUEST_STATE,
       changePassword: DEFAULT_REQUEST_STATE,
       userProposals: DEFAULT_REQUEST_STATE,

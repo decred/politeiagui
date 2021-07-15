@@ -21,7 +21,14 @@ import isEmpty from "lodash/fp/isEmpty";
 import isUndefined from "lodash/fp/isUndefined";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
-import { INVENTORY_PAGE_SIZE, PROPOSAL_PAGE_SIZE } from "src/constants";
+import assign from "lodash/fp/assign";
+import {
+  INVENTORY_PAGE_SIZE,
+  PROPOSAL_PAGE_SIZE,
+  PROPOSAL_STATE_UNVETTED,
+  PROPOSAL_STATE_VETTED,
+  PROPOSAL_STATUS_UNREVIEWED
+} from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import {
   getRfpLinkedProposals,
@@ -46,7 +53,9 @@ const getRfpSubmissions = (proposals) =>
   )(proposals);
 
 const getUnfetchedTokens = (proposals, tokens) =>
-  difference(tokens.map((token) => shortRecordToken(token)))(keys(proposals));
+  difference(tokens.map((token) => shortRecordToken(token)))(
+    keys(proposals).map((token) => shortRecordToken(token))
+  );
 
 const getCurrentPage = (tokens) => {
   return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
@@ -55,30 +64,31 @@ const getCurrentPage = (tokens) => {
 export default function useProposalsBatch({
   fetchRfpLinks,
   fetchVoteSummaries = false,
+  unvetted = false,
   proposalStatus,
   status,
   proposalPageSize = PROPOSAL_PAGE_SIZE
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
   const [voteStatus, setStatus] = useState(status);
+  const [previousPage, setPreviousPage] = useState(0);
   const isByRecordStatus = isUndefined(voteStatus);
   const proposals = useSelector(sel.proposalsByToken);
+  const recordState = unvetted
+    ? PROPOSAL_STATE_UNVETTED
+    : PROPOSAL_STATE_VETTED;
+  const currentStatus = isByRecordStatus ? proposalStatus || 1 : voteStatus;
   const voteSummaries = useSelector(sel.summaryByToken);
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
+  const tokens = useMemo(
+    () => allByStatus[getProposalStatusLabel(currentStatus, isByRecordStatus)],
+    [allByStatus, isByRecordStatus, currentStatus]
+  );
   const page = useMemo(() => {
-    const tokens =
-      allByStatus[
-        getProposalStatusLabel(
-          isByRecordStatus ? proposalStatus || 1 : voteStatus,
-          isByRecordStatus
-        )
-      ];
-
     return getCurrentPage(tokens);
-  }, [allByStatus, isByRecordStatus, proposalStatus, voteStatus]);
-  const [previousPage, setPreviousPage] = useState(0);
+  }, [tokens]);
   const errorSelector = useMemo(
     () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
     []
@@ -94,15 +104,20 @@ export default function useProposalsBatch({
       start: () => {
         if (hasRemainingTokens) return send(VERIFY);
         if (page && page === previousPage) return send(RESOLVE);
-        onFetchTokenInventory(page + 1)
+        onFetchTokenInventory(
+          recordState,
+          page && currentStatus, // first page fetches all status
+          page + 1,
+          !isByRecordStatus
+        )
           .catch((e) => send(REJECT, e))
           .then(({ votes, records }) => {
+            setPreviousPage(page);
             // prepare token batch to fetch proposal for given status
             const proposalStatusLabel = getProposalStatusLabel(
-              isByRecordStatus ? proposalStatus || 1 : voteStatus,
+              currentStatus,
               isByRecordStatus
             );
-            setPreviousPage(page);
             const tokens = (isByRecordStatus ? records : votes)[
               proposalStatusLabel
             ];
@@ -113,39 +128,42 @@ export default function useProposalsBatch({
         return send(FETCH);
       },
       verify: () => {
-        if (hasRemainingTokens) {
-          const [fetch, next] = getTokensForProposalsPagination(
-            remainingTokens,
-            proposalPageSize
-          );
-          onFetchProposalsBatch(fetch, fetchVoteSummaries)
-            .then(([fetchedProposals]) => {
-              if (isEmpty(fetchedProposals)) {
-                setRemainingTokens(next);
-                return send(RESOLVE);
-              }
-              if (fetchRfpLinks) {
-                const rfpLinks = getRfpLinks(fetchedProposals);
-                const rfpSubmissions = getRfpSubmissions(fetchedProposals);
-                const unfetchedRfpLinks = getUnfetchedTokens(proposals, [
-                  ...rfpLinks,
-                  ...rfpSubmissions
-                ]);
-                if (!isEmpty(unfetchedRfpLinks)) {
-                  onFetchProposalsBatch(unfetchedRfpLinks, fetchVoteSummaries)
-                    .then(() => send(RESOLVE))
-                    .catch((e) => send(REJECT, e));
-                  return send(FETCH);
-                }
-              }
-              const unfetchedTokens = getUnfetchedTokens(proposals, fetch);
-              setRemainingTokens([...unfetchedTokens, ...next]);
+        if (!hasRemainingTokens) return send(RESOLVE, { proposals });
+        const [tokensToFetch, next] = getTokensForProposalsPagination(
+          remainingTokens,
+          proposalPageSize
+        );
+        onFetchProposalsBatch(tokensToFetch, fetchVoteSummaries)
+          .then(([fetchedProposals]) => {
+            if (isEmpty(fetchedProposals)) {
+              setRemainingTokens(next);
               return send(RESOLVE);
-            })
-            .catch((e) => send(REJECT, e));
-          return send(FETCH);
-        }
-        return send(RESOLVE, { proposals });
+            }
+            const unfetchedTokens = getUnfetchedTokens(
+              assign(proposals, fetchedProposals),
+              tokensToFetch
+            );
+            setRemainingTokens([...unfetchedTokens, ...next]);
+            if (fetchRfpLinks) {
+              const rfpLinks = getRfpLinks(fetchedProposals);
+              const rfpSubmissions = getRfpSubmissions(fetchedProposals);
+              const unfetchedRfpLinks = getUnfetchedTokens(proposals, [
+                ...rfpLinks,
+                ...rfpSubmissions
+              ]);
+              if (!isEmpty(unfetchedRfpLinks)) {
+                setRemainingTokens([
+                  ...unfetchedRfpLinks,
+                  ...unfetchedTokens,
+                  ...next
+                ]);
+                return send(VERIFY);
+              }
+            }
+            return send(RESOLVE);
+          })
+          .catch((e) => send(REJECT, e));
+        return send(FETCH);
       },
       done: () => {}
     },
@@ -162,18 +180,18 @@ export default function useProposalsBatch({
     const newStatusLabel = getProposalStatusLabel(
       !newStatus
         ? isByRecordStatus
-          ? proposalStatus || 1
+          ? proposalStatus || PROPOSAL_STATUS_UNREVIEWED
           : voteStatus
         : newStatus,
       isByRecordStatus
     );
-
     const unfetchedTokens = getUnfetchedTokens(
       proposals,
       uniq(allByStatus[newStatusLabel] || [])
     );
+
+    // machine stop condition: inventory loaded, but no tokens to fetch
     if (isEmpty(remainingTokens) && isEmpty(unfetchedTokens) && !page) {
-      // stop condition
       return send(RESOLVE);
     }
     setRemainingTokens(unfetchedTokens);
@@ -185,10 +203,23 @@ export default function useProposalsBatch({
     return send(START);
   };
 
-  const onFetchMoreProposals = useCallback(() => send(VERIFY), [send]);
+  const isFetchDone =
+    !remainingTokens.length &&
+    state.status === "success" &&
+    !getUnfetchedTokens(proposals, tokens).length;
+
+  const isAnotherInventoryCallRequired =
+    tokens && tokens.length && tokens.length % INVENTORY_PAGE_SIZE === 0;
+
+  const onFetchMoreProposals = useCallback(() => {
+    if (isEmpty(remainingTokens) && isAnotherInventoryCallRequired)
+      return send(START);
+    return send(VERIFY);
+  }, [send, remainingTokens, isAnotherInventoryCallRequired]);
 
   const anyError = error || state.error;
   useThrowError(anyError);
+
   return {
     proposals: getRfpLinkedProposals(proposals, voteSummaries),
     onFetchProposalsBatch,
@@ -198,6 +229,7 @@ export default function useProposalsBatch({
     onRestartMachine,
     onFetchMoreProposals,
     hasMoreProposals: !!remainingTokens.length,
+    isProposalsBatchComplete: isFetchDone && !isAnotherInventoryCallRequired,
     machineCurrentState: state.status
   };
 }

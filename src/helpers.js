@@ -71,24 +71,31 @@ export const parseReceivedProposalsMap = (proposals) => {
   return parsedProps;
 };
 
-// parseProposalStatuses iterate over proposal's status changes array returned
-// from BE and returns proposal's timestamps accordingly
-const parseProposalStatuses = (sChanges) => {
+/**
+ * getProposalTimestamps
+ * @param {Object} proposal
+ * @returns {{publishedat: number, censoredat: number, abandonedat: number}} Object with publishedat, censoredat, abandonedat
+ */
+const getProposalTimestamps = (proposal, publishedts) => {
+  const { status, timestamp, version } = proposal;
   let publishedat = 0,
     censoredat = 0,
     abandonedat = 0;
+  // publlished but not edited
+  if (status === PROPOSAL_STATUS_PUBLIC && version <= 1) {
+    publishedat = timestamp;
+  }
+  // edited, have to grab published timestamp from metadata
+  if (status === PROPOSAL_STATUS_PUBLIC && version > 1) {
+    publishedat = publishedts;
+  }
+  if (status === PROPOSAL_STATUS_CENSORED) {
+    censoredat = timestamp;
+  }
+  if (status === PROPOSAL_STATUS_ARCHIVED) {
+    abandonedat = timestamp;
+  }
 
-  sChanges.forEach((sChange) => {
-    if (sChange.status === PROPOSAL_STATUS_PUBLIC) {
-      publishedat = sChange.timestamp;
-    }
-    if (sChange.status === PROPOSAL_STATUS_CENSORED) {
-      censoredat = sChange.timestamp;
-    }
-    if (sChange.status === PROPOSAL_STATUS_ARCHIVED) {
-      abandonedat = sChange.timestamp;
-    }
-  });
   return { publishedat, censoredat, abandonedat };
 };
 
@@ -104,8 +111,7 @@ const parseProposalMetadata = (proposal = {}) => {
   return metadata ? JSON.parse(atob(metadata.payload)) : {};
 };
 
-// parseVoteMetadata accepts a proposal object parses it's metadata
-// and returns it as object of the form { linkto, linkby }
+// parseVoteMetadata accepts a proposal object and parses its votes metadata.
 //
 // censored proposals won't have metadata, in this case this function will
 // return an empty object
@@ -116,20 +122,45 @@ const parseVoteMetadata = (proposal = {}) => {
   return metadata ? JSON.parse(atob(metadata.payload)) : {};
 };
 
-// parseUserMetadata accepts a proposal object parses it's metadata
-// and returns it as object of the form { userid, token }
+// parseUserMetadata accepts a proposal object and parses its user plugin
+// metadata. Returns a key-value object where the key is the status for
+// that status change, and the value is their parsed json payload. If
+// the metadata was not a status change one, the data will be inserted
+// plainly in the object.
 //
 // proposals without any user metadata will return an empty object
 const parseUserPluginMetadata = (proposal = {}) =>
   compose(
-    reduce((acc, curr) => ({ ...acc, ...curr }), {}),
+    reduce(
+      (acc, curr) =>
+        curr.status
+          ? { ...acc, byStatus: { ...acc.byStatus, [curr.status]: curr } }
+          : { ...acc, ...curr },
+      { byStatus: {} }
+    ),
     map(({ payload }) => {
       try {
         const parsedPayload = JSON.parse(payload);
         return parsedPayload;
       } catch (e) {
-        // parses metadata payload manually
+        // Parses metadata payload that may be nested without a json parent
+        // on the payload response. This happens when there were more than
+        // one status change to the proposal.
         return compose(
+          reduce(
+            (acc, curr) =>
+              curr.status
+                ? {
+                    ...acc,
+                    byStatus: {
+                      ...acc.byStatus,
+                      [curr.status]: curr
+                    }
+                  }
+                : { ...acc, ...curr },
+            { byStatus: {} }
+          ),
+          filter((md) => Object.keys(md).length),
           map((parsed) => JSON.parse(`{${parsed}}`)),
           splitFp(/\{(.*?)\}/)
         )(payload);
@@ -139,8 +170,8 @@ const parseUserPluginMetadata = (proposal = {}) =>
     get("metadata")
   )(proposal);
 
-// parseProposalIndexFile accepts a proposal object parses it's metadata
-// and returns it as object of the form { description }
+// parseProposalIndexFile accepts a proposal object and parses its index.md
+// file.
 //
 // censored proposals won't have metadata, in this case this function will
 // return an empty object
@@ -151,27 +182,33 @@ const parseProposalIndexFile = (proposal = {}) => {
 };
 
 // parseRawProposal accepts raw proposal object received from BE and parses
-// it's metadata & status changes
+// its metadata & status changes
 export const parseRawProposal = (proposal) => {
-  // Parse statuses
-  const { publishedat, censoredat, abandonedat } = parseProposalStatuses(
-    proposal.statuses || []
-  );
-  // Parse metdata
-  // Censored proposal's metadata isn't available
+  // Parse metadatas
   const { name } = parseProposalMetadata(proposal);
   const { linkby, linkto } = parseVoteMetadata(proposal);
   const { description } = parseProposalIndexFile(proposal);
-  const { userid } = parseUserPluginMetadata(proposal);
+  const usermds = parseUserPluginMetadata(proposal);
+  const statuschangemsg = usermds.byStatus[proposal.status]?.message;
+  const statuschangepk = usermds.byStatus[proposal.status]?.publickey;
+
+  // get prop timestamps
+  const { publishedat, censoredat, abandonedat } = getProposalTimestamps(
+    proposal,
+    usermds.timestamp
+  );
+
   return {
     ...proposal,
     description: description || proposal.description,
     name: name || proposal.name,
     linkby,
-    userid: userid || proposal.userid,
+    userid: usermds.userid || proposal.userid,
     linkto,
-    publishedat,
     commentsCount: proposal.commentsCount || 0,
+    statuschangemsg,
+    statuschangepk,
+    publishedat,
     censoredat,
     abandonedat
   };

@@ -84,7 +84,7 @@ export const makeProposal = (
   markdown,
   linkby = 0,
   type,
-  linkto = 0,
+  linkto = "",
   attachments = []
 ) => ({
   files: [
@@ -701,11 +701,11 @@ export const userProposalCredits = () =>
 export const rescanUserPayments = (csrf, userid) =>
   PUT("/user/payments/rescan", csrf, { userid }).then(getResponse);
 
-export const proposalsInventory = (page) =>
-  POST("/inventory", "", { page }, apiRecords).then(getResponse);
+export const proposalsInventory = (state, status, page) =>
+  POST("/inventory", "", { state, status, page }, apiRecords).then(getResponse);
 
-export const votesInventory = (page) =>
-  POST("/inventory", "", { page }, apiTicketVote).then(getResponse);
+export const votesInventory = (status, page) =>
+  POST("/inventory", "", { status, page }, apiTicketVote).then(getResponse);
 
 export const recordsTimestamp = (csrf, token, version) =>
   POST("/timestamps", csrf, { token, version }, apiRecords).then(getResponse);

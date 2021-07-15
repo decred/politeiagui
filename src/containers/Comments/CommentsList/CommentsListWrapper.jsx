@@ -57,10 +57,12 @@ const CommentsListWrapper = ({
   recordsBaseLink
 }) => {
   const [nestedComments, setNestedComments] = useState([]);
+  // single thread mode: find the childrens of the thread parent comment
+  const isSingleThread = threadParentID && !!comments.length;
   useEffect(
     function generateNestedComments() {
       // flat mode: keep comments array flat
-      if (isFlatMode) {
+      if (isFlatMode && !isSingleThread) {
         setNestedComments(
           comments.map((c) =>
             createComputedComment(c, comments, lastTimeAccessed, currentUserID)
@@ -68,9 +70,7 @@ const CommentsListWrapper = ({
         );
         return;
       }
-      // single thread mode: find the childrens of the thread parent comment
-      const isSingleThred = threadParentID && !!comments.length;
-      if (isSingleThred) {
+      if (isSingleThread) {
         const singleThreadParent = comments.find(
           (c) => +c.commentid === +threadParentID
         );
@@ -87,12 +87,19 @@ const CommentsListWrapper = ({
       const result = getChildren(comments, 0, lastTimeAccessed, currentUserID);
       setNestedComments(result);
     },
-    [comments, threadParentID, currentUserID, isFlatMode, lastTimeAccessed]
+    [
+      comments,
+      threadParentID,
+      currentUserID,
+      isFlatMode,
+      lastTimeAccessed,
+      isSingleThread
+    ]
   );
   return (
     <CommentsList
       comments={nestedComments}
-      isFlatMode={isFlatMode}
+      isFlatMode={isSingleThread ? false : isFlatMode}
       proposalState={proposalState}
       recordBaseLink={recordsBaseLink}
     />

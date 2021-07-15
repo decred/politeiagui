@@ -10,6 +10,8 @@ import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 import { LIST_HEADER_VETTED } from "src/constants";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import { PROPOSAL_STATUS_CENSORED } from "src/constants";
+import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
 
 const renderProposal = (record) => (
   <Proposal key={record.censorshiprecord.token} proposal={record} />
@@ -26,23 +28,28 @@ const tabLabels = [
 const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const {
-    proposals,
+    proposals: batchProposals,
     proposalsTokens,
     loading,
     verifying,
     onRestartMachine,
     hasMoreProposals,
-    onFetchMoreProposals
+    onFetchMoreProposals,
+    isProposalsBatchComplete
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
-    status: statusByTab[tabLabels[index]],
-    proposalPageSize: 4
+    status: statusByTab[tabLabels[index]]
   });
+
+  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
+    batchProposals,
+    PROPOSAL_STATUS_CENSORED
+  );
 
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
-    !hasMoreProposals,
+    isProposalsBatchComplete,
     statusByTab[tabLabels[index]]
   );
 
@@ -122,9 +129,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onSetIndex={handleSetIndex}
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
-      filterCensored={true}
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying}>
+      isLoading={loading || verifying || mdLoading}>
       {content}
     </RecordsView>
   );

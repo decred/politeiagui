@@ -106,13 +106,8 @@ export function useComments(recordToken, proposalState) {
 
   const getCommentLikeOption = useCallback(
     (commentID) => {
-      const actionData = (commentsLikes || []).find(
-        (cl) => cl.commentid === commentID
-      );
-      if (actionData) {
-        return actionData.vote;
-      }
-      return actionData ? actionData.vote : 0;
+      const option = commentsLikes && commentsLikes[commentID];
+      return option ? option : 0;
     },
     [commentsLikes]
   );

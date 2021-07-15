@@ -3,6 +3,8 @@ import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
+import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
+import { PROPOSAL_STATUS_CENSORED } from "src/constants";
 import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
 // XXX change to AdminActionsProvider
 import {
@@ -25,7 +27,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     tabLabels
   );
   const {
-    proposals,
+    proposals: batchProposals,
     proposalsTokens,
     loading,
     verifying,
@@ -35,8 +37,14 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: false,
+    unvetted: true,
     proposalStatus: statusByTab[tabLabels[tabIndex]]
   });
+
+  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
+    batchProposals,
+    PROPOSAL_STATUS_CENSORED
+  );
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -64,7 +72,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying}
+      isLoading={loading || verifying || mdLoading}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (
         <>

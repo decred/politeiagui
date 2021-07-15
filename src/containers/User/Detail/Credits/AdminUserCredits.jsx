@@ -42,7 +42,7 @@ const Credits = ({ user }) => {
     if (shouldPollPaywallPayment) {
       toggleCreditsPaymentPolling(true);
       toggleProposalPaymentReceived(false);
-      onPollProposalPaywallPayment(true);
+      onPollProposalPaywallPayment(false);
     }
   }, [
     shouldPollPaywallPayment,

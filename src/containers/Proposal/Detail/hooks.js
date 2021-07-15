@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
@@ -8,7 +8,7 @@ import {
   getTokensForProposalsPagination
 } from "../helpers";
 import { getDetailsFile } from "./helpers";
-import { shortRecordToken } from "src/helpers";
+import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import isEmpty from "lodash/fp/isEmpty";
@@ -19,9 +19,10 @@ import values from "lodash/fp/values";
 import pick from "lodash/pick";
 import concat from "lodash/fp/concat";
 
-const getUnfetchedVoteSummaries = (proposal, voteSummaries) => {
+const getUnfetchedVoteSummaries = (proposal, voteSummaries, isSubmission) => {
   if (!proposal) return [];
-  const rfpLinks = getProposalRfpLinksTokens(proposal);
+  // no need to fetch vote summary if its submission
+  const rfpLinks = isSubmission ? [] : getProposalRfpLinksTokens(proposal);
   const proposalToken = getProposalToken(proposal);
   const tokens = concat(rfpLinks || [])(proposalToken);
   // compare tokens by short form
@@ -59,35 +60,61 @@ export function useProposal(token, threadParentID) {
   const voteSummaries = useSelector(sel.summaryByToken);
   const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
   const rfpLinks = getProposalRfpLinksTokens(proposal);
+  const isRfp = proposal && !!proposal.linkby;
+  const isSubmission = proposal && !!proposal.linkto;
 
   const unfetchedProposalTokens =
-    rfpLinks && difference(rfpLinks)(keys(proposals));
+    rfpLinks &&
+    difference(
+      rfpLinks.map((r) => shortRecordToken(r)),
+      keys(proposals)
+    );
   const unfetchedSummariesTokens = getUnfetchedVoteSummaries(
     proposal,
-    voteSummaries
+    voteSummaries,
+    isSubmission
   );
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
-      proposals: values(pick(proposals, rfpLinks)),
+      proposals: values(
+        pick(
+          proposals,
+          rfpLinks.map((l) => shortRecordToken(l))
+        )
+      ),
       voteSummaries: pick(
         voteSummaries,
         rfpLinks.map((l) => shortRecordToken(l))
       )
     };
 
-  const isRfp = proposal && !!proposal.linkby;
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !(
     voteSummaries[tokenShort] && voteSummaries[tokenShort].details
   );
-  const needsInitialFetch = isRfp || (token && isMissingDetails);
+  const needsInitialFetch = token && isMissingDetails;
+
+  const [remainingTokens, setRemainingTokens] = useState(
+    unfetchedProposalTokens
+  );
+  const hasRemainingTokens = !isEmpty(remainingTokens);
+
+  const initialValues = {
+    status: "idle"
+  };
 
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
       initial: () => {
         if (needsInitialFetch) {
           onFetchProposalDetails(token)
-            .then(() => send(VERIFY))
+            .then((res) => {
+              const hasToFetchRfpLinks = getProposalRfpLinksTokens(
+                parseRawProposal(res)
+              );
+              setRemainingTokens(hasToFetchRfpLinks);
+              send(VERIFY);
+            })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
@@ -99,20 +126,22 @@ export function useProposal(token, threadParentID) {
           !isEmpty(unfetchedSummariesTokens) ||
           (proposal &&
             rfpLinks &&
-            (!isEmpty(unfetchedProposalTokens) ||
-              !isEmpty(unfetchedSummariesTokens)))
+            (hasRemainingTokens || !isEmpty(unfetchedSummariesTokens)))
         ) {
           return;
         }
         return send(VERIFY);
       },
       verify: () => {
-        if (!isEmpty(unfetchedProposalTokens)) {
-          const [tokensBatch] = getTokensForProposalsPagination(
-            unfetchedProposalTokens
-          );
-          onFetchProposalsBatch(tokensBatch, isRfp)
-            .then(() => send(VERIFY))
+        if (hasRemainingTokens) {
+          const [tokensBatch, next] =
+            getTokensForProposalsPagination(remainingTokens);
+          // only fetch summaries and count if the proposal is a RFP. If it is a submission, just grab the records info.
+          onFetchProposalsBatch(tokensBatch, isRfp, undefined, !isSubmission)
+            .then(() => {
+              setRemainingTokens(next);
+              return send(VERIFY);
+            })
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
@@ -130,17 +159,20 @@ export function useProposal(token, threadParentID) {
           return send(FETCH);
         }
         if (rfpLinks && rfpSubmissions) {
+          // is a RFP
           return send(RESOLVE, { proposal, rfpSubmissions });
         }
         return send(RESOLVE, { proposal });
       },
       done: () => {
         // verify proposal on proposal changes
+        // TODO: improve this in the future so we don't need to verify once it should be done
         if (!isEqual(state.proposal, proposal)) {
           return send(VERIFY);
         }
       }
-    }
+    },
+    initialValues
   });
 
   const proposalWithLinks = getProposalRfpLinks(
@@ -152,7 +184,7 @@ export function useProposal(token, threadParentID) {
   return {
     proposal: proposalWithLinks,
     error: state.error,
-    loading: state.loading,
+    loading: state.status === "idle" || state.status === "loading",
     threadParentID
   };
 }

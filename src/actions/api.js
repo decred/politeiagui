@@ -23,7 +23,8 @@ import {
   INELIGIBLE,
   ARCHIVED,
   PROPOSAL_METADATA_FILENAME,
-  VOTE_METADATA_FILENAME
+  VOTE_METADATA_FILENAME,
+  PROPOSAL_STATE_UNVETTED
 } from "../constants";
 import {
   parseReceivedProposalsMap,
@@ -449,7 +450,12 @@ export const onFetchProposalDetailsWithoutState =
   };
 
 // state should be the state of requested proposals
-export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
+export const onFetchProposalsBatch = (
+  tokens,
+  fetchVoteSummary = true,
+  userid,
+  fetchProposalsCount = true
+) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     const requests = tokens?.map((token) => ({
@@ -462,13 +468,14 @@ export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
           requests
         }),
         fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
-        api.commentsCount(tokens)
+        fetchProposalsCount && api.commentsCount(tokens)
       ]);
       const proposals = response.find((res) => res && res.records).records;
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
-      const commentsCount = response.find((res) => res && res.counts).counts;
+      const commentsCount =
+        fetchProposalsCount && response.find((res) => res && res.counts).counts;
       const proposalsWithCommentsCount = Object.keys(proposals).reduce(
         (acc, curr) => {
           return {
@@ -482,9 +489,12 @@ export const onFetchProposalsBatch = (tokens, fetchVoteSummary = true) =>
         {}
       );
       dispatch(
-        act.RECEIVE_PROPOSALS_BATCH({ proposals: proposalsWithCommentsCount })
+        act.RECEIVE_PROPOSALS_BATCH({
+          proposals: proposalsWithCommentsCount,
+          userid
+        })
       );
-      return [parseRawProposalsBatch(proposals), summaries];
+      return [parseRawProposalsBatch(proposalsWithCommentsCount), summaries];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
       throw e;
@@ -514,6 +524,11 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
           }
         })
       );
+      return {
+        ...record,
+        linkedfrom: submissions,
+        commentsCount: commentsCount[token]
+      };
     } else {
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({
@@ -525,8 +540,11 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
           }
         })
       );
+      return {
+        ...record,
+        commentsCount: commentsCount[token]
+      };
     }
-    return response.record;
   } catch (e) {
     act.RECEIVE_PROPOSALS_BATCH(null, e);
     throw e;
@@ -534,15 +552,17 @@ export const onFetchProposalDetails = (token, version) => async (dispatch) => {
 };
 
 export const onFetchTokenInventory =
-  (page = 0) =>
+  (state, status, page = 0, isVoteStatus) =>
   async (dispatch) => {
     dispatch(act.REQUEST_TOKEN_INVENTORY());
     try {
       return await Promise.all([
-        api.proposalsInventory(page),
-        api.votesInventory(page)
+        !isVoteStatus && api.proposalsInventory(state, status, page),
+        isVoteStatus &&
+          state !== PROPOSAL_STATE_UNVETTED &&
+          api.votesInventory(status, page)
       ]).then(([proposals, votes]) => {
-        const byRecords = {
+        const byRecords = !isVoteStatus && {
           [UNREVIEWED]:
             (proposals &&
               proposals.unvetted &&
@@ -565,7 +585,7 @@ export const onFetchTokenInventory =
               [])
           ]
         };
-        const byVotes = {
+        const byVotes = isVoteStatus && {
           [PRE_VOTE]: [
             ...((votes && votes.vetted && votes.vetted.authorized) || []),
             ...((votes && votes.vetted && votes.vetted.unauthorized) || [])
@@ -575,8 +595,8 @@ export const onFetchTokenInventory =
           [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
           [INELIGIBLE]: (votes && votes.vetted && votes.vetted.ineligible) || []
         };
-        dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
-        dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
+        !isVoteStatus && dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
+        isVoteStatus && dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
         return { records: byRecords, votes: byVotes };
       });
     } catch (error) {
@@ -968,8 +988,7 @@ export const onCommentVote = (currentUserID, token, commentid, vote, state) =>
       .then((comment) => api.signCommentVote(currentUserID, comment))
       .then((comment) => api.commentVote(csrf, comment))
       .then(() => {
-        dispatch(act.RECEIVE_LIKE_COMMENT({ token }));
-        dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, vote }));
+        dispatch(act.RECEIVE_LIKE_COMMENT({ token, commentid, vote }));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
@@ -1229,47 +1248,20 @@ export const onUserProposalCredits = () => (dispatch, getState) => {
 
 export const onFetchUserProposals = (userid) =>
   withCsrf(async (dispatch, getState, csrf) => {
-    dispatch(act.REQUEST_USER_PROPOSALS({ userid }));
+    dispatch(act.REQUEST_USER_INVENTORY({ userid }));
     try {
       const response = await api.userProposals(csrf, userid);
-      const cachedUserProposals = sel.makeGetUserProposals(userid)(getState());
-      const unvettedTokens = response.unvetted;
-      const vettedTokens = response.vetted;
-      const tokensLength = unvettedTokens.length + vettedTokens.length;
-
-      let unvettedProposals = [];
-      let vettedProposals = [];
-
-      if (unvettedTokens.length) {
-        const remainingTokens = unvettedTokens
-          .filter(
-            (t) =>
-              !cachedUserProposals.find((up) => up.censorshiprecord.token === t)
-          )
-          .slice(0, 9);
-        unvettedProposals = await dispatch(
-          onFetchProposalsBatch(remainingTokens, false)
-        );
-      }
-      if (vettedTokens.length) {
-        vettedProposals = await dispatch(onFetchProposalsBatch(vettedTokens));
-      }
-      // we access the first array position, which contains the proposals.
-      // second array position refers to the vote summary results.
-      const proposals = {
-        ...unvettedProposals[0],
-        ...vettedProposals[0]
-      };
-
+      const tokensLength = response.vetted.length + response.unvetted.length;
       dispatch(
-        act.RECEIVE_USER_PROPOSALS({
-          proposals,
+        act.RECEIVE_USER_INVENTORY({
+          proposals: { ...response },
           userid,
           numofproposals: tokensLength
         })
       );
+      return response;
     } catch (e) {
-      dispatch(act.RECEIVE_USER_PROPOSALS(null, e));
+      dispatch(act.RECEIVE_USER_INVENTORY(null, e));
       throw e;
     }
   });
@@ -1737,3 +1729,22 @@ export const onFetchCommentsTimestamps = (token, commentsids) =>
 // Ticket Vote actions
 export const onFetchTicketVoteTimestamps = (token, votespage) =>
   withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token, votespage));
+
+// Votes Bundle
+export const onFetchVotesBundle = (token, serverpublickey) =>
+  withCsrf(async (dispatch, _, csrf) => {
+    dispatch(act.REQUEST_VOTES_BUNDLE());
+    try {
+      return await Promise.all([
+        api.proposalVoteDetails(csrf, token),
+        api.proposalVoteResults(csrf, token)
+      ]).then(([{ auths, vote }, { votes }]) => {
+        const response = { auths, details: vote, votes, serverpublickey };
+        dispatch(act.RECEIVE_VOTES_BUNDLE(response));
+        return response;
+      });
+    } catch (error) {
+      dispatch(act.RECEIVE_VOTES_BUNDLE(null, error));
+      throw error;
+    }
+  });

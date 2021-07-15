@@ -62,6 +62,7 @@ ul.dropdownList {
 .themeToggleLabel {
   margin-left: 1rem;
   margin-top: 0.1rem;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 1000px) {

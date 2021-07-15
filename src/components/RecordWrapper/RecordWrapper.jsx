@@ -32,14 +32,18 @@ import useTimestamps from "src/hooks/api/useTimestamps";
 export const Author = ({ username, url, isLegacy }) =>
   isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
 
-export const Event = ({ event, timestamp, className, size }) => (
+export const Event = ({ event, timestamp, username, className, size }) => (
   <DateTooltip timestamp={timestamp} placement="bottom">
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
         className={classNames(styles.eventTooltip, className)}
         truncate
-        size={size}>{`${event} ${timeAgo}`}</Text>
+        size={size}>
+        {username
+          ? `${event} ${timeAgo} by ${username}`
+          : `${event} ${timeAgo}`}
+      </Text>
     )}
   </DateTooltip>
 );
@@ -195,8 +199,8 @@ export const ChartsLink = ({ token }) => {
   return (
     <Tooltip
       className={classNames(
-        styles.seeOnGithubTooltip,
-        isDarkTheme && styles.darkSeeOnGithubTooltip
+        styles.actionsTooltip,
+        isDarkTheme && styles.darkActionsTooltip
       )}
       placement="bottom"
       content="Voting Charts">
@@ -206,6 +210,42 @@ export const ChartsLink = ({ token }) => {
         rel="nofollow noopener noreferrer"
         href={`https://${hostName}/proposal/${token}`}>
         <Icon type="chart" iconColor={iconColor} backgroundColor={bgColor} />
+      </UILink>
+    </Tooltip>
+  );
+};
+
+export const MarkdownLink = ({ to, active = false, onClick }) => {
+  const { theme, themeName } = useTheme();
+  const color = getThemeProperty(theme, "icon-color");
+  const hoverColor = getThemeProperty(theme, "icon-hover-color");
+  const darkIconColor = getThemeProperty(theme, "text-color");
+  const [ref, isHovered] = useHover();
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
+  const iconColor = isHovered
+    ? hoverColor
+    : isDarkTheme
+    ? darkIconColor
+    : color;
+  return (
+    <Tooltip
+      className={classNames(
+        styles.actionsTooltip,
+        isDarkTheme && styles.darkActionsTooltip
+      )}
+      placement="bottom"
+      content={active ? "See rendered markdown" : "See raw markdown"}>
+      <UILink
+        target="_blank"
+        rel="nofollow noopener noreferrer"
+        href={to}
+        onClick={onClick}>
+        <Icon
+          ref={ref}
+          type="markdown"
+          viewBox="0 0 208 128"
+          iconColor={iconColor}
+        />
       </UILink>
     </Tooltip>
   );
@@ -241,7 +281,7 @@ export const CommentsLink = ({
   );
 };
 
-export const RfpProposalLink = ({ url, rfpTitle }) => {
+export const RfpProposalLink = ({ url, rfpTitle, isLegacy }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
@@ -253,7 +293,11 @@ export const RfpProposalLink = ({ url, rfpTitle }) => {
         )}>
         Proposed for{" "}
       </span>
-      <Link to={url}>{rfpTitle}</Link>
+      {isLegacy ? (
+        <a href={url}>{rfpTitle}</a>
+      ) : (
+        <Link to={url}>{rfpTitle}</Link>
+      )}
     </div>
   );
 };
@@ -293,19 +337,17 @@ export const DownloadTimestamps = ({ token, version, label }) => {
   );
 };
 
-export const DownloadVotes = ({
-  label,
-  voteSummary,
-  fileName,
-  serverpublickey
-}) => {
-  const bundle = {
-    auths: voteSummary?.details?.auths,
-    details: voteSummary?.details?.details,
-    votes: voteSummary?.votes,
-    serverpublickey
-  };
-  return <DownloadJSON fileName={fileName} label={label} content={bundle} />;
+export const DownloadVotes = ({ label, fileName, serverpublickey, token }) => {
+  const { onFetchVotesBundle } = useTimestamps();
+  return (
+    <DownloadJSON
+      label={label}
+      fileName={fileName}
+      isAsync={true}
+      content={[]}
+      beforeDownload={() => onFetchVotesBundle(token, serverpublickey)}
+    />
+  );
 };
 
 export const LinkSection = ({ children, className, title }) => (
@@ -327,6 +369,7 @@ const RecordWrapper = ({ children, className }) => (
       CommentsLink,
       Link,
       ChartsLink,
+      MarkdownLink,
       CopyLink,
       DownloadRecord,
       DownloadTimestamps,

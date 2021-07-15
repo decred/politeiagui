@@ -7,9 +7,11 @@ export default function useTimestamps() {
   const onFetchTicketVoteTimestamps = useAction(
     act.onFetchTicketVoteTimestamps
   );
+  const onFetchVotesBundle = useAction(act.onFetchVotesBundle);
   return {
     onFetchRecordTimestamps,
     onFetchCommentsTimestamps,
-    onFetchTicketVoteTimestamps
+    onFetchTicketVoteTimestamps,
+    onFetchVotesBundle
   };
 }

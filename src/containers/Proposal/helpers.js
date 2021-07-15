@@ -316,12 +316,12 @@ export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
     const isRfp = !!proposal.linkby;
     const isSubmission = !!proposal.linkto;
     if (!isSubmission && !isRfp) return acc;
-
     if (isSubmission) {
-      const linkedProposal = proposalsByToken[proposal.linkto];
+      const linkedProposal =
+        proposalsByToken[shortRecordToken(proposal.linkto)];
       if (!linkedProposal) return acc;
       return set(
-        [getProposalToken(proposal), "proposedFor"],
+        [shortRecordToken(getProposalToken(proposal)), "proposedFor"],
         linkedProposal.name
       )(acc);
     }
@@ -333,7 +333,7 @@ export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
       };
       return {
         ...acc,
-        [getProposalToken(proposal)]: {
+        [shortRecordToken(getProposalToken(proposal))]: {
           ...proposal,
           rfpSubmissions
         }
@@ -359,7 +359,10 @@ export const getProposalRfpLinks = (proposal, rfpSubmissions, proposals) => {
   return hasRfpSubmissions
     ? { ...proposal, rfpSubmissions }
     : isSubmissionWithProposals
-    ? { ...proposal, proposedFor: proposals[proposal.linkto]?.name }
+    ? {
+        ...proposal,
+        proposedFor: proposals[shortRecordToken(proposal.linkto)]?.name
+      }
     : proposal;
 };
 

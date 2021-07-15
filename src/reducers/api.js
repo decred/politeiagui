@@ -14,6 +14,7 @@ export const DEFAULT_STATE = {
   changeUsername: DEFAULT_REQUEST_STATE,
   changePassword: DEFAULT_REQUEST_STATE,
   userProposals: DEFAULT_REQUEST_STATE,
+  userInventory: DEFAULT_REQUEST_STATE,
   tokenInventory: DEFAULT_REQUEST_STATE,
   proposalsBatch: DEFAULT_REQUEST_STATE,
   proposal: DEFAULT_REQUEST_STATE,
@@ -97,9 +98,9 @@ const api = (state = DEFAULT_STATE, action) =>
         request("changePassword", state, action),
       [act.RECEIVE_CHANGE_PASSWORD]: () =>
         receive("changePassword", state, action),
-      [act.REQUEST_USER_PROPOSALS]: () =>
-        request("userProposals", state, action),
-      [act.RECEIVE_USER_PROPOSALS]: () => receive("userProposals", state),
+      [act.REQUEST_USER_INVENTORY]: () =>
+        request("userInventory", state, action),
+      [act.RECEIVE_USER_INVENTORY]: () => receive("userInventory", state),
       [act.REQUEST_TOKEN_INVENTORY]: () =>
         request("tokenInventory", state, action),
       [act.RECEIVE_VOTES_INVENTORY]: () =>
@@ -207,6 +208,8 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_SET_TOTP]: () => receive("setTotp", state, action),
       [act.REQUEST_VERIFY_TOTP]: () => request("verifyTotp", state, action),
       [act.RECEIVE_VERIFY_TOTP]: () => receive("verifyTotp", state, action),
+      [act.REQUEST_VOTES_BUNDLE]: () => request("votesBundle", state, action),
+      [act.RECEIVE_VOTES_BUNDLE]: () => receive("votesBundle", state, action),
       // == CMS START ==
       [act.REQUEST_GENERATE_PAYOUTS]: () => request("payouts", state, action),
       [act.RECEIVE_GENERATE_PAYOUTS]: () => receive("payouts", state, action),

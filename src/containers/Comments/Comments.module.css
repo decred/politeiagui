@@ -7,8 +7,8 @@ div.commentsWrapper {
   padding: 0 2.6rem 2rem 2.6rem;
 }
 
-.commentsHeader {
-  margin-top: 2rem;
+div.commentsHeader {
+  padding-top: 0;
 }
 
 div.titleWrapper {
@@ -27,7 +27,31 @@ h2.commentsTitle {
 .sortContainer {
   width: 18rem;
   display: flex;
-  justify-content: space-between;
+}
+
+span.flatButtonText {
+  cursor: pointer;
+  color: var(--color-primary);
+  font-size: var(--font-size-small);
+}
+
+.flatButtonWrapper {
+  margin-left: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  border-radius: 0.2rem;
+  border: 0.1rem solid var(--color-primary);
+  user-select: none;
+}
+
+div.flatModeActive {
+  background-color: var(--color-primary);
+}
+
+span.flatModeActive {
+  color: var(--color-white);
 }
 
 .notAllowedMessageContent {
@@ -35,11 +59,6 @@ h2.commentsTitle {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-}
-
-.modeToggleWrapper {
-  display: flex;
-  margin-top: var(--spacing-small);
 }
 
 .modeToggleLabel {
@@ -52,7 +71,8 @@ h2.commentsTitle {
     padding: 0 0 2rem 0;
   }
 
-  .commentsHeaderWrapper {
+  .commentsHeaderWrapper,
+  .commentsHeader {
     padding-left: 1.4rem;
     padding-right: 1.4rem;
   }

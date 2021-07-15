@@ -9,6 +9,7 @@ import usePaywall from "src/hooks/api/usePaywall";
 import { useCredits } from "../hooks.js";
 import { Table, Text, Link, useMediaQuery } from "pi-ui";
 import ExportToCsv from "src/components/ExportToCsv.jsx";
+import usePolicy from "src/hooks/api/usePolicy";
 
 export default ({ proposalCreditPrice, user }) => {
   const userID = user && user.userid;
@@ -31,16 +32,17 @@ export default ({ proposalCreditPrice, user }) => {
     PAYWALL_STATUS_PAID === userPaywallStatus
       ? [...proposalCreditsPurchases, paywallPayment]
       : proposalCreditsPurchases;
+  const { policy } = usePolicy();
   const data = getTableContentFromPurchases(
     allPurchases,
     {
       confirmations: proposalPaywallPaymentConfirmations,
+      paywallConfirmations: policy.paywallconfirmations,
       txID: proposalPaywallPaymentTxid,
       amount: proposalPaywallPaymentAmount
     },
     proposalCreditPrice
   );
-
   const extraSmall = useMediaQuery("(max-width: 560px)");
 
   return data && !!data.length ? (
