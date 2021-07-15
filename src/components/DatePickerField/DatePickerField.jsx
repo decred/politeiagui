@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { classNames, DatePicker, Icon, Text } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./DatePickerField.module.css";
-import useBooleanState from "src/hooks/utils/useBooleanState";
 import { Row } from "../layout";
 import { MONTHS_LABELS } from "src/constants";
 
@@ -15,14 +14,11 @@ const DatePickerField = ({
   isRange,
   error
 }) => {
-  const [isOpen, openPicker, closePicker] = useBooleanState(false);
-  const togglePicker = () => {
-    if (!isOpen) {
-      openPicker();
-    } else {
-      closePicker();
-    }
-  };
+  const [isOpen, setIsOpen] = useState(false);
+  const togglePicker = useCallback(() => {
+    setIsOpen(!isOpen);
+  }, [isOpen, setIsOpen]);
+
   return (
     <FormikConsumer>
       {({ setFieldValue, setFieldTouched, values }) => {
@@ -31,7 +27,7 @@ const DatePickerField = ({
             setFieldValue(name, { year, month, day });
           }
           setFieldTouched(name, true);
-          closePicker();
+          setIsOpen(false);
         };
 
         const value = values[name];
@@ -41,42 +37,50 @@ const DatePickerField = ({
             newValue[idx] = { year, month, day };
             setFieldValue(name, newValue);
           }
+        };
 
-          setFieldTouched(name, true);
+        const onRangeDismiss = () => {
+          if (isOpen) {
+            setFieldTouched(name, true);
+            setIsOpen(false);
+          }
         };
 
         return (
-          <div className={classNames("cursor-pointer", className)}>
-            <DatePicker
-              show={isOpen}
-              years={years}
-              isRange={isRange}
-              value={values[name]}
-              lang={MONTHS_LABELS}
-              onChange={isRange ? onRangeChange : onDateChange}>
-              <Row
-                className={styles.box}
-                justify="space-between"
-                align="center"
-                noMargin
-                onClick={togglePicker}>
-                {value &&
-                  (isRange
-                    ? (value[0]
-                        ? `${value[0].month}/${value[0].day}/${value[0].year} - `
-                        : "") +
-                      (value[1]
-                        ? `${value[1].month}/${value[1].day}/${value[1].year}`
-                        : "")
-                    : `${value.month}/${value.day}/${value.year}`)}
-                {!value && (
-                  <Text className={styles.placeholder}>{placeholder}</Text>
-                )}
-                <Icon type="calendar" />
-              </Row>
-            </DatePicker>
+          <>
+            <div className={classNames("cursor-pointer", className)}>
+              <DatePicker
+                show={isOpen}
+                years={years}
+                isRange={isRange}
+                value={values[name]}
+                lang={MONTHS_LABELS}
+                onChange={isRange ? onRangeChange : onDateChange}
+                onDismiss={isRange ? onRangeDismiss : undefined}>
+                <Row
+                  className={styles.box}
+                  justify="space-between"
+                  align="center"
+                  noMargin
+                  onClick={togglePicker}>
+                  {value &&
+                    (isRange
+                      ? (value[0]
+                          ? `${value[0].month}/${value[0].day}/${value[0].year} - `
+                          : "") +
+                        (value[1]
+                          ? `${value[1].month}/${value[1].day}/${value[1].year}`
+                          : "")
+                      : `${value.month}/${value.day}/${value.year}`)}
+                  {!value && (
+                    <Text className={styles.placeholder}>{placeholder}</Text>
+                  )}
+                  <Icon type="calendar" />
+                </Row>
+              </DatePicker>
+            </div>
             {error && <p className={styles.errorMsg}>{error}</p>}
-          </div>
+          </>
         );
       }}
     </FormikConsumer>

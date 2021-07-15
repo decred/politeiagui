@@ -199,7 +199,6 @@ const ProposalForm = React.memo(function ProposalForm({
             <DatePickerField
               className={styles.rfpDeadline}
               years={deadlineRange}
-              value={values.rfpDeadline}
               name="rfpDeadline"
               placeholder="Deadline"
             />
@@ -273,7 +272,6 @@ const ProposalForm = React.memo(function ProposalForm({
       <DatePickerField
         years={datesRange}
         isRange={true}
-        value={values.dates}
         name="dates"
         placeholder="Start & End Dates"
         error={touched.dates && errors.dates}
