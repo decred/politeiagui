@@ -10,6 +10,7 @@ export default function useProposalVote(token) {
     [token]
   );
   const voteSummary = useSelector(voteSummarySelector);
+  console.log(voteSummary);
   const voteActive = isVoteActiveProposal(voteSummary);
   const { voteEndTimestamp, voteBlocksLeft } =
     useProposalVoteTimeInfo(voteSummary);
