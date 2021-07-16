@@ -151,6 +151,7 @@ export default function useProposalsBatch({
               assign(proposals, fetchedProposals),
               tokensToFetch
             );
+            // const tokensToFetch = [...unfetchedTokens, ...next]
             setRemainingTokens([...unfetchedTokens, ...next]);
             if (fetchRfpLinks) {
               const rfpLinks = getRfpLinks(fetchedProposals);
@@ -174,7 +175,11 @@ export default function useProposalsBatch({
         return send(FETCH);
       },
       done: () => {
-        // Check there are unscanned status or not. If yes, do a new circle of that status
+        if (hasRemainingTokens) {
+          // If there are remaining tokens. Go directly to new cycle of fetching
+          return send(START);
+        }
+        // If there are not remaining tokens. Check there are unscanned status or not. If yes, do a new circle of that status
         if (statusIndex + 1 < currentStatuses.length) {
           const newIndex = statusIndex + 1;
           const newStatus = currentStatuses[newIndex];
