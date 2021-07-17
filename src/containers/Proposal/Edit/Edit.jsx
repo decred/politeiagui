@@ -45,7 +45,11 @@ const EditProposal = ({ match }) => {
           proposal.linkby && formatUnixTimestampToObj(proposal.linkby),
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
-        files: getAttachmentsFiles(proposal.files)
+        files: getAttachmentsFiles(proposal.files),
+        amount: proposal.amount,
+        dates: [proposal.sDate && formatUnixTimestampToObj(proposal.sDate),
+          proposal.eDate && formatUnixTimestampToObj(proposal.eDate)],
+        domain: proposal.domain
       }
     : null;
 

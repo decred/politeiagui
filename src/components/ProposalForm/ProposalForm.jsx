@@ -434,8 +434,12 @@ const ProposalFormWrapper = ({
         rfpLink: "",
         name: "",
         description: "",
-        files: []
+        files: [],
+        amount: null,
+        dates: null,
+        domain: ""
       };
+
   return (
     <>
       <Formik

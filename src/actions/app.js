@@ -109,13 +109,29 @@ export const onSaveNewDcc =
   };
 
 export const onEditProposal =
-  ({ token, name, description, files, rfpDeadline, type, rfpLink }) =>
+  ({
+    token,
+    name,
+    amount,
+    sDate,
+    eDate,
+    domain,
+    description,
+    files,
+    rfpDeadline,
+    type,
+    rfpLink
+  }) =>
   (dispatch, getState) => {
     const userid = sel.currentUserID(getState());
     return dispatch(
       onSubmitEditedProposal(
         userid,
         name,
+        amount,
+        sDate,
+        eDate,
+        domain,
         description,
         rfpDeadline,
         type,
