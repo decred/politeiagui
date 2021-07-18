@@ -902,7 +902,7 @@ export const onSubmitProposal = (
 export const onSubmitEditedProposal = (
   userid,
   name,
-  amount,
+  amount, // Amount in USD.
   sDate,
   eDate,
   domain,

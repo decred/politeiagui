@@ -32,6 +32,10 @@ describe("test api actions (actions/api.js)", () => {
   };
   const FAKE_CSRF = "fake_csrf_token";
   const FAKE_PROPOSAL_NAME = "Fake prop name";
+  const FAKE_PROPOSAL_AMOUNT = 2000000;
+  const FAKE_PROPOSAL_STARTDATE = 0;
+  const FAKE_PROPOSAL_ENDDATE = 0;
+  const FAKE_PROPOSAL_DOMAIN = "development";
   const FAKE_PROPOSAL_TYPE = PROPOSAL_TYPE_REGULAR;
   const FAKE_RFP_DEADLINE = undefined;
   const FAKE_RFP_LINK = undefined;
@@ -559,6 +563,10 @@ describe("test api actions (actions/api.js)", () => {
       FAKE_USER.id,
       FAKE_USER.username,
       FAKE_PROPOSAL_NAME,
+      FAKE_PROPOSAL_AMOUNT,
+      FAKE_PROPOSAL_STARTDATE,
+      FAKE_PROPOSAL_ENDDATE,
+      FAKE_PROPOSAL_DOMAIN,
       FAKE_PROPOSAL_DESCRIPTION,
       FAKE_RFP_DEADLINE,
       FAKE_PROPOSAL_TYPE,
@@ -593,7 +601,11 @@ describe("test api actions (actions/api.js)", () => {
             rfpDeadline: FAKE_RFP_DEADLINE,
             type: FAKE_PROPOSAL_TYPE,
             rfpLink: FAKE_RFP_LINK,
-            files: []
+            files: [],
+            amount: FAKE_PROPOSAL_AMOUNT,
+            sDate: FAKE_PROPOSAL_STARTDATE,
+            eDate: FAKE_PROPOSAL_ENDDATE,
+            domain: FAKE_PROPOSAL_DOMAIN
           }
         },
         { type: act.RECEIVE_NEW_PROPOSAL, error: true, payload: e }
@@ -787,6 +799,12 @@ describe("test api actions (actions/api.js)", () => {
     const params = [
       FAKE_USER.id,
       FAKE_PROPOSAL_NAME,
+      // onSubmitEditedProposal accepts amount in USD and it converts it to
+      // cents.
+      FAKE_PROPOSAL_AMOUNT / 100,
+      FAKE_PROPOSAL_STARTDATE,
+      FAKE_PROPOSAL_ENDDATE,
+      FAKE_PROPOSAL_DOMAIN,
       FAKE_PROPOSAL_DESCRIPTION,
       FAKE_RFP_DEADLINE,
       FAKE_PROPOSAL_TYPE,
@@ -797,7 +815,8 @@ describe("test api actions (actions/api.js)", () => {
     const keys = await pki.generateKeys(FAKE_USER.id);
     await pki.loadKeys(FAKE_USER.id, keys);
 
-    // this needs a custom assertion for success response as the common one doesn't work for this case
+    // this needs a custom assertion for success response as the common one
+    // doesn't work for this case.
     setPostSuccessResponse(
       path,
       {},
@@ -826,7 +845,11 @@ describe("test api actions (actions/api.js)", () => {
             rfpDeadline: FAKE_RFP_DEADLINE,
             type: FAKE_PROPOSAL_TYPE,
             rfpLink: FAKE_RFP_LINK,
-            files: []
+            files: [],
+            amount: FAKE_PROPOSAL_AMOUNT,
+            sDate: FAKE_PROPOSAL_STARTDATE,
+            eDate: FAKE_PROPOSAL_ENDDATE,
+            domain: FAKE_PROPOSAL_DOMAIN
           }
         },
         { type: act.RECEIVE_EDIT_PROPOSAL, error: true, payload: e }
