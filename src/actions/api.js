@@ -1032,8 +1032,7 @@ export const onCommentVote = (currentUserID, token, commentid, vote, state) =>
       .then((comment) => api.signCommentVote(currentUserID, comment))
       .then((comment) => api.commentVote(csrf, comment))
       .then(() => {
-        dispatch(act.RECEIVE_LIKE_COMMENT({ token }));
-        dispatch(act.RECEIVE_SYNC_LIKE_COMMENT({ token, commentid, vote }));
+        dispatch(act.RECEIVE_LIKE_COMMENT({ token, commentid, vote }));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
@@ -1774,3 +1773,22 @@ export const onFetchCommentsTimestamps = (token, commentsids) =>
 // Ticket Vote actions
 export const onFetchTicketVoteTimestamps = (token, votespage) =>
   withCsrf((__, _, csrf) => api.ticketVoteTimestamps(csrf, token, votespage));
+
+// Votes Bundle
+export const onFetchVotesBundle = (token, serverpublickey) =>
+  withCsrf(async (dispatch, _, csrf) => {
+    dispatch(act.REQUEST_VOTES_BUNDLE());
+    try {
+      return await Promise.all([
+        api.proposalVoteDetails(csrf, token),
+        api.proposalVoteResults(csrf, token)
+      ]).then(([{ auths, vote }, { votes }]) => {
+        const response = { auths, details: vote, votes, serverpublickey };
+        dispatch(act.RECEIVE_VOTES_BUNDLE(response));
+        return response;
+      });
+    } catch (error) {
+      dispatch(act.RECEIVE_VOTES_BUNDLE(null, error));
+      throw error;
+    }
+  });

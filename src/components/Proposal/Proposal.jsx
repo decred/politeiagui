@@ -19,6 +19,7 @@ import {
   getMarkdownContent,
   getVotesReceived,
   isAbandonedProposal,
+  isCensoredProposal,
   isPublicProposal,
   isActiveRfp,
   isEditableProposal,
@@ -114,6 +115,7 @@ const Proposal = React.memo(function Proposal({
     name,
     publishedat,
     abandonedat,
+    censoredat,
     timestamp,
     userid,
     username,
@@ -124,7 +126,9 @@ const Proposal = React.memo(function Proposal({
     type,
     rfpSubmissions,
     state,
-    commentsCount
+    commentsCount,
+    statuschangemsg,
+    statuschangeusername
   } = proposal;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
@@ -145,7 +149,8 @@ const Proposal = React.memo(function Proposal({
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
-  const isPublicAccessible = isPublic || isAbandoned;
+  const isCensored = isCensoredProposal(proposal);
+  const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
   const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
   const isEditable =
@@ -153,10 +158,15 @@ const Proposal = React.memo(function Proposal({
   const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate =
-    version > 1 && timestamp !== publishedat && !abandonedat && !mobile;
+    version > 1 &&
+    timestamp !== publishedat &&
+    !abandonedat &&
+    !censoredat &&
+    !mobile;
   const showPublishedDate = publishedat && !mobile;
   const showExtendedVersionPicker = extended && version > 1;
   const showAbandonedDate = abandonedat && !mobile;
+  const showCensoredDate = censoredat && !mobile;
   const showVersionAsText = version > 1 && !extended && !mobile;
   const showRfpSubmissions =
     extended &&
@@ -192,7 +202,7 @@ const Proposal = React.memo(function Proposal({
     <>
       <RecordWrapper
         className={classNames(
-          isAbandoned && styles.abandonedProposal,
+          (isAbandoned || isCensored) && styles.abandonedProposal,
           isNotExtendedRfpOrSubmission && styles.rfpProposal
         )}>
         {({
@@ -279,6 +289,13 @@ const Proposal = React.memo(function Proposal({
                   {showAbandonedDate && (
                     <Event event="abandoned" timestamp={abandonedat} />
                   )}
+                  {showCensoredDate && (
+                    <Event
+                      event="censored"
+                      timestamp={censoredat}
+                      username={statuschangeusername}
+                    />
+                  )}
                   {showVersionAsText && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
@@ -299,7 +316,7 @@ const Proposal = React.memo(function Proposal({
                 </Subtitle>
               }
               status={
-                (isPublic || isAbandoned) && (
+                (isPublic || isAbandoned || isCensored) && (
                   <Status>
                     <StatusTag
                       className={styles.statusTag}
@@ -371,6 +388,16 @@ const Proposal = React.memo(function Proposal({
                 body={text}
               />
             )}
+            {extended && isCensored && !collapseBodyContent && (
+              <Markdown
+                className={classNames(
+                  styles.markdownContainer,
+                  isDarkTheme && "dark",
+                  showRfpSubmissions && styles.rfpMarkdownContainer
+                )}
+                body={statuschangemsg}
+              />
+            )}
             {collapseBodyContent && (
               <IconButton
                 type="expand"
@@ -431,7 +458,7 @@ const Proposal = React.memo(function Proposal({
                   )}
                   {isPublic && commentsCount > 0 && (
                     <DownloadCommentsTimestamps
-                      label="Load Comments Timestamps"
+                      label="Comments Timestamps"
                       recordToken={proposalToken}
                       commentsCount={commentsCount}
                     />
@@ -439,14 +466,14 @@ const Proposal = React.memo(function Proposal({
                   {votesCount > 0 && (
                     <DownloadVotes
                       label="Votes Bundle"
-                      voteSummary={voteSummary}
                       fileName={`${proposalToken}-votes`}
                       serverpublickey={apiInfo.pubkey}
+                      token={proposalToken}
                     />
                   )}
                   {votesCount > 0 && (
                     <DownloadVotesTimestamps
-                      label="Load Votes Timestamp"
+                      label="Votes Timestamp"
                       votesCount={votesCount}
                       recordToken={proposalToken}
                     />
