@@ -81,6 +81,10 @@ export const convertJsonToFile = (json, name) => ({
 
 export const makeProposal = (
   name,
+  amount,
+  startdate,
+  enddate,
+  domain,
   markdown,
   linkby = 0,
   type,
@@ -93,8 +97,10 @@ export const makeProposal = (
       // Proposal metadata file
       name: PROPOSAL_METADATA_FILENAME,
       mime: "text/plain; charset=utf-8",
-      digest: objectToSHA256({ name }),
-      payload: bufferToBase64String(objectToBuffer({ name }))
+      digest: objectToSHA256({ name, amount, startdate, enddate, domain }),
+      payload: bufferToBase64String(
+        objectToBuffer({ name, amount, startdate, enddate, domain })
+      )
     },
     ...(linkby || linkto
       ? [

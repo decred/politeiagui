@@ -10,3 +10,10 @@
 .placeholder {
   color: var(--text-input-color);
 }
+
+.errorMsg {
+  color: var(--color-orange);
+  font-size: var(--font-size-small);
+  min-height: 2rem;
+  margin-top: 0.3rem;
+}

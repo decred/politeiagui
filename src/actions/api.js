@@ -832,6 +832,10 @@ export const onSubmitProposal = (
   userid,
   username,
   name,
+  amount,
+  sDate,
+  eDate,
+  domain,
   description,
   rfpDeadline,
   type,
@@ -839,6 +843,7 @@ export const onSubmitProposal = (
   files
 ) =>
   withCsrf((dispatch, _, csrf) => {
+    amount = Number(amount);
     dispatch(
       act.REQUEST_NEW_PROPOSAL({
         name,
@@ -846,11 +851,26 @@ export const onSubmitProposal = (
         rfpDeadline,
         type,
         rfpLink,
-        files
+        files,
+        amount,
+        sDate,
+        eDate,
+        domain
       })
     );
     return Promise.resolve(
-      api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
+      api.makeProposal(
+        name,
+        amount,
+        sDate,
+        eDate,
+        domain,
+        description,
+        rfpDeadline,
+        type,
+        rfpLink,
+        files
+      )
     )
       .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))
@@ -863,7 +883,11 @@ export const onSubmitProposal = (
             username,
             name,
             description,
-            type
+            type,
+            amount,
+            sDate,
+            eDate,
+            domain
           })
         );
         resetNewProposalData();
@@ -878,6 +902,10 @@ export const onSubmitProposal = (
 export const onSubmitEditedProposal = (
   userid,
   name,
+  amount, // Amount in USD.
+  sDate,
+  eDate,
+  domain,
   description,
   rfpDeadline,
   type,
@@ -886,9 +914,14 @@ export const onSubmitEditedProposal = (
   token
 ) =>
   withCsrf((dispatch, _, csrf) => {
+    amount = Number(amount) * 100; // Backend expects value in cents
     dispatch(
       act.REQUEST_EDIT_PROPOSAL({
         name,
+        amount,
+        sDate,
+        eDate,
+        domain,
         description,
         files,
         rfpDeadline,
@@ -897,7 +930,18 @@ export const onSubmitEditedProposal = (
       })
     );
     return Promise.resolve(
-      api.makeProposal(name, description, rfpDeadline, type, rfpLink, files)
+      api.makeProposal(
+        name,
+        amount,
+        sDate,
+        eDate,
+        domain,
+        description,
+        rfpDeadline,
+        type,
+        rfpLink,
+        files
+      )
     )
       .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.editProposal(csrf, { ...proposal, token }))
