@@ -47,8 +47,10 @@ const EditProposal = ({ match }) => {
         description: getMarkdownContent(proposal.files),
         files: getAttachmentsFiles(proposal.files),
         amount: proposal.amount,
-        dates: [proposal.sDate && formatUnixTimestampToObj(proposal.sDate),
-          proposal.eDate && formatUnixTimestampToObj(proposal.eDate)],
+        dates: [
+          proposal.sDate && formatUnixTimestampToObj(proposal.sDate),
+          proposal.eDate && formatUnixTimestampToObj(proposal.eDate)
+        ],
         domain: proposal.domain
       }
     : null;
