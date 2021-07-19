@@ -147,19 +147,15 @@ const onReceiveLogout = (state) =>
   compose(
     update("byToken", (data) => {
       const vetteds = {};
-      Object.keys(data).flatMap((id) => 
-        data[id].state === PROPOSAL_STATE_VETTED ? (
-        vetteds[id] = {
-          ...data[id]
-        }
-      ) : []);
+      Object.keys(data).flatMap((id) =>
+        data[id].state === PROPOSAL_STATE_VETTED
+          ? (vetteds[id] = {
+              ...data[id]
+            })
+          : []
+      );
       return vetteds;
     }),
-    update("allByRecordStatus", (data) => ({
-      [ARCHIVED]: data[ARCHIVED],
-      [CENSORED]: data[CENSORED],
-      [UNREVIEWED]: {}
-    })),
     set("allProposalsByUserId", DEFAULT_STATE.allProposalsByUserId),
     set("allTokensByUserId", DEFAULT_STATE.allTokensByUserId),
     set("numOfProposalsByUserId", DEFAULT_STATE.numOfProposalsByUserId)
