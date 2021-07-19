@@ -66,18 +66,25 @@ export default function useProposalsBatch({
   fetchVoteSummaries = false,
   unvetted = false,
   proposalStatus,
-  status,
+  statuses,
   proposalPageSize = PROPOSAL_PAGE_SIZE
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
-  const [voteStatus, setStatus] = useState(status);
+  const [voteStatuses, setStatuses] = useState(statuses);
   const [previousPage, setPreviousPage] = useState(0);
-  const isByRecordStatus = isUndefined(voteStatus);
+  const isByRecordStatus = isUndefined(voteStatuses);
   const proposals = useSelector(sel.proposalsByToken);
   const recordState = unvetted
     ? PROPOSAL_STATE_UNVETTED
     : PROPOSAL_STATE_VETTED;
-  const currentStatus = isByRecordStatus ? proposalStatus || 1 : voteStatus;
+  const currentStatuses = isByRecordStatus
+    ? proposalStatus || [PROPOSAL_STATUS_UNREVIEWED]
+    : voteStatuses;
+  const [statusIndex, setStatusIndex] = useState(0);
+  const currentStatus = useMemo(
+    () => currentStatuses[statusIndex],
+    [currentStatuses, statusIndex]
+  );
   const voteSummaries = useSelector(sel.summaryByToken);
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
@@ -165,7 +172,24 @@ export default function useProposalsBatch({
           .catch((e) => send(REJECT, e));
         return send(FETCH);
       },
-      done: () => {}
+      done: () => {
+        // If there are not remaining tokens. Check there are unscanned status or not.
+        // If yes, change the index to the new status and set up new tokens
+        if (!hasRemainingTokens && statusIndex + 1 < currentStatuses.length) {
+          const newIndex = statusIndex + 1;
+          const newStatus = currentStatuses[newIndex];
+          const unfetchedTokens = getUnfetchedTokens(
+            proposals,
+            uniq(
+              allByStatus[
+                getProposalStatusLabel(newStatus, isByRecordStatus)
+              ] || []
+            )
+          );
+          setRemainingTokens(unfetchedTokens);
+          setStatusIndex(newIndex);
+        }
+      }
     },
     initialValues: {
       status: "idle",
@@ -176,29 +200,35 @@ export default function useProposalsBatch({
     }
   });
 
-  const onRestartMachine = (newStatus) => {
-    const newStatusLabel = getProposalStatusLabel(
-      !newStatus
-        ? isByRecordStatus
-          ? proposalStatus || PROPOSAL_STATUS_UNREVIEWED
-          : voteStatus
-        : newStatus,
-      isByRecordStatus
-    );
-    const unfetchedTokens = getUnfetchedTokens(
-      proposals,
-      uniq(allByStatus[newStatusLabel] || [])
-    );
-
-    // machine stop condition: inventory loaded, but no tokens to fetch
-    if (isEmpty(remainingTokens) && isEmpty(unfetchedTokens) && !page) {
+  // onRestartMachine called when the user clicking on a new tab
+  // The function will find what is the status has been loading in the previous session.
+  // If there are not status found. That mean all the data are loaded in this tab and go to RESOLVE state
+  const onRestartMachine = (newStatuses) => {
+    let unfetchedTokens = [],
+      index = 0;
+    const statuses = newStatuses || currentStatuses;
+    const foundPreviousSessionStatus = statuses.find((status, i) => {
+      const statusLabel = getProposalStatusLabel(status, isByRecordStatus);
+      unfetchedTokens = getUnfetchedTokens(
+        proposals,
+        uniq(allByStatus[statusLabel] || [])
+      );
+      if (unfetchedTokens.length > 0) {
+        index = i;
+        return true;
+      }
+      return false;
+    });
+    if (!foundPreviousSessionStatus) {
       return send(RESOLVE);
     }
+    // machine stop condition: inventory loaded, but no tokens to fetch
     setRemainingTokens(unfetchedTokens);
+    setStatusIndex(index);
     if (isByRecordStatus) {
-      proposalStatus = newStatus;
+      proposalStatus = statuses;
     } else {
-      setStatus(newStatus);
+      setStatuses(statuses);
     }
     return send(START);
   };
@@ -219,7 +249,6 @@ export default function useProposalsBatch({
 
   const anyError = error || state.error;
   useThrowError(anyError);
-
   return {
     proposals: getRfpLinkedProposals(proposals, voteSummaries),
     onFetchProposalsBatch,
@@ -228,7 +257,7 @@ export default function useProposalsBatch({
     verifying: state.verifying,
     onRestartMachine,
     onFetchMoreProposals,
-    hasMoreProposals: !!remainingTokens.length,
+    hasMoreProposals: !!remainingTokens.length && !!values(proposals).length,
     isProposalsBatchComplete: isFetchDone && !isAnotherInventoryCallRequired,
     machineCurrentState: state.status
   };

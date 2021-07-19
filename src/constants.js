@@ -91,6 +91,7 @@ export const PRE_VOTE = "pre";
 export const ACTIVE_VOTE = "started";
 export const APPROVED = "approved";
 export const AUTHORIZED = "authorized";
+export const UNAUTHORIZED = "unauthorized";
 export const REJECTED = "rejected";
 export const INELIGIBLE = "ineligible";
 export const ARCHIVED = "archived";

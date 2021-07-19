@@ -5,7 +5,8 @@ import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
 import { PROPOSAL_STATUS_CENSORED } from "src/constants";
-import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
+import { tabValues, statusByTab } from "./helpers";
+import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 // XXX change to AdminActionsProvider
 import {
   UnvettedActionsProvider,
@@ -63,7 +64,11 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     <RecordsView
       records={proposals}
       tabLabels={tabLabels}
-      recordTokensByTab={mapProposalsTokensByTab(tabLabels, proposalsTokens)}
+      recordTokensByTab={mapProposalsTokensByTab(
+        statusByTab,
+        proposalsTokens,
+        true
+      )}
       renderRecord={renderProposal}
       displayTabCount={!!proposalsTokens}
       placeholder={ProposalLoader}
