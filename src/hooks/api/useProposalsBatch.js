@@ -188,6 +188,11 @@ export default function useProposalsBatch({
           );
           setRemainingTokens(unfetchedTokens);
           setStatusIndex(newIndex);
+          if (!values(proposals).length) {
+            // In the case there are no proposals fetched yet.
+            // Continue the fetching cycle to fetch the first page at user view
+            return send(START);
+          }
         }
       }
     },
@@ -219,12 +224,13 @@ export default function useProposalsBatch({
       }
       return false;
     });
+    setRemainingTokens(unfetchedTokens);
+    setStatusIndex(index);
     if (!foundPreviousSessionStatus) {
+      setStatuses(statuses);
       return send(RESOLVE);
     }
     // machine stop condition: inventory loaded, but no tokens to fetch
-    setRemainingTokens(unfetchedTokens);
-    setStatusIndex(index);
     if (isByRecordStatus) {
       proposalStatus = statuses;
     } else {
