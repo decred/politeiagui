@@ -333,7 +333,6 @@ export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
         proposals: values(pick(proposalsByToken, linkedFrom)),
         voteSummaries: pick(voteSummaries, linkedFrom)
       };
-      console.log(rfpSubmissions);
       return {
         ...acc,
         [shortProposalToken]: {
