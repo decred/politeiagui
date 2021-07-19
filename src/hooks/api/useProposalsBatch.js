@@ -111,7 +111,6 @@ export default function useProposalsBatch({
       start: () => {
         if (hasRemainingTokens) return send(VERIFY);
         if (page && page === previousPage) return send(RESOLVE);
-        setStatusIndex(statusIndex);
         onFetchTokenInventory(
           recordState,
           page && currentStatus, // first page fetches all status
@@ -151,7 +150,6 @@ export default function useProposalsBatch({
               assign(proposals, fetchedProposals),
               tokensToFetch
             );
-            // const tokensToFetch = [...unfetchedTokens, ...next]
             setRemainingTokens([...unfetchedTokens, ...next]);
             if (fetchRfpLinks) {
               const rfpLinks = getRfpLinks(fetchedProposals);
@@ -175,12 +173,9 @@ export default function useProposalsBatch({
         return send(FETCH);
       },
       done: () => {
-        if (hasRemainingTokens) {
-          // If there are remaining tokens. Go directly to new cycle of fetching
-          return send(START);
-        }
-        // If there are not remaining tokens. Check there are unscanned status or not. If yes, do a new circle of that status
-        if (statusIndex + 1 < currentStatuses.length) {
+        // If there are not remaining tokens. Check there are unscanned status or not.
+        // If yes, change the index to the new status and set up new tokens
+        if (!hasRemainingTokens && statusIndex + 1 < currentStatuses.length) {
           const newIndex = statusIndex + 1;
           const newStatus = currentStatuses[newIndex];
           const unfetchedTokens = getUnfetchedTokens(
@@ -193,7 +188,6 @@ export default function useProposalsBatch({
           );
           setRemainingTokens(unfetchedTokens);
           setStatusIndex(newIndex);
-          return send(START);
         }
       }
     },
