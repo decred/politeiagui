@@ -8,7 +8,7 @@ module.exports = {
   mode: "development",
   devServer: {
     contentBase: path.join(__dirname, "dist"),
-    port: 3001,
+    port: 3002,
     proxy: {
       "/api": {
         target: "https://localhost:4443",
@@ -39,9 +39,13 @@ module.exports = {
     new ModuleFederationPlugin({
       name: "records",
       filename: "remoteEntry.js",
-      exposes: {
-        "./RecordsList": "./src/components/RecordsList.js",
+      remotes: {
+        records: "records@https://localhost:3001/remoteEntry.js",
       },
+      // exposes: {
+      //   "./Navigation": "./src/Navigation",
+      //   "./routes": "./src/routes",
+      // },
       shared: {
         ...deps,
         react: {
@@ -56,11 +60,11 @@ module.exports = {
         },
         "@politeiagui/shared": {
           import: "@politeiagui/shared",
-          requiredVersion: require("../shared/package.json").version,
+          requiredVersion: require("@politeiagui/shared/package").version,
         },
         "@politeiagui/shared-hooks": {
           import: "@politeiagui/shared-hooks",
-          requiredVersion: require("../shared-hooks/package.json").version,
+          requiredVersion: require("@politeiagui/shared-hooks/package").version,
         },
       },
     }),

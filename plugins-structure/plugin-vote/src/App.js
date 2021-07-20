@@ -1,7 +1,7 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from "react-query/devtools";
-import Records from "./components/RecordsWrapper";
+import Votes from "./components/VotesWrapper";
 
 const queryClient = new QueryClient()
 
@@ -10,7 +10,7 @@ function App() {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <>
-          <Records />
+          <Votes />
           <ReactQueryDevtools />
         </>
       </QueryClientProvider>

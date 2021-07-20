@@ -1,16 +1,16 @@
 import React from "react";
-import { useApi } from "@politeiagui/shared-hooks";
 import { useRecordsInventory } from "../hooks/useRecordsInventory";
-import { useRecords } from "../hooks/useRecords";
+import RecordsList from "./RecordsList";
 
-function Records() {
-  const apiInfo = useApi();
-  console.log(apiInfo);
-  const recordsInventoryInfo = useRecordsInventory({state: 2, status: 2, page: 1});
-  console.log(recordsInventoryInfo);
-  const records = useRecords({state: 2, status: 2, records: recordsInventoryInfo.data?.vetted.public});
-  console.log(records);
-  return <h1>Hey, I am records</h1>;
-}
+function Records({ state, status }) {
+  const {isLoading, isIdle, data, fetchNextPage, hasNextPage} = useRecordsInventory({state, status});
+  const allRecords = data?.pages.flatMap(page => page[state][status] ? page[state][status] : []);
+  return isIdle ? null : isLoading ? "Loading..." : (
+    <div>
+      <h1>Hey, I am {state} records</h1>
+      <RecordsList inventoryHasMore={hasNextPage} state={state} status={status} fetchInventoryNextPage={fetchNextPage} records={allRecords} />
+    </div>
+  );
+};
 
 export default Records;

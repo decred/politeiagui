@@ -3,6 +3,7 @@
   "workspaces": {
     "packages": [
       "records",
+      "plugin-vote",
       "shared",
       "shared-hooks"
     ]

@@ -14,7 +14,6 @@ const stateToString = {
 }
 
 export function getHumanReadableRecordStatus(status) {
-  console.log(status);
   if (status < RECORD_STATUS_UNREVIEWED && status > RECORD_STATUS_ARCHIVED) return "invalid";
   else return statusToString[status];
 }
@@ -22,9 +21,9 @@ export function getHumanReadableRecordStatus(status) {
 export function getRecordStatusCode(statusString) {
   const stringToStatus = invert(statusToString);
   if (stringToStatus[statusString] === undefined) {
-    throw Error(`Invalid status. You are trying to get the status code of an invalid status. Valid codes are: ${RECORD_STATUS_UNREVIEWED}, ${RECORD_STATUS_PUBLIC}, ${RECORD_STATUS_CENSORED} and ${RECORD_STATUS_ARCHIVED}`)
+    throw Error(`Invalid status. You are trying to get the status code of an invalid status. Valid strings are: ${statusToString[RECORD_STATUS_UNREVIEWED]}, ${statusToString[RECORD_STATUS_PUBLIC]}, ${statusToString[RECORD_STATUS_CENSORED]} and ${statusToString[RECORD_STATUS_ARCHIVED]}`)
   }
-  else return stringToStatus[statusString];
+  else return Number(stringToStatus[statusString]);
 }
 
 export function getHumanReadableRecordState(state) {
@@ -33,9 +32,9 @@ export function getHumanReadableRecordState(state) {
 }
 
 export function getRecordStateCode(stateString) {
-  const stringToState = invert(stateString);
+  const stringToState = invert(stateToString);
   if (stringToState[stateString] === undefined) {
-    throw Error(`Invalid status. You are trying to get the status code of an invalid status. Valid codes are: ${RECORD_STATE_UNVETTED} and ${RECORD_STATE_VETTED}`)
+    throw Error(`Invalid state. You are trying to get the state code of an invalid state. Valid strings are: ${stateToString[RECORD_STATE_UNVETTED]} and ${stateToString[RECORD_STATE_VETTED]}`)
   }
-  else return stringToState[stateString];
+  else return Number(stringToState[stateString]);
 }
