@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { useVoteInventory } from "../hooks/useVoteInventory";
-import RecordsList from "records/RecordsList";
+const RecordsList = lazy(() => import("records/RecordsList"));
 
 function VoteStatusList({ status, setListAsFinished, enabled, finished }) {
   const {isLoading, isIdle, data, fetchNextPage, hasNextPage} = useVoteInventory({ status, enabled });
   const allRecords = data?.pages.flatMap(page => page.vetted[status] ? page.vetted[status] : []);
   return isIdle ? null : isLoading ? "Loading..." : (
-    <RecordsList inventoryHasMore={hasNextPage} state={"vetted"} status={status} fetchInventoryNextPage={fetchNextPage} records={allRecords} enabled={enabled} finished={finished} setListAsFinished={setListAsFinished} />
+    <Suspense fallback={<div>Loading...</div>}>
+      <RecordsList inventoryHasMore={hasNextPage} state={"vetted"} status={status} fetchInventoryNextPage={fetchNextPage} records={allRecords} enabled={enabled} finished={finished} setListAsFinished={setListAsFinished} />
+    </Suspense>
   );
 };
 
