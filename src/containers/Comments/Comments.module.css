@@ -5,6 +5,7 @@ div.commentAreaContainer {
 
 div.commentsWrapper {
   padding: 0 2.6rem 2rem 2.6rem;
+  max-width: calc(100vw - 12rem);
 }
 
 div.commentsHeader {
@@ -66,9 +67,16 @@ span.flatModeActive {
   margin-top: 0.1rem;
 }
 
+@media screen and (max-width: 768px) {
+  div.commentsWrapper {
+    max-width: calc(100vw - 6rem);
+  }
+}
+
 @media screen and (max-width: 560px) {
   div.commentsWrapper {
     padding: 0 0 2rem 0;
+    max-width: 100vw;
   }
 
   .commentsHeaderWrapper,
