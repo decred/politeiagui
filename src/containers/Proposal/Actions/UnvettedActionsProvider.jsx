@@ -16,7 +16,9 @@ const UnvettedActionsProvider = ({ children, history }) => {
   const handleOpenCensorModal = (proposal) => {
     const handleCloseSuccess = () => {
       handleCloseModal();
-      history.push(`/record/${shortRecordToken(proposal.censorshiprecord.token)}`);
+      history.push(
+        `/record/${shortRecordToken(proposal.censorshiprecord.token)}`
+      );
     };
     handleOpenModal(ModalConfirmWithReason, {
       title: `Censor proposal - ${proposal.name}`,
@@ -39,7 +41,9 @@ const UnvettedActionsProvider = ({ children, history }) => {
   const handleOpenApproveModal = (proposal) => {
     const handleCloseSuccess = () => {
       handleCloseModal();
-      history.push(`/record/${shortRecordToken(proposal.censorshiprecord.token)}`);
+      history.push(
+        `/record/${shortRecordToken(proposal.censorshiprecord.token)}`
+      );
     };
     handleOpenModal(ModalConfirm, {
       title: `Approve proposal - ${proposal.name}`,

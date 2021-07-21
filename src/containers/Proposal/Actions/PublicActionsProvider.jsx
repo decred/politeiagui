@@ -35,7 +35,9 @@ const PublicActionsProvider = ({ children, history }) => {
     (proposal) => {
       const handleCloseSuccess = () => {
         handleCloseModal();
-        history.push(`/record/${shortRecordToken(proposal.censorshiprecord.token)}`);
+        history.push(
+          `/record/${shortRecordToken(proposal.censorshiprecord.token)}`
+        );
       };
       handleOpenModal(ModalConfirmWithReason, {
         title: `Abandon - ${proposal.name}`,
