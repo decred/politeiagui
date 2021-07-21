@@ -37,15 +37,11 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "records",
+      name: "plugin-vote",
       filename: "remoteEntry.js",
       remotes: {
         records: "records@https://localhost:3001/remoteEntry.js",
       },
-      // exposes: {
-      //   "./Navigation": "./src/Navigation",
-      //   "./routes": "./src/routes",
-      // },
       shared: {
         ...deps,
         react: {
