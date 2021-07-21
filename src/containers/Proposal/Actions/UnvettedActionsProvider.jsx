@@ -6,6 +6,7 @@ import Link from "src/components/Link";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalConfirm from "src/components/ModalConfirm";
 import useModalContext from "src/hooks/utils/useModalContext";
+import { shortRecordToken } from "src/helpers";
 
 const UnvettedActionsProvider = ({ children, history }) => {
   const { onCensorProposal, onApproveProposal } = useUnvettedActions();
@@ -15,7 +16,7 @@ const UnvettedActionsProvider = ({ children, history }) => {
   const handleOpenCensorModal = (proposal) => {
     const handleCloseSuccess = () => {
       handleCloseModal();
-      history.push(`/record/${proposal.censorshiprecord.token}`);
+      history.push(`/record/${shortRecordToken(proposal.censorshiprecord.token)}`);
     };
     handleOpenModal(ModalConfirmWithReason, {
       title: `Censor proposal - ${proposal.name}`,
@@ -38,7 +39,7 @@ const UnvettedActionsProvider = ({ children, history }) => {
   const handleOpenApproveModal = (proposal) => {
     const handleCloseSuccess = () => {
       handleCloseModal();
-      history.push(`/record/${proposal.censorshiprecord.token}`);
+      history.push(`/record/${shortRecordToken(proposal.censorshiprecord.token)}`);
     };
     handleOpenModal(ModalConfirm, {
       title: `Approve proposal - ${proposal.name}`,
