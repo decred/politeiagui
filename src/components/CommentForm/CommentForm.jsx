@@ -7,6 +7,8 @@ import { Row } from "../layout";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import validationSchema from "./validation";
 
+const forbiddenCommentsMdElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
+
 const CommentForm = ({
   onSubmit,
   onCancel,
@@ -57,11 +59,13 @@ const CommentForm = ({
             )}
             <MarkdownEditor
               allowImgs={false}
+              allowHeaders={false}
               name="comment"
               className="margin-top-s"
               value={values.comment}
               onChange={handleCommentChange}
               onBlur={handleBlur}
+              disallowedElements={forbiddenCommentsMdElements}
               placeholder={"Write a comment"}
             />
             <Row justify="right" topMarginSize="s">

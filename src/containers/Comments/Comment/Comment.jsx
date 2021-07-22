@@ -18,6 +18,8 @@ import CopyLink from "src/components/CopyLink";
 import { useConfig } from "src/containers/Config";
 import { NOJS_ROUTE_PREFIX } from "src/constants";
 
+const forbiddenCommentsMdElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
+
 const Comment = ({
   className,
   permalink,
@@ -112,10 +114,10 @@ const Comment = ({
       {extraSmall && seeInContextLink}
       {!censored ? (
         <Markdown
-          filterUrl={true}
           renderImages={false}
           className={classNames(isDarkTheme && "dark", "margin-top-s")}
           body={commentBody}
+          disallowedElements={forbiddenCommentsMdElements}
         />
       ) : (
         <Markdown
