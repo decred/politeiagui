@@ -1,14 +1,7 @@
 import React from "react";
-import htmlParser from "react-markdown/plugins/html-parser";
 import ModalExternalLink from "../ModalExternalLink";
 import useModalContext from "src/hooks/utils/useModalContext";
 import xssFilters from "xss-filters";
-
-export const htmlParserRules = htmlParser({
-  isValidNode: (node) => {
-    return node.type !== "script";
-  }
-});
 
 export const traverseChildren = (el, cb) => {
   const filterChildren = (c) =>
@@ -32,8 +25,29 @@ export const traverseChildren = (el, cb) => {
   return newElement ? cb(newElement) : cb(el);
 };
 
+const handleFilterXss = (el) => {
+  if (typeof el === "string") return el;
+  const props = el.props;
+  if (!props) {
+    return el;
+  }
+  const newProps = {
+    ...props
+  };
+  if (newProps.url) {
+    console.log("aparece aqui");
+    newProps.url = xssFilters.uriInDoubleQuotedAttr(props.url);
+  }
+  if (newProps.href) {
+    newProps.href = xssFilters.uriInDoubleQuotedAttr(props.href);
+  }
+  return {
+    ...el,
+    props: newProps
+  };
+};
+
 const isExternalLink = (link) => {
-  // e.preventDefault();
   // Does this to prevent xss attacks
   const tmpLink = document.createElement("a");
   tmpLink.href = link;
@@ -55,7 +69,7 @@ const LinkRenderer = ({ url, children }) => {
       });
     }
   }
-  return (
+  return handleFilterXss(
     <a href={url} onClick={onLinkClick}>
       {children}
     </a>
@@ -76,38 +90,8 @@ const linkHandler = ({ href, children }) => {
   return <LinkRenderer url={href}>{children}</LinkRenderer>;
 };
 
-const handleFilterXss = (el) => {
-  if (typeof el === "string") return el;
-  const props = el.props;
-  if (!props) {
-    return el;
-  }
-  const newProps = {
-    ...props
-  };
-  if (newProps.src) {
-    newProps.src = xssFilters.uriInDoubleQuotedAttr(props.src);
-  }
-  return {
-    ...el,
-    props: newProps
-  };
-};
-
-const rootHandler = (filterUrl) => (el) => {
-  if (filterUrl) {
-    el = traverseChildren(el, handleFilterXss);
-  }
-  const { children, ...props } = el;
-  return <div {...props}>{children}</div>;
-};
-
-export const customRenderers = (renderImages, filterUrl) => {
-  return {
-    image: imageHandler(renderImages),
-    imageReference: imageHandler(renderImages),
-    link: linkHandler,
-    linkReference: linkHandler,
-    root: rootHandler(filterUrl)
-  };
-};
+export const customComponents = (renderImages) => ({
+  // Root handler is no longer required due to react-markdown updates
+  img: imageHandler(renderImages),
+  a: linkHandler
+});
