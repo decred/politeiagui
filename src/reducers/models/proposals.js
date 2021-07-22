@@ -19,7 +19,8 @@ import {
   CENSORED,
   ARCHIVED,
   INELIGIBLE,
-  PROPOSAL_STATE_UNVETTED
+  PROPOSAL_STATE_UNVETTED,
+  PROPOSAL_STATE_VETTED
 } from "../../constants";
 import {
   shortRecordToken,
@@ -144,6 +145,24 @@ const updateInventory = (payload) => (allProps) => {
     }, {})
   };
 };
+
+const onReceiveLogout = (state) =>
+  compose(
+    update("byToken", (data) => {
+      const vetteds = {};
+      Object.keys(data).flatMap((id) =>
+        data[id].state === PROPOSAL_STATE_VETTED
+          ? (vetteds[id] = {
+              ...data[id]
+            })
+          : []
+      );
+      return vetteds;
+    }),
+    set("allProposalsByUserId", DEFAULT_STATE.allProposalsByUserId),
+    set("allTokensByUserId", DEFAULT_STATE.allTokensByUserId),
+    set("numOfProposalsByUserId", DEFAULT_STATE.numOfProposalsByUserId)
+  )(state);
 
 const proposals = (state = DEFAULT_STATE, action) =>
   action.error
@@ -287,7 +306,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
               (commentsCount) => ++commentsCount
             )(state);
           },
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE
+          [act.RECEIVE_LOGOUT]: () => onReceiveLogout(state)
         }[action.type] || (() => state)
       )();
 

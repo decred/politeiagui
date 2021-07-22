@@ -12,6 +12,7 @@ import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalStartVote from "src/components/ModalStartVote";
 import useModalContext from "src/hooks/utils/useModalContext";
 import values from "lodash/fp/values";
+import { shortRecordToken } from "src/helpers";
 import {
   VOTE_TYPE_STANDARD,
   VOTE_TYPE_RUNOFF,
@@ -34,7 +35,9 @@ const PublicActionsProvider = ({ children, history }) => {
     (proposal) => {
       const handleCloseSuccess = () => {
         handleCloseModal();
-        history.push(`/record/${proposal.censorshiprecord.token}`);
+        history.push(
+          `/record/${shortRecordToken(proposal.censorshiprecord.token)}`
+        );
       };
       handleOpenModal(ModalConfirmWithReason, {
         title: `Abandon - ${proposal.name}`,

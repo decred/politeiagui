@@ -6,7 +6,11 @@ import { getRecordsByTabOption } from "./helpers";
 import HelpMessage from "src/components/HelpMessage";
 import { useConfig } from "src/containers/Config";
 import { shortRecordToken } from "src/helpers";
-import { NOJS_ROUTE_PREFIX, PROPOSAL_STATUS_CENSORED } from "src/constants";
+import {
+  NOJS_ROUTE_PREFIX,
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_PAGE_SIZE
+} from "src/constants";
 
 const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   const Item = placeholder;
@@ -61,9 +65,10 @@ const RecordsView = ({
   onSetIndex,
   hasMore,
   filterCensored,
+  pageSize = PROPOSAL_PAGE_SIZE,
   sort
 }) => {
-  const [loadingItems, setLoadingItems] = useState(0);
+  const [loadingItems, setLoadingItems] = useState(pageSize);
   const { javascriptEnabled } = useConfig();
 
   useEffect(
@@ -88,7 +93,7 @@ const RecordsView = ({
   const handleFetchMoreRecords = () => {
     if (!filteredTokens || isLoading) return;
     onFetchMoreProposals && onFetchMoreProposals();
-    setLoadingItems(4);
+    setLoadingItems(pageSize);
   };
 
   const tabs = useMemo(

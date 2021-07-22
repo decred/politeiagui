@@ -54,6 +54,11 @@ To build politeiagui for production deployment, use the following commands:
 - Build the Proposal app: `yarn && yarn build`
 - Build the CMS app: `yarn && yarn build:cms`
 
+These commands use [create-react-app](https://create-react-app.dev/) to create
+production builds of politeiagui.  See the deployment
+[documentation](https://create-react-app.dev/docs/deployment/) for instructions
+on deploying the builds.
+
 ## Configuration
 
 Politeiagui allow customization of settings and features toggling by providing a set of configuration options. The configuration is loaded based on the "preset name" which must be
