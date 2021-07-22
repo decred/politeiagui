@@ -414,9 +414,9 @@ export const getTokensForProposalsPagination = (
 
 /**
  * Returns the proposal tokens by status from an inventory of tokens
- * @param {*} statuses
- * @param {*} isByRecordStatus
- * @param {*} inventory
+ * @param {number[]} statuses
+ * @param {boolean} isByRecordStatus
+ * @param {Object.<string, string[]>} inventory
  */
 export const getRecordsTokensByStatusList = (
   statuses = [],
@@ -431,9 +431,9 @@ export const getRecordsTokensByStatusList = (
 /**
  * Returns a map of proposals tokens with the key is tab name
  * the tokens are taken from the inventory, filtered by status
- * @param {*} statusByTab
- * @param {*} inventory
- * @param {*} isByRecordStatus
+ * @param {Object.<string, number[]>} statusByTab
+ * @param {Object.<string, string[]>} inventory
+ * @param {boolean} isByRecordStatus
  */
 export const mapProposalsTokensByTab = (
   statusByTab,
