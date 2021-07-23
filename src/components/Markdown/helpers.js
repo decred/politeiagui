@@ -35,7 +35,6 @@ const handleFilterXss = (el) => {
     ...props
   };
   if (newProps.url) {
-    console.log("aparece aqui");
     newProps.url = xssFilters.uriInDoubleQuotedAttr(props.url);
   }
   if (newProps.href) {
