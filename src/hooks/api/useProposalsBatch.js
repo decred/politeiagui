@@ -104,7 +104,34 @@ export default function useProposalsBatch({
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
   const hasRemainingTokens = !isEmpty(remainingTokens);
-
+  /*const [cacheVoteStatusMap, setCacheVoteStatusMap] = useState({});
+  const updateCacheVoteStatusMap = (isRefresh) => {
+    const voteStatusMap = {};
+    Object.keys(voteSummaries).forEach((token) => {
+      const shortToken = shortRecordToken(token);
+      voteStatusMap[shortToken] =
+        isUndefined(cacheVoteStatusMap[shortToken]) || isRefresh
+          ? voteSummaries[token].status
+          : cacheVoteStatusMap[shortToken];
+    });
+    setCacheVoteStatusMap(voteStatusMap);
+  };
+  const proposalsWithVoteStatus = useMemo(() => {
+    return Object.keys(proposals).reduce(
+        (acc, curr) => {
+          const shortToken = shortRecordToken(curr);
+          return {
+            ...acc,
+            [shortToken]: {
+              ...proposals[curr],
+              voteStatus: cacheVoteStatusMap[shortToken]
+            }
+          };
+        },
+        {}
+    );
+  }, [cacheVoteStatusMap, proposals])*/
+  //console.log(cacheVoteStatusMap)
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => send(START),
@@ -142,6 +169,7 @@ export default function useProposalsBatch({
         );
         onFetchProposalsBatch(tokensToFetch, fetchVoteSummaries)
           .then(([fetchedProposals]) => {
+//            updateCacheVoteStatusMap();
             if (isEmpty(fetchedProposals)) {
               setRemainingTokens(next);
               return send(RESOLVE);
@@ -209,6 +237,7 @@ export default function useProposalsBatch({
   // The function will find what is the status has been loading in the previous session.
   // If there are not status found. That mean all the data are loaded in this tab and go to RESOLVE state
   const onRestartMachine = (newStatuses) => {
+//    updateCacheVoteStatusMap(true);
     let unfetchedTokens = [],
       index = 0;
     const statuses = newStatuses || currentStatuses;
@@ -252,7 +281,7 @@ export default function useProposalsBatch({
       return send(START);
     return send(VERIFY);
   }, [send, remainingTokens, isAnotherInventoryCallRequired]);
-
+  console.log(proposals);
   const anyError = error || state.error;
   useThrowError(anyError);
   return {

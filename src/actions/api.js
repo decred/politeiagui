@@ -1323,7 +1323,7 @@ export const onFetchVotesDetails = (token) =>
       });
   });
 
-export const onAuthorizeVote = (userid, token, version, doneCb) =>
+export const onAuthorizeVote = (userid, token, version) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
     return api
@@ -1332,9 +1332,6 @@ export const onAuthorizeVote = (userid, token, version, doneCb) =>
         dispatch(
           act.RECEIVE_AUTHORIZE_VOTE({ ...response, token, success: true })
         );
-        if (typeof doneCb === "function") {
-          doneCb();
-        }
       })
       .catch((error) => {
         dispatch(act.RECEIVE_AUTHORIZE_VOTE(null, error));
