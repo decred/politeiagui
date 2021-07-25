@@ -39,7 +39,7 @@ const DatePickerField = ({
           }
         };
 
-        const onRangeDismiss = () => {
+        const onDismiss = () => {
           if (isOpen) {
             setFieldTouched(name, true);
             setIsOpen(false);
@@ -47,40 +47,40 @@ const DatePickerField = ({
         };
 
         return (
-          <>
-            <div className={classNames("cursor-pointer", className)}>
-              <DatePicker
-                show={isOpen}
-                years={years}
-                isRange={isRange}
-                value={values[name]}
-                lang={MONTHS_LABELS}
-                onChange={isRange ? onRangeChange : onDateChange}
-                onDismiss={isRange ? onRangeDismiss : undefined}>
-                <Row
-                  className={styles.box}
-                  justify="space-between"
-                  align="center"
-                  noMargin
-                  onClick={togglePicker}>
-                  {value &&
-                    (isRange
-                      ? (value[0]
-                          ? `${value[0].month}/${value[0].day}/${value[0].year} - `
-                          : "") +
-                        (value[1]
-                          ? `${value[1].month}/${value[1].day}/${value[1].year}`
-                          : "")
-                      : `${value.month}/${value.day}/${value.year}`)}
-                  {!value && (
-                    <Text className={styles.placeholder}>{placeholder}</Text>
-                  )}
-                  <Icon type="calendar" />
-                </Row>
-              </DatePicker>
-            </div>
-            {error && <p className={styles.errorMsg}>{error}</p>}
-          </>
+          <div className={classNames("cursor-pointer", className)}>
+            <DatePicker
+              show={isOpen}
+              years={years}
+              isRange={isRange}
+              value={values[name]}
+              lang={MONTHS_LABELS}
+              onChange={isRange ? onRangeChange : onDateChange}
+              onDismiss={onDismiss}>
+              <Row
+                className={styles.box}
+                justify="space-between"
+                align="center"
+                noMargin
+                onClick={togglePicker}>
+                {value &&
+                  (isRange
+                    ? (value[0]
+                        ? `${value[0].month}/${value[0].day}/${value[0].year} - `
+                        : "") +
+                      (value[1]
+                        ? `${value[1].month}/${value[1].day}/${value[1].year}`
+                        : "")
+                    : `${value.month}/${value.day}/${value.year}`)}
+                {!value && (
+                  <Text className={styles.placeholder}>{placeholder}</Text>
+                )}
+                <Icon type="calendar" />
+              </Row>
+            </DatePicker>
+            <p className={classNames(styles.errorMsg, styles.active)}>
+              {error}
+            </p>
+          </div>
         );
       }}
     </FormikConsumer>

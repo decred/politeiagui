@@ -42,6 +42,12 @@
   height: 4.4rem;
 }
 
+.sDate,
+.eDate {
+  margin-top: 1.2rem;
+  flex-basis: 20rem;
+}
+
 .iconWrapper {
   display: flex;
   align-items: center;

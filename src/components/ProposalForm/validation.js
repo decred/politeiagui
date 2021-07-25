@@ -26,7 +26,8 @@ export const proposalValidation =
       values = {
         name: "",
         amount: 0,
-        dates: null,
+        sDate: null,
+        eDate: null,
         domain: "",
         description: "",
         type: null,
@@ -69,30 +70,30 @@ export const proposalValidation =
       values.amount < amountmin / 100 ||
       values.amount > amountmax / 100
     ) {
-      errors.amount = `Invalid amount, min is ${amountmin / 100}, max is ${
+      errors.amount = `Invalid amount, min is $${amountmin / 100}, max is $${
         amountmax / 100
       }`;
     }
 
-    // start date validation
-    const dates = values.dates;
-    const emptyDates = !dates;
-    const startdate = !emptyDates && dates[0];
-    const enddate = !emptyDates && dates[1];
-    const emptyStartdate = !startdate;
-    const emptyEnddate = !enddate;
-    if (emptyDates || emptyStartdate || emptyEnddate) {
-      errors.dates = "Please pick start & end dates";
+    // start & end dates validations.
+    const startdate = values.sDate;
+    if (!startdate) {
+      errors.sDate = "Please pick a start date";
+    }
+    const enddate = values.eDate;
+    if (!enddate) {
+      errors.eDate = "Please pick an end date";
     }
 
     // If both start & end dates provided, ensure start
     // date is smaller.
-    if (!emptyStartdate && !emptyEnddate) {
+    if (startdate && enddate) {
       if (
         convertObjectToUnixTimestamp(enddate) <=
         convertObjectToUnixTimestamp(startdate)
       ) {
-        errors.dates = "Start date must be smaller than end date";
+        errors.sDate = "Start date must be before end date";
+        errors.eDate = "End date must be after start date";
       }
     }
 

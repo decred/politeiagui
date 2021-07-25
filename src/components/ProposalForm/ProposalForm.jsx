@@ -131,7 +131,7 @@ const ProposalForm = React.memo(function ProposalForm({
     [linkbyperiodmin, linkbyperiodmax]
   );
 
-  const datesRange = useMemo(
+  const startAndEndDatesRange = useMemo(
     () => getStartEndDatesRange(enddatemax),
     [enddatemax]
   );
@@ -262,7 +262,7 @@ const ProposalForm = React.memo(function ProposalForm({
         error={touched.name && errors.name}
       />
       <BoxTextInput
-        placeholder="Amount"
+        placeholder="Amount (USD)"
         name="amount"
         tabIndex={1}
         value={values.amount}
@@ -270,11 +270,20 @@ const ProposalForm = React.memo(function ProposalForm({
         error={touched.amount && errors.amount}
       />
       <DatePickerField
-        years={datesRange}
-        isRange={true}
-        name="dates"
-        placeholder="Start & End Dates"
-        error={touched.dates && errors.dates}
+        className={classNames(styles.sDate, "margin-bottom-m")}
+        years={startAndEndDatesRange}
+        value={values.sDate}
+        name="sDate"
+        placeholder="Start Date"
+        error={touched.sDate && errors.sDate}
+      />
+      <DatePickerField
+        className={classNames(styles.eDate, "margin-bottom-m")}
+        years={startAndEndDatesRange}
+        value={values.eDate}
+        name="eDate"
+        placeholder="End Date"
+        error={touched.eDate && errors.eDate}
       />
       <SelectField
         name="domain"
@@ -368,13 +377,7 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const {
-          type,
-          rfpLink,
-          rfpDeadline,
-          dates: [sDate, eDate],
-          ...others
-        } = values;
+        const { type, rfpLink, rfpDeadline, sDate, eDate, ...others } = values;
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
             [rfpLink],
