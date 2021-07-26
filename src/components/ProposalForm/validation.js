@@ -65,14 +65,22 @@ export const proposalValidation =
     // amount validation
     if (!values.amount) {
       errors.amount = "Required";
-    } else if (
-      isNaN(values.amount) ||
-      values.amount < amountmin / 100 ||
-      values.amount > amountmax / 100
-    ) {
-      errors.amount = `Invalid amount, min is $${amountmin / 100}, max is $${
-        amountmax / 100
-      }`;
+    } else {
+      // Valid amount is at least 2 chars long, as it includes the unit
+      // as the first char.
+      const amount = values.amount;
+      if (amount.length >= 2) {
+        const amountNumber = Number(amount.substring(1));
+        if (
+          isNaN(amountNumber) ||
+          amountNumber < amountmin / 100 ||
+          amountNumber > amountmax / 100
+        ) {
+          errors.amount = `Invalid amount, min is $${
+            amountmin / 100
+          }, max is $${amountmax / 100}`;
+        }
+      }
     }
 
     // start & end dates validations.

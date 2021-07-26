@@ -149,6 +149,16 @@ const ProposalForm = React.memo(function ProposalForm({
     handleChange(e);
   };
 
+  const handleAmountKeyUp = ({ target }) => {
+    const value = target.value;
+    const unit = "$";
+    if (value.length > 0 && !value.includes(unit)) {
+      setFieldValue("amount", `${unit}${value}`);
+    } else if (value === unit) {
+      setFieldValue("amount", "");
+    }
+  };
+
   const handleFilesChange = useCallback(
     (v) => {
       const files = values.files.concat(v);
@@ -267,6 +277,7 @@ const ProposalForm = React.memo(function ProposalForm({
         tabIndex={1}
         value={values.amount}
         onChange={handleChangeWithTouched("amount")}
+        onKeyUp={handleAmountKeyUp}
         error={touched.amount && errors.amount}
       />
       <DatePickerField
@@ -377,7 +388,10 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const { type, rfpLink, rfpDeadline, sDate, eDate, ...others } = values;
+        const { type, rfpLink, rfpDeadline, sDate, eDate, amount, ...others } =
+          values;
+        // Parse string amount as it includes the unit.
+        const amountNumber = Number(amount.substring(1));
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
             [rfpLink],
@@ -408,7 +422,8 @@ const ProposalFormWrapper = ({
           rfpLink,
           rfpDeadline: convertObjectToUnixTimestamp(rfpDeadline),
           sDate: convertObjectToUnixTimestamp(sDate),
-          eDate: convertObjectToUnixTimestamp(eDate)
+          eDate: convertObjectToUnixTimestamp(eDate),
+          amount: amountNumber
         });
         setSubmitting(false);
         setSubmitSuccess(true);
