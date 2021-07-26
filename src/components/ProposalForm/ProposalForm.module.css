@@ -42,8 +42,8 @@
   height: 4.4rem;
 }
 
-.sDate,
-.eDate {
+.startDate,
+.endate {
   margin-top: 1.2rem;
   flex-basis: 20rem;
 }

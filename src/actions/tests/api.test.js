@@ -603,8 +603,8 @@ describe("test api actions (actions/api.js)", () => {
             rfpLink: FAKE_RFP_LINK,
             files: [],
             amount: FAKE_PROPOSAL_AMOUNT,
-            sDate: FAKE_PROPOSAL_STARTDATE,
-            eDate: FAKE_PROPOSAL_ENDDATE,
+            startDate: FAKE_PROPOSAL_STARTDATE,
+            endDate: FAKE_PROPOSAL_ENDDATE,
             domain: FAKE_PROPOSAL_DOMAIN
           }
         },
@@ -846,8 +846,8 @@ describe("test api actions (actions/api.js)", () => {
             rfpLink: FAKE_RFP_LINK,
             files: [],
             amount: FAKE_PROPOSAL_AMOUNT,
-            sDate: FAKE_PROPOSAL_STARTDATE,
-            eDate: FAKE_PROPOSAL_ENDDATE,
+            startDate: FAKE_PROPOSAL_STARTDATE,
+            endDate: FAKE_PROPOSAL_ENDDATE,
             domain: FAKE_PROPOSAL_DOMAIN
           }
         },

@@ -86,7 +86,8 @@ const getProposalTimestamps = (proposal, publishedts) => {
 };
 
 // parseProposalMetadata accepts a proposal object parses it's metadata
-// and returns it as object of the form { name, sDate, eDate, amount, domain }
+// and returns it as object of the form { name, startdate, enddate,
+// amount, domain }
 //
 // censored proposals won't have metadata, in this case this function will
 // return an empty object
@@ -190,8 +191,8 @@ export const parseRawProposal = (proposal) => {
     description: description || proposal.description,
     name: name || proposal.name,
     amount: amount / 100, // BE stores amount in cents - calculate USD.
-    sDate: startdate,
-    eDate: enddate,
+    startDate: startdate,
+    endDate: enddate,
     domain,
     linkby,
     userid: usermds.userid || proposal.userid,

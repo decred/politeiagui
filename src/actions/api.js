@@ -833,8 +833,8 @@ export const onSubmitProposal = (
   username,
   name,
   amount,
-  sDate,
-  eDate,
+  startDate,
+  endDate,
   domain,
   description,
   rfpDeadline,
@@ -853,8 +853,8 @@ export const onSubmitProposal = (
         rfpLink,
         files,
         amount,
-        sDate,
-        eDate,
+        startDate,
+        endDate,
         domain
       })
     );
@@ -862,8 +862,8 @@ export const onSubmitProposal = (
       api.makeProposal(
         name,
         amount,
-        sDate,
-        eDate,
+        startDate,
+        endDate,
         domain,
         description,
         rfpDeadline,
@@ -885,8 +885,8 @@ export const onSubmitProposal = (
             description,
             type,
             amount,
-            sDate,
-            eDate,
+            startDate,
+            endDate,
             domain
           })
         );
@@ -903,8 +903,8 @@ export const onSubmitEditedProposal = (
   userid,
   name,
   amount, // Amount in USD.
-  sDate,
-  eDate,
+  startDate,
+  endDate,
   domain,
   description,
   rfpDeadline,
@@ -919,8 +919,8 @@ export const onSubmitEditedProposal = (
       act.REQUEST_EDIT_PROPOSAL({
         name,
         amount,
-        sDate,
-        eDate,
+        startDate,
+        endDate,
         domain,
         description,
         files,
@@ -933,8 +933,8 @@ export const onSubmitEditedProposal = (
       api.makeProposal(
         name,
         amount,
-        sDate,
-        eDate,
+        startDate,
+        endDate,
         domain,
         description,
         rfpDeadline,

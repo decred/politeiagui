@@ -281,20 +281,20 @@ const ProposalForm = React.memo(function ProposalForm({
         error={touched.amount && errors.amount}
       />
       <DatePickerField
-        className={classNames(styles.sDate, "margin-bottom-m")}
+        className={classNames(styles.startDate, "margin-bottom-m")}
         years={startAndEndDatesRange}
-        value={values.sDate}
-        name="sDate"
+        value={values.startDate}
+        name="startDate"
         placeholder="Start Date"
-        error={touched.sDate && errors.sDate}
+        error={touched.startDate && errors.startDate}
       />
       <DatePickerField
-        className={classNames(styles.eDate, "margin-bottom-m")}
+        className={classNames(styles.endDate, "margin-bottom-m")}
         years={startAndEndDatesRange}
-        value={values.eDate}
-        name="eDate"
+        value={values.endDate}
+        name="endDate"
         placeholder="End Date"
-        error={touched.eDate && errors.eDate}
+        error={touched.endDate && errors.endDate}
       />
       <SelectField
         name="domain"
@@ -388,7 +388,7 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const { type, rfpLink, rfpDeadline, sDate, eDate, amount, ...others } =
+        const { type, rfpLink, rfpDeadline, startDate, endDate, amount, ...others } =
           values;
         // Parse string amount as it includes the unit.
         const amountNumber = Number(amount.substring(1));
@@ -421,8 +421,8 @@ const ProposalFormWrapper = ({
           files: [...others.files, ...files],
           rfpLink,
           rfpDeadline: convertObjectToUnixTimestamp(rfpDeadline),
-          sDate: convertObjectToUnixTimestamp(sDate),
-          eDate: convertObjectToUnixTimestamp(eDate),
+          startDate: convertObjectToUnixTimestamp(startDate),
+          endDate: convertObjectToUnixTimestamp(endDate),
           amount: amountNumber
         });
         setSubmitting(false);

@@ -26,8 +26,8 @@ export const proposalValidation =
       values = {
         name: "",
         amount: 0,
-        sDate: null,
-        eDate: null,
+        startDate: null,
+        endDate: null,
         domain: "",
         description: "",
         type: null,
@@ -84,13 +84,13 @@ export const proposalValidation =
     }
 
     // start & end dates validations.
-    const startdate = values.sDate;
+    const startdate = values.startDate;
     if (!startdate) {
-      errors.sDate = "Please pick a start date";
+      errors.startDate = "Please pick a start date";
     }
-    const enddate = values.eDate;
+    const enddate = values.endDate;
     if (!enddate) {
-      errors.eDate = "Please pick an end date";
+      errors.endDate = "Please pick an end date";
     }
 
     // If both start & end dates provided, ensure start
@@ -100,8 +100,8 @@ export const proposalValidation =
         convertObjectToUnixTimestamp(enddate) <=
         convertObjectToUnixTimestamp(startdate)
       ) {
-        errors.sDate = "Start date must be before end date";
-        errors.eDate = "End date must be after start date";
+        errors.startDate = "Start date must be before end date";
+        errors.endDate = "End date must be after start date";
       }
     }
 
