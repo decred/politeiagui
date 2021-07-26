@@ -31,6 +31,7 @@ const EditProposal = ({ match }) => {
   const hasDetails =
     proposal?.files.filter((f) => f.name === "index.md").length > 0;
 
+  const unit = "$";
   const initialValues = proposal
     ? {
         token: proposal.censorshiprecord.token,
@@ -46,11 +47,9 @@ const EditProposal = ({ match }) => {
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
         files: getAttachmentsFiles(proposal.files),
-        amount: proposal.amount,
-        dates: [
-          proposal.sDate && formatUnixTimestampToObj(proposal.sDate),
-          proposal.eDate && formatUnixTimestampToObj(proposal.eDate)
-        ],
+        amount: `${unit}${proposal.amount}`,
+        sDate: proposal.sDate && formatUnixTimestampToObj(proposal.sDate),
+        eDate: proposal.eDate && formatUnixTimestampToObj(proposal.eDate),
         domain: proposal.domain
       }
     : null;
