@@ -388,8 +388,15 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const { type, rfpLink, rfpDeadline, startDate, endDate, amount, ...others } =
-          values;
+        const {
+          type,
+          rfpLink,
+          rfpDeadline,
+          startDate,
+          endDate,
+          amount,
+          ...others
+        } = values;
         // Parse string amount as it includes the unit.
         const amountNumber = Number(amount.substring(1));
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
