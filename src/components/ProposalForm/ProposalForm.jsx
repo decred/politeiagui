@@ -111,8 +111,8 @@ const ProposalForm = React.memo(function ProposalForm({
     policyPi: { domains, enddatemax }
   } = usePolicy();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  const isRfp = values.type === PROPOSAL_TYPE_RFP;
-  const isRfpSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
+  const isRFP = values.type === PROPOSAL_TYPE_RFP;
+  const isRFPSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
 
   const handleDescriptionChange = useCallback(
     (v) => {
@@ -194,7 +194,7 @@ const ProposalForm = React.memo(function ProposalForm({
         wrap={smallTablet}
         className={classNames(
           styles.typeRow,
-          isRfpSubmission && styles.typeRowNoMargin
+          isRFPSubmission && styles.typeRowNoMargin
         )}>
         <SelectField
           name="type"
@@ -204,7 +204,7 @@ const ProposalForm = React.memo(function ProposalForm({
           options={typeOptions}
           className={styles.typeSelectWrapper}
         />
-        {isRfp && (
+        {isRFP && (
           <>
             <DatePickerField
               className={styles.rfpDeadline}
@@ -224,7 +224,7 @@ const ProposalForm = React.memo(function ProposalForm({
             </Tooltip>
           </>
         )}
-        {isRfpSubmission && (
+        {isRFPSubmission && (
           <>
             {!smallTablet && (
               <div className={styles.iconWrapper}>
@@ -271,31 +271,35 @@ const ProposalForm = React.memo(function ProposalForm({
         onChange={handleChangeWithTouched("name")}
         error={touched.name && errors.name}
       />
-      <BoxTextInput
-        placeholder="Amount (USD)"
-        name="amount"
-        tabIndex={1}
-        value={values.amount}
-        onChange={handleChangeWithTouched("amount")}
-        onKeyUp={handleAmountKeyUp}
-        error={touched.amount && errors.amount}
-      />
-      <DatePickerField
-        className={classNames(styles.startDate, "margin-bottom-m")}
-        years={startAndEndDatesRange}
-        value={values.startDate}
-        name="startDate"
-        placeholder="Start Date"
-        error={touched.startDate && errors.startDate}
-      />
-      <DatePickerField
-        className={classNames(styles.endDate, "margin-bottom-m")}
-        years={startAndEndDatesRange}
-        value={values.endDate}
-        name="endDate"
-        placeholder="End Date"
-        error={touched.endDate && errors.endDate}
-      />
+      {!isRFP && (
+        <>
+          <BoxTextInput
+            placeholder="Amount (USD)"
+            name="amount"
+            tabIndex={1}
+            value={values.amount}
+            onChange={handleChangeWithTouched("amount")}
+            onKeyUp={handleAmountKeyUp}
+            error={touched.amount && errors.amount}
+          />
+          <DatePickerField
+            className={classNames(styles.startDate, "margin-bottom-m")}
+            years={startAndEndDatesRange}
+            value={values.startDate}
+            name="startDate"
+            placeholder="Start Date"
+            error={touched.startDate && errors.startDate}
+          />
+          <DatePickerField
+            className={classNames(styles.endDate, "margin-bottom-m")}
+            years={startAndEndDatesRange}
+            value={values.endDate}
+            name="endDate"
+            placeholder="End Date"
+            error={touched.endDate && errors.endDate}
+          />
+        </>
+      )}
       <SelectField
         name="domain"
         onChange={handleSelectFiledChange("domain")}
@@ -398,7 +402,7 @@ const ProposalFormWrapper = ({
           ...others
         } = values;
         // Parse string amount as it includes the unit.
-        const amountNumber = Number(amount.substring(1));
+        const amountNumber = amount && Number(amount.substring(1));
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
             [rfpLink],
@@ -421,16 +425,21 @@ const ProposalFormWrapper = ({
           others.description,
           mapBlobToFile
         );
+        const isRFP = type === PROPOSAL_TYPE_RFP;
         const proposalToken = await onSubmit({
           ...others,
           description,
           type,
           files: [...others.files, ...files],
           rfpLink,
-          rfpDeadline: convertObjectToUnixTimestamp(rfpDeadline),
-          startDate: convertObjectToUnixTimestamp(startDate),
-          endDate: convertObjectToUnixTimestamp(endDate),
-          amount: amountNumber
+          rfpDeadline: isRFP
+            ? convertObjectToUnixTimestamp(rfpDeadline)
+            : undefined,
+          startDate: !isRFP
+            ? convertObjectToUnixTimestamp(startDate)
+            : undefined,
+          endDate: !isRFP ? convertObjectToUnixTimestamp(endDate) : undefined,
+          amount: !isRFP ? amountNumber : undefined
         });
         setSubmitting(false);
         setSubmitSuccess(true);

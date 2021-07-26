@@ -44,7 +44,8 @@ export const proposalValidation =
     }
 
     // RFP deadline validation
-    if (values.type === PROPOSAL_TYPE_RFP && !values.rfpDeadline) {
+    const isRFP = values.type === PROPOSAL_TYPE_RFP;
+    if (isRFP && !values.rfpDeadline) {
       errors.rfpDeadline = "Required";
     }
 
@@ -63,46 +64,50 @@ export const proposalValidation =
     );
     if (nameErrors) errors.name = nameErrors;
 
-    // amount validation
-    if (!values.amount) {
-      errors.amount = "Required";
-    } else {
-      // Valid amount is at least 2 chars long, as it includes the unit
-      // as the first char.
-      const amount = values.amount;
-      if (amount.length >= 2) {
-        const amountNumber = Number(amount.substring(1));
-        if (
-          isNaN(amountNumber) ||
-          amountNumber < amountmin / 100 ||
-          amountNumber > amountmax / 100
-        ) {
-          errors.amount = `Invalid amount, min is ${PROPOSAL_AMOUNT_UNIT}${
-            amountmin / 100
-          }, max is ${PROPOSAL_AMOUNT_UNIT}${amountmax / 100}`;
+    // Validate amount, start & end dates only if not dealing with
+    // a RFP.
+    if (!isRFP) {
+      // amount validation
+      if (!values.amount) {
+        errors.amount = "Required";
+      } else {
+        // Valid amount is at least 2 chars long, as it includes the unit
+        // as the first char.
+        const amount = values.amount;
+        if (amount.length >= 2) {
+          const amountNumber = Number(amount.substring(1));
+          if (
+            isNaN(amountNumber) ||
+            amountNumber < amountmin / 100 ||
+            amountNumber > amountmax / 100
+          ) {
+            errors.amount = `Invalid amount, min is ${PROPOSAL_AMOUNT_UNIT}${
+              amountmin / 100
+            }, max is ${PROPOSAL_AMOUNT_UNIT}${amountmax / 100}`;
+          }
         }
       }
-    }
 
-    // start & end dates validations.
-    const startdate = values.startDate;
-    if (!startdate) {
-      errors.startDate = "Please pick a start date";
-    }
-    const enddate = values.endDate;
-    if (!enddate) {
-      errors.endDate = "Please pick an end date";
-    }
+      // start & end dates validations.
+      const startdate = values.startDate;
+      if (!startdate) {
+        errors.startDate = "Please pick a start date";
+      }
+      const enddate = values.endDate;
+      if (!enddate) {
+        errors.endDate = "Please pick an end date";
+      }
 
-    // If both start & end dates provided, ensure start
-    // date is smaller.
-    if (startdate && enddate) {
-      if (
-        convertObjectToUnixTimestamp(enddate) <=
-        convertObjectToUnixTimestamp(startdate)
-      ) {
-        errors.startDate = "Start date must be before end date";
-        errors.endDate = "End date must be after start date";
+      // If both start & end dates provided, ensure start
+      // date is smaller.
+      if (startdate && enddate) {
+        if (
+          convertObjectToUnixTimestamp(enddate) <=
+          convertObjectToUnixTimestamp(startdate)
+        ) {
+          errors.startDate = "Start date must be before end date";
+          errors.endDate = "End date must be after start date";
+        }
       }
     }
 

@@ -47,7 +47,7 @@ const EditProposal = ({ match }) => {
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
         files: getAttachmentsFiles(proposal.files),
-        amount: `${PROPOSAL_AMOUNT_UNIT}${proposal.amount}`,
+      amount: proposal.amount ? `${PROPOSAL_AMOUNT_UNIT}${proposal.amount}` : undefined,
         startDate:
           proposal.startDate && formatUnixTimestampToObj(proposal.startDate),
         endDate: proposal.endDate && formatUnixTimestampToObj(proposal.endDate),
