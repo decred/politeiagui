@@ -9,7 +9,8 @@ import { convertObjectToUnixTimestamp } from "src/helpers";
 import {
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION,
-  CENSORSHIP_TOKEN_LENGTH
+  CENSORSHIP_TOKEN_LENGTH,
+  PROPOSAL_AMOUNT_UNIT
 } from "src/constants";
 
 export const proposalValidation =
@@ -76,9 +77,9 @@ export const proposalValidation =
           amountNumber < amountmin / 100 ||
           amountNumber > amountmax / 100
         ) {
-          errors.amount = `Invalid amount, min is $${
+          errors.amount = `Invalid amount, min is ${PROPOSAL_AMOUNT_UNIT}${
             amountmin / 100
-          }, max is $${amountmax / 100}`;
+          }, max is ${PROPOSAL_AMOUNT_UNIT}${amountmax / 100}`;
         }
       }
     }

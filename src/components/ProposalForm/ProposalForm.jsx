@@ -34,7 +34,8 @@ import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION,
-  PROPOSAL_STATE_VETTED
+  PROPOSAL_STATE_VETTED,
+  PROPOSAL_AMOUNT_UNIT
 } from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
@@ -151,10 +152,9 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const handleAmountKeyUp = ({ target }) => {
     const value = target.value;
-    const unit = "$";
-    if (value.length > 0 && !value.includes(unit)) {
-      setFieldValue("amount", `${unit}${value}`);
-    } else if (value === unit) {
+    if (value.length > 0 && !value.includes(PROPOSAL_AMOUNT_UNIT)) {
+      setFieldValue("amount", `${PROPOSAL_AMOUNT_UNIT}${value}`);
+    } else if (value === PROPOSAL_AMOUNT_UNIT) {
       setFieldValue("amount", "");
     }
   };

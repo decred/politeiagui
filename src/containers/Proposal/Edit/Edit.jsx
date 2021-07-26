@@ -14,7 +14,8 @@ import ProposalFormLoader from "src/components/ProposalForm/ProposalFormLoader";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
-  PROPOSAL_TYPE_RFP_SUBMISSION
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  PROPOSAL_AMOUNT_UNIT
 } from "src/constants";
 import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
@@ -31,7 +32,6 @@ const EditProposal = ({ match }) => {
   const hasDetails =
     proposal?.files.filter((f) => f.name === "index.md").length > 0;
 
-  const unit = "$";
   const initialValues = proposal
     ? {
         token: proposal.censorshiprecord.token,
@@ -47,7 +47,7 @@ const EditProposal = ({ match }) => {
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
         files: getAttachmentsFiles(proposal.files),
-        amount: `${unit}${proposal.amount}`,
+        amount: `${PROPOSAL_AMOUNT_UNIT}${proposal.amount}`,
         startDate:
           proposal.startDate && formatUnixTimestampToObj(proposal.startDate),
         endDate: proposal.endDate && formatUnixTimestampToObj(proposal.endDate),
