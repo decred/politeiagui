@@ -106,10 +106,12 @@ describe("Records list", () => {
       cy.findByTestId("sidebar").should("be.visible");
     });
 
-    // The test below is currently broken. Check issue #2471
-    // it("can render loading placeholders properly", () => {
-    //   cy.visit(`/`);
-    //   cy.assertListLengthByTestId("loading-placeholders", 5);
-    // });
+    it("can render loading placeholders properly", () => {
+      cy.visit(`/`);
+      cy.get('[data-testid="loading-placeholders"] > div').should(
+        "have.length",
+        5
+      );
+    });
   });
 });
