@@ -115,6 +115,10 @@ div.darkActionsTooltip {
   font-weight: var(--font-weight-regular);
 }
 
+.metadataLabel {
+  color: var(--text-secondary-color);
+}
+
 @media screen and (max-width: 560px) {
   .status:not(.disableMobileView) {
     position: initial;

@@ -128,7 +128,11 @@ const Proposal = React.memo(function Proposal({
     state,
     commentsCount,
     statuschangemsg,
-    statuschangeusername
+    statuschangeusername,
+    amount,
+    domain,
+    startDate,
+    endDate
   } = proposal;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
@@ -223,7 +227,8 @@ const Proposal = React.memo(function Proposal({
           Subtitle,
           Edit,
           Status,
-          RecordToken
+          RecordToken,
+          Metadata
         }) => (
           <>
             <Header
@@ -240,7 +245,8 @@ const Proposal = React.memo(function Proposal({
               }
               /**
                * if the proposal is editable: show Edit icon
-               * if the proposal is not editable and the voting is authorized: show Edit icon wrapped by tooltip
+               * if the proposal is not editable and the voting is
+               * authorized: show Edit icon wrapped by tooltip
                * otherwise: do not show Edit icon
                * */
               edit={
@@ -402,7 +408,7 @@ const Proposal = React.memo(function Proposal({
               <IconButton
                 type="expand"
                 className="margin-top-m"
-                size={"xlg"}
+                size="xlg"
                 onClick={goToFullProposal(history, proposalURL)}
               />
             )}
@@ -424,6 +430,14 @@ const Proposal = React.memo(function Proposal({
                   />
                 )}
               </Row>
+            )}
+            {extended && (
+              <Metadata
+                amount={amount}
+                startDate={startDate}
+                endDate={endDate}
+                domain={domain}
+              />
             )}
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">
