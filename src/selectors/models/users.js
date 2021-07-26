@@ -16,6 +16,11 @@ export const queryResultsByUsername = get([
   "search",
   "queryByUsername"
 ]);
+export const queryResultsByPublicKey = get([
+  "users",
+  "search",
+  "queryByPublicKey"
+]);
 export const cmsUsersByContractorType = get([
   "users",
   "cms",
@@ -108,6 +113,17 @@ export const makeGetSearchResultsByUsername = (username) =>
     queryResultsByUsername,
     (allResults, idsByUsn) => {
       const results = idsByUsn[username];
+      if (!results) return null;
+      return results.map((id) => allResults[id]);
+    }
+  );
+
+export const makeGetSearchResultsByPublicKey = (publickey) =>
+  createSelector(
+    searchResultsByID,
+    queryResultsByPublicKey,
+    (allResults, idsByPk) => {
+      const results = idsByPk[publickey];
       if (!results) return null;
       return results.map((id) => allResults[id]);
     }

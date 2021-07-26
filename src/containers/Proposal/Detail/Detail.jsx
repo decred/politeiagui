@@ -21,8 +21,10 @@ import {
 } from "src/containers/Proposal/Actions";
 import { useProposalVote } from "../hooks";
 import useDocumentTitle from "src/hooks/utils/useDocumentTitle";
+import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
 import { GoBackLink } from "src/components/Router";
 import { useConfig } from "src/containers/Config";
+import { PROPOSAL_STATUS_CENSORED } from "src/constants";
 
 const SetPageTitle = ({ title }) => {
   useDocumentTitle(title);
@@ -32,10 +34,17 @@ const SetPageTitle = ({ title }) => {
 const ProposalDetail = ({ Main, match }) => {
   const tokenFromUrl = get("params.token", match);
   const threadParentCommentID = get("params.commentid", match);
-  const { proposal, loading, threadParentID, error } = useProposal(
-    tokenFromUrl,
-    threadParentCommentID
+  const {
+    proposal: fetchedProposal,
+    loading,
+    threadParentID,
+    error
+  } = useProposal(tokenFromUrl, threadParentCommentID);
+  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
+    { [tokenFromUrl]: fetchedProposal },
+    PROPOSAL_STATUS_CENSORED
   );
+  const proposal = proposals[tokenFromUrl];
   const proposalToken = getProposalToken(proposal);
   const { voteSummary } = useProposalVote(proposalToken || tokenFromUrl);
   const canReceiveComments =
@@ -51,7 +60,7 @@ const ProposalDetail = ({ Main, match }) => {
           <PublicActionsProvider>
             {error ? (
               <Message kind="error">{error.toString()}</Message>
-            ) : loading || !proposal ? (
+            ) : loading || mdLoading || !proposal ? (
               <ProposalLoader extended />
             ) : (
               <Proposal

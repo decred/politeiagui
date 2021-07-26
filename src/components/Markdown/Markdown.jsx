@@ -1,25 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
-import { customRenderers, htmlParserRules } from "./helpers";
+import { customComponents } from "./helpers";
 import "./styles.css";
 
 const MarkdownRenderer = ({
   body,
   className,
   renderImages = true,
-  escapeHtml = true,
-  filterUrl = false,
+  disallowedElements,
   ...props
 }) => (
   <div className={className} {...props}>
     <ReactMarkdown
       className="markdown-body"
-      escapeHtml={escapeHtml}
-      astPlugins={[htmlParserRules]}
-      renderers={customRenderers(renderImages, filterUrl)}
-      source={body}
-    />
+      skipHtml={true}
+      unwrapDisallowed={true}
+      components={customComponents(renderImages)}
+      disallowedElements={disallowedElements}>
+      {body}
+    </ReactMarkdown>
   </div>
 );
 

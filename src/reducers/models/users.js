@@ -7,7 +7,8 @@ const DEFAULT_SEARCH_STATE = {
   results: [],
   resultsByID: {},
   queryByEmail: {},
-  queryByUsername: {}
+  queryByUsername: {},
+  queryByPublicKey: {}
 };
 
 const DEFAULT_CMS_USERS_STATE = {
@@ -113,7 +114,7 @@ const users = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_USER_SEARCH]: () => {
             const {
               users,
-              query: { email, username }
+              query: { email, username, publickey }
             } = action.payload;
             const usersByID = users.reduce(
               (res, user) => ({ ...res, [user.id]: user }),
@@ -122,6 +123,7 @@ const users = (state = DEFAULT_STATE, action) =>
             const usersIds = users.map((user) => user.id);
             const searchedByEmail = !!email;
             const searchedByUsername = !!username;
+            const searchedByPublicKey = !!publickey;
             return compose(
               set(["search", "results"], users),
               update("search.resultsByID", (users) => ({
@@ -133,6 +135,9 @@ const users = (state = DEFAULT_STATE, action) =>
                 : skip(),
               searchedByUsername
                 ? set(["search", "queryByUsername", username], usersIds)
+                : skip(),
+              searchedByPublicKey
+                ? set(["search", "queryByPublicKey", publickey], usersIds)
                 : skip()
             )(state);
           },
