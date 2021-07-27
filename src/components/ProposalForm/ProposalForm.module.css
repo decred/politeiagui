@@ -42,6 +42,14 @@
   height: 4.4rem;
 }
 
+.draftSaverTooltip {
+  padding-right: var(--spacing-4);
+}
+
+.draftSaverTooltip > div {
+  width: 30rem;
+}
+
 .iconWrapper {
   display: flex;
   align-items: center;

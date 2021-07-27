@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "pi-ui";
+import { Button, Tooltip } from "pi-ui";
 import { FormikConsumer } from "formik";
 import { useDraftProposals } from "src/containers/Proposal/User/hooks";
 import { getQueryStringValue, setQueryStringValue } from "src/lib/queryString";
@@ -7,6 +7,7 @@ import {
   replaceBlobsByDigestsAndGetFiles,
   replaceImgDigestByBlob
 } from "src/helpers";
+import styles from "./ProposalForm.module.css";
 
 const DraftSaver = ({
   values,
@@ -101,13 +102,21 @@ const DraftSaver = ({
     [draftProposals, dirty, draftId, setValues, mapBlobToFile]
   );
   return (
-    <Button
-      type="button"
-      kind={saving || !canSaveDraft ? "disabled" : "secondary"}
-      loading={saving}
-      onClick={handleSave}>
-      {saved ? "Saved ✓" : "Save Draft"}
-    </Button>
+    <Tooltip
+      className={styles.draftSaverTooltip}
+      content={
+        "Drafts are saved locally to your browser and are not recoverable if " +
+        "something goes wrong. We recommend drafting the content offline then" +
+        " using the editor to submit the final version."
+      }>
+      <Button
+        type="button"
+        kind={saving || !canSaveDraft ? "disabled" : "secondary"}
+        loading={saving}
+        onClick={handleSave}>
+        {saved ? "Saved ✓" : "Save Draft"}
+      </Button>
+    </Tooltip>
   );
 };
 
