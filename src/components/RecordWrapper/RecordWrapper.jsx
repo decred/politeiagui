@@ -380,11 +380,10 @@ export const Metadata = ({ amount, domain, startDate, endDate, isRFP }) => {
     year: endYear
   } = (endDate && formatUnixTimestampToObj(endDate)) || {};
 
+  const metadataAvailable = !!amount || !!domain || !!startDate || !!endDate;
+
   return (
-    !!amount &&
-    !!domain &&
-    !!startDate &&
-    !!endDate && (
+    metadataAvailable && (
       <div className="flex-column">
         <Row>
           <MetadataLabel label="Domain" />

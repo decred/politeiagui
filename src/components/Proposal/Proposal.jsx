@@ -62,7 +62,8 @@ function replaceImgDigestWithPayload(text, files) {
   let newText = text;
   const markdownFiles = [];
   /**
-   * This for loop will update the newText replacing images digest by their base64 payload and push the img object to an array of markdownFiles
+   * This for loop will update the newText replacing images digest by their
+   * base64 payload and push the img object to an array of markdownFiles.
    * */
   for (const img of imgs) {
     const { digest } = img.groups;
@@ -437,6 +438,7 @@ const Proposal = React.memo(function Proposal({
                 startDate={startDate}
                 endDate={endDate}
                 domain={domain}
+                isRFP={isRfp}
               />
             )}
             {extended && files.length > 1 && (
