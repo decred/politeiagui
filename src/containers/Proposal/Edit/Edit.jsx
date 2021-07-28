@@ -14,12 +14,12 @@ import ProposalFormLoader from "src/components/ProposalForm/ProposalFormLoader";
 import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
-  PROPOSAL_TYPE_RFP_SUBMISSION,
-  PROPOSAL_AMOUNT_UNIT
+  PROPOSAL_TYPE_RFP_SUBMISSION
 } from "src/constants";
 import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
 import { getAttachmentsFiles } from "src/helpers";
+import { usdFormatter } from "src/utils";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
@@ -48,7 +48,7 @@ const EditProposal = ({ match }) => {
         description: getMarkdownContent(proposal.files),
         files: getAttachmentsFiles(proposal.files),
         amount: proposal.amount
-          ? `${PROPOSAL_AMOUNT_UNIT}${proposal.amount}`
+          ? `${usdFormatter.format(proposal.amount)}`
           : undefined,
         startDate:
           proposal.startDate && formatUnixTimestampToObj(proposal.startDate),

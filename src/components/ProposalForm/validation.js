@@ -75,7 +75,7 @@ export const proposalValidation =
         // as the first char.
         const amount = values.amount;
         if (amount.length >= 2) {
-          const amountNumber = Number(amount.substring(1));
+          const amountNumber = Number(amount.replace(/[^0-9.-]+/g, ""));
           if (
             isNaN(amountNumber) ||
             amountNumber < amountmin / 100 ||

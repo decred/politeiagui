@@ -914,7 +914,7 @@ export const onSubmitEditedProposal = (
   token
 ) =>
   withCsrf((dispatch, _, csrf) => {
-    amount = Number(amount) * 100; // Backend expects value in cents
+    amount = Math.round(Number(amount) * 100); // Backend expects value in cents
     dispatch(
       act.REQUEST_EDIT_PROPOSAL({
         name,

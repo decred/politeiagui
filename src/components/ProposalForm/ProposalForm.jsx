@@ -420,7 +420,7 @@ const ProposalFormWrapper = ({
           ...others
         } = values;
         // Parse string amount as it includes the unit.
-        const amountNumber = amount && Number(amount.substring(1));
+        const amountNumber = amount && Number(amount.replace(/[^0-9.-]+/g, ""));
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
             [rfpLink],
