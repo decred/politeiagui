@@ -12,7 +12,7 @@ const VersionPicker = ({ version, token, className, proposalState }) => {
 
   const versionsOptions = useMemo(() => {
     const versions = [];
-    for (let index = version; index >= 1; index--) {
+    for (let index = Number(version); index >= 1; index--) {
       versions.push(index);
     }
     return versions;

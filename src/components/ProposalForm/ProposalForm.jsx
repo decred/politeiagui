@@ -184,6 +184,11 @@ const ProposalForm = React.memo(function ProposalForm({
 
   return (
     <form onSubmit={handleSubmit}>
+      <Message kind="warning" className="margin-bottom-m">
+        Drafts are saved locally to your browser and are not recoverable if
+        something goes wrong. We recommend drafting the content offline then
+        using the editor to submit the final version.
+      </Message>
       {errors && errors.global && (
         <Message className="margin-bottom-m" kind="error">
           {errors.global.toString()}

@@ -91,7 +91,7 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
         <Icon type="info" />
       </Tooltip>
       <a href={url} className={classNames(styles.title, "margin-left-s")}>
-        <H2 {...props} data-testid="record-title">
+        <H2 {...props} data-testid="record-title-legacy">
           {children}
         </H2>
       </a>

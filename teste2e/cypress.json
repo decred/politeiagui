@@ -7,5 +7,6 @@
   "fixturesFolder": false,
   "supportFile": "cypress/support/index.js",
   "screenshotOnRunFailure": false,
-  "video": false
+  "video": false,
+  "watchForFileChanges": true
 }

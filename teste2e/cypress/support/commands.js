@@ -26,10 +26,13 @@
 import { sha3_256 } from "js-sha3";
 import { requestWithCsrfToken, setProposalStatus } from "../utils";
 import * as pki from "../pki";
+import get from "lodash/fp/get";
 // TODO: consider moving general functions like makeProposal and signRegister
 // to a more general lib file other than api.
 import { makeProposal, signRegister } from "../utils";
 import { shortRecordToken } from "../utils";
+import { middlewares as recordMiddlewares } from "./mock/records";
+import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -134,6 +137,18 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
       token: xhr.response.body.record.censorshiprecord.token
     });
   });
+});
+
+Cypress.Commands.add("assertListLengthByTestId", (testid, expectedLength) =>
+  cy.findAllByTestId(testid).should("have.length", expectedLength)
+);
+
+Cypress.Commands.add("middleware", (path, ...args) => {
+  const mw = get(path)({
+    ticketvote: ticketVoteMiddlewares,
+    records: recordMiddlewares
+  });
+  return mw(...args).as(path);
 });
 
 Cypress.on("window:before:load", (win) => {

@@ -41,6 +41,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
   filesInput,
   mapBlobToFile,
   allowImgs,
+  disallowedElements,
   ...props
 }) {
   const [tab, setTab] = useState("write");
@@ -72,6 +73,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
           isDarkTheme && "dark"
         )}
         body={markdown || "Nothing to preview"}
+        disallowedElements={disallowedElements}
       />
     );
 
