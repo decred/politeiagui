@@ -113,11 +113,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     onSetIndex(newIndex);
     onRestartMachine(statusByTab[tabLabels[newIndex]]);
   };
-<<<<<<< HEAD
 
-=======
-  console.log('hasMore: ',hasMoreProposals, 'isLoading: ', (loading || verifying || mdLoading))
->>>>>>> a3175712... stash
   return (
     <RecordsView
       records={{ ...proposals, ...legacyProposals }}

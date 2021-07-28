@@ -67,26 +67,23 @@ const updateCacheVoteStatusMap = (voteSummaries, isRefresh) => {
   Object.keys(voteSummaries).forEach((token) => {
     const shortToken = shortRecordToken(token);
     cacheVoteStatus[shortToken] =
-        isUndefined(cacheVoteStatus[shortToken]) || isRefresh
-            ? voteSummaries[token].status
-            : cacheVoteStatus[shortToken];
+      isUndefined(cacheVoteStatus[shortToken]) || isRefresh
+        ? voteSummaries[token].status
+        : cacheVoteStatus[shortToken];
   });
 };
 
 const proposalWithCacheVotetatus = (proposals) => {
-  return Object.keys(proposals).reduce(
-      (acc, curr) => {
-        const shortToken = shortRecordToken(curr);
-        return {
-          ...acc,
-          [shortToken]: {
-            ...proposals[curr],
-            voteStatus: cacheVoteStatus[shortToken]
-          }
-        };
-      },
-      {}
-  );
+  return Object.keys(proposals).reduce((acc, curr) => {
+    const shortToken = shortRecordToken(curr);
+    return {
+      ...acc,
+      [shortToken]: {
+        ...proposals[curr],
+        voteStatus: cacheVoteStatus[shortToken]
+      }
+    };
+  }, {});
 };
 
 export default function useProposalsBatch({
@@ -285,10 +282,16 @@ export default function useProposalsBatch({
   const anyError = error || state.error;
   useThrowError(anyError);
   return {
-    proposals: getRfpLinkedProposals(proposalWithCacheVotetatus(proposals), voteSummaries),
+    proposals: getRfpLinkedProposals(
+      proposalWithCacheVotetatus(proposals),
+      voteSummaries
+    ),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,
-    loading: state.loading,
+    loading:
+      state.loading ||
+      (!values(proposals).length && statusIndex + 1 < voteStatuses.length),
+    // loading return true when fetching cycle is running and there are no proposals fetched to avoid flickering at starting
     verifying: state.verifying,
     onRestartMachine,
     onFetchMoreProposals,
