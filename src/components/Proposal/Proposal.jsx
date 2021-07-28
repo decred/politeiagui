@@ -201,6 +201,7 @@ const Proposal = React.memo(function Proposal({
   return (
     <>
       <RecordWrapper
+        id={proposalToken}
         className={classNames(
           (isAbandoned || isCensored) && styles.abandonedProposal,
           isNotExtendedRfpOrSubmission && styles.rfpProposal
@@ -229,7 +230,6 @@ const Proposal = React.memo(function Proposal({
             <Header
               title={
                 <Title
-                  data-testid={"proposal-title"}
                   id={`proposal-title-${proposalToken}`}
                   truncate
                   isLegacy={isLegacy}
