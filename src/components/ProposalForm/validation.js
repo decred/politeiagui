@@ -68,7 +68,7 @@ export const proposalValidation =
     // a RFP.
     if (!isRFP) {
       // amount validation
-      if (!values.amount) {
+      if (!values.amount || values.amount.length < 2) {
         errors.amount = "Required";
       } else {
         // Valid amount is at least 2 chars long, as it includes the unit

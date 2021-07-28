@@ -159,6 +159,17 @@ const ProposalForm = React.memo(function ProposalForm({
     }
   };
 
+  const handleAmountFocus = ({ target }) => {
+    const value = target.value;
+    if (value === "") {
+      setFieldValue("amount", PROPOSAL_AMOUNT_UNIT);
+    }
+  };
+
+  const handleAmountBlur = () => {
+    setFieldTouched("amount");
+  }
+
   const handleFilesChange = useCallback(
     (v) => {
       const files = values.files.concat(v);
@@ -285,6 +296,8 @@ const ProposalForm = React.memo(function ProposalForm({
             value={values.amount}
             onChange={handleChangeWithTouched("amount")}
             onKeyUp={handleAmountKeyUp}
+            onFocus={handleAmountFocus}
+            onBlur={handleAmountBlur}
             error={touched.amount && errors.amount}
           />
           <DatePickerField
