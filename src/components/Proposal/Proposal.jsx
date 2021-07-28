@@ -48,6 +48,7 @@ import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
 import { shortRecordToken, isEmpty, getKeyByValue } from "src/helpers";
+import { usdFormatter } from "src/utils";
 
 /**
  * replaceImgDigestWithPayload uses a regex to parse images
@@ -385,6 +386,15 @@ const Proposal = React.memo(function Proposal({
               </Row>
             )}
             {showRfpSubmissions && <ProposalsList data={rfpSubmissions} />}
+            {extended && (
+              <Metadata
+                amount={amount && usdFormatter.format(amount)}
+                startDate={startDate}
+                endDate={endDate}
+                domain={domain}
+                isRFP={isRfp}
+              />
+            )}
             {extended && files && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={classNames(
@@ -431,15 +441,6 @@ const Proposal = React.memo(function Proposal({
                   />
                 )}
               </Row>
-            )}
-            {extended && (
-              <Metadata
-                amount={amount}
-                startDate={startDate}
-                endDate={endDate}
-                domain={domain}
-                isRFP={isRfp}
-              />
             )}
             {extended && files.length > 1 && (
               <Row className={styles.filesRow} justify="left" topMarginSize="s">

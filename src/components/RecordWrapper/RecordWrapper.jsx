@@ -28,7 +28,6 @@ import CopyLink from "../CopyLink";
 import rfpTag from "src/assets/images/rfp-tag.svg";
 import useTimestamps from "src/hooks/api/useTimestamps";
 import { formatUnixTimestampToObj } from "src/utils";
-import { PROPOSAL_AMOUNT_UNIT } from "src/constants";
 
 // TODO: remove legacy
 export const Author = ({ username, url, isLegacy }) =>
@@ -393,7 +392,7 @@ export const Metadata = ({ amount, domain, startDate, endDate, isRFP }) => {
           <>
             <Row>
               <MetadataLabel label="Amount" />
-              <MetadataValue value={`${PROPOSAL_AMOUNT_UNIT}${amount}`} />
+              <MetadataValue value={amount} />
             </Row>
             <Row>
               <MetadataLabel label="Start Date" />
