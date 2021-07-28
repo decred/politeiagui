@@ -314,10 +314,6 @@ export const goToFullProposal = (history, proposalURL) => () =>
 export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
   values(proposalsByToken).reduce((acc, proposal) => {
     const shortProposalToken = shortRecordToken(getProposalToken(proposal));
-    const summary = voteSummaries[shortProposalToken];
-    if (summary && summary.status) {
-      proposal.voteStatus = summary.status;
-    }
     const isRfp = !!proposal.linkby;
     const isSubmission = !!proposal.linkto;
     if (!isSubmission && !isRfp) return acc;

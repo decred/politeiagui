@@ -113,6 +113,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     onSetIndex(newIndex);
     onRestartMachine(statusByTab[tabLabels[newIndex]]);
   };
+  console.log(hasMoreProposals)
   return (
     <RecordsView
       records={{ ...proposals, ...legacyProposals }}

@@ -61,6 +61,34 @@ const getCurrentPage = (tokens) => {
   return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
 };
 
+const cacheVoteStatus = {};
+
+const updateCacheVoteStatusMap = (voteSummaries, isRefresh) => {
+  Object.keys(voteSummaries).forEach((token) => {
+    const shortToken = shortRecordToken(token);
+    cacheVoteStatus[shortToken] =
+        isUndefined(cacheVoteStatus[shortToken]) || isRefresh
+            ? voteSummaries[token].status
+            : cacheVoteStatus[shortToken];
+  });
+};
+
+const proposalWithCacheVotetatus = (proposals) => {
+  return Object.keys(proposals).reduce(
+      (acc, curr) => {
+        const shortToken = shortRecordToken(curr);
+        return {
+          ...acc,
+          [shortToken]: {
+            ...proposals[curr],
+            voteStatus: cacheVoteStatus[shortToken]
+          }
+        };
+      },
+      {}
+  );
+};
+
 export default function useProposalsBatch({
   fetchRfpLinks,
   fetchVoteSummaries = false,
@@ -86,6 +114,7 @@ export default function useProposalsBatch({
     [currentStatuses, statusIndex]
   );
   const voteSummaries = useSelector(sel.summaryByToken);
+  updateCacheVoteStatusMap(voteSummaries);
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
@@ -104,34 +133,6 @@ export default function useProposalsBatch({
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
   const hasRemainingTokens = !isEmpty(remainingTokens);
-  /*const [cacheVoteStatusMap, setCacheVoteStatusMap] = useState({});
-  const updateCacheVoteStatusMap = (isRefresh) => {
-    const voteStatusMap = {};
-    Object.keys(voteSummaries).forEach((token) => {
-      const shortToken = shortRecordToken(token);
-      voteStatusMap[shortToken] =
-        isUndefined(cacheVoteStatusMap[shortToken]) || isRefresh
-          ? voteSummaries[token].status
-          : cacheVoteStatusMap[shortToken];
-    });
-    setCacheVoteStatusMap(voteStatusMap);
-  };
-  const proposalsWithVoteStatus = useMemo(() => {
-    return Object.keys(proposals).reduce(
-        (acc, curr) => {
-          const shortToken = shortRecordToken(curr);
-          return {
-            ...acc,
-            [shortToken]: {
-              ...proposals[curr],
-              voteStatus: cacheVoteStatusMap[shortToken]
-            }
-          };
-        },
-        {}
-    );
-  }, [cacheVoteStatusMap, proposals])*/
-  //console.log(cacheVoteStatusMap)
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => send(START),
@@ -169,7 +170,6 @@ export default function useProposalsBatch({
         );
         onFetchProposalsBatch(tokensToFetch, fetchVoteSummaries)
           .then(([fetchedProposals]) => {
-//            updateCacheVoteStatusMap();
             if (isEmpty(fetchedProposals)) {
               setRemainingTokens(next);
               return send(RESOLVE);
@@ -237,7 +237,7 @@ export default function useProposalsBatch({
   // The function will find what is the status has been loading in the previous session.
   // If there are not status found. That mean all the data are loaded in this tab and go to RESOLVE state
   const onRestartMachine = (newStatuses) => {
-//    updateCacheVoteStatusMap(true);
+    updateCacheVoteStatusMap(voteSummaries, true);
     let unfetchedTokens = [],
       index = 0;
     const statuses = newStatuses || currentStatuses;
@@ -281,11 +281,11 @@ export default function useProposalsBatch({
       return send(START);
     return send(VERIFY);
   }, [send, remainingTokens, isAnotherInventoryCallRequired]);
-  console.log(proposals);
+
   const anyError = error || state.error;
   useThrowError(anyError);
   return {
-    proposals: getRfpLinkedProposals(proposals, voteSummaries),
+    proposals: getRfpLinkedProposals(proposalWithCacheVotetatus(proposals), voteSummaries),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,
     loading: state.loading,
