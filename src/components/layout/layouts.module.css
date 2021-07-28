@@ -30,6 +30,7 @@ div.customPageDetails {
   flex-direction: column;
   justify-content: space-between;
   overflow: visible;
+  max-width: 100%;
 }
 
 .titleAndSubtitleWrapper {
