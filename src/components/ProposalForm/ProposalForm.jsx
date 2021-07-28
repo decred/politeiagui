@@ -168,7 +168,7 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const handleAmountBlur = () => {
     setFieldTouched("amount");
-  }
+  };
 
   const handleFilesChange = useCallback(
     (v) => {
