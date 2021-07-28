@@ -46,22 +46,19 @@ const StaticMarkdown = ({ contentName }) => {
     }
   }, [contentName, getContent, source]);
 
-  const renderers = useMemo(
+  const components = useMemo(
     () => ({
-      paragraph: paragraphRenderer,
-      heading: headingRenderer,
-      link: linkRenderer
+      p: paragraphRenderer,
+      h2: headingRenderer,
+      a: linkRenderer
     }),
     []
   );
 
   return (
-    <ReactMarkdown
-      escapeHtml={false}
-      className="static-md"
-      source={source}
-      renderers={renderers}
-    />
+    <ReactMarkdown className="static-md" components={components}>
+      {source}
+    </ReactMarkdown>
   );
 };
 
