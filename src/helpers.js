@@ -189,7 +189,7 @@ export const parseRawProposal = (proposal) => {
   const { linkby, linkto } = parseVoteMetadata(proposal);
   const { description } = parseProposalIndexFile(proposal);
   const usermds = parseUserPluginMetadata(proposal);
-  const statuschangemsg = usermds.byStatus[proposal.status]?.message;
+  const statuschangemsg = usermds.byStatus[proposal.status]?.reason;
   const statuschangepk = usermds.byStatus[proposal.status]?.publickey;
 
   // get prop timestamps
