@@ -112,7 +112,7 @@ describe("Admin account actions", () => {
     // register random unpaid user
     let unpaidUser = buildUser();
 
-    pki.generateKeys().then((keys) =>
+    return pki.generateKeys().then((keys) =>
       pki.loadKeys(unpaidUser.username, keys).then(() =>
         pki.myPubKeyHex(unpaidUser.username).then((publickey) => {
           unpaidUser.publickey = publickey;

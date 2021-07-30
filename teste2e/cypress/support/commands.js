@@ -123,7 +123,7 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.findByTestId("proposal-name").type(proposal.name);
   cy.findByTestId("text-area").type(proposal.description);
   cy.route("POST", "/api/records/v1/new").as("newProposal");
-  cy.findByText(/submit/i).click();
+  cy.findByRole("button", { name: /submit/i }).click();
   // needs more time in general to complete this request so we increase the
   // responseTimeout
   cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
