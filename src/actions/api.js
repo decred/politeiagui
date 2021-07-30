@@ -859,18 +859,17 @@ export const onSubmitProposal = (
       })
     );
     return Promise.resolve(
-      api.makeProposal(
+      api.makeProposal({
         name,
         amount,
-        startDate,
-        endDate,
+        startdate: startDate,
+        enddate: endDate,
         domain,
-        description,
-        rfpDeadline,
-        type,
-        rfpLink,
+        markdown: description,
+        linkby: rfpDeadline,
+        linkto: rfpLink,
         files
-      )
+      })
     )
       .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.newProposal(csrf, proposal))
@@ -930,18 +929,17 @@ export const onSubmitEditedProposal = (
       })
     );
     return Promise.resolve(
-      api.makeProposal(
+      api.makeProposal({
         name,
         amount,
-        startDate,
-        endDate,
+        startdate: startDate,
+        enddate: endDate,
         domain,
-        description,
-        rfpDeadline,
-        type,
-        rfpLink,
+        markdown: description,
+        linkby: rfpDeadline,
+        linkto: rfpLink,
         files
-      )
+      })
     )
       .then((proposal) => api.signRegister(userid, proposal))
       .then((proposal) => api.editProposal(csrf, { ...proposal, token }))

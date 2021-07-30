@@ -798,7 +798,7 @@ describe("test api actions (actions/api.js)", () => {
     const params = [
       FAKE_USER.id,
       FAKE_PROPOSAL_NAME,
-      // onSubmitEditedProposal accepts amount in USD and it converts it to
+      // onSubmitEditedProposal accepts amount in USD and converts it to
       // cents.
       FAKE_PROPOSAL_AMOUNT / 100,
       FAKE_PROPOSAL_STARTDATE,

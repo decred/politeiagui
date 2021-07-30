@@ -46,6 +46,23 @@ const DatePickerField = ({
           }
         };
 
+        const formattedValue = () => {
+          // If range mode is on, format both values and return as string.
+          if (isRange) {
+            let firstFormattedValue = "";
+            if (value[0]) {
+              firstFormattedValue = `${value[0].month}/${value[0].day}/${value[0].year} - `;
+            }
+            let secondFormattedValue;
+            if (value[1]) {
+              secondFormattedValue = `${value[1].month}/${value[1].day}/${value[1].year}`;
+            }
+            return `${firstFormattedValue}${secondFormattedValue}`;
+          }
+          // In single mode return the formatted picked date.
+          return `${value.month}/${value.day}/${value.year}`;
+        };
+
         return (
           <div className={classNames("cursor-pointer", className)}>
             <DatePicker
@@ -62,15 +79,7 @@ const DatePickerField = ({
                 align="center"
                 noMargin
                 onClick={togglePicker}>
-                {value &&
-                  (isRange
-                    ? (value[0]
-                        ? `${value[0].month}/${value[0].day}/${value[0].year} - `
-                        : "") +
-                      (value[1]
-                        ? `${value[1].month}/${value[1].day}/${value[1].year}`
-                        : "")
-                    : `${value.month}/${value.day}/${value.year}`)}
+                {value && formattedValue()}
                 {!value && (
                   <Text className={styles.placeholder}>{placeholder}</Text>
                 )}

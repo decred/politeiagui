@@ -79,7 +79,7 @@ export const convertJsonToFile = (json, name) => ({
   payload: utoa(JSON.stringify(json))
 });
 
-export const makeProposal = (
+export const makeProposal = ({
   name,
   amount,
   startdate,
@@ -87,10 +87,9 @@ export const makeProposal = (
   domain,
   markdown,
   linkby = 0,
-  type,
   linkto = "",
   attachments = []
-) => ({
+}) => ({
   files: [
     convertMarkdownToFile(markdown),
     {

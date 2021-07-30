@@ -127,7 +127,7 @@ export const signRegister = (userid, record) => {
   });
 };
 
-export const makeProposal = (
+export const makeProposal = ({
   name,
   amount,
   startdate,
@@ -135,10 +135,9 @@ export const makeProposal = (
   domain,
   markdown,
   rfpDeadline,
-  type,
   rfpLink,
   attachments = []
-) => ({
+}) => ({
   files: [
     convertMarkdownToFile(name + "\n\n" + markdown),
     {
