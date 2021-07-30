@@ -29,9 +29,9 @@ const PROPOSAL_STATUS_PUBLIC = 2;
 const PROPOSAL_STATUS_CENSORED = 3;
 const PROPOSAL_STATUS_ARCHIVED = 4;
 
-export const requestWithCsrfToken = (url, body) => {
-  return cy.request("/api").then((res) => {
-    return cy.request({
+export const requestWithCsrfToken = (url, body) =>
+  cy.request("/api").then((res) =>
+    cy.request({
       url,
       body,
       method: "POST",
@@ -39,9 +39,8 @@ export const requestWithCsrfToken = (url, body) => {
       headers: {
         "X-Csrf-Token": res.headers["x-csrf-token"]
       }
-    });
-  });
-};
+    })
+  );
 
 export const setProposalStatus = (token, status, version, reason) =>
   cy.request("api/v1/user/me").then(({ body: { userid } }) =>
