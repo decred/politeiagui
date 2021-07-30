@@ -108,7 +108,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const { themeName } = useTheme();
   const {
     policyTicketVote: { linkbyperiodmin, linkbyperiodmax },
-    policyPi: { domains, enddatemax }
+    policyPi: { domains, enddatemax, startdatemin }
   } = usePolicy();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const isRFP = values.type === PROPOSAL_TYPE_RFP;
@@ -133,8 +133,8 @@ const ProposalForm = React.memo(function ProposalForm({
   );
 
   const startAndEndDatesRange = useMemo(
-    () => getStartEndDatesRange(enddatemax),
-    [enddatemax]
+    () => getStartEndDatesRange(startdatemin, enddatemax),
+    [startdatemin, enddatemax]
   );
 
   const handleSelectFiledChange = useCallback(
@@ -335,7 +335,7 @@ const ProposalForm = React.memo(function ProposalForm({
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
         onFileChange={handleFilesChange}
-        placeholder={"Write your proposal"}
+        placeholder="Write your proposal"
         error={touched.description && errors.description}
         filesInput={filesInput}
         mapBlobToFile={mapBlobToFile}

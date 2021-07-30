@@ -36,11 +36,10 @@ export const getRfpMinMaxDates = (linkbyperiodmin, linkbyperiodmax) => {
  * Returns the possible dates range as objects { min, max } for the
  * start-end dates range.
  */
-export const getStartEndDatesRange = (enddatemax) => {
+export const getStartEndDatesRange = (startdatemin, enddatemax) => {
   const currentTimeSec = new Date().getTime() / 1000;
   return {
-    // Min is current time.
-    min: formatUnixTimestampToObj(currentTimeSec),
+    min: formatUnixTimestampToObj(currentTimeSec + Number(startdatemin)),
     max: formatUnixTimestampToObj(currentTimeSec + Number(enddatemax))
   };
 };
