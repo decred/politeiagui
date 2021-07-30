@@ -5,20 +5,31 @@ import {
   exactLengthMessage,
   invalidMessage
 } from "src/utils/validation";
-
+import { convertObjectToUnixTimestamp } from "src/helpers";
 import {
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION,
   CENSORSHIP_TOKEN_LENGTH
 } from "src/constants";
+import { usdFormatter } from "src/utils";
 
 export const proposalValidation =
-  ({ namesupportedchars, namelengthmax, namelengthmin }) =>
+  ({
+    amountmin,
+    amountmax,
+    namesupportedchars,
+    namelengthmax,
+    namelengthmin
+  }) =>
   (values) => {
     const errors = {};
     if (!values) {
       values = {
         name: "",
+        amount: 0,
+        startDate: null,
+        endDate: null,
+        domain: "",
         description: "",
         type: null,
         rfpLink: "",
@@ -33,7 +44,8 @@ export const proposalValidation =
     }
 
     // RFP deadline validation
-    if (values.type === PROPOSAL_TYPE_RFP && !values.rfpDeadline) {
+    const isRFP = values.type === PROPOSAL_TYPE_RFP;
+    if (isRFP && !values.rfpDeadline) {
       errors.rfpDeadline = "Required";
     }
 
@@ -51,6 +63,58 @@ export const proposalValidation =
       namelengthmax
     );
     if (nameErrors) errors.name = nameErrors;
+
+    // Validate amount, start & end dates only if not dealing with
+    // a RFP.
+    if (!isRFP) {
+      // amount validation
+      if (!values.amount || values.amount.length < 2) {
+        errors.amount = "Required";
+      } else {
+        // Valid amount is at least 2 chars long, as it includes the unit
+        // as the first char.
+        const amount = values.amount;
+        if (amount.length >= 2) {
+          const amountNumber = Number(amount.replace(/[^0-9.-]+/g, ""));
+          if (
+            isNaN(amountNumber) ||
+            amountNumber < amountmin / 100 ||
+            amountNumber > amountmax / 100
+          ) {
+            errors.amount = `Invalid amount, min is ${usdFormatter.format(
+              amountmin / 100
+            )}, max is ${usdFormatter.format(amountmax / 100)}`;
+          }
+        }
+      }
+
+      // start & end dates validations.
+      const startdate = values.startDate;
+      if (!startdate) {
+        errors.startDate = "Please pick a start date";
+      }
+      const enddate = values.endDate;
+      if (!enddate) {
+        errors.endDate = "Please pick an end date";
+      }
+
+      // If both start & end dates provided, ensure start
+      // date is smaller.
+      if (startdate && enddate) {
+        if (
+          convertObjectToUnixTimestamp(enddate) <=
+          convertObjectToUnixTimestamp(startdate)
+        ) {
+          errors.startDate = "Start date must be before end date";
+          errors.endDate = "End date must be after start date";
+        }
+      }
+    }
+
+    // domain validation
+    if (!values.domain) {
+      errors.domain = "Required";
+    }
 
     // description validation
     if (!values.description) {

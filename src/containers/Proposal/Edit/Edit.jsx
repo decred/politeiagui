@@ -19,6 +19,7 @@ import {
 import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
 import { getAttachmentsFiles } from "src/helpers";
+import { usdFormatter } from "src/utils";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
@@ -45,7 +46,14 @@ const EditProposal = ({ match }) => {
           proposal.linkby && formatUnixTimestampToObj(proposal.linkby),
         rfpLink: proposal.linkto,
         description: getMarkdownContent(proposal.files),
-        files: getAttachmentsFiles(proposal.files)
+        files: getAttachmentsFiles(proposal.files),
+        amount: proposal.amount
+          ? `${usdFormatter.format(proposal.amount)}`
+          : undefined,
+        startDate:
+          proposal.startDate && formatUnixTimestampToObj(proposal.startDate),
+        endDate: proposal.endDate && formatUnixTimestampToObj(proposal.endDate),
+        domain: proposal.domain
       }
     : null;
 

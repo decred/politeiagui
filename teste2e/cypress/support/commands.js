@@ -103,8 +103,8 @@ Cypress.Commands.add("identity", () => {
   });
 });
 
-Cypress.Commands.add("createProposal", (proposal) => {
-  const createdProposal = makeProposal(proposal.name, proposal.description);
+Cypress.Commands.add("createProposal", ({ name, description }) => {
+  const createdProposal = makeProposal({ name, description });
   return cy
     .request("api/v1/user/me")
     .then((res) =>

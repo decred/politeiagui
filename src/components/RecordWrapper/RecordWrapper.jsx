@@ -27,6 +27,7 @@ import Join from "../Join";
 import CopyLink from "../CopyLink";
 import rfpTag from "src/assets/images/rfp-tag.svg";
 import useTimestamps from "src/hooks/api/useTimestamps";
+import { formatUnixTimestampToObj } from "src/utils";
 
 // TODO: remove legacy
 export const Author = ({ username, url, isLegacy }) =>
@@ -358,6 +359,56 @@ export const LinkSection = ({ children, className, title }) => (
   </Dropdown>
 );
 
+const MetadataLabel = ({ label }) => (
+  <div className={styles.metadataLabel}>{label}:</div>
+);
+
+const MetadataValue = ({ value }) => (
+  <div className="margin-left-s">{value}</div>
+);
+
+export const Metadata = ({ amount, domain, startDate, endDate, isRFP }) => {
+  const {
+    day: startDay,
+    month: startMonth,
+    year: startYear
+  } = (startDate && formatUnixTimestampToObj(startDate)) || {};
+  const {
+    day: endDay,
+    month: endMonth,
+    year: endYear
+  } = (endDate && formatUnixTimestampToObj(endDate)) || {};
+
+  const metadataAvailable = !!amount || !!domain || !!startDate || !!endDate;
+
+  return (
+    metadataAvailable && (
+      <div className="flex-column">
+        <Row>
+          <MetadataLabel label="Domain" />
+          <MetadataValue value={domain} />
+        </Row>
+        {!isRFP && (
+          <>
+            <Row>
+              <MetadataLabel label="Amount" />
+              <MetadataValue value={amount} />
+            </Row>
+            <Row>
+              <MetadataLabel label="Start Date" />
+              <MetadataValue value={`${startMonth}/${startDay}/${startYear}`} />
+            </Row>
+            <Row>
+              <MetadataLabel label="End Date" />
+              <MetadataValue value={`${endMonth}/${endDay}/${endYear}`} />
+            </Row>
+          </>
+        )}
+      </div>
+    )
+  );
+};
+
 const RecordWrapper = ({ children, className }) => (
   <Card className={classNames("container margin-bottom-m", className)}>
     {children({
@@ -379,7 +430,8 @@ const RecordWrapper = ({ children, className }) => (
       Subtitle,
       Edit,
       Status,
-      RecordToken
+      RecordToken,
+      Metadata
     })}
   </Card>
 );

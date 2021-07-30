@@ -34,19 +34,24 @@ import {
   PROPOSAL_TYPE_REGULAR,
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION,
-  PROPOSAL_STATE_VETTED
+  PROPOSAL_STATE_VETTED,
+  PROPOSAL_AMOUNT_UNIT
 } from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
   getRfpMinMaxDates,
-  getRfpDeadlineTimestamp
-} from "./helpers.js";
+  getProposalDomainOptionsForSelect,
+  getStartEndDatesRange
+} from "./helpers";
+import { convertObjectToUnixTimestamp } from "src/helpers";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
 import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
 
-/** The main goal of using a Map data structure instead of internal state here is to prevent unnecessary rerenders. We just want a way to map blobs to files objects. */
+/** The main goal of using a Map data structure instead of internal state
+ * here is to prevent unnecessary rerenders. We just want a way to map blobs
+ * to files objects. */
 const mapBlobToFile = new Map();
 
 const ListItem = ({ children }) => (
@@ -102,11 +107,12 @@ const ProposalForm = React.memo(function ProposalForm({
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
   const {
-    policyTicketVote: { linkbyperiodmin, linkbyperiodmax }
+    policyTicketVote: { linkbyperiodmin, linkbyperiodmax },
+    policyPi: { domains, enddatemax, startdatemin }
   } = usePolicy();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  const isRfp = values.type === PROPOSAL_TYPE_RFP;
-  const isRfpSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
+  const isRFP = values.type === PROPOSAL_TYPE_RFP;
+  const isRFPSubmission = values.type === PROPOSAL_TYPE_RFP_SUBMISSION;
 
   const handleDescriptionChange = useCallback(
     (v) => {
@@ -115,11 +121,20 @@ const ProposalForm = React.memo(function ProposalForm({
     [setFieldValue]
   );
 
-  const selectOptions = useMemo(() => getProposalTypeOptionsForSelect(), []);
+  const typeOptions = useMemo(() => getProposalTypeOptionsForSelect(), []);
+  const domainOptions = useMemo(
+    () => getProposalDomainOptionsForSelect(domains),
+    [domains]
+  );
 
   const deadlineRange = useMemo(
     () => getRfpMinMaxDates(linkbyperiodmin, linkbyperiodmax),
     [linkbyperiodmin, linkbyperiodmax]
+  );
+
+  const startAndEndDatesRange = useMemo(
+    () => getStartEndDatesRange(startdatemin, enddatemax),
+    [startdatemin, enddatemax]
   );
 
   const handleSelectFiledChange = useCallback(
@@ -133,6 +148,26 @@ const ProposalForm = React.memo(function ProposalForm({
   const handleChangeWithTouched = (field) => (e) => {
     setFieldTouched(field, true);
     handleChange(e);
+  };
+
+  const handleAmountKeyUp = ({ target }) => {
+    const value = target.value;
+    if (value.length > 0 && !value.includes(PROPOSAL_AMOUNT_UNIT)) {
+      setFieldValue("amount", `${PROPOSAL_AMOUNT_UNIT}${value}`);
+    } else if (value === PROPOSAL_AMOUNT_UNIT) {
+      setFieldValue("amount", "");
+    }
+  };
+
+  const handleAmountFocus = ({ target }) => {
+    const value = target.value;
+    if (value === "") {
+      setFieldValue("amount", PROPOSAL_AMOUNT_UNIT);
+    }
+  };
+
+  const handleAmountBlur = () => {
+    setFieldTouched("amount");
   };
 
   const handleFilesChange = useCallback(
@@ -175,22 +210,21 @@ const ProposalForm = React.memo(function ProposalForm({
         wrap={smallTablet}
         className={classNames(
           styles.typeRow,
-          isRfpSubmission && styles.typeRowNoMargin
+          isRFPSubmission && styles.typeRowNoMargin
         )}>
         <SelectField
           name="type"
           onChange={handleSelectFiledChange("type")}
           disabled={isPublic}
           data-testid="proposal-type"
-          options={selectOptions}
-          className={classNames(styles.typeSelectWrapper)}
+          options={typeOptions}
+          className={styles.typeSelectWrapper}
         />
-        {isRfp && (
+        {isRFP && (
           <>
             <DatePickerField
-              className={styles.datePicker}
+              className={styles.rfpDeadline}
               years={deadlineRange}
-              value={values.RfpDeadline}
               name="rfpDeadline"
               placeholder="Deadline"
             />
@@ -206,7 +240,7 @@ const ProposalForm = React.memo(function ProposalForm({
             </Tooltip>
           </>
         )}
-        {isRfpSubmission && (
+        {isRFPSubmission && (
           <>
             {!smallTablet && (
               <div className={styles.iconWrapper}>
@@ -253,6 +287,44 @@ const ProposalForm = React.memo(function ProposalForm({
         onChange={handleChangeWithTouched("name")}
         error={touched.name && errors.name}
       />
+      {!isRFP && (
+        <>
+          <BoxTextInput
+            placeholder="Amount (USD)"
+            name="amount"
+            tabIndex={1}
+            value={values.amount}
+            onChange={handleChangeWithTouched("amount")}
+            onKeyUp={handleAmountKeyUp}
+            onFocus={handleAmountFocus}
+            onBlur={handleAmountBlur}
+            error={touched.amount && errors.amount}
+          />
+          <DatePickerField
+            className={classNames(styles.startDate, "margin-bottom-m")}
+            years={startAndEndDatesRange}
+            value={values.startDate}
+            name="startDate"
+            placeholder="Start Date"
+            error={touched.startDate && errors.startDate}
+          />
+          <DatePickerField
+            className={classNames(styles.endDate, "margin-bottom-m")}
+            years={startAndEndDatesRange}
+            value={values.endDate}
+            name="endDate"
+            placeholder="End Date"
+            error={touched.endDate && errors.endDate}
+          />
+        </>
+      )}
+      <SelectField
+        name="domain"
+        onChange={handleSelectFiledChange("domain")}
+        options={domainOptions}
+        className={classNames(styles.typeSelectWrapper, "margin-top-m")}
+        placeholder="Domain"
+      />
       <MarkdownEditor
         allowImgs={true}
         tabIndex={1}
@@ -263,7 +335,7 @@ const ProposalForm = React.memo(function ProposalForm({
         textAreaProps={textAreaProps}
         onChange={handleDescriptionChange}
         onFileChange={handleFilesChange}
-        placeholder={"Write your proposal"}
+        placeholder="Write your proposal"
         error={touched.description && errors.description}
         filesInput={filesInput}
         mapBlobToFile={mapBlobToFile}
@@ -338,8 +410,17 @@ const ProposalFormWrapper = ({
   const handleSubmit = useCallback(
     async (values, { resetForm, setSubmitting, setFieldError }) => {
       try {
-        const { type, rfpLink, rfpDeadline, ...others } = values;
-        const deadline = getRfpDeadlineTimestamp(rfpDeadline);
+        const {
+          type,
+          rfpLink,
+          rfpDeadline,
+          startDate,
+          endDate,
+          amount,
+          ...others
+        } = values;
+        // Parse string amount as it includes the unit.
+        const amountNumber = amount && Number(amount.replace(/[^0-9.-]+/g, ""));
         if (type === PROPOSAL_TYPE_RFP_SUBMISSION) {
           const rfpWithVoteSummaries = (await onFetchProposalsBatchWithoutState(
             [rfpLink],
@@ -362,13 +443,21 @@ const ProposalFormWrapper = ({
           others.description,
           mapBlobToFile
         );
+        const isRFP = type === PROPOSAL_TYPE_RFP;
         const proposalToken = await onSubmit({
           ...others,
           description,
           type,
           files: [...others.files, ...files],
           rfpLink,
-          rfpDeadline: deadline
+          rfpDeadline: isRFP
+            ? convertObjectToUnixTimestamp(rfpDeadline)
+            : undefined,
+          startDate: !isRFP
+            ? convertObjectToUnixTimestamp(startDate)
+            : undefined,
+          endDate: !isRFP ? convertObjectToUnixTimestamp(endDate) : undefined,
+          amount: !isRFP ? amountNumber : undefined
         });
         setSubmitting(false);
         setSubmitSuccess(true);
@@ -397,8 +486,12 @@ const ProposalFormWrapper = ({
         rfpLink: "",
         name: "",
         description: "",
-        files: []
+        files: [],
+        amount: null,
+        dates: null,
+        domain: ""
       };
+
   return (
     <>
       <Formik

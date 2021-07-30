@@ -57,7 +57,18 @@ export const onSaveNewInvoice =
   };
 
 export const onSaveNewProposal =
-  ({ name, description, files, rfpDeadline, rfpLink, type }) =>
+  ({
+    name,
+    amount,
+    startDate,
+    endDate,
+    domain,
+    description,
+    files,
+    rfpDeadline,
+    rfpLink,
+    type
+  }) =>
   (dispatch, getState) => {
     const { userid, username } = sel.currentUser(getState());
     return dispatch(
@@ -65,6 +76,10 @@ export const onSaveNewProposal =
         userid,
         username,
         name.trim(),
+        amount * 100, // Backend expects value in cents
+        startDate,
+        endDate,
+        domain,
         description,
         rfpDeadline,
         type,
@@ -94,13 +109,29 @@ export const onSaveNewDcc =
   };
 
 export const onEditProposal =
-  ({ token, name, description, files, rfpDeadline, type, rfpLink }) =>
+  ({
+    token,
+    name,
+    amount,
+    startDate,
+    endDate,
+    domain,
+    description,
+    files,
+    rfpDeadline,
+    type,
+    rfpLink
+  }) =>
   (dispatch, getState) => {
     const userid = sel.currentUserID(getState());
     return dispatch(
       onSubmitEditedProposal(
         userid,
         name,
+        amount,
+        startDate,
+        endDate,
+        domain,
         description,
         rfpDeadline,
         type,

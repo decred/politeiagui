@@ -48,6 +48,7 @@ import VersionPicker from "src/components/VersionPicker";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
 import { shortRecordToken, isEmpty, getKeyByValue } from "src/helpers";
+import { usdFormatter } from "src/utils";
 
 /**
  * replaceImgDigestWithPayload uses a regex to parse images
@@ -62,7 +63,8 @@ function replaceImgDigestWithPayload(text, files) {
   let newText = text;
   const markdownFiles = [];
   /**
-   * This for loop will update the newText replacing images digest by their base64 payload and push the img object to an array of markdownFiles
+   * This for loop will update the newText replacing images digest by their
+   * base64 payload and push the img object to an array of markdownFiles.
    * */
   for (const img of imgs) {
     const { digest } = img.groups;
@@ -128,7 +130,11 @@ const Proposal = React.memo(function Proposal({
     state,
     commentsCount,
     statuschangemsg,
-    statuschangeusername
+    statuschangeusername,
+    amount,
+    domain,
+    startDate,
+    endDate
   } = proposal;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
@@ -224,7 +230,8 @@ const Proposal = React.memo(function Proposal({
           Subtitle,
           Edit,
           Status,
-          RecordToken
+          RecordToken,
+          Metadata
         }) => (
           <>
             <Header
@@ -240,7 +247,8 @@ const Proposal = React.memo(function Proposal({
               }
               /**
                * if the proposal is editable: show Edit icon
-               * if the proposal is not editable and the voting is authorized: show Edit icon wrapped by tooltip
+               * if the proposal is not editable and the voting is
+               * authorized: show Edit icon wrapped by tooltip
                * otherwise: do not show Edit icon
                * */
               edit={
@@ -378,6 +386,15 @@ const Proposal = React.memo(function Proposal({
               </Row>
             )}
             {showRfpSubmissions && <ProposalsList data={rfpSubmissions} />}
+            {extended && (
+              <Metadata
+                amount={amount && usdFormatter.format(amount)}
+                startDate={startDate}
+                endDate={endDate}
+                domain={domain}
+                isRFP={isRfp}
+              />
+            )}
             {extended && files && !!files.length && !collapseBodyContent && (
               <Markdown
                 className={classNames(
@@ -402,7 +419,7 @@ const Proposal = React.memo(function Proposal({
               <IconButton
                 type="expand"
                 className="margin-top-m"
-                size={"xlg"}
+                size="xlg"
                 onClick={goToFullProposal(history, proposalURL)}
               />
             )}

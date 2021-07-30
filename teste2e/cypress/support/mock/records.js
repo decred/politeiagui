@@ -34,7 +34,7 @@ const makeMockProposalResponse = (
       getUserMd(userid, publickey, signature),
       getRecordMd(token, version, status, timestamp, publickey, signature)
     ],
-    files: makeProposal(name, description).files,
+    files: makeProposal({ name, description }).files,
     censorshiprecord: {
       token,
       merkle,

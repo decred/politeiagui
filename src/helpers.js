@@ -33,20 +33,6 @@ import {
   USER_METADATA_PLUGIN
 } from "./constants.js";
 
-// XXX find usage and ensure this still works as expected
-export const getProposalStatus = (proposalStatus) =>
-  get(proposalStatus, [
-    "Invalid",
-    "Not found",
-    "Not reviewed",
-    "Censored",
-    "Public",
-    "Unreviewed changes",
-    "Abandoned",
-    "Rejected",
-    "Approved"
-  ]);
-
 export const digestPayload = (payload) =>
   CryptoJS.SHA256(
     arrayBufferToWordArray(base64ToArrayBuffer(payload))
@@ -100,7 +86,8 @@ const getProposalTimestamps = (proposal, publishedts) => {
 };
 
 // parseProposalMetadata accepts a proposal object parses it's metadata
-// and returns it as object of the form { name }
+// and returns it as object of the form { name, startdate, enddate,
+// amount, domain }
 //
 // censored proposals won't have metadata, in this case this function will
 // return an empty object
@@ -184,8 +171,9 @@ const parseProposalIndexFile = (proposal = {}) => {
 // parseRawProposal accepts raw proposal object received from BE and parses
 // its metadata & status changes
 export const parseRawProposal = (proposal) => {
-  // Parse metadatas
-  const { name } = parseProposalMetadata(proposal);
+  // Parse metdata
+  const { name, startdate, enddate, domain, amount } =
+    parseProposalMetadata(proposal);
   const { linkby, linkto } = parseVoteMetadata(proposal);
   const { description } = parseProposalIndexFile(proposal);
   const usermds = parseUserPluginMetadata(proposal);
@@ -202,6 +190,10 @@ export const parseRawProposal = (proposal) => {
     ...proposal,
     description: description || proposal.description,
     name: name || proposal.name,
+    amount: amount / 100, // BE stores amount in cents - calculate USD.
+    startDate: startdate,
+    endDate: enddate,
+    domain,
     linkby,
     userid: usermds.userid || proposal.userid,
     linkto,
@@ -503,12 +495,16 @@ export const getDomainName = (contractorDomains, op) => {
 };
 
 /**
- * Converts { day, month, year } object to unix second timestamp
+ * Converts { day, month, year } object to an unix second timestamp
  * uses 23:59 of that day as time.
  * @param {object} date
  */
-export const convertObjectToUnixTimestamp = ({ day, month, year }) =>
-  new Date(Date.UTC(year, month - 1, day, 23, 59)).getTime() / 1000;
+export const convertObjectToUnixTimestamp = (date) => {
+  if (!date) return 0;
+  const { day, month, year } = date;
+  return new Date(Date.UTC(year, month - 1, day, 23, 59)).getTime() / 1000;
+};
+
 /** INLINE IMAGES HELPERS */
 /**
  * replaceBlobsByDigestsAndGetFiles uses a regex to parse images and replace blobs by files digests
