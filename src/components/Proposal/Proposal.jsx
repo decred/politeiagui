@@ -135,7 +135,9 @@ const Proposal = React.memo(function Proposal({
   const isRfpActive = isRfp && isActiveRfp(linkby);
   const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
   const hasVoteSummary = !!voteSummary && !!voteSummary.endblockheight;
-  const proposalToken = censorshiprecord && censorshiprecord.token;
+  const proposalToken = shortRecordToken(
+    censorshiprecord && censorshiprecord.token
+  );
   const votesCount = !!voteSummary && getVotesReceived(voteSummary);
   const {
     proposalURL,

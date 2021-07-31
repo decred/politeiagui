@@ -1,6 +1,7 @@
+import {shortRecordToken} from "../../../../src/helpers";
+
 const statusByTab = {
-  "In Discussion": ["authorized", "unauthorized"],
-  Voting: ["started"],
+  "Under Review": ["started", "authorized", "unauthorized"],
   Approved: ["approved"],
   Rejected: ["rejected"],
   Abandoned: ["ineligible"]
@@ -37,10 +38,10 @@ describe("Records list", () => {
       });
       cy.wait("@records.records");
       // each proposal should be rendered accordingly to inventory response
-      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE) // first records batch
+      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE + 3) // first records batch
         .each(([{ id }], position) => {
-          const tokens = getTokensByStatusTab(inventory, "In Discussion");
-          const expectedToken = tokens[position];
+          const tokens = getTokensByStatusTab(inventory, "Under Review");
+          const expectedToken = shortRecordToken(tokens[position]);
           expect(id).to.have.string(expectedToken);
         });
     });
@@ -48,26 +49,26 @@ describe("Records list", () => {
       cy.visit(`/`);
       cy.wait("@ticketvote.inventory");
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 5);
+      cy.assertListLengthByTestId("record-title", 8);
       cy.scrollTo("bottom");
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 10);
+      cy.assertListLengthByTestId("record-title", 13);
       cy.scrollTo("bottom");
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 15);
+      cy.assertListLengthByTestId("record-title", 18);
       cy.scrollTo("bottom");
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 20);
+      cy.assertListLengthByTestId("record-title", 23);
       // finished first inventory page
       cy.scrollTo("bottom");
       cy.wait("@ticketvote.inventory").its("request.body.page").should("eq", 2);
       cy.wait("@records.records");
       // records from second inventory page
-      cy.assertListLengthByTestId("record-title", 25);
+      cy.assertListLengthByTestId("record-title", 28);
       cy.scrollTo("bottom");
       // wait to see if no requests are done, since inventory is fully fetched
       cy.wait(1000);
-      cy.assertListLengthByTestId("record-title", 25);
+      cy.assertListLengthByTestId("record-title", 28);
     });
 
     it("can switch tabs and load proposals correctly", () => {
@@ -78,7 +79,7 @@ describe("Records list", () => {
       // navigate to in discussion tab
       cy.findByTestId("tab-0").click();
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 5);
+      cy.assertListLengthByTestId("record-title", 8);
     });
     it("can list legacy proposals", () => {
       // for approved proposals
