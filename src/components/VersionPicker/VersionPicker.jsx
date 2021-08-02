@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, DropdownItem } from "pi-ui";
+import { Dropdown, DropdownItem, Spinner } from "pi-ui";
 import { useVersionPicker } from "./hooks";
 
 const VersionPicker = ({ version, token, className, proposalState }) => {
-  const { disablePicker, onChangeVersion } = useVersionPicker(
+  const { disablePicker, onChangeVersion, isLoading } = useVersionPicker(
     version,
     token,
     proposalState
@@ -19,7 +19,8 @@ const VersionPicker = ({ version, token, className, proposalState }) => {
   }, [version]);
 
   return (
-    !disablePicker && (
+    !disablePicker &&
+    (!isLoading ? (
       <Dropdown
         title={`version ${version}`}
         className={className}
@@ -34,7 +35,11 @@ const VersionPicker = ({ version, token, className, proposalState }) => {
           </DropdownItem>
         ))}
       </Dropdown>
-    )
+    ) : (
+      <div style={{ padding: "2px" }}>
+        <Spinner invert />
+      </div>
+    ))
   );
 };
 
