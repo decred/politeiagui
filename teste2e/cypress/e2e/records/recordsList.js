@@ -1,4 +1,4 @@
-import {shortRecordToken} from "../../../../src/helpers";
+import {shortRecordToken} from "../../utils";
 
 const statusByTab = {
   "Under Review": ["started", "authorized", "unauthorized"],
