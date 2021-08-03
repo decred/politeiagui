@@ -198,7 +198,7 @@ export default function useProposalsBatch({
         return send(FETCH);
       },
       done: () => {
-        // If there are not remaining tokens. Check there are unscanned status or not.
+        // If there are not remaining tokens, check if have unscanned status.
         // If yes, change the index to the new status and set up new tokens
         if (!hasRemainingTokens && statusIndex + 1 < currentStatuses.length) {
           const newIndex = statusIndex + 1;
@@ -214,8 +214,8 @@ export default function useProposalsBatch({
           setRemainingTokens(unfetchedTokens);
           setStatusIndex(newIndex);
           if (!values(proposals).length) {
-            // In the case there are no proposals fetched yet.
-            // Continue the fetching cycle to fetch the first page at user view
+            // If no proposals are fetched yet.
+            // Continue the fetching cycle to fetch the first page.
             return send(START);
           }
         }
@@ -230,9 +230,9 @@ export default function useProposalsBatch({
     }
   });
 
-  // onRestartMachine called when the user clicking on a new tab
-  // The function will find what is the status has been loading in the previous session.
-  // If there are not status found. That mean all the data are loaded in this tab and go to RESOLVE state
+  // onRestartMachine is called when the user clicks on a new tab
+  // The function will find out whether the status has been loading in the previous session.
+  // If no status is found, all the data is loaded in this tab. Go to the RESOLVE state.
   const onRestartMachine = (newStatuses) => {
     updateCacheVoteStatusMap(voteSummaries, true);
     let unfetchedTokens = [],
