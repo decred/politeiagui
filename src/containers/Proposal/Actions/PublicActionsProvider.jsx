@@ -107,10 +107,7 @@ const PublicActionsProvider = ({ children, history }) => {
         onSubmit: onStartVote([{ token, version }], VOTE_TYPE_STANDARD),
         successTitle: "Proposal vote started",
         successMessage: (
-          <Text>
-            The proposal vote has been successfully started! Now it will appear
-            under the <Link to="/?tab=voting">Voting</Link> tab.
-          </Text>
+          <Text>The proposal vote has been successfully started!</Text>
         ),
         onClose: handleCloseModal,
         proposal

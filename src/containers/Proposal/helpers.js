@@ -12,7 +12,6 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED,
-  PRE_VOTE,
   AUTHORIZED,
   ACTIVE_VOTE,
   APPROVED,
@@ -25,7 +24,8 @@ import {
   PROPOSAL_VOTING_REJECTED,
   PROPOSAL_VOTING_INELIGIBLE,
   INELIGIBLE,
-  PROPOSAL_PAGE_SIZE
+  PROPOSAL_PAGE_SIZE,
+  UNAUTHORIZED
 } from "../../constants";
 import { getTextFromIndexMd, shortRecordToken } from "src/helpers";
 import set from "lodash/fp/set";
@@ -313,6 +313,7 @@ export const goToFullProposal = (history, proposalURL) => () =>
  */
 export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
   values(proposalsByToken).reduce((acc, proposal) => {
+    const shortProposalToken = shortRecordToken(getProposalToken(proposal));
     const isRfp = !!proposal.linkby;
     const isSubmission = !!proposal.linkto;
     if (!isSubmission && !isRfp) return acc;
@@ -320,10 +321,7 @@ export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
       const linkedProposal =
         proposalsByToken[shortRecordToken(proposal.linkto)];
       if (!linkedProposal) return acc;
-      return set(
-        [shortRecordToken(getProposalToken(proposal)), "proposedFor"],
-        linkedProposal.name
-      )(acc);
+      return set([shortProposalToken, "proposedFor"], linkedProposal.name)(acc);
     }
     if (isRfp) {
       const linkedFrom = proposal.linkedfrom;
@@ -333,7 +331,7 @@ export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
       };
       return {
         ...acc,
-        [shortRecordToken(getProposalToken(proposal))]: {
+        [shortProposalToken]: {
           ...proposal,
           rfpSubmissions
         }
@@ -382,7 +380,7 @@ export const getProposalStatusLabel = (status, isByRecordStatus) =>
           [PROPOSAL_STATUS_PUBLIC]: PUBLIC
         }
       : {
-          [PROPOSAL_VOTING_NOT_AUTHORIZED]: PRE_VOTE,
+          [PROPOSAL_VOTING_NOT_AUTHORIZED]: UNAUTHORIZED,
           [PROPOSAL_VOTING_AUTHORIZED]: AUTHORIZED,
           [PROPOSAL_VOTING_ACTIVE]: ACTIVE_VOTE,
           [PROPOSAL_VOTING_APPROVED]: APPROVED,
@@ -409,3 +407,38 @@ export const getTokensForProposalsPagination = (
   tokens,
   pageSize = PROPOSAL_PAGE_SIZE
 ) => [take(pageSize)(tokens), takeRight(tokens.length - pageSize)(tokens)];
+
+/**
+ * Returns the proposal tokens by status from an inventory of tokens
+ * @param {number[]} statuses
+ * @param {boolean} isByRecordStatus
+ * @param {Object.<string, string[]>} inventory
+ */
+export const getRecordsTokensByStatusList = (
+  statuses = [],
+  isByRecordStatus,
+  inventory
+) =>
+  statuses.reduce((tokens, status) => {
+    const label = getProposalStatusLabel(status, isByRecordStatus);
+    return [...tokens, ...(inventory[label] || [])];
+  }, []);
+
+/**
+ * Returns a map of proposals tokens with the key is tab name
+ * the tokens are taken from the inventory, filtered by status
+ * @param {Object.<string, number[]>} statusByTab
+ * @param {Object.<string, string[]>} inventory
+ * @param {boolean} isByRecordStatus
+ */
+export const mapProposalsTokensByTab = (
+  statusByTab,
+  inventory,
+  isByRecordStatus
+) =>
+  Object.entries(statusByTab).reduce((map, [tab, statuses]) => {
+    return {
+      ...map,
+      [tab]: getRecordsTokensByStatusList(statuses, isByRecordStatus, inventory)
+    };
+  }, {});

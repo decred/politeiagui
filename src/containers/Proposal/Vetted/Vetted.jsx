@@ -1,14 +1,15 @@
 import React, { useCallback, useMemo } from "react";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
-import { tabValues, mapProposalsTokensByTab, statusByTab } from "./helpers";
+import { tabValues, statusByTab, sortByTab } from "./helpers";
+import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import useLegacyVettedProposals from "src/hooks/api/useLegacyVettedProposals";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
-import { LIST_HEADER_VETTED } from "src/constants";
+import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import { PROPOSAL_STATUS_CENSORED } from "src/constants";
 import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
@@ -18,8 +19,7 @@ const renderProposal = (record) => (
 );
 
 const tabLabels = [
-  tabValues.IN_DISCUSSION,
-  tabValues.VOTING,
+  tabValues.UNDER_REVIEW,
   tabValues.APPROVED,
   tabValues.REJECTED,
   tabValues.INELIGIBLE
@@ -27,6 +27,8 @@ const tabLabels = [
 
 const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
+  const statuses = statusByTab[tabLabels[index]];
+  const sort = sortByTab[tabLabels[index]];
   const {
     proposals: batchProposals,
     proposalsTokens,
@@ -39,7 +41,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
-    status: statusByTab[tabLabels[index]]
+    statuses: statuses
   });
 
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
@@ -50,18 +52,12 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
     isProposalsBatchComplete,
-    statusByTab[tabLabels[index]]
+    statuses[0] // hard code because legacy proposals tab always have 1 item in statuses
   );
 
   const mergedProposalsTokens = !isEmpty(legacyProposalsTokens)
     ? Object.keys(proposalsTokens).reduce((acc, cur) => {
-        if (cur === "started" || cur === "pre") {
-          return {
-            ...acc,
-            [cur]: proposalsTokens[cur]
-          };
-        }
-        if (cur === "ineligible") {
+        if (cur === INELIGIBLE) {
           return {
             ...acc,
             [cur]: [
@@ -72,15 +68,17 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
         }
         return {
           ...acc,
-          [cur]: [...proposalsTokens[cur], ...legacyProposalsTokens[cur]]
+          [cur]: [
+            ...(proposalsTokens[cur] || []),
+            ...(legacyProposalsTokens[cur] || [])
+          ]
         };
       }, {})
     : proposalsTokens;
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
-      [tabValues.IN_DISCUSSION]: "No proposals under discussion",
-      [tabValues.VOTING]: "No proposals voting",
+      [tabValues.UNDER_REVIEW]: "No proposals under review",
       [tabValues.APPROVED]: "No proposals approved",
       [tabValues.REJECTED]: "No proposals rejected",
       [tabValues.INELIGIBLE]: "No proposals archived or censored"
@@ -90,7 +88,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   // TODO: remove legacy
   const recordTokensByTab = useMemo(
-    () => mapProposalsTokensByTab(tabLabels, mergedProposalsTokens),
+    () => mapProposalsTokensByTab(statusByTab, mergedProposalsTokens),
     [mergedProposalsTokens]
   );
 
@@ -130,7 +128,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying || mdLoading}>
+      isLoading={loading || verifying || mdLoading}
+      sort={sort}>
       {content}
     </RecordsView>
   );

@@ -21,9 +21,20 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   return <>{placeholders}</>;
 };
 
-const getFilteredRecordsAndToken = (records, tokens, tab, filterCensored) => {
+const defaultSort = {
+  fields: ["timestamp"],
+  order: ["desc"]
+};
+
+const getFilteredRecordsAndToken = (
+  records,
+  tokens,
+  tab,
+  filterCensored,
+  sort = defaultSort
+) => {
   const filteredTokens = tokens[tab].map((token) => shortRecordToken(token));
-  const sortByNewestFirst = orderBy(["timestamp"], ["desc"]);
+  const sortByNewestFirst = orderBy(sort.fields, sort.order);
   let filteredRecords =
     (records &&
       filteredTokens &&
@@ -54,7 +65,8 @@ const RecordsView = ({
   onSetIndex,
   hasMore,
   filterCensored,
-  pageSize = PROPOSAL_PAGE_SIZE
+  pageSize = PROPOSAL_PAGE_SIZE,
+  sort
 }) => {
   const [loadingItems, setLoadingItems] = useState(pageSize);
   const { javascriptEnabled } = useConfig();
@@ -72,9 +84,10 @@ const RecordsView = ({
         records,
         recordTokensByTab,
         tabOption,
-        filterCensored
+        filterCensored,
+        sort
       ),
-    [recordTokensByTab, records, tabOption, filterCensored]
+    [recordTokensByTab, records, tabOption, filterCensored, sort]
   );
 
   const handleFetchMoreRecords = () => {
