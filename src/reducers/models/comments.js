@@ -136,7 +136,6 @@ const comments = (state = DEFAULT_STATE, action) =>
               find((c) => c.commentid === commentid),
               get(["comments", "byToken", shortToken])
             )(state);
-            // const oldComments = state.comments.byToken[shortToken];
             const commentsLikes = state.commentsLikes.byToken[shortToken];
             const oldVote = commentsLikes
               ? commentsLikes[commentid]
