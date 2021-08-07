@@ -681,6 +681,11 @@ describe("test api actions (actions/api.js)", () => {
           payload: { commentid, token: FAKE_PROPOSAL_TOKEN }
         },
         {
+          error: false,
+          payload: { commentid, token: FAKE_PROPOSAL_TOKEN, vote: up_action },
+          type: act.RECEIVE_LIKE_COMMENT
+        },
+        {
           error: true,
           payload: { errorcode },
           type: act.RECEIVE_LIKE_COMMENT
