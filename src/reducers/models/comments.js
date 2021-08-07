@@ -3,6 +3,8 @@ import uniqWith from "lodash/uniqWith";
 import reverse from "lodash/reverse";
 import compose from "lodash/fp/compose";
 import set from "lodash/fp/set";
+import get from "lodash/fp/get";
+import find from "lodash/fp/find";
 import update from "lodash/fp/update";
 import { shortRecordToken } from "src/helpers";
 import {
@@ -71,7 +73,30 @@ const calcVotes = (comment, oldVote, vote) => {
 
 const comments = (state = DEFAULT_STATE, action) =>
   action.error
-    ? state
+    ? action.type === act.RECEIVE_LIKE_COMMENT
+      ? /* if like comment action receives an error, restore data from backup */
+        (function restoreLikesFromBackup() {
+          const { token, commentid, oldVote } = get([
+            "commentsLikes",
+            "backup"
+          ])(state);
+          const oldComment = get(["comments", "backup"])(state);
+
+          return compose(
+            set(["commentsLikes", "backup"], null),
+            update(["commentsLikes", "byToken", token], (current) => ({
+              ...current,
+              [commentid]: oldVote
+            })),
+            update(["comments", "byToken", token], (current) =>
+              current.map((comment) => {
+                if (comment.commentid !== commentid) return comment;
+                return oldComment;
+              })
+            )
+          )(state);
+        })()
+      : state
     : (
         {
           [act.RECEIVE_RECORD_COMMENTS]: () => {
@@ -107,6 +132,11 @@ const comments = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_LIKE_COMMENT]: () => {
             const { token, vote, commentid } = action.payload;
             const shortToken = shortRecordToken(token);
+            const oldComment = compose(
+              find((c) => c.commentid === commentid),
+              get(["comments", "byToken", shortToken])
+            )(state);
+            // const oldComments = state.comments.byToken[shortToken];
             const commentsLikes = state.commentsLikes.byToken[shortToken];
             const oldVote = commentsLikes
               ? commentsLikes[commentid]
@@ -140,6 +170,14 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             return compose(
               set(["commentsLikes", "byToken", shortToken], newCommentsLikes),
+              /* backup the old vote and comment to restore in case of error */
+              set(["commentsLikes", "backup"], {
+                token: shortToken,
+                commentid,
+                oldVote,
+                oldComment
+              }),
+              set(["comments", "backup"], oldComment),
               /* This will cause some delay to update up/downvotes if there are
               a lot of comments in the page. This happens because we have to
               recreate the comments array all the time due to the redux
