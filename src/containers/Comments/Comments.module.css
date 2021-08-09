@@ -47,6 +47,10 @@ span.flatButtonText {
   user-select: none;
 }
 
+.flatButtonWrapper:hover {
+  cursor: pointer;
+}
+
 div.flatModeActive {
   background-color: var(--color-primary);
 }
