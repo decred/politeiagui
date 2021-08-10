@@ -57,7 +57,7 @@ export const getProposalTypeOptionsForSelect = () =>
   );
 
 export const getProposalDomainOptionsForSelect = (domains) =>
-  domains.map((domain) => ({
+  domains ? domains.map((domain) => ({
     label: domainLabels[domain],
     value: domain
-  }));
+  })) : [];
