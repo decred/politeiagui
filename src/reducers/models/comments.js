@@ -150,22 +150,6 @@ const comments = (state = DEFAULT_STATE, action) =>
               newCommentsLikes[commentid] = 0;
             }
 
-            // const updateCommentVotes = (comment) => {
-            //   if (comment.commentid !== commentid) return comment;
-
-            //   const { newUpvotes, newDownvotes } = calcVotes(
-            //     comment,
-            //     oldVote,
-            //     vote
-            //   );
-
-            //   return {
-            //     ...comment,
-            //     upvotes: newUpvotes,
-            //     downvotes: newDownvotes
-            //   };
-            // };
-
             const { newUpvotes, newDownvotes } = calcVotes(
               oldComment,
               oldVote,
