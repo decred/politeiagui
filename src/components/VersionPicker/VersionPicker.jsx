@@ -12,7 +12,7 @@ const VersionPicker = ({ version, token, className, proposalState }) => {
 
   const versionsOptions = useMemo(() => {
     const versions = [];
-    for (let index = Number(version); index >= 1; index--) {
+    for (let index = version; index >= 1; index--) {
       versions.push(index);
     }
     return versions;
@@ -29,7 +29,7 @@ const VersionPicker = ({ version, token, className, proposalState }) => {
           <DropdownItem
             key={v}
             onClick={() => {
-              onChangeVersion(v);
+              onChangeVersion(v, version);
             }}>
             version {v}
           </DropdownItem>
@@ -44,7 +44,7 @@ const VersionPicker = ({ version, token, className, proposalState }) => {
 };
 
 VersionPicker.propTypes = {
-  version: PropTypes.string.isRequired,
+  version: PropTypes.number.isRequired,
   token: PropTypes.string.isRequired,
   className: PropTypes.string
 };
