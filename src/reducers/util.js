@@ -23,13 +23,13 @@ export const request = (key, state, { payload, error }) =>
         }
       };
 
-export const receive = (key, state, { payload, error } = {}) => ({
+export const receive = (key, state, { payload, error } = {}, keepError) => ({
   ...state,
   [key]: {
     ...state[key],
     payload: error ? null : payload,
     isRequesting: false,
-    error: error ? payload : null
+    error: error ? payload : keepError ? state[key].error : null
   }
 });
 
