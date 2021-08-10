@@ -869,7 +869,7 @@ export const onSubmitProposal = (
         markdown: description,
         linkby: rfpDeadline,
         linkto: rfpLink,
-        files
+        attachments: files
       })
     )
       .then((proposal) => api.signRegister(userid, proposal))
@@ -939,7 +939,7 @@ export const onSubmitEditedProposal = (
         markdown: description,
         linkby: rfpDeadline,
         linkto: rfpLink,
-        files
+        attachments: files
       })
     )
       .then((proposal) => api.signRegister(userid, proposal))
