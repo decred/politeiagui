@@ -28,10 +28,7 @@ const ModalDiffProposal = ({
     setActiveTabIndex(0);
   }, [props.show]);
   return (
-    <Modal
-      onClose={onClose}
-      {...props}
-      contentStyle={{ width: "100%", minHeight: "40rem" }}>
+    <Modal onClose={onClose} contentClassName={styles.modalContent} {...props}>
       <Header
         title={
           <Title id={"proposal-title-gfsag"} truncate linesBeforeTruncate={2}>
@@ -75,7 +72,9 @@ const ModalDiffProposal = ({
         className={styles.diffTabs}
         contentClassName={styles.diffTabContent}>
         <Tab label="Text Changes">
-          <DiffHTML oldTextBody={oldText} newTextBody={newText} />
+          <div className={styles.diffWrapper}>
+            <DiffHTML oldTextBody={oldText} newTextBody={newText} />
+          </div>
         </Tab>
         <Tab label="Attachments Changes">
           <FilesDiff oldFiles={oldFiles} newFiles={newFiles} />

@@ -43,13 +43,13 @@ const FlatModeButton = ({ isActive, onClick }) => (
     className={classNames(
       styles.flatButtonWrapper,
       isActive && styles.flatModeActive
-    )}>
+    )}
+    onClick={onClick}>
     <Text
       className={classNames(
         styles.flatButtonText,
         isActive && styles.flatModeActive
-      )}
-      onClick={onClick}>
+      )}>
       Flat mode
     </Text>
   </div>

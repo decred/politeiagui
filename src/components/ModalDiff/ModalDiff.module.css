@@ -3,6 +3,12 @@
   margin: 2rem 0;
 }
 
+.modalContent {
+  width: 100%;
+  min-height: 40rem;
+  min-width: 90rem;
+}
+
 .diffTabs > li {
   flex: 50%;
   justify-content: center;
@@ -11,7 +17,11 @@
 .diffTabContent {
   min-height: 20rem;
   overflow-y: auto;
-  max-height: calc(70vh - 20rem);
+  width: calc(100% - 8rem);
+}
+
+.diffWrapper {
+  overflow-wrap: break-word;
 }
 
 .version {
@@ -28,8 +38,24 @@
   overflow: scroll;
 }
 
+@media screen and (max-width: 1000px) {
+  .modalContent {
+    min-width: 60rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modalContent {
+    min-width: 40rem;
+  }
+}
+
 @media screen and (max-width: 560px) {
   .diffTabContent {
     max-height: calc(70vh);
+    width: calc(100% - 5rem);
+  }
+  .modalContent {
+    min-width: 100%;
   }
 }

@@ -16,7 +16,8 @@ import {
   TOTP_DEFAULT_TYPE,
   UNREVIEWED,
   CENSORED,
-  PRE_VOTE,
+  AUTHORIZED,
+  UNAUTHORIZED,
   ACTIVE_VOTE,
   APPROVED,
   REJECTED,
@@ -586,10 +587,10 @@ export const onFetchTokenInventory =
           ]
         };
         const byVotes = isVoteStatus && {
-          [PRE_VOTE]: [
-            ...((votes && votes.vetted && votes.vetted.authorized) || []),
-            ...((votes && votes.vetted && votes.vetted.unauthorized) || [])
-          ],
+          [AUTHORIZED]:
+            (votes && votes.vetted && votes.vetted.authorized) || [],
+          [UNAUTHORIZED]:
+            (votes && votes.vetted && votes.vetted.unauthorized) || [],
           [ACTIVE_VOTE]: (votes && votes.vetted && votes.vetted.started) || [],
           [APPROVED]: (votes && votes.vetted && votes.vetted.approved) || [],
           [REJECTED]: (votes && votes.vetted && votes.vetted.rejected) || [],
@@ -1369,11 +1370,11 @@ export const onAuthorizeVote = (userid, token, version) =>
     dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
     return api
       .proposalAuthorizeOrRevokeVote(csrf, "authorize", token, userid, version)
-      .then((response) =>
+      .then((response) => {
         dispatch(
           act.RECEIVE_AUTHORIZE_VOTE({ ...response, token, success: true })
-        )
-      )
+        );
+      })
       .catch((error) => {
         dispatch(act.RECEIVE_AUTHORIZE_VOTE(null, error));
         throw error;

@@ -61,24 +61,57 @@ const getCurrentPage = (tokens) => {
   return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
 };
 
+const cacheVoteStatus = {};
+
+const updateCacheVoteStatusMap = (voteSummaries, isRefresh) => {
+  Object.keys(voteSummaries).forEach((token) => {
+    const shortToken = shortRecordToken(token);
+    cacheVoteStatus[shortToken] =
+      isUndefined(cacheVoteStatus[shortToken]) || isRefresh
+        ? voteSummaries[token].status
+        : cacheVoteStatus[shortToken];
+  });
+};
+
+const proposalWithCacheVotetatus = (proposals) => {
+  return Object.keys(proposals).reduce((acc, curr) => {
+    const shortToken = shortRecordToken(curr);
+    return {
+      ...acc,
+      [shortToken]: {
+        ...proposals[curr],
+        voteStatus: cacheVoteStatus[shortToken]
+      }
+    };
+  }, {});
+};
+
 export default function useProposalsBatch({
   fetchRfpLinks,
   fetchVoteSummaries = false,
   unvetted = false,
   proposalStatus,
-  status,
+  statuses,
   proposalPageSize = PROPOSAL_PAGE_SIZE
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
-  const [voteStatus, setStatus] = useState(status);
+  const [voteStatuses, setStatuses] = useState(statuses);
   const [previousPage, setPreviousPage] = useState(0);
-  const isByRecordStatus = isUndefined(voteStatus);
+  const isByRecordStatus = isUndefined(voteStatuses);
   const proposals = useSelector(sel.proposalsByToken);
   const recordState = unvetted
     ? PROPOSAL_STATE_UNVETTED
     : PROPOSAL_STATE_VETTED;
-  const currentStatus = isByRecordStatus ? proposalStatus || 1 : voteStatus;
+  const currentStatuses = isByRecordStatus
+    ? proposalStatus || [PROPOSAL_STATUS_UNREVIEWED]
+    : voteStatuses;
+  const [statusIndex, setStatusIndex] = useState(0);
+  const currentStatus = useMemo(
+    () => currentStatuses[statusIndex],
+    [currentStatuses, statusIndex]
+  );
   const voteSummaries = useSelector(sel.summaryByToken);
+  updateCacheVoteStatusMap(voteSummaries);
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
@@ -97,7 +130,6 @@ export default function useProposalsBatch({
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
   const hasRemainingTokens = !isEmpty(remainingTokens);
-
   const [state, send] = useFetchMachine({
     actions: {
       initial: () => send(START),
@@ -165,7 +197,29 @@ export default function useProposalsBatch({
           .catch((e) => send(REJECT, e));
         return send(FETCH);
       },
-      done: () => {}
+      done: () => {
+        // If there are not remaining tokens, check if have unscanned status.
+        // If yes, change the index to the new status and set up new tokens
+        if (!hasRemainingTokens && statusIndex + 1 < currentStatuses.length) {
+          const newIndex = statusIndex + 1;
+          const newStatus = currentStatuses[newIndex];
+          const unfetchedTokens = getUnfetchedTokens(
+            proposals,
+            uniq(
+              allByStatus[
+                getProposalStatusLabel(newStatus, isByRecordStatus)
+              ] || []
+            )
+          );
+          setRemainingTokens(unfetchedTokens);
+          setStatusIndex(newIndex);
+          if (!values(proposals).length) {
+            // If no proposals are fetched yet.
+            // Continue the fetching cycle to fetch the first page.
+            return send(START);
+          }
+        }
+      }
     },
     initialValues: {
       status: "idle",
@@ -176,29 +230,37 @@ export default function useProposalsBatch({
     }
   });
 
-  const onRestartMachine = (newStatus) => {
-    const newStatusLabel = getProposalStatusLabel(
-      !newStatus
-        ? isByRecordStatus
-          ? proposalStatus || PROPOSAL_STATUS_UNREVIEWED
-          : voteStatus
-        : newStatus,
-      isByRecordStatus
-    );
-    const unfetchedTokens = getUnfetchedTokens(
-      proposals,
-      uniq(allByStatus[newStatusLabel] || [])
-    );
-
-    // machine stop condition: inventory loaded, but no tokens to fetch
-    if (isEmpty(remainingTokens) && isEmpty(unfetchedTokens) && !page) {
+  // onRestartMachine is called when the user clicks on a new tab
+  // The function will find out whether the status has been loading in the previous session.
+  // If no status is found, all the data is loaded in this tab. Go to the RESOLVE state.
+  const onRestartMachine = (newStatuses) => {
+    updateCacheVoteStatusMap(voteSummaries, true);
+    let unfetchedTokens = [],
+      index = 0;
+    const statuses = newStatuses || currentStatuses;
+    const foundPreviousSessionStatus = statuses.find((status, i) => {
+      const statusLabel = getProposalStatusLabel(status, isByRecordStatus);
+      unfetchedTokens = getUnfetchedTokens(
+        proposals,
+        uniq(allByStatus[statusLabel] || [])
+      );
+      if (unfetchedTokens.length > 0) {
+        index = i;
+        return true;
+      }
+      return false;
+    });
+    setRemainingTokens(unfetchedTokens);
+    setStatusIndex(index);
+    if (!foundPreviousSessionStatus) {
+      setStatuses(statuses);
       return send(RESOLVE);
     }
-    setRemainingTokens(unfetchedTokens);
+    // machine stop condition: inventory loaded, but no tokens to fetch
     if (isByRecordStatus) {
-      proposalStatus = newStatus;
+      proposalStatus = statuses;
     } else {
-      setStatus(newStatus);
+      setStatuses(statuses);
     }
     return send(START);
   };
@@ -219,16 +281,21 @@ export default function useProposalsBatch({
 
   const anyError = error || state.error;
   useThrowError(anyError);
-
   return {
-    proposals: getRfpLinkedProposals(proposals, voteSummaries),
+    proposals: getRfpLinkedProposals(
+      proposalWithCacheVotetatus(proposals),
+      voteSummaries
+    ),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,
-    loading: state.loading,
+    loading:
+      state.loading ||
+      (!values(proposals).length && statusIndex + 1 < voteStatuses.length),
+    // loading return true when fetching cycle is running and there are no proposals fetched to avoid flickering at starting
     verifying: state.verifying,
     onRestartMachine,
     onFetchMoreProposals,
-    hasMoreProposals: !!remainingTokens.length,
+    hasMoreProposals: !!remainingTokens.length && !!values(proposals).length,
     isProposalsBatchComplete: isFetchDone && !isAnotherInventoryCallRequired,
     machineCurrentState: state.status
   };

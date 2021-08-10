@@ -8,5 +8,6 @@
   "supportFile": "cypress/support/index.js",
   "screenshotOnRunFailure": false,
   "video": false,
-  "watchForFileChanges": true
+  "watchForFileChanges": true,
+  "projectId": "43a5z3"
 }

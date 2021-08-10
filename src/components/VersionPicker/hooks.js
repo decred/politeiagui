@@ -8,6 +8,7 @@ import { useAction } from "src/redux";
 import * as act from "src/actions";
 
 export function useVersionPicker(version, token) {
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedVersion, setSelectedVersion] = useState(version);
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { recordType, constants } = useConfig();
@@ -79,6 +80,7 @@ export function useVersionPicker(version, token) {
   const onChangeVersion = useCallback(
     async (v) => {
       setSelectedVersion(v);
+      setIsLoading(true);
       try {
         if (recordType === constants.RECORD_TYPE_PROPOSAL) {
           const proposalDiff = await fetchProposalVersions(
@@ -86,6 +88,7 @@ export function useVersionPicker(version, token) {
             token,
             v
           );
+          setIsLoading(false);
           handleOpenModal(ModalDiffProposal, {
             proposalDetails: proposalDiff.details,
             onClose: handleCloseModal,
@@ -99,6 +102,7 @@ export function useVersionPicker(version, token) {
         }
         if (recordType === constants.RECORD_TYPE_INVOICE) {
           const { invoice, prevInvoice } = await fetchInvoiceVersions(token, v);
+          setIsLoading(false);
           handleOpenModal(ModalDiffInvoice, {
             onClose: handleCloseModal,
             invoice,
@@ -106,6 +110,7 @@ export function useVersionPicker(version, token) {
           });
         }
       } catch (err) {
+        setIsLoading(false);
         setError(err);
       }
     },
@@ -127,6 +132,7 @@ export function useVersionPicker(version, token) {
     disablePicker,
     selectedVersion,
     onChangeVersion,
-    error
+    error,
+    isLoading
   };
 }
