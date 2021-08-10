@@ -86,7 +86,8 @@ const CommentWrapper = ({
     openCensorModal,
     openLoginModal,
     isAdmin,
-    currentUser
+    currentUser,
+    getCommentVotes
   } = useComment();
   const {
     comment: commentText,
@@ -97,8 +98,6 @@ const CommentWrapper = ({
     username,
     userid,
     isNew,
-    upvotes,
-    downvotes,
     sumOfNewDescendants,
     parentid
   } = comment;
@@ -109,6 +108,11 @@ const CommentWrapper = ({
 
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(true);
+  // get comment's votes from cache. If they don't exist, get it from comment
+  const { upvotes, downvotes } = useMemo(
+    () => getCommentVotes(comment.commentid) || comment,
+    [getCommentVotes, comment]
+  );
 
   const hasChildrenComments = useMemo(
     () =>

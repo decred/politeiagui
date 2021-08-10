@@ -35,12 +35,17 @@ export function useComments(recordToken, proposalState) {
     () => sel.makeGetRecordCommentsLikes(recordToken),
     [recordToken]
   );
+  const commentsVotesSelector = useMemo(
+    () => sel.makeGetRecordCommentsVotes(recordToken),
+    [recordToken]
+  );
   const lastVisitTimestampSelector = useMemo(
     () => sel.makeGetLastAccessTime(recordToken),
     [recordToken]
   );
   const comments = useSelector(commentsSelector);
   const commentsLikes = useSelector(commentsLikesSelector);
+  const commentsVotes = useSelector(commentsVotesSelector);
   const lastVisitTimestamp = useSelector(lastVisitTimestampSelector);
   const loading = useSelector(sel.isApiRequestingComments);
   const loadingLikes = useSelector(sel.isApiRequestingCommentsLikes);
@@ -112,6 +117,11 @@ export function useComments(recordToken, proposalState) {
     [commentsLikes]
   );
 
+  const getCommentVotes = useCallback(
+    (commentID) => commentsVotes && commentsVotes[commentID],
+    [commentsVotes]
+  );
+
   return {
     comments,
     onCommentVote,
@@ -126,6 +136,7 @@ export function useComments(recordToken, proposalState) {
     loading,
     loadingLikes,
     onSubmitComment,
-    error
+    error,
+    getCommentVotes
   };
 }

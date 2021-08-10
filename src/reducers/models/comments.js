@@ -14,6 +14,7 @@ import {
 
 const DEFAULT_STATE = {
   comments: { byToken: {}, accessTimeByToken: {}, backup: null },
+  commentsVotes: { byToken: {}, backup: null },
   commentsLikes: { byToken: {}, backup: null }
 };
 
@@ -80,7 +81,7 @@ const comments = (state = DEFAULT_STATE, action) =>
             "commentsLikes",
             "backup"
           ])(state);
-          const oldComment = get(["comments", "backup"])(state);
+          const oldCommentVotes = get(["commentsVotes", "backup"])(state);
 
           return compose(
             set(["commentsLikes", "backup"], null),
@@ -88,12 +89,10 @@ const comments = (state = DEFAULT_STATE, action) =>
               ...current,
               [commentid]: oldVote
             })),
-            update(["comments", "byToken", token], (current) =>
-              current.map((comment) => {
-                if (comment.commentid !== commentid) return comment;
-                return oldComment;
-              })
-            )
+            update(["commentsVotes", "byToken", token], (current) => ({
+              ...current,
+              [commentid]: oldCommentVotes
+            }))
           )(state);
         })()
       : state
@@ -151,20 +150,30 @@ const comments = (state = DEFAULT_STATE, action) =>
               newCommentsLikes[commentid] = 0;
             }
 
-            const updateCommentVotes = (comment) => {
-              if (comment.commentid !== commentid) return comment;
+            // const updateCommentVotes = (comment) => {
+            //   if (comment.commentid !== commentid) return comment;
 
-              const { newUpvotes, newDownvotes } = calcVotes(
-                comment,
-                oldVote,
-                vote
-              );
+            //   const { newUpvotes, newDownvotes } = calcVotes(
+            //     comment,
+            //     oldVote,
+            //     vote
+            //   );
 
-              return {
-                ...comment,
-                upvotes: newUpvotes,
-                downvotes: newDownvotes
-              };
+            //   return {
+            //     ...comment,
+            //     upvotes: newUpvotes,
+            //     downvotes: newDownvotes
+            //   };
+            // };
+
+            const { newUpvotes, newDownvotes } = calcVotes(
+              oldComment,
+              oldVote,
+              vote
+            );
+            const votes = {
+              upvotes: newUpvotes,
+              downvotes: newDownvotes
             };
 
             return compose(
@@ -176,15 +185,11 @@ const comments = (state = DEFAULT_STATE, action) =>
                 oldVote,
                 oldComment
               }),
-              set(["comments", "backup"], oldComment),
-              /* This will cause some delay to update up/downvotes if there are
-              a lot of comments in the page. This happens because we have to
-              recreate the comments array all the time due to the redux
-              immutability pattern. Will be improved when we migrate to the
-              plugins structure. */
-              update(["comments", "byToken", shortToken], (value) =>
-                value.map(updateCommentVotes)
-              )
+              set(["commentsVotes", "backup"], {
+                downvotes: oldComment.downvotes,
+                upvotes: oldComment.upvotes
+              }),
+              set(["commentsVotes", "byToken", shortToken, commentid], votes)
             )(state);
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
