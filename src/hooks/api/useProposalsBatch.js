@@ -252,15 +252,14 @@ export default function useProposalsBatch({
     });
     setRemainingTokens(unfetchedTokens);
     setStatusIndex(index);
-    if (!foundPreviousSessionStatus) {
-      setStatuses(statuses);
-      return send(RESOLVE);
-    }
     // machine stop condition: inventory loaded, but no tokens to fetch
     if (isByRecordStatus) {
       proposalStatus = statuses;
     } else {
       setStatuses(statuses);
+    }
+    if (!foundPreviousSessionStatus) {
+      return send(RESOLVE);
     }
     return send(START);
   };
@@ -281,6 +280,7 @@ export default function useProposalsBatch({
 
   const anyError = error || state.error;
   useThrowError(anyError);
+
   return {
     proposals: getRfpLinkedProposals(
       proposalWithCacheVotetatus(proposals),
@@ -290,7 +290,7 @@ export default function useProposalsBatch({
     proposalsTokens: allByStatus,
     loading:
       state.loading ||
-      (!values(proposals).length && statusIndex + 1 < voteStatuses.length),
+      (!values(proposals).length && statusIndex + 1 < voteStatuses?.length),
     // loading return true when fetching cycle is running and there are no proposals fetched to avoid flickering at starting
     verifying: state.verifying,
     onRestartMachine,
