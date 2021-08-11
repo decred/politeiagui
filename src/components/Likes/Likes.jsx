@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { debounce } from "lodash";
 import { Icon, useTheme, Text, getThemeProperty, classNames } from "pi-ui";
@@ -8,6 +8,7 @@ export const isLiked = (action) => action === 1 || action === "1";
 export const isDisliked = (action) => action === -1 || action === "-1";
 
 const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
+  const [tempDisabled, setTempDisabled] = useState(false);
   const { theme } = useTheme();
   const defaultColor = getThemeProperty(theme, "comment-like-color");
   const activeColor = getThemeProperty(theme, "comment-like-color-active");
@@ -17,17 +18,21 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
   const dislikeColor = disliked ? activeColor : defaultColor;
 
   async function handleLike() {
-    if (disabled) return;
     await onLike();
+    setTempDisabled(false);
   }
 
   async function handleDislike() {
-    if (disabled) return;
     await onDislike();
+    setTempDisabled(false);
   }
 
-  const debouncedHandleDislike = debounce(handleDislike, 150);
-  const debouncedHandleLike = debounce(handleLike, 150);
+  // Avoid multi-clicking actions
+  const handleDebounceVote = (voteFn) => () => {
+    if (tempDisabled || disabled) return;
+    setTempDisabled(true);
+    debounce(voteFn, 150)();
+  };
 
   const renderCount = useCallback(
     (count) => (
@@ -47,10 +52,10 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
         <button
           className={classNames(
             styles.likeBtn,
-            disabled && styles.likeDisabled
+            (disabled || tempDisabled) && styles.likeDisabled
           )}
           data-testid="like-btn"
-          onClick={debouncedHandleLike}>
+          onClick={handleDebounceVote(handleLike)}>
           <Icon iconColor={likeColor} backgroundColor={likeColor} type="like" />
         </button>
         {renderCount(upLikes)}
@@ -62,7 +67,7 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
             disabled && styles.likeDisabled
           )}
           data-testid="dislike-btn"
-          onClick={debouncedHandleDislike}>
+          onClick={handleDebounceVote(handleDislike)}>
           <Icon
             iconColor={dislikeColor}
             backgroundColor={dislikeColor}

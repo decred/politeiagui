@@ -1,6 +1,7 @@
 import * as act from "../actions/types";
 import { DEFAULT_REQUEST_STATE, receive, request, reset } from "./util";
 import { onRequestLikeComment } from "./handlers";
+import compose from "lodash/fp/compose";
 
 export const DEFAULT_STATE = {
   me: DEFAULT_REQUEST_STATE,
@@ -116,8 +117,11 @@ const api = (state = DEFAULT_STATE, action) =>
         request("proposalOwnerBilling", state, action),
       [act.RECEIVE_PROPOSAL_BILLING]: () =>
         receive("proposalOwnerBilling", state, action),
-      [act.REQUEST_RECORD_COMMENTS]: () =>
-        request("proposalComments", state, action),
+      [act.REQUEST_RECORD_COMMENTS]: compose(
+        // clean likeComment errors
+        (newState) => receive("likeComment", newState, { payload: {} }),
+        () => request("proposalComments", state, action)
+      ),
       [act.RECEIVE_RECORD_COMMENTS]: () =>
         receive("proposalComments", state, action),
       [act.REQUEST_LIKE_COMMENT]: () => onRequestLikeComment(state, action),
@@ -242,8 +246,11 @@ const api = (state = DEFAULT_STATE, action) =>
         receive("adminInvoices", state, action),
       [act.REQUEST_INVOICE]: () => request("invoice", state, action),
       [act.RECEIVE_INVOICE]: () => receive("invoice", state, action),
-      [act.REQUEST_RECORD_COMMENTS]: () =>
-        request("invoiceComments", state, action),
+      [act.REQUEST_RECORD_COMMENTS]: compose(
+        // clean likeComment errors
+        (newState) => receive("likeComment", newState, { payload: {} }),
+        () => request("invoiceComments", state, action)
+      ),
       [act.RECEIVE_RECORD_COMMENTS]: () =>
         receive("invoiceComments", state, action),
       [act.REQUEST_SETSTATUS_INVOICE]: () =>

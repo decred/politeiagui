@@ -136,6 +136,12 @@ const comments = (state = DEFAULT_STATE, action) =>
               get(["comments", "byToken", shortToken])
             )(state);
             const commentsLikes = state.commentsLikes.byToken[shortToken];
+            const oldCommentsVotes = get([
+              "commentsVotes",
+              "byToken",
+              shortToken,
+              commentid
+            ])(state);
             const oldVote = commentsLikes
               ? commentsLikes[commentid]
                 ? commentsLikes[commentid]
@@ -151,7 +157,7 @@ const comments = (state = DEFAULT_STATE, action) =>
             }
 
             const { newUpvotes, newDownvotes } = calcVotes(
-              oldComment,
+              oldCommentsVotes || oldComment,
               oldVote,
               vote
             );
@@ -173,7 +179,22 @@ const comments = (state = DEFAULT_STATE, action) =>
                 downvotes: oldComment.downvotes,
                 upvotes: oldComment.upvotes
               }),
-              set(["commentsVotes", "byToken", shortToken, commentid], votes)
+              update(["commentsVotes", "byToken", shortToken], (current) => ({
+                ...current,
+                [commentid]: votes
+              }))
+            )(state);
+          },
+          [act.RECEIVE_LIKE_COMMENT_SUCCESS]: () => {
+            const { token, commentid } = action.payload;
+            const shortToken = shortRecordToken(token);
+            const { upvotes, downvotes } =
+              state.commentsVotes.byToken[shortToken][commentid];
+            return update(["comments", "byToken", shortToken], (comments) =>
+              comments.map((comment) => {
+                if (comment.commentid !== commentid) return comment;
+                return { ...comment, upvotes, downvotes };
+              })
             )(state);
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
