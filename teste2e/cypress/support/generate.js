@@ -31,6 +31,29 @@ export const buildRecord = build("Record").fields({
   signature: fake((f) => f.datatype.hexaDecimal(128, false, /[0-9a-z]/))
 });
 
+export const buildRecordComment = ({
+  token,
+  state = 2,
+  downvotes = 0,
+  upvotes = 0,
+  commentid
+}) =>
+  build("RecordComment").fields({
+    userid: fake((f) => f.datatype.uuid()),
+    username: fake((f) => `user${f.datatype.number()}`),
+    state,
+    token,
+    parentid: 0,
+    comment: fake((f) => f.lorem.sentence()),
+    publickey: fake((f) => f.datatype.hexaDecimal(64, false, /[0-9a-z]/)),
+    signature: fake((f) => f.datatype.hexaDecimal(128, false, /[0-9a-z]/)),
+    commentid: commentid || fake((f) => f.datatype.number()),
+    timestamp: Date.now() / 1000,
+    receipt: fake((f) => f.datatype.hexaDecimal(128, false, /[0-9a-z]/)),
+    downvotes,
+    upvotes
+  })();
+
 const fakeToken = () => buildRecord().token;
 
 /**

@@ -35,9 +35,9 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
   };
 
   const renderCount = useCallback(
-    (count) => (
+    (count, isLike) => (
       <Text
-        data-testid="score"
+        data-testid={`score-${isLike ? "like" : "dislike"}`}
         size="small"
         className={classNames(styles.likesResult, "unselectable")}>
         {count}
@@ -58,7 +58,7 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
           onClick={handleDebounceVote(handleLike)}>
           <Icon iconColor={likeColor} backgroundColor={likeColor} type="like" />
         </button>
-        {renderCount(upLikes)}
+        {renderCount(upLikes, true)}
       </div>
       <div className={styles.rightLikeBox}>
         <button

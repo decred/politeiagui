@@ -33,6 +33,7 @@ import { makeProposal, signRegister } from "../utils";
 import { shortRecordToken } from "../utils";
 import { middlewares as recordMiddlewares } from "./mock/records";
 import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";
+import { middlewares as commentsMiddlewares } from "./mock/comments";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -146,7 +147,8 @@ Cypress.Commands.add("assertListLengthByTestId", (testid, expectedLength) =>
 Cypress.Commands.add("middleware", (path, ...args) => {
   const mw = get(path)({
     ticketvote: ticketVoteMiddlewares,
-    records: recordMiddlewares
+    records: recordMiddlewares,
+    comments: commentsMiddlewares
   });
   return mw(...args).as(path);
 });
