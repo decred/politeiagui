@@ -1346,25 +1346,6 @@ export const onFetchProposalVoteResults = (token) =>
       });
   });
 
-export const onFetchVotesDetails = (token) =>
-  withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_VOTES_DETAILS({ token }));
-    return api
-      .proposalVoteDetails(csrf, token)
-      .then((response) =>
-        dispatch(
-          act.RECEIVE_VOTES_DETAILS({
-            ...response,
-            token
-          })
-        )
-      )
-      .catch((error) => {
-        dispatch(act.RECEIVE_VOTES_DETAILS(null, error));
-        throw error;
-      });
-  });
-
 export const onAuthorizeVote = (userid, token, version) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_AUTHORIZE_VOTE({ token }));
