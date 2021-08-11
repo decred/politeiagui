@@ -18,6 +18,8 @@ const INELIGIBLE = "ineligible";
 const ARCHIVED = "archived";
 const PUBLIC = "public";
 const CENSORED = "censored";
+const PROPOSAL_STATE_UNVETTED = 1;
+const PROPOSAL_STATE_VETTED = 2;
 const PROPOSAL_VOTING_NOT_AUTHORIZED = 1;
 const PROPOSAL_VOTING_AUTHORIZED = 2;
 const PROPOSAL_VOTING_ACTIVE = 3;
@@ -178,3 +180,9 @@ export const getProposalStatusLabel = (status, isByRecordStatus) =>
           [PROPOSAL_VOTING_INELIGIBLE]: INELIGIBLE
         }
   );
+
+export const getProposalStateLabel = (proposalState) =>
+  get(proposalState)({
+    [PROPOSAL_STATE_VETTED]: "vetted",
+    [PROPOSAL_STATE_UNVETTED]: "unvetted"
+  });

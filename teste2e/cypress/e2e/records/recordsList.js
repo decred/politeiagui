@@ -1,10 +1,12 @@
-import {shortRecordToken} from "../../utils";
+import { shortRecordToken } from "../../utils";
 
 const statusByTab = {
   "Under Review": ["started", "authorized", "unauthorized"],
   Approved: ["approved"],
   Rejected: ["rejected"],
-  Abandoned: ["ineligible"]
+  Abandoned: ["ineligible"],
+  Unreviewed: ["unreviewed"],
+  Censored: ["censored"]
 };
 
 const RECORDS_PAGE_SIZE = 5;
@@ -18,7 +20,7 @@ const getTokensByStatusTab = (inventory, currentTab) =>
     : [];
 
 describe("Records list", () => {
-  describe("proposal list", () => {
+  describe("proposals list", () => {
     beforeEach(() => {
       cy.middleware("ticketvote.inventory", {
         approved: 4,
@@ -70,7 +72,6 @@ describe("Records list", () => {
       cy.wait(1000);
       cy.assertListLengthByTestId("record-title", 28);
     });
-
     it("can switch tabs and load proposals correctly", () => {
       cy.visit("/?tab=approved");
       cy.wait("@ticketvote.inventory");
@@ -106,13 +107,75 @@ describe("Records list", () => {
       cy.viewport(1001, 500);
       cy.findByTestId("sidebar").should("be.visible");
     });
-
     it("can render loading placeholders properly", () => {
       cy.visit(`/`);
       cy.get('[data-testid="loading-placeholders"] > div').should(
         "have.length",
         5
       );
+    });
+  });
+
+  describe("admin proposals list", () => {
+    beforeEach(() => {
+      const admin = {
+        email: "adminuser@example.com",
+        username: "adminuser",
+        password: "password"
+      };
+      cy.middleware("records.inventory", {
+        unreviewed: 22,
+        censored: 8
+      });
+      cy.middleware("records.records");
+      cy.login(admin);
+    });
+    it("can render records list according to inventory order", () => {
+      let inventory;
+      cy.visit("/admin/records");
+      cy.wait("@records.inventory").then(({ response: { body } }) => {
+        inventory = body.unvetted;
+      });
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE) // first records batch
+        .each(([{ id }], position) => {
+          const tokens = getTokensByStatusTab(inventory, "Unreviewed");
+          const expectedToken = shortRecordToken(tokens[position]);
+          expect(id).to.have.string(expectedToken);
+        });
+    });
+    it("can render records and inventory pagination correctly", () => {
+      cy.visit("/admin/records");
+      cy.wait("@records.inventory");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 5);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 10);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 15);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 20);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 22);
+      cy.scrollTo("bottom");
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 22);
+    });
+    it("can switch tabs and load proposals correctly", () => {
+      cy.visit("/admin/records?tab=unreviewed");
+      cy.wait("@records.inventory");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 5);
+      cy.findByTestId("tab-1").click();
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 5);
+      cy.findByTestId("tab-0").click();
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 10);
     });
   });
 });
