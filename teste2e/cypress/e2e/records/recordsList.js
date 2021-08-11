@@ -134,7 +134,6 @@ describe("Records list", () => {
       let inventory;
       cy.visit("/admin/records");
       cy.wait("@records.inventory").then(({ response: { body } }) => {
-        console.log("body", body);
         inventory = body.unvetted;
       });
       cy.wait("@records.records");
