@@ -252,12 +252,12 @@ export default function useProposalsBatch({
     });
     setRemainingTokens(unfetchedTokens);
     setStatusIndex(index);
-    // machine stop condition: inventory loaded, but no tokens to fetch
     if (isByRecordStatus) {
       proposalStatus = statuses;
     } else {
       setStatuses(statuses);
     }
+    // machine stop condition: inventory loaded, but no tokens to fetch
     if (!foundPreviousSessionStatus) {
       return send(RESOLVE);
     }
