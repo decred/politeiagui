@@ -1,6 +1,10 @@
 import { makeProposal } from "../../utils";
-import { buildRecord, buildProposal } from "../generate";
-
+import {
+  buildRecord,
+  buildProposal,
+  makeCustomInventoryByStatus
+} from "../generate";
+import { getProposalStatusLabel, getProposalStateLabel } from "../../utils";
 // Record
 const DEFAULT_STATUS = 2;
 const DEFAULT_STATE = 2;
@@ -57,5 +61,41 @@ export const middlewares = {
       req.reply({
         body: { records: proposals }
       });
+    }),
+  inventory: (tokensAmountByStatus, state = 1) =>
+    cy.intercept("/api/records/v1/inventory", (req) => {
+      const inv = makeCustomInventoryByStatus(
+        tokensAmountByStatus || {
+          censored: 7,
+          unreviewed: 8
+        }
+      );
+      const recordState = getProposalStateLabel(state);
+      if (!req.body.status) {
+        const tokens = Object.keys(inv).reduce(
+          (acc, status) => ({
+            ...acc,
+            [status]: inv[status][0]
+          }),
+          {}
+        );
+        req.reply({
+          body: {
+            bestBlock: 718066,
+            [recordState]: tokens
+          }
+        });
+      } else {
+        const statusLabel = getProposalStatusLabel(req.body.status, true);
+        req.reply({
+          body: {
+            bestBlock: 718066,
+            [recordState]: {
+              [statusLabel]:
+                inv[statusLabel][req.body.page ? req.body.page - 1 : 0]
+            }
+          }
+        });
+      }
     })
 };
