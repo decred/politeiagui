@@ -29,7 +29,7 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
     debounce(() => {
       if (disabled) return;
       voteFn();
-    }, 150);
+    }, 300);
 
   const renderCount = useCallback(
     (count, isLike) => (
