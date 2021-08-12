@@ -63,6 +63,26 @@ describe("Comments Votes", () => {
           expect(Number(newup)).to.equal(Number(upvotes) - 1);
         });
     });
+    it("should prevent multi-clicking", () => {
+      let upvotes;
+      cy.visit(`/record/${shortRecordToken(token)}`);
+      cy.wait("@comments.comments");
+      cy.findAllByTestId("score-like")
+        .first()
+        .then((score) => {
+          upvotes = score[0].innerText;
+        });
+      cy.route("POST", "api/comments/v1/vote").as("vote");
+      cy.findAllByTestId("like-btn").first().dblclick();
+      cy.wait("@vote");
+      cy.shouldBeCalled("vote", 1);
+      cy.findAllByTestId("score-like")
+        .first()
+        .then((score) => {
+          const newup = score[0].innerText;
+          expect(Number(newup)).to.equal(Number(upvotes) + 1);
+        });
+    });
   });
   describe("failed votes", () => {
     let token;

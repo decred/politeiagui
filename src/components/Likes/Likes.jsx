@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { debounce } from "lodash";
 import { Icon, useTheme, Text, getThemeProperty, classNames } from "pi-ui";
@@ -8,7 +8,6 @@ export const isLiked = (action) => action === 1 || action === "1";
 export const isDisliked = (action) => action === -1 || action === "-1";
 
 const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
-  const [tempDisabled, setTempDisabled] = useState(false);
   const { theme } = useTheme();
   const defaultColor = getThemeProperty(theme, "comment-like-color");
   const activeColor = getThemeProperty(theme, "comment-like-color-active");
@@ -19,20 +18,18 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
 
   async function handleLike() {
     await onLike();
-    setTempDisabled(false);
   }
 
   async function handleDislike() {
     await onDislike();
-    setTempDisabled(false);
   }
 
   // Avoid multi-clicking actions
-  const handleDebounceVote = (voteFn) => () => {
-    if (tempDisabled || disabled) return;
-    setTempDisabled(true);
-    debounce(voteFn, 150)();
-  };
+  const handleDebounceVote = (voteFn) =>
+    debounce(() => {
+      if (disabled) return;
+      voteFn();
+    }, 150);
 
   const renderCount = useCallback(
     (count, isLike) => (
@@ -52,7 +49,7 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
         <button
           className={classNames(
             styles.likeBtn,
-            (disabled || tempDisabled) && styles.likeDisabled
+            disabled && styles.likeDisabled
           )}
           data-testid="like-btn"
           onClick={handleDebounceVote(handleLike)}>

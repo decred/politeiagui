@@ -153,6 +153,13 @@ Cypress.Commands.add("middleware", (path, ...args) => {
   return mw(...args).as(path);
 });
 
+Cypress.Commands.add("shouldBeCalled", (alias, timesCalled) => {
+  expect(
+    cy.state("requests").filter((call) => call.alias === alias),
+    `${alias} should have been called ${timesCalled} times`
+  ).to.have.length(timesCalled);
+});
+
 Cypress.on("window:before:load", (win) => {
   // this lets React DevTools "see" components inside application's iframe
   win.__REACT_DEVTOOLS_GLOBAL_HOOK__ =
