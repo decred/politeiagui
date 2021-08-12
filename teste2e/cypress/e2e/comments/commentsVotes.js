@@ -3,8 +3,8 @@ import { shortRecordToken } from "../../utils";
 describe("Comments Votes", () => {
   beforeEach(() => {
     const user = {
-      email: "email@example.com",
-      username: "vgadmin",
+      email: "adminuser@example.com",
+      username: "adminuser",
       password: "password"
     };
     cy.login(user);
