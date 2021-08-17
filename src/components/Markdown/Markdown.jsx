@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 import { customComponents } from "./helpers";
 import "./styles.css";
 
@@ -16,6 +17,7 @@ const MarkdownRenderer = ({
       className="markdown-body"
       skipHtml={true}
       unwrapDisallowed={true}
+      remarkPlugins={[gfm]}
       components={customComponents(renderImages)}
       disallowedElements={disallowedElements}>
       {body}
