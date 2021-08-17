@@ -34,20 +34,20 @@ const CompareVersionSelector = ({
   return (
     <div className={styles.versionSelectorContainer}>
       <Dropdown
-          title={`version ${base}`}
-          className={styles.versionSelectorWrapper}
-          itemsListClassName={className}>
+        title={`version ${base}`}
+        className={styles.versionSelectorWrapper}
+        itemsListClassName={className}>
         {versionsOptions.map((v) => {
           return (
-              compare > v && (
-                  <DropdownItem
-                      key={v}
-                      onClick={() => {
-                        onChange(BASE, v);
-                      }}>
-                    version {v}
-                  </DropdownItem>
-              )
+            compare > v && (
+              <DropdownItem
+                key={v}
+                onClick={() => {
+                  onChange(BASE, v);
+                }}>
+                version {v}
+              </DropdownItem>
+            )
           );
         })}
       </Dropdown>
@@ -57,20 +57,20 @@ const CompareVersionSelector = ({
         type="compare"
       />
       <Dropdown
-          title={`version ${compare}`}
-          className={styles.versionSelectorWrapper}
-          itemsListClassName={className}>
+        title={`version ${compare}`}
+        className={styles.versionSelectorWrapper}
+        itemsListClassName={className}>
         {versionsOptions.map((v) => {
           return (
-              base < v && (
-                  <DropdownItem
-                      key={v}
-                      onClick={() => {
-                        onChange(COMPARE, v);
-                      }}>
-                    version {v}
-                  </DropdownItem>
-              )
+            base < v && (
+              <DropdownItem
+                key={v}
+                onClick={() => {
+                  onChange(COMPARE, v);
+                }}>
+                version {v}
+              </DropdownItem>
+            )
           );
         })}
       </Dropdown>
