@@ -60,12 +60,21 @@
   }
 }
 
+.versionSelectorContainer {
+  margin-bottom: 5px;
+}
+
 .versionSelectorWrapper {
-  border: 1px solid var(--color-primary);
-  border-radius: 2px;
+  border-bottom: 1px solid var(--color-primary);
   padding: 4px;
 }
 
 .versionCompareIcon {
   margin: 0 10px;
+}
+
+.versionSpinnerContainer {
+  width: 100%;
+  margin-top: 5px;
+  text-align: center;
 }

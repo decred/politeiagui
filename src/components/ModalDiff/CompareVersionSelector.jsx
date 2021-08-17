@@ -4,7 +4,6 @@ import {
   Dropdown,
   DropdownItem,
   getThemeProperty,
-  Spinner,
   useTheme
 } from "pi-ui";
 import styles from "./ModalDiff.module.css";
@@ -33,60 +32,48 @@ const CompareVersionSelector = ({
     return versions;
   }, [latest]);
   return (
-    <div>
-      {baseLoading ? (
-        <span className={styles.versionSelectorWrapper}>
-          {`version ${base}`} <Spinner invert />
-        </span>
-      ) : (
-        <Dropdown
+    <div className={styles.versionSelectorContainer}>
+      <Dropdown
           title={`version ${base}`}
           className={styles.versionSelectorWrapper}
           itemsListClassName={className}>
-          {versionsOptions.map((v) => {
-            return (
+        {versionsOptions.map((v) => {
+          return (
               compare > v && (
-                <DropdownItem
-                  key={v}
-                  onClick={() => {
-                    onChange(BASE, v);
-                  }}>
-                  version {v}
-                </DropdownItem>
+                  <DropdownItem
+                      key={v}
+                      onClick={() => {
+                        onChange(BASE, v);
+                      }}>
+                    version {v}
+                  </DropdownItem>
               )
-            );
-          })}
-        </Dropdown>
-      )}
+          );
+        })}
+      </Dropdown>
       <IconButton
         className={styles.versionCompareIcon}
         iconColor={iconColor}
         type="compare"
       />
-      {compareLoading ? (
-        <span className={styles.versionSelectorWrapper}>
-          {`version ${compare}`} <Spinner invert />
-        </span>
-      ) : (
-        <Dropdown
+      <Dropdown
           title={`version ${compare}`}
           className={styles.versionSelectorWrapper}
           itemsListClassName={className}>
-          {versionsOptions.map((v) => {
-            return (
+        {versionsOptions.map((v) => {
+          return (
               base < v && (
-                <DropdownItem
-                  key={v}
-                  onClick={() => {
-                    onChange(COMPARE, v);
-                  }}>
-                  version {v}
-                </DropdownItem>
+                  <DropdownItem
+                      key={v}
+                      onClick={() => {
+                        onChange(COMPARE, v);
+                      }}>
+                    version {v}
+                  </DropdownItem>
               )
-            );
-          })}
-        </Dropdown>
-      )}
+          );
+        })}
+      </Dropdown>
     </div>
   );
 };
