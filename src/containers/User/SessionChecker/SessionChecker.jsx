@@ -1,37 +1,41 @@
 import PropTypes from "prop-types";
 import { useEffect, useCallback } from "react";
 import { useSessionChecker } from "./hooks";
-import useNavigation from "src/hooks/api/useNavigation";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
 
 const LOGIN_MODAL_ID = "sessionExpiredModal";
 
 const SessionChecker = ({ children }) => {
-  const { sessionExpired, setSessionExpired } = useSessionChecker();
-  const { handleLogout } = useNavigation();
+  const { sessionExpired, setSessionExpired, handleLogout } =
+    useSessionChecker();
   const [handleOpenModal, handleCloseModal] = useModalContext();
-
-  const markSessionExpiredAsFalse = useCallback(() => {
-    setSessionExpired(false);
-  }, [setSessionExpired]);
 
   const closeModal = useCallback(() => {
     handleLogout();
     handleCloseModal();
-    markSessionExpiredAsFalse();
-  }, [handleCloseModal, handleLogout, markSessionExpiredAsFalse]);
+    setSessionExpired(false);
+  }, [handleCloseModal, handleLogout, setSessionExpired]);
+
+  const openModal = useCallback(() => {
+    handleOpenModal(ModalLogin, {
+      onLoggedIn: () => {
+        setSessionExpired(false);
+        handleCloseModal();
+      },
+      id: LOGIN_MODAL_ID,
+      title: "Your session has expired. Please log in again",
+      onClose: closeModal,
+      disableDismiss: true
+    });
+  }, [setSessionExpired, handleOpenModal, closeModal, handleCloseModal]);
 
   useEffect(() => {
     if (sessionExpired) {
-      handleOpenModal(ModalLogin, {
-        onLoggedIn: markSessionExpiredAsFalse,
-        id: LOGIN_MODAL_ID,
-        title: "Your session has expired. Please log in again",
-        onClose: closeModal
-      });
+      openModal();
     }
-  }, [sessionExpired, markSessionExpiredAsFalse, handleOpenModal, closeModal]);
+  }, [sessionExpired, openModal]);
+
   return children;
 };
 

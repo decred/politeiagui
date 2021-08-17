@@ -139,10 +139,8 @@ export const onGetPolicy = () => async (dispatch, getState) => {
 
 export const withCsrf = (fn) => (dispatch, getState) => {
   const csrf = sel.csrf(getState());
-  const csrfIsNeeded = sel.getCsrfIsNeeded(getState());
-  if (csrf || csrfIsNeeded) return fn(dispatch, getState, csrf);
+  if (csrf) return fn(dispatch, getState, csrf);
 
-  dispatch(act.CSRF_NEEDED(true));
   return dispatch(requestApiInfo()).then(() =>
     withCsrf(fn)(dispatch, getState)
   );
@@ -256,6 +254,7 @@ export const onLogin = ({ email, password, code }) =>
       const response = await api.login(csrf, email, password, code);
       await dispatch(onRequestMe());
       dispatch(act.RECEIVE_LOGIN(response));
+      dispatch(act.LOGIN_REQUIRED(false));
       const { userid, username } = response;
       const keyNeedsReplace = await pki.needStorageKeyReplace(email, username);
       if (keyNeedsReplace) {
@@ -281,6 +280,13 @@ export const handleNormalLogout = () => {
   clearStateLocalStorage();
   clearPollingPointer();
   clearProposalPaymentPollingPointer();
+};
+
+// handleLocalLogout can be used to clean user session on logout
+// without requesting the API
+export const handleLocalLogout = () => (dispatch) => {
+  dispatch(act.RECEIVE_LOGOUT());
+  handleNormalLogout();
 };
 
 // handlePermanentLogout handles the logout procedures while deleting all
@@ -309,6 +315,10 @@ export const onLogout = (isCMS, isPermanent) =>
         throw error;
       });
   });
+
+export const onRequireCSRF = () => (dispatch) => {
+  dispatch(act.CSRF_NEEDED(true));
+};
 
 export const onChangeUsername = (password, newUsername) =>
   withCsrf((dispatch, _, csrf) => {

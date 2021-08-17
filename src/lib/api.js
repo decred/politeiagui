@@ -10,7 +10,7 @@ import {
   PROPOSAL_METADATA_FILENAME,
   VOTE_METADATA_FILENAME
 } from "../constants";
-import { APIUserError, APIPluginError, isAPIWww } from "./errors.js";
+import { APIUserError, APIPluginError } from "./errors.js";
 import {
   digestPayload,
   digest,
@@ -346,13 +346,8 @@ export const parseResponse = (response) =>
             response: {},
             csrfToken: response.headers.get("X-Csrf-Token")
           });
-        let errorcode = json.errorcode;
-        let errorcontext = json.errorcontext;
-
-        if (isAPIWww(response.url)) {
-          errorcode = json.ErrorCode;
-          errorcontext = json.ErrorContext;
-        }
+        const errorcode = json.errorcode || json.ErrorCode;
+        const errorcontext = json.errorcontext || json.ErrorContext;
 
         if (json.pluginid) {
           reject(new APIPluginError(json.pluginid, errorcode, errorcontext));
