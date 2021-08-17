@@ -16,9 +16,7 @@ const CompareVersionSelector = ({
   className,
   latest,
   base,
-  compare,
-  baseLoading,
-  compareLoading
+  compare
 }) => {
   const { theme, themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
