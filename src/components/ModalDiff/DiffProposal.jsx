@@ -37,7 +37,7 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
           <p className={styles.headerSubtitle}>
             Compare changes across different versions of the record.
           </p>
-        }></Header>
+        }/>
       <CompareVersionSelector
         latest={latest}
         onChange={changedVersion}
@@ -53,15 +53,12 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
         <>
           <Header
             title={
-              <Title
-                id={"proposal-title-gfsag"}
-                truncate
-                linesBeforeTruncate={2}>
+              <p className={styles.titleDiff}>
                 <DiffText
                   oldText={baseProposal.title}
                   newText={compareProposal.title}
                 />
-              </Title>
+              </p>
             }
             subtitle={
               <Subtitle>
