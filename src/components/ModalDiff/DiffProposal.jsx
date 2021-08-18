@@ -37,7 +37,8 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
           <p className={styles.headerSubtitle}>
             Compare changes across different versions of the record.
           </p>
-        }/>
+        }
+      />
       <CompareVersionSelector
         latest={latest}
         onChange={changedVersion}
