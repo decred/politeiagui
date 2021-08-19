@@ -24,15 +24,16 @@ const CompareVersionSelector = ({
   const iconColor = isDarkTheme ? darkIconColor : undefined;
   const versionsOptions = useMemo(() => {
     const versions = [];
-    for (let index = latest; index >= 1; index--) {
+    for (let index = latest; index >= 0; index--) {
       versions.push(index);
     }
     return versions;
   }, [latest]);
+  const ZERO_VERSION_ALIAS = "----------";
   return (
     <div className={styles.versionSelectorContainer}>
       <Dropdown
-        title={`version ${base}`}
+        title={base ? `version ${base}` : ZERO_VERSION_ALIAS}
         className={styles.versionSelectorWrapper}
         itemsListClassName={className}>
         {versionsOptions.map((v) => {
@@ -43,7 +44,7 @@ const CompareVersionSelector = ({
                 onClick={() => {
                   onChange(BASE, v);
                 }}>
-                version {v}
+                {v ? `version ${v}` : ZERO_VERSION_ALIAS}
               </DropdownItem>
             )
           );

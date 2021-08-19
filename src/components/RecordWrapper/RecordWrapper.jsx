@@ -99,12 +99,24 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
   );
 };
 
-export const Subtitle = ({ children }) => (
+export const Subtitle = ({ children, separatorSymbol = "•" }) => (
   <Join
     className={classNames("margin-top-s", styles.subtitleWrapper)}
     SeparatorComponent={() => (
       <span className="text-secondary-color margin-left-s margin-right-s">
-        •
+        {separatorSymbol}
+      </span>
+    )}>
+    {children}
+  </Join>
+);
+
+export const JoinTitle = ({ children, className, separatorSymbol = "•" }) => (
+  <Join
+    className={classNames(className, styles.subtitleWrapper)}
+    SeparatorComponent={() => (
+      <span className="text-secondary-color margin-left-s margin-right-s">
+        {separatorSymbol}
       </span>
     )}>
     {children}

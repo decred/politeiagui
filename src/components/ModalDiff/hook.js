@@ -18,7 +18,13 @@ export function useCompareVersionSelector(initVersion, latestVersion, token) {
   const fetchProposalVersions = useCallback(
     async (onFetchProposalDetailsWithoutState, token, version) => {
       if (!version) {
-        return;
+        // return empty data for case version = 0
+        return {
+          details: {},
+          files: [],
+          text: "",
+          title: ""
+        };
       }
       // Fetch provided version
       const proposal = await onFetchProposalDetailsWithoutState(token, version);

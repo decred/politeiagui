@@ -8,7 +8,7 @@ import {
   Title,
   Author,
   Event,
-  Subtitle,
+  JoinTitle,
   DownloadTimestamps
 } from "src/components/RecordWrapper";
 import styles from "./ModalDiff.module.css";
@@ -62,59 +62,68 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
               </p>
             }
             subtitle={
-              <Subtitle>
+              <JoinTitle className={"margin-top-s"} separatorSymbol={":"}>
                 <Author
                   username={compareProposal.details.username}
                   url={`/user/${compareProposal.details.userid}`}
                 />
-                <span>
-                  {baseProposal.details.timestamp !==
-                    baseProposal.details.publishedat &&
-                    baseProposal.details.timestamp !==
-                      baseProposal.details.abandonedat && (
+                <JoinTitle separatorSymbol={"-"}>
+                  {baseVersion > 0 && (
+                    <JoinTitle>
+                      {baseProposal.details.timestamp !==
+                        baseProposal.details.publishedat &&
+                        baseProposal.details.timestamp !==
+                          baseProposal.details.abandonedat && (
+                          <Event
+                            className="margin-left-s margin-right-s"
+                            event="edited"
+                            timestamp={baseProposal.details.timestamp}
+                          />
+                        )}
+                      {baseProposal.details.abandonedat && (
+                        <Event
+                          className="margin-left-s margin-right-s"
+                          event={"abandoned"}
+                          timestamp={baseProposal.details.abandonedat}
+                        />
+                      )}
+                    </JoinTitle>
+                  )}
+                  <JoinTitle>
+                    {compareProposal.details.timestamp !==
+                      compareProposal.details.publishedat &&
+                      compareProposal.details.timestamp !==
+                        compareProposal.details.abandonedat && (
+                        <Event
+                          className="margin-left-s margin-right-s"
+                          event="edited"
+                          timestamp={compareProposal.details.timestamp}
+                        />
+                      )}
+                    {compareProposal.details.abandonedat && (
                       <Event
                         className="margin-left-s margin-right-s"
-                        event="edited"
-                        timestamp={baseProposal.details.timestamp}
+                        event={"abandoned"}
+                        timestamp={compareProposal.details.abandonedat}
                       />
                     )}
-                  {baseProposal.details.abandonedat && (
-                    <Event
-                      className="margin-left-s margin-right-s"
-                      event={"abandoned"}
-                      timestamp={baseProposal.details.abandonedat}
-                    />
-                  )}
-                  -
-                  {compareProposal.details.timestamp !==
-                    compareProposal.details.publishedat &&
-                    compareProposal.details.timestamp !==
-                      compareProposal.details.abandonedat && (
-                      <Event
-                        className="margin-left-s margin-right-s"
-                        event="edited"
-                        timestamp={compareProposal.details.timestamp}
-                      />
-                    )}
-                  {compareProposal.details.abandonedat && (
-                    <Event
-                      className="margin-left-s margin-right-s"
-                      event={"abandoned"}
-                      timestamp={compareProposal.details.abandonedat}
-                    />
-                  )}
-                </span>
-              </Subtitle>
+                  </JoinTitle>
+                </JoinTitle>
+              </JoinTitle>
             }
           />
           <span>
             Download the timestamps for &nbsp;
-            <DownloadTimestamps
-              label={`version ${baseProposal.details.version}`}
-              version={baseProposal.details.version}
-              token={token}
-            />
-            &nbsp; or &nbsp;
+            {baseVersion > 0 && (
+              <>
+                <DownloadTimestamps
+                  label={`version ${baseProposal.details.version}`}
+                  version={baseProposal.details.version}
+                  token={token}
+                />
+                &nbsp; or &nbsp;
+              </>
+            )}
             <DownloadTimestamps
               label={`version ${compareProposal.details.version}`}
               version={compareProposal.details.version}
