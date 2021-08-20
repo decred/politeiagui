@@ -17,22 +17,24 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
   const dislikeColor = disliked ? activeColor : defaultColor;
 
   async function handleLike() {
-    if (disabled) return;
     await onLike();
   }
 
   async function handleDislike() {
-    if (disabled) return;
     await onDislike();
   }
 
-  const debouncedHandleDislike = debounce(handleDislike, 150);
-  const debouncedHandleLike = debounce(handleLike, 150);
+  // Avoid multi-clicking actions
+  const handleDebounceVote = (voteFn) =>
+    debounce(() => {
+      if (disabled) return;
+      voteFn();
+    }, 300);
 
   const renderCount = useCallback(
-    (count) => (
+    (count, isLike) => (
       <Text
-        data-testid="score"
+        data-testid={`score-${isLike ? "like" : "dislike"}`}
         size="small"
         className={classNames(styles.likesResult, "unselectable")}>
         {count}
@@ -50,10 +52,10 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
             disabled && styles.likeDisabled
           )}
           data-testid="like-btn"
-          onClick={debouncedHandleLike}>
+          onClick={handleDebounceVote(handleLike)}>
           <Icon iconColor={likeColor} backgroundColor={likeColor} type="like" />
         </button>
-        {renderCount(upLikes)}
+        {renderCount(upLikes, true)}
       </div>
       <div className={styles.rightLikeBox}>
         <button
@@ -62,7 +64,7 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
             disabled && styles.likeDisabled
           )}
           data-testid="dislike-btn"
-          onClick={debouncedHandleDislike}>
+          onClick={handleDebounceVote(handleDislike)}>
           <Icon
             iconColor={dislikeColor}
             backgroundColor={dislikeColor}

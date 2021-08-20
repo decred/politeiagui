@@ -1026,12 +1026,12 @@ export const onCommentVote = (currentUserID, token, commentid, vote, state) =>
     if (!currentUserID) {
       return;
     }
-    dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token }));
+    dispatch(act.RECEIVE_LIKE_COMMENT({ token, commentid, vote }));
     return Promise.resolve(api.makeCommentVote(state, token, vote, commentid))
       .then((comment) => api.signCommentVote(currentUserID, comment))
       .then((comment) => api.commentVote(csrf, comment))
       .then(() => {
-        dispatch(act.RECEIVE_LIKE_COMMENT({ token, commentid, vote }));
+        dispatch(act.RECEIVE_LIKE_COMMENT_SUCCESS({ token, commentid, vote }));
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));

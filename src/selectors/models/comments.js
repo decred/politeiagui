@@ -3,6 +3,8 @@ import get from "lodash/fp/get";
 import { shortRecordToken } from "src/helpers";
 
 export const commentsByToken = get(["comments", "comments", "byToken"]);
+const commentsVotesByToken = get(["comments", "commentsVotes", "byToken"]);
+
 export const accessTimeByToken = get([
   "comments",
   "comments",
@@ -26,6 +28,9 @@ const getCommentsByToken = (token) => (commentsByToken) => {
 
 export const makeGetRecordComments = (token) =>
   createSelector(commentsByToken, getCommentsByToken(token));
+
+export const makeGetRecordCommentsVotes = (token) =>
+  createSelector(commentsVotesByToken, getCommentsByToken(token));
 
 export const makeGetRecordCommentsLikes = (token) =>
   createSelector(commentsLikesByToken, getCommentsByToken(token));
