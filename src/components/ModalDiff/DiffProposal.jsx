@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Spinner, Tab, Tabs } from "pi-ui";
 import PropTypes from "prop-types";
 import { DiffHTML, FilesDiff, DiffText } from "src/components/Diff/Diff";
 import CompareVersionSelector from "./CompareVersionSelector";
+import TimestampTitle from "./TimestampTitle";
 import {
   Header,
   Title,
   Author,
-  Event,
   JoinTitle,
   DownloadTimestamps
 } from "src/components/RecordWrapper";
 import styles from "./ModalDiff.module.css";
-import { useCompareVersionSelector } from "./hook";
+import { useCompareVersionSelector } from "./hooks";
 
 const DiffProposal = ({ latest, initVersion, token, ...props }) => {
   const {
@@ -23,12 +23,22 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
     changedVersion,
     baseProposal,
     compareProposal
-  } = useCompareVersionSelector(initVersion, latest, token);
+  } = useCompareVersionSelector(initVersion, token);
+
+  const isDiffAvailable = useMemo(() => {
+    return (
+      !!baseProposal.details &&
+      !!compareProposal.details &&
+      !baseLoading &&
+      !compareLoading
+    );
+  }, [baseProposal, compareProposal, baseLoading, compareLoading]);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   useEffect(() => {
     setActiveTabIndex(0);
   }, [props.show]);
+
   return (
     <>
       <Header
@@ -47,10 +57,7 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
         baseLoading={baseLoading}
         compareLoading={compareLoading}
       />
-      {!!baseProposal.details &&
-      !!compareProposal.details &&
-      !baseLoading &&
-      !compareLoading ? (
+      {isDiffAvailable ? (
         <>
           <Header
             title={
@@ -62,52 +69,16 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
               </p>
             }
             subtitle={
-              <JoinTitle className={"margin-top-s"} separatorSymbol={":"}>
+              <JoinTitle className="margin-top-s" separatorSymbol=":">
                 <Author
                   username={compareProposal.details.username}
                   url={`/user/${compareProposal.details.userid}`}
                 />
-                <JoinTitle separatorSymbol={"-"}>
+                <JoinTitle separatorSymbol="-">
                   {baseVersion > 0 && (
-                    <JoinTitle>
-                      {baseProposal.details.timestamp !==
-                        baseProposal.details.publishedat &&
-                        baseProposal.details.timestamp !==
-                          baseProposal.details.abandonedat && (
-                          <Event
-                            className="margin-left-s margin-right-s"
-                            event="edited"
-                            timestamp={baseProposal.details.timestamp}
-                          />
-                        )}
-                      {baseProposal.details.abandonedat && (
-                        <Event
-                          className="margin-left-s margin-right-s"
-                          event={"abandoned"}
-                          timestamp={baseProposal.details.abandonedat}
-                        />
-                      )}
-                    </JoinTitle>
+                    <TimestampTitle proposal={baseProposal.details} />
                   )}
-                  <JoinTitle>
-                    {compareProposal.details.timestamp !==
-                      compareProposal.details.publishedat &&
-                      compareProposal.details.timestamp !==
-                        compareProposal.details.abandonedat && (
-                        <Event
-                          className="margin-left-s margin-right-s"
-                          event="edited"
-                          timestamp={compareProposal.details.timestamp}
-                        />
-                      )}
-                    {compareProposal.details.abandonedat && (
-                      <Event
-                        className="margin-left-s margin-right-s"
-                        event={"abandoned"}
-                        timestamp={compareProposal.details.abandonedat}
-                      />
-                    )}
-                  </JoinTitle>
+                  <TimestampTitle proposal={compareProposal.details} />
                 </JoinTitle>
               </JoinTitle>
             }

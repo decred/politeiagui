@@ -1,10 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
-import { COMPARE, BASE } from "./const";
+import { COMPARE, BASE } from "./constants";
 import * as act from "src/actions";
-import { useAction } from "../../redux";
-import { getAttachmentsFiles, parseRawProposal } from "../../helpers";
+import { useAction } from "src/redux";
+import { getAttachmentsFiles, parseRawProposal } from "src/helpers";
 
-export function useCompareVersionSelector(initVersion, latestVersion, token) {
+export function useCompareVersionSelector(initVersion, token) {
   const [baseVersion, setBaseVersion] = useState(initVersion - 1);
   const [compareVersion, setCompareVersion] = useState(initVersion);
   const [baseLoading, setBaseLoading] = useState(false);
@@ -12,13 +12,15 @@ export function useCompareVersionSelector(initVersion, latestVersion, token) {
   const [compareProposal, setCompareProposal] = useState({});
   const [baseProposal, setBaseProposal] = useState({});
   const [error, setError] = useState();
+
   const onFetchProposalDetailsWithoutState = useAction(
     act.onFetchProposalDetailsWithoutState
   );
+
   const fetchProposalVersions = useCallback(
-    async (onFetchProposalDetailsWithoutState, token, version) => {
+    async (token, version) => {
       if (!version) {
-        // return empty data for case version = 0
+        // Return empty data for case: version = 0.
         return {
           details: {},
           files: [],
@@ -26,9 +28,9 @@ export function useCompareVersionSelector(initVersion, latestVersion, token) {
           title: ""
         };
       }
-      // Fetch provided version
+      // Fetch provided version.
       const proposal = await onFetchProposalDetailsWithoutState(token, version);
-      // Parse current version
+      // Parse current version.
       const { description, name } = parseRawProposal(proposal);
       return {
         details: proposal,
@@ -37,8 +39,9 @@ export function useCompareVersionSelector(initVersion, latestVersion, token) {
         title: name
       };
     },
-    []
+    [onFetchProposalDetailsWithoutState]
   );
+
   const changedVersion = (versionType, v) => {
     if (versionType === COMPARE) {
       setCompareVersion(v);
@@ -47,14 +50,11 @@ export function useCompareVersionSelector(initVersion, latestVersion, token) {
       setBaseVersion(v);
     }
   };
+
   useEffect(() => {
     setBaseLoading(true);
     setError(null);
-    fetchProposalVersions(
-      onFetchProposalDetailsWithoutState,
-      token,
-      baseVersion
-    )
+    fetchProposalVersions(token, baseVersion)
       .then((proposal) => {
         setBaseLoading(false);
         setBaseProposal(proposal);
@@ -69,14 +69,11 @@ export function useCompareVersionSelector(initVersion, latestVersion, token) {
     fetchProposalVersions,
     onFetchProposalDetailsWithoutState
   ]);
+
   useEffect(() => {
     setCompareLoading(true);
     setError(null);
-    fetchProposalVersions(
-      onFetchProposalDetailsWithoutState,
-      token,
-      compareVersion
-    )
+    fetchProposalVersions(token, compareVersion)
       .then((proposal) => {
         setCompareLoading(false);
         setCompareProposal(proposal);
@@ -91,6 +88,7 @@ export function useCompareVersionSelector(initVersion, latestVersion, token) {
     fetchProposalVersions,
     onFetchProposalDetailsWithoutState
   ]);
+
   return {
     baseVersion,
     compareVersion,

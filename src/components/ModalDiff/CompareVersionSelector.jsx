@@ -9,7 +9,8 @@ import {
 import styles from "./ModalDiff.module.css";
 import IconButton from "../IconButton";
 import PropTypes from "prop-types";
-import { COMPARE, BASE } from "./const";
+import { COMPARE, BASE, ZERO_VERSION_ALIAS } from "./constants";
+import rangeRight from "lodash/rangeRight";
 
 const CompareVersionSelector = ({
   onChange,
@@ -22,22 +23,16 @@ const CompareVersionSelector = ({
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const darkIconColor = getThemeProperty(theme, "text-color");
   const iconColor = isDarkTheme ? darkIconColor : undefined;
-  const versionsOptions = useMemo(() => {
-    const versions = [];
-    for (let index = latest; index >= 0; index--) {
-      versions.push(index);
-    }
-    return versions;
-  }, [latest]);
-  const ZERO_VERSION_ALIAS = "----------";
+  const versionsOptions = useMemo(() => rangeRight(latest), [latest]);
+
   return (
     <div className={styles.versionSelectorContainer}>
       <Dropdown
         title={base ? `version ${base}` : ZERO_VERSION_ALIAS}
         className={styles.versionSelectorWrapper}
         itemsListClassName={className}>
-        {versionsOptions.map((v) => {
-          return (
+        {versionsOptions.map(
+          (v) =>
             compare > v && (
               <DropdownItem
                 key={v}
@@ -47,8 +42,7 @@ const CompareVersionSelector = ({
                 {v ? `version ${v}` : ZERO_VERSION_ALIAS}
               </DropdownItem>
             )
-          );
-        })}
+        )}
       </Dropdown>
       <IconButton
         className={styles.versionCompareIcon}
@@ -62,11 +56,7 @@ const CompareVersionSelector = ({
         {versionsOptions.map((v) => {
           return (
             base < v && (
-              <DropdownItem
-                key={v}
-                onClick={() => {
-                  onChange(COMPARE, v);
-                }}>
+              <DropdownItem key={v} onClick={() => onChange(COMPARE, v)}>
                 version {v}
               </DropdownItem>
             )
