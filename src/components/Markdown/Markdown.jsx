@@ -11,7 +11,7 @@ const MarkdownRenderer = ({
   disallowedElements,
   ...props
 }) => (
-  <div className={className} {...props}>
+  <div className={className} {...props} data-testid="markdown-wrapper">
     <ReactMarkdown
       className="markdown-body"
       skipHtml={true}

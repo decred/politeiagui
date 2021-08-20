@@ -25,6 +25,7 @@ import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChange
 import { GoBackLink } from "src/components/Router";
 import { useConfig } from "src/containers/Config";
 import { PROPOSAL_STATUS_CENSORED } from "src/constants";
+import { shortRecordToken } from "src/helpers";
 
 const SetPageTitle = ({ title }) => {
   useDocumentTitle(title);
@@ -32,7 +33,7 @@ const SetPageTitle = ({ title }) => {
 };
 
 const ProposalDetail = ({ Main, match }) => {
-  const tokenFromUrl = get("params.token", match);
+  const tokenFromUrl = shortRecordToken(get("params.token", match));
   const threadParentCommentID = get("params.commentid", match);
   const {
     proposal: fetchedProposal,

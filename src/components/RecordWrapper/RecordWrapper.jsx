@@ -56,6 +56,7 @@ export const RecordToken = ({ token, isCopyable }) => {
       {isCopyable && (
         <CopyableText
           id={`proposal-token-${token}`}
+          data-testid="record-token"
           truncate
           tooltipPlacement={shouldPlaceTooltipLeft ? "left" : "bottom"}>
           {token}
@@ -352,7 +353,11 @@ export const DownloadVotes = ({ label, fileName, serverpublickey, token }) => {
 };
 
 export const LinkSection = ({ children, className, title }) => (
-  <Dropdown className={className} title={title} closeOnItemClick={false}>
+  <Dropdown
+    className={className}
+    title={title}
+    closeOnItemClick={false}
+    data-testid="record-links">
     {React.Children.toArray(children).map((link, i) => (
       <DropdownItem key={i}>{link}</DropdownItem>
     ))}
@@ -383,7 +388,7 @@ export const Metadata = ({ amount, domain, startDate, endDate, isRFP }) => {
 
   return (
     metadataAvailable && (
-      <div className="flex-column">
+      <div className="flex-column" data-testid="record-metadata">
         <Row>
           <MetadataLabel label="Domain" />
           <MetadataValue value={domain} />

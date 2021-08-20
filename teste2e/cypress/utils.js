@@ -6,7 +6,8 @@ import MerkleTree from "./merkle";
 const PROPOSAL_TYPE_REGULAR = 1;
 const PROPOSAL_TYPE_RFP = 2;
 const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
-const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
+export const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
+export const VOTE_METADATA_FILENAME = "votemetadata.json";
 
 const UNREVIEWED = "unreviewed";
 const ACTIVE_VOTE = "started";
