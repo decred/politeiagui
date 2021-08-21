@@ -80,5 +80,3 @@ export const reachedCreditsPaymentPollingLimit = (state) =>
 
 export const proposalPaymentReceived = (state) =>
   state.app.proposalPaymentReceived;
-
-export const isLoginRequired = get(["app", "loginRequired"]);

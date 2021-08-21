@@ -254,7 +254,6 @@ export const onLogin = ({ email, password, code }) =>
       const response = await api.login(csrf, email, password, code);
       await dispatch(onRequestMe());
       dispatch(act.RECEIVE_LOGIN(response));
-      dispatch(act.LOGIN_REQUIRED(false));
       const { userid, username } = response;
       const keyNeedsReplace = await pki.needStorageKeyReplace(email, username);
       if (keyNeedsReplace) {
