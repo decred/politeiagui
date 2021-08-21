@@ -63,11 +63,7 @@ export function useCompareVersionSelector(initVersion, token) {
         setError(e);
         setBaseLoading(false);
       });
-  }, [
-    token,
-    baseVersion,
-    fetchProposalVersions
-  ]);
+  }, [token, baseVersion, fetchProposalVersions]);
 
   useEffect(() => {
     setCompareLoading(true);
@@ -81,11 +77,7 @@ export function useCompareVersionSelector(initVersion, token) {
         setError(e);
         setCompareLoading(false);
       });
-  }, [
-    token,
-    compareVersion,
-    fetchProposalVersions
-  ]);
+  }, [token, compareVersion, fetchProposalVersions]);
 
   return {
     baseVersion,
