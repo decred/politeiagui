@@ -66,8 +66,7 @@ export function useCompareVersionSelector(initVersion, token) {
   }, [
     token,
     baseVersion,
-    fetchProposalVersions,
-    onFetchProposalDetailsWithoutState
+    fetchProposalVersions
   ]);
 
   useEffect(() => {
@@ -85,8 +84,7 @@ export function useCompareVersionSelector(initVersion, token) {
   }, [
     token,
     compareVersion,
-    fetchProposalVersions,
-    onFetchProposalDetailsWithoutState
+    fetchProposalVersions
   ]);
 
   return {
