@@ -23,7 +23,7 @@ const CompareVersionSelector = ({
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const darkIconColor = getThemeProperty(theme, "text-color");
   const iconColor = isDarkTheme ? darkIconColor : undefined;
-  const versionsOptions = useMemo(() => rangeRight(latest), [latest]);
+  const versionsOptions = useMemo(() => rangeRight(latest + 1), [latest]);
 
   return (
     <div className={styles.versionSelectorContainer}>
