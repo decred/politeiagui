@@ -27,7 +27,7 @@ export function APIUserError(response, code, context) {
     case APIComments:
       throw new CommentsUserError(code);
     case APITicketvote:
-      throw new TicketvoteUserError(code);
+      throw new TicketvoteUserError(code, context);
     case APIWww:
       throw new WWWUserError(code, context);
     default:
@@ -54,8 +54,9 @@ export function APIPluginError(pluginId, code, context) {
 function PiUserError(code) {
   const errorMap = {
     1: "Invalid inputs for request",
-    2: "The number of requested proposal tokens exceeds the page size policy",
-    3: "The proposal was in an invalid state"
+    2: "The provided user identity is not active",
+    3: "The provided record token is invalid",
+    4: "The provided record was not found"
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIPi);
@@ -113,18 +114,17 @@ function CommentsUserError(code) {
 
 CommentsUserError.prototype = new Error();
 
-function TicketvoteUserError(code) {
+function TicketvoteUserError(code, context) {
   const errorMap = {
     0: "Invalid vote error.",
     1: "Internal server error.",
-    2: "Invalid record token.",
-    3: "Record not found.",
-    4: "You cannot cast votes for multiple records. A ballot can only contain votes for a single record at a time.",
-    5: "Invalid vote status. You can only cast votes on records with an active voting",
-    6: "The provided vote bit is invalid",
-    7: "The provided vote signature is invalid",
-    8: "Ticket not eligible",
-    9: "The provided ticket has already voted"
+    2: "The user public key is not active",
+    3: `Unauthorized: ${context}`,
+    4: "The provided record was not found",
+    5: "The provided record is locked",
+    6: "The provided token is invalid",
+    7: `The page size has exceeded: ${context}`,
+    8: "The provided payload is duplicate"
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APITicketvote);
