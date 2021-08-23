@@ -5,7 +5,7 @@
 
 .modalContent {
   width: 100%;
-  min-height: 40rem;
+  min-height: 45rem;
   min-width: 90rem;
 }
 
@@ -58,4 +58,37 @@
   .modalContent {
     min-width: 100%;
   }
+}
+
+.versionSelectorContainer {
+  margin-bottom: 5px;
+}
+
+.versionSelectorWrapper {
+  border: 1px solid var(--color-gray-light);
+  padding: 0.25rem 1rem 0.25rem 1rem;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+}
+
+.versionCompareIcon {
+  margin: 0 10px;
+}
+
+.versionSpinnerContainer {
+  width: 100%;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.headerSubtitle {
+  border-bottom: 1px solid var(--separator-color);
+  margin-bottom: var(--spacing-2);
+  padding-bottom: var(--spacing-1);
+  color: var(--text-secondary-color);
+}
+
+.titleDiff {
+  font-weight: bold;
+  font-size: var(--font-size-xlarge);
 }
