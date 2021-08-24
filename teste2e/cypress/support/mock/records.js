@@ -27,7 +27,8 @@ const makeMockProposalResponse = (
 ) => {
   const { timestamp, username, userid, merkle, signature, publickey } =
     buildRecord();
-  const { name, description } = buildProposal();
+  const { name, description, startDate, endDate, amount, domain } =
+    buildProposal();
   return {
     state,
     status,
@@ -38,7 +39,14 @@ const makeMockProposalResponse = (
       getUserMd(userid, publickey, signature),
       getRecordMd(token, version, status, timestamp, publickey, signature)
     ],
-    files: makeProposal({ name, description }).files,
+    files: makeProposal({
+      name,
+      description,
+      startDate,
+      endDate,
+      amount,
+      domain
+    }).files,
     censorshiprecord: {
       token,
       merkle,

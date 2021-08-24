@@ -14,7 +14,13 @@ export const buildUser = build("User").fields({
 
 export const buildProposal = build("Proposal").fields({
   name: fake((f) => f.lorem.words()),
-  description: fake((f) => f.lorem.sentence())
+  description: fake((f) => f.lorem.sentence()),
+  // two weeks from now
+  startDate: Math.round(new Date().getTime() / 1000) + 1209600,
+  // one month from now
+  endDate: Math.round(new Date().getTime() / 1000) + 2629746,
+  amount: 2000000, // $20k in cents.
+  domain: "research"
 });
 
 export const buildComment = build("Comment").fields({

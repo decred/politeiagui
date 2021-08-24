@@ -88,9 +88,9 @@ Cypress.Commands.add("logout", () => {
 Cypress.Commands.add("identity", () => {
   cy.server();
   cy.route("POST", "api/v1/user/key/verify").as("verifyKey");
-  cy.request("api/v1/user/me").then((res) => {
-    return pki.generateKeys().then((keys) => {
-      return pki.loadKeys(res.body.userid, keys).then(() => {
+  cy.request("api/v1/user/me").then((res) =>
+    pki.generateKeys().then((keys) =>
+      pki.loadKeys(res.body.userid, keys).then(() =>
         requestWithCsrfToken("api/v1/user/key", {
           publickey: pki.toHex(keys.publicKey)
         }).then((res) => {
@@ -98,22 +98,32 @@ Cypress.Commands.add("identity", () => {
             `/user/key/verify?verificationtoken=${res.body.verificationtoken}`
           );
           cy.wait("@verifyKey").its("status").should("eq", 200);
-        });
-      });
-    });
-  });
+        })
+      )
+    )
+  );
 });
 
-Cypress.Commands.add("createProposal", ({ name, description }) => {
-  const createdProposal = makeProposal({ name, description });
-  return cy
-    .request("api/v1/user/me")
-    .then((res) =>
-      signRegister(res.body.userid, createdProposal).then((res) =>
-        requestWithCsrfToken("/api/records/v1/new", res)
-      )
-    );
-});
+Cypress.Commands.add(
+  "createProposal",
+  ({ name, description, startDate, endDate, amount, domain }) => {
+    const createdProposal = makeProposal({
+      name,
+      markdown: description,
+      startdate: startDate,
+      enddate: endDate,
+      amount,
+      domain
+    });
+    return cy
+      .request("api/v1/user/me")
+      .then((res) =>
+        signRegister(res.body.userid, createdProposal).then((res) =>
+          requestWithCsrfToken("/api/records/v1/new", res)
+        )
+      );
+  }
+);
 
 Cypress.Commands.add("approveProposal", ({ token }) =>
   setProposalStatus(token, 2, 1, "")

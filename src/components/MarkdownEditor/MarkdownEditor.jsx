@@ -48,13 +48,14 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
+  const testId = props["data-testid"];
   useEffect(() => {
     const textarea = document.getElementsByClassName("mde-text")[0];
     if (textarea) {
       textarea.placeholder = placeholder;
-      textarea["data-testid"] = props["data-testid"];
+      textarea["data-testid"] = testId;
     }
-  }, [tab, placeholder, props]);
+  }, [tab, placeholder, testId]);
 
   const attachFilesCommand = {
     name: "attach-files",
