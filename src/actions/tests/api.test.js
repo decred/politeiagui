@@ -364,6 +364,11 @@ describe("test api actions (actions/api.js)", () => {
       [FAKE_USER],
       (e) => [
         {
+          error: false,
+          payload: true,
+          type: act.CSRF_NEEDED
+        },
+        {
           type: act.REQUEST_LOGIN,
           error: false,
           payload: { email: FAKE_USER.email }
