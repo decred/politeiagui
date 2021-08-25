@@ -5,7 +5,6 @@ import { useSelector, useAction } from "src/redux";
 
 export function useSessionChecker() {
   const currentUser = useSelector(sel.currentUser);
-  const onRequireCSRF = useAction(act.onRequireCSRF);
   const handleLogout = useAction(act.handleLocalLogout);
   const [sessionExpired, setSessionExpired] = useState();
   const timeout = useMemo(() => {
@@ -18,10 +17,7 @@ export function useSessionChecker() {
     const { sessionmaxage, lastlogintime } = currentUser;
     const expired = sessionmaxage < Date.now() / 1000 - lastlogintime;
     setSessionExpired(expired);
-    if (expired) {
-      onRequireCSRF();
-    }
-  }, [currentUser, onRequireCSRF]);
+  }, [currentUser]);
 
   useEffect(() => {
     let interval;

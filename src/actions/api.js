@@ -247,24 +247,31 @@ export const onSearchUser = (query, isCMS) => (dispatch) => {
 // onLogin handles a user's login. If it is his first login on the app
 // after registering, his key will be saved under his email. If so, it
 // changes the storage key to his uuid.
-export const onLogin = ({ email, password, code }) =>
-  withCsrf(async (dispatch, _, csrf) => {
-    dispatch(act.REQUEST_LOGIN({ email }));
-    try {
-      const response = await api.login(csrf, email, password, code);
-      await dispatch(onRequestMe());
-      dispatch(act.RECEIVE_LOGIN(response));
-      const { userid, username } = response;
-      const keyNeedsReplace = await pki.needStorageKeyReplace(email, username);
-      if (keyNeedsReplace) {
-        pki.replaceStorageKey(keyNeedsReplace, userid);
+export const onLogin =
+  ({ email, password, code }) =>
+  (dispatch, getState) => {
+    dispatch(onRequireCSRF());
+    return withCsrf(async (dispatch, _, csrf) => {
+      dispatch(act.REQUEST_LOGIN({ email }));
+      try {
+        const response = await api.login(csrf, email, password, code);
+        await dispatch(onRequestMe());
+        dispatch(act.RECEIVE_LOGIN(response));
+        const { userid, username } = response;
+        const keyNeedsReplace = await pki.needStorageKeyReplace(
+          email,
+          username
+        );
+        if (keyNeedsReplace) {
+          pki.replaceStorageKey(keyNeedsReplace, userid);
+        }
+        return;
+      } catch (error) {
+        dispatch(act.RECEIVE_LOGIN(null, error));
+        throw error;
       }
-      return;
-    } catch (error) {
-      dispatch(act.RECEIVE_LOGIN(null, error));
-      throw error;
-    }
-  });
+    })(dispatch, getState);
+  };
 
 // handleLogout calls the correct logout handler according to the user
 // selected option between a normal logout or a permanent logout.
