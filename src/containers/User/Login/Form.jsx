@@ -36,14 +36,18 @@ const LoginForm = ({
     } catch (e) {
       setSubmitting(false);
       if (e.errorcode === TOTP_MISSING_LOGIN_ERROR) {
-        handleOpenModal(ModalTotpVerify, {
-          onVerify: (code) =>
-            onSubmit(
-              { ...values, code },
-              { resetForm, setSubmitting, setFieldError }
-            ),
-          onClose: handleCloseModal
-        });
+        handleOpenModal(
+          ModalTotpVerify,
+          {
+            onVerify: (code) =>
+              onSubmit(
+                { ...values, code },
+                { resetForm, setSubmitting, setFieldError }
+              ),
+            onClose: handleCloseModal
+          },
+          { overlay: true }
+        );
         return;
       }
       setFieldError("global", e);
