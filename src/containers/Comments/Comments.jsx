@@ -82,7 +82,8 @@ const CommentsListAndActions = ({
   readOnly,
   identityError,
   paywallMissing,
-  handleOpenLoginModal
+  handleOpenLoginModal,
+  latestAuthorUpdateId
 }) => {
   const { userid } = currentUser || {};
   const commentsCount = comments ? comments.length : 0;
@@ -251,7 +252,8 @@ const CommentsListAndActions = ({
               currentUser,
               openCensorModal: handleCensorCommentModal,
               openLoginModal: handleOpenLoginModal,
-              ...commentsCtx
+              ...commentsCtx,
+              latestAuthorUpdateId
             }}>
             <CommentsListWrapper
               lastTimeAccessed={lastVisitTimestamp}
@@ -304,6 +306,7 @@ const Comments = ({
     lastVisitTimestamp,
     currentUser,
     error,
+    latestAuthorUpdateId,
     ...commentsCtx
   } = useComments(recordTokenFull, proposalState);
 
@@ -444,6 +447,7 @@ const Comments = ({
           identityError={identityError}
           paywallMissing={paywallMissing}
           handleOpenLoginModal={handleOpenLoginModal}
+          latestAuthorUpdateId={latestAuthorUpdateId}
         />
       </Card>
     </>

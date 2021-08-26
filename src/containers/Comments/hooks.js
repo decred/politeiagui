@@ -11,7 +11,7 @@ import { useSelector, useAction } from "src/redux";
 import { useConfig } from "src/containers/Config";
 import { useLoaderContext } from "src/containers/Loader";
 import { or } from "src/lib/fp";
-import { PROPOSAL_STATE_VETTED } from "src/constants";
+import { PROPOSAL_STATE_VETTED, PROPOSAL_UPDATE_HINT } from "src/constants";
 
 export const CommentContext = createContext();
 export const useComment = () => useContext(CommentContext);
@@ -122,6 +122,19 @@ export function useComments(recordToken, proposalState) {
     [commentsVotes]
   );
 
+  // Search for latest author update if found any.
+  const latestAuthorUpdate = comments?.reduce(
+    (acc, { extradatahint, commentid, timestamp }) => {
+      if (extradatahint === PROPOSAL_UPDATE_HINT) {
+        if (!acc || (acc && timestamp > acc.timestamp)) {
+          return { timestamp, commentid };
+        }
+      }
+      return acc;
+    },
+    null
+  );
+
   return {
     comments,
     onCommentVote,
@@ -137,6 +150,7 @@ export function useComments(recordToken, proposalState) {
     loadingLikes,
     onSubmitComment,
     error,
-    getCommentVotes
+    getCommentVotes,
+    latestAuthorUpdateId: latestAuthorUpdate?.commentid
   };
 }

@@ -88,7 +88,8 @@ const CommentWrapper = ({
     openLoginModal,
     isAdmin,
     currentUser,
-    getCommentVotes
+    getCommentVotes,
+    latestAuthorUpdateId
   } = useComment();
   const {
     comment: commentText,
@@ -184,6 +185,9 @@ const CommentWrapper = ({
     (userLoggedIn &&
       (identityError || paywallMissing || currentUser.username === username));
 
+  const isLatestAuthorUpdate =
+    isAuthorUpdate && commentid === latestAuthorUpdateId;
+
   return (
     <>
       {authorUpdateMetadata && (
@@ -206,7 +210,12 @@ const CommentWrapper = ({
           !enableCommentVote || proposalState === PROPOSAL_STATE_UNVETTED
         }
         disableLikesClick={isLikeCommentDisabled}
-        disableReply={readOnly || !!identityError || paywallMissing}
+        disableReply={
+          readOnly ||
+          !!identityError ||
+          paywallMissing ||
+          (isAuthorUpdate && !isLatestAuthorUpdate)
+        }
         likesUpCount={upvotes}
         likesDownCount={downvotes}
         likeOption={getCommentLikeOption(commentid)}
