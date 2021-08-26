@@ -40,7 +40,7 @@ describe("Records list", () => {
       });
       cy.wait("@records.records");
       // each proposal should be rendered accordingly to inventory response
-      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE + 3) // first records batch
+      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE) // first records batch
         .each(([{ id }], position) => {
           const tokens = getTokensByStatusTab(inventory, "Under Review");
           const expectedToken = shortRecordToken(tokens[position]);
@@ -50,22 +50,27 @@ describe("Records list", () => {
     it("can render records and inventory pagination correctly", () => {
       cy.visit(`/`);
       cy.wait("@ticketvote.inventory");
+      // Fetch 'started', 'authorized' and 'unauthorized' proposals
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 8);
+      // 3 items of started status and 2 items of unauthorized status
+      cy.assertListLengthByTestId("record-title", 5);
       cy.scrollTo("bottom");
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 13);
+      cy.assertListLengthByTestId("record-title", 10);
       cy.scrollTo("bottom");
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 18);
+      cy.assertListLengthByTestId("record-title", 15);
       cy.scrollTo("bottom");
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 23);
+      cy.assertListLengthByTestId("record-title", 20);
       // finished first inventory page
       cy.scrollTo("bottom");
       cy.wait("@ticketvote.inventory").its("request.body.page").should("eq", 2);
       cy.wait("@records.records");
       // records from second inventory page
+      cy.assertListLengthByTestId("record-title", 25);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 28);
       cy.scrollTo("bottom");
       // wait to see if no requests are done, since inventory is fully fetched
@@ -80,7 +85,7 @@ describe("Records list", () => {
       // navigate to in discussion tab
       cy.findByTestId("tab-0").click();
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 8);
+      cy.assertListLengthByTestId("record-title", 5);
     });
     it("can list legacy proposals", () => {
       // for approved proposals
