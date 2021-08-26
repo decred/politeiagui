@@ -1087,7 +1087,6 @@ export const onSubmitComment = (
         if (signatureFound) {
           throw new Error("That is a duplicate comment.");
         }
-        console.log({ comment });
         return comment;
       })
       .then((comment) => api.newComment(csrf, comment))

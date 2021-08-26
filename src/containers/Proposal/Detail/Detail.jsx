@@ -13,7 +13,8 @@ import {
   getProposalToken,
   isCensoredProposal,
   isAbandonedProposal,
-  getProposalLink
+  getProposalLink,
+  isApprovedProposal
 } from "../helpers";
 import {
   UnvettedActionsProvider,
@@ -49,11 +50,10 @@ const ProposalDetail = ({ Main, match }) => {
   const proposal = proposals[tokenFromUrl];
   const proposalToken = getProposalToken(proposal);
   const { voteSummary } = useProposalVote(proposalToken || tokenFromUrl);
-  const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const canReceiveComments =
-    !isVotingFinished && !isAbandonedProposal(proposal);
+    !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
   const canReceiveAuthorUpdates =
-    isVotingFinished && isCurrentUserProposalAuthor;
+    isApprovedProposal(proposal, voteSummary) && isCurrentUserProposalAuthor;
   const { javascriptEnabled } = useConfig();
 
   return (

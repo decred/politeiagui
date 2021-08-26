@@ -6,6 +6,7 @@ import { Button, Message, BoxTextInput } from "pi-ui";
 import { Row } from "../layout";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import validationSchema from "./validation";
+import { usePolicy } from "src/hooks";
 
 const forbiddenCommentsMdElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
@@ -16,11 +17,11 @@ const CommentForm = ({
   disableSubmit,
   persistKey,
   className,
-  canReceiveAuthorUpdates,
-  titleValidationPolicy
+  canReceiveAuthorUpdates
 }) => {
-  const { namesupportedchars, namelengthmax, namelengthmin } =
-    titleValidationPolicy;
+  const {
+    policyPi: { namesupportedchars, namelengthmax, namelengthmin }
+  } = usePolicy();
   async function handleSubmit(
     { comment, title },
     { resetForm, setSubmitting, setFieldError }
@@ -38,7 +39,7 @@ const CommentForm = ({
   return (
     <Formik
       initialValues={{
-        title: canReceiveAuthorUpdates && "",
+        title: canReceiveAuthorUpdates ? "" : null,
         comment: ""
       }}
       loading={!validationSchema}

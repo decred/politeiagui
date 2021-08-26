@@ -139,7 +139,7 @@ const CommentWrapper = ({
   }, [showReplies]);
 
   const handleSubmitComment = useCallback(
-    (comment) =>
+    ({ comment }) =>
       onSubmitComment({
         comment,
         token,
@@ -188,11 +188,8 @@ const CommentWrapper = ({
     <>
       {authorUpdateMetadata && (
         <div>
-          commentid: {commentid}
-          {" "}
-          timestamp: {timestamp}
-          {" "}
-          title: {authorUpdateMetadata.title}
+          commentid: {commentid} timestamp: {timestamp} title:{" "}
+          {authorUpdateMetadata.title}
         </div>
       )}
       <Comment

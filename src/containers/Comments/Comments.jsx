@@ -24,7 +24,7 @@ import {
   handleCommentCensoringInfo,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
-import { useIdentity, usePaywall, usePolicy } from "src/hooks";
+import { useIdentity, usePaywall } from "src/hooks";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -293,7 +293,6 @@ const Comments = ({
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
   const [state, dispatch] = useReducer(commentsReducer, initialState);
-  const { policyPi } = usePolicy();
 
   const {
     onSubmitComment,
@@ -326,7 +325,6 @@ const Comments = ({
         extraDataHint = PROPOSAL_UPDATE_HINT;
         extraData = JSON.stringify({ title });
       }
-      console.log({ extraData, extraDataHint });
       return onSubmitComment({
         comment,
         token: recordTokenFull,
@@ -407,7 +405,6 @@ const Comments = ({
                 onSubmit={handleSubmitComment}
                 disableSubmit={!!identityError || paywallMissing}
                 canReceiveAuthorUpdates={canReceiveAuthorUpdates}
-                titleValidationPolicy={policyPi}
               />
             )}
           </LoggedInContent>
