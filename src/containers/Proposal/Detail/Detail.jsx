@@ -39,7 +39,8 @@ const ProposalDetail = ({ Main, match }) => {
     proposal: fetchedProposal,
     loading,
     threadParentID,
-    error
+    error,
+    isCurrentUserProposalAuthor
   } = useProposal(tokenFromUrl, threadParentCommentID);
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
     { [tokenFromUrl]: fetchedProposal },
@@ -48,8 +49,11 @@ const ProposalDetail = ({ Main, match }) => {
   const proposal = proposals[tokenFromUrl];
   const proposalToken = getProposalToken(proposal);
   const { voteSummary } = useProposalVote(proposalToken || tokenFromUrl);
+  const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const canReceiveComments =
-    !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
+    !isVotingFinished && !isAbandonedProposal(proposal);
+  const canReceiveAuthorUpdates =
+    isVotingFinished && isCurrentUserProposalAuthor;
   const { javascriptEnabled } = useConfig();
 
   return (
@@ -78,8 +82,9 @@ const ProposalDetail = ({ Main, match }) => {
                 recordTokenFull={proposalToken}
                 numOfComments={proposal?.comments}
                 threadParentID={threadParentID}
-                readOnly={!canReceiveComments}
+                readOnly={!canReceiveComments && !canReceiveAuthorUpdates}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
+                canReceiveAuthorUpdates={canReceiveAuthorUpdates}
                 proposalState={proposal?.state}
                 recordBaseLink={getProposalLink(proposal, javascriptEnabled)}
               />

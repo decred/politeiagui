@@ -29,6 +29,7 @@ export { default as useOnRouteChange } from "./utils/useOnRouteChange";
 export { default as useQueryString } from "./utils/useQueryString";
 export { default as useQueryStringWithIndexValue } from "./utils/useQueryStringWithIndexValue";
 export { default as useScrollFormOnError } from "./utils/useScrollFormOnError";
+export { default as useScrollTo } from "./utils/useScrollTo";
 export { default as useScrollToTop } from "./utils/useScrollToTop";
 export { default as useSessionStorage } from "./utils/useSessionStorage";
 export { default as useThrowError } from "./utils/useThrowError";

@@ -143,11 +143,19 @@ export const onEditProposal =
   };
 
 export const onSaveNewComment =
-  ({ comment, token, parentID, state }) =>
+  ({ comment, token, parentID, state, extraData, extraDataHint }) =>
   (dispatch, getState) => {
     const userid = sel.currentUserID(getState());
     return dispatch(
-      onSubmitCommentApi(userid, token, comment, parentID, state)
+      onSubmitCommentApi(
+        userid,
+        token,
+        comment,
+        parentID,
+        state,
+        extraData,
+        extraDataHint
+      )
     );
   };
 

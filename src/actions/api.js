@@ -1063,21 +1063,31 @@ export const onSubmitComment = (
   token,
   commentText,
   parentid,
-  state
+  state,
+  extraData,
+  extraDataHint
 ) =>
   withCsrf((dispatch, getState, csrf) => {
-    const comment = api.makeComment(token, commentText, parentid, state);
+    const comment = api.makeComment(
+      token,
+      commentText,
+      parentid,
+      state,
+      extraData,
+      extraDataHint
+    );
     dispatch(act.REQUEST_NEW_COMMENT(comment));
     return Promise.resolve(api.signComment(currentUserID, comment))
       .then((comment) => {
-        // make sure this is not a duplicate comment by comparing to the existent
-        // comments signatures
+        // make sure this is not a duplicate comment by comparing to the
+        // existen comments signatures.
         const comments = sel.commentsByToken(getState())[token];
         const signatureFound =
           comments && comments.find((cm) => cm.signature === comment.signature);
         if (signatureFound) {
           throw new Error("That is a duplicate comment.");
         }
+        console.log({ comment });
         return comment;
       })
       .then((comment) => api.newComment(csrf, comment))
@@ -1694,8 +1704,8 @@ export const onSubmitDccComment = (currentUserID, token, comment, parentid) =>
     return Promise.resolve(api.makeDccComment(token, comment, parentid))
       .then((comment) => api.signDccComment(currentUserID, comment))
       .then((comment) => {
-        // make sure this is not a duplicate comment by comparing to the existent
-        // comments signatures
+        // make sure this is not a duplicate comment by comparing to the
+        // existent comments signatures.
         const comments = sel.commentsByToken(getState())[token];
         const signatureFound =
           comments && comments.find((cm) => cm.signature === comment.signature);

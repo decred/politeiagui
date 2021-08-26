@@ -7,7 +7,8 @@ import Comment from "./Comment";
 import {
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_COMMENT_UPVOTE,
-  PROPOSAL_COMMENT_DOWNVOTE
+  PROPOSAL_COMMENT_DOWNVOTE,
+  PROPOSAL_UPDATE_HINT
 } from "src/constants";
 
 const ContextLink = React.memo(({ parentid, recordToken }) => (
@@ -99,9 +100,13 @@ const CommentWrapper = ({
     userid,
     isNew,
     sumOfNewDescendants,
-    parentid
+    parentid,
+    extradatahint,
+    extradata
   } = comment;
 
+  const isAuthorUpdate = extradatahint === PROPOSAL_UPDATE_HINT;
+  const authorUpdateMetadata = isAuthorUpdate && JSON.parse(extradata);
   const isRecordAuthor =
     recordAuthorID === userid || recordAuthorUsername === username;
   const censorable = isAdmin && !readOnly;
@@ -181,6 +186,15 @@ const CommentWrapper = ({
 
   return (
     <>
+      {authorUpdateMetadata && (
+        <div>
+          commentid: {commentid}
+          {" "}
+          timestamp: {timestamp}
+          {" "}
+          title: {authorUpdateMetadata.title}
+        </div>
+      )}
       <Comment
         permalink={`${recordBaseLink}/comments/${commentid}`}
         seeInContextLink={contextLink}

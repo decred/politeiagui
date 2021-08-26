@@ -175,11 +175,20 @@ export const makeInvoice = (
   };
 };
 
-export const makeComment = (token, comment, parentid, state) => ({
+export const makeComment = (
+  token,
+  comment,
+  parentid,
+  state,
+  extradata,
+  extradatahint
+) => ({
   token,
   parentid: parentid || TOP_LEVEL_COMMENT_PARENTID,
   comment,
-  state
+  state,
+  extradata,
+  extradatahint
 });
 
 export const makeDccComment = (token, comment, parentid) => ({
@@ -268,7 +277,9 @@ export const signComment = (userid, comment) =>
             comment.state,
             comment.token,
             comment.parentid,
-            comment.comment
+            comment.comment,
+            comment.extradata,
+            comment.extradatahint
           ].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))

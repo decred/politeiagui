@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
 import FormikPersist from "src/components/FormikPersist";
-import { Button, Message } from "pi-ui";
+import { Button, Message, BoxTextInput } from "pi-ui";
 import { Row } from "../layout";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import validationSchema from "./validation";
@@ -15,14 +15,18 @@ const CommentForm = ({
   onCommentSubmitted,
   disableSubmit,
   persistKey,
-  className
+  className,
+  canReceiveAuthorUpdates,
+  titleValidationPolicy
 }) => {
+  const { namesupportedchars, namelengthmax, namelengthmin } =
+    titleValidationPolicy;
   async function handleSubmit(
-    values,
+    { comment, title },
     { resetForm, setSubmitting, setFieldError }
   ) {
     try {
-      await onSubmit(values.comment.trim());
+      await onSubmit({ comment: comment.trim(), title });
       setSubmitting(false);
       resetForm();
       onCommentSubmitted && onCommentSubmitted();
@@ -34,28 +38,49 @@ const CommentForm = ({
   return (
     <Formik
       initialValues={{
+        title: canReceiveAuthorUpdates && "",
         comment: ""
       }}
       loading={!validationSchema}
-      validationSchema={validationSchema}
+      validationSchema={validationSchema({
+        namesupportedchars,
+        namelengthmax,
+        namelengthmin
+      })}
       onSubmit={handleSubmit}>
-      {(formikProps) => {
-        const {
-          values,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-          errors,
-          isValid
-        } = formikProps;
-        function handleCommentChange(v) {
-          setFieldValue("comment", v);
-        }
+      {({
+        values,
+        handleBlur,
+        handleSubmit,
+        handleChange,
+        isSubmitting,
+        setFieldTouched,
+        setFieldValue,
+        errors,
+        isValid,
+        touched
+      }) => {
+        const handleTitleChangeWithTouched = (e) => {
+          setFieldTouched("title", true);
+          handleChange(e);
+        };
+
+        const handleCommentChange = (v) => setFieldValue("comment", v);
+
         return (
           <form onSubmit={handleSubmit} className={className}>
             {errors && errors.global && (
               <Message kind="error">{errors.global.toString()}</Message>
+            )}
+            {canReceiveAuthorUpdates && (
+              <BoxTextInput
+                placeholder="Update title"
+                name="title"
+                tabIndex={1}
+                value={values.title}
+                onChange={handleTitleChangeWithTouched}
+                error={touched.title && errors.title}
+              />
             )}
             <MarkdownEditor
               allowImgs={false}
@@ -66,7 +91,7 @@ const CommentForm = ({
               onChange={handleCommentChange}
               onBlur={handleBlur}
               disallowedElements={forbiddenCommentsMdElements}
-              placeholder={"Write a comment"}
+              placeholder="Write a comment"
             />
             <Row justify="right" topMarginSize="s">
               {!!onCancel && (

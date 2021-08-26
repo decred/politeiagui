@@ -16,8 +16,7 @@ import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/components/Link";
 import Or from "src/components/Or";
-import useQueryString from "src/hooks/utils/useQueryString";
-import useScrollTo from "src/hooks/utils/useScrollTo";
+import { useQueryString, useScrollTo } from "src/hooks";
 import {
   getSortOptionsForSelect,
   createSelectOptionFromSortOption,
@@ -25,8 +24,7 @@ import {
   handleCommentCensoringInfo,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
-import useIdentity from "src/hooks/api/useIdentity";
-import usePaywall from "src/hooks/api/usePaywall";
+import { useIdentity, usePaywall, usePolicy } from "src/hooks";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -35,6 +33,7 @@ import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import { debounce } from "lodash";
+import { PROPOSAL_UPDATE_HINT } from "src/constants";
 
 const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 
@@ -288,11 +287,13 @@ const Comments = ({
   className,
   history,
   proposalState,
-  recordBaseLink
+  recordBaseLink,
+  canReceiveAuthorUpdates
 }) => {
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
   const [state, dispatch] = useReducer(commentsReducer, initialState);
+  const { policyPi } = usePolicy();
 
   const {
     onSubmitComment,
@@ -310,21 +311,31 @@ const Comments = ({
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { userid } = currentUser || {};
 
-  const onRedirectToSignup = () => {
-    history.push("/user/signup");
-  };
+  const onRedirectToSignup = () => history.push("/user/signup");
 
   const paywallMissing = paywallEnabled && !isPaid;
   const isSingleThread = !!threadParentID;
 
   const handleSubmitComment = useCallback(
-    (comment) =>
-      onSubmitComment({
+    ({ comment, title }) => {
+      // If title is provided then we are dealing with an author
+      // update.
+      let extraData = "",
+        extraDataHint = "";
+      if (title) {
+        extraDataHint = PROPOSAL_UPDATE_HINT;
+        extraData = JSON.stringify({ title });
+      }
+      console.log({ extraData, extraDataHint });
+      return onSubmitComment({
         comment,
         token: recordTokenFull,
         parentID: 0,
-        state: proposalState
-      }),
+        state: proposalState,
+        extraData,
+        extraDataHint
+      });
+    },
     [onSubmitComment, proposalState, recordTokenFull]
   );
 
@@ -374,7 +385,7 @@ const Comments = ({
             }>
             <Or>
               {readOnly && (
-                <Message kind="blocked" title={"Comments are not allowed"}>
+                <Message kind="blocked" title="Comments are not allowed">
                   {readOnlyReason}
                 </Message>
               )}
@@ -395,6 +406,8 @@ const Comments = ({
                 persistKey={`commenting-on-${recordToken}`}
                 onSubmit={handleSubmitComment}
                 disableSubmit={!!identityError || paywallMissing}
+                canReceiveAuthorUpdates={canReceiveAuthorUpdates}
+                titleValidationPolicy={policyPi}
               />
             )}
           </LoggedInContent>

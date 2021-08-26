@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import CommentsList from "./CommentsList";
 
-const getChildren = (comments, commentId, lastTimeAccessed, currentUserID) => {
-  return (
-    comments.filter((comment) => +comment.parentid === +commentId) || []
-  ).map((comment) =>
-    createComputedComment(comment, comments, lastTimeAccessed, currentUserID)
+const getChildren = (comments, commentId, lastTimeAccessed, currentUserID) =>
+  (comments.filter((comment) => +comment.parentid === +commentId) || []).map(
+    (comment) =>
+      createComputedComment(comment, comments, lastTimeAccessed, currentUserID)
   );
-};
 
 const createComputedComment = (
   comment,
