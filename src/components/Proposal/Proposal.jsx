@@ -169,14 +169,12 @@ const Proposal = React.memo(function Proposal({
   const showEditedDate =
     version > 1 &&
     timestamp !== publishedat &&
-    !abandonedat &&
-    !censoredat &&
     !mobile;
-  const showPublishedDate = publishedat && !mobile;
+  const showPublishedDate = publishedat && !mobile && !showEditedDate;
   const showExtendedVersionPicker = extended && version > 1;
-  const showAbandonedDate = abandonedat && !mobile;
-  const showCensoredDate = censoredat && !mobile;
-  const showVersionAsText = version > 1 && !extended && !mobile;
+  const showVersionAsText = !extended && !mobile;
+  const showVoteEnd = (isVoteActive || isVotingFinished) &&
+    !isAbandoned && !isCensored;
   const showRfpSubmissions =
     extended &&
     !!rfpSubmissions &&
@@ -297,16 +295,6 @@ const Proposal = React.memo(function Proposal({
                   {showEditedDate && (
                     <Event event="edited" timestamp={timestamp} />
                   )}
-                  {showAbandonedDate && (
-                    <Event event="abandoned" timestamp={abandonedat} />
-                  )}
-                  {showCensoredDate && (
-                    <Event
-                      event="censored"
-                      timestamp={censoredat}
-                      username={statuschangeusername}
-                    />
-                  )}
                   {showVersionAsText && (
                     <Text
                       id={`proposal-${proposalToken}-version`}
@@ -337,12 +325,29 @@ const Proposal = React.memo(function Proposal({
                         isDarkTheme
                       )}
                     />
-                    {(isVoteActive || isVotingFinished) && (
+                    {showVoteEnd && (
                       <Event
                         event={`vote end${isVoteActive ? "s" : "ed"}`}
                         timestamp={voteEndTimestamp}
-                        className={styles.timeLeft}
+                        className={styles.subtitleStatusTag}
                         size="small"
+                      />
+                    )}
+                    {isAbandoned && (
+                      <Event
+                        event="abandoned"
+                        timestamp={abandonedat}
+                        className={styles.subtitleStatusTag}
+                        size="small"
+                      />
+                    )}
+                    {isCensored && (
+                      <Event
+                        event="censored"
+                        timestamp={censoredat}
+                        className={styles.subtitleStatusTag}
+                        size="small"
+                        username={statuschangeusername}
                       />
                     )}
                     {isVoteActive && (

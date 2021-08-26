@@ -62,28 +62,12 @@ export const parseReceivedProposalsMap = (proposals) => {
  * @param {Object} proposal
  * @returns {{publishedat: number, censoredat: number, abandonedat: number}} Object with publishedat, censoredat, abandonedat
  */
-const getProposalTimestamps = (proposal, publishedts) => {
-  const { status, timestamp, version } = proposal;
-  let publishedat = 0,
-    censoredat = 0,
-    abandonedat = 0;
-  // publlished but not edited
-  if (status === PROPOSAL_STATUS_PUBLIC && version <= 1) {
-    publishedat = timestamp;
-  }
-  // edited, have to grab published timestamp from metadata
-  if (status === PROPOSAL_STATUS_PUBLIC && version > 1) {
-    publishedat = publishedts;
-  }
-  if (status === PROPOSAL_STATUS_CENSORED) {
-    censoredat = timestamp;
-  }
-  if (status === PROPOSAL_STATUS_ARCHIVED) {
-    abandonedat = timestamp;
-  }
 
-  return { publishedat, censoredat, abandonedat };
-};
+const getProposalTimestamps = (mdByStatus = {}) => ({
+  publishedat: mdByStatus[PROPOSAL_STATUS_PUBLIC]?.timestamp || 0,
+  censoredat: mdByStatus[PROPOSAL_STATUS_CENSORED]?.timestamp || 0,
+  abandonedat: mdByStatus[PROPOSAL_STATUS_ARCHIVED]?.timestamp || 0
+});
 
 // parseProposalMetadata accepts a proposal object parses it's metadata
 // and returns it as object of the form { name, startdate, enddate,
@@ -181,10 +165,8 @@ export const parseRawProposal = (proposal) => {
   const statuschangepk = usermds.byStatus[proposal.status]?.publickey;
 
   // get prop timestamps
-  const { publishedat, censoredat, abandonedat } = getProposalTimestamps(
-    proposal,
-    usermds.timestamp
-  );
+  const { publishedat, censoredat, abandonedat } =
+    getProposalTimestamps(usermds.byStatus);
 
   return {
     ...proposal,
