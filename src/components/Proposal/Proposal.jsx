@@ -166,15 +166,12 @@ const Proposal = React.memo(function Proposal({
     isAuthor && isEditableProposal(proposal, voteSummary) && !isLegacy;
   const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
-  const showEditedDate =
-    version > 1 &&
-    timestamp !== publishedat &&
-    !mobile;
+  const showEditedDate = version > 1 && timestamp !== publishedat && !mobile;
   const showPublishedDate = publishedat && !mobile && !showEditedDate;
   const showExtendedVersionPicker = extended && version > 1;
   const showVersionAsText = !extended && !mobile;
-  const showVoteEnd = (isVoteActive || isVotingFinished) &&
-    !isAbandoned && !isCensored;
+  const showVoteEnd =
+    (isVoteActive || isVotingFinished) && !isAbandoned && !isCensored;
   const showRfpSubmissions =
     extended &&
     !!rfpSubmissions &&

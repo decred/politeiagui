@@ -165,8 +165,9 @@ export const parseRawProposal = (proposal) => {
   const statuschangepk = usermds.byStatus[proposal.status]?.publickey;
 
   // get prop timestamps
-  const { publishedat, censoredat, abandonedat } =
-    getProposalTimestamps(usermds.byStatus);
+  const { publishedat, censoredat, abandonedat } = getProposalTimestamps(
+    usermds.byStatus
+  );
 
   return {
     ...proposal,
