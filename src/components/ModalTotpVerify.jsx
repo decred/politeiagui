@@ -11,7 +11,7 @@ const ModalTotpVerify = ({ show, onClose, onVerify }) => {
       onVerify(v)
         .then(() => {
           onClose();
-          setError();
+          // setError();
         })
         .catch((e) => {
           setError(e);
