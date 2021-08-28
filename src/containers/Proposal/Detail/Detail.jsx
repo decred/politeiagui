@@ -50,10 +50,9 @@ const ProposalDetail = ({ Main, match }) => {
   const proposal = proposals[tokenFromUrl];
   const proposalToken = getProposalToken(proposal);
   const { voteSummary } = useProposalVote(proposalToken || tokenFromUrl);
-  const canReceiveComments =
+  const areCommentsAllowed =
     !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
-  const canReceiveAuthorUpdates =
-    isApprovedProposal(proposal, voteSummary) && isCurrentUserProposalAuthor;
+  const areAuthorUpdatesAllowed = isApprovedProposal(proposal, voteSummary);
   const { javascriptEnabled } = useConfig();
 
   return (
@@ -82,9 +81,10 @@ const ProposalDetail = ({ Main, match }) => {
                 recordTokenFull={proposalToken}
                 numOfComments={proposal?.comments}
                 threadParentID={threadParentID}
-                readOnly={!canReceiveComments && !canReceiveAuthorUpdates}
+                readOnly={!areCommentsAllowed && !areAuthorUpdatesAllowed}
                 readOnlyReason={getCommentBlockedReason(proposal, voteSummary)}
-                canReceiveAuthorUpdates={canReceiveAuthorUpdates}
+                areAuthorUpdatesAllowed={areAuthorUpdatesAllowed}
+                isCurrentUserProposalAuthor={isCurrentUserProposalAuthor}
                 proposalState={proposal?.state}
                 recordBaseLink={getProposalLink(proposal, javascriptEnabled)}
               />

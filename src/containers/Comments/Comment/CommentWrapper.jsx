@@ -3,6 +3,7 @@ import styles from "./Comment.module.css";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import Link from "src/components/Link";
 import { useComment } from "../hooks";
+import { isInCommentTree } from "../helpers";
 import Comment from "./Comment";
 import {
   PROPOSAL_STATE_UNVETTED,
@@ -89,7 +90,9 @@ const CommentWrapper = ({
     isAdmin,
     currentUser,
     getCommentVotes,
-    latestAuthorUpdateId
+    latestAuthorUpdateId,
+    areAuthorUpdatesAllowed,
+    comments
   } = useComment();
   const {
     comment: commentText,
@@ -108,6 +111,11 @@ const CommentWrapper = ({
 
   const isAuthorUpdate = extradatahint === PROPOSAL_UPDATE_HINT;
   const authorUpdateMetadata = isAuthorUpdate && JSON.parse(extradata);
+  const isInLatestUpdateCommentTree = isInCommentTree(
+    latestAuthorUpdateId,
+    commentid,
+    comments
+  );
   const isRecordAuthor =
     recordAuthorID === userid || recordAuthorUsername === username;
   const censorable = isAdmin && !readOnly;
@@ -185,9 +193,6 @@ const CommentWrapper = ({
     (userLoggedIn &&
       (identityError || paywallMissing || currentUser.username === username));
 
-  const isLatestAuthorUpdate =
-    isAuthorUpdate && commentid === latestAuthorUpdateId;
-
   return (
     <>
       {authorUpdateMetadata && (
@@ -214,7 +219,7 @@ const CommentWrapper = ({
           readOnly ||
           !!identityError ||
           paywallMissing ||
-          (isAuthorUpdate && !isLatestAuthorUpdate)
+          (areAuthorUpdatesAllowed && !isInLatestUpdateCommentTree)
         }
         likesUpCount={upvotes}
         likesDownCount={downvotes}

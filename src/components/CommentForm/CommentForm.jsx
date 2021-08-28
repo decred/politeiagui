@@ -17,7 +17,7 @@ const CommentForm = ({
   disableSubmit,
   persistKey,
   className,
-  canReceiveAuthorUpdates
+  isAuthorUpdate
 }) => {
   const {
     policyPi: { namesupportedchars, namelengthmax, namelengthmin }
@@ -39,7 +39,7 @@ const CommentForm = ({
   return (
     <Formik
       initialValues={{
-        title: canReceiveAuthorUpdates ? "" : null,
+        title: isAuthorUpdate ? "" : null,
         comment: ""
       }}
       loading={!validationSchema}
@@ -73,7 +73,7 @@ const CommentForm = ({
             {errors && errors.global && (
               <Message kind="error">{errors.global.toString()}</Message>
             )}
-            {canReceiveAuthorUpdates && (
+            {isAuthorUpdate && (
               <BoxTextInput
                 placeholder="Update title"
                 name="title"

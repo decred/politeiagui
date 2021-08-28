@@ -83,7 +83,8 @@ const CommentsListAndActions = ({
   identityError,
   paywallMissing,
   handleOpenLoginModal,
-  latestAuthorUpdateId
+  latestAuthorUpdateId,
+  areAuthorUpdatesAllowed
 }) => {
   const { userid } = currentUser || {};
   const commentsCount = comments ? comments.length : 0;
@@ -252,8 +253,10 @@ const CommentsListAndActions = ({
               currentUser,
               openCensorModal: handleCensorCommentModal,
               openLoginModal: handleOpenLoginModal,
-              ...commentsCtx,
-              latestAuthorUpdateId
+              latestAuthorUpdateId,
+              areAuthorUpdatesAllowed,
+              comments,
+              ...commentsCtx
             }}>
             <CommentsListWrapper
               lastTimeAccessed={lastVisitTimestamp}
@@ -290,7 +293,8 @@ const Comments = ({
   history,
   proposalState,
   recordBaseLink,
-  canReceiveAuthorUpdates
+  areAuthorUpdatesAllowed,
+  isCurrentUserProposalAuthor
 }) => {
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
@@ -407,7 +411,9 @@ const Comments = ({
                 persistKey={`commenting-on-${recordToken}`}
                 onSubmit={handleSubmitComment}
                 disableSubmit={!!identityError || paywallMissing}
-                canReceiveAuthorUpdates={canReceiveAuthorUpdates}
+                isAuthorUpdate={
+                  areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
+                }
               />
             )}
           </LoggedInContent>
@@ -448,6 +454,7 @@ const Comments = ({
           paywallMissing={paywallMissing}
           handleOpenLoginModal={handleOpenLoginModal}
           latestAuthorUpdateId={latestAuthorUpdateId}
+          areAuthorUpdatesAllowed={areAuthorUpdatesAllowed}
         />
       </Card>
     </>
