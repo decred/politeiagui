@@ -52,6 +52,10 @@ const ProposalDetail = ({ Main, match }) => {
   const { voteSummary } = useProposalVote(proposalToken || tokenFromUrl);
   const areCommentsAllowed =
     !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
+  // XXX this should be to false when the proposal billing status is set
+  // to closed or completed.
+  // Currently this piece of info isn't available and need to be returned
+  // from the BE somehow.
   const areAuthorUpdatesAllowed = isApprovedProposal(proposal, voteSummary);
   const { javascriptEnabled } = useConfig();
 
