@@ -406,16 +406,20 @@ const Comments = ({
               )}
               {!readOnly && !!identityError && <IdentityMessageError />}
             </Or>
-            {!isSingleThread && !readOnly && recordTokenFull && (
-              <CommentForm
-                persistKey={`commenting-on-${recordToken}`}
-                onSubmit={handleSubmitComment}
-                disableSubmit={!!identityError || paywallMissing}
-                isAuthorUpdate={
-                  areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
-                }
-              />
-            )}
+            {!isSingleThread &&
+              !readOnly &&
+              recordTokenFull &&
+              (areAuthorUpdatesAllowed &&
+              isCurrentUserProposalAuthor) && (
+                <CommentForm
+                  persistKey={`commenting-on-${recordToken}`}
+                  onSubmit={handleSubmitComment}
+                  disableSubmit={!!identityError || paywallMissing}
+                  isAuthorUpdate={
+                    areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
+                  }
+                />
+              )}
           </LoggedInContent>
           {error && (
             <Message kind="error" className="margin-top-m">

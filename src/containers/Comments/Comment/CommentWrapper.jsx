@@ -111,7 +111,7 @@ const CommentWrapper = ({
 
   const isAuthorUpdate = extradatahint === PROPOSAL_UPDATE_HINT;
   const authorUpdateMetadata = isAuthorUpdate && JSON.parse(extradata);
-  const isInLatestUpdateCommentTree = isInCommentTree(
+  const isInLatestUpdateCommentTree = comments && isInCommentTree(
     latestAuthorUpdateId,
     commentid,
     comments
