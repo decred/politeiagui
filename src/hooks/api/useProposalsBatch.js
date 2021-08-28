@@ -115,6 +115,7 @@ export default function useProposalsBatch({
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
+
   const tokens = useMemo(
     () =>
       allByStatus[getProposalStatusLabel(currentStatus, isByRecordStatus)] ||
@@ -159,19 +160,12 @@ export default function useProposalsBatch({
         // If remaining tokens length is smaller than proposal page size.
         // Find more tokens from inventory or scan from the next status
 
-        // Condition to scan: inventory is initialized and
-        // the tokens are able to be fetched from the next page
-        const currentStatusTokens =
-          allByStatus[
-            getProposalStatusLabel(currentStatus, isByRecordStatus)
-          ] || [];
-        const scanTokensCondition =
+        // scanNextStatus: inventory is initialized and
+        // there are no tokens to be fetched from the next page
+        const scanNextStatus =
           initializedInventory &&
-          !(
-            currentStatusTokens.length % INVENTORY_PAGE_SIZE === 0 &&
-            currentStatusTokens.length > 0
-          );
-        if (scanTokensCondition) {
+          !(tokens.length % INVENTORY_PAGE_SIZE === 0 && tokens.length > 0);
+        if (scanNextStatus) {
           const { index, tokens } = scanNextStatusTokens(
             statusIndex + 1,
             remainingTokens
@@ -199,16 +193,32 @@ export default function useProposalsBatch({
               currentStatus,
               isByRecordStatus
             );
-            const newTokens = (isByRecordStatus ? records : votes)[
-              proposalStatusLabel
-            ];
+            const newTokensByStatus = isByRecordStatus ? records : votes;
+            const newTokens = newTokensByStatus[proposalStatusLabel];
             const tokens = [...newTokens, ...remainingTokens];
             setRemainingTokens(tokens);
+
+            // Go to the next status when the remaining tokens still be smaller
+            // than proposal page size and current status is not the last one.
             if (
               tokens.length < proposalPageSize &&
               statusIndex + 1 < currentStatuses.length
-            )
-              return send(RESOLVE);
+            ) {
+              const nextIndex = statusIndex + 1;
+              const nextStatus = currentStatuses[nextIndex];
+              const nextStatusTokens = getUnfetchedTokens(
+                proposals,
+                uniq(
+                  (page ? allByStatus : newTokensByStatus)[
+                    getProposalStatusLabel(nextStatus, isByRecordStatus)
+                  ] || []
+                )
+              );
+              setRemainingTokens([...tokens, ...nextStatusTokens]);
+              setStatusIndex(nextIndex);
+
+              return send(START);
+            }
 
             return send(VERIFY);
           });
@@ -217,7 +227,6 @@ export default function useProposalsBatch({
       },
       verify: () => {
         if (!hasRemainingTokens) return send(RESOLVE, { proposals });
-
         const [tokensToFetch, next] = getTokensForProposalsPagination(
           remainingTokens,
           proposalPageSize
@@ -256,32 +265,7 @@ export default function useProposalsBatch({
 
         return send(FETCH);
       },
-      done: () => {
-        // If the remaining tokens is smaller than proposal page size and have not scanned status.
-        // Check the new status and set up new tokens
-        if (
-          remainingTokens.length < proposalPageSize &&
-          statusIndex + 1 < currentStatuses.length
-        ) {
-          const nextIndex = statusIndex + 1;
-          const nextStatus = currentStatuses[nextIndex];
-          const nextStatusTokens = getUnfetchedTokens(
-            proposals,
-            uniq(
-              allByStatus[
-                getProposalStatusLabel(nextStatus, isByRecordStatus)
-              ] || []
-            )
-          );
-          setRemainingTokens([...remainingTokens, ...nextStatusTokens]);
-          setStatusIndex(nextIndex);
-          if (!values(proposals).length) {
-            // If no proposals are fetched yet.
-            // Continue the fetching cycle to fetch the first page.
-            return send(START);
-          }
-        }
-      }
+      done: () => {}
     },
     initialValues: {
       status: "idle",
@@ -333,17 +317,14 @@ export default function useProposalsBatch({
     state.status === "success" &&
     !getUnfetchedTokens(proposals, tokens).length;
 
-  const isAnotherInventoryCallRequired =
+  const isAnotherTokensScanningRequired =
     tokens && tokens.length && tokens.length % INVENTORY_PAGE_SIZE === 0;
 
   const onFetchMoreProposals = useCallback(() => {
-    if (
-      remainingTokens.length < proposalPageSize &&
-      isAnotherInventoryCallRequired
-    )
-      return send(START);
+    if (remainingTokens.length < proposalPageSize) return send(START);
+
     return send(VERIFY);
-  }, [send, remainingTokens, proposalPageSize, isAnotherInventoryCallRequired]);
+  }, [send, remainingTokens, proposalPageSize]);
 
   const anyError = error || state.error;
   useThrowError(anyError);
@@ -363,7 +344,7 @@ export default function useProposalsBatch({
     onRestartMachine,
     onFetchMoreProposals,
     hasMoreProposals: !!remainingTokens.length && !!values(proposals).length,
-    isProposalsBatchComplete: isFetchDone && !isAnotherInventoryCallRequired,
+    isProposalsBatchComplete: isFetchDone && !isAnotherTokensScanningRequired,
     machineCurrentState: state.status
   };
 }
