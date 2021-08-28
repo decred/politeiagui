@@ -409,8 +409,8 @@ const Comments = ({
             {!isSingleThread &&
               !readOnly &&
               recordTokenFull &&
-              (areAuthorUpdatesAllowed &&
-              isCurrentUserProposalAuthor) && (
+              areAuthorUpdatesAllowed &&
+              isCurrentUserProposalAuthor && (
                 <CommentForm
                   persistKey={`commenting-on-${recordToken}`}
                   onSubmit={handleSubmitComment}

@@ -111,11 +111,8 @@ const CommentWrapper = ({
 
   const isAuthorUpdate = extradatahint === PROPOSAL_UPDATE_HINT;
   const authorUpdateMetadata = isAuthorUpdate && JSON.parse(extradata);
-  const isInLatestUpdateCommentTree = comments && isInCommentTree(
-    latestAuthorUpdateId,
-    commentid,
-    comments
-  );
+  const isInLatestUpdateCommentTree =
+    comments && isInCommentTree(latestAuthorUpdateId, commentid, comments);
   const isRecordAuthor =
     recordAuthorID === userid || recordAuthorUsername === username;
   const censorable = isAdmin && !readOnly;
@@ -191,7 +188,8 @@ const CommentWrapper = ({
     loadingLikes ||
     readOnly ||
     (userLoggedIn &&
-      (identityError || paywallMissing || currentUser.username === username));
+      (identityError || paywallMissing || currentUser.username === username)) ||
+    (areAuthorUpdatesAllowed && !isInLatestUpdateCommentTree);
 
   return (
     <>
