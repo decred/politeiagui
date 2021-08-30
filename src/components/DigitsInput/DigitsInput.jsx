@@ -64,7 +64,7 @@ const DigitsInput = ({
         value={digits.join("")}
         ref={inputRef}
         onBlur={() => {
-          setFocused(false);
+          !autoFocus && setFocused(false);
         }}
       />
       <div
