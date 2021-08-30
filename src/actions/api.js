@@ -1080,7 +1080,7 @@ export const onSubmitComment = (
     return Promise.resolve(api.signComment(currentUserID, comment))
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the
-        // existen comments signatures.
+        // existent comments signatures.
         const comments = sel.commentsByToken(getState())[token];
         const signatureFound =
           comments && comments.find((cm) => cm.signature === comment.signature);

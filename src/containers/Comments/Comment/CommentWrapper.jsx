@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from "react";
+import { classNames } from "pi-ui";
 import styles from "./Comment.module.css";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import Link from "src/components/Link";
@@ -192,13 +193,7 @@ const CommentWrapper = ({
     (areAuthorUpdatesAllowed && !isInLatestUpdateCommentTree);
 
   return (
-    <>
-      {authorUpdateMetadata && (
-        <div>
-          commentid: {commentid} timestamp: {timestamp} title:{" "}
-          {authorUpdateMetadata.title}
-        </div>
-      )}
+    <div className={isAuthorUpdate && classNames(styles.authorUpdate)}>
       <Comment
         permalink={`${recordBaseLink}/comments/${commentid}`}
         seeInContextLink={contextLink}
@@ -232,6 +227,8 @@ const CommentWrapper = ({
         numOfReplies={numOfReplies}
         numOfNewHiddenReplies={sumOfNewDescendants}
         commentBody={commentText}
+        isAuthorUpdate={isAuthorUpdate}
+        authorUpdateTitle={authorUpdateMetadata && authorUpdateMetadata.title}
         {...props}
       />
       <CommentContent
@@ -244,7 +241,7 @@ const CommentWrapper = ({
         isThread={isThread}>
         <Replies>{children}</Replies>
       </CommentContent>
-    </>
+    </div>
   );
 };
 
