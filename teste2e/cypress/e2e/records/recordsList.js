@@ -21,15 +21,16 @@ const getTokensByStatusTab = (inventory, currentTab) =>
 
 describe("Records list", () => {
   describe("records and inventory pagination", () => {
-    before(() => {
+    it("work correct with 0 item in some statuses.", () => {
+      // emulate api
       cy.middleware("ticketvote.inventory", {
         authorized: 0,
         started: 0,
         unauthorized: 1
       });
       cy.middleware("records.records");
-    });
-    it("work correct with 0 item in some statuses.", () => {
+
+      // do testing
       cy.visit(`/`);
       cy.wait("@ticketvote.inventory");
       cy.wait("@records.records");
@@ -38,19 +39,18 @@ describe("Records list", () => {
       // wait to see if no requests are done, since inventory is fully fetched
       cy.wait(1000);
       cy.assertListLengthByTestId("record-title", 1);
-    })
-  });
+    });
 
-  describe("records and inventory pagination", () => {
-    before(() => {
+    it("do not lose any status.", () => {
+      // emulate api
       cy.middleware("ticketvote.inventory", {
         authorized: 1,
         started: 1,
         unauthorized: 1
       });
       cy.middleware("records.records");
-    });
-    it("do not lose any status.", () => {
+
+      // do testing
       cy.visit(`/`);
       cy.wait("@ticketvote.inventory");
       cy.wait("@records.records");
@@ -59,19 +59,18 @@ describe("Records list", () => {
       // wait to see if no requests are done, since inventory is fully fetched
       cy.wait(1000);
       cy.assertListLengthByTestId("record-title", 3);
-    })
-  });
+    });
 
-  describe("records and inventory pagination", () => {
-    before(() => {
+    it("scan inventory pages correctly", () => {
+      // emulate api
       cy.middleware("ticketvote.inventory", {
         authorized: 20,
         started: 3,
         unauthorized: 45
       });
       cy.middleware("records.records");
-    });
-    it("scan inventory pages correct", () => {
+
+      // do testing
       cy.visit(`/`);
       cy.wait("@ticketvote.inventory");
       cy.wait("@records.records");
@@ -90,7 +89,7 @@ describe("Records list", () => {
       // prepare to fetch 25 items: 3 started, 20 authorized and 2 unauthorized
       // scan inventory: page 2 of authorized
       cy.wait("@ticketvote.inventory").its("request.body")
-        .should("deep.eq", {page: 2,status : 2});
+          .should("deep.eq", {page: 2,status : 2});
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 25);
       cy.scrollTo("bottom");
@@ -132,7 +131,7 @@ describe("Records list", () => {
       // wait to see if no requests are done, since inventory is fully fetched
       cy.wait(1000);
       cy.assertListLengthByTestId("record-title", 68);
-    })
+    });
   });
 
   describe("proposals list", () => {
