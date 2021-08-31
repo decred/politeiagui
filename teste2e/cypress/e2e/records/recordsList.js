@@ -10,7 +10,6 @@ const statusByTab = {
 };
 
 const RECORDS_PAGE_SIZE = 5;
-const INVENTORY_PAGE_SIZE = 20;
 
 const getTokensByStatusTab = (inventory, currentTab) =>
   statusByTab[currentTab]
@@ -20,109 +19,121 @@ const getTokensByStatusTab = (inventory, currentTab) =>
       )
     : [];
 
-const underReviewPaginationCases = [
-  {
-    title: "Zero page",
-    inventory: {
-      authorized: 0,
-      started: 0,
-      unauthorized: 1
-    },
-  } , {
-    title: "Fill up statuses",
-    inventory: {
-      authorized: 1,
-      started: 1,
-      unauthorized: 1
-    },
-  } , {
-    title: "1 page",
-    inventory: {
-      authorized: 10,
-      started: 3,
-      unauthorized: 25
-    },
-  }, {
-    title: "2 page",
-    inventory: {
-      authorized: 20,
-      started: 3,
-      unauthorized: 40
-    },
-  }
-];
-
-const scanPage = (inventory) => {
-  cy.visit(`/`);
-  const started = inventory.started || 0;
-  const authorized = inventory.authorized || 0;
-  const unauthorized = inventory.unauthorized || 0;
-  const total = started + authorized + unauthorized;
-  const statuses = [started, authorized, unauthorized];
-  let page = 1, statusIndex = 0, oldFilledStatusTokens = 0, oldInventoryPage;
-
-  const scanStatus = (currentStatusIndex, willFetchedTokens) => {
-    const nextStatusIndex = currentStatusIndex + 1;
-    if (nextStatusIndex >= statuses.length) {
-      return currentStatusIndex;
-    }
-    const nextStatusTokens = statuses[nextStatusIndex]
-    oldFilledStatusTokens += statuses[currentStatusIndex];
-    if (nextStatusTokens + oldFilledStatusTokens < willFetchedTokens) {
-      return scanStatus(nextStatusIndex)
-    }
-    return nextStatusIndex
-  }
-
-  do {
-    if (!statuses[statusIndex]) {
-      return
-    }
-    const tokensInStatus = statuses[statusIndex];
-    const willFetchedTokens = page * RECORDS_PAGE_SIZE;
-
-    if (willFetchedTokens > oldFilledStatusTokens + tokensInStatus && statusIndex +1 < statuses.length) {
-      // switch to next status
-      statusIndex = scanStatus(statusIndex, willFetchedTokens);
-      oldInventoryPage = 0;
-    }
-    const inventoryPage = Math.floor((willFetchedTokens - oldFilledStatusTokens) /  INVENTORY_PAGE_SIZE);
-    if (page === 1) {
-      // fist page fetch all statuses
+describe("Records list", () => {
+  describe("records and inventory pagination", () => {
+    before(() => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 0,
+        started: 0,
+        unauthorized: 1
+      });
+      cy.middleware("records.records");
+    });
+    it("work correct with 0 item in some statuses.", () => {
+      cy.visit(`/`);
       cy.wait("@ticketvote.inventory");
-    } else if (inventoryPage !== oldInventoryPage && tokensInStatus >= inventoryPage * INVENTORY_PAGE_SIZE) {
-      // fetch next page
-      oldInventoryPage = inventoryPage;
-      cy.wait("@ticketvote.inventory").its("request.body.page").should("eq", inventoryPage + 1);
-    }
-    cy.wait("@records.records");
-
-    if (willFetchedTokens > total) {
-      cy.assertListLengthByTestId("record-title", total);
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 1);
       cy.scrollTo("bottom");
       // wait to see if no requests are done, since inventory is fully fetched
       cy.wait(1000);
-      cy.assertListLengthByTestId("record-title", total);
-    } else {
-      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE * page);
-      cy.scrollTo("bottom");
-    }
-    page += 1;
-  } while (page  <= Math.ceil(total / RECORDS_PAGE_SIZE));
-}
-
-describe("Records list", () => {
-  underReviewPaginationCases.forEach((config) => {
-    describe(`Under review render records and inventory pagination correctly: ${config.title}`, () => {
-      before(() => {
-        cy.middleware("ticketvote.inventory", config.inventory);
-        cy.middleware("records.records");
-      });
-      it("Render", () => {
-        scanPage(config.inventory)
-      })
+      cy.assertListLengthByTestId("record-title", 1);
     })
-  })
+  });
+
+  describe("records and inventory pagination", () => {
+    before(() => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 1,
+        started: 1,
+        unauthorized: 1
+      });
+      cy.middleware("records.records");
+    });
+    it("do not lose any status.", () => {
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 3);
+      cy.scrollTo("bottom");
+      // wait to see if no requests are done, since inventory is fully fetched
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 3);
+    })
+  });
+
+  describe("records and inventory pagination", () => {
+    before(() => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 20,
+        started: 3,
+        unauthorized: 45
+      });
+      cy.middleware("records.records");
+    });
+    it("scan inventory pages correct", () => {
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 5);
+      // 3 started and 2 authorized
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 10);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 15);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 20);
+      cy.scrollTo("bottom");
+      // prepare to fetch 25 items: 3 started, 20 authorized and 2 unauthorized
+      // scan inventory: page 2 of authorized
+      cy.wait("@ticketvote.inventory").its("request.body")
+        .should("deep.eq", {page: 2,status : 2});
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 25);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 30);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 35);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 40);
+      cy.scrollTo("bottom");
+      // prepare to fetch 45 items: 3 started, 20 authorized and 22 unauthorized
+      // scan inventory: page 2 of unauthorized
+      cy.wait("@ticketvote.inventory").its("request.body")
+          .should("deep.eq", {page: 2,status : 1});
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 45);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 50);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 55);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 60);
+      cy.scrollTo("bottom");
+      // prepare to fetch 65 items: 3 started, 20 authorized and 42 unauthorized
+      // scan inventory: page 3 of unauthorized
+      cy.wait("@ticketvote.inventory").its("request.body")
+          .should("deep.eq", {page: 3,status : 1});
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 65);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 68);
+      cy.scrollTo("bottom");
+      // wait to see if no requests are done, since inventory is fully fetched
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 68);
+    })
+  });
 
   describe("proposals list", () => {
     beforeEach(() => {
