@@ -6,7 +6,7 @@ import useModalContext from "src/hooks/utils/useModalContext";
 
 const LOGIN_MODAL_ID = "sessionExpiredModal";
 
-const SessionChecker = ({ children }) => {
+const SessionChecker = ({ children, showModal }) => {
   const { sessionExpired, setSessionExpired, handleLogout } =
     useSessionChecker();
   const [handleOpenModal, handleCloseModal] = useModalContext();
@@ -31,16 +31,17 @@ const SessionChecker = ({ children }) => {
   }, [setSessionExpired, handleOpenModal, closeModal, handleCloseModal]);
 
   useEffect(() => {
-    if (sessionExpired) {
+    if (sessionExpired && showModal) {
       openModal();
     }
-  }, [sessionExpired, openModal]);
+  }, [sessionExpired, openModal, showModal]);
 
   return children;
 };
 
 SessionChecker.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  showModal: PropTypes.bool
 };
 
 export default SessionChecker;
