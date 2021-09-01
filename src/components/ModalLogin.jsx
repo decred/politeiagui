@@ -10,6 +10,7 @@ const ModalLogin = ({ title = "Login", onLoggedIn, onClose, ...props }) => {
       title={title}
       onClose={onClose}
       iconType="info"
+      data-testid="modal-login"
       iconSize="lg"
       {...props}
       contentStyle={{ width: "100%" }}

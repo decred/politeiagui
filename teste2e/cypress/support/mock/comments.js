@@ -1,11 +1,13 @@
-import { buildRecord, buildRecordComment } from "../generate";
+import { buildRecordComment } from "../generate";
 import range from "lodash/fp/range";
 import compose from "lodash/fp/compose";
 import map from "lodash/fp/map";
 
+const COMMENTS_API = "/api/comments/v1";
+
 export const middlewares = {
   comments: (amount, state) =>
-    cy.intercept("/api/comments/v1/comments", (req) => {
+    cy.intercept(`${COMMENTS_API}/comments`, (req) => {
       const token = req.body.token;
       const comments = compose(
         map((comment) => ({
@@ -31,11 +33,17 @@ export const middlewares = {
       req.reply({ body: { comments } });
     }),
   vote: ({ isError, throttleKbps = 1000000 } = {}) =>
-    cy.intercept("/api/comments/v1/vote", (req) => {
+    cy.intercept(`${COMMENTS_API}/vote`, (req) => {
       req.reply({
         body: isError ? { errorcode: 10, pluginid: "comments" } : {},
         statusCode: isError ? 400 : 200,
         throttleKbps
+      });
+    }),
+  new: ({ errorCode } = {}) =>
+    cy.intercept(`${COMMENTS_API}/new`, (req) => {
+      req.reply({
+        statusCode: errorCode || 200
       });
     })
 };

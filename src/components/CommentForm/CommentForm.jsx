@@ -94,6 +94,7 @@ const CommentForm = ({
               )}
               <Button
                 type="submit"
+                data-testid="comment-submit-button"
                 kind={!isValid || disableSubmit ? "disabled" : "primary"}
                 loading={isSubmitting}>
                 Add comment
