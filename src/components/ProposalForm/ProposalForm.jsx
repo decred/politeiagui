@@ -20,6 +20,7 @@ import SelectField from "src/components/Select/SelectField";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import ModalMDGuide from "src/components/ModalMDGuide";
+import ModalLogin from "src/components/ModalLogin";
 import ThumbnailGrid from "src/components/Files";
 import AttachFileInput from "src/components/AttachFileInput";
 import DraftSaver from "./DraftSaver";
@@ -404,6 +405,13 @@ const ProposalFormWrapper = ({
       onClose: handleCloseModal
     });
   }, [handleCloseModal, handleOpenModal]);
+  const openLoginModal = useCallback(() => {
+    handleOpenModal(ModalLogin, {
+      onLoggedIn: handleCloseModal,
+      onClose: handleCloseModal,
+      title: "Your session has expired. Please log in again"
+    });
+  }, [handleOpenModal, handleCloseModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation, onFetchProposalsBatchWithoutState } =
     useProposalForm();
@@ -466,10 +474,22 @@ const ProposalFormWrapper = ({
         resetForm();
       } catch (e) {
         setSubmitting(false);
-        setFieldError("global", e);
+        // Hardcode the login modal to show up when user session expires
+        // ref: https://github.com/decred/politeiagui/pull/2541#issuecomment-909194251
+        if (e.statusCode === 403) {
+          openLoginModal();
+        } else {
+          setFieldError("global", e);
+        }
       }
     },
-    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
+    [
+      history,
+      onSubmit,
+      onFetchProposalsBatchWithoutState,
+      isPublic,
+      openLoginModal
+    ]
   );
 
   const newInitialValues = initialValues

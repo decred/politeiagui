@@ -23,7 +23,7 @@ import {
 const STATUS_ERR = {
   400: "Bad response from server",
   401: "Not authorized",
-  403: "Forbidden",
+  403: "You must be logged in to perform this action.",
   404: "Not found"
 };
 

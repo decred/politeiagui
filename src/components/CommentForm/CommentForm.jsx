@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
 import FormikPersist from "src/components/FormikPersist";
@@ -6,6 +6,8 @@ import { Button, Message } from "pi-ui";
 import { Row } from "../layout";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import validationSchema from "./validation";
+import useModalContext from "src/hooks/utils/useModalContext";
+import ModalLogin from "src/components/ModalLogin";
 
 const forbiddenCommentsMdElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
@@ -17,6 +19,16 @@ const CommentForm = ({
   persistKey,
   className
 }) => {
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const openLoginModal = useCallback(() => {
+    handleOpenModal(ModalLogin, {
+      onLoggedIn: handleCloseModal,
+      onClose: handleCloseModal,
+      title: "Your session has expired. Please log in again"
+    });
+  }, [handleOpenModal, handleCloseModal]);
+
   async function handleSubmit(
     values,
     { resetForm, setSubmitting, setFieldError }
@@ -28,7 +40,13 @@ const CommentForm = ({
       onCommentSubmitted && onCommentSubmitted();
     } catch (e) {
       setSubmitting(false);
-      setFieldError("global", e);
+      // Hardcode the login modal to show up when user session expires
+      // ref: https://github.com/decred/politeiagui/pull/2541#issuecomment-909194251
+      if (e.statusCode === 403) {
+        openLoginModal();
+      } else {
+        setFieldError("global", e);
+      }
     }
   }
   return (
