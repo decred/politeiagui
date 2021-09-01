@@ -5,8 +5,10 @@ import util from "tweetnacl-util";
 import get from "lodash/fp/get";
 
 export const STORAGE_PREFIX = "ed255191~";
-export const IDENTITY_ERROR =
-  "User identity not found. You need to restore it from a backup or generate a new one. If this is a verification from an emailed link, please ensure to open it in the same browser where you requested it.";
+export const IDENTITY_ERROR = `
+  Your identity is invalid. You cannot currently submit proposals or comments, 
+  please visit your account page to correct this problem.
+`;
 
 export const toHex = (x) => Buffer.from(toUint8Array(x)).toString("hex");
 
