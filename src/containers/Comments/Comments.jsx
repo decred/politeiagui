@@ -11,7 +11,7 @@ import styles from "./Comments.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
-import { useComments, CommentContext } from "./hooks";
+import { CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/components/Link";
@@ -87,6 +87,14 @@ const CommentsListAndActions = ({
   areAuthorUpdatesAllowed
 }) => {
   const { userid } = currentUser || {};
+  const {
+    getCommentLikeOption,
+    enableCommentVote,
+    userLoggedIn,
+    userEmail,
+    loadingLikes,
+    getCommentVotes
+  } = commentsCtx;
   const commentsCount = comments ? comments.length : 0;
   const numOfDuplicatedComments = numOfComments - state.comments.length;
   const hasDuplicatedComments =
@@ -256,7 +264,12 @@ const CommentsListAndActions = ({
               latestAuthorUpdateId,
               areAuthorUpdatesAllowed,
               comments,
-              ...commentsCtx
+              getCommentLikeOption,
+              enableCommentVote,
+              userLoggedIn,
+              userEmail,
+              loadingLikes,
+              getCommentVotes
             }}>
             <CommentsListWrapper
               lastTimeAccessed={lastVisitTimestamp}
@@ -294,25 +307,27 @@ const Comments = ({
   proposalState,
   recordBaseLink,
   areAuthorUpdatesAllowed,
-  isCurrentUserProposalAuthor
+  isCurrentUserProposalAuthor,
+  onSubmitComment,
+  onCommentVote,
+  onCensorComment,
+  comments,
+  loading,
+  recordType,
+  lastVisitTimestamp,
+  currentUser,
+  error,
+  latestAuthorUpdateId,
+  getCommentLikeOption,
+  enableCommentVote,
+  userLoggedIn,
+  userEmail,
+  loadingLikes,
+  getCommentVotes
 }) => {
   const [, identityError] = useIdentity();
   const { isPaid, paywallEnabled } = usePaywall();
   const [state, dispatch] = useReducer(commentsReducer, initialState);
-
-  const {
-    onSubmitComment,
-    onCommentVote,
-    onCensorComment,
-    comments,
-    loading,
-    recordType,
-    lastVisitTimestamp,
-    currentUser,
-    error,
-    latestAuthorUpdateId,
-    ...commentsCtx
-  } = useComments(recordTokenFull, proposalState);
 
   const [handleOpenModal, handleCloseModal] = useModalContext();
   const { userid } = currentUser || {};
@@ -441,7 +456,14 @@ const Comments = ({
           recordToken={recordToken}
           recordType={recordType}
           lastVisitTimestamp={lastVisitTimestamp}
-          commentsCtx={commentsCtx}
+          commentsCtx={{
+            getCommentLikeOption,
+            enableCommentVote,
+            userLoggedIn,
+            userEmail,
+            loadingLikes,
+            getCommentVotes
+          }}
           onCensorComment={onCensorComment}
           userid={userid}
           currentUser={currentUser}

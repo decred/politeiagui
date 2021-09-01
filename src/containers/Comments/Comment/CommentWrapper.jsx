@@ -193,7 +193,7 @@ const CommentWrapper = ({
     (areAuthorUpdatesAllowed && !isInLatestUpdateCommentTree);
 
   return (
-    <div className={isAuthorUpdate && classNames(styles.authorUpdate)}>
+    <div className={classNames(isAuthorUpdate && styles.authorUpdate)}>
       <Comment
         permalink={`${recordBaseLink}/comments/${commentid}`}
         seeInContextLink={contextLink}

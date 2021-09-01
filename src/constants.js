@@ -57,6 +57,8 @@ export const PROPOSAL_UPDATE_HINT = "proposalupdate";
 
 export const PROPOSAL_AMOUNT_UNIT = "$";
 
+export const PROPOSAL_MAIN_THREAD_KEY = "main";
+
 export const USER_METADATA_PLUGIN = "usermd";
 
 export const PAYWALL_STATUS_WAITING = 0;
