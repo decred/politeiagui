@@ -345,10 +345,7 @@ const Comments = ({
     <>
       <Card
         id="commentArea"
-        className={classNames(
-          styles.commentAreaContainer,
-          className
-        )}>
+        className={classNames(styles.commentAreaContainer, className)}>
         <CommentsListAndActions
           sortOption={sortOption}
           setSortOption={setSortOption}
