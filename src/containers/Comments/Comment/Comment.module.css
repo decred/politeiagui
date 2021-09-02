@@ -1,8 +1,3 @@
-.authorUpdate {
-  border: 1px solid var(--input-border-color);
-  margin-bottom: var(--spacing-medium);
-}
-
 .comment {
   margin-bottom: 2rem;
   padding: 1rem 1.4rem;

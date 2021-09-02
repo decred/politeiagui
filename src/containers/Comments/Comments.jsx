@@ -5,17 +5,13 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { Card, H2, Text, Message, classNames, P, Select } from "pi-ui";
-import { withRouter } from "react-router-dom";
+import { Card, H2, Text, Message, classNames, Select } from "pi-ui";
 import styles from "./Comments.module.css";
-import LoggedInContent from "src/components/LoggedInContent";
-import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import { CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/components/Link";
-import Or from "src/components/Or";
 import { useQueryString, useScrollTo } from "src/hooks";
 import {
   getSortOptionsForSelect,
@@ -24,18 +20,10 @@ import {
   handleCommentCensoringInfo,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
-import { useIdentity, usePaywall } from "src/hooks";
-import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
-import ModalLogin from "src/components/ModalLogin";
-import useModalContext from "src/hooks/utils/useModalContext";
-import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import { debounce } from "lodash";
-import { PROPOSAL_UPDATE_HINT } from "src/constants";
-
-const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 
 const FlatModeButton = ({ isActive, onClick }) => (
   <div
@@ -71,6 +59,7 @@ const CommentsListAndActions = ({
   commentsCtx,
   onCensorComment,
   currentUser,
+  userid,
   proposalState,
   handleOpenModal,
   handleCloseModal,
@@ -86,7 +75,6 @@ const CommentsListAndActions = ({
   latestAuthorUpdateId,
   areAuthorUpdatesAllowed
 }) => {
-  const { userid } = currentUser || {};
   const {
     getCommentLikeOption,
     enableCommentVote,
@@ -274,7 +262,7 @@ const CommentsListAndActions = ({
             <CommentsListWrapper
               lastTimeAccessed={lastVisitTimestamp}
               threadParentID={threadParentID}
-              currentUserID={currentUser && currentUser.userid}
+              currentUserID={userid}
               comments={state.comments}
               isFlatMode={isFlatCommentsMode}
               proposalState={proposalState}
@@ -301,13 +289,10 @@ const Comments = ({
   recordAuthorUsername,
   threadParentID,
   readOnly,
-  readOnlyReason,
   className,
-  history,
   proposalState,
   recordBaseLink,
   areAuthorUpdatesAllowed,
-  isCurrentUserProposalAuthor,
   onSubmitComment,
   onCommentVote,
   onCensorComment,
@@ -316,49 +301,22 @@ const Comments = ({
   recordType,
   lastVisitTimestamp,
   currentUser,
-  error,
+  userid,
   latestAuthorUpdateId,
   getCommentLikeOption,
   enableCommentVote,
   userLoggedIn,
   userEmail,
   loadingLikes,
-  getCommentVotes
+  getCommentVotes,
+  handleOpenModal,
+  handleCloseModal,
+  handleOpenLoginModal,
+  paywallMissing,
+  identityError,
+  isSingleThread
 }) => {
-  const [, identityError] = useIdentity();
-  const { isPaid, paywallEnabled } = usePaywall();
   const [state, dispatch] = useReducer(commentsReducer, initialState);
-
-  const [handleOpenModal, handleCloseModal] = useModalContext();
-  const { userid } = currentUser || {};
-
-  const onRedirectToSignup = () => history.push("/user/signup");
-
-  const paywallMissing = paywallEnabled && !isPaid;
-  const isSingleThread = !!threadParentID;
-
-  const handleSubmitComment = useCallback(
-    ({ comment, title }) => {
-      // If title is provided then we are dealing with an author
-      // update.
-      let extraData = "",
-        extraDataHint = "";
-      if (title) {
-        extraDataHint = PROPOSAL_UPDATE_HINT;
-        extraData = JSON.stringify({ title });
-      }
-      return onSubmitComment({
-        comment,
-        token: recordTokenFull,
-        parentID: 0,
-        state: proposalState,
-        extraData,
-        extraDataHint
-      });
-    },
-    [onSubmitComment, proposalState, recordTokenFull]
-  );
-
   const hasComments = !!comments;
   const hasScrollToQuery = !!getQueryStringValue("scrollToComments");
   const shouldScrollToComments =
@@ -383,65 +341,14 @@ const Comments = ({
     [comments, sortOption]
   );
 
-  const handleOpenLoginModal = useCallback(() => {
-    handleOpenModal(ModalLogin, {
-      id: COMMENTS_LOGIN_MODAL_ID,
-      onLoggedIn: handleCloseModal
-    });
-  }, [handleOpenModal, handleCloseModal]);
-
   return (
     <>
       <Card
         id="commentArea"
-        className={classNames(styles.commentAreaContainer, className)}>
-        <div className={classNames("container", styles.commentsHeaderWrapper)}>
-          <LoggedInContent
-            fallback={
-              <WhatAreYourThoughts
-                onLoginClick={handleOpenLoginModal}
-                onSignupClick={onRedirectToSignup}
-              />
-            }>
-            <Or>
-              {readOnly && (
-                <Message kind="blocked" title="Comments are not allowed">
-                  {readOnlyReason}
-                </Message>
-              )}
-              {!isPaid && paywallEnabled && currentUser && (
-                <Message kind="error">
-                  <P>
-                    You won't be able to submit comments or proposals before
-                    paying the paywall, please visit your{" "}
-                    <Link to={`/user/${userid}?tab=credits`}>account</Link> page
-                    to correct this problem.
-                  </P>
-                </Message>
-              )}
-              {!readOnly && !!identityError && <IdentityMessageError />}
-            </Or>
-            {!isSingleThread &&
-              !readOnly &&
-              recordTokenFull &&
-              areAuthorUpdatesAllowed &&
-              isCurrentUserProposalAuthor && (
-                <CommentForm
-                  persistKey={`commenting-on-${recordToken}`}
-                  onSubmit={handleSubmitComment}
-                  disableSubmit={!!identityError || paywallMissing}
-                  isAuthorUpdate={
-                    areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
-                  }
-                />
-              )}
-          </LoggedInContent>
-          {error && (
-            <Message kind="error" className="margin-top-m">
-              {error.toString()}
-            </Message>
-          )}
-        </div>
+        className={classNames(
+          styles.commentAreaContainer,
+          className
+        )}>
         <CommentsListAndActions
           sortOption={sortOption}
           setSortOption={setSortOption}
@@ -487,4 +394,4 @@ const Comments = ({
   );
 };
 
-export default withRouter(Comments);
+export default Comments;
