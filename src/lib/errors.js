@@ -27,7 +27,7 @@ export function APIUserError(response, code, context) {
     case APIComments:
       throw new CommentsUserError(code);
     case APITicketvote:
-      throw new TicketvoteUserError(code);
+      throw new TicketvoteUserError(code, context);
     case APIWww:
       throw new WWWUserError(code, context);
     default:
@@ -54,8 +54,9 @@ export function APIPluginError(pluginId, code, context) {
 function PiUserError(code) {
   const errorMap = {
     1: "Invalid inputs for request",
-    2: "The number of requested proposal tokens exceeds the page size policy",
-    3: "The proposal was in an invalid state"
+    2: "The provided user identity is not active",
+    3: "The provided record token is invalid",
+    4: "The provided record was not found"
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIPi);
@@ -67,16 +68,17 @@ PiUserError.prototype = new Error();
 function RecordsUserError(code, context) {
   const errorMap = {
     1: "Invalid inputs for request",
-    2: `The file ${context} has an invalid name`,
-    3: `The file ${context} has an invalid MIME type`,
-    4: `The file ${context} has an invalid digest`,
-    5: `The file ${context} has an invalid base64 payload`,
-    6: `The provided record mdstream has an invalid ID ${context}`,
+    2: "The provided record files are empty",
+    3: `The file ${context} has an invalid name`,
+    4: `The provided record has duplicate files: ${context}`,
+    5: `The file ${context} has an invalid MIME type`,
+    6: `The file ${context} has an unsupported MIME type.`,
+    7: `The file ${context} has an invalid digest`,
     8: "The provided record mdstream has an invalid payload",
-    9: "The provided user public key is not active",
-    10: "The provided signature is invalid",
-    11: "The provided record token is invalid",
-    12: "The provided record state is invalid",
+    9: `The provided record mdstream has an invalid ID ${context}`,
+    10: "The provided user public key is invalid",
+    11: "The provided signature is invalid",
+    12: "The provided record token is invalid",
     13: "The record was not found",
     14: "The record is locked for changes",
     15: "The record has no changes and therefore cannot be updated",
@@ -112,18 +114,17 @@ function CommentsUserError(code) {
 
 CommentsUserError.prototype = new Error();
 
-function TicketvoteUserError(code) {
+function TicketvoteUserError(code, context) {
   const errorMap = {
     0: "Invalid vote error.",
     1: "Internal server error.",
-    2: "Invalid record token.",
-    3: "Record not found.",
-    4: "You cannot cast votes for multiple records. A ballot can only contain votes for a single record at a time.",
-    5: "Invalid vote status. You can only cast votes on records with an active voting",
-    6: "The provided vote bit is invalid",
-    7: "The provided vote signature is invalid",
-    8: "Ticket not eligible",
-    9: "The provided ticket has already voted"
+    2: "The user public key is not active",
+    3: `Unauthorized: ${context}`,
+    4: "The provided record was not found",
+    5: "The provided record is locked",
+    6: "The provided token is invalid",
+    7: `The page size has exceeded: ${context}`,
+    8: "The provided payload is duplicate"
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APITicketvote);
@@ -282,7 +283,7 @@ WWWUserError.prototype = new Error();
 
 function PiPluginError(code, context) {
   const errorMap = {
-    1: `The file ${context} has an invalid name`,
+    1: `The submitted proposal has an invalid file name: ${context}`,
     2: `The file size is invalid, ${context}`,
     3: `The required ${context} file is missing`,
     4: `The provided images exceeds the maximum allowed, ${context}`,
