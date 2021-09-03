@@ -83,10 +83,10 @@ const ProposalDetail = ({ Main, match, history }) => {
     onSubmitComment,
     onCommentVote,
     onCensorComment,
-    // If comments includes author updates comments will be a map-like object
-    // where the keys are the author update ids mapping to an array with the
-    // update's thread comments. The map has an additional special key
-    // PROPOSAL_MAIN_THREAD_KEY which maps to the main comments thread.
+    // map-like object where the keys are the author update
+    // ids mapping to an array with the update's thread comments. The map has
+    // an additional special key PROPOSAL_MAIN_THREAD_KEY which maps to the
+    // main comments thread.
     comments,
     loading: commentsLoading,
     recordType,
@@ -104,6 +104,25 @@ const ProposalDetail = ({ Main, match, history }) => {
   } = useComments(proposalToken, proposalState);
   const { userid } = currentUser || {};
   const [, identityError] = useIdentity();
+
+  // If displaying a single thread while having multiple author updates with
+  // different section, find to which tree the sub-tree we are displaying
+  // belongs to display only the relevant section.
+  const singleThreadRootId = useMemo(() => {
+    let authorUpdateId;
+    if (isSingleThread && authorUpdateIds) {
+      authorUpdateIds.forEach((updateId) => {
+        if (
+          comments[updateId]
+            .map(({ commentid }) => commentid)
+            .includes(+threadParentID)
+        ) {
+          authorUpdateId = updateId;
+        }
+      });
+    }
+    return authorUpdateId;
+  }, [authorUpdateIds, comments, isSingleThread, threadParentID]);
 
   const onRedirectToSignup = useCallback(
     () => history.push("/user/signup"),
@@ -180,77 +199,92 @@ const ProposalDetail = ({ Main, match, history }) => {
   const proposalComments = useMemo(
     () => (
       <>
-        <Card className={classNames("container", styles.commentsHeaderWrapper)}>
-          <LoggedInContent
-            fallback={
-              <WhatAreYourThoughts
-                onLoginClick={handleOpenLoginModal}
-                onSignupClick={onRedirectToSignup}
-              />
-            }>
-            <Or>
-              {readOnly && (
-                <Message kind="blocked" title="Comments are not allowed">
-                  {readOnlyReason}
-                </Message>
-              )}
-              {!isPaid && paywallEnabled && currentUser && (
-                <Message kind="error">
-                  <P>
-                    You won't be able to submit comments or proposals before
-                    paying the paywall, please visit your{" "}
-                    <Link to={`/user/${userid}?tab=credits`}>account</Link> page
-                    to correct this problem.
-                  </P>
-                </Message>
-              )}
-              {!readOnly && !!identityError && <IdentityMessageError />}
-              {areAuthorUpdatesAllowed && !isCurrentUserProposalAuthor && (
-                <Message>
-                  Replies & upvotes/downvotes are allowed only on the latest
-                  author update thread.
-                </Message>
-              )}
-            </Or>
-            {!isSingleThread &&
-              (!readOnly ||
-                (areAuthorUpdatesAllowed && isCurrentUserProposalAuthor)) &&
-              proposalToken && (
-                <CommentForm
-                  persistKey={`commenting-on-${tokenFromUrl}`}
-                  onSubmit={handleSubmitComment}
-                  disableSubmit={!!identityError || paywallMissing}
-                  isAuthorUpdate={
-                    areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
-                  }
+        {!(currentUser && isSingleThread) && (
+          <Card
+            className={classNames("container", styles.commentsHeaderWrapper)}>
+            <LoggedInContent
+              fallback={
+                <WhatAreYourThoughts
+                  onLoginClick={handleOpenLoginModal}
+                  onSignupClick={onRedirectToSignup}
                 />
-              )}
-          </LoggedInContent>
-          {commentsError && (
-            <Message kind="error" className="margin-top-m">
-              {commentsError.toString()}
-            </Message>
-          )}
-        </Card>
-        {authorUpdateIds &&
-          authorUpdateIds.map((updateId) => (
-            <CommentsSection
-              key={updateId}
-              numOfComments={comments[updateId].length}
-              comments={comments[updateId]}
-            />
-          ))}
-        {comments && !!comments[PROPOSAL_MAIN_THREAD_KEY].length && (
-          <CommentsSection
-            key={PROPOSAL_MAIN_THREAD_KEY}
-            numOfComments={comments[PROPOSAL_MAIN_THREAD_KEY].length}
-            comments={comments && comments[PROPOSAL_MAIN_THREAD_KEY]}
-          />
+              }>
+              <Or>
+                {readOnly && (
+                  <Message kind="blocked" title="Comments are not allowed">
+                    {readOnlyReason}
+                  </Message>
+                )}
+                {!isPaid && paywallEnabled && currentUser && (
+                  <Message kind="error">
+                    <P>
+                      You won't be able to submit comments or proposals before
+                      paying the paywall, please visit your{" "}
+                      <Link to={`/user/${userid}?tab=credits`}>account</Link>{" "}
+                      page to correct this problem.
+                    </P>
+                  </Message>
+                )}
+                {!readOnly && !!identityError && <IdentityMessageError />}
+                {areAuthorUpdatesAllowed && !isCurrentUserProposalAuthor && (
+                  <Message>
+                    Replies & upvotes/downvotes are allowed only on the latest
+                    author update thread.
+                  </Message>
+                )}
+              </Or>
+              {!isSingleThread &&
+                ((!readOnly && !areAuthorUpdatesAllowed) ||
+                  (!readOnly &&
+                    areAuthorUpdatesAllowed &&
+                    isCurrentUserProposalAuthor)) &&
+                !!proposalToken && (
+                  <CommentForm
+                    persistKey={`commenting-on-${tokenFromUrl}`}
+                    onSubmit={handleSubmitComment}
+                    disableSubmit={!!identityError || paywallMissing}
+                    isAuthorUpdate={
+                      areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
+                    }
+                  />
+                )}
+            </LoggedInContent>
+            {commentsError && (
+              <Message kind="error" className="margin-top-m">
+                {commentsError.toString()}
+              </Message>
+            )}
+          </Card>
         )}
+        {authorUpdateIds &&
+          (singleThreadRootId ? (
+            <CommentsSection
+              numOfComments={comments[singleThreadRootId].length}
+              comments={comments[singleThreadRootId]}
+            />
+          ) : (
+            authorUpdateIds.map((updateId) => (
+              <CommentsSection
+                key={updateId}
+                numOfComments={comments[updateId].length}
+                comments={comments[updateId]}
+              />
+            ))
+          ))}
+        {comments &&
+          !!comments[PROPOSAL_MAIN_THREAD_KEY].length &&
+          !singleThreadRootId && (
+            <CommentsSection
+              key={PROPOSAL_MAIN_THREAD_KEY}
+              numOfComments={comments[PROPOSAL_MAIN_THREAD_KEY].length}
+              comments={comments && comments[PROPOSAL_MAIN_THREAD_KEY]}
+            />
+          )}
       </>
     ),
     [
       authorUpdateIds,
+      singleThreadRootId,
       comments,
       areAuthorUpdatesAllowed,
       currentUser,
