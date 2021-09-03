@@ -117,7 +117,7 @@ const comments = (state = DEFAULT_STATE, action) =>
             const comment = action.payload;
             return update(
               ["comments", "byToken", shortRecordToken(comment.token)],
-              (comments = []) => [...comments, comment]
+              (comments = []) => [comment, ...comments]
             )(state);
           },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
