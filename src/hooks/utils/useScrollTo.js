@@ -2,7 +2,8 @@ import { useLayoutEffect } from "react";
 
 const scrollToElement = (element) =>
   setTimeout(() => {
-    document.getElementById(element).scrollIntoView();
+    const elm = document.getElementById(element);
+    elm && elm.scrollIntoView();
   }, 100);
 
 function useScrollTo(element, shouldScroll) {
