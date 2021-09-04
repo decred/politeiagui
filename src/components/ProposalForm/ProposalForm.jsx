@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { Formik } from "formik";
@@ -102,8 +102,24 @@ const ProposalForm = React.memo(function ProposalForm({
   submitSuccess,
   disableSubmit,
   openMDGuideModal,
-  isPublic
+  isPublic,
+  isInitialValid,
+  validateForm
 }) {
+  // If initial values are not valid we run validateForm formik
+  // function to display errors.
+  //
+  // XXX when migrating to Formik v2.x we could use Formik's new props
+  // `initialErrors` && `initialTouched` instead of passing
+  // `isInitialValid` and then validating the form & setting the
+  // touched manually if it's false on mount.
+  useEffect(() => {
+    if (!isInitialValid) {
+      setFieldTouched("startDate");
+      validateForm();
+    }
+  }, [isInitialValid, validateForm, setFieldTouched]);
+
   const smallTablet = useMediaQuery("(max-width: 685px)");
   const { themeName } = useTheme();
   const {
@@ -488,9 +504,13 @@ const ProposalFormWrapper = ({
         description: "",
         files: [],
         amount: null,
-        dates: null,
+        startDate: null,
+        endDate: null,
         domain: ""
       };
+
+  const initialErrors =
+    initialValues && proposalFormValidation(newInitialValues);
 
   return (
     <>
@@ -498,6 +518,7 @@ const ProposalFormWrapper = ({
         initialValues={newInitialValues}
         loading={!proposalFormValidation}
         validate={proposalFormValidation}
+        isInitialValid={!initialErrors}
         onSubmit={handleSubmit}>
         {(props) => (
           <ProposalForm
@@ -507,7 +528,8 @@ const ProposalFormWrapper = ({
               disableSubmit,
               openMDGuideModal: openMdModal,
               newInitialValues,
-              isPublic
+              isPublic,
+              isInitialValid: !initialErrors
             }}
           />
         )}
