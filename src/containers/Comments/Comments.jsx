@@ -196,7 +196,8 @@ const CommentsListAndActions = ({
           <div className={styles.titleWrapper}>
             <H2 className={styles.commentsTitle}>
               {authorUpdateTitle ? authorUpdateTitle : "Comments"}{" "}
-              <span className={styles.commentsCount}>{`(${commentsCount})`}</span>
+              <span
+                className={styles.commentsCount}>{`(${commentsCount})`}</span>
             </H2>
             {hasDuplicatedComments && (
               <Text
