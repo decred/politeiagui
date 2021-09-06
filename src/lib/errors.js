@@ -289,7 +289,11 @@ function PiPluginError(code, context) {
     4: `The provided images exceeds the maximum allowed, ${context}`,
     5: `The file exceeds the maximum allowed size, ${context}`,
     6: `The proposal name ${context} is invalid`,
-    7: `This operation is not allowed, ${context}`
+    7: `This operation is not allowed, ${context}`,
+    8: `Proposal start date is invalid, ${context}`,
+    9: `Proposal end date is invalid, ${context}`,
+    10: `Proposal amount is invalid, ${context}`,
+    11: `Proposal domain is invalid, ${context}`
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdPi);
