@@ -47,8 +47,6 @@ const Comment = ({
   censorable,
   isFlatMode,
   seeInContextLink,
-  isAuthorUpdate,
-  authorUpdateTitle,
   ...props
 }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
@@ -114,9 +112,6 @@ const Comment = ({
       </div>
       {extraSmall && censorButton}
       {extraSmall && seeInContextLink}
-      {isAuthorUpdate && (
-        <div className="margin-top-s">Author Update: {authorUpdateTitle}</div>
-      )}
       {!censored ? (
         <Markdown
           renderImages={false}

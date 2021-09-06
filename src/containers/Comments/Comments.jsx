@@ -73,7 +73,8 @@ const CommentsListAndActions = ({
   paywallMissing,
   handleOpenLoginModal,
   latestAuthorUpdateId,
-  areAuthorUpdatesAllowed
+  areAuthorUpdatesAllowed,
+  authorUpdateTitle
 }) => {
   const {
     getCommentLikeOption,
@@ -194,7 +195,7 @@ const CommentsListAndActions = ({
         {!isSingleThread && (
           <div className={styles.titleWrapper}>
             <H2 className={styles.commentsTitle}>
-              Comments{" "}
+              {authorUpdateTitle ? authorUpdateTitle : "Comments"}{" "}
               <span className={styles.commentsCount}>{commentsCount}</span>
             </H2>
             {hasDuplicatedComments && (
@@ -314,7 +315,8 @@ const Comments = ({
   handleOpenLoginModal,
   paywallMissing,
   identityError,
-  isSingleThread
+  isSingleThread,
+  authorUpdateTitle
 }) => {
   const [state, dispatch] = useReducer(commentsReducer, initialState);
   const hasComments = !!comments;
@@ -385,6 +387,7 @@ const Comments = ({
           handleOpenLoginModal={handleOpenLoginModal}
           latestAuthorUpdateId={latestAuthorUpdateId}
           areAuthorUpdatesAllowed={areAuthorUpdatesAllowed}
+          authorUpdateTitle={authorUpdateTitle}
         />
       </Card>
     </>

@@ -8,8 +8,7 @@ import Comment from "./Comment";
 import {
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_COMMENT_UPVOTE,
-  PROPOSAL_COMMENT_DOWNVOTE,
-  PROPOSAL_UPDATE_HINT
+  PROPOSAL_COMMENT_DOWNVOTE
 } from "src/constants";
 
 const ContextLink = React.memo(({ parentid, recordToken }) => (
@@ -104,13 +103,9 @@ const CommentWrapper = ({
     userid,
     isNew,
     sumOfNewDescendants,
-    parentid,
-    extradatahint,
-    extradata
+    parentid
   } = comment;
 
-  const isAuthorUpdate = extradatahint === PROPOSAL_UPDATE_HINT;
-  const authorUpdateMetadata = isAuthorUpdate && JSON.parse(extradata);
   const isInLatestUpdateCommentTree =
     comments && isInCommentTree(latestAuthorUpdateId, commentid, comments);
   const isRecordAuthor =
@@ -226,8 +221,6 @@ const CommentWrapper = ({
         numOfReplies={numOfReplies}
         numOfNewHiddenReplies={sumOfNewDescendants}
         commentBody={commentText}
-        isAuthorUpdate={isAuthorUpdate}
-        authorUpdateTitle={authorUpdateMetadata && authorUpdateMetadata.title}
         {...props}
       />
       <CommentContent

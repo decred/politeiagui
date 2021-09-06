@@ -159,7 +159,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     });
   }, [handleOpenModal, handleCloseModal]);
 
-  const CommentsSection = ({ comments, numOfComments }) => (
+  const CommentsSection = ({ comments, numOfComments, authorUpdateTitle }) => (
     <Comments
       recordAuthorID={proposal?.userid}
       recordAuthorUsername={proposal?.username}
@@ -193,7 +193,19 @@ const ProposalDetail = ({ Main, match, history }) => {
       paywallMissing={paywallMissing}
       identityError={identityError}
       isSingleThread={isSingleThread}
+      authorUpdateTitle={authorUpdateTitle}
     />
+  );
+
+  const authorUpdateTitle = useCallback(
+    (updateId) => {
+      const { extradata } = comments[updateId].find(
+        ({ commentid }) => commentid === updateId
+      );
+      const authorUpdateMetadata = JSON.parse(extradata);
+      return authorUpdateMetadata.title;
+    },
+    [comments]
   );
 
   const proposalComments = useMemo(
@@ -261,6 +273,7 @@ const ProposalDetail = ({ Main, match, history }) => {
             <CommentsSection
               numOfComments={comments[singleThreadRootId].length}
               comments={comments[singleThreadRootId]}
+              authorUpdateTitle={authorUpdateTitle(singleThreadRootId)}
             />
           ) : (
             authorUpdateIds.map((updateId) => (
@@ -268,6 +281,7 @@ const ProposalDetail = ({ Main, match, history }) => {
                 key={updateId}
                 numOfComments={comments[updateId].length}
                 comments={comments[updateId]}
+                authorUpdateTitle={authorUpdateTitle(updateId)}
               />
             ))
           ))}
@@ -284,6 +298,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     ),
     [
       authorUpdateIds,
+      authorUpdateTitle,
       singleThreadRootId,
       comments,
       areAuthorUpdatesAllowed,
