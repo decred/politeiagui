@@ -84,6 +84,16 @@ const CommentForm = ({
             )}
             {isAuthorUpdate && (
               <Row noMargin align="center" wrap={smallTablet}>
+                <Tooltip
+                  contentClassName={styles.updateTitleTooltip}
+                  className={styles.titleTooltipWrapper}
+                  placement="right"
+                  content="The proposal author is allowed to give periodic updates on the status of their proposal.  You can start an update thread by submitting a new comment.  Users
+will only be able to reply to your most recent update thread.">
+                  <div>
+                    <Icon type="info" size={smallTablet ? "md" : "lg"} />
+                  </div>
+                </Tooltip>
                 <BoxTextInput
                   placeholder="Update title"
                   name="title"
@@ -93,41 +103,6 @@ const CommentForm = ({
                   onChange={handleTitleChangeWithTouched}
                   error={touched.title && errors.title}
                 />
-                <Tooltip
-                  contentClassName={styles.updateTitleTooltip}
-                  className={styles.titleTooltipWrapper}
-                  placement="left"
-                  content={
-                    <div>
-                      <p>
-                        Once a proposal vote has finished, all existing comment
-                        threads are locked.
-                      </p>
-                      <br />
-                      <p>
-                        When a proposal author wants to give an update they will
-                        start a new comment thread. The author is the only user
-                        that will have the ability to start a new comment thread
-                        once the voting period has finished. Each update will
-                        have an author provided title.
-                      </p>
-                      <br />
-                      <p>
-                        Anyone can reply to any comments in the thread and can
-                        cast upvotes/downvotes for any comments in the thread.
-                      </p>
-                      <br />
-                      <p>
-                        The comment thread will remain open until either the
-                        author starts a new update thread or an admin marks the
-                        proposal as closed/completed.
-                      </p>
-                    </div>
-                  }>
-                  <div>
-                    <Icon type="info" size={smallTablet ? "md" : "lg"} />
-                  </div>
-                </Tooltip>
               </Row>
             )}
             <MarkdownEditor
