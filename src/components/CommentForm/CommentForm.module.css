@@ -10,4 +10,7 @@
 .titleTooltipWrapper {
   flex-basis: 4rem;
   margin-top: -0.5rem;
+  margin-left: -4rem;
+  display: flex;
+  justify-content: center;
 }
