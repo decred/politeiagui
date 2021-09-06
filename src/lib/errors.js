@@ -320,7 +320,8 @@ function CommentsPluginError(code, context) {
     7: "Only the comment author is allowed to edit",
     8: `The provided parent ID is invalid, ${context}`,
     9: `The provided comment vote is invalid, ${context}`,
-    10: "You have exceeded the max number of changes on your vote"
+    10: "You have exceeded the max number of changes on your vote",
+    12: "Backend does not accept the extra data needed for author updates"
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdComments);
