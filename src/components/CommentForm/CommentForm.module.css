@@ -1,0 +1,14 @@
+.updateTitle {
+  flex-grow: 1;
+}
+
+.updateTitleTooltip {
+  font-size: var(--font-size-small);
+  width: 50rem;
+}
+
+.titleTooltipWrapper {
+  flex-basis: 4rem;
+  margin-left: 2rem;
+  margin-top: -0.5rem;
+}
