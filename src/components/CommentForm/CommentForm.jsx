@@ -101,7 +101,9 @@ const CommentForm = ({
         return (
           <form onSubmit={handleSubmit} className={className}>
             {errors && errors.global && (
-              <Message className="margin-bottom-m" kind="error">{errors.global.toString()}</Message>
+              <Message className="margin-bottom-m" kind="error">
+                {errors.global.toString()}
+              </Message>
             )}
             {isAuthorUpdate && (
               <>
