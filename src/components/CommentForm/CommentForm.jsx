@@ -46,7 +46,7 @@ const CommentForm = ({
         handleOpenModal(ModalConfirm, {
           title: "New author update",
           message:
-            "Submitting a new update with lock the previous update thread. Are you sure you want to continue?",
+            "Submitting a new update will lock the previous update thread. Are you sure you want to continue?",
           successTitle: "Author Update posted",
           successMessage: <Text>The update has been successfully posted!</Text>,
           onClose: handleCloseModal,
