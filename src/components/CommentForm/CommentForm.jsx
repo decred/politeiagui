@@ -75,7 +75,8 @@ const CommentForm = ({
       validationSchema={validationSchema({
         namesupportedchars,
         namelengthmax,
-        namelengthmin
+        namelengthmin,
+        isAuthorUpdate
       })}
       onSubmit={handleSubmit}>
       {({
@@ -100,7 +101,7 @@ const CommentForm = ({
         return (
           <form onSubmit={handleSubmit} className={className}>
             {errors && errors.global && (
-              <Message kind="error">{errors.global.toString()}</Message>
+              <Message className="margin-bottom-m" kind="error">{errors.global.toString()}</Message>
             )}
             {isAuthorUpdate && (
               <>
