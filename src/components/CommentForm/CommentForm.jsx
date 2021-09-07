@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Formik } from "formik";
 import FormikPersist from "src/components/FormikPersist";
 import {
+  H4,
   Button,
   Message,
   BoxTextInput,
@@ -83,27 +84,29 @@ const CommentForm = ({
               <Message kind="error">{errors.global.toString()}</Message>
             )}
             {isAuthorUpdate && (
-              <Row noMargin align="center" wrap={smallTablet}>
-                <Tooltip
-                  contentClassName={styles.updateTitleTooltip}
-                  className={styles.titleTooltipWrapper}
-                  placement="right"
-                  content="The proposal author is allowed to give periodic updates on the status of their proposal.  You can start an update thread by submitting a new comment.  Users
+              <>
+                <Row noMargin align="center" wrap={smallTablet}>
+                  <H4 className="margin-bottom-s">Proposal Update</H4>
+                  <Tooltip
+                    contentClassName={styles.updateTitleTooltip}
+                    className={styles.titleTooltipWrapper}
+                    placement="right"
+                    content="The proposal author is allowed to give periodic updates on the status of their proposal.  You can start an update thread by submitting a new comment.  Users
 will only be able to reply to your most recent update thread.">
-                  <div>
-                    <Icon type="info" size={smallTablet ? "md" : "lg"} />
-                  </div>
-                </Tooltip>
+                    <div>
+                      <Icon type="info" size={smallTablet ? "md" : "lg"} />
+                    </div>
+                  </Tooltip>
+                </Row>
                 <BoxTextInput
                   placeholder="Update title"
                   name="title"
                   tabIndex={1}
-                  className={styles.updateTitle}
                   value={values.title}
                   onChange={handleTitleChangeWithTouched}
                   error={touched.title && errors.title}
                 />
-              </Row>
+              </>
             )}
             <MarkdownEditor
               allowImgs={false}

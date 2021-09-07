@@ -1,7 +1,3 @@
-.updateTitle {
-  flex-grow: 1;
-}
-
 .updateTitleTooltip {
   font-size: var(--font-size-small);
   width: 50rem;
@@ -10,7 +6,6 @@
 .titleTooltipWrapper {
   flex-basis: 4rem;
   margin-top: -0.5rem;
-  margin-left: -4rem;
   display: flex;
   justify-content: center;
 }
