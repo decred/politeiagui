@@ -265,6 +265,7 @@ const ProposalDetail = ({ Main, match, history }) => {
                     isAuthorUpdate={
                       areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
                     }
+                    hasAuthorUpdates={hasAuthorUpdates}
                   />
                 )}
             </LoggedInContent>

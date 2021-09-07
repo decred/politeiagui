@@ -9,12 +9,15 @@ import {
   BoxTextInput,
   Tooltip,
   Icon,
-  useMediaQuery
+  useMediaQuery,
+  Text
 } from "pi-ui";
 import { Row } from "../layout";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import validationSchema from "./validation";
 import { usePolicy } from "src/hooks";
+import useModalContext from "src/hooks/utils/useModalContext";
+import ModalConfirm from "src/components/ModalConfirm";
 import styles from "./CommentForm.module.css";
 
 const forbiddenCommentsMdElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
@@ -26,18 +29,35 @@ const CommentForm = ({
   disableSubmit,
   persistKey,
   className,
-  isAuthorUpdate
+  isAuthorUpdate,
+  hasAuthorUpdates
 }) => {
   const {
     policyPi: { namesupportedchars, namelengthmax, namelengthmin }
   } = usePolicy();
+  const [handleOpenModal, handleCloseModal] = useModalContext();
   const smallTablet = useMediaQuery("(max-width: 685px)");
   async function handleSubmit(
     { comment, title },
     { resetForm, setSubmitting, setFieldError }
   ) {
     try {
-      await onSubmit({ comment: comment.trim(), title });
+      if (title && hasAuthorUpdates) {
+        handleOpenModal(ModalConfirm, {
+          title: "New author update",
+          message: "Submitting a new update with lock the previous update thread. Are you sure you want to continue?",
+          successTitle: "Author Update posted",
+          successMessage: (
+            <Text>The update has been successfully posted!</Text>
+          ),
+          onClose: handleCloseModal,
+          onSubmit: async () => {
+            await onSubmit({ comment: comment.trim(), title });
+          }
+        });
+      } else {
+        await onSubmit({ comment: comment.trim(), title });
+      }
       setSubmitting(false);
       resetForm();
       onCommentSubmitted && onCommentSubmitted();
