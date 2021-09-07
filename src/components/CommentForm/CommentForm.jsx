@@ -49,17 +49,23 @@ const CommentForm = ({
             "Submitting a new update will lock the previous update thread. Are you sure you want to continue?",
           successTitle: "Author Update posted",
           successMessage: <Text>The update has been successfully posted!</Text>,
-          onClose: handleCloseModal,
+          onClose: () => {
+            setSubmitting(false);
+            handleCloseModal();
+          },
           onSubmit: async () => {
             await onSubmit({ comment: comment.trim(), title });
+            setSubmitting(false);
+            resetForm();
+            onCommentSubmitted && onCommentSubmitted();
           }
         });
       } else {
         await onSubmit({ comment: comment.trim(), title });
+        setSubmitting(false);
+        resetForm();
+        onCommentSubmitted && onCommentSubmitted();
       }
-      setSubmitting(false);
-      resetForm();
-      onCommentSubmitted && onCommentSubmitted();
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
