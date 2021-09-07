@@ -64,7 +64,7 @@ describe("Admin proposals actions", () => {
         cy.findByText(/ok/i).click();
         cy.findByText(/approve/i).should("not.exist");
         cy.visit("/admin/records?tab=censored");
-        cy.findByText(token).should("be.visible");
+        cy.findByText(shortRecordToken(token)).should("be.visible");
       }
     );
   });

@@ -17,9 +17,9 @@ describe("Comments Votes", () => {
       cy.middleware("comments.vote");
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
-      cy.wait("@inventory").then(({ response: { body } }) => {
-        token = body.vetted.unauthorized[0];
-      });
+      cy.wait("@inventory").then(
+        ({ response: { body } }) => (token = body.vetted.unauthorized[0])
+      );
     });
     it("should submit comments votes successfully", () => {
       let upvotes, downvotes;
@@ -69,9 +69,7 @@ describe("Comments Votes", () => {
       cy.wait("@comments.comments");
       cy.findAllByTestId("score-like")
         .first()
-        .then((score) => {
-          upvotes = score[0].innerText;
-        });
+        .then((score) => (upvotes = score[0].innerText));
       cy.route("POST", "api/comments/v1/vote").as("vote");
       cy.findAllByTestId("like-btn").first().dblclick();
       cy.wait("@vote");
@@ -91,9 +89,9 @@ describe("Comments Votes", () => {
       cy.middleware("comments.vote", { isError: true, throttleKbps: 50 });
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
-      cy.wait("@inventory").then(({ response: { body } }) => {
-        token = body.vetted.unauthorized[0];
-      });
+      cy.wait("@inventory").then(
+        ({ response: { body } }) => (token = body.vetted.unauthorized[0])
+      );
     });
     it("should display error message", () => {
       cy.visit(`/record/${shortRecordToken(token)}`);
@@ -101,24 +99,14 @@ describe("Comments Votes", () => {
       cy.findAllByTestId("dislike-btn").first().click();
       cy.findByText(/Error/).should("exist");
     });
-    it("should reset votes count on error", () => {
+    it("shouldn't change votes count on error", () => {
       let upvotes;
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.findAllByTestId("score-like")
         .first()
-        .then((score) => {
-          upvotes = score[0].innerText;
-          console.log(`${Number(upvotes) + 1}`);
-        });
+        .then((score) => (upvotes = score[0].innerText));
       cy.wait(1000);
       cy.findAllByTestId("like-btn").first().click();
-      cy.wait(100);
-      cy.findAllByTestId("score-like")
-        .first()
-        .then((score) => {
-          const newup = score[0].innerText;
-          expect(Number(newup)).to.equal(Number(upvotes) + 1);
-        });
       cy.wait("@comments.vote");
       // assert votes count after delayed vote response
       cy.findAllByTestId("score-like")
