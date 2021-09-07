@@ -218,7 +218,7 @@ const ProposalDetail = ({ Main, match, history }) => {
   const proposalComments = useMemo(
     () => (
       <>
-        {!commentsLoading && !(currentUser && isSingleThread) && (
+        {!(currentUser && isSingleThread) && (
           <Card
             className={classNames("container", styles.commentsHeaderWrapper)}>
             <LoggedInContent
@@ -275,8 +275,7 @@ const ProposalDetail = ({ Main, match, history }) => {
             )}
           </Card>
         )}
-        {!commentsLoading &&
-          hasAuthorUpdates &&
+        {hasAuthorUpdates &&
           (singleThreadRootId ? (
             <CommentsSection
               numOfComments={comments[singleThreadRootId].length}
@@ -302,15 +301,12 @@ const ProposalDetail = ({ Main, match, history }) => {
               )}
             </>
           ))}
-        {!commentsLoading &&
-          comments &&
-          !hasAuthorUpdates &&
-          !singleThreadRootId && (
-            <CommentsSection
-              numOfComments={comments.length}
-              comments={comments}
-            />
-          )}
+        {comments && !hasAuthorUpdates && !singleThreadRootId && (
+          <CommentsSection
+            numOfComments={comments.length}
+            comments={comments}
+          />
+        )}
       </>
     ),
     [
@@ -335,7 +331,6 @@ const ProposalDetail = ({ Main, match, history }) => {
       tokenFromUrl,
       userid,
       commentsError,
-      commentsLoading,
       hasAuthorUpdates
     ]
   );
