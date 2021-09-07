@@ -100,7 +100,8 @@ const ProposalDetail = ({ Main, match, history }) => {
     loadingLikes,
     getCommentVotes,
     latestAuthorUpdateId,
-    authorUpdateIds
+    authorUpdateIds,
+    hasAuthorUpdates
   } = useComments(proposalToken, proposalState);
   const { userid } = currentUser || {};
   const [, identityError] = useIdentity();
@@ -110,7 +111,7 @@ const ProposalDetail = ({ Main, match, history }) => {
   // belongs to display only the relevant section.
   const singleThreadRootId = useMemo(() => {
     let authorUpdateId;
-    if (isSingleThread && authorUpdateIds) {
+    if (isSingleThread && hasAuthorUpdates) {
       authorUpdateIds.forEach((updateId) => {
         if (
           comments[updateId]
@@ -122,7 +123,13 @@ const ProposalDetail = ({ Main, match, history }) => {
       });
     }
     return authorUpdateId;
-  }, [authorUpdateIds, comments, isSingleThread, threadParentID]);
+  }, [
+    hasAuthorUpdates,
+    authorUpdateIds,
+    comments,
+    isSingleThread,
+    threadParentID
+  ]);
 
   const onRedirectToSignup = useCallback(
     () => history.push("/user/signup"),
@@ -211,7 +218,7 @@ const ProposalDetail = ({ Main, match, history }) => {
   const proposalComments = useMemo(
     () => (
       <>
-        {!(currentUser && isSingleThread) && (
+        {!commentsLoading && !(currentUser && isSingleThread) && (
           <Card
             className={classNames("container", styles.commentsHeaderWrapper)}>
             <LoggedInContent
@@ -268,7 +275,8 @@ const ProposalDetail = ({ Main, match, history }) => {
             )}
           </Card>
         )}
-        {authorUpdateIds &&
+        {!commentsLoading &&
+          hasAuthorUpdates &&
           (singleThreadRootId ? (
             <CommentsSection
               numOfComments={comments[singleThreadRootId].length}
@@ -276,22 +284,31 @@ const ProposalDetail = ({ Main, match, history }) => {
               authorUpdateTitle={authorUpdateTitle(singleThreadRootId)}
             />
           ) : (
-            authorUpdateIds.map((updateId) => (
-              <CommentsSection
-                key={updateId}
-                numOfComments={comments[updateId].length}
-                comments={comments[updateId]}
-                authorUpdateTitle={authorUpdateTitle(updateId)}
-              />
-            ))
+            <>
+              {authorUpdateIds.map((updateId) => (
+                <CommentsSection
+                  key={updateId}
+                  numOfComments={comments[updateId].length}
+                  comments={comments[updateId]}
+                  authorUpdateTitle={authorUpdateTitle(updateId)}
+                />
+              ))}
+              {!!comments[PROPOSAL_MAIN_THREAD_KEY].length && (
+                <CommentsSection
+                  key={PROPOSAL_MAIN_THREAD_KEY}
+                  numOfComments={comments[PROPOSAL_MAIN_THREAD_KEY].length}
+                  comments={comments && comments[PROPOSAL_MAIN_THREAD_KEY]}
+                />
+              )}
+            </>
           ))}
-        {comments &&
-          !!comments[PROPOSAL_MAIN_THREAD_KEY].length &&
+        {!commentsLoading &&
+          comments &&
+          !hasAuthorUpdates &&
           !singleThreadRootId && (
             <CommentsSection
-              key={PROPOSAL_MAIN_THREAD_KEY}
-              numOfComments={comments[PROPOSAL_MAIN_THREAD_KEY].length}
-              comments={comments && comments[PROPOSAL_MAIN_THREAD_KEY]}
+              numOfComments={comments.length}
+              comments={comments}
             />
           )}
       </>
@@ -317,7 +334,9 @@ const ProposalDetail = ({ Main, match, history }) => {
       readOnlyReason,
       tokenFromUrl,
       userid,
-      commentsError
+      commentsError,
+      commentsLoading,
+      hasAuthorUpdates
     ]
   );
 
@@ -339,7 +358,10 @@ const ProposalDetail = ({ Main, match, history }) => {
                 collapseBodyContent={!!threadParentID}
               />
             )}
-            {!isCensoredProposal(proposal) && proposalComments}
+            {!commentsLoading &&
+              comments &&
+              !isCensoredProposal(proposal) &&
+              proposalComments}
           </PublicActionsProvider>
         </UnvettedActionsProvider>
       </Main>

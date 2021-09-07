@@ -306,12 +306,14 @@ export function useComments(recordToken, proposalState) {
     ?.filter(({ extradatahint }) => extradatahint === PROPOSAL_UPDATE_HINT)
     .map(({ commentid }) => commentid);
 
+  const hasAuthorUpdates = !!authorUpdateIds?.length;
+
   // Calculate comments tree for each author update to display each
   // one of them in a separate comments section.
   const commentsWithAuthorUpdatesMap = useMemo(() => {
     const commentsMap = {};
     let authorUpdateThreads = [];
-    if (authorUpdateIds) {
+    if (hasAuthorUpdates) {
       authorUpdateIds.forEach((updateId) => {
         const authorUpdateTree = calculateAuthorUpdateTree(updateId, comments);
         authorUpdateThreads = [...authorUpdateThreads, ...authorUpdateTree];
@@ -324,10 +326,14 @@ export function useComments(recordToken, proposalState) {
       );
     }
     return commentsMap;
-  }, [authorUpdateIds, comments]);
+  }, [authorUpdateIds, comments, hasAuthorUpdates]);
+
+  const processedComments = hasAuthorUpdates
+    ? commentsWithAuthorUpdatesMap
+    : comments;
 
   return {
-    comments: authorUpdateIds ? commentsWithAuthorUpdatesMap : comments,
+    comments: processedComments,
     onCommentVote,
     onCensorComment,
     getCommentLikeOption,
@@ -337,12 +343,13 @@ export function useComments(recordToken, proposalState) {
     recordType,
     currentUser,
     lastVisitTimestamp,
-    loading,
+    loading: loading || !processedComments,
     loadingLikes,
     onSubmitComment,
     error,
     getCommentVotes,
     authorUpdateIds,
-    latestAuthorUpdateId: authorUpdateIds && authorUpdateIds[0]
+    latestAuthorUpdateId: hasAuthorUpdates && authorUpdateIds[0],
+    hasAuthorUpdates
   };
 }
