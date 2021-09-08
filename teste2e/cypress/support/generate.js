@@ -60,6 +60,23 @@ export const buildRecordComment = ({
     upvotes
   })();
 
+export const buildPaymentRegistration = build("PaymentRegistration").fields({
+  paywalladdress: fake(
+    (f) => `Ts${f.datatype.hexaDecimal(33, false, /[0-9a-z]/)}`
+  ),
+  haspaid: true,
+  paywallamount: 1,
+  paywalltxnotbefore: Date.now() / 1000 - 3600
+});
+
+export const buildPaymentPaywall = build("PaymentPaywall").fields({
+  paywalltxnotbefore: Date.now() / 1000 - 3600,
+  paywalladdress: fake(
+    (f) => `Ts${f.datatype.hexaDecimal(33, false, /[0-9a-z]/)}`
+  ),
+  creditprice: 10000000
+});
+
 const fakeToken = () => buildRecord().token;
 
 /**

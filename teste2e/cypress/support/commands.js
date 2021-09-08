@@ -34,6 +34,7 @@ import { shortRecordToken } from "../utils";
 import { middlewares as recordMiddlewares } from "./mock/records";
 import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";
 import { middlewares as commentsMiddlewares } from "./mock/comments";
+import { middlewares as usersMiddlewares } from "./mock/users";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -82,6 +83,13 @@ Cypress.Commands.add("register", (user) => {
 
 Cypress.Commands.add("logout", () => {
   requestWithCsrfToken("api/v1/logout");
+});
+
+Cypress.Commands.add("userLogout", (username) => {
+  cy.get("[data-testid='header-nav']").findByText(username).click();
+  cy.get("[data-testid='header-nav']")
+    .findByText(/logout/i)
+    .click();
 });
 
 // Should use after login
@@ -158,7 +166,8 @@ Cypress.Commands.add("middleware", (path, ...args) => {
   const mw = get(path)({
     ticketvote: ticketVoteMiddlewares,
     records: recordMiddlewares,
-    comments: commentsMiddlewares
+    comments: commentsMiddlewares,
+    users: usersMiddlewares
   });
   return mw(...args).as(path);
 });

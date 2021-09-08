@@ -27,6 +27,7 @@ const mapPaymentToStatusTag = {
     <StatusTag
       className={styles.statusTag}
       type="greenCheck"
+      data-testid="paywall-status-paid"
       text="Confirmed"
     />
   )
