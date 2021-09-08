@@ -226,7 +226,9 @@ const CommentsListAndActions = ({
         {isSingleThread && (
           <div className="justify-left margin-top-s">
             <Text className="margin-right-xs">Single comment thread. </Text>
-            <Link to={`/record/${recordToken}`}> View all.</Link>
+            <Link to={`/record/${recordToken}?scrollToComments=true`}>
+              View all.
+            </Link>
           </div>
         )}
       </div>

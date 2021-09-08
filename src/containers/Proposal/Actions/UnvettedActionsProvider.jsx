@@ -52,8 +52,8 @@ const UnvettedActionsProvider = ({ children, history }) => {
       successTitle: "Proposal approved",
       successMessage: (
         <Text>
-          The proposal has been successfully approved! Now it will appear under{" "}
-          <Link to="/?tab=in%20discussion">In discussion</Link> tab among Public
+          The proposal has been successfully approved! Now it will appear in{" "}
+          <Link to="/?tab=under%20review">Under review</Link> tab among Public
           Proposals.
         </Text>
       ),

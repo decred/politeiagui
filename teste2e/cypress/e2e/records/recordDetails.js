@@ -1,5 +1,4 @@
 import {
-  shortRecordToken,
   PROPOSAL_METADATA_FILENAME,
   VOTE_METADATA_FILENAME
 } from "../../utils";
@@ -17,7 +16,7 @@ function findRecordFileByName(record, name) {
   )(record);
 }
 
-function getRegularProposalToken(records = {}) {
+function getShortProposalToken(records = {}) {
   return compose(
     first,
     filter(
@@ -40,11 +39,11 @@ describe("Record Details", () => {
       beforeEach(() => {
         cy.visit("/");
         cy.wait("@records").then(({ response: { body } }) => {
-          const recordToken = getRegularProposalToken(body.records);
-          token = recordToken;
-          shortToken = shortRecordToken(recordToken);
+          const { records } = body;
+          shortToken = getShortProposalToken(records);
+          token = records[shortToken].censorshiprecord.token;
           expect(
-            recordToken,
+            shortToken,
             "You should have at least one record Under Review."
           ).to.exist;
         });

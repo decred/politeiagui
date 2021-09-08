@@ -11,7 +11,7 @@ import {
   PROPOSAL_TYPE_RFP_SUBMISSION,
   CENSORSHIP_TOKEN_LENGTH
 } from "src/constants";
-import { usdFormatter } from "src/utils";
+import { usdFormatter, formatUnixTimestampToObj } from "src/utils";
 
 export const proposalValidation =
   ({
@@ -19,7 +19,8 @@ export const proposalValidation =
     amountmax,
     namesupportedchars,
     namelengthmax,
-    namelengthmin
+    namelengthmin,
+    startdatemin
   }) =>
   (values) => {
     const errors = {};
@@ -98,13 +99,24 @@ export const proposalValidation =
         errors.endDate = "Please pick an end date";
       }
 
+      // Ensure start date is bigger than policy start date min.
+      let startdateTimestamp;
+      if (startdate) {
+        startdateTimestamp = convertObjectToUnixTimestamp(startdate);
+        const minStartdateTimestamp =
+          Math.round(new Date().getTime() / 1000) + startdatemin;
+        const { day, month, year } = formatUnixTimestampToObj(
+          minStartdateTimestamp
+        );
+        if (startdateTimestamp < minStartdateTimestamp) {
+          errors.startDate = `Minimum possible start date is: ${month}/${day}/${year}`;
+        }
+      }
+
       // If both start & end dates provided, ensure start
       // date is smaller.
       if (startdate && enddate) {
-        if (
-          convertObjectToUnixTimestamp(enddate) <=
-          convertObjectToUnixTimestamp(startdate)
-        ) {
+        if (convertObjectToUnixTimestamp(enddate) <= startdateTimestamp) {
           errors.startDate = "Start date must be before end date";
           errors.endDate = "End date must be after start date";
         }
