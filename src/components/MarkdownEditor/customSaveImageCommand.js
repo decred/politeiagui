@@ -1,4 +1,4 @@
-import { saveFileToMde, saveFileToMde } from "./helpers";
+import { saveFileToMde } from "./helpers";
 
 function dataTransferToArray(items) {
   const result = [];
