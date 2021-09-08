@@ -32,11 +32,12 @@ const PROPOSAL_STATUS_PUBLIC = 2;
 const PROPOSAL_STATUS_CENSORED = 3;
 const PROPOSAL_STATUS_ARCHIVED = 4;
 
-export const requestWithCsrfToken = (url, body) =>
+export const requestWithCsrfToken = (url, body, failOnStatusCode = true) =>
   cy.request("/api").then((res) =>
     cy.request({
       url,
       body,
+      failOnStatusCode,
       method: "POST",
       encoding: "utf-8",
       headers: {

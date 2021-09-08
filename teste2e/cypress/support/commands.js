@@ -117,9 +117,9 @@ Cypress.Commands.add(
     });
     return cy
       .request("api/v1/user/me")
-      .then((res) =>
-        signRegister(res.body.userid, createdProposal).then((res) =>
-          requestWithCsrfToken("/api/records/v1/new", res)
+      .then((me) =>
+        signRegister(me.body.userid, createdProposal).then((proposal) =>
+          requestWithCsrfToken("/api/records/v1/new", proposal, false)
         )
       );
   }
