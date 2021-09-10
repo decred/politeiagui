@@ -49,7 +49,7 @@ describe("Comments Votes", () => {
         .first()
         .then((score) => {
           const newdown = score[0].innerText;
-          expect(newdown).to.equal(Number(downvotes) + 1);
+          expect(Number(newdown)).to.equal(Number(downvotes) + 1);
           downvotes = newdown;
         });
       // check if upvotes count has decreased

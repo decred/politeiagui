@@ -327,9 +327,12 @@ export function useComments(
     [commentsVotes]
   );
 
-  const authorUpdateIds = comments
-    ?.filter(({ extradatahint }) => extradatahint === PROPOSAL_UPDATE_HINT)
-    .map(({ commentid }) => commentid);
+  const authorUpdateIds = useMemo(() => {
+    const ids = comments
+      ?.filter(({ extradatahint }) => extradatahint === PROPOSAL_UPDATE_HINT)
+      .map(({ commentid }) => commentid);
+    return ids && !!ids.length && ids;
+  }, [comments]);
 
   const hasAuthorUpdates = !!authorUpdateIds?.length;
 

@@ -20,6 +20,7 @@ import {
   handleCommentCensoringInfo,
   NUMBER_OF_LIST_PLACEHOLDERS
 } from "./helpers";
+import { PROPOSAL_MAIN_THREAD_KEY } from "src/constants";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
@@ -43,248 +44,250 @@ const FlatModeButton = ({ isActive, onClick }) => (
   </div>
 );
 
-const CommentsListAndActions = ({
-  sortOption,
-  setSortOption,
-  dispatch,
-  comments,
-  numOfComments,
-  state,
-  threadParentID,
-  isSingleThread,
-  recordTokenFull,
-  onCommentVote,
-  recordToken,
-  recordType,
-  lastVisitTimestamp,
-  commentsCtx,
-  onCensorComment,
-  currentUser,
-  userid,
-  proposalState,
-  handleOpenModal,
-  handleCloseModal,
-  loading,
-  recordAuthorID,
-  recordAuthorUsername,
-  recordBaseLink,
-  onSubmitComment,
-  readOnly,
-  identityError,
-  paywallMissing,
-  handleOpenLoginModal,
-  latestAuthorUpdateId,
-  areAuthorUpdatesAllowed,
-  authorUpdateTitle
-}) => {
-  const {
-    getCommentLikeOption,
-    enableCommentVote,
-    userLoggedIn,
-    userEmail,
-    loadingLikes,
-    getCommentVotes
-  } = commentsCtx;
-  const commentsCount = comments ? comments.length : 0;
-  const numOfDuplicatedComments = numOfComments - state.comments.length;
-  const hasDuplicatedComments =
-    !!state.comments.length && numOfDuplicatedComments > 0;
-  /** SORT START */
-  const handleSetSortOption = useCallback(
-    (option) => {
-      setSortOption(option.value);
+const CommentsListAndActions = React.memo(
+  ({
+    sortOption,
+    setSortOption,
+    dispatch,
+    comments,
+    numOfComments,
+    state,
+    threadParentID,
+    isSingleThread,
+    recordTokenFull,
+    onCommentVote,
+    recordToken,
+    recordType,
+    lastVisitTimestamp,
+    commentsCtx,
+    onCensorComment,
+    currentUser,
+    userid,
+    proposalState,
+    handleOpenModal,
+    handleCloseModal,
+    loading,
+    recordAuthorID,
+    recordAuthorUsername,
+    recordBaseLink,
+    onSubmitComment,
+    readOnly,
+    identityError,
+    paywallMissing,
+    handleOpenLoginModal,
+    latestAuthorUpdateId,
+    areAuthorUpdatesAllowed,
+    authorUpdateTitle
+  }) => {
+    const {
+      getCommentLikeOption,
+      enableCommentVote,
+      userLoggedIn,
+      userEmail,
+      loadingLikes,
+      getCommentVotes
+    } = commentsCtx;
+    const commentsCount = comments ? comments.length : 0;
+    const numOfDuplicatedComments = numOfComments - state.comments.length;
+    const hasDuplicatedComments =
+      !!state.comments.length && numOfDuplicatedComments > 0;
+    /** SORT START */
+    const handleSetSortOption = useCallback(
+      (option) => {
+        setSortOption(option.value);
+        dispatch({
+          type: actions.SORT,
+          sortOption: option.value
+        });
+      },
+      [dispatch, setSortOption]
+    );
+
+    const selectOptions = useMemo(() => getSortOptionsForSelect(), []);
+    const selectValue = useMemo(
+      () => createSelectOptionFromSortOption(sortOption),
+      [sortOption]
+    );
+    /** SORT END */
+    /** FLAT MODE START */
+    const [flatModeOnLocalStorage, setflatModeOnLocalStorage] = useLocalStorage(
+      "flatComments",
+      false
+    );
+    const [isFlatCommentsMode, setIsFlatCommentsMode] = useState(
+      flatModeOnLocalStorage
+    );
+
+    const handleCommentsModeToggle = () => {
+      const newFlagValue = !isFlatCommentsMode;
+      setIsFlatCommentsMode(newFlagValue);
+      setflatModeOnLocalStorage(newFlagValue);
       dispatch({
         type: actions.SORT,
-        sortOption: option.value
+        sortOption
       });
-    },
-    [dispatch, setSortOption]
-  );
-
-  const selectOptions = useMemo(() => getSortOptionsForSelect(), []);
-  const selectValue = useMemo(
-    () => createSelectOptionFromSortOption(sortOption),
-    [sortOption]
-  );
-  /** SORT END */
-  /** FLAT MODE START */
-  const [flatModeOnLocalStorage, setflatModeOnLocalStorage] = useLocalStorage(
-    "flatComments",
-    false
-  );
-  const [isFlatCommentsMode, setIsFlatCommentsMode] = useState(
-    flatModeOnLocalStorage
-  );
-
-  const handleCommentsModeToggle = () => {
-    const newFlagValue = !isFlatCommentsMode;
-    setIsFlatCommentsMode(newFlagValue);
-    setflatModeOnLocalStorage(newFlagValue);
-    dispatch({
-      type: actions.SORT,
-      sortOption
-    });
-  };
-  const debouncedHandleCommentsModeToggle = debounce(
-    handleCommentsModeToggle,
-    50
-  );
-  /** FLAT MODE END */
-  /** VOTE START */
-  const handleCommentVote = useCallback(
-    (commentID, action) =>
-      recordTokenFull
-        ? onCommentVote(commentID, action, recordTokenFull)
-        : null,
-    [onCommentVote, recordTokenFull]
-  );
-  /** VOTE END */
-  /** CENSOR START */
-  const handleCensorCommentModal = useCallback(
-    function handleCensorCommentModal(id) {
-      const handleCensorComment = handleCommentCensoringInfo(
+    };
+    const debouncedHandleCommentsModeToggle = debounce(
+      handleCommentsModeToggle,
+      50
+    );
+    /** FLAT MODE END */
+    /** VOTE START */
+    const handleCommentVote = useCallback(
+      (commentID, action) =>
+        recordTokenFull
+          ? onCommentVote(commentID, action, recordTokenFull)
+          : null,
+      [onCommentVote, recordTokenFull]
+    );
+    /** VOTE END */
+    /** CENSOR START */
+    const handleCensorCommentModal = useCallback(
+      function handleCensorCommentModal(id) {
+        const handleCensorComment = handleCommentCensoringInfo(
+          onCensorComment,
+          userid,
+          recordTokenFull,
+          id,
+          proposalState
+        );
+        handleOpenModal(ModalConfirmWithReason, {
+          title: "Censor comment",
+          reasonLabel: "Censor reason",
+          subject: "censorComment",
+          successTitle: "Comment censored",
+          successMessage: (
+            <Text>The comment has been successfully censored.</Text>
+          ),
+          onSubmit: handleCensorComment,
+          onClose: () => handleCloseModal()
+        });
+      },
+      [
         onCensorComment,
         userid,
         recordTokenFull,
-        id,
-        proposalState
-      );
-      handleOpenModal(ModalConfirmWithReason, {
-        title: "Censor comment",
-        reasonLabel: "Censor reason",
-        subject: "censorComment",
-        successTitle: "Comment censored",
-        successMessage: (
-          <Text>The comment has been successfully censored.</Text>
-        ),
-        onSubmit: handleCensorComment,
-        onClose: () => handleCloseModal()
-      });
-    },
-    [
-      onCensorComment,
-      userid,
-      recordTokenFull,
-      proposalState,
-      handleOpenModal,
-      handleCloseModal
-    ]
-  );
-  /** CENSOR END */
-  /** LOADERS START */
-  const commentLoaders = useMemo(() => {
-    if (!loading) return null;
+        proposalState,
+        handleOpenModal,
+        handleCloseModal
+      ]
+    );
+    /** CENSOR END */
+    /** LOADERS START */
+    const commentLoaders = useMemo(() => {
+      if (!loading) return null;
 
-    const numOfContents =
-      numOfComments < 3 ? numOfComments : NUMBER_OF_LIST_PLACEHOLDERS;
-    const contents = [];
-    for (let i = 0; i < numOfContents; i++) {
-      contents.push(<CommentLoader key={`comment-loader-${i}`} />);
-    }
-    return contents;
-  }, [numOfComments, loading]);
-  /** LOADERS END */
-  /** SINGLE THREAD VERIFICATION START */
-  const singleThreadCommentCannotBeAccessed =
-    isSingleThread &&
-    ((comments && !comments.find((c) => c.commentid === +threadParentID)) ||
-      numOfComments === 0);
-  /** SINGLE THREAD VERIFICATION END */
-  return (
-    <>
-      <div className={classNames("container", styles.commentsHeader)}>
-        {!isSingleThread && (
-          <div className={styles.titleWrapper}>
-            <H2 className={styles.commentsTitle}>
-              {authorUpdateTitle ? authorUpdateTitle : "Comments"}{" "}
-              <span
-                className={styles.commentsCount}>{`(${commentsCount})`}</span>
-            </H2>
-            {hasDuplicatedComments && (
-              <Text
-                color="gray"
-                size="small">{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
+      const numOfContents =
+        numOfComments < 3 ? numOfComments : NUMBER_OF_LIST_PLACEHOLDERS;
+      const contents = [];
+      for (let i = 0; i < numOfContents; i++) {
+        contents.push(<CommentLoader key={`comment-loader-${i}`} />);
+      }
+      return contents;
+    }, [numOfComments, loading]);
+    /** LOADERS END */
+    /** SINGLE THREAD VERIFICATION START */
+    const singleThreadCommentCannotBeAccessed =
+      isSingleThread &&
+      ((comments && !comments.find((c) => c.commentid === +threadParentID)) ||
+        numOfComments === 0);
+    /** SINGLE THREAD VERIFICATION END */
+    return (
+      <>
+        <div className={classNames("container", styles.commentsHeader)}>
+          {!isSingleThread && (
+            <div className={styles.titleWrapper}>
+              <H2 className={styles.commentsTitle}>
+                {authorUpdateTitle ? authorUpdateTitle : "Comments"}{" "}
+                <span
+                  className={styles.commentsCount}>{`(${commentsCount})`}</span>
+              </H2>
+              {hasDuplicatedComments && (
+                <Text
+                  color="gray"
+                  size="small">{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
+              )}
+            </div>
+          )}
+          <div className={styles.sortContainer}>
+            {!!comments && !!comments.length && (
+              <>
+                <Select
+                  value={selectValue}
+                  onChange={handleSetSortOption}
+                  options={selectOptions}
+                />
+                {!isSingleThread && (
+                  <FlatModeButton
+                    isActive={isFlatCommentsMode}
+                    onClick={debouncedHandleCommentsModeToggle}
+                  />
+                )}
+              </>
             )}
           </div>
-        )}
-        <div className={styles.sortContainer}>
-          {!!comments && !!comments.length && (
-            <>
-              <Select
-                value={selectValue}
-                onChange={handleSetSortOption}
-                options={selectOptions}
-              />
-              {!isSingleThread && (
-                <FlatModeButton
-                  isActive={isFlatCommentsMode}
-                  onClick={debouncedHandleCommentsModeToggle}
-                />
-              )}
-            </>
+          {isSingleThread && (
+            <div className="justify-left margin-top-s">
+              <Text className="margin-right-xs">Single comment thread. </Text>
+              <Link to={`/record/${recordToken}?scrollToComments=true`}>
+                View all.
+              </Link>
+            </div>
           )}
         </div>
-        {isSingleThread && (
-          <div className="justify-left margin-top-s">
-            <Text className="margin-right-xs">Single comment thread. </Text>
-            <Link to={`/record/${recordToken}?scrollToComments=true`}>
-              View all.
-            </Link>
-          </div>
-        )}
-      </div>
-      <div className={styles.commentsWrapper}>
-        {loading ? (
-          commentLoaders
-        ) : !singleThreadCommentCannotBeAccessed ? (
-          <CommentContext.Provider
-            value={{
-              onSubmitComment,
-              onCommentVote: handleCommentVote,
-              recordAuthorID,
-              recordAuthorUsername,
-              recordToken,
-              threadParentID,
-              recordType,
-              proposalState,
-              readOnly,
-              identityError,
-              paywallMissing,
-              isAdmin: currentUser && currentUser.isadmin,
-              currentUser,
-              openCensorModal: handleCensorCommentModal,
-              openLoginModal: handleOpenLoginModal,
-              latestAuthorUpdateId,
-              areAuthorUpdatesAllowed,
-              comments,
-              getCommentLikeOption,
-              enableCommentVote,
-              userLoggedIn,
-              userEmail,
-              loadingLikes,
-              getCommentVotes
-            }}>
-            <CommentsListWrapper
-              lastTimeAccessed={lastVisitTimestamp}
-              threadParentID={threadParentID}
-              currentUserID={userid}
-              comments={state.comments}
-              isFlatMode={isFlatCommentsMode}
-              proposalState={proposalState}
-              recordsBaseLink={recordBaseLink}
-            />
-          </CommentContext.Provider>
-        ) : null}
-        {singleThreadCommentCannotBeAccessed && (
-          <Message kind="error">
-            The comment you are trying to access does not exist or it is a
-            duplicated. Return to the full thread to select a valid comment.
-          </Message>
-        )}
-      </div>
-    </>
-  );
-};
+        <div className={styles.commentsWrapper}>
+          {loading ? (
+            commentLoaders
+          ) : !singleThreadCommentCannotBeAccessed ? (
+            <CommentContext.Provider
+              value={{
+                onSubmitComment,
+                onCommentVote: handleCommentVote,
+                recordAuthorID,
+                recordAuthorUsername,
+                recordToken,
+                threadParentID,
+                recordType,
+                proposalState,
+                readOnly,
+                identityError,
+                paywallMissing,
+                isAdmin: currentUser && currentUser.isadmin,
+                currentUser,
+                openCensorModal: handleCensorCommentModal,
+                openLoginModal: handleOpenLoginModal,
+                latestAuthorUpdateId,
+                areAuthorUpdatesAllowed,
+                comments,
+                getCommentLikeOption,
+                enableCommentVote,
+                userLoggedIn,
+                userEmail,
+                loadingLikes,
+                getCommentVotes
+              }}>
+              <CommentsListWrapper
+                lastTimeAccessed={lastVisitTimestamp}
+                threadParentID={threadParentID}
+                currentUserID={userid}
+                comments={state.comments}
+                isFlatMode={isFlatCommentsMode}
+                proposalState={proposalState}
+                recordsBaseLink={recordBaseLink}
+              />
+            </CommentContext.Provider>
+          ) : null}
+          {singleThreadCommentCannotBeAccessed && (
+            <Message kind="error">
+              The comment you are trying to access does not exist or it is a
+              duplicated. Return to the full thread to select a valid comment.
+            </Message>
+          )}
+        </div>
+      </>
+    );
+  }
+);
 
 const Comments = ({
   recordToken,
@@ -339,7 +342,7 @@ const Comments = ({
 
   const authorUpdateTitle = useCallback(
     (updateId) => {
-      const { extradata } = comments[updateId].find(
+      const { extradata } = comments.find(
         ({ commentid }) => commentid === updateId
       );
       const authorUpdateMetadata = JSON.parse(extradata);
@@ -348,16 +351,23 @@ const Comments = ({
     [comments]
   );
 
-  // XXX is still needed ?
-  useEffect(function handleUpdateComments() {
-    if (!!comments && !!comments.length) {
-      dispatch({
-        type: actions.UPDATE,
-        comments,
-        sortOption
-      });
-    }
-  });
+  useEffect(
+    function handleUpdateComments() {
+      if (!!comments && !!comments.length) {
+        dispatch({
+          type: actions.UPDATE,
+          comments,
+          sortOption
+        });
+      }
+    },
+    [comments, sortOption]
+  );
+
+  const updateTitle = useMemo(() => {
+    if (threadRootId && threadRootId !== PROPOSAL_MAIN_THREAD_KEY)
+      return authorUpdateTitle(threadRootId);
+  }, [threadRootId, authorUpdateTitle]);
 
   return (
     <>
@@ -404,7 +414,7 @@ const Comments = ({
             handleOpenLoginModal={handleOpenLoginModal}
             latestAuthorUpdateId={latestAuthorUpdateId}
             areAuthorUpdatesAllowed={areAuthorUpdatesAllowed}
-            authorUpdateTitle={threadRootId && authorUpdateTitle(threadRootId)}
+            authorUpdateTitle={updateTitle}
           />
         </Card>
       )}
@@ -412,4 +422,4 @@ const Comments = ({
   );
 };
 
-export default Comments;
+export default React.memo(Comments);

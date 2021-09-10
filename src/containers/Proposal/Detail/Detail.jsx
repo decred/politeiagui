@@ -65,7 +65,6 @@ const ProposalDetail = ({ Main, match, history }) => {
     commentsError,
     commentsLoading
   } = useProposal(tokenFromUrl, threadParentCommentID);
-  console.log({ authorUpdateIds });
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
