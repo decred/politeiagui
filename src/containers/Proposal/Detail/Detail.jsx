@@ -4,7 +4,7 @@ import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/components/Proposal";
 import styles from "./Detail.module.css";
-import { useProposal, useComments } from "./hooks";
+import { useProposal } from "./hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
@@ -56,8 +56,17 @@ const ProposalDetail = ({ Main, match, history }) => {
     loading,
     threadParentID,
     error,
-    isCurrentUserProposalAuthor
+    isCurrentUserProposalAuthor,
+    authorUpdateIds,
+    hasAuthorUpdates,
+    singleThreadRootId,
+    onSubmitComment,
+    currentUser,
+    commentsError,
+    commentsLoading
   } = useProposal(tokenFromUrl, threadParentCommentID);
+  console.log({ authorUpdateIds });
+  const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
     { [tokenFromUrl]: fetchedProposal },
@@ -79,57 +88,7 @@ const ProposalDetail = ({ Main, match, history }) => {
   const { javascriptEnabled } = useConfig();
   const { isPaid, paywallEnabled } = usePaywall();
   const paywallMissing = paywallEnabled && !isPaid;
-  const {
-    onSubmitComment,
-    onCommentVote,
-    onCensorComment,
-    // map-like object where the keys are the author update
-    // ids mapping to an array with the update's thread comments. The map has
-    // an additional special key PROPOSAL_MAIN_THREAD_KEY which maps to the
-    // main comments thread.
-    comments,
-    loading: commentsLoading,
-    recordType,
-    lastVisitTimestamp,
-    currentUser,
-    error: commentsError,
-    getCommentLikeOption,
-    enableCommentVote,
-    userLoggedIn,
-    userEmail,
-    loadingLikes,
-    getCommentVotes,
-    latestAuthorUpdateId,
-    authorUpdateIds,
-    hasAuthorUpdates
-  } = useComments(proposalToken, proposalState);
-  const { userid } = currentUser || {};
   const [, identityError] = useIdentity();
-
-  // If displaying a single thread while having multiple author updates with
-  // different section, find to which tree the sub-tree we are displaying
-  // belongs to display only the relevant section.
-  const singleThreadRootId = useMemo(() => {
-    let authorUpdateId;
-    if (isSingleThread && hasAuthorUpdates) {
-      authorUpdateIds.forEach((updateId) => {
-        if (
-          comments[updateId]
-            .map(({ commentid }) => commentid)
-            .includes(+threadParentID)
-        ) {
-          authorUpdateId = updateId;
-        }
-      });
-    }
-    return authorUpdateId;
-  }, [
-    hasAuthorUpdates,
-    authorUpdateIds,
-    comments,
-    isSingleThread,
-    threadParentID
-  ]);
 
   const onRedirectToSignup = useCallback(
     () => history.push("/user/signup"),
@@ -166,53 +125,24 @@ const ProposalDetail = ({ Main, match, history }) => {
     });
   }, [handleOpenModal, handleCloseModal]);
 
-  const CommentsSection = ({ comments, numOfComments, authorUpdateTitle }) => (
+  const CommentsSection = ({ threadRootId }) => (
     <Comments
       recordAuthorID={proposal?.userid}
       recordAuthorUsername={proposal?.username}
       recordToken={tokenFromUrl}
       recordTokenFull={proposalToken}
-      numOfComments={numOfComments}
       threadParentID={threadParentID}
       readOnly={readOnly}
       areAuthorUpdatesAllowed={areAuthorUpdatesAllowed}
       proposalState={proposalState}
       recordBaseLink={getProposalLink(proposal, javascriptEnabled)}
-      onSubmitComment={onSubmitComment}
-      onCommentVote={onCommentVote}
-      onCensorComment={onCensorComment}
-      comments={comments}
-      loading={commentsLoading}
-      recordType={recordType}
-      lastVisitTimestamp={lastVisitTimestamp}
-      currentUser={currentUser}
-      userid={userid}
-      latestAuthorUpdateId={latestAuthorUpdateId}
-      getCommentLikeOption={getCommentLikeOption}
-      enableCommentVote={enableCommentVote}
-      userLoggedIn={userLoggedIn}
-      userEmail={userEmail}
-      loadingLikes={loadingLikes}
-      getCommentVotes={getCommentVotes}
       handleOpenModal={handleOpenModal}
       handleCloseModal={handleCloseModal}
       handleOpenLoginModal={handleOpenLoginModal}
       paywallMissing={paywallMissing}
       identityError={identityError}
-      isSingleThread={isSingleThread}
-      authorUpdateTitle={authorUpdateTitle}
+      threadRootId={threadRootId}
     />
-  );
-
-  const authorUpdateTitle = useCallback(
-    (updateId) => {
-      const { extradata } = comments[updateId].find(
-        ({ commentid }) => commentid === updateId
-      );
-      const authorUpdateMetadata = JSON.parse(extradata);
-      return authorUpdateMetadata.title;
-    },
-    [comments]
   );
 
   const proposalComments = useMemo(
@@ -278,43 +208,24 @@ const ProposalDetail = ({ Main, match, history }) => {
         )}
         {hasAuthorUpdates &&
           (singleThreadRootId ? (
-            <CommentsSection
-              numOfComments={comments[singleThreadRootId].length}
-              comments={comments[singleThreadRootId]}
-              authorUpdateTitle={authorUpdateTitle(singleThreadRootId)}
-            />
+            <CommentsSection threadRootId={singleThreadRootId} />
           ) : (
             <>
               {authorUpdateIds.map((updateId) => (
-                <CommentsSection
-                  key={updateId}
-                  numOfComments={comments[updateId].length}
-                  comments={comments[updateId]}
-                  authorUpdateTitle={authorUpdateTitle(updateId)}
-                />
+                <CommentsSection key={updateId} threadRootId={updateId} />
               ))}
-              {!!comments[PROPOSAL_MAIN_THREAD_KEY].length && (
-                <CommentsSection
-                  key={PROPOSAL_MAIN_THREAD_KEY}
-                  numOfComments={comments[PROPOSAL_MAIN_THREAD_KEY].length}
-                  comments={comments && comments[PROPOSAL_MAIN_THREAD_KEY]}
-                />
-              )}
+              <CommentsSection
+                key={PROPOSAL_MAIN_THREAD_KEY}
+                threadRootId={PROPOSAL_MAIN_THREAD_KEY}
+              />
             </>
           ))}
-        {comments && !hasAuthorUpdates && !singleThreadRootId && (
-          <CommentsSection
-            numOfComments={comments.length}
-            comments={comments}
-          />
-        )}
+        {!hasAuthorUpdates && !singleThreadRootId && <CommentsSection />}
       </>
     ),
     [
       authorUpdateIds,
-      authorUpdateTitle,
       singleThreadRootId,
-      comments,
       areAuthorUpdatesAllowed,
       currentUser,
       handleOpenLoginModal,
@@ -354,9 +265,8 @@ const ProposalDetail = ({ Main, match, history }) => {
                 collapseBodyContent={!!threadParentID}
               />
             )}
-            {!commentsLoading &&
-              comments &&
-              !isCensoredProposal(proposal) &&
+            {!isCensoredProposal(proposal) &&
+              !commentsLoading &&
               proposalComments}
           </PublicActionsProvider>
         </UnvettedActionsProvider>

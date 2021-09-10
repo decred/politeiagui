@@ -187,16 +187,41 @@ export function useProposal(token, threadParentID) {
     proposals
   );
 
+  const proposalToken = getProposalToken(proposalWithLinks);
+  const proposalState = proposalWithLinks?.state;
+
+  const {
+    onSubmitComment,
+    authorUpdateIds,
+    hasAuthorUpdates,
+    singleThreadRootId,
+    error: commentsError,
+    loading: commentsLoading
+  } = useComments(proposalToken, proposalState, null, threadParentID);
+
   return {
     proposal: proposalWithLinks,
     error: state.error,
     loading: state.status === "idle" || state.status === "loading",
     threadParentID,
-    isCurrentUserProposalAuthor
+    isCurrentUserProposalAuthor,
+    authorUpdateIds,
+    hasAuthorUpdates,
+    singleThreadRootId,
+    onSubmitComment,
+    commentsError,
+    currentUser,
+    commentsLoading
   };
 }
 
-export function useComments(recordToken, proposalState) {
+export function useComments(
+  recordToken,
+  proposalState,
+  authorUpdateId,
+  threadParentID
+) {
+  const isSingleThread = !!threadParentID;
   const { enableCommentVote, recordType, constants } = useConfig();
 
   const errorSelector = or(
@@ -328,9 +353,38 @@ export function useComments(recordToken, proposalState) {
     return commentsMap;
   }, [authorUpdateIds, comments, hasAuthorUpdates]);
 
-  const processedComments = hasAuthorUpdates
-    ? commentsWithAuthorUpdatesMap
-    : comments;
+  const processedComments = useMemo(
+    () =>
+      hasAuthorUpdates && authorUpdateId
+        ? commentsWithAuthorUpdatesMap[authorUpdateId]
+        : comments,
+    [authorUpdateId, comments, commentsWithAuthorUpdatesMap, hasAuthorUpdates]
+  );
+
+  // If displaying a single thread while having multiple author updates with
+  // different section, find to which tree the sub-tree we are displaying
+  // belongs to display only the relevant section.
+  const singleThreadRootId = useMemo(() => {
+    let authorUpdateId;
+    if (isSingleThread && hasAuthorUpdates) {
+      authorUpdateIds.forEach((updateId) => {
+        if (
+          comments[updateId]
+            .map(({ commentid }) => commentid)
+            .includes(+threadParentID)
+        ) {
+          authorUpdateId = updateId;
+        }
+      });
+    }
+    return authorUpdateId;
+  }, [
+    isSingleThread,
+    hasAuthorUpdates,
+    authorUpdateIds,
+    comments,
+    threadParentID
+  ]);
 
   return {
     comments: processedComments,
@@ -350,6 +404,7 @@ export function useComments(recordToken, proposalState) {
     getCommentVotes,
     authorUpdateIds,
     latestAuthorUpdateId: hasAuthorUpdates && authorUpdateIds[0],
-    hasAuthorUpdates
+    hasAuthorUpdates,
+    singleThreadRootId
   };
 }

@@ -24,6 +24,7 @@ import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import { debounce } from "lodash";
+import { useComments } from "../Proposal/Detail/hooks";
 
 const FlatModeButton = ({ isActive, onClick }) => (
   <div
@@ -286,7 +287,6 @@ const CommentsListAndActions = ({
 };
 
 const Comments = ({
-  numOfComments,
   recordToken,
   recordTokenFull,
   recordAuthorID,
@@ -297,30 +297,34 @@ const Comments = ({
   proposalState,
   recordBaseLink,
   areAuthorUpdatesAllowed,
-  onSubmitComment,
-  onCommentVote,
-  onCensorComment,
-  comments,
-  loading,
-  recordType,
-  lastVisitTimestamp,
-  currentUser,
-  userid,
-  latestAuthorUpdateId,
-  getCommentLikeOption,
-  enableCommentVote,
-  userLoggedIn,
-  userEmail,
-  loadingLikes,
-  getCommentVotes,
   handleOpenModal,
   handleCloseModal,
   handleOpenLoginModal,
   paywallMissing,
   identityError,
-  isSingleThread,
-  authorUpdateTitle
+  threadRootId
 }) => {
+  const isSingleThread = !!threadParentID;
+  const {
+    onSubmitComment,
+    onCommentVote,
+    onCensorComment,
+    comments,
+    loading,
+    recordType,
+    lastVisitTimestamp,
+    currentUser,
+    getCommentLikeOption,
+    enableCommentVote,
+    userLoggedIn,
+    userEmail,
+    loadingLikes,
+    getCommentVotes,
+    latestAuthorUpdateId
+  } = useComments(recordTokenFull, proposalState, threadRootId, threadParentID);
+  const { userid } = currentUser || {};
+  const numOfComments = comments?.length;
+
   const [state, dispatch] = useReducer(commentsReducer, initialState);
   const hasComments = !!comments;
   const hasScrollToQuery = !!getQueryStringValue("scrollToComments");
@@ -333,66 +337,77 @@ const Comments = ({
     commentSortOptions.SORT_BY_TOP
   );
 
-  useEffect(
-    function handleUpdateComments() {
-      if (!!comments && !!comments.length) {
-        dispatch({
-          type: actions.UPDATE,
-          comments,
-          sortOption
-        });
-      }
+  const authorUpdateTitle = useCallback(
+    (updateId) => {
+      const { extradata } = comments[updateId].find(
+        ({ commentid }) => commentid === updateId
+      );
+      const authorUpdateMetadata = JSON.parse(extradata);
+      return authorUpdateMetadata.title;
     },
-    [comments, sortOption]
+    [comments]
   );
+
+  // XXX is still needed ?
+  useEffect(function handleUpdateComments() {
+    if (!!comments && !!comments.length) {
+      dispatch({
+        type: actions.UPDATE,
+        comments,
+        sortOption
+      });
+    }
+  });
 
   return (
     <>
-      <Card
-        id="commentArea"
-        className={classNames(styles.commentAreaContainer, className)}>
-        <CommentsListAndActions
-          sortOption={sortOption}
-          setSortOption={setSortOption}
-          dispatch={dispatch}
-          comments={comments}
-          numOfComments={numOfComments}
-          state={state}
-          threadParentID={threadParentID}
-          isSingleThread={isSingleThread}
-          recordTokenFull={recordTokenFull}
-          onCommentVote={onCommentVote}
-          recordToken={recordToken}
-          recordType={recordType}
-          lastVisitTimestamp={lastVisitTimestamp}
-          commentsCtx={{
-            getCommentLikeOption,
-            enableCommentVote,
-            userLoggedIn,
-            userEmail,
-            loadingLikes,
-            getCommentVotes
-          }}
-          onCensorComment={onCensorComment}
-          userid={userid}
-          currentUser={currentUser}
-          proposalState={proposalState}
-          handleOpenModal={handleOpenModal}
-          handleCloseModal={handleCloseModal}
-          loading={loading}
-          recordAuthorID={recordAuthorID}
-          recordAuthorUsername={recordAuthorUsername}
-          recordBaseLink={recordBaseLink}
-          onSubmitComment={onSubmitComment}
-          readOnly={readOnly}
-          identityError={identityError}
-          paywallMissing={paywallMissing}
-          handleOpenLoginModal={handleOpenLoginModal}
-          latestAuthorUpdateId={latestAuthorUpdateId}
-          areAuthorUpdatesAllowed={areAuthorUpdatesAllowed}
-          authorUpdateTitle={authorUpdateTitle}
-        />
-      </Card>
+      {comments && (
+        <Card
+          id="commentArea"
+          className={classNames(styles.commentAreaContainer, className)}>
+          <CommentsListAndActions
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+            dispatch={dispatch}
+            comments={comments}
+            numOfComments={numOfComments}
+            state={state}
+            threadParentID={threadParentID}
+            isSingleThread={isSingleThread}
+            recordTokenFull={recordTokenFull}
+            onCommentVote={onCommentVote}
+            recordToken={recordToken}
+            recordType={recordType}
+            lastVisitTimestamp={lastVisitTimestamp}
+            commentsCtx={{
+              getCommentLikeOption,
+              enableCommentVote,
+              userLoggedIn,
+              userEmail,
+              loadingLikes,
+              getCommentVotes
+            }}
+            onCensorComment={onCensorComment}
+            userid={userid}
+            currentUser={currentUser}
+            proposalState={proposalState}
+            handleOpenModal={handleOpenModal}
+            handleCloseModal={handleCloseModal}
+            loading={loading}
+            recordAuthorID={recordAuthorID}
+            recordAuthorUsername={recordAuthorUsername}
+            recordBaseLink={recordBaseLink}
+            onSubmitComment={onSubmitComment}
+            readOnly={readOnly}
+            identityError={identityError}
+            paywallMissing={paywallMissing}
+            handleOpenLoginModal={handleOpenLoginModal}
+            latestAuthorUpdateId={latestAuthorUpdateId}
+            areAuthorUpdatesAllowed={areAuthorUpdatesAllowed}
+            authorUpdateTitle={threadRootId && authorUpdateTitle(threadRootId)}
+          />
+        </Card>
+      )}
     </>
   );
 };

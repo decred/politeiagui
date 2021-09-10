@@ -28,9 +28,7 @@ describe("Comments Votes", () => {
       // like action
       cy.findAllByTestId("score-like")
         .first()
-        .then((score) => {
-          upvotes = score[0].innerText;
-        });
+        .then((score) => (upvotes = score[0].innerText));
       cy.findAllByTestId("like-btn").first().click();
       cy.wait("@comments.vote");
       cy.findAllByTestId("score-like")
@@ -43,19 +41,18 @@ describe("Comments Votes", () => {
       // dislike action
       cy.findAllByTestId("score-dislike")
         .first()
-        .then((score) => {
-          downvotes = score[0].innerText;
-        });
+        .then((score) => (downvotes = score[0].innerText));
       cy.findAllByTestId("dislike-btn").first().click();
       cy.wait("@comments.vote");
+      // check if downvotes count has increased
       cy.findAllByTestId("score-dislike")
         .first()
         .then((score) => {
           const newdown = score[0].innerText;
-          expect(Number(newdown)).to.equal(Number(downvotes) + 1);
+          expect(newdown).to.equal(Number(downvotes) + 1);
           downvotes = newdown;
         });
-      // checks if like vote count has decreased
+      // check if upvotes count has decreased
       cy.findAllByTestId("score-like")
         .first()
         .then((score) => {
