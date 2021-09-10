@@ -18,7 +18,8 @@ export function useCustomImageCommand(saveImage) {
         }
       };
       handleOpenModal(ModalAttachFiles, {
-        title: "Upload an image",
+        title: "Insert an image",
+        subTitle: "Select the image that you would like to insert into the proposal text.",
         onChange: handleOnChange,
         onClose: handleCloseModal
       });
