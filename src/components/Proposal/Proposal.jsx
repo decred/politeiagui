@@ -437,7 +437,7 @@ const Proposal = React.memo(function Proposal({
                 />
                 <div>
                   {(isVoteActive || isVotingFinished) && (
-                    <ChartsLink token={proposalToken} />
+                    <ChartsLink token={fullToken} />
                   )}
                 </div>
                 {extended && (
@@ -509,7 +509,7 @@ const Proposal = React.memo(function Proposal({
                     url={window.location.origin + proposalURL}
                   />
                   {(isVoteActive || isVotingFinished) && (
-                    <ChartsLink token={proposalToken} />
+                    <ChartsLink token={fullToken} />
                   )}
                   {extended && (
                     <MarkdownLink
