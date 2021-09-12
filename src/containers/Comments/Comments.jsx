@@ -5,7 +5,17 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { Card, H2, Text, Message, classNames, P, Select } from "pi-ui";
+import {
+  Card,
+  H2,
+  Text,
+  Message,
+  classNames,
+  P,
+  Select,
+  Icon,
+  Tooltip
+} from "pi-ui";
 import { withRouter } from "react-router-dom";
 import styles from "./Comments.module.css";
 import LoggedInContent from "src/components/LoggedInContent";
@@ -39,20 +49,30 @@ import { debounce } from "lodash";
 const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 
 const FlatModeButton = ({ isActive, onClick }) => (
-  <div
-    className={classNames(
-      styles.flatButtonWrapper,
-      isActive && styles.flatModeActive
-    )}
-    onClick={onClick}>
-    <Text
+  <>
+    <div
       className={classNames(
-        styles.flatButtonText,
+        styles.flatButtonWrapper,
         isActive && styles.flatModeActive
-      )}>
-      Flat mode
-    </Text>
-  </div>
+      )}
+      onClick={onClick}>
+      <Text
+        className={classNames(
+          styles.flatButtonText,
+          isActive && styles.flatModeActive
+        )}>
+        Flat mode
+      </Text>
+    </div>
+    <Tooltip
+      contentClassName={styles.flatModTootip}
+      content={
+        "Flat mode flattens out the comment hierarchy so that filtering criteria can be applied to both top level comments and comment replies equally." +
+        "When flat mode is turned off, filtering criteria is only applied to top level comments."
+      }>
+      <Icon type="info" />
+    </Tooltip>
+  </>
 );
 
 const CommentsListAndActions = ({
