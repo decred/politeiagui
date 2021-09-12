@@ -72,8 +72,12 @@ span.flatModeActive {
   margin-top: 0.1rem;
 }
 
-.flatModTootip {
-  width: 20rem;
+.flatTooltipWrapper {
+  margin-top: 0.5rem;
+}
+
+.flatModTooltip {
+  width: 30rem;
 }
 
 @media screen and (max-width: 768px) {
