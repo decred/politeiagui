@@ -66,16 +66,21 @@ const FlatModeButton = ({ isActive, onClick }) => (
     </div>
     <div>
       <Tooltip
-          className={styles.flatTooltipWrapper}
-          contentClassName={styles.flatModTooltip}
-          content={
-            (
-                <>
-                  <p>Flat mode flattens out the comment hierarchy so that filtering criteria can be applied to both top level comments and comment replies equally.</p>
-                  <p>When flat mode is turned off, filtering criteria is only applied to top level comments.</p>
-                </>
-            )
-          }>
+        className={styles.flatTooltipWrapper}
+        contentClassName={styles.flatModTooltip}
+        content={
+          <>
+            <p>
+              Flat mode flattens out the comment hierarchy so that filtering
+              criteria can be applied to both top level comments and comment
+              replies equally.
+            </p>
+            <p>
+              When flat mode is turned off, filtering criteria is only applied
+              to top level comments.
+            </p>
+          </>
+        }>
         <Icon type="info" />
       </Tooltip>
     </div>
