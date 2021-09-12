@@ -5,7 +5,8 @@ import FilesInput from "src/components/Files/Input";
 import usePolicy from "src/hooks/api/usePolicy";
 
 const ModalAttachFiles = ({
-  title = "Upload new file",
+  title = "Attach a file",
+  subTitle = "Select the file that you would like to attach to your proposal.",
   show,
   onChange,
   onClose
@@ -14,7 +15,7 @@ const ModalAttachFiles = ({
   return (
     <Modal title={title} show={show} onClose={onClose}>
       <div className={styles.wrapper}>
-        <P>Please upload an image you want to attach to your proposal.</P>
+        <P>{subTitle}</P>
         {policy && (
           <P>
             Valid MIME types - image/png <br />
