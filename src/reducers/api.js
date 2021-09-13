@@ -127,6 +127,8 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.REQUEST_LIKE_COMMENT]: () => onRequestLikeComment(state, action),
       [act.RECEIVE_LIKE_COMMENT]: () =>
         receive("likeComment", state, action, true),
+      [act.RECEIVE_LIKE_COMMENT_SUCCESS]: () =>
+        receive("likeComment", state, action),
       [act.REQUEST_CENSOR_COMMENT]: () =>
         request("censorComment", state, action),
       [act.RECEIVE_CENSOR_COMMENT]: () => receive("censorComment", state),

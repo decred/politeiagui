@@ -15,9 +15,9 @@ import {
 } from "src/constants";
 
 const DEFAULT_STATE = {
-  comments: { byToken: {}, accessTimeByToken: {} },
-  commentsVotes: { byToken: {} },
-  commentsLikes: { byToken: {} }
+  comments: { byToken: {}, accessTimeByToken: {}, backup: null },
+  commentsVotes: { byToken: {}, backup: null },
+  commentsLikes: { byToken: {}, backup: null }
 };
 
 const olderVotesFirst = (a, b) => a.timestamp - b.timestamp;
@@ -26,7 +26,8 @@ const calcScoreByComment = (votes) => {
   return votes.sort(olderVotesFirst).reduce((accObj, currentVote) => {
     const id = currentVote.commentid;
     if (!accObj[id] || accObj[id] !== currentVote.vote) {
-      // no vote found or old vote is different than new vote. Vote option is the chosen option
+      // no vote found or old vote is different than new vote. Vote option
+      // is the chosen option.
       return {
         ...accObj,
         [id]: currentVote.vote
@@ -76,7 +77,28 @@ const calcVotes = (comment, oldVote, vote) => {
 
 const comments = (state = DEFAULT_STATE, action) =>
   action.error
-    ? state
+    ? action.type === act.RECEIVE_LIKE_COMMENT
+      ? /* if like comment action receives an error, restore data from backup */
+        (function restoreLikesFromBackup() {
+          const { token, commentid, oldVote } = get([
+            "commentsLikes",
+            "backup"
+          ])(state);
+          const oldCommentVotes = get(["commentsVotes", "backup"])(state);
+
+          return compose(
+            set(["commentsLikes", "backup"], null),
+            update(["commentsLikes", "byToken", token], (current) => ({
+              ...current,
+              [commentid]: oldVote
+            })),
+            update(["commentsVotes", "byToken", token], (current) => ({
+              ...current,
+              [commentid]: oldCommentVotes
+            }))
+          )(state);
+        })()
+      : state
     : (
         {
           [act.RECEIVE_RECORD_COMMENTS]: () => {
@@ -157,7 +179,7 @@ const comments = (state = DEFAULT_STATE, action) =>
               commentsUserVote
             )(state);
           },
-          [act.RECEIVE_LIKE_COMMENT]: () => {
+          [act.REQUEST_LIKE_COMMENT]: () => {
             const { token, vote, commentid, sectionId } = action.payload;
             const shortToken = shortRecordToken(token);
             const oldComment = compose(
@@ -197,18 +219,35 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             return compose(
               set(["commentsLikes", "byToken", shortToken], newCommentsLikes),
+              /* backup the old vote and comment to restore in case of error */
+              set(["commentsLikes", "backup"], {
+                token: shortToken,
+                commentid,
+                oldVote,
+                oldComment
+              }),
+              set(["commentsVotes", "backup"], {
+                downvotes: oldComment.downvotes,
+                upvotes: oldComment.upvotes
+              }),
               update(["commentsVotes", "byToken", shortToken], (current) => ({
                 ...current,
                 [commentid]: votes
-              })),
-              update(
-                ["comments", "byToken", shortToken, "comments", sectionId],
-                (comments) =>
-                  comments.map((comment) => {
-                    if (comment.commentid !== commentid) return comment;
-                    return { ...comment, newUpvotes, newDownvotes };
-                  })
-              )
+              }))
+            )(state);
+          },
+          [act.RECEIVE_LIKE_COMMENT_SUCCESS]: () => {
+            const { token, commentid, sectionId } = action.payload;
+            const shortToken = shortRecordToken(token);
+            const { upvotes, downvotes } =
+              state.commentsVotes.byToken[shortToken][commentid];
+            return update(
+              ["comments", "byToken", shortToken, "comments", sectionId],
+              (comments) =>
+                comments.map((comment) => {
+                  if (comment.commentid !== commentid) return comment;
+                  return { ...comment, upvotes, downvotes };
+                })
             )(state);
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
