@@ -86,7 +86,7 @@ describe("Comments Votes", () => {
     let token;
     beforeEach(() => {
       cy.middleware("comments.comments", 50);
-      cy.middleware("comments.vote", { isError: true, throttleKbps: 50 });
+      cy.middleware("comments.vote", { isError: true, delay: 3000 });
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
       cy.wait("@inventory").then(
@@ -99,7 +99,7 @@ describe("Comments Votes", () => {
       cy.findAllByTestId("dislike-btn").first().click();
       cy.findByText(/Error/).should("exist");
     });
-    it("shouldn't change votes count on error", () => {
+    it("should reset votes count on error", () => {
       let upvotes;
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.findAllByTestId("score-like")
@@ -107,6 +107,13 @@ describe("Comments Votes", () => {
         .then((score) => (upvotes = score[0].innerText));
       cy.wait(1000);
       cy.findAllByTestId("like-btn").first().click();
+      cy.wait(1000);
+      cy.findAllByTestId("score-like")
+        .first()
+        .then((score) => {
+          const newup = score[0].innerText;
+          expect(Number(newup)).to.equal(Number(upvotes) + 1);
+        });
       cy.wait("@comments.vote");
       // assert votes count after delayed vote response
       cy.findAllByTestId("score-like")
