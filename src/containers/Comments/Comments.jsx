@@ -77,7 +77,8 @@ const CommentsListAndActions = React.memo(
     handleOpenLoginModal,
     latestAuthorUpdateId,
     areAuthorUpdatesAllowed,
-    authorUpdateTitle
+    authorUpdateTitle,
+    sectionId
   }) => {
     const {
       getCommentLikeOption,
@@ -149,7 +150,8 @@ const CommentsListAndActions = React.memo(
           userid,
           recordTokenFull,
           id,
-          proposalState
+          proposalState,
+          sectionId
         );
         handleOpenModal(ModalConfirmWithReason, {
           title: "Censor comment",
@@ -169,7 +171,8 @@ const CommentsListAndActions = React.memo(
         recordTokenFull,
         proposalState,
         handleOpenModal,
-        handleCloseModal
+        handleCloseModal,
+        sectionId
       ]
     );
     /** CENSOR END */
@@ -264,7 +267,8 @@ const CommentsListAndActions = React.memo(
                 userLoggedIn,
                 userEmail,
                 loadingLikes,
-                getCommentVotes
+                getCommentVotes,
+                sectionId
               }}>
               <CommentsListWrapper
                 lastTimeAccessed={lastVisitTimestamp}
@@ -305,7 +309,7 @@ const Comments = ({
   handleOpenLoginModal,
   paywallMissing,
   identityError,
-  threadRootId
+  sectionId
 }) => {
   const isSingleThread = !!threadParentID;
   const {
@@ -324,7 +328,7 @@ const Comments = ({
     loadingLikes,
     getCommentVotes,
     latestAuthorUpdateId
-  } = useComments(recordTokenFull, proposalState, threadRootId, threadParentID);
+  } = useComments(recordTokenFull, proposalState, sectionId, threadParentID);
   const { userid } = currentUser || {};
   const numOfComments = comments?.length;
 
@@ -365,9 +369,9 @@ const Comments = ({
   );
 
   const updateTitle = useMemo(() => {
-    if (threadRootId && threadRootId !== PROPOSAL_MAIN_THREAD_KEY)
-      return authorUpdateTitle(threadRootId);
-  }, [threadRootId, authorUpdateTitle]);
+    if (sectionId && sectionId !== PROPOSAL_MAIN_THREAD_KEY && !isSingleThread)
+      return authorUpdateTitle(sectionId);
+  }, [sectionId, authorUpdateTitle, isSingleThread]);
 
   return (
     <>
@@ -415,6 +419,7 @@ const Comments = ({
             latestAuthorUpdateId={latestAuthorUpdateId}
             areAuthorUpdatesAllowed={areAuthorUpdatesAllowed}
             authorUpdateTitle={updateTitle}
+            sectionId={sectionId}
           />
         </Card>
       )}

@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import get from "lodash/fp/get";
 import { shortRecordToken } from "src/helpers";
 
-export const commentsByToken = get(["comments", "comments", "byToken"]);
+export const commentsInfoByToken = get(["comments", "comments", "byToken"]);
 const commentsVotesByToken = get(["comments", "commentsVotes", "byToken"]);
 
 export const accessTimeByToken = get([
@@ -16,24 +16,37 @@ export const commentsLikesByToken = get([
   "byToken"
 ]);
 
-const getCommentsByToken = (token) => (commentsByToken) => {
+const getByToken = (token) => (mapByToken) => {
   const shortToken = token && shortRecordToken(token);
-  const comment = commentsByToken[shortToken];
-  if (comment) return comment;
-  const commentsTokens = Object.keys(commentsByToken);
-  // check if the provided token is prefix of original token
-  const matchedTokenByPrefix = commentsTokens.find((key) => key === shortToken);
-  return commentsByToken[matchedTokenByPrefix];
+  return mapByToken[shortToken];
 };
 
+const getSectionIds = ({ sectionIds } = {}) => sectionIds;
+
+const getCommentsMap = ({ comments } = {}) => comments;
+
+const getSectionComments =
+  (sectionId) =>
+  (commentsMap = {}) =>
+    commentsMap[sectionId];
+
+export const makeGetRecordCommentSectionIds = (token) =>
+  createSelector(makeGetRecordCommentsInfo(token), getSectionIds);
+
+export const makeGetRecordSectionComments = (token, sectionId) =>
+  createSelector(makeGetRecordComments(token), getSectionComments(sectionId));
+
 export const makeGetRecordComments = (token) =>
-  createSelector(commentsByToken, getCommentsByToken(token));
+  createSelector(makeGetRecordCommentsInfo(token), getCommentsMap);
+
+export const makeGetRecordCommentsInfo = (token) =>
+  createSelector(commentsInfoByToken, getByToken(token));
 
 export const makeGetRecordCommentsVotes = (token) =>
-  createSelector(commentsVotesByToken, getCommentsByToken(token));
+  createSelector(commentsVotesByToken, getByToken(token));
 
 export const makeGetRecordCommentsLikes = (token) =>
-  createSelector(commentsLikesByToken, getCommentsByToken(token));
+  createSelector(commentsLikesByToken, getByToken(token));
 
 export const makeGetLastAccessTime = (token) =>
-  createSelector(accessTimeByToken, getCommentsByToken(token));
+  createSelector(accessTimeByToken, getByToken(token));

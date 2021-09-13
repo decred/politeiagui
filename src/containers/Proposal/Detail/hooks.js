@@ -7,13 +7,9 @@ import {
   getProposalToken,
   getTokensForProposalsPagination
 } from "../helpers";
-import { getDetailsFile, calculateAuthorUpdateTree } from "./helpers";
+import { getDetailsFile } from "./helpers";
 import { shortRecordToken, parseRawProposal } from "src/helpers";
-import {
-  PROPOSAL_STATE_VETTED,
-  PROPOSAL_UPDATE_HINT,
-  PROPOSAL_MAIN_THREAD_KEY
-} from "src/constants";
+import { PROPOSAL_STATE_VETTED } from "src/constants";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import { useLoaderContext } from "src/containers/Loader";
 import isEmpty from "lodash/fp/isEmpty";
@@ -192,7 +188,7 @@ export function useProposal(token, threadParentID) {
 
   const {
     onSubmitComment,
-    authorUpdateIds,
+    commentSectionIds,
     hasAuthorUpdates,
     singleThreadRootId,
     error: commentsError,
@@ -205,7 +201,7 @@ export function useProposal(token, threadParentID) {
     loading: state.status === "idle" || state.status === "loading",
     threadParentID,
     isCurrentUserProposalAuthor,
-    authorUpdateIds,
+    commentSectionIds,
     hasAuthorUpdates,
     singleThreadRootId,
     onSubmitComment,
@@ -218,7 +214,7 @@ export function useProposal(token, threadParentID) {
 export function useComments(
   recordToken,
   proposalState,
-  authorUpdateId,
+  sectionId,
   threadParentID
 ) {
   const isSingleThread = !!threadParentID;
@@ -232,8 +228,16 @@ export function useComments(
     sel.apiCommentsLikesError
   );
   const error = useSelector(errorSelector);
-  const commentsSelector = useMemo(
+  const allCommentsBySectionSelector = useMemo(
     () => sel.makeGetRecordComments(recordToken),
+    [recordToken]
+  );
+  const sectionCommentsSelector = useMemo(
+    () => sel.makeGetRecordSectionComments(recordToken, sectionId),
+    [recordToken, sectionId]
+  );
+  const sectionIdsSelector = useMemo(
+    () => sel.makeGetRecordCommentSectionIds(recordToken),
     [recordToken]
   );
   const commentsLikesSelector = useMemo(
@@ -248,7 +252,10 @@ export function useComments(
     () => sel.makeGetLastAccessTime(recordToken),
     [recordToken]
   );
-  const comments = useSelector(commentsSelector);
+  const comments = useSelector(sectionCommentsSelector);
+  const allCommentsBySection = useSelector(allCommentsBySectionSelector);
+  const commentSectionIds = useSelector(sectionIdsSelector);
+  const hasAuthorUpdates = commentSectionIds && commentSectionIds.length > 1;
   const commentsLikes = useSelector(commentsLikesSelector);
   const commentsVotes = useSelector(commentsVotesSelector);
   const lastVisitTimestamp = useSelector(lastVisitTimestampSelector);
@@ -309,9 +316,16 @@ export function useComments(
 
   const onCommentVote = useCallback(
     (commentID, action, token) => {
-      onCommentVoteAction(userid, token, commentID, action, proposalState);
+      onCommentVoteAction(
+        userid,
+        token,
+        commentID,
+        action,
+        proposalState,
+        sectionId
+      );
     },
-    [onCommentVoteAction, userid, proposalState]
+    [onCommentVoteAction, userid, proposalState, sectionId]
   );
 
   const getCommentLikeOption = useCallback(
@@ -327,70 +341,27 @@ export function useComments(
     [commentsVotes]
   );
 
-  const authorUpdateIds = useMemo(() => {
-    const ids = comments
-      ?.filter(({ extradatahint }) => extradatahint === PROPOSAL_UPDATE_HINT)
-      .map(({ commentid }) => commentid);
-    return ids && !!ids.length && ids;
-  }, [comments]);
-
-  const hasAuthorUpdates = !!authorUpdateIds?.length;
-
-  // Calculate comments tree for each author update to display each
-  // one of them in a separate comments section.
-  const commentsWithAuthorUpdatesMap = useMemo(() => {
-    const commentsMap = {};
-    let authorUpdateThreads = [];
-    if (hasAuthorUpdates) {
-      authorUpdateIds.forEach((updateId) => {
-        const authorUpdateTree = calculateAuthorUpdateTree(updateId, comments);
-        authorUpdateThreads = [...authorUpdateThreads, ...authorUpdateTree];
-        commentsMap[updateId] = comments.filter(({ commentid }) =>
-          authorUpdateTree.includes(commentid)
-        );
-      });
-      commentsMap[PROPOSAL_MAIN_THREAD_KEY] = comments.filter(
-        ({ commentid }) => !authorUpdateThreads.includes(commentid)
-      );
-    }
-    return commentsMap;
-  }, [authorUpdateIds, comments, hasAuthorUpdates]);
-
-  const processedComments = useMemo(
-    () =>
-      hasAuthorUpdates && authorUpdateId
-        ? commentsWithAuthorUpdatesMap[authorUpdateId]
-        : comments,
-    [authorUpdateId, comments, commentsWithAuthorUpdatesMap, hasAuthorUpdates]
-  );
-
   // If displaying a single thread while having multiple author updates with
   // different section, find to which tree the sub-tree we are displaying
   // belongs to display only the relevant section.
   const singleThreadRootId = useMemo(() => {
     let authorUpdateId;
     if (isSingleThread && hasAuthorUpdates) {
-      authorUpdateIds.forEach((updateId) => {
+      for (const [sectionId, comments] of Object.entries(
+        allCommentsBySection
+      )) {
         if (
-          comments[updateId]
-            .map(({ commentid }) => commentid)
-            .includes(+threadParentID)
+          comments.map(({ commentid }) => commentid).includes(+threadParentID)
         ) {
-          authorUpdateId = updateId;
+          authorUpdateId = sectionId;
         }
-      });
+      }
     }
     return authorUpdateId;
-  }, [
-    isSingleThread,
-    hasAuthorUpdates,
-    authorUpdateIds,
-    comments,
-    threadParentID
-  ]);
+  }, [isSingleThread, hasAuthorUpdates, allCommentsBySection, threadParentID]);
 
   return {
-    comments: processedComments,
+    comments,
     onCommentVote,
     onCensorComment,
     getCommentLikeOption,
@@ -400,14 +371,14 @@ export function useComments(
     recordType,
     currentUser,
     lastVisitTimestamp,
-    loading: loading || !processedComments,
+    loading: loading,
     loadingLikes,
     onSubmitComment,
     error,
     getCommentVotes,
-    authorUpdateIds,
-    latestAuthorUpdateId: hasAuthorUpdates && authorUpdateIds[0],
+    commentSectionIds,
     hasAuthorUpdates,
+    latestAuthorUpdateId: hasAuthorUpdates && commentSectionIds[0],
     singleThreadRootId
   };
 }

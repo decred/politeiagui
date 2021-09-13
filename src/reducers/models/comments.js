@@ -6,16 +6,18 @@ import set from "lodash/fp/set";
 import get from "lodash/fp/get";
 import find from "lodash/fp/find";
 import update from "lodash/fp/update";
-import { shortRecordToken } from "src/helpers";
+import { shortRecordToken, calculateAuthorUpdateTree } from "src/helpers";
 import {
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_UNREVIEWED
-} from "../../constants";
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_MAIN_THREAD_KEY,
+  PROPOSAL_UPDATE_HINT
+} from "src/constants";
 
 const DEFAULT_STATE = {
-  comments: { byToken: {}, accessTimeByToken: {}, backup: null },
-  commentsVotes: { byToken: {}, backup: null },
-  commentsLikes: { byToken: {}, backup: null }
+  comments: { byToken: {}, accessTimeByToken: {} },
+  commentsVotes: { byToken: {} },
+  commentsLikes: { byToken: {} }
 };
 
 const olderVotesFirst = (a, b) => a.timestamp - b.timestamp;
@@ -74,28 +76,7 @@ const calcVotes = (comment, oldVote, vote) => {
 
 const comments = (state = DEFAULT_STATE, action) =>
   action.error
-    ? action.type === act.RECEIVE_LIKE_COMMENT
-      ? /* if like comment action receives an error, restore data from backup */
-        (function restoreLikesFromBackup() {
-          const { token, commentid, oldVote } = get([
-            "commentsLikes",
-            "backup"
-          ])(state);
-          const oldCommentVotes = get(["commentsVotes", "backup"])(state);
-
-          return compose(
-            set(["commentsLikes", "backup"], null),
-            update(["commentsLikes", "byToken", token], (current) => ({
-              ...current,
-              [commentid]: oldVote
-            })),
-            update(["commentsVotes", "byToken", token], (current) => ({
-              ...current,
-              [commentid]: oldCommentVotes
-            }))
-          )(state);
-        })()
-      : state
+    ? state
     : (
         {
           [act.RECEIVE_RECORD_COMMENTS]: () => {
@@ -108,16 +89,64 @@ const comments = (state = DEFAULT_STATE, action) =>
               (arrVal, othVal) =>
                 arrVal.signature && arrVal.signaure !== othVal.signaure
             );
+
+            // Find author update ids.
+            const authorUpdateIds = filteredComments
+              .filter(
+                ({ extradatahint }) => extradatahint === PROPOSAL_UPDATE_HINT
+              )
+              .map(({ commentid }) => commentid);
+
+            const sectionIds = [...authorUpdateIds, PROPOSAL_MAIN_THREAD_KEY];
+
+            // Calculate comments tree for each author update to display each
+            // one of them in a separate comments section.
+            const commentsMap = {};
+            let authorUpdateThreads = [];
+            authorUpdateIds.forEach((updateId) => {
+              const authorUpdateTree = calculateAuthorUpdateTree(
+                updateId,
+                filteredComments
+              );
+              authorUpdateThreads = [
+                ...authorUpdateThreads,
+                ...authorUpdateTree
+              ];
+              commentsMap[updateId] = filteredComments.filter(({ commentid }) =>
+                authorUpdateTree.includes(commentid)
+              );
+            });
+            commentsMap[PROPOSAL_MAIN_THREAD_KEY] = filteredComments.filter(
+              ({ commentid }) => !authorUpdateThreads.includes(commentid)
+            );
+
             return compose(
-              set(["comments", "byToken", shortToken], filteredComments),
+              set(["comments", "byToken", shortToken], {
+                sectionIds,
+                comments: commentsMap
+              }),
               set(["comments", "accessTimeByToken", shortToken], accesstime)
             )(state);
           },
           [act.RECEIVE_NEW_COMMENT]: () => {
-            const comment = action.payload;
-            return update(
-              ["comments", "byToken", shortRecordToken(comment.token)],
-              (comments = []) => [comment, ...comments]
+            const { sectionId, ...comment } = action.payload;
+            const shortToken = shortRecordToken(comment.token);
+            // If comment's section id is not known then we are dealing
+            // with a new author update and the section id should be
+            // added to the section ids array.
+            const { sectionIds } = state.comments.byToken[shortToken];
+            const isNewSectionId = !sectionIds.includes(sectionId);
+            return compose(
+              update(
+                ["comments", "byToken", shortToken, "comments", sectionId],
+                (comments = []) => [comment, ...comments]
+              ),
+              isNewSectionId
+                ? set(
+                    ["comments", "byToken", shortToken, "sectionIds"],
+                    [sectionId, ...sectionIds]
+                  )
+                : (state) => state
             )(state);
           },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
@@ -129,11 +158,11 @@ const comments = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_LIKE_COMMENT]: () => {
-            const { token, vote, commentid } = action.payload;
+            const { token, vote, commentid, sectionId } = action.payload;
             const shortToken = shortRecordToken(token);
             const oldComment = compose(
               find((c) => c.commentid === commentid),
-              get(["comments", "byToken", shortToken])
+              get(["comments", "byToken", shortToken, "comments", sectionId])
             )(state);
             const commentsLikes = state.commentsLikes.byToken[shortToken];
             const oldCommentsVotes = get([
@@ -168,37 +197,22 @@ const comments = (state = DEFAULT_STATE, action) =>
 
             return compose(
               set(["commentsLikes", "byToken", shortToken], newCommentsLikes),
-              /* backup the old vote and comment to restore in case of error */
-              set(["commentsLikes", "backup"], {
-                token: shortToken,
-                commentid,
-                oldVote,
-                oldComment
-              }),
-              set(["commentsVotes", "backup"], {
-                downvotes: oldComment.downvotes,
-                upvotes: oldComment.upvotes
-              }),
               update(["commentsVotes", "byToken", shortToken], (current) => ({
                 ...current,
                 [commentid]: votes
-              }))
-            )(state);
-          },
-          [act.RECEIVE_LIKE_COMMENT_SUCCESS]: () => {
-            const { token, commentid } = action.payload;
-            const shortToken = shortRecordToken(token);
-            const { upvotes, downvotes } =
-              state.commentsVotes.byToken[shortToken][commentid];
-            return update(["comments", "byToken", shortToken], (comments) =>
-              comments.map((comment) => {
-                if (comment.commentid !== commentid) return comment;
-                return { ...comment, upvotes, downvotes };
-              })
+              })),
+              update(
+                ["comments", "byToken", shortToken, "comments", sectionId],
+                (comments) =>
+                  comments.map((comment) => {
+                    if (comment.commentid !== commentid) return comment;
+                    return { ...comment, newUpvotes, newDownvotes };
+                  })
+              )
             )(state);
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
-            const { commentid, token } = action.payload;
+            const { commentid, token, sectionId } = action.payload;
             const censorTargetComment = (comment) => {
               if (comment.commentid !== commentid) return comment;
               return {
@@ -209,7 +223,13 @@ const comments = (state = DEFAULT_STATE, action) =>
             };
             return compose(
               update(
-                ["comments", "byToken", shortRecordToken(token)],
+                [
+                  "comments",
+                  "byToken",
+                  shortRecordToken(token),
+                  "comments",
+                  sectionId
+                ],
                 (comments) => comments.map(censorTargetComment)
               )
             )(state);

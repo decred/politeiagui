@@ -1,5 +1,4 @@
 import { isAbandonedProposal, isVotingFinishedProposal } from "../helpers";
-import uniq from "lodash/uniq";
 
 export const getCommentBlockedReason = (proposal, voteSummary) => {
   if (isAbandonedProposal(proposal)) {
@@ -15,20 +14,3 @@ export const getCommentBlockedReason = (proposal, voteSummary) => {
 
 export const getDetailsFile = (files = []) =>
   files.find((f) => f.name === "index.md");
-
-export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
-  let authorUpdateTree = [authorUpdateId];
-  let children = comments
-    .filter(({ parentid }) => authorUpdateTree.includes(parentid))
-    .map(({ commentid }) => commentid);
-  while (
-    uniq([...authorUpdateTree, ...children]).length > authorUpdateTree.length
-  ) {
-    authorUpdateTree = uniq([...authorUpdateTree, ...children]);
-    const parents = [...authorUpdateTree];
-    children = comments
-      .filter(({ parentid }) => parents.includes(parentid))
-      .map(({ commentid }) => commentid);
-  }
-  return uniq([...authorUpdateTree, ...children]);
-};

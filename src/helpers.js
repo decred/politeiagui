@@ -8,6 +8,7 @@ import map from "lodash/fp/map";
 import splitFp from "lodash/fp/split";
 import reduce from "lodash/fp/reduce";
 import compose from "lodash/fp/compose";
+import uniq from "lodash/fp/uniq";
 import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
 import { capitalize } from "./utils/strings";
@@ -583,3 +584,28 @@ export function getAttachmentsFiles(files) {
       ].includes(f.name)
   );
 }
+
+/**
+ * calculateAuthorUpdateTree get list of all comments and an author update
+ * id and calculates the author update thread comment tree and returns
+ * the tree as an sub-array of the original array.
+ * @param {String} authorUpdateId
+ * @param {Array} comments
+ * @returns {Array} array of author update thread comments.
+ */
+export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
+  let authorUpdateTree = [authorUpdateId];
+  let children = comments
+    .filter(({ parentid }) => authorUpdateTree.includes(parentid))
+    .map(({ commentid }) => commentid);
+  while (
+    uniq([...authorUpdateTree, ...children]).length > authorUpdateTree.length
+  ) {
+    authorUpdateTree = uniq([...authorUpdateTree, ...children]);
+    const parents = [...authorUpdateTree];
+    children = comments
+      .filter(({ parentid }) => parents.includes(parentid))
+      .map(({ commentid }) => commentid);
+  }
+  return uniq([...authorUpdateTree, ...children]);
+};

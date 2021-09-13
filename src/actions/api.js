@@ -25,13 +25,16 @@ import {
   ARCHIVED,
   PROPOSAL_METADATA_FILENAME,
   VOTE_METADATA_FILENAME,
-  PROPOSAL_STATE_UNVETTED
-} from "../constants";
+  PROPOSAL_STATE_UNVETTED,
+  PROPOSAL_UPDATE_HINT,
+  PROPOSAL_MAIN_THREAD_KEY
+} from "src/constants";
 import {
   parseReceivedProposalsMap,
   parseRawProposal,
-  parseRawProposalsBatch
-} from "src/helpers";
+  parseRawProposalsBatch,
+  shortRecordToken
+} from "../helpers";
 
 export const onResetNewUser = act.RESET_NEW_USER;
 
@@ -1021,26 +1024,49 @@ export const onSubmitEditedInvoice = (
       });
   });
 
-export const onCommentVote = (currentUserID, token, commentid, vote, state) =>
+export const onCommentVote = (
+  currentUserID,
+  token,
+  commentid,
+  vote,
+  state,
+  sectionId
+) =>
   withCsrf((dispatch, _, csrf) => {
     if (!currentUserID) {
       return;
     }
-    dispatch(act.RECEIVE_LIKE_COMMENT({ token, commentid, vote }));
+    dispatch(act.REQUEST_LIKE_COMMENT({ commentid, token, vote }));
     return Promise.resolve(api.makeCommentVote(state, token, vote, commentid))
       .then((comment) => api.signCommentVote(currentUserID, comment))
       .then((comment) => api.commentVote(csrf, comment))
       .then(() => {
-        dispatch(act.RECEIVE_LIKE_COMMENT_SUCCESS({ token, commentid, vote }));
+        dispatch(
+          act.RECEIVE_LIKE_COMMENT({
+            token,
+            commentid,
+            vote,
+            sectionId
+          })
+        );
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
       });
   });
 
-export const onCensorComment = (userid, token, commentid, state, reason) => {
+export const onCensorComment = (
+  userid,
+  token,
+  commentid,
+  state,
+  sectionId,
+  reason
+) => {
   return withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_CENSOR_COMMENT({ commentid, token, state }));
+    dispatch(
+      act.REQUEST_CENSOR_COMMENT({ commentid, token, state, sectionId })
+    );
     return Promise.resolve(
       api.makeCensoredComment(state, token, reason, commentid)
     )
@@ -1048,7 +1074,7 @@ export const onCensorComment = (userid, token, commentid, state, reason) => {
       .then((comment) => api.censorComment(csrf, comment))
       .then(({ comment: { receipt, commentid, token } }) => {
         if (receipt) {
-          dispatch(act.RECEIVE_CENSOR_COMMENT({ commentid, token }, null));
+          dispatch(act.RECEIVE_CENSOR_COMMENT({ commentid, token, sectionId }));
         }
       })
       .catch((error) => {
@@ -1065,7 +1091,8 @@ export const onSubmitComment = (
   parentid,
   state,
   extraData,
-  extraDataHint
+  extraDataHint,
+  sectionId
 ) =>
   withCsrf((dispatch, getState, csrf) => {
     const comment = api.makeComment(
@@ -1081,7 +1108,11 @@ export const onSubmitComment = (
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the
         // existent comments signatures.
-        const comments = sel.commentsByToken(getState())[token];
+        const shortToken = shortRecordToken(token);
+        const { comments: commentsMap } =
+          sel.commentsInfoByToken(getState())[shortToken] || {};
+        // Flatten all comments in one array.
+        const comments = commentsMap && Object.values(commentsMap).flat();
         const signatureFound =
           comments && comments.find((cm) => cm.signature === comment.signature);
         if (signatureFound) {
@@ -1091,8 +1122,19 @@ export const onSubmitComment = (
       })
       .then((comment) => api.newComment(csrf, comment))
       .then((response) => {
-        const responsecomment = response.comment;
-        return dispatch(act.RECEIVE_NEW_COMMENT(responsecomment));
+        const responsecomment = response.comment || {};
+        const { commentid } = responsecomment;
+        const isAuthorUpdate = extraDataHint === PROPOSAL_UPDATE_HINT;
+        return dispatch(
+          act.RECEIVE_NEW_COMMENT({
+            ...responsecomment,
+            sectionId: sectionId
+              ? sectionId
+              : isAuthorUpdate
+              ? commentid
+              : PROPOSAL_MAIN_THREAD_KEY
+          })
+        );
       })
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
@@ -1705,7 +1747,7 @@ export const onSubmitDccComment = (currentUserID, token, comment, parentid) =>
       .then((comment) => {
         // make sure this is not a duplicate comment by comparing to the
         // existent comments signatures.
-        const comments = sel.commentsByToken(getState())[token];
+        const comments = sel.commentsInfoByToken(getState())[token].comments;
         const signatureFound =
           comments && comments.find((cm) => cm.signature === comment.signature);
         if (signatureFound) {

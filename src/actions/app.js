@@ -143,7 +143,7 @@ export const onEditProposal =
   };
 
 export const onSaveNewComment =
-  ({ comment, token, parentID, state, extraData, extraDataHint }) =>
+  ({ comment, token, parentID, state, extraData, extraDataHint, sectionId }) =>
   (dispatch, getState) => {
     const userid = sel.currentUserID(getState());
     return dispatch(
@@ -154,7 +154,8 @@ export const onSaveNewComment =
         parentID,
         state,
         extraData,
-        extraDataHint
+        extraDataHint,
+        sectionId
       )
     );
   };

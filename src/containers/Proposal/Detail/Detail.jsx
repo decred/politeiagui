@@ -31,11 +31,7 @@ import LoggedInContent from "src/components/LoggedInContent";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
-import {
-  PROPOSAL_STATUS_CENSORED,
-  PROPOSAL_MAIN_THREAD_KEY,
-  PROPOSAL_UPDATE_HINT
-} from "src/constants";
+import { PROPOSAL_STATUS_CENSORED, PROPOSAL_UPDATE_HINT } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -57,7 +53,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     threadParentID,
     error,
     isCurrentUserProposalAuthor,
-    authorUpdateIds,
+    commentSectionIds,
     hasAuthorUpdates,
     singleThreadRootId,
     onSubmitComment,
@@ -124,7 +120,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     });
   }, [handleOpenModal, handleCloseModal]);
 
-  const CommentsSection = ({ threadRootId }) => (
+  const CommentsSection = React.memo(({ sectionId }) => (
     <Comments
       recordAuthorID={proposal?.userid}
       recordAuthorUsername={proposal?.username}
@@ -140,9 +136,9 @@ const ProposalDetail = ({ Main, match, history }) => {
       handleOpenLoginModal={handleOpenLoginModal}
       paywallMissing={paywallMissing}
       identityError={identityError}
-      threadRootId={threadRootId}
+      sectionId={sectionId}
     />
-  );
+  ));
 
   const proposalComments = useMemo(
     () => (
@@ -205,25 +201,19 @@ const ProposalDetail = ({ Main, match, history }) => {
             )}
           </Card>
         )}
-        {hasAuthorUpdates &&
-          (singleThreadRootId ? (
-            <CommentsSection threadRootId={singleThreadRootId} />
-          ) : (
-            <>
-              {authorUpdateIds.map((updateId) => (
-                <CommentsSection key={updateId} threadRootId={updateId} />
-              ))}
-              <CommentsSection
-                key={PROPOSAL_MAIN_THREAD_KEY}
-                threadRootId={PROPOSAL_MAIN_THREAD_KEY}
-              />
-            </>
-          ))}
-        {!hasAuthorUpdates && !singleThreadRootId && <CommentsSection />}
+        {singleThreadRootId ? (
+          <CommentsSection sectionId={singleThreadRootId} />
+        ) : (
+          <>
+            {commentSectionIds?.map((sectionId) => (
+              <CommentsSection key={sectionId} sectionId={sectionId} />
+            ))}
+          </>
+        )}
       </>
     ),
     [
-      authorUpdateIds,
+      commentSectionIds,
       singleThreadRootId,
       areAuthorUpdatesAllowed,
       currentUser,

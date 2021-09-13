@@ -91,7 +91,8 @@ const CommentWrapper = ({
     getCommentVotes,
     latestAuthorUpdateId,
     areAuthorUpdatesAllowed,
-    comments
+    comments,
+    sectionId
   } = useComment();
   const {
     comment: commentText,
@@ -145,9 +146,10 @@ const CommentWrapper = ({
         comment,
         token,
         parentID: commentid,
-        state: proposalState
+        state: proposalState,
+        sectionId
       }),
-    [onSubmitComment, token, commentid, proposalState]
+    [onSubmitComment, token, commentid, proposalState, sectionId]
   );
 
   const handleCommentSubmitted = useCallback(() => {
