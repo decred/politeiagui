@@ -194,13 +194,14 @@ const ProposalDetail = ({ Main, match, history }) => {
                   />
                 )}
             </LoggedInContent>
-            {commentsError && (
+            
+          </Card>
+        )}
+{commentsError && (
               <Message kind="error" className="margin-top-m">
                 {commentsError.toString()}
               </Message>
             )}
-          </Card>
-        )}
         {singleThreadRootId ? (
           <CommentsSection sectionId={singleThreadRootId} />
         ) : (
