@@ -5,32 +5,10 @@ import { toolbarCommands, getCommandIcon } from "./commands";
 import Markdown from "../Markdown";
 import styles from "./MarkdownEditor.module.css";
 import "./styles.css";
-import { digestPayload } from "src/helpers";
 import ReactMde, { getDefaultCommandMap } from "react-mde";
 import customSaveImageCommand from "./customSaveImageCommand";
-
-/** displayBlobSolution receives a pair of [ArrayBuffer, File] and returns a blob URL to display the image on preview. */
-const displayBlobSolution = (f) => {
-  const [result] = f;
-  const bytes = new Uint8Array(result);
-  const blob = new Blob([bytes], { type: "image/png" });
-  const urlCreator = window.URL || window.webkitURL;
-  const imageUrl = urlCreator.createObjectURL(blob);
-  return imageUrl;
-};
-
-/** getFormattedFile receives a pair of [ArrayBuffer, File] and returns an object in the exact format we need to submit to the backend */
-function getFormattedFile(f) {
-  const [result, file] = f;
-  const payload = btoa(result);
-  return {
-    name: file.name,
-    mime: file.type,
-    size: file.size,
-    payload,
-    digest: digestPayload(payload)
-  };
-}
+import { useCustomImageCommand } from "./CustomImageCommand";
+import { getFormattedFile, displayBlobSolution } from "./helpers";
 
 const MarkdownEditor = React.memo(function MarkdownEditor({
   onChange,
@@ -47,8 +25,8 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
   const [tab, setTab] = useState("write");
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-
   const testId = props["data-testid"];
+
   useEffect(() => {
     const textarea = document.getElementsByClassName("mde-text")[0];
     if (textarea) {
@@ -56,6 +34,22 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
       textarea["data-testid"] = testId;
     }
   }, [tab, placeholder, testId]);
+
+  const saveImage = function ({ serverImage, displayImage }) {
+    try {
+      const fileToUpload = getFormattedFile(serverImage);
+      const urlToDisplay = displayBlobSolution(displayImage);
+      mapBlobToFile.set(urlToDisplay, fileToUpload);
+      return {
+        name: fileToUpload.name,
+        url: urlToDisplay
+      };
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const { imageCommand } = useCustomImageCommand(saveImage);
 
   const attachFilesCommand = {
     name: "attach-files",
@@ -78,20 +72,6 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
       />
     );
 
-  const save = function ({ serverImage, displayImage }) {
-    try {
-      const fileToUpload = getFormattedFile(serverImage);
-      const urlToDisplay = displayBlobSolution(displayImage);
-      mapBlobToFile.set(urlToDisplay, fileToUpload);
-      return {
-        name: fileToUpload.name,
-        url: urlToDisplay
-      };
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   return (
     <div className={classNames(styles.container, className)}>
       <ReactMde
@@ -103,6 +83,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         commands={{
           ...getDefaultCommandMap(),
           "attach-files": attachFilesCommand,
+          image: imageCommand,
           "save-image": customSaveImageCommand
         }}
         toolbarCommands={toolbarCommands(allowImgs)}
@@ -111,7 +92,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         paste={
           allowImgs
             ? {
-                saveImage: save
+                saveImage: saveImage
               }
             : null
         }
