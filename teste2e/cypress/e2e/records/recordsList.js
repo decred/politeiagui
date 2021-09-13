@@ -88,8 +88,9 @@ describe("Records list", () => {
       cy.scrollTo("bottom");
       // prepare to fetch 25 items: 3 started, 20 authorized and 2 unauthorized
       // scan inventory: page 2 of authorized
-      cy.wait("@ticketvote.inventory").its("request.body")
-          .should("deep.eq", {page: 2,status : 2});
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 2, status: 2 });
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 25);
       cy.scrollTo("bottom");
@@ -104,8 +105,9 @@ describe("Records list", () => {
       cy.scrollTo("bottom");
       // prepare to fetch 45 items: 3 started, 20 authorized and 22 unauthorized
       // scan inventory: page 2 of unauthorized
-      cy.wait("@ticketvote.inventory").its("request.body")
-          .should("deep.eq", {page: 2,status : 1});
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 2, status: 1 });
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 45);
       cy.scrollTo("bottom");
@@ -120,8 +122,9 @@ describe("Records list", () => {
       cy.scrollTo("bottom");
       // prepare to fetch 65 items: 3 started, 20 authorized and 42 unauthorized
       // scan inventory: page 3 of unauthorized
-      cy.wait("@ticketvote.inventory").its("request.body")
-          .should("deep.eq", {page: 3,status : 1});
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 3, status: 1 });
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 65);
       cy.scrollTo("bottom");
@@ -265,6 +268,66 @@ describe("Records list", () => {
       cy.findByTestId("tab-0").click();
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 10);
+    });
+  });
+
+  describe("Big screens and inventory length multiple of proposals page size", () => {
+    beforeEach(() => {
+      cy.viewport(1500, 1500);
+    });
+    it("can render under review records with 5 autorized tokens", () => {
+      // setup
+      cy.middleware("ticketvote.inventory", {
+        authorized: 5,
+        started: 0,
+        unauthorized: 13
+      });
+      cy.middleware("records.records");
+      // test
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      // Should trigger at least 2 records batch requests
+      cy.wait("@records.records");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 10);
+      cy.scrollTo("bottom");
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 15);
+    });
+    it("can render under review records with 5 started tokens", () => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 0,
+        started: 5,
+        unauthorized: 13
+      });
+      cy.middleware("records.records");
+    });
+    it("can render under review records with 5 tokens started and authorized", () => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 5,
+        started: 5,
+        unauthorized: 13
+      });
+      cy.middleware("records.records");
+    });
+    it("can render 10 authorized proposals", () => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 10,
+        started: 0,
+        unauthorized: 13
+      });
+      cy.middleware("records.records");
+    });
+    afterEach(() => {
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      // Should trigger at least 2 records batch requests
+      cy.wait("@records.records");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 10);
+      cy.scrollTo("bottom");
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 15);
     });
   });
 });

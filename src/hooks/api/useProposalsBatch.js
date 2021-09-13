@@ -156,7 +156,6 @@ export default function useProposalsBatch({
       initial: () => send(START),
       start: () => {
         if (remainingTokens.length >= proposalPageSize) return send(VERIFY);
-
         // If remaining tokens length is smaller than proposal page size.
         // Find more tokens from inventory or scan from the next status
 
@@ -198,12 +197,19 @@ export default function useProposalsBatch({
             const tokens = [...newTokens, ...remainingTokens];
             setRemainingTokens(tokens);
 
-            // Go to the next status when the remaining tokens still be smaller
-            // than proposal page size and current status is not the last one.
-            if (
+            // Means the current batch request accepts more tokens than
+            // the current amount.
+            const needsToCompletePaginationBatch =
               tokens.length < proposalPageSize &&
-              statusIndex + 1 < currentStatuses.length
-            ) {
+              statusIndex + 1 < currentStatuses.length;
+
+            // can scan more tokens from next status list in order to
+            // populate the remainingTokens array and don't lose any token
+            const needsNextStatusScan =
+              tokens.length === proposalPageSize ||
+              needsToCompletePaginationBatch;
+
+            if (needsNextStatusScan) {
               const nextIndex = statusIndex + 1;
               const nextStatus = currentStatuses[nextIndex];
               const nextStatusTokens = getUnfetchedTokens(
