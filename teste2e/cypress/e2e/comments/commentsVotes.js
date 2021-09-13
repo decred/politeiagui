@@ -99,7 +99,7 @@ describe("Comments Votes", () => {
       cy.findAllByTestId("dislike-btn").first().click();
       cy.findByText(/Error/).should("exist");
     });
-    it("shouldn't change votes count on error", () => {
+    it("should reset votes count on error", () => {
       let upvotes;
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.findAllByTestId("score-like")
