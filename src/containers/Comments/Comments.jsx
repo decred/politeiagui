@@ -25,7 +25,7 @@ import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
 import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import { debounce } from "lodash";
-import { useComments } from "../Proposal/Detail/hooks";
+import { useComments } from "src/hooks";
 
 const FlatModeButton = ({ isActive, onClick }) => (
   <div
