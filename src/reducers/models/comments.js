@@ -285,7 +285,6 @@ const comments = (state = DEFAULT_STATE, action) =>
             }
             return state;
           },
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE,
           [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();
