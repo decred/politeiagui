@@ -75,7 +75,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
   // XXX this should be to false when the proposal billing status is set
   // to closed or completed.
-  // Currently this piece of info isn't available and need to be returned
+  // Currently this piece of info isn't available and should be returned
   // from the BE somehow.
   const areAuthorUpdatesAllowed = isApprovedProposal(proposal, voteSummary);
   const readOnly = !areCommentsAllowed && !areAuthorUpdatesAllowed;
