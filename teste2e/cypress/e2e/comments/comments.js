@@ -1,5 +1,5 @@
-import { buildProposal, buildComment } from "../support/generate";
-import { shortRecordToken } from "../utils";
+import { buildProposal, buildComment } from "../../support/generate";
+import { shortRecordToken } from "../../utils";
 
 describe("User comments", () => {
   it("Can not comment if hasn't paid the paywall", () => {

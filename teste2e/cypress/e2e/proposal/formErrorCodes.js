@@ -1,5 +1,5 @@
-import { buildProposal } from "../support/generate";
-import { APIPluginError } from "../errors";
+import { buildProposal } from "../../support/generate";
+import { APIPluginError } from "../../errors";
 
 describe("Proposal Form Error Codes Mapping", () => {
   const user = {
