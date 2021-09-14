@@ -88,5 +88,33 @@ describe("Record Details", () => {
         cy.wait("@details").its("response.statusCode").should("eq", 400);
       });
     });
+    describe("user proposals actions", () => {
+      const admin = {
+        email: "adminuser@example.com",
+        username: "adminuser",
+        password: "password"
+      };
+      beforeEach(() => {
+        cy.login(admin);
+        cy.visit("/admin/records");
+        cy.wait("@records").then(({ response: { body } }) => {
+          const { records } = body;
+          shortToken = getShortProposalToken(records);
+          expect(shortToken, "You should have at least one unvetted record.").to
+            .exist;
+        });
+      });
+      it("can logout from unvetted proposals details page", () => {
+        cy.visit(`/record/${shortToken}`);
+        cy.wait("@details");
+        cy.findByTestId("record-header").should("be.visible");
+        cy.findByTestId("markdown-wrapper").should("exist");
+        cy.userLogout(admin.username);
+        cy.wait(2000);
+        // assert that proposal files were removed from store
+        cy.findByTestId("record-header").should("be.visible");
+        cy.findByTestId("markdown-wrapper").should("not.exist");
+      });
+    });
   });
 });
