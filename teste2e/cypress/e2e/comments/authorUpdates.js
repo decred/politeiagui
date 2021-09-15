@@ -39,26 +39,12 @@ describe("Proposal author updates", () => {
         cy.wait("@setstatus");
         // Mock vote summary reply to set proposal vote status to
         // approved to test author updates.
-        cy.intercept("/api/ticketvote/v1/summaries", (req) => {
-          req.continue((res) => {
-            res.body.summaries[token] = {
-              type: 0,
-              status: PROPOSAL_VOTING_APPROVED,
-              duration: 0,
-              startblockheight: 0,
-              startblockhash: "",
-              endblockheight: 0,
-              eligibletickets: 0,
-              quorumpercentage: 0,
-              passpercentage: 0,
-              results: [],
-              bestblock: 767301
-            };
-            res.send(res.body);
-          });
-        }).as("votesummaries");
+        cy.middleware("ticketvote.summaries", {
+          token,
+          status: PROPOSAL_VOTING_APPROVED
+        });
         cy.visit(`record/${shortRecordToken(token)}`);
-        cy.wait("@votesummaries");
+        cy.wait("@ticketvote.summaries");
         const { title, text } = buildAuthorUpdate();
         cy.findByTestId(/update-title/i).type(title);
         cy.findByTestId(/text-area/i).type(text);
