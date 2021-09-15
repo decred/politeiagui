@@ -11,7 +11,8 @@ import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
   PROPOSAL_MAIN_THREAD_KEY,
-  PROPOSAL_UPDATE_HINT
+  PROPOSAL_UPDATE_HINT,
+  PROPOSAL_STATE_UNVETTED
 } from "src/constants";
 
 const DEFAULT_STATE = {
@@ -284,6 +285,21 @@ const comments = (state = DEFAULT_STATE, action) =>
               ];
             }
             return state;
+          },
+          [act.RECEIVE_LOGOUT]: function removeUnvettedComments() {
+            return update(["comments", "byToken"], (commentsByToken) =>
+              Object.keys(commentsByToken).reduce((acc, token) => {
+                const { sectionIds, comments } = commentsByToken[token];
+                const isUnvetted = sectionIds.some((sec) =>
+                  comments[sec].some(
+                    ({ state }) => state === PROPOSAL_STATE_UNVETTED
+                  )
+                );
+                return isUnvetted
+                  ? { ...acc }
+                  : { ...acc, [token]: commentsByToken[token] };
+              }, {})
+            )(state);
           },
           [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
