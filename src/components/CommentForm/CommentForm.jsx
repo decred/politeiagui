@@ -129,6 +129,7 @@ will only be able to reply to your most recent update thread.">
                 <BoxTextInput
                   placeholder="Update title"
                   name="title"
+                  data-testid="update-title"
                   tabIndex={1}
                   value={values.title}
                   onChange={handleTitleChangeWithTouched}

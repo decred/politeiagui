@@ -77,7 +77,7 @@ describe("User comments", () => {
         cy.logout(user1);
         cy.login(user);
         cy.identity();
-        cy.visit(`record/${censorshiprecord.token.substring(0, 7)}`);
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         cy.route("POST", "/api/comments/v1/vote").as("likeComment");
         cy.findByTestId("like-btn").click();
         cy.wait("@likeComment", { timeout: 10000 })
