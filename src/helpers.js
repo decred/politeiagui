@@ -586,8 +586,8 @@ export function getAttachmentsFiles(files) {
 }
 
 /**
- * calculateAuthorUpdateTree get list of all comments and an author update
- * id and calculates the author update thread comment tree and returns
+ * calculateAuthorUpdateTree accepts an array of comments and an author update
+ * id. It calculates the author update thread comment tree then returns
  * the tree as an sub-array of the original array.
  * @param {String} authorUpdateId
  * @param {Array} comments

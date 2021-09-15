@@ -12,7 +12,12 @@ import { CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/components/Link";
-import { useQueryString, useScrollTo } from "src/hooks";
+import {
+  useQueryString,
+  useScrollTo,
+  useComments,
+  useLocalStorage
+} from "src/hooks";
 import {
   getSortOptionsForSelect,
   createSelectOptionFromSortOption,
@@ -23,9 +28,7 @@ import {
 import { PROPOSAL_MAIN_THREAD_KEY } from "src/constants";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { getQueryStringValue } from "src/lib/queryString";
-import useLocalStorage from "src/hooks/utils/useLocalStorage";
 import { debounce } from "lodash";
-import { useComments } from "src/hooks";
 
 const FlatModeButton = ({ isActive, onClick }) => (
   <div
