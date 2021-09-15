@@ -1,7 +1,7 @@
 import {
   PROPOSAL_METADATA_FILENAME,
   VOTE_METADATA_FILENAME
-} from "../../../utils";
+} from "../../utils";
 import compose from "lodash/fp/compose";
 import filter from "lodash/fp/filter";
 import keys from "lodash/fp/keys";
