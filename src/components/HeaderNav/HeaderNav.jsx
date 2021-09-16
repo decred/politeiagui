@@ -2,7 +2,7 @@ import {
   Text,
   Dropdown,
   DropdownItem,
-  Toggle,
+  DarkLightToggle,
   useTheme,
   classNames,
   DEFAULT_DARK_THEME_NAME,
@@ -99,13 +99,10 @@ const HeaderNav = ({ history }) => {
         title={username}>
         {menuItems}
         <DropdownItem onClick={onThemeToggleHandler}>
-          <div className={styles.themeToggleWrapper}>
-            <Toggle
-              onToggle={onThemeToggleHandler}
-              toggled={themeName === DEFAULT_DARK_THEME_NAME}
-            />
-            <div className={styles.themeToggleLabel}>Dark Mode</div>
-          </div>
+          <DarkLightToggle
+            onToggle={onThemeToggleHandler}
+            toggled={themeName === DEFAULT_DARK_THEME_NAME}
+          />
         </DropdownItem>
         <DropdownItem onClick={handleLogoutClick}>Logout</DropdownItem>
       </Dropdown>
@@ -114,23 +111,18 @@ const HeaderNav = ({ history }) => {
     <nav className={styles.navContainer}>
       <div
         className={classNames(styles.themeToggleWrapper, styles.publicWrapper)}>
-        <Toggle
+        <DarkLightToggle
           onToggle={onThemeToggleHandler}
           toggled={themeName === DEFAULT_DARK_THEME_NAME}
         />
-        <div onClick={onThemeToggleHandler} className={styles.themeToggleLabel}>
-          Dark Mode
-        </div>
       </div>
       {!enableAdminInvite && (
-        <>
+        <div className={styles.navLinkCtn}>
           <NavLink
             className={styles.navLink}
             activeClassName={styles.activeNavLink}
             to="/user/login">
-            <Text className={`${styles.navLinkText} ${styles.rightGreyBorder}`}>
-              Log in
-            </Text>
+            <Text className={styles.navLinkText}>Log in</Text>
           </NavLink>
           <NavLink
             className={styles.navLink}
@@ -138,7 +130,7 @@ const HeaderNav = ({ history }) => {
             to="/user/signup">
             <Text className={styles.navLinkText}>Sign up</Text>
           </NavLink>
-        </>
+        </div>
       )}
     </nav>
   );
