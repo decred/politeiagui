@@ -1192,6 +1192,23 @@ export const onSetProposalStatus = ({
       });
   });
 
+export const onSetBillingStatus = (token, billingStatus, reason) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const userid = sel.currentUserID(getState());
+    dispatch(act.REQUEST_SET_BILLING_STATUS({ token, billingStatus, reason }));
+    return api
+      .proposalSetBillingStatus(userid, csrf, token, billingStatus, reason)
+      .then(() =>
+        dispatch(
+          act.RECEIVE_SET_BILLING_STATUS({ token, billingStatus, reason })
+        )
+      )
+      .catch((error) => {
+        act.RECEIVE_SET_BILLING_STATUS(null, error);
+        throw error;
+      });
+  });
+
 export const onResetPassword = ({ username, email }) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_RESET_PASSWORD({ username, email }));

@@ -10,6 +10,7 @@ import {
 import ModalConfirm from "src/components/ModalConfirm";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalStartVote from "src/components/ModalStartVote";
+import ModalSetBillingStatus from "src/components/ModalSetBillingStatus";
 import useModalContext from "src/hooks/utils/useModalContext";
 import values from "lodash/fp/values";
 import { shortRecordToken } from "src/helpers";
@@ -26,6 +27,7 @@ const PublicActionsProvider = ({ children, history }) => {
     onAuthorizeVote,
     onRevokeVote,
     onStartVote,
+    onSetBillingStatus,
     onFetchProposalsBatchWithoutState
   } = usePublicActions();
 
@@ -95,6 +97,21 @@ const PublicActionsProvider = ({ children, history }) => {
       });
     },
     [handleCloseModal, handleOpenModal, onRevokeVote]
+  );
+
+  const handleSetBillingStatusModal = useCallback(
+    (proposal) =>
+      handleOpenModal(ModalSetBillingStatus, {
+        title: `Set billing status - ${proposal.name}`,
+        onSubmit: onSetBillingStatus(proposal),
+        successTitle: "Billing status set",
+        successMessage: (
+          <Text>The proposal billing status has been successfully set!</Text>
+        ),
+        onClose: handleCloseModal,
+        proposal
+      }),
+    [handleCloseModal, handleOpenModal, onSetBillingStatus]
   );
 
   const handleStartVoteModal = useCallback(
@@ -188,7 +205,8 @@ const PublicActionsProvider = ({ children, history }) => {
         onRevokeVote: handleOpenRevokeVoteModal,
         onStartVote: handleStartVoteModal,
         onCensor: handleOpenCensorModal,
-        onStartRunoffVote: handleStartRunoffVoteModal
+        onStartRunoffVote: handleStartRunoffVoteModal,
+        onSetBillingStatus: handleSetBillingStatusModal
       }}>
       {children}
     </PublicProposalsActionsContext.Provider>

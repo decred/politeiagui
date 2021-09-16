@@ -98,13 +98,12 @@ export const isRfpReadyToVote = (proposalLinkBy, minlinkbyperiod) => {
 };
 
 /**
- * Returns true if RFP was approved & deadline already expired
- * which means RFP ready to start runoff vote
+ * Returns true if RFP was approved, deadline already expired & RFP submissions
+ * didn't vote yet, which means RFP ready to start runoff vote.
  * @param {Object} proposal
  * @param {Object} voteSummary
- * @returns {Boolean} isActiveApproved
+ * @returns {Boolean} isRfpReadyToRunoff
  */
-/// XXX revert me
 export const isRfpReadyToRunoff = (
   proposal,
   voteSummary,

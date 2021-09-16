@@ -611,6 +611,27 @@ export const proposalSetStatus = (
     )
     .then(getResponse);
 
+export const proposalSetBillingStatus = (userid, csrf, token, status, reason) =>
+  pki
+    .myPubKeyHex(userid)
+    .then((publickey) =>
+      pki.signStringHex(userid, token + status + reason).then((signature) =>
+        POST(
+          "/setbillingstatus",
+          csrf,
+          {
+            token,
+            status,
+            reason,
+            signature,
+            publickey
+          },
+          apiPi
+        )
+      )
+    )
+    .then(getResponse);
+
 export const newProposal = (csrf, proposal) =>
   POST("/new", csrf, proposal, apiRecords).then(getResponse);
 
