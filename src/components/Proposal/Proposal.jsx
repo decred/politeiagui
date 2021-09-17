@@ -526,6 +526,7 @@ const Proposal = React.memo(function Proposal({
                 rfpSubmissionsVoteSummaries={
                   isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }
+                isLegacy={isLegacy}
               />
             </LoggedInContent>
           </>

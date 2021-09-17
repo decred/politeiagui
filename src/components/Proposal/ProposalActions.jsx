@@ -51,7 +51,8 @@ const PublicActions = ({
   proposal,
   voteSummary,
   rfpSubmissionsVoteSummaries,
-  resetRfpSubmissionsData
+  resetRfpSubmissionsData,
+  isLegacy
 }) => {
   if (!usePublicProposalActions()) {
     throw Error(
@@ -87,7 +88,7 @@ const PublicActions = ({
 
   return (
     <>
-      {isUnderDiscussion && (
+      {isUnderDiscussion && !isLegacy && (
         <div className="justify-right margin-top-m">
           <AdminContent>
             <Button
@@ -118,7 +119,7 @@ const PublicActions = ({
           </AdminContent>
         </div>
       )}
-      {isApproved && (
+      {isApproved && !isLegacy && (
         <AdminContent>
           <div className="justify-right margin-top-m">
             <Button onClick={withProposal(onSetBillingStatus)}>

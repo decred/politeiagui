@@ -293,7 +293,8 @@ function PiPluginError(code, context) {
     8: `Proposal start date is invalid, ${context}`,
     9: `Proposal end date is invalid, ${context}`,
     10: `Proposal amount is invalid, ${context}`,
-    11: `Proposal domain is invalid, ${context}`
+    11: `Proposal domain is invalid, ${context}`,
+    15: `${context}`
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdPi);

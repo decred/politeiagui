@@ -12,6 +12,8 @@ import { validationSchema } from "./validation";
 import FormWrapper from "src/components/FormWrapper";
 import SelectField from "src/components/Select/SelectField";
 import { getProposalBillingStatusOptionsForSelect } from "./helpers";
+import { PROPOSAL_BILLING_STATUS_CLOSED } from "src/constants";
+import styles from "./ModalSetBillingStatus.module.css";
 
 const ModalSetBillingStatus = ({
   onClose,
@@ -22,6 +24,7 @@ const ModalSetBillingStatus = ({
   successTitle
 }) => {
   const [success, setSuccess] = useState(false);
+
   const typeOptions = useMemo(
     () => getProposalBillingStatusOptionsForSelect(),
     []
@@ -99,6 +102,10 @@ const ModalSetBillingStatus = ({
               setFieldValue(fieldName, option.value);
             };
 
+            const { billingStatus } = values;
+            const isBillingStatusClosed =
+              billingStatus === PROPOSAL_BILLING_STATUS_CLOSED;
+
             return (
               <Form onSubmit={handleSubmit}>
                 {errors && errors.global && (
@@ -106,17 +113,23 @@ const ModalSetBillingStatus = ({
                 )}
                 <SelectField
                   name="billingStatus"
+                  placeholder="Billing Status"
+                  className={styles.statusSelectWrapper}
                   onChange={handleSelectFiledChange("billingStatus")}
                   options={typeOptions}
                 />
-                <TextInput
-                  label="Reason"
-                  type="number"
-                  value={values.reason}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.reason && errors.reason}
-                />
+                {isBillingStatusClosed && (
+                  <TextInput
+                    name="reason"
+                    id="billing-status-reason"
+                    label="Reason"
+                    type="text"
+                    value={values.reason}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.reason && errors.reason}
+                  />
+                )}
                 <Actions className="no-padding-bottom">
                   <Button
                     loading={isSubmitting}
