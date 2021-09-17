@@ -45,6 +45,9 @@ export const PROPOSAL_TYPE_REGULAR = 1;
 export const PROPOSAL_TYPE_RFP = 2;
 export const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
 
+export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
+export const PROPOSAL_BILLING_STATUS_COMPLETED = 3;
+
 export const VOTE_TYPE_STANDARD = 1;
 export const VOTE_TYPE_RUNOFF = 2;
 

@@ -122,7 +122,7 @@ const ModalStartVote = ({
           />
         )
       }>
-      {!success && (
+      {!success ? (
         <FormWrapper
           initialValues={initialValues}
           validationSchema={validationSchema(apiInfo.testnet)}
@@ -192,8 +192,7 @@ const ModalStartVote = ({
             );
           }}
         </FormWrapper>
-      )}
-      {success && (
+      ) : (
         <>
           {successMessage}
           <div className="justify-right margin-top-m">
