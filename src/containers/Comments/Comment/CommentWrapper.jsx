@@ -109,6 +109,8 @@ const CommentWrapper = ({
 
   const isInLatestUpdateCommentTree =
     comments && isInCommentTree(latestAuthorUpdateId, commentid, comments);
+  const notInLatestAuthorUpdateThread =
+    areAuthorUpdatesAllowed && !isInLatestUpdateCommentTree;
   const isRecordAuthor =
     recordAuthorID === userid || recordAuthorUsername === username;
   const censorable = isAdmin && !readOnly;
@@ -186,7 +188,7 @@ const CommentWrapper = ({
     readOnly ||
     (userLoggedIn &&
       (identityError || paywallMissing || currentUser.username === username)) ||
-    (areAuthorUpdatesAllowed && !isInLatestUpdateCommentTree);
+    notInLatestAuthorUpdateThread;
 
   return (
     <>
@@ -208,7 +210,7 @@ const CommentWrapper = ({
           readOnly ||
           !!identityError ||
           paywallMissing ||
-          (areAuthorUpdatesAllowed && !isInLatestUpdateCommentTree)
+          notInLatestAuthorUpdateThread
         }
         likesUpCount={upvotes}
         likesDownCount={downvotes}

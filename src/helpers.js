@@ -586,6 +586,18 @@ export function getAttachmentsFiles(files) {
 }
 
 /**
+ * getChildrenComments accepts an array of comments and a subset of comment ids
+ * as parents and returns the ids of the children comments as an array.
+ * @param {Array} comments
+ * @param {Array} parents comment ids
+ * @param {Array} children comment ids
+ */
+const getChildrenComments = (comments, parents) =>
+  comments
+    .filter(({ parentid }) => parents.includes(parentid))
+    .map(({ commentid }) => commentid);
+
+/**
  * calculateAuthorUpdateTree accepts an array of comments and an author update
  * id. It calculates the author update thread comment tree then returns
  * the tree as an sub-array of the original array.
@@ -595,17 +607,13 @@ export function getAttachmentsFiles(files) {
  */
 export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
   let authorUpdateTree = [authorUpdateId];
-  let children = comments
-    .filter(({ parentid }) => authorUpdateTree.includes(parentid))
-    .map(({ commentid }) => commentid);
-  while (
-    uniq([...authorUpdateTree, ...children]).length > authorUpdateTree.length
-  ) {
-    authorUpdateTree = uniq([...authorUpdateTree, ...children]);
+  let children = getChildrenComments(comments, authorUpdateTree);
+  let allTreeComments = uniq([...authorUpdateTree, ...children]);
+  while (allTreeComments.length > authorUpdateTree.length) {
+    authorUpdateTree = allTreeComments;
     const parents = [...authorUpdateTree];
-    children = comments
-      .filter(({ parentid }) => parents.includes(parentid))
-      .map(({ commentid }) => commentid);
+    children = getChildrenComments(comments, parents);
+    allTreeComments = uniq([...authorUpdateTree, ...children]);
   }
-  return uniq([...authorUpdateTree, ...children]);
+  return allTreeComments;
 };
