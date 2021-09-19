@@ -140,21 +140,16 @@ export default function useComments(
   // If displaying a single thread while having multiple author updates with
   // different section, find to which tree the sub-tree we are displaying
   // belongs to display only the relevant section.
-  const singleThreadRootId = useMemo(() => {
-    let authorUpdateId;
-    if (isSingleThread && hasAuthorUpdates) {
-      for (const [sectionId, comments] of Object.entries(
-        allCommentsBySection
-      )) {
-        if (
-          comments.map(({ commentid }) => commentid).includes(+threadParentID)
-        ) {
-          authorUpdateId = sectionId;
-        }
+  let singleThreadRootId;
+  if (isSingleThread && hasAuthorUpdates) {
+    for (const [sectionId, comments] of Object.entries(allCommentsBySection)) {
+      if (
+        comments.map(({ commentid }) => commentid).includes(+threadParentID)
+      ) {
+        singleThreadRootId = sectionId;
       }
     }
-    return authorUpdateId;
-  }, [isSingleThread, hasAuthorUpdates, allCommentsBySection, threadParentID]);
+  }
 
   return {
     comments,
