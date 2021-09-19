@@ -117,6 +117,7 @@ const ModalSetBillingStatus = ({
                   className={styles.statusSelectWrapper}
                   onChange={handleSelectFiledChange("billingStatus")}
                   options={typeOptions}
+                  id="select-billing-status"
                 />
                 {isBillingStatusClosed && (
                   <TextInput
@@ -132,6 +133,7 @@ const ModalSetBillingStatus = ({
                 )}
                 <Actions className="no-padding-bottom">
                   <Button
+                    data-testid="set-billing-status"
                     loading={isSubmitting}
                     kind={isValid ? "primary" : "disabled"}
                     type="submit">
