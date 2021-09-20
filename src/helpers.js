@@ -8,6 +8,7 @@ import map from "lodash/fp/map";
 import splitFp from "lodash/fp/split";
 import reduce from "lodash/fp/reduce";
 import compose from "lodash/fp/compose";
+import uniq from "lodash/fp/uniq";
 import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
 import { capitalize } from "./utils/strings";
@@ -583,3 +584,36 @@ export function getAttachmentsFiles(files) {
       ].includes(f.name)
   );
 }
+
+/**
+ * getChildrenComments accepts an array of comments and a subset of comment ids
+ * as parents and returns the ids of the children comments as an array.
+ * @param {Array} comments
+ * @param {Array} parents comment ids
+ * @param {Array} children comment ids
+ */
+const getChildrenComments = (comments, parents) =>
+  comments
+    .filter(({ parentid }) => parents.includes(parentid))
+    .map(({ commentid }) => commentid);
+
+/**
+ * calculateAuthorUpdateTree accepts an array of comments and an author update
+ * id. It calculates the author update thread comment tree then returns
+ * the tree as an sub-array of the original array.
+ * @param {String} authorUpdateId
+ * @param {Array} comments
+ * @returns {Array} array of author update thread comments.
+ */
+export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
+  let authorUpdateTree = [authorUpdateId];
+  let children = getChildrenComments(comments, authorUpdateTree);
+  let allTreeComments = uniq([...authorUpdateTree, ...children]);
+  while (allTreeComments.length > authorUpdateTree.length) {
+    authorUpdateTree = allTreeComments;
+    const parents = [...authorUpdateTree];
+    children = getChildrenComments(comments, parents);
+    allTreeComments = uniq([...authorUpdateTree, ...children]);
+  }
+  return allTreeComments;
+};

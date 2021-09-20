@@ -342,10 +342,11 @@ export default function useProposalsBatch({
     ),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,
+    // loading is true when fetching cycle is running and there are no
+    // proposals fetched to avoid flickering at starting.
     loading:
       state.loading ||
       (!values(proposals).length && statusIndex + 1 < voteStatuses?.length),
-    // loading return true when fetching cycle is running and there are no proposals fetched to avoid flickering at starting
     verifying: state.verifying,
     onRestartMachine,
     onFetchMoreProposals,

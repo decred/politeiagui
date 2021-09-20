@@ -9,6 +9,41 @@ export const commentSortOptions = {
 };
 
 /**
+ * isInCommentTree returns whether the leafID is part of the provided comment
+ * tree. A leaf is considered to be part of the tree if the leaf is a child of
+ * the root or the leaf references the root itself.
+ * @param {Int} rootId root node id.
+ * @param {Int} leafId leaf node id.
+ * @param {Map} comments array of comments.
+ */
+export const isInCommentTree = (rootId, leafId, comments) => {
+  if (leafId === rootId) {
+    return true;
+  }
+
+  // Convert comment array to a map
+  const commentsMap = comments.reduce((map, comment) => {
+    map[comment.commentid] = comment;
+    return map;
+  }, {});
+
+  // Start with the provided comment leaf and traverse the comment tree up
+  // until either the provided root ID is found or we reach the tree head. The
+  // tree head will have a comment ID of 0.
+  let current = commentsMap[leafId];
+  while (current && current.parentid !== 0) {
+    // Check if next parent in the tree is the rootID.
+    if (current.parentid === rootId) {
+      return true;
+    }
+    const newLeafId = current.parentid;
+    current = commentsMap[newLeafId];
+  }
+
+  return false;
+};
+
+/**
  * Creates a select option from a string sort option.
  * @param {String} sortOption
  * @returns {Object} selectOption

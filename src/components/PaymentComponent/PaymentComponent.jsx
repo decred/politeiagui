@@ -19,6 +19,7 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
   return (
     <>
       <div
+        data-testid="payment-component"
         className={classNames(
           styles.paywallInfo,
           isDarkTheme && styles.dark,
@@ -41,7 +42,11 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
             tooltipPlacement={"bottom"}>
             {address}
           </CopyableText>
-          {!extraSmall && <PaymentStatusTag status={status} />}
+          {!extraSmall && (
+            <span data-testid="payment-status-tag">
+              <PaymentStatusTag status={status} />
+            </span>
+          )}
         </div>
       </div>
       <PaymentFaucet address={address} amount={amount} />

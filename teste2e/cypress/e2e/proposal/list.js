@@ -194,7 +194,8 @@ describe("Records list", () => {
       cy.findByTestId("sidebar").should("be.visible");
       cy.viewport("iphone-6");
       cy.findByTestId("sidebar").should("be.hidden");
-      cy.viewport(1000, 500); // sidebar breakpoint
+      // sidebar breakpoint
+      cy.viewport(1000, 500);
       cy.findByTestId("sidebar").should("be.hidden");
       cy.viewport(1001, 500);
       cy.findByTestId("sidebar").should("be.visible");
@@ -229,12 +230,14 @@ describe("Records list", () => {
         inventory = body.unvetted;
       });
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE) // first records batch
-        .each(([{ id }], position) => {
+      // first records batch
+      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE).each(
+        ([{ id }], position) => {
           const tokens = getTokensByStatusTab(inventory, "Unreviewed");
           const expectedToken = shortRecordToken(tokens[position]);
           expect(id).to.have.string(expectedToken);
-        });
+        }
+      );
     });
     it("can render records and inventory pagination correctly", () => {
       cy.visit("/admin/records");

@@ -74,21 +74,19 @@ const ModalConfirm = ({
             handleSubmit,
             errors,
             isSubmitting
-          }) => {
-            return (
-              <Form onSubmit={handleSubmit}>
-                {errors && errors.global && (
-                  <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-                )}
-                <Text>{message}</Text>
-                <Actions className="no-padding-bottom">
-                  <Button loading={isSubmitting} type="submit">
-                    Confirm
-                  </Button>
-                </Actions>
-              </Form>
-            );
-          }}
+          }) => (
+            <Form onSubmit={handleSubmit}>
+              {errors && errors.global && (
+                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+              )}
+              <Text>{message}</Text>
+              <Actions className="no-padding-bottom">
+                <Button loading={isSubmitting} type="submit">
+                  Confirm
+                </Button>
+              </Actions>
+            </Form>
+          )}
         </FormWrapper>
       )}
       {success && (

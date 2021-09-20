@@ -3,6 +3,7 @@ import styles from "./Comment.module.css";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import Link from "src/components/Link";
 import { useComment } from "../hooks";
+import { isInCommentTree } from "../helpers";
 import Comment from "./Comment";
 import {
   PROPOSAL_STATE_UNVETTED,
@@ -87,7 +88,11 @@ const CommentWrapper = ({
     openLoginModal,
     isAdmin,
     currentUser,
-    getCommentVotes
+    getCommentVotes,
+    latestAuthorUpdateId,
+    areAuthorUpdatesAllowed,
+    comments,
+    sectionId
   } = useComment();
   const {
     comment: commentText,
@@ -102,6 +107,10 @@ const CommentWrapper = ({
     parentid
   } = comment;
 
+  const isInLatestUpdateCommentTree =
+    comments && isInCommentTree(latestAuthorUpdateId, commentid, comments);
+  const notInLatestAuthorUpdateThread =
+    areAuthorUpdatesAllowed && !isInLatestUpdateCommentTree;
   const isRecordAuthor =
     recordAuthorID === userid || recordAuthorUsername === username;
   const censorable = isAdmin && !readOnly;
@@ -134,14 +143,15 @@ const CommentWrapper = ({
   }, [showReplies]);
 
   const handleSubmitComment = useCallback(
-    (comment) =>
+    ({ comment }) =>
       onSubmitComment({
         comment,
         token,
         parentID: commentid,
-        state: proposalState
+        state: proposalState,
+        sectionId
       }),
-    [onSubmitComment, token, commentid, proposalState]
+    [onSubmitComment, token, commentid, proposalState, sectionId]
   );
 
   const handleCommentSubmitted = useCallback(() => {
@@ -177,7 +187,8 @@ const CommentWrapper = ({
     loadingLikes ||
     readOnly ||
     (userLoggedIn &&
-      (identityError || paywallMissing || currentUser.username === username));
+      (identityError || paywallMissing || currentUser.username === username)) ||
+    notInLatestAuthorUpdateThread;
 
   return (
     <>
@@ -195,7 +206,12 @@ const CommentWrapper = ({
           !enableCommentVote || proposalState === PROPOSAL_STATE_UNVETTED
         }
         disableLikesClick={isLikeCommentDisabled}
-        disableReply={readOnly || !!identityError || paywallMissing}
+        disableReply={
+          readOnly ||
+          !!identityError ||
+          paywallMissing ||
+          notInLatestAuthorUpdateThread
+        }
         likesUpCount={upvotes}
         likesDownCount={downvotes}
         likeOption={getCommentLikeOption(commentid)}

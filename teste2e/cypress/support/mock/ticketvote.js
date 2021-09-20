@@ -40,5 +40,24 @@ export const middlewares = {
           }
         });
       }
+    }),
+  summaries: ({ token, status }) =>
+    cy.intercept("/api/ticketvote/v1/summaries", (req) => {
+      req.continue((res) => {
+        res.body.summaries[token] = {
+          type: 0,
+          status,
+          duration: 0,
+          startblockheight: 0,
+          startblockhash: "",
+          endblockheight: 0,
+          eligibletickets: 0,
+          quorumpercentage: 0,
+          passpercentage: 0,
+          results: [],
+          bestblock: 767301
+        };
+        res.send(res.body);
+      });
     })
 };
