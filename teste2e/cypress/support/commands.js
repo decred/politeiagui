@@ -35,6 +35,7 @@ import { middlewares as recordMiddlewares } from "./mock/records";
 import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";
 import { middlewares as commentsMiddlewares } from "./mock/comments";
 import { middlewares as usersMiddlewares } from "./mock/users";
+import { middlewares as piMiddlewares } from "./mock/pi";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -167,7 +168,8 @@ Cypress.Commands.add("middleware", (path, ...args) => {
     ticketvote: ticketVoteMiddlewares,
     records: recordMiddlewares,
     comments: commentsMiddlewares,
-    users: usersMiddlewares
+    users: usersMiddlewares,
+    pi: piMiddlewares
   });
   return mw(...args).as(path);
 });

@@ -174,16 +174,10 @@ describe("Admin proposals actions", () => {
         cy.get("#select-billing-status").click();
         // Pick the completed billing status.
         cy.get("#react-select-3-option-0").click();
-        // XXX move to a middleware when 2549 is in.
-        cy.intercept("/api/pi/v1/setbillingstatus", (req) =>
-          req.reply({
-            body: {},
-            statusCode: 200
-          })
-        ).as("setBillingStatus");
+        cy.middleware("pi.setBillingStatus");
         cy.findByTestId("set-billing-status").click();
         // Ensure mocked response has 200 status code
-        cy.wait("@setBillingStatus")
+        cy.wait("@pi.setBillingStatus")
           .its("response.statusCode")
           .should("eq", 200);
         // Ensure success modal is displayed
