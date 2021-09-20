@@ -11,6 +11,8 @@ import { getDetailsFile } from "./helpers";
 import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
+import { useLoaderContext } from "src/containers/Loader";
+import { useComments } from "src/hooks";
 import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
@@ -61,6 +63,9 @@ export function useProposal(token, threadParentID) {
   const rfpLinks = getProposalRfpLinksTokens(proposal);
   const isRfp = proposal && !!proposal.linkby;
   const isSubmission = proposal && !!proposal.linkto;
+  const { currentUser } = useLoaderContext();
+  const isCurrentUserProposalAuthor =
+    currentUser && proposal && currentUser.userid === proposal.userid;
 
   const unfetchedProposalTokens =
     rfpLinks &&
@@ -161,7 +166,8 @@ export function useProposal(token, threadParentID) {
       },
       done: () => {
         // verify proposal on proposal changes
-        // TODO: improve this in the future so we don't need to verify once it should be done
+        // TODO: improve this in the future so we don't need to verify once
+        // it should be done.
         if (!isEqual(state.proposal, proposal)) {
           return send(VERIFY);
         }
@@ -176,10 +182,30 @@ export function useProposal(token, threadParentID) {
     proposals
   );
 
+  const proposalToken = getProposalToken(proposalWithLinks);
+  const proposalState = proposalWithLinks?.state;
+
+  const {
+    onSubmitComment,
+    commentSectionIds,
+    hasAuthorUpdates,
+    singleThreadRootId,
+    error: commentsError,
+    loading: commentsLoading
+  } = useComments(proposalToken, proposalState, null, threadParentID);
+
   return {
     proposal: proposalWithLinks,
     error: state.error,
     loading: state.status === "idle" || state.status === "loading",
-    threadParentID
+    threadParentID,
+    isCurrentUserProposalAuthor,
+    commentSectionIds,
+    hasAuthorUpdates,
+    singleThreadRootId,
+    onSubmitComment,
+    commentsError,
+    currentUser,
+    commentsLoading
   };
 }

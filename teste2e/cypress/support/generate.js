@@ -27,6 +27,11 @@ export const buildComment = build("Comment").fields({
   text: fake((f) => f.lorem.sentence())
 });
 
+export const buildAuthorUpdate = build("AuthorUpdate").fields({
+  title: fake((f) => f.lorem.words()),
+  text: fake((f) => f.lorem.sentence())
+});
+
 export const buildRecord = build("Record").fields({
   token: fake((f) => f.internet.password(15, false, /[0-9a-z]/)),
   timestamp: Date.now() / 1000,

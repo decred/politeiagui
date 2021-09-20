@@ -88,8 +88,9 @@ describe("Records list", () => {
       cy.scrollTo("bottom");
       // prepare to fetch 25 items: 3 started, 20 authorized and 2 unauthorized
       // scan inventory: page 2 of authorized
-      cy.wait("@ticketvote.inventory").its("request.body")
-          .should("deep.eq", {page: 2,status : 2});
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 2, status: 2 });
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 25);
       cy.scrollTo("bottom");
@@ -104,8 +105,9 @@ describe("Records list", () => {
       cy.scrollTo("bottom");
       // prepare to fetch 45 items: 3 started, 20 authorized and 22 unauthorized
       // scan inventory: page 2 of unauthorized
-      cy.wait("@ticketvote.inventory").its("request.body")
-          .should("deep.eq", {page: 2,status : 1});
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 2, status: 1 });
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 45);
       cy.scrollTo("bottom");
@@ -120,8 +122,9 @@ describe("Records list", () => {
       cy.scrollTo("bottom");
       // prepare to fetch 65 items: 3 started, 20 authorized and 42 unauthorized
       // scan inventory: page 3 of unauthorized
-      cy.wait("@ticketvote.inventory").its("request.body")
-          .should("deep.eq", {page: 3,status : 1});
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 3, status: 1 });
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 65);
       cy.scrollTo("bottom");
@@ -191,7 +194,8 @@ describe("Records list", () => {
       cy.findByTestId("sidebar").should("be.visible");
       cy.viewport("iphone-6");
       cy.findByTestId("sidebar").should("be.hidden");
-      cy.viewport(1000, 500); // sidebar breakpoint
+      // sidebar breakpoint
+      cy.viewport(1000, 500);
       cy.findByTestId("sidebar").should("be.hidden");
       cy.viewport(1001, 500);
       cy.findByTestId("sidebar").should("be.visible");
@@ -226,12 +230,14 @@ describe("Records list", () => {
         inventory = body.unvetted;
       });
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE) // first records batch
-        .each(([{ id }], position) => {
+      // first records batch
+      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE).each(
+        ([{ id }], position) => {
           const tokens = getTokensByStatusTab(inventory, "Unreviewed");
           const expectedToken = shortRecordToken(tokens[position]);
           expect(id).to.have.string(expectedToken);
-        });
+        }
+      );
     });
     it("can render records and inventory pagination correctly", () => {
       cy.visit("/admin/records");
