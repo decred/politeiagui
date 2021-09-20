@@ -93,6 +93,10 @@ export const setPollingPointer = (paymentpolling) => {
 const POLL_INTERVAL = 10 * 1000;
 export const onPollUserPayment = () => (dispatch, getState) => {
   const userid = sel.currentUserID(getState());
+  if (!userid) {
+    clearPollingPointer();
+    return;
+  }
   return api
     .verifyUserPayment()
     .then((response) => response.haspaid)
