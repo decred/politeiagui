@@ -86,8 +86,7 @@ function RecordsUserError(code, context) {
     17: "The record status is invalid",
     18: `The status transition is invalid: ${context}`,
     19: "The status reason was not found",
-    20: "The number of requested record tokens exceeds the page size policy.",
-    29: "You must be logged in to perform this action"
+    20: "The number of requested record tokens exceeds the page size policy."
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIRecords);
@@ -294,8 +293,7 @@ function PiPluginError(code, context) {
     8: `Proposal start date is invalid, ${context}`,
     9: `Proposal end date is invalid, ${context}`,
     10: `Proposal amount is invalid, ${context}`,
-    11: `Proposal domain is invalid, ${context}`,
-    18: "Author update title is missing"
+    11: `Proposal domain is invalid, ${context}`
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdPi);
@@ -326,8 +324,7 @@ function CommentsPluginError(code, context) {
     7: "Only the comment author is allowed to edit",
     8: `The provided parent ID is invalid, ${context}`,
     9: `The provided comment vote is invalid, ${context}`,
-    10: "You have exceeded the max number of changes on your vote",
-    12: "Backend does not accept the extra data needed for author updates"
+    10: "You have exceeded the max number of changes on your vote"
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdComments);
@@ -365,3 +362,10 @@ function TicketvotePluginError(code, context) {
 }
 
 TicketvotePluginError.prototype = new Error();
+
+// Helpers
+export function isAPIWww(url) {
+  if (url.startsWith("/api")) return true;
+  const apiType = new URL(url).pathname.split("/")[2];
+  return apiType === APIWww;
+}

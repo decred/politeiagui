@@ -24,7 +24,7 @@ const PROPOSAL_STATE_VETTED = 2;
 const PROPOSAL_VOTING_NOT_AUTHORIZED = 1;
 const PROPOSAL_VOTING_AUTHORIZED = 2;
 const PROPOSAL_VOTING_ACTIVE = 3;
-const PROPOSAL_VOTING_APPROVED = 5;
+export const PROPOSAL_VOTING_APPROVED = 5;
 const PROPOSAL_VOTING_REJECTED = 6;
 const PROPOSAL_VOTING_INELIGIBLE = 7;
 const PROPOSAL_STATUS_UNREVIEWED = 1;
@@ -32,11 +32,12 @@ const PROPOSAL_STATUS_PUBLIC = 2;
 const PROPOSAL_STATUS_CENSORED = 3;
 const PROPOSAL_STATUS_ARCHIVED = 4;
 
-export const requestWithCsrfToken = (url, body) =>
+export const requestWithCsrfToken = (url, body, failOnStatusCode = true) =>
   cy.request("/api").then((res) =>
     cy.request({
       url,
       body,
+      failOnStatusCode,
       method: "POST",
       encoding: "utf-8",
       headers: {

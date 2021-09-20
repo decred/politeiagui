@@ -10,3 +10,10 @@
 .customTitleAndSubtitleWrapper {
   justify-content: center;
 }
+
+@media screen and (max-width: 560px) {
+  .commentsHeaderWrapper {
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
+  }
+}

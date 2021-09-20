@@ -6,11 +6,13 @@ import set from "lodash/fp/set";
 import get from "lodash/fp/get";
 import find from "lodash/fp/find";
 import update from "lodash/fp/update";
-import { shortRecordToken } from "src/helpers";
+import { shortRecordToken, calculateAuthorUpdateTree } from "src/helpers";
 import {
   PROPOSAL_STATUS_PUBLIC,
-  PROPOSAL_STATUS_UNREVIEWED
-} from "../../constants";
+  PROPOSAL_STATUS_UNREVIEWED,
+  PROPOSAL_MAIN_THREAD_KEY,
+  PROPOSAL_UPDATE_HINT
+} from "src/constants";
 
 const DEFAULT_STATE = {
   comments: { byToken: {}, accessTimeByToken: {}, backup: null },
@@ -24,7 +26,8 @@ const calcScoreByComment = (votes) => {
   return votes.sort(olderVotesFirst).reduce((accObj, currentVote) => {
     const id = currentVote.commentid;
     if (!accObj[id] || accObj[id] !== currentVote.vote) {
-      // no vote found or old vote is different than new vote. Vote option is the chosen option
+      // no vote found or old vote is different than new vote. Vote option
+      // is the chosen option.
       return {
         ...accObj,
         [id]: currentVote.vote
@@ -108,16 +111,64 @@ const comments = (state = DEFAULT_STATE, action) =>
               (arrVal, othVal) =>
                 arrVal.signature && arrVal.signaure !== othVal.signaure
             );
+
+            // Find author update ids.
+            const authorUpdateIds = filteredComments
+              .filter(
+                ({ extradatahint }) => extradatahint === PROPOSAL_UPDATE_HINT
+              )
+              .map(({ commentid }) => commentid);
+
+            const sectionIds = [...authorUpdateIds, PROPOSAL_MAIN_THREAD_KEY];
+
+            // Calculate comments tree for each author update to display each
+            // one of them in a separate comments section.
+            const commentsMap = {};
+            let authorUpdateThreads = [];
+            authorUpdateIds.forEach((updateId) => {
+              const authorUpdateTree = calculateAuthorUpdateTree(
+                updateId,
+                filteredComments
+              );
+              authorUpdateThreads = [
+                ...authorUpdateThreads,
+                ...authorUpdateTree
+              ];
+              commentsMap[updateId] = filteredComments.filter(({ commentid }) =>
+                authorUpdateTree.includes(commentid)
+              );
+            });
+            commentsMap[PROPOSAL_MAIN_THREAD_KEY] = filteredComments.filter(
+              ({ commentid }) => !authorUpdateThreads.includes(commentid)
+            );
+
             return compose(
-              set(["comments", "byToken", shortToken], filteredComments),
+              set(["comments", "byToken", shortToken], {
+                sectionIds,
+                comments: commentsMap
+              }),
               set(["comments", "accessTimeByToken", shortToken], accesstime)
             )(state);
           },
           [act.RECEIVE_NEW_COMMENT]: () => {
-            const comment = action.payload;
-            return update(
-              ["comments", "byToken", shortRecordToken(comment.token)],
-              (comments = []) => [...comments, comment]
+            const { sectionId, ...comment } = action.payload;
+            const shortToken = shortRecordToken(comment.token);
+            // If comment's section id is not known then we are dealing
+            // with a new author update and the section id should be
+            // added to the section ids array.
+            const { sectionIds } = state.comments.byToken[shortToken];
+            const isNewSectionId = !sectionIds.includes(sectionId);
+            return compose(
+              update(
+                ["comments", "byToken", shortToken, "comments", sectionId],
+                (comments = []) => [comment, ...comments]
+              ),
+              isNewSectionId
+                ? set(
+                    ["comments", "byToken", shortToken, "sectionIds"],
+                    [sectionId, ...sectionIds]
+                  )
+                : (state) => state
             )(state);
           },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
@@ -128,12 +179,12 @@ const comments = (state = DEFAULT_STATE, action) =>
               commentsUserVote
             )(state);
           },
-          [act.RECEIVE_LIKE_COMMENT]: () => {
-            const { token, vote, commentid } = action.payload;
+          [act.REQUEST_LIKE_COMMENT]: () => {
+            const { token, vote, commentid, sectionId } = action.payload;
             const shortToken = shortRecordToken(token);
             const oldComment = compose(
               find((c) => c.commentid === commentid),
-              get(["comments", "byToken", shortToken])
+              get(["comments", "byToken", shortToken, "comments", sectionId])
             )(state);
             const commentsLikes = state.commentsLikes.byToken[shortToken];
             const oldCommentsVotes = get([
@@ -186,19 +237,21 @@ const comments = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_LIKE_COMMENT_SUCCESS]: () => {
-            const { token, commentid } = action.payload;
+            const { token, commentid, sectionId } = action.payload;
             const shortToken = shortRecordToken(token);
             const { upvotes, downvotes } =
               state.commentsVotes.byToken[shortToken][commentid];
-            return update(["comments", "byToken", shortToken], (comments) =>
-              comments.map((comment) => {
-                if (comment.commentid !== commentid) return comment;
-                return { ...comment, upvotes, downvotes };
-              })
+            return update(
+              ["comments", "byToken", shortToken, "comments", sectionId],
+              (comments) =>
+                comments.map((comment) => {
+                  if (comment.commentid !== commentid) return comment;
+                  return { ...comment, upvotes, downvotes };
+                })
             )(state);
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
-            const { commentid, token } = action.payload;
+            const { commentid, token, sectionId } = action.payload;
             const censorTargetComment = (comment) => {
               if (comment.commentid !== commentid) return comment;
               return {
@@ -209,7 +262,13 @@ const comments = (state = DEFAULT_STATE, action) =>
             };
             return compose(
               update(
-                ["comments", "byToken", shortRecordToken(token)],
+                [
+                  "comments",
+                  "byToken",
+                  shortRecordToken(token),
+                  "comments",
+                  sectionId
+                ],
                 (comments) => comments.map(censorTargetComment)
               )
             )(state);
@@ -226,7 +285,6 @@ const comments = (state = DEFAULT_STATE, action) =>
             }
             return state;
           },
-          [act.RECEIVE_LOGOUT]: () => DEFAULT_STATE,
           [act.RECEIVE_CMS_LOGOUT]: () => DEFAULT_STATE
         }[action.type] || (() => state)
       )();

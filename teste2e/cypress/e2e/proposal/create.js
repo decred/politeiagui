@@ -1,6 +1,6 @@
-import { buildProposal } from "../support/generate";
+import { buildProposal } from "../../support/generate";
 
-describe("Proposals", () => {
+describe("Proposal Create", () => {
   // XXX This test needs changes in the Datepicker and (probably) the Select
   // components, in order to fill the new form fields such as: start & end dates
   // and amount - issue to track <insert issue link>

@@ -20,7 +20,7 @@
   color: var(--text-secondary-color) !important;
 }
 
-.timeLeft {
+.subtitleStatusTag {
   margin-top: 0.5rem;
   color: var(--text-secondary-color) !important;
 }
@@ -133,7 +133,7 @@ span.statusTag > span {
     border-left: 1px solid #1b41b3;
   }
 
-  .timeLeft {
+  .subtitleStatusTag {
     margin-top: 0;
   }
 

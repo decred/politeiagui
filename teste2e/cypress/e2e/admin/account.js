@@ -1,5 +1,5 @@
-import { buildUser } from "../support/generate";
-import * as pki from "../pki";
+import { buildUser } from "../../support/generate";
+import * as pki from "../../pki";
 
 describe("Admin account actions", () => {
   it("Can search users", () => {

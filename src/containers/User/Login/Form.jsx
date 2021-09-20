@@ -28,8 +28,9 @@ const LoginForm = ({
     values,
     { resetForm, setSubmitting, setFieldError }
   ) => {
+    const credentials = { ...values, email: values.email.trim() };
     try {
-      await onLogin({ ...values, email: values.email.trim() });
+      await onLogin(credentials);
       setSubmitting(false);
       resetForm();
       onLoggedIn && onLoggedIn();
@@ -39,11 +40,7 @@ const LoginForm = ({
         handleOpenModal(
           ModalTotpVerify,
           {
-            onVerify: (code) =>
-              onSubmit(
-                { ...values, code },
-                { resetForm, setSubmitting, setFieldError }
-              ),
+            onVerify: (code) => onLogin({ ...credentials, code }),
             onClose: handleCloseModal
           },
           { overlay: true }

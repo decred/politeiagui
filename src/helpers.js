@@ -8,6 +8,7 @@ import map from "lodash/fp/map";
 import splitFp from "lodash/fp/split";
 import reduce from "lodash/fp/reduce";
 import compose from "lodash/fp/compose";
+import uniq from "lodash/fp/uniq";
 import * as pki from "./lib/pki";
 import { sha3_256 } from "js-sha3";
 import { capitalize } from "./utils/strings";
@@ -62,28 +63,12 @@ export const parseReceivedProposalsMap = (proposals) => {
  * @param {Object} proposal
  * @returns {{publishedat: number, censoredat: number, abandonedat: number}} Object with publishedat, censoredat, abandonedat
  */
-const getProposalTimestamps = (proposal, publishedts) => {
-  const { status, timestamp, version } = proposal;
-  let publishedat = 0,
-    censoredat = 0,
-    abandonedat = 0;
-  // publlished but not edited
-  if (status === PROPOSAL_STATUS_PUBLIC && version <= 1) {
-    publishedat = timestamp;
-  }
-  // edited, have to grab published timestamp from metadata
-  if (status === PROPOSAL_STATUS_PUBLIC && version > 1) {
-    publishedat = publishedts;
-  }
-  if (status === PROPOSAL_STATUS_CENSORED) {
-    censoredat = timestamp;
-  }
-  if (status === PROPOSAL_STATUS_ARCHIVED) {
-    abandonedat = timestamp;
-  }
 
-  return { publishedat, censoredat, abandonedat };
-};
+const getProposalTimestamps = (mdByStatus = {}) => ({
+  publishedat: mdByStatus[PROPOSAL_STATUS_PUBLIC]?.timestamp || 0,
+  censoredat: mdByStatus[PROPOSAL_STATUS_CENSORED]?.timestamp || 0,
+  abandonedat: mdByStatus[PROPOSAL_STATUS_ARCHIVED]?.timestamp || 0
+});
 
 // parseProposalMetadata accepts a proposal object parses it's metadata
 // and returns it as object of the form { name, startdate, enddate,
@@ -182,8 +167,7 @@ export const parseRawProposal = (proposal) => {
 
   // get prop timestamps
   const { publishedat, censoredat, abandonedat } = getProposalTimestamps(
-    proposal,
-    usermds.timestamp
+    usermds.byStatus
   );
 
   return {
@@ -600,3 +584,36 @@ export function getAttachmentsFiles(files) {
       ].includes(f.name)
   );
 }
+
+/**
+ * getChildrenComments accepts an array of comments and a subset of comment ids
+ * as parents and returns the ids of the children comments as an array.
+ * @param {Array} comments
+ * @param {Array} parents comment ids
+ * @param {Array} children comment ids
+ */
+const getChildrenComments = (comments, parents) =>
+  comments
+    .filter(({ parentid }) => parents.includes(parentid))
+    .map(({ commentid }) => commentid);
+
+/**
+ * calculateAuthorUpdateTree accepts an array of comments and an author update
+ * id. It calculates the author update thread comment tree then returns
+ * the tree as an sub-array of the original array.
+ * @param {String} authorUpdateId
+ * @param {Array} comments
+ * @returns {Array} array of author update thread comments.
+ */
+export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
+  let authorUpdateTree = [authorUpdateId];
+  let children = getChildrenComments(comments, authorUpdateTree);
+  let allTreeComments = uniq([...authorUpdateTree, ...children]);
+  while (allTreeComments.length > authorUpdateTree.length) {
+    authorUpdateTree = allTreeComments;
+    const parents = [...authorUpdateTree];
+    children = getChildrenComments(comments, parents);
+    allTreeComments = uniq([...authorUpdateTree, ...children]);
+  }
+  return allTreeComments;
+};

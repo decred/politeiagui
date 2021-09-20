@@ -20,6 +20,123 @@ const getTokensByStatusTab = (inventory, currentTab) =>
     : [];
 
 describe("Records list", () => {
+  describe("records and inventory pagination", () => {
+    it("work correct with 0 item in some statuses.", () => {
+      // emulate api
+      cy.middleware("ticketvote.inventory", {
+        authorized: 0,
+        started: 0,
+        unauthorized: 1
+      });
+      cy.middleware("records.records");
+
+      // do testing
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 1);
+      cy.scrollTo("bottom");
+      // wait to see if no requests are done, since inventory is fully fetched
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 1);
+    });
+
+    it("do not lose any status.", () => {
+      // emulate api
+      cy.middleware("ticketvote.inventory", {
+        authorized: 1,
+        started: 1,
+        unauthorized: 1
+      });
+      cy.middleware("records.records");
+
+      // do testing
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 3);
+      cy.scrollTo("bottom");
+      // wait to see if no requests are done, since inventory is fully fetched
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 3);
+    });
+
+    it("scan inventory pages correctly", () => {
+      // emulate api
+      cy.middleware("ticketvote.inventory", {
+        authorized: 20,
+        started: 3,
+        unauthorized: 45
+      });
+      cy.middleware("records.records");
+
+      // do testing
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 5);
+      // 3 started and 2 authorized
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 10);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 15);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 20);
+      cy.scrollTo("bottom");
+      // prepare to fetch 25 items: 3 started, 20 authorized and 2 unauthorized
+      // scan inventory: page 2 of authorized
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 2, status: 2 });
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 25);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 30);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 35);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 40);
+      cy.scrollTo("bottom");
+      // prepare to fetch 45 items: 3 started, 20 authorized and 22 unauthorized
+      // scan inventory: page 2 of unauthorized
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 2, status: 1 });
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 45);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 50);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 55);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 60);
+      cy.scrollTo("bottom");
+      // prepare to fetch 65 items: 3 started, 20 authorized and 42 unauthorized
+      // scan inventory: page 3 of unauthorized
+      cy.wait("@ticketvote.inventory")
+        .its("request.body")
+        .should("deep.eq", { page: 3, status: 1 });
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 65);
+      cy.scrollTo("bottom");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 68);
+      cy.scrollTo("bottom");
+      // wait to see if no requests are done, since inventory is fully fetched
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 68);
+    });
+  });
+
   describe("proposals list", () => {
     beforeEach(() => {
       cy.middleware("ticketvote.inventory", {
@@ -40,37 +157,12 @@ describe("Records list", () => {
       });
       cy.wait("@records.records");
       // each proposal should be rendered accordingly to inventory response
-      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE + 3) // first records batch
+      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE) // first records batch
         .each(([{ id }], position) => {
           const tokens = getTokensByStatusTab(inventory, "Under Review");
           const expectedToken = shortRecordToken(tokens[position]);
           expect(id).to.have.string(expectedToken);
         });
-    });
-    it("can render records and inventory pagination correctly", () => {
-      cy.visit(`/`);
-      cy.wait("@ticketvote.inventory");
-      cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 8);
-      cy.scrollTo("bottom");
-      cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 13);
-      cy.scrollTo("bottom");
-      cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 18);
-      cy.scrollTo("bottom");
-      cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 23);
-      // finished first inventory page
-      cy.scrollTo("bottom");
-      cy.wait("@ticketvote.inventory").its("request.body.page").should("eq", 2);
-      cy.wait("@records.records");
-      // records from second inventory page
-      cy.assertListLengthByTestId("record-title", 28);
-      cy.scrollTo("bottom");
-      // wait to see if no requests are done, since inventory is fully fetched
-      cy.wait(1000);
-      cy.assertListLengthByTestId("record-title", 28);
     });
     it("can switch tabs and load proposals correctly", () => {
       cy.visit("/?tab=approved");
@@ -80,7 +172,7 @@ describe("Records list", () => {
       // navigate to in discussion tab
       cy.findByTestId("tab-0").click();
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", 8);
+      cy.assertListLengthByTestId("record-title", 5);
     });
     it("can list legacy proposals", () => {
       // for approved proposals
@@ -102,7 +194,8 @@ describe("Records list", () => {
       cy.findByTestId("sidebar").should("be.visible");
       cy.viewport("iphone-6");
       cy.findByTestId("sidebar").should("be.hidden");
-      cy.viewport(1000, 500); // sidebar breakpoint
+      // sidebar breakpoint
+      cy.viewport(1000, 500);
       cy.findByTestId("sidebar").should("be.hidden");
       cy.viewport(1001, 500);
       cy.findByTestId("sidebar").should("be.visible");
@@ -137,12 +230,14 @@ describe("Records list", () => {
         inventory = body.unvetted;
       });
       cy.wait("@records.records");
-      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE) // first records batch
-        .each(([{ id }], position) => {
+      // first records batch
+      cy.assertListLengthByTestId("record-title", RECORDS_PAGE_SIZE).each(
+        ([{ id }], position) => {
           const tokens = getTokensByStatusTab(inventory, "Unreviewed");
           const expectedToken = shortRecordToken(tokens[position]);
           expect(id).to.have.string(expectedToken);
-        });
+        }
+      );
     });
     it("can render records and inventory pagination correctly", () => {
       cy.visit("/admin/records");

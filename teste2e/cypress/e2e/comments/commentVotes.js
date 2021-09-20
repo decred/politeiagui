@@ -17,9 +17,9 @@ describe("Comments Votes", () => {
       cy.middleware("comments.vote");
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
-      cy.wait("@inventory").then(({ response: { body } }) => {
-        token = body.vetted.unauthorized[0];
-      });
+      cy.wait("@inventory").then(
+        ({ response: { body } }) => (token = body.vetted.unauthorized[0])
+      );
     });
     it("should submit comments votes successfully", () => {
       let upvotes, downvotes;
@@ -28,9 +28,7 @@ describe("Comments Votes", () => {
       // like action
       cy.findAllByTestId("score-like")
         .first()
-        .then((score) => {
-          upvotes = score[0].innerText;
-        });
+        .then((score) => (upvotes = score[0].innerText));
       cy.findAllByTestId("like-btn").first().click();
       cy.wait("@comments.vote");
       cy.findAllByTestId("score-like")
@@ -43,11 +41,10 @@ describe("Comments Votes", () => {
       // dislike action
       cy.findAllByTestId("score-dislike")
         .first()
-        .then((score) => {
-          downvotes = score[0].innerText;
-        });
+        .then((score) => (downvotes = score[0].innerText));
       cy.findAllByTestId("dislike-btn").first().click();
       cy.wait("@comments.vote");
+      // check if downvotes count has increased
       cy.findAllByTestId("score-dislike")
         .first()
         .then((score) => {
@@ -55,7 +52,7 @@ describe("Comments Votes", () => {
           expect(Number(newdown)).to.equal(Number(downvotes) + 1);
           downvotes = newdown;
         });
-      // checks if like vote count has decreased
+      // check if upvotes count has decreased
       cy.findAllByTestId("score-like")
         .first()
         .then((score) => {
@@ -69,9 +66,7 @@ describe("Comments Votes", () => {
       cy.wait("@comments.comments");
       cy.findAllByTestId("score-like")
         .first()
-        .then((score) => {
-          upvotes = score[0].innerText;
-        });
+        .then((score) => (upvotes = score[0].innerText));
       cy.route("POST", "api/comments/v1/vote").as("vote");
       cy.findAllByTestId("like-btn").first().dblclick();
       cy.wait("@vote");
@@ -88,12 +83,12 @@ describe("Comments Votes", () => {
     let token;
     beforeEach(() => {
       cy.middleware("comments.comments", 50);
-      cy.middleware("comments.vote", { isError: true, throttleKbps: 50 });
+      cy.middleware("comments.vote", { isError: true, delay: 3000 });
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
-      cy.wait("@inventory").then(({ response: { body } }) => {
-        token = body.vetted.unauthorized[0];
-      });
+      cy.wait("@inventory").then(
+        ({ response: { body } }) => (token = body.vetted.unauthorized[0])
+      );
     });
     it("should display error message", () => {
       cy.visit(`/record/${shortRecordToken(token)}`);
@@ -106,13 +101,10 @@ describe("Comments Votes", () => {
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.findAllByTestId("score-like")
         .first()
-        .then((score) => {
-          upvotes = score[0].innerText;
-          console.log(`${Number(upvotes) + 1}`);
-        });
+        .then((score) => (upvotes = score[0].innerText));
       cy.wait(1000);
       cy.findAllByTestId("like-btn").first().click();
-      cy.wait(100);
+      cy.wait(1000);
       cy.findAllByTestId("score-like")
         .first()
         .then((score) => {

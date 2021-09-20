@@ -16,7 +16,8 @@ const commandTypes = {
   link: "link",
   quote: "quote",
   code: "code",
-  image: "image"
+  image: "image",
+  saveImage: "save-image"
 };
 
 export const toolbarCommands = (allowImgs) =>
@@ -91,6 +92,11 @@ export const commands = [
     command: commandTypes.numberedList,
     tooltipText: "Add a numbered list",
     Icon: NumberedListSVG
+  },
+  {
+    command: commandTypes.saveImage,
+    tooltipText: "Add an image",
+    Icon: ImageSVG
   }
 ];
 

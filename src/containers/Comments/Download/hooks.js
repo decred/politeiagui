@@ -27,7 +27,8 @@ export function useDownloadComments(token) {
     () => sel.makeGetRecordComments(token),
     [token]
   );
-  const comments = useSelector(commentsSelector);
+  const allCommentsBySection = useSelector(commentsSelector);
+  const comments = Object.values(allCommentsBySection).flat();
   const { onFetchCommentsTimestamps } = useTimestamps();
 
   return { comments, onFetchCommentsTimestamps };
@@ -42,7 +43,8 @@ export function useDownloadCommentsTimestamps(recordToken) {
     () => sel.makeGetRecordComments(recordToken),
     [recordToken]
   );
-  const comments = useSelector(commentsSelector);
+  const allCommentsBySection = useSelector(commentsSelector);
+  const comments = Object.values(allCommentsBySection).flat();
   const commentsLength = comments?.length || 0;
   const multiPage = commentsLength > TIMESTAMPS_PAGE_SIZE;
   const onFetchCommentsTimestamps = useAction(act.onFetchCommentsTimestamps);
