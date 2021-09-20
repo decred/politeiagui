@@ -1,5 +1,5 @@
-import { buildProposal } from "../support/generate";
-import { shortRecordToken, PROPOSAL_VOTING_APPROVED } from "../utils";
+import { buildProposal } from "../../support/generate";
+import { shortRecordToken, PROPOSAL_VOTING_APPROVED } from "../../utils";
 
 describe("Admin proposals actions", () => {
   it("Should allow admins to approve propsoals", () => {

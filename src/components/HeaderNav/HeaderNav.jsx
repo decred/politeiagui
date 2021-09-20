@@ -82,6 +82,7 @@ const HeaderNav = ({ history }) => {
 
   return user && username ? (
     <div
+      data-testid="header-nav"
       className={classNames(
         styles.loggedInContainer,
         !enableCredits && styles.noCreditsContainer

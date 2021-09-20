@@ -71,7 +71,7 @@ const Comment = ({
   return (
     <div
       className={classNames(
-        styles.commentWrapper,
+        styles.comment,
         highlightAsNew && styles.highlightAsNew,
         className
       )}

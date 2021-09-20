@@ -56,8 +56,11 @@ export const PROPOSAL_USER_FILTER_DRAFT_PROPOSALS = 2;
 
 export const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 export const VOTE_METADATA_FILENAME = "votemetadata.json";
+export const PROPOSAL_UPDATE_HINT = "proposalupdate";
 
 export const PROPOSAL_AMOUNT_UNIT = "$";
+
+export const PROPOSAL_MAIN_THREAD_KEY = "main";
 
 export const USER_METADATA_PLUGIN = "usermd";
 

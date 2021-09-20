@@ -41,7 +41,6 @@ export const middlewares = {
         });
       }
     }),
-  // XXX revert when 2549 is in!
   summaries: ({ token, status }) =>
     cy.intercept("/api/ticketvote/v1/summaries", (req) => {
       req.continue((res) => {

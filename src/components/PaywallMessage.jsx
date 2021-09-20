@@ -24,7 +24,10 @@ const PaywallMessage = ({ wrapper, ...props }) => {
       <>
         <WrapperComponent {...props}>
           <StaticMarkdown contentName={paywallContent} />
-          <Button onClick={openPaywallModal} className="margin-top-m">
+          <Button
+            onClick={openPaywallModal}
+            className="margin-top-m"
+            data-testid="registration-fee-btn">
             Pay the registration fee
           </Button>
         </WrapperComponent>
