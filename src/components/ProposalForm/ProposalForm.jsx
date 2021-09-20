@@ -400,7 +400,7 @@ const ProposalForm = React.memo(function ProposalForm({
       )}
       {hasError && (
         <Row>
-          <Message 
+          <Message
             id="errorMessage"
             className={classNames(styles.errorRow, "margin-bottom-m")}
             kind="error">
