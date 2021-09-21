@@ -211,7 +211,7 @@ const ProposalForm = React.memo(function ProposalForm({
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
   const hasError = errors && errors.global;
-  useScrollTo("errorMessage", hasError);
+  useScrollTo("record-submission-error-message", hasError);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -401,7 +401,7 @@ const ProposalForm = React.memo(function ProposalForm({
       {hasError && (
         <Row>
           <Message
-            id="errorMessage"
+            id="record-submission-error-message"
             className={classNames(styles.errorRow, "margin-bottom-m")}
             kind="error">
             {errors.global.toString()}
