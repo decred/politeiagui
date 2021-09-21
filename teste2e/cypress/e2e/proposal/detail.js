@@ -118,8 +118,10 @@ describe("Record Details", () => {
         cy.userLogout(admin.username);
         cy.visit(`/record/${shortToken}`);
         cy.wait("@details");
+        cy.wait(1000);
         cy.findByTestId("wayt-login-button").click();
         cy.typeLoginModal(admin);
+        cy.wait("@details");
         cy.findByTestId("markdown-wrapper").should("exist");
         cy.get("#commentArea").should("exist");
       });

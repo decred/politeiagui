@@ -182,10 +182,11 @@ export function useProposal(token, threadParentID) {
     proposals
   );
 
-  const onReloadProposalDetails = useCallback(
-    () => send("RETRY", { status: "idle" }),
-    [send]
-  );
+  const onReloadProposalDetails = () => send("RETRY", { status: "idle" });
+  // const onReloadProposalDetails = useCallback(
+  //   () => send("RETRY", { status: "idle" }),
+  //   [send]
+  // );
   const proposalToken = getProposalToken(proposalWithLinks);
   const proposalState = proposalWithLinks?.state;
 
