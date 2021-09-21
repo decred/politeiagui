@@ -273,4 +273,64 @@ describe("Records list", () => {
       cy.assertListLengthByTestId("record-title", 10);
     });
   });
+
+  describe("Big screens and inventory length multiple of proposals page size", () => {
+    beforeEach(() => {
+      cy.viewport(1500, 1500);
+    });
+    it("can render under review records with 5 autorized tokens", () => {
+      // setup
+      cy.middleware("ticketvote.inventory", {
+        authorized: 5,
+        started: 0,
+        unauthorized: 13
+      });
+      cy.middleware("records.records");
+      // test
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      // Should trigger at least 2 records batch requests
+      cy.wait("@records.records");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 10);
+      cy.scrollTo("bottom");
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 15);
+    });
+    it("can render under review records with 5 started tokens", () => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 0,
+        started: 5,
+        unauthorized: 13
+      });
+      cy.middleware("records.records");
+    });
+    it("can render under review records with 5 tokens started and authorized", () => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 5,
+        started: 5,
+        unauthorized: 13
+      });
+      cy.middleware("records.records");
+    });
+    it("can render 10 authorized proposals", () => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 10,
+        started: 0,
+        unauthorized: 13
+      });
+      cy.middleware("records.records");
+    });
+    afterEach(() => {
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      // Should trigger at least 2 records batch requests
+      cy.wait("@records.records");
+      cy.wait("@records.records");
+      cy.assertListLengthByTestId("record-title", 10);
+      cy.scrollTo("bottom");
+      cy.wait(1000);
+      cy.assertListLengthByTestId("record-title", 15);
+    });
+  });
 });
