@@ -46,6 +46,7 @@ import {
 import { convertObjectToUnixTimestamp } from "src/helpers";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
+import useScrollTo from "src/hooks/utils/useScrollTo";
 import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
 
@@ -209,6 +210,9 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
+  const hasError = errors && errors.global;
+  useScrollTo("record-submission-error-message", hasError);
+
   return (
     <form onSubmit={handleSubmit}>
       <Message kind="warning" className="margin-bottom-m">
@@ -216,11 +220,6 @@ const ProposalForm = React.memo(function ProposalForm({
         something goes wrong. We recommend drafting the content offline then
         using the editor to submit the final version.
       </Message>
-      {errors && errors.global && (
-        <Message className="margin-bottom-m" kind="error">
-          {errors.global.toString()}
-        </Message>
-      )}
       <Row
         noMargin
         wrap={smallTablet}
@@ -398,6 +397,16 @@ const ProposalForm = React.memo(function ProposalForm({
             />
           </Row>
         </>
+      )}
+      {hasError && (
+        <Row>
+          <Message
+            id="record-submission-error-message"
+            className={classNames(styles.errorRow, "margin-bottom-m")}
+            kind="error">
+            {errors.global.toString()}
+          </Message>
+        </Row>
       )}
     </form>
   );
