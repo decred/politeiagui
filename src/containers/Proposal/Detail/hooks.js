@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
@@ -182,6 +182,11 @@ export function useProposal(token, threadParentID) {
     proposals
   );
 
+  const onReloadProposalDetails = useCallback(
+    () => send("RETRY", { status: "idle" }),
+    [send]
+  );
+
   const proposalToken = getProposalToken(proposalWithLinks);
   const proposalState = proposalWithLinks?.state;
 
@@ -206,6 +211,7 @@ export function useProposal(token, threadParentID) {
     onSubmitComment,
     commentsError,
     currentUser,
-    commentsLoading
+    commentsLoading,
+    onReloadProposalDetails
   };
 }

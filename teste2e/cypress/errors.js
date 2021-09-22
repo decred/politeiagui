@@ -98,7 +98,7 @@ RecordsUserError.prototype = new Error();
 function CommentsUserError(code) {
   const errorMap = {
     1: "Invalid inputs for request",
-    2: "Unvetted records can only be voted by an admin or the author",
+    2: "You must be an author or admin to perform this action",
     3: "The user public key is not active",
     4: "The provided signature was invalid for this comment",
     5: "The record has an invalid state",

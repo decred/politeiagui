@@ -69,11 +69,6 @@ describe("Record Details", () => {
           .and("have.length", 2);
         // assert description existence
         cy.get("[data-testid='markdown-wrapper']").should("exist");
-        // assert downloads existence
-        cy.get("[data-testid='record-links']").click();
-        cy.get("[data-testid='record-links']")
-          .and("include.text", "Proposal Timestamps")
-          .and("include.text", "Proposal Bundle");
         // assert metadata existence
         cy.get("[data-testid='record-metadata']")
           .should("include.text", "Domain")
@@ -86,6 +81,49 @@ describe("Record Details", () => {
       it("should dislpay not found message for nonexistent proposals", () => {
         cy.visit("/record/invalidtoken");
         cy.wait("@details").its("response.statusCode").should("eq", 400);
+      });
+    });
+    describe("user proposals actions", () => {
+      const admin = {
+        email: "adminuser@example.com",
+        username: "adminuser",
+        password: "password"
+      };
+      beforeEach(() => {
+        cy.login(admin);
+        cy.visit("/admin/records");
+        cy.wait("@records").then(({ response: { body } }) => {
+          const { records } = body;
+          shortToken = getShortProposalToken(records);
+          expect(shortToken, "You should have at least one unvetted record.").to
+            .exist;
+        });
+      });
+      it("should be able to logout from unvetted proposal details page", () => {
+        cy.middleware("comments.comments", 10, 1);
+        cy.visit(`/record/${shortToken}`);
+        cy.wait("@details");
+        cy.findByTestId("record-header").should("be.visible");
+        cy.findByTestId("markdown-wrapper").should("exist");
+        cy.userLogout(admin.username);
+        cy.wait(2000);
+        // assert that proposal files were removed from store
+        cy.findByTestId("record-header").should("be.visible");
+        cy.findByTestId("markdown-wrapper").should("not.exist");
+        cy.get("#commentArea").should("not.exist");
+      });
+      it("should render unvetted proposal details after admin/author login", () => {
+        cy.visit("/");
+        cy.wait("@records");
+        cy.userLogout(admin.username);
+        cy.visit(`/record/${shortToken}`);
+        cy.wait("@details");
+        cy.wait(1000);
+        cy.findByTestId("wayt-login-button").click();
+        cy.typeLoginModal(admin);
+        cy.wait("@details");
+        cy.findByTestId("markdown-wrapper").should("exist");
+        cy.get("#commentArea").should("exist");
       });
     });
   });

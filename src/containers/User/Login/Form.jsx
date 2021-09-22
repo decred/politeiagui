@@ -120,7 +120,11 @@ const LoginForm = ({
             />
             <Actions>
               <Link to="/user/request-reset-password">Reset Password</Link>
-              <Button loading={isSubmitting} kind="primary" type="submit">
+              <Button
+                loading={isSubmitting}
+                kind="primary"
+                type="submit"
+                data-testid="login-form-button">
                 Login
               </Button>
             </Actions>

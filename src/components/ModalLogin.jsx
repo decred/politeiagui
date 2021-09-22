@@ -12,6 +12,7 @@ const ModalLogin = ({ title = "Login", onLoggedIn, onClose, ...props }) => {
       iconType="info"
       data-testid="modal-login"
       iconSize="lg"
+      data-testid="modal-login"
       {...props}
       contentStyle={{ width: "100%" }}
       titleStyle={{ paddingRight: "4rem" }}>

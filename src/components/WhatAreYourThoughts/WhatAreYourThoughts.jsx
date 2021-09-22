@@ -18,7 +18,10 @@ const WhatAreYourThoughts = ({ onLoginClick, onSignupClick }) => {
       </Text>
       <div className={styles.buttonsWrapper}>
         {onLoginClick && (
-          <Button kind="secondary" onClick={onLoginClick}>
+          <Button
+            kind="secondary"
+            onClick={onLoginClick}
+            data-testid="wayt-login-button">
             Log in
           </Button>
         )}
