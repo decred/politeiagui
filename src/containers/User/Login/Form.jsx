@@ -37,10 +37,14 @@ const LoginForm = ({
     } catch (e) {
       setSubmitting(false);
       if (e.errorcode === TOTP_MISSING_LOGIN_ERROR) {
-        handleOpenModal(ModalTotpVerify, {
-          onVerify: (code) => onLogin({ ...credentials, code }),
-          onClose: handleCloseModal
-        });
+        handleOpenModal(
+          ModalTotpVerify,
+          {
+            onVerify: (code) => onLogin({ ...credentials, code }),
+            onClose: handleCloseModal
+          },
+          { overlay: true }
+        );
         return;
       }
       setFieldError("global", e);

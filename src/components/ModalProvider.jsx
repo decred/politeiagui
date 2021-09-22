@@ -1,4 +1,5 @@
 import React, { useState, createContext } from "react";
+import isEmpty from "lodash/fp/isEmpty";
 
 export const modalContext = createContext({ component: () => null, props: {} });
 
@@ -10,29 +11,36 @@ const initialState = {
 };
 
 const ModalProvider = ({ children }) => {
-  const [modal, setModal] = useState(initialState);
-  const handleOpenModal = function handleOpenModal(modal, props = {}) {
-    setModal({
-      component: modal,
-      props: {
-        show: true,
-        ...props
-      }
-    });
+  const [modalStack] = useState([]);
+  const [currentModal, setModal] = useState(initialState);
+  const handleOpenModal = function handleOpenModal(
+    modal,
+    props = {},
+    { overlay } = {}
+  ) {
+    const newModal = { component: modal, props: { show: true, ...props } };
+    if (isEmpty(modalStack) || overlay) {
+      modalStack.push(newModal);
+      setModal(newModal);
+    } else if (!currentModal || !currentModal.props.show) {
+      setModal(newModal);
+    }
   };
 
   const handleCloseModal = function handleCloseModal() {
-    setModal(initialState);
+    modalStack.pop();
+    const previousModal = modalStack.pop();
+    setModal(previousModal || initialState);
   };
 
   const props = {
     onClose: handleCloseModal,
-    ...modal.props
+    ...currentModal.props
   };
   return (
     <modalContext.Provider value={[handleOpenModal, handleCloseModal]}>
       {children}
-      <modal.component {...props} />
+      <currentModal.component {...props} />
     </modalContext.Provider>
   );
 };

@@ -86,7 +86,8 @@ function RecordsUserError(code, context) {
     17: "The record status is invalid",
     18: `The status transition is invalid: ${context}`,
     19: "The status reason was not found",
-    20: "The number of requested record tokens exceeds the page size policy."
+    20: "The number of requested record tokens exceeds the page size policy.",
+    29: "You must be logged in to perform this action"
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, APIRecords);
@@ -364,10 +365,3 @@ function TicketvotePluginError(code, context) {
 }
 
 TicketvotePluginError.prototype = new Error();
-
-// Helpers
-export function isAPIWww(url) {
-  if (url.startsWith("/api")) return true;
-  const apiType = new URL(url).pathname.split("/")[2];
-  return apiType === APIWww;
-}

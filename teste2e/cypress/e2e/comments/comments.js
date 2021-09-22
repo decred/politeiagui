@@ -95,3 +95,29 @@ describe("User comments", () => {
     );
   });
 });
+
+describe("Failed comments", () => {
+  let token = "";
+  beforeEach(() => {
+    const user = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    cy.login(user);
+    cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
+    cy.visit("/");
+    cy.wait("@inventory").then(({ response: { body } }) => {
+      token = body.vetted.unauthorized[0];
+    });
+  });
+  it("should display login modal when commenting with an expired user session", () => {
+    cy.middleware("comments.new", { errorCode: 403 });
+    cy.wait(1000);
+    cy.visit(`/record/${shortRecordToken(token)}`);
+    cy.findByTestId(/text-area/i).type("new comment");
+    cy.findByTestId(/comment-submit-button/i).click();
+    cy.wait("@comments.new");
+    cy.findByTestId("modal-login").should("exist");
+  });
+});

@@ -8,10 +8,6 @@ describe("test app selector", () => {
     );
   });
 
-  it("test selector getCsrfIsNeeded", () => {
-    expect(sel.getCsrfIsNeeded(MOCK_STATE)).toBeTruthy();
-  });
-
   it("test selector identityImportSuccess", () => {
     expect(sel.identityImportSuccess(MOCK_STATE)).toEqual(
       MOCK_STATE.app.identityImportResult.successMsg

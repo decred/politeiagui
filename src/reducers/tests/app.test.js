@@ -103,7 +103,6 @@ describe("test app reducer", () => {
   test("correctly test reducers that only sets payload to informed key", () => {
     const reducers = [
       { action: act.LOAD_DRAFT_PROPOSALS, key: "draftProposals" },
-      { action: act.CSRF_NEEDED, key: "csrfIsNeeded" },
       { action: act.SHOULD_AUTO_VERIFY_KEY, key: "shouldVerifyKey" },
       { action: act.IDENTITY_IMPORTED, key: "identityImportResult" },
       {
@@ -120,5 +119,14 @@ describe("test app reducer", () => {
       };
       assertKeyEqualsPayload({}, act, obj.key);
     });
+  });
+
+  test("correctly deletes csrf token when required", () => {
+    const action = {
+      type: act.CSRF_NEEDED,
+      payload: { data: "any" },
+      error: false
+    };
+    expect(app({ init: {} }, action)).toEqual({ init: { csrfToken: null } });
   });
 });

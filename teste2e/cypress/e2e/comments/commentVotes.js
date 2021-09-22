@@ -83,7 +83,6 @@ describe("Comments Votes", () => {
     let token;
     beforeEach(() => {
       cy.middleware("comments.comments", 50);
-      cy.middleware("comments.vote", { isError: true, delay: 3000 });
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
       cy.wait("@inventory").then(
@@ -91,12 +90,22 @@ describe("Comments Votes", () => {
       );
     });
     it("should display error message", () => {
+      cy.middleware("comments.vote", {
+        errorCode: 10,
+        statusCode: 400,
+        delay: 3000
+      });
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.findByText(/Error/).should("not.exist");
       cy.findAllByTestId("dislike-btn").first().click();
       cy.findByText(/Error/).should("exist");
     });
     it("should reset votes count on error", () => {
+      cy.middleware("comments.vote", {
+        errorCode: 10,
+        statusCode: 400,
+        delay: 3000
+      });
       let upvotes;
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.findAllByTestId("score-like")
@@ -119,6 +128,13 @@ describe("Comments Votes", () => {
           const newup = score[0].innerText;
           expect(Number(newup)).to.equal(Number(upvotes));
         });
+    });
+    it("should display login modal when voting with an expired user session", () => {
+      cy.middleware("comments.vote", { statusCode: 403 });
+      cy.visit(`/record/${shortRecordToken(token)}`);
+      cy.findAllByTestId("like-btn").first().click();
+      cy.wait(1000);
+      cy.findByTestId("modal-login").should("exist");
     });
   });
 });

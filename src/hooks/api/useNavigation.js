@@ -7,6 +7,5 @@ export default function useNavigation() {
   const isCMS = useSelector(sel.isCMS);
   const username = user && user.username;
   const onLogout = useAction(act.onLogout);
-  const handleLogout = useAction(act.handleLogout);
-  return { user, username, onLogout, handleLogout, isCMS };
+  return { user, username, onLogout, isCMS };
 }

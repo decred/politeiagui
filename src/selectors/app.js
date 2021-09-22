@@ -68,9 +68,6 @@ export const resolveEditUserValues = (prefs) => {
   };
 };
 
-export const getCsrfIsNeeded = (state) =>
-  state.app ? state.app.csrfIsNeeded : null;
-
 export const shouldAutoVerifyKey = (state) => state.app.shouldVerifyKey;
 
 export const identityImportSuccess = (state) =>

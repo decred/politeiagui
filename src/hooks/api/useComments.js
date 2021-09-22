@@ -6,6 +6,8 @@ import * as act from "src/actions";
 import { useSelector, useAction } from "src/redux";
 import { useLoaderContext } from "src/containers/Loader";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
+import ModalLogin from "src/components/ModalLogin";
+import useModalContext from "src/hooks/utils/useModalContext";
 
 export default function useComments(
   recordToken,
@@ -15,6 +17,7 @@ export default function useComments(
 ) {
   const isSingleThread = !!threadParentID;
   const { enableCommentVote, recordType, constants } = useConfig();
+  const [handleOpenModal, handleCloseModal] = useModalContext();
 
   const errorSelector = or(
     sel.apiProposalCommentsError,
@@ -110,6 +113,14 @@ export default function useComments(
     [onFetchLikes, needsToFetchCommentsLikes, recordToken, userid]
   );
 
+  const openLoginModal = useCallback(() => {
+    handleOpenModal(ModalLogin, {
+      onLoggedIn: handleCloseModal,
+      onClose: handleCloseModal,
+      title: "Your session has expired. Please log in again"
+    });
+  }, [handleOpenModal, handleCloseModal]);
+
   const onCommentVote = useCallback(
     (commentID, action, token) => {
       onCommentVoteAction(
@@ -119,9 +130,13 @@ export default function useComments(
         action,
         proposalState,
         sectionId
-      );
+      ).catch((e) => {
+        if (e.statusCode === 403) {
+          openLoginModal();
+        }
+      });
     },
-    [onCommentVoteAction, userid, proposalState, sectionId]
+    [onCommentVoteAction, userid, proposalState, sectionId, openLoginModal]
   );
 
   const getCommentLikeOption = useCallback(
