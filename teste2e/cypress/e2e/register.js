@@ -19,4 +19,21 @@ describe("Registration", () => {
       /Please check your inbox to verify your registration/i
     ).should("exist");
   });
+  it("can pay the registration fee", () => {
+    const unpaidUser = {
+      email: "user3@example.com",
+      password: "password"
+    };
+    cy.login(unpaidUser);
+    cy.visit("/");
+    cy.findByTestId("registration-fee-btn").click();
+    cy.findByTestId("payment-component").should("be.visible");
+    cy.middleware("users.payments.registration");
+    cy.middleware("users.payments.paywall");
+    cy.wait("@users.payments.registration", { timeout: 10000 });
+    cy.findByTestId("payment-status-tag")
+      .should("be.visible")
+      .children()
+      .should("have.text", "Confirmed");
+  });
 });

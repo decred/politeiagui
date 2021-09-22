@@ -12,9 +12,16 @@ const getDigitsArrayFromCode = (code = "", length) => {
   return newDigits;
 };
 
-const DigitsInput = ({ length, onChange, className, code, tabIndex }) => {
+const DigitsInput = ({
+  length,
+  onChange,
+  className,
+  code,
+  tabIndex,
+  autoFocus
+}) => {
   const [digits, setDigits] = useState(getDigitsArrayFromCode(code, length));
-  const [focused, setFocused] = useState(false);
+  const [focused, setFocused] = useState();
   const inputRef = useRef(null);
 
   const handleChangeDigit = (e) => {
@@ -36,17 +43,28 @@ const DigitsInput = ({ length, onChange, className, code, tabIndex }) => {
     inputRef.current.focus();
   };
 
+  // Both useEffects are used to trigger the input focus
+  // on render because useEffect does not recognize changes
+  // for references, therefore, inputRef cannot be used as
+  // a dependency
+  useEffect(() => {
+    focused && inputRef.current.focus();
+  }, [focused]);
+
+  useEffect(() => {
+    setFocused(autoFocus);
+  }, [autoFocus]);
+
   return (
     <>
       <input
         type="text"
         className={styles.mainInput}
-        autoFocus
         onChange={handleChangeDigit}
         value={digits.join("")}
         ref={inputRef}
         onBlur={() => {
-          setFocused(false);
+          !autoFocus && setFocused(false);
         }}
       />
       <div
@@ -81,14 +99,16 @@ DigitsInput.propTypes = {
   onChange: PropTypes.func,
   className: PropTypes.string,
   code: PropTypes.string,
-  tabIndex: PropTypes.number
+  tabIndex: PropTypes.number,
+  autoFocus: PropTypes.bool
 };
 
 DigitsInput.defaultProps = {
   tabIndex: 1,
   length: 6,
   onChange: () => {},
-  onFill: () => {}
+  onFill: () => {},
+  autoFocus: false
 };
 
 export default DigitsInput;

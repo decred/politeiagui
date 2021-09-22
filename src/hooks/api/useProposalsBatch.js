@@ -155,8 +155,7 @@ export default function useProposalsBatch({
     actions: {
       initial: () => send(START),
       start: () => {
-        if (remainingTokens.length >= proposalPageSize) return send(VERIFY);
-
+        if (remainingTokens.length > proposalPageSize) return send(VERIFY);
         // If remaining tokens length is smaller than proposal page size.
         // Find more tokens from inventory or scan from the next status
 
@@ -164,7 +163,8 @@ export default function useProposalsBatch({
         // there are no tokens to be fetched from the next page
         const scanNextStatus =
           initializedInventory &&
-          !(tokens.length % INVENTORY_PAGE_SIZE === 0 && tokens.length > 0);
+          (!(tokens.length % INVENTORY_PAGE_SIZE === 0 && tokens.length > 0) ||
+            remainingTokens.length === proposalPageSize);
         if (scanNextStatus) {
           const { index, tokens } = scanNextStatusTokens(
             statusIndex + 1,
@@ -198,12 +198,19 @@ export default function useProposalsBatch({
             const tokens = [...newTokens, ...remainingTokens];
             setRemainingTokens(tokens);
 
-            // Go to the next status when the remaining tokens still be smaller
-            // than proposal page size and current status is not the last one.
-            if (
+            // Means the current batch request accepts more tokens than
+            // the current amount.
+            const needsToCompletePaginationBatch =
               tokens.length < proposalPageSize &&
-              statusIndex + 1 < currentStatuses.length
-            ) {
+              statusIndex + 1 < currentStatuses.length;
+
+            // can scan more tokens from next status list in order to
+            // populate the remainingTokens array and don't lose any token
+            const needsNextStatusScan =
+              tokens.length === proposalPageSize ||
+              needsToCompletePaginationBatch;
+
+            if (needsNextStatusScan) {
               const nextIndex = statusIndex + 1;
               const nextStatus = currentStatuses[nextIndex];
               const nextStatusTokens = getUnfetchedTokens(
@@ -336,10 +343,11 @@ export default function useProposalsBatch({
     ),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,
+    // loading is true when fetching cycle is running and there are no
+    // proposals fetched to avoid flickering at starting.
     loading:
       state.loading ||
       (!values(proposals).length && statusIndex + 1 < voteStatuses?.length),
-    // loading return true when fetching cycle is running and there are no proposals fetched to avoid flickering at starting
     verifying: state.verifying,
     onRestartMachine,
     onFetchMoreProposals,

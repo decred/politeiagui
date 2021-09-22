@@ -30,12 +30,12 @@ export const middlewares = {
       )(0);
       req.reply({ body: { comments } });
     }),
-  vote: ({ isError, throttleKbps = 1000000 } = {}) =>
+  vote: ({ isError, delay = 0 } = {}) =>
     cy.intercept("/api/comments/v1/vote", (req) => {
       req.reply({
         body: isError ? { errorcode: 10, pluginid: "comments" } : {},
         statusCode: isError ? 400 : 200,
-        throttleKbps
+        delay: delay
       });
     })
 };

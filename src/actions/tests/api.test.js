@@ -622,7 +622,8 @@ describe("test api actions (actions/api.js)", () => {
     const keys = await pki.generateKeys(FAKE_USER.id);
     await pki.loadKeys(FAKE_USER.id, keys);
 
-    // this needs a custom assertion for success response as the common one doesn't work for this case
+    // this needs a custom assertion for success response as the common
+    // one doesn't work for this case.
     setPostSuccessResponse(path);
     const store = getMockedStore();
     await store.dispatch(api.onSubmitComment.apply(null, params));
@@ -659,12 +660,13 @@ describe("test api actions (actions/api.js)", () => {
     //const down_action = -1;
     const params = [FAKE_USER.id, FAKE_PROPOSAL_TOKEN, commentid, up_action];
 
-    // this needs a custom assertion for success response as the common one doesn't work for this case
+    // this needs a custom assertion for success response as the common one
+    // doesn't work for this case.
     setPostSuccessResponse(path);
     const store = getMockedStore();
     await store.dispatch(api.onCommentVote.apply(null, params));
     const dispatchedActions = store.getActions();
-    expect(dispatchedActions[0].type).toEqual(act.RECEIVE_LIKE_COMMENT);
+    expect(dispatchedActions[0].type).toEqual(act.REQUEST_LIKE_COMMENT);
     expect(dispatchedActions[1].type).toEqual(act.RECEIVE_LIKE_COMMENT_SUCCESS);
 
     const keys = await pki.generateKeys(FAKE_USER.id);
@@ -678,7 +680,7 @@ describe("test api actions (actions/api.js)", () => {
         {
           error: false,
           payload: { commentid, token: FAKE_PROPOSAL_TOKEN, vote: up_action },
-          type: act.RECEIVE_LIKE_COMMENT
+          type: act.REQUEST_LIKE_COMMENT
         },
         {
           error: true,

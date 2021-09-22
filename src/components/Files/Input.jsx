@@ -5,7 +5,7 @@ import { getFormattedFiles } from "./helpers";
 const FilesInput = ({ onChange, children, acceptedFiles }) => {
   function handleFilesChange(e, files) {
     const formattedFiles = getFormattedFiles(files);
-    onChange(formattedFiles);
+    onChange(formattedFiles, files);
   }
 
   return (

@@ -46,6 +46,7 @@ const VerifyTotp = ({
           className={inputClassName}
           tabIndex={tabIndex}
           code={code}
+          autoFocus={true}
         />
         {extended && (
           <Button
