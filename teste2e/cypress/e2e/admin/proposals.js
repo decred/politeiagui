@@ -130,7 +130,9 @@ describe("Admin proposals actions", () => {
           .should("be.visible")
           .click();
         cy.wait("@confirmAuthorizeVote");
-        cy.findByTestId("close-confirm-msg").should("be.visible").click();
+        cy.findByTestId("modal-confirm-success-msg")
+          .should("be.visible")
+          .click();
       }
     );
   });

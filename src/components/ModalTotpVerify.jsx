@@ -21,7 +21,10 @@ const ModalTotpVerify = ({ show, onClose, onVerify }) => {
     <Modal show={show} onClose={onClose} title="Verify 2FA Code">
       <>
         {error && (
-          <Message kind="error" className="margin-bottom-m">
+          <Message
+            kind="error"
+            data-testid="modal-totp-verify-error"
+            className="margin-bottom-m">
             {error.toString()}
           </Message>
         )}

@@ -59,6 +59,7 @@ const DigitsInput = ({
     <>
       <input
         type="text"
+        data-testid="digits-input"
         className={styles.mainInput}
         onChange={handleChangeDigit}
         value={digits.join("")}

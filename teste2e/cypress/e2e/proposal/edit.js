@@ -83,7 +83,7 @@ describe("Proposal Edit", () => {
         cy.wait("@authorizeVote", { timeout: 3000 })
           .its("status")
           .should("eq", 200);
-        cy.findByTestId(/close-confirm-msg/i).click();
+        cy.findByTestId(/modal-confirm-success-msg/i).click();
         cy.findByTestId(/record-edit-button/i).should(
           "have.css",
           "pointer-events",
