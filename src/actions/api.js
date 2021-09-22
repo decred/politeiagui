@@ -1072,6 +1072,7 @@ export const onCommentVote = (
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
+        throw error;
       });
   });
 

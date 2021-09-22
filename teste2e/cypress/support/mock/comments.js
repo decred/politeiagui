@@ -32,13 +32,20 @@ export const middlewares = {
       )(0);
       req.reply({ body: { comments } });
     }),
-  vote: ({ isError, delay = 0 } = {}) =>
+  vote: ({ errorCode, statusCode = 200, delay = 0 } = {}) =>
     cy.intercept(`${COMMENTS_API}/vote`, (req) => {
-      req.reply({
-        body: isError ? { errorcode: 10, pluginid: "comments" } : {},
-        statusCode: isError ? 400 : 200,
-        delay: delay
-      });
+      if (statusCode === 403 && !errorCode) {
+        req.reply({
+          statusCode,
+          delay
+        });
+      } else {
+        req.reply({
+          body: errorCode ? { errorcode: errorCode, pluginid: "comments" } : {},
+          statusCode,
+          delay
+        });
+      }
     }),
   new: ({ errorCode } = {}) =>
     cy.intercept(`${COMMENTS_API}/new`, (req) => {
