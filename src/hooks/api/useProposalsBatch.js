@@ -306,7 +306,6 @@ export default function useProposalsBatch({
     });
 
     setRemainingTokens(unfetchedTokens);
-    setStatusIndex(index);
     if (isByRecordStatus) {
       proposalStatus = statuses;
     } else {
@@ -314,8 +313,10 @@ export default function useProposalsBatch({
     }
     // machine stop condition: inventory loaded, but no tokens to fetch
     if (!foundPreviousSessionStatus) {
+      setStatusIndex(statuses.length - 1);
       return send(RESOLVE);
     }
+    setStatusIndex(index);
     return send(START);
   };
 
