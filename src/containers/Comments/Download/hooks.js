@@ -44,7 +44,10 @@ export function useDownloadCommentsTimestamps(recordToken) {
     [recordToken]
   );
   const allCommentsBySection = useSelector(commentsSelector);
-  const comments = Object.values(allCommentsBySection).flat();
+  const comments = useMemo(
+    () => Object.values(allCommentsBySection).flat(),
+    [allCommentsBySection]
+  );
   const commentsLength = comments?.length || 0;
   const multiPage = commentsLength > TIMESTAMPS_PAGE_SIZE;
   const onFetchCommentsTimestamps = useAction(act.onFetchCommentsTimestamps);
