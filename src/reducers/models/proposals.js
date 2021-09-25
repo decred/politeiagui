@@ -149,15 +149,29 @@ const updateInventory = (payload) => (allProps) => {
 const onReceiveLogout = (state) =>
   compose(
     update("byToken", (data) => {
-      const vetteds = {};
+      const vetted = {};
+      const unvetted = {};
       Object.keys(data).flatMap((id) =>
         data[id].state === PROPOSAL_STATE_VETTED
-          ? (vetteds[id] = {
+          ? (vetted[id] = {
               ...data[id]
+            })
+          : data[id].state === PROPOSAL_STATE_UNVETTED
+          ? (unvetted[id] = {
+              name: id,
+              censorshiprecord: data[id].censorshiprecord,
+              userid: data[id].userid,
+              username: data[id].username,
+              state: data[id].state,
+              status: data[id].status,
+              files: [],
+              timestamp: data[id].timestamp,
+              version: data[id].version,
+              metadata: data[id].metadata
             })
           : []
       );
-      return vetteds;
+      return { ...vetted, ...unvetted };
     }),
     set("allProposalsByUserId", DEFAULT_STATE.allProposalsByUserId),
     set("allTokensByUserId", DEFAULT_STATE.allTokensByUserId),

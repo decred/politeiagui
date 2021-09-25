@@ -146,10 +146,8 @@ export const onGetPolicy = () => async (dispatch, getState) => {
 
 export const withCsrf = (fn) => (dispatch, getState) => {
   const csrf = sel.csrf(getState());
-  const csrfIsNeeded = sel.getCsrfIsNeeded(getState());
-  if (csrf || csrfIsNeeded) return fn(dispatch, getState, csrf);
+  if (csrf) return fn(dispatch, getState, csrf);
 
-  dispatch(act.CSRF_NEEDED(true));
   return dispatch(requestApiInfo()).then(() =>
     withCsrf(fn)(dispatch, getState)
   );
@@ -256,24 +254,31 @@ export const onSearchUser = (query, isCMS) => (dispatch) => {
 // onLogin handles a user's login. If it is his first login on the app
 // after registering, his key will be saved under his email. If so, it
 // changes the storage key to his uuid.
-export const onLogin = ({ email, password, code }) =>
-  withCsrf(async (dispatch, _, csrf) => {
-    dispatch(act.REQUEST_LOGIN({ email }));
-    try {
-      const response = await api.login(csrf, email, password, code);
-      await dispatch(onRequestMe());
-      dispatch(act.RECEIVE_LOGIN(response));
-      const { userid, username } = response;
-      const keyNeedsReplace = await pki.needStorageKeyReplace(email, username);
-      if (keyNeedsReplace) {
-        pki.replaceStorageKey(keyNeedsReplace, userid);
+export const onLogin =
+  ({ email, password, code }) =>
+  (dispatch, getState) => {
+    dispatch(onRequireCSRF());
+    return withCsrf(async (dispatch, _, csrf) => {
+      dispatch(act.REQUEST_LOGIN({ email }));
+      try {
+        const response = await api.login(csrf, email, password, code);
+        await dispatch(onRequestMe());
+        dispatch(act.RECEIVE_LOGIN(response));
+        const { userid, username } = response;
+        const keyNeedsReplace = await pki.needStorageKeyReplace(
+          email,
+          username
+        );
+        if (keyNeedsReplace) {
+          pki.replaceStorageKey(keyNeedsReplace, userid);
+        }
+        return;
+      } catch (error) {
+        dispatch(act.RECEIVE_LOGIN(null, error));
+        throw error;
       }
-      return;
-    } catch (error) {
-      dispatch(act.RECEIVE_LOGIN(null, error));
-      throw error;
-    }
-  });
+    })(dispatch, getState);
+  };
 
 // handleLogout calls the correct logout handler according to the user
 // selected option between a normal logout or a permanent logout.
@@ -288,6 +293,13 @@ export const handleNormalLogout = () => {
   clearStateLocalStorage();
   clearPollingPointer();
   clearProposalPaymentPollingPointer();
+};
+
+// handleLocalLogout can be used to clean user session on logout
+// without requesting the API
+export const handleLocalLogout = () => (dispatch) => {
+  dispatch(act.RECEIVE_LOGOUT());
+  handleNormalLogout();
 };
 
 // handlePermanentLogout handles the logout procedures while deleting all
@@ -316,6 +328,10 @@ export const onLogout = (isCMS, isPermanent) =>
         throw error;
       });
   });
+
+export const onRequireCSRF = () => (dispatch) => {
+  dispatch(act.CSRF_NEEDED(true));
+};
 
 export const onChangeUsername = (password, newUsername) =>
   withCsrf((dispatch, _, csrf) => {
@@ -1056,6 +1072,7 @@ export const onCommentVote = (
       })
       .catch((error) => {
         dispatch(act.RECEIVE_LIKE_COMMENT(null, error));
+        throw error;
       });
   });
 

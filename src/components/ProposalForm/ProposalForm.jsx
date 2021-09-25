@@ -20,6 +20,7 @@ import SelectField from "src/components/Select/SelectField";
 import styles from "./ProposalForm.module.css";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import ModalMDGuide from "src/components/ModalMDGuide";
+import ModalLogin from "src/components/ModalLogin";
 import ThumbnailGrid from "src/components/Files";
 import AttachFileInput from "src/components/AttachFileInput";
 import DraftSaver from "./DraftSaver";
@@ -46,6 +47,7 @@ import {
 import { convertObjectToUnixTimestamp } from "src/helpers";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
 import useModalContext from "src/hooks/utils/useModalContext";
+import useScrollTo from "src/hooks/utils/useScrollTo";
 import FormatHelpButton from "./FormatHelpButton";
 import SubmitButton from "./SubmitButton";
 
@@ -209,6 +211,9 @@ const ProposalForm = React.memo(function ProposalForm({
 
   const textAreaProps = useMemo(() => ({ tabIndex: 2 }), []);
 
+  const hasError = errors && errors.global;
+  useScrollTo("record-submission-error-message", hasError);
+
   return (
     <form onSubmit={handleSubmit}>
       <Message kind="warning" className="margin-bottom-m">
@@ -216,11 +221,6 @@ const ProposalForm = React.memo(function ProposalForm({
         something goes wrong. We recommend drafting the content offline then
         using the editor to submit the final version.
       </Message>
-      {errors && errors.global && (
-        <Message className="margin-bottom-m" kind="error">
-          {errors.global.toString()}
-        </Message>
-      )}
       <Row
         noMargin
         wrap={smallTablet}
@@ -399,6 +399,16 @@ const ProposalForm = React.memo(function ProposalForm({
           </Row>
         </>
       )}
+      {hasError && (
+        <Row>
+          <Message
+            id="record-submission-error-message"
+            className={classNames(styles.errorRow, "margin-bottom-m")}
+            kind="error">
+            {errors.global.toString()}
+          </Message>
+        </Row>
+      )}
     </form>
   );
 });
@@ -420,6 +430,13 @@ const ProposalFormWrapper = ({
       onClose: handleCloseModal
     });
   }, [handleCloseModal, handleOpenModal]);
+  const openLoginModal = useCallback(() => {
+    handleOpenModal(ModalLogin, {
+      onLoggedIn: handleCloseModal,
+      onClose: handleCloseModal,
+      title: "Your session has expired. Please log in again"
+    });
+  }, [handleOpenModal, handleCloseModal]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const { proposalFormValidation, onFetchProposalsBatchWithoutState } =
     useProposalForm();
@@ -482,10 +499,22 @@ const ProposalFormWrapper = ({
         resetForm();
       } catch (e) {
         setSubmitting(false);
-        setFieldError("global", e);
+        // Hardcode the login modal to show up when user session expires
+        // ref: https://github.com/decred/politeiagui/pull/2541#issuecomment-909194251
+        if (e.statusCode === 403) {
+          openLoginModal();
+        } else {
+          setFieldError("global", e);
+        }
       }
     },
-    [history, onSubmit, onFetchProposalsBatchWithoutState, isPublic]
+    [
+      history,
+      onSubmit,
+      onFetchProposalsBatchWithoutState,
+      isPublic,
+      openLoginModal
+    ]
   );
 
   const newInitialValues = initialValues

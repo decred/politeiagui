@@ -364,6 +364,11 @@ describe("test api actions (actions/api.js)", () => {
       [FAKE_USER],
       (e) => [
         {
+          error: false,
+          payload: true,
+          type: act.CSRF_NEEDED
+        },
+        {
           type: act.REQUEST_LOGIN,
           error: false,
           payload: { email: FAKE_USER.email }
@@ -657,8 +662,16 @@ describe("test api actions (actions/api.js)", () => {
     const path = "/api/comments/v1/vote";
     const commentid = 0;
     const up_action = 1;
-    //const down_action = -1;
-    const params = [FAKE_USER.id, FAKE_PROPOSAL_TOKEN, commentid, up_action];
+    const sectionId = "main";
+
+    const params = [
+      FAKE_USER.id,
+      FAKE_PROPOSAL_TOKEN,
+      commentid,
+      up_action,
+      PROPOSAL_STATE_VETTED,
+      sectionId
+    ];
 
     // this needs a custom assertion for success response as the common one
     // doesn't work for this case.
@@ -676,15 +689,20 @@ describe("test api actions (actions/api.js)", () => {
       path,
       api.onCommentVote,
       params,
-      (errorcode) => [
+      (e) => [
         {
           error: false,
-          payload: { commentid, token: FAKE_PROPOSAL_TOKEN, vote: up_action },
+          payload: {
+            commentid,
+            token: FAKE_PROPOSAL_TOKEN,
+            vote: up_action,
+            sectionId
+          },
           type: act.REQUEST_LIKE_COMMENT
         },
         {
           error: true,
-          payload: { errorcode },
+          payload: e,
           type: act.RECEIVE_LIKE_COMMENT
         }
       ],

@@ -61,9 +61,16 @@ Cypress.Commands.add("typeLogin", (user) => {
   cy.visit("/user/login");
   cy.findByLabelText(/email/i).type(user.email);
   cy.findByLabelText(/password/i).type(user.password);
-  cy.findByRole("button", { text: /login/i }).click();
+  cy.findByTestId("login-form-button").click();
   cy.assertHome();
   cy.assertLoggedInAs();
+});
+
+Cypress.Commands.add("typeLoginModal", (user) => {
+  cy.findByTestId("modal-login").should("be.visible");
+  cy.findByLabelText(/email/i).type(user.email);
+  cy.findByLabelText(/password/i).type(user.password);
+  cy.findByTestId("login-form-button").click();
 });
 
 Cypress.Commands.add("login", (user) => {

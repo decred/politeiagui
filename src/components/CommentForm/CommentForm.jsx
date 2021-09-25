@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
 import FormikPersist from "src/components/FormikPersist";
@@ -15,8 +15,9 @@ import {
 import { Row } from "../layout";
 import MarkdownEditor from "src/components/MarkdownEditor";
 import validationSchema from "./validation";
-import { usePolicy } from "src/hooks";
 import useModalContext from "src/hooks/utils/useModalContext";
+import ModalLogin from "src/components/ModalLogin";
+import { usePolicy } from "src/hooks";
 import ModalConfirm from "src/components/ModalConfirm";
 import styles from "./CommentForm.module.css";
 
@@ -32,10 +33,19 @@ const CommentForm = ({
   isAuthorUpdate,
   hasAuthorUpdates
 }) => {
+  const [handleOpenModal, handleCloseModal] = useModalContext();
+
+  const openLoginModal = useCallback(() => {
+    handleOpenModal(ModalLogin, {
+      onLoggedIn: handleCloseModal,
+      onClose: handleCloseModal,
+      title: "Your session has expired. Please log in again"
+    });
+  }, [handleOpenModal, handleCloseModal]);
+
   const {
     policyPi: { namesupportedchars, namelengthmax, namelengthmin }
   } = usePolicy();
-  const [handleOpenModal, handleCloseModal] = useModalContext();
   const smallTablet = useMediaQuery("(max-width: 685px)");
   async function handleSubmit(
     { comment, title },
@@ -68,7 +78,13 @@ const CommentForm = ({
       }
     } catch (e) {
       setSubmitting(false);
-      setFieldError("global", e);
+      // Hardcode the login modal to show up when user session expires
+      // ref: https://github.com/decred/politeiagui/pull/2541#issuecomment-909194251
+      if (e.statusCode === 403) {
+        openLoginModal();
+      } else {
+        setFieldError("global", e);
+      }
     }
   }
   return (
@@ -156,6 +172,7 @@ will only be able to reply to your most recent update thread.">
               )}
               <Button
                 type="submit"
+                data-testid="comment-submit-button"
                 kind={!isValid || disableSubmit ? "disabled" : "primary"}
                 loading={isSubmitting}>
                 Add comment

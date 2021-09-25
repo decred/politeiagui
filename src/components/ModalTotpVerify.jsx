@@ -4,7 +4,7 @@ import { Modal, Message } from "pi-ui";
 import VerifyTotp from "src/containers/User/Totp/Verify";
 import { TOTP_CODE_LENGTH } from "src/constants";
 
-const ModalTotpVerify = ({ show, onClose, onVerify }) => {
+const ModalTotpVerifyContent = ({ onClose, onVerify }) => {
   const [error, setError] = useState();
   const handleChange = (v) => {
     if (v.length === TOTP_CODE_LENGTH) {
@@ -18,23 +18,27 @@ const ModalTotpVerify = ({ show, onClose, onVerify }) => {
     }
   };
   return (
-    <Modal show={show} onClose={onClose} title="Verify 2FA Code">
-      <>
-        {error && (
-          <Message kind="error" className="margin-bottom-m">
-            {error.toString()}
-          </Message>
-        )}
-        <VerifyTotp
-          onType={handleChange}
-          extended={false}
-          tabIndex={1}
-          title="Authenticator Code"
-        />
-      </>
-    </Modal>
+    <div>
+      {error && (
+        <Message kind="error" className="margin-bottom-m">
+          {error.toString()}
+        </Message>
+      )}
+      <VerifyTotp
+        onType={handleChange}
+        extended={false}
+        tabIndex={1}
+        title="Authenticator Code"
+      />
+    </div>
   );
 };
+
+const ModalTotpVerify = ({ show, onClose, onVerify }) => (
+  <Modal show={show} onClose={onClose} title="Verify 2FA Code">
+    <ModalTotpVerifyContent onVerify={onVerify} onClose={onClose} />
+  </Modal>
+);
 
 ModalTotpVerify.propTypes = {
   show: PropTypes.bool.isRequired,

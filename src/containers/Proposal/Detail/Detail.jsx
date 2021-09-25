@@ -31,7 +31,11 @@ import LoggedInContent from "src/components/LoggedInContent";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
-import { PROPOSAL_STATUS_CENSORED, PROPOSAL_UPDATE_HINT } from "src/constants";
+import {
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_UPDATE_HINT,
+  PROPOSAL_STATE_UNVETTED
+} from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -59,7 +63,8 @@ const ProposalDetail = ({ Main, match, history }) => {
     onSubmitComment,
     currentUser,
     commentsError,
-    commentsLoading
+    commentsLoading,
+    onReloadProposalDetails
   } = useProposal(tokenFromUrl, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
@@ -78,6 +83,7 @@ const ProposalDetail = ({ Main, match, history }) => {
   // Currently this piece of info isn't available and should be returned
   // from the BE somehow.
   const areAuthorUpdatesAllowed = isApprovedProposal(proposal, voteSummary);
+  const isUnvetted = proposalState === PROPOSAL_STATE_UNVETTED;
   const readOnly = !areCommentsAllowed && !areAuthorUpdatesAllowed;
   const readOnlyReason = getCommentBlockedReason(proposal, voteSummary);
   const { javascriptEnabled } = useConfig();
@@ -116,9 +122,14 @@ const ProposalDetail = ({ Main, match, history }) => {
   const handleOpenLoginModal = useCallback(() => {
     handleOpenModal(ModalLogin, {
       id: COMMENTS_LOGIN_MODAL_ID,
-      onLoggedIn: handleCloseModal
+      onLoggedIn: () => {
+        if (isUnvetted) {
+          onReloadProposalDetails();
+        }
+        handleCloseModal();
+      }
     });
-  }, [handleOpenModal, handleCloseModal]);
+  }, [handleOpenModal, handleCloseModal, isUnvetted, onReloadProposalDetails]);
 
   const CommentsSection = React.memo(({ sectionId }) => (
     <Comments
@@ -139,6 +150,13 @@ const ProposalDetail = ({ Main, match, history }) => {
       sectionId={sectionId}
     />
   ));
+
+  const canSubmitComments =
+    !isSingleThread &&
+    !readOnly &&
+    (!areAuthorUpdatesAllowed ||
+      (areAuthorUpdatesAllowed && isCurrentUserProposalAuthor)) &&
+    !!proposalToken;
 
   const proposalComments = useMemo(
     () => (
@@ -177,22 +195,17 @@ const ProposalDetail = ({ Main, match, history }) => {
                   </Message>
                 )}
               </Or>
-              {!isSingleThread &&
-                ((!readOnly && !areAuthorUpdatesAllowed) ||
-                  (!readOnly &&
-                    areAuthorUpdatesAllowed &&
-                    isCurrentUserProposalAuthor)) &&
-                !!proposalToken && (
-                  <CommentForm
-                    persistKey={`commenting-on-${tokenFromUrl}`}
-                    onSubmit={handleSubmitComment}
-                    disableSubmit={!!identityError || paywallMissing}
-                    isAuthorUpdate={
-                      areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
-                    }
-                    hasAuthorUpdates={hasAuthorUpdates}
-                  />
-                )}
+              {canSubmitComments && (
+                <CommentForm
+                  persistKey={`commenting-on-${tokenFromUrl}`}
+                  onSubmit={handleSubmitComment}
+                  disableSubmit={!!identityError || paywallMissing}
+                  isAuthorUpdate={
+                    areAuthorUpdatesAllowed && isCurrentUserProposalAuthor
+                  }
+                  hasAuthorUpdates={hasAuthorUpdates}
+                />
+              )}
             </LoggedInContent>
           </Card>
         )}
@@ -226,13 +239,13 @@ const ProposalDetail = ({ Main, match, history }) => {
       onRedirectToSignup,
       paywallEnabled,
       paywallMissing,
-      proposalToken,
       readOnly,
       readOnlyReason,
       tokenFromUrl,
       userid,
       commentsError,
-      hasAuthorUpdates
+      hasAuthorUpdates,
+      canSubmitComments
     ]
   );
 

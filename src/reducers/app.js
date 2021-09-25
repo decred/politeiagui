@@ -124,7 +124,10 @@ const app = (state = DEFAULT_STATE, action) =>
         ...state,
         draftDccs: action.payload
       }),
-      [act.CSRF_NEEDED]: () => ({ ...state, csrfIsNeeded: action.payload }),
+      [act.CSRF_NEEDED]: () => ({
+        ...state,
+        init: { ...state.init, csrfToken: null }
+      }),
       [act.SHOULD_AUTO_VERIFY_KEY]: () => ({
         ...state,
         shouldVerifyKey: action.payload

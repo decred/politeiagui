@@ -5,7 +5,16 @@ import React, {
   useMemo,
   useState
 } from "react";
-import { Card, H2, Text, Message, classNames, Select } from "pi-ui";
+import {
+  Card,
+  H2,
+  Text,
+  Message,
+  classNames,
+  Select,
+  Icon,
+  Tooltip
+} from "pi-ui";
 import styles from "./Comments.module.css";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import { CommentContext } from "./hooks";
@@ -31,20 +40,42 @@ import { getQueryStringValue } from "src/lib/queryString";
 import { debounce } from "lodash";
 
 const FlatModeButton = ({ isActive, onClick }) => (
-  <div
-    className={classNames(
-      styles.flatButtonWrapper,
-      isActive && styles.flatModeActive
-    )}
-    onClick={onClick}>
-    <Text
+  <>
+    <div
       className={classNames(
-        styles.flatButtonText,
+        styles.flatButtonWrapper,
         isActive && styles.flatModeActive
-      )}>
-      Flat mode
-    </Text>
-  </div>
+      )}
+      onClick={onClick}>
+      <Text
+        className={classNames(
+          styles.flatButtonText,
+          isActive && styles.flatModeActive
+        )}>
+        Flat mode
+      </Text>
+    </div>
+    <div>
+      <Tooltip
+        className={styles.flatTooltipWrapper}
+        contentClassName={styles.flatModTooltip}
+        content={
+          <>
+            <p>
+              Flat mode flattens out the comment hierarchy so that filtering
+              criteria can be applied to both top level comments and comment
+              replies equally.
+            </p>
+            <p>
+              When flat mode is turned off, filtering criteria is only applied
+              to top level comments.
+            </p>
+          </>
+        }>
+        <Icon type="info" />
+      </Tooltip>
+    </div>
+  </>
 );
 
 const CommentsListAndActions = React.memo(

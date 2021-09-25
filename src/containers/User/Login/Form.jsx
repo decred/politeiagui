@@ -37,10 +37,14 @@ const LoginForm = ({
     } catch (e) {
       setSubmitting(false);
       if (e.errorcode === TOTP_MISSING_LOGIN_ERROR) {
-        handleOpenModal(ModalTotpVerify, {
-          onVerify: (code) => onLogin({ ...credentials, code }),
-          onClose: handleCloseModal
-        });
+        handleOpenModal(
+          ModalTotpVerify,
+          {
+            onVerify: (code) => onLogin({ ...credentials, code }),
+            onClose: handleCloseModal
+          },
+          { overlay: true }
+        );
         return;
       }
       setFieldError("global", e);
@@ -116,7 +120,11 @@ const LoginForm = ({
             />
             <Actions>
               <Link to="/user/request-reset-password">Reset Password</Link>
-              <Button loading={isSubmitting} kind="primary" type="submit">
+              <Button
+                loading={isSubmitting}
+                kind="primary"
+                type="submit"
+                data-testid="login-form-button">
                 Login
               </Button>
             </Actions>
