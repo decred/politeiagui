@@ -135,7 +135,7 @@ describe("Admin proposals actions", () => {
     );
   });
 
-  it.only("Should allow admins to set the billing status of an approved propsoal", () => {
+  it("Should allow admins to set the billing status of an approved propsoal", () => {
     cy.server();
     // paid admin user with proposal credits
     cy.server();
