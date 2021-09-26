@@ -1,7 +1,13 @@
 import CryptoJS from "crypto-js";
-import get from "lodash/fp/get";
 import * as pki from "./pki";
 import MerkleTree from "./merkle";
+import compose from "lodash/fp/compose";
+import filter from "lodash/fp/filter";
+import keys from "lodash/fp/keys";
+import first from "lodash/fp/first";
+import get from "lodash/fp/get";
+import find from "lodash/fp/find";
+import path from "path";
 
 const PROPOSAL_TYPE_REGULAR = 1;
 const PROPOSAL_TYPE_RFP = 2;
@@ -31,6 +37,23 @@ const PROPOSAL_STATUS_UNREVIEWED = 1;
 const PROPOSAL_STATUS_PUBLIC = 2;
 const PROPOSAL_STATUS_CENSORED = 3;
 const PROPOSAL_STATUS_ARCHIVED = 4;
+
+const findRecordFileByName = (record, name) =>
+  compose(
+    find((file) => file.name === name),
+    get("files")
+  )(record);
+
+export const getFirstShortProposalToken = (records = {}) =>
+  compose(
+    first,
+    filter(
+      (token) =>
+        !findRecordFileByName(records[token], VOTE_METADATA_FILENAME) &&
+        findRecordFileByName(records[token], PROPOSAL_METADATA_FILENAME)
+    ),
+    keys
+  )(records);
 
 export const requestWithCsrfToken = (url, body, failOnStatusCode = true) =>
   cy.request("/api").then((res) =>
