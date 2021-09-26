@@ -187,6 +187,10 @@ const api = (state = DEFAULT_STATE, action) =>
         request("proposalsVoteSummary", state, action),
       [act.RECEIVE_PROPOSALS_VOTE_SUMMARY]: () =>
         receive("proposalsVoteSummary", state, {}),
+      [act.REQUEST_BATCH_PROPOSAL_SUMMARY]: () =>
+        request("batchProposalSummary", state, action),
+      [act.RECEIVE_BATCH_PROPOSAL_SUMMARY]: () =>
+        receive("batchProposalSummary", state, action),
       [act.REQUEST_PROPOSAL_VOTE_RESULTS]: () =>
         request("proposalVoteResults", state, action),
       [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () =>

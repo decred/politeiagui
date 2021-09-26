@@ -83,7 +83,8 @@ const getUnfetchedTokens = (proposals, tokens) =>
 export function useUserProposals({
   proposalPageSize = PROPOSAL_PAGE_SIZE,
   fetchRfpLinks = true,
-  fetchVoteSummaries = true,
+  fetchVoteSummary = true,
+  fetchProposalSummary = true,
   userID
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
@@ -139,7 +140,12 @@ export function useUserProposals({
           remainingTokens,
           proposalPageSize
         );
-        onFetchProposalsBatch(tokensToFetch, fetchVoteSummaries, userID)
+        onFetchProposalsBatch({
+          tokens: tokensToFetch,
+          fetchVoteSummary,
+          fetchProposalSummary,
+          userid: userID
+        })
           .then(([fetchedProposals]) => {
             if (isEmpty(fetchedProposals)) {
               setRemainingTokens(next);
@@ -153,11 +159,12 @@ export function useUserProposals({
                 ...rfpSubmissions
               ]);
               if (!isEmpty(unfetchedRfpLinks)) {
-                onFetchProposalsBatch(
-                  unfetchedRfpLinks,
-                  fetchVoteSummaries,
-                  userID
-                )
+                onFetchProposalsBatch({
+                  tokens: unfetchedRfpLinks,
+                  fetchVoteSummary,
+                  fetchProposalSummary,
+                  userid: userID
+                })
                   .then(() => {
                     const unfetchedTokens = getUnfetchedTokens(
                       assign(proposals, fetchedProposals),

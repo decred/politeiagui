@@ -675,6 +675,9 @@ export const startVote = (csrf, userid, voteParams) =>
 export const proposalsBatchVoteSummary = (csrf, tokens) =>
   POST("/summaries", csrf, { tokens }, apiTicketVote).then(getResponse);
 
+export const batchProposalSummary = (csrf, tokens) =>
+  POST("/summaries", csrf, { tokens }, apiPi).then(getResponse);
+
 export const proposalVoteResults = (csrf, token) =>
   POST("/results", csrf, { token }, apiTicketVote).then(getResponse);
 

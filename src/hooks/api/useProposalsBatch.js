@@ -88,7 +88,8 @@ const proposalWithCacheVotetatus = (proposals) => {
 
 export default function useProposalsBatch({
   fetchRfpLinks,
-  fetchVoteSummaries = false,
+  fetchVoteSummary = false,
+  fetchProposalSummary = false,
   unvetted = false,
   proposalStatus,
   statuses,
@@ -238,7 +239,11 @@ export default function useProposalsBatch({
           remainingTokens,
           proposalPageSize
         );
-        onFetchProposalsBatch(tokensToFetch, fetchVoteSummaries)
+        onFetchProposalsBatch({
+          tokens: tokensToFetch,
+          fetchVoteSummary,
+          fetchProposalSummary
+        })
           .then(([fetchedProposals]) => {
             if (isEmpty(fetchedProposals)) {
               setRemainingTokens(next);

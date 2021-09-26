@@ -56,7 +56,6 @@ export const getPaymentsByAddressDcrdata = (address) => {
   return getRawTransactions(dcrdataAddressURL(isTestnet, address));
 };
 
-// XXX this should be updated!!!
 export const getCmsApprovedProposalsTokens = (isTestnet) => {
   const url = `https://${
     isTestnet ? "test-proposals" : "proposals"

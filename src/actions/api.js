@@ -437,8 +437,6 @@ export const onFetchProposalBilling = (token) =>
   });
 
 // state should be the state of requested proposals
-// XXX ensure all ref. call with state provided
-// XXX and includefiles param
 export const onFetchProposalsBatchWithoutState = (
   tokens,
   state,
@@ -474,12 +472,13 @@ export const onFetchProposalDetailsWithoutState =
   };
 
 // state should be the state of requested proposals
-export const onFetchProposalsBatch = (
+export const onFetchProposalsBatch = ({
   tokens,
   fetchVoteSummary = true,
+  fetchProposalSummary = true,
   userid,
   fetchProposalsCount = true
-) =>
+}) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     const requests = tokens?.map((token) => ({
@@ -492,24 +491,26 @@ export const onFetchProposalsBatch = (
           requests
         }),
         fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
+        fetchProposalSummary && dispatch(onFetchBatchProposalSummary(tokens)),
         fetchProposalsCount && api.commentsCount(tokens)
       ]);
       const proposals = response.find((res) => res && res.records).records;
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
+      const proposalSummaries =
+        fetchProposalSummary &&
+        response.find((res) => res && res.proposalSummaries).proposalSummaries;
       const commentsCount =
         fetchProposalsCount && response.find((res) => res && res.counts).counts;
       const proposalsWithCommentsCount = Object.keys(proposals).reduce(
-        (acc, curr) => {
-          return {
-            ...acc,
-            [curr]: {
-              ...proposals[curr],
-              commentsCount: commentsCount[curr]
-            }
-          };
-        },
+        (acc, curr) => ({
+          ...acc,
+          [curr]: {
+            ...proposals[curr],
+            commentsCount: commentsCount[curr]
+          }
+        }),
         {}
       );
       dispatch(
@@ -518,7 +519,11 @@ export const onFetchProposalsBatch = (
           userid
         })
       );
-      return [parseRawProposalsBatch(proposalsWithCommentsCount), summaries];
+      return [
+        parseRawProposalsBatch(proposalsWithCommentsCount),
+        summaries,
+        proposalSummaries
+      ];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
       throw e;
@@ -1254,7 +1259,11 @@ export const onSetProposalStatus = ({
         if (status === PROPOSAL_STATUS_PUBLIC) {
           dispatch(onFetchProposalsBatchVoteSummary([token]));
           if (linkto) {
-            dispatch(onFetchProposalsBatch([linkto]));
+            dispatch(
+              onFetchProposalsBatch({
+                tokens: [linkto]
+              })
+            );
           }
         }
       })
@@ -1411,6 +1420,23 @@ export const onFetchProposalsBatchVoteSummary = (tokens) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_PROPOSALS_VOTE_SUMMARY(null, error));
+        throw error;
+      });
+  });
+
+export const onFetchBatchProposalSummary = (tokens) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_BATCH_PROPOSAL_SUMMARY({ tokens }));
+    return api
+      .batchProposalSummary(csrf, tokens)
+      .then(({ summaries }) => {
+        dispatch(
+          act.RECEIVE_BATCH_PROPOSAL_SUMMARY({ summaries, success: true })
+        );
+        return { proposalSummaries: summaries };
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_BATCH_PROPOSAL_SUMMARY(null, error));
         throw error;
       });
   });

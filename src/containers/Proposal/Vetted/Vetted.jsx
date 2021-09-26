@@ -40,7 +40,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     isProposalsBatchComplete
   } = useProposalsBatch({
     fetchRfpLinks: true,
-    fetchVoteSummaries: true,
+    fetchVoteSummary: true,
+    fetchProposalSummary: true,
     statuses: statuses
   });
 

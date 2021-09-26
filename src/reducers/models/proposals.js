@@ -40,6 +40,7 @@ const mapStatusToName = {
 
 const DEFAULT_STATE = {
   byToken: {},
+  summaries: {},
   allByVoteStatus: {
     [UNAUTHORIZED]: [],
     [AUTHORIZED]: [],
@@ -183,21 +184,37 @@ const proposals = (state = DEFAULT_STATE, action) =>
     ? state
     : (
         {
-          [act.RECEIVE_PROPOSALS_BATCH]: () => {
-            return compose(
-              update(["allProposalsByUserId"], (prop) => {
-                return {
-                  [action.payload.userid]: {
-                    ...prop[action.payload.userid],
-                    ...parseReceivedProposalsMap(action.payload.proposals)
-                  }
-                };
-              }),
+          [act.RECEIVE_PROPOSALS_BATCH]: () =>
+            compose(
+              action.payload.userid
+                ? update(["allProposalsByUserId"], (prop) => ({
+                    [action.payload.userid]: {
+                      ...prop[action.payload.userid],
+                      ...parseReceivedProposalsMap(action.payload.proposals)
+                    }
+                  }))
+                : (state) => state,
               update("byToken", (proposals) => ({
                 ...proposals,
                 ...parseReceivedProposalsMap(action.payload.proposals)
               }))
-            )(state);
+            )(state),
+          [act.RECEIVE_BATCH_PROPOSAL_SUMMARY]: () => {
+            const keys = Object.keys(action.payload.summaries);
+            const normalizedSummaries = keys.reduce(
+              (acc, key) => ({
+                ...acc,
+                [shortRecordToken(key)]: {
+                  ...state.byToken[shortRecordToken(key)],
+                  ...action.payload.summaries[key]
+                }
+              }),
+              {}
+            );
+            return update("summaries", (proposalSummaries) => ({
+              ...proposalSummaries,
+              ...normalizedSummaries
+            }))(state);
           },
           [act.RECEIVE_VOTES_INVENTORY]: () =>
             update("allByVoteStatus", updateInventory(action.payload))(state),
