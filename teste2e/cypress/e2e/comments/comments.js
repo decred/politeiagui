@@ -1,8 +1,9 @@
 import { buildProposal, buildComment } from "../../support/generate";
-import { shortRecordToken } from "../../utils";
+import { shortRecordToken, getFirstShortProposalToken } from "../../utils";
+import path from "path";
 
 describe("User comments", () => {
-  it("Can not comment if hasn't paid the paywall", () => {
+  it("Shouldn't allow submitting new comments if paywall not paid", () => {
     cy.server();
     // create proposal
     const user = {
@@ -37,8 +38,7 @@ describe("User comments", () => {
       }
     );
   });
-
-  it("Can comment, vote and reply on others' comments if paid the paywall", () => {
+  it("Should allow user who paid the paywall to add new comments & vote or reply on others' comments", () => {
     cy.server();
     // create proposal
     const user = {
@@ -95,8 +95,62 @@ describe("User comments", () => {
     );
   });
 });
-
-describe("Failed comments", () => {
+describe.only("Comments downloads", () => {
+  let shortToken = "";
+  beforeEach(() => {
+    cy.server();
+    cy.intercept("/api/records/v1/records").as("records");
+    cy.intercept("/api/records/v1/details").as("details");
+    cy.visit("/");
+    cy.wait("@records").then(({ response: { body } }) => {
+      const { records } = body;
+      shortToken = getFirstShortProposalToken(records);
+      expect(shortToken, "You should have at least one record Under Review.").to
+        .exist;
+      // login paid user
+      const user1 = {
+        email: "user1@example.com",
+        username: "user1",
+        password: "password"
+      };
+      cy.login(user1);
+      cy.identity();
+      cy.visit(`record/${shortToken}`);
+      const { text } = buildComment();
+      cy.findByTestId(/text-area/i).type(text);
+      cy.route("POST", "/api/comments/v1/new").as("newComment");
+      cy.findByText(/add comment/i).click();
+      cy.wait("@newComment").its("status").should("eq", 200);
+      cy.intercept("/api/comments/v1/comments").as("comments");
+      cy.intercept("/api/comments/v1/votes").as("votes");
+    });
+  });
+  it("should publicly allow users to download comments bundle", () => {
+    cy.visit(`/record/${shortToken}`);
+    cy.wait("@details");
+    cy.wait("@comments");
+    cy.wait("@votes");
+    cy.findByTestId("record-links").click();
+    cy.findByText(/comments bundle/i).click();
+    const downloadsFolder = Cypress.config("downloadsFolder");
+    cy.readFile(
+      path.join(downloadsFolder, `${shortToken}-comments.json`)
+    ).should("exist");
+  });
+  it("should publicly allow users to download comments timestamps", () => {
+    cy.visit(`/record/${shortToken}`);
+    cy.wait("@details");
+    cy.wait("@comments");
+    cy.wait("@votes");
+    cy.findByTestId("record-links").click();
+    cy.findByText(/comments timestamps/i).click();
+    const downloadsFolder = Cypress.config("downloadsFolder");
+    cy.readFile(
+      path.join(downloadsFolder, `${shortToken}-comments-timestamps.json`)
+    ).should("exist");
+  });
+});
+describe("Comments error handling", () => {
   let token = "";
   beforeEach(() => {
     const user = {
