@@ -58,7 +58,7 @@ export function useProposal(token, threadParentID) {
   );
   const proposal = useSelector(proposalSelector);
   const proposals = useSelector(sel.proposalsByToken);
-  const voteSummaries = useSelector(sel.summaryByToken);
+  const voteSummaries = useSelector(sel.voteSummariesByToken);
   const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
   const rfpLinks = getProposalRfpLinksTokens(proposal);
   const isRfp = proposal && !!proposal.linkby;

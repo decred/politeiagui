@@ -88,7 +88,7 @@ export function useUserProposals({
   userID
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
-  const voteSummaries = useSelector(sel.summaryByToken);
+  const voteSummaries = useSelector(sel.voteSummariesByToken);
   const tokensSelector = useMemo(
     () => sel.makeGetUserProposalsTokens(userID),
     [userID]

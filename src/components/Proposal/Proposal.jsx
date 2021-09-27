@@ -24,6 +24,7 @@ import {
   isActiveRfp,
   isEditableProposal,
   getQuorumInVotes,
+  isVoteActiveProposal,
   isVotingFinishedProposal,
   getProposalToken,
   isVotingAuthorizedProposal,
@@ -81,7 +82,7 @@ function replaceImgDigestWithPayload(text, files) {
 }
 
 const ProposalWrapper = (props) => {
-  const { voteSummary, voteBlocksLeft, voteActive, voteEndTimestamp } =
+  const { voteSummary, proposalSummary, voteBlocksLeft, voteEndTimestamp } =
     useProposalVote(getProposalToken(props.proposal));
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
@@ -90,8 +91,8 @@ const ProposalWrapper = (props) => {
       {...{
         ...props,
         voteSummary,
+        proposalSummary,
         voteBlocksLeft,
-        voteActive,
         voteEndTimestamp,
         currentUser,
         history
@@ -105,7 +106,7 @@ const Proposal = React.memo(function Proposal({
   extended,
   collapseBodyContent,
   voteSummary,
-  voteActive: isVoteActive,
+  proposalSummary,
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
@@ -157,6 +158,7 @@ const Proposal = React.memo(function Proposal({
   } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
+  const isVoteActive = isVoteActiveProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposal);
   const isCensored = isCensoredProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
@@ -523,6 +525,7 @@ const Proposal = React.memo(function Proposal({
               <ProposalActions
                 proposal={proposal}
                 voteSummary={voteSummary}
+                proposalSummary={proposalSummary}
                 rfpSubmissionsVoteSummaries={
                   isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }

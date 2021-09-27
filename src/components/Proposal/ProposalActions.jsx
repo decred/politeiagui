@@ -5,7 +5,9 @@ import {
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal,
   isRfpReadyToRunoff,
-  isApprovedProposal
+  isApprovedProposal,
+  isClosedProposal,
+  isCompletedProposal
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
@@ -50,6 +52,7 @@ const UnvettedActions = ({ proposal }) => {
 const PublicActions = ({
   proposal,
   voteSummary,
+  proposalSummary,
   rfpSubmissionsVoteSummaries,
   resetRfpSubmissionsData,
   isLegacy
@@ -81,6 +84,10 @@ const PublicActions = ({
   );
   const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
   const isApproved = isApprovedProposal(proposal, voteSummary);
+  const isClosed = isClosedProposal(proposalSummary);
+  const isCompleted = isCompletedProposal(proposalSummary);
+  const isSetBillingStatusAllowed =
+    isApproved && !isLegacy && !isClosed && !isCompleted;
 
   const withProposal = (fn, cb) => () => {
     fn(proposal, cb);
@@ -119,7 +126,7 @@ const PublicActions = ({
           </AdminContent>
         </div>
       )}
-      {isApproved && !isLegacy && (
+      {isSetBillingStatusAllowed && (
         <AdminContent>
           <div className="justify-right margin-top-m">
             <Button onClick={withProposal(onSetBillingStatus)}>

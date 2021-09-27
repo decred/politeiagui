@@ -12,6 +12,8 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED,
+  PROPOSAL_SUMMARY_STATUS_CLOSED,
+  PROPOSAL_SUMMARY_STATUS_COMPLETED,
   AUTHORIZED,
   ACTIVE_VOTE,
   APPROVED,
@@ -26,7 +28,7 @@ import {
   INELIGIBLE,
   PROPOSAL_PAGE_SIZE,
   UNAUTHORIZED
-} from "../../constants";
+} from "src/constants";
 import { getTextFromIndexMd, shortRecordToken } from "src/helpers";
 import set from "lodash/fp/set";
 import values from "lodash/fp/values";
@@ -222,6 +224,24 @@ export const isApprovedProposal = (proposal, voteSummary) => {
  */
 export const isVoteActiveProposal = (voteSummary) =>
   !!voteSummary && voteSummary.status === PROPOSAL_VOTING_ACTIVE;
+
+/**
+ * Returns true if the proposal is closed
+ * @param {Object} proposalSummary
+ * @returns {Boolean} isClosedProposal
+ */
+export const isClosedProposal = (proposalSummary) =>
+  !!proposalSummary &&
+  proposalSummary.status === PROPOSAL_SUMMARY_STATUS_CLOSED;
+
+/**
+ * Returns true if the proposal is completed
+ * @param {Object} proposalSummary
+ * @returns {Boolean} isCompletedProposal
+ */
+export const isCompletedProposal = (proposalSummary) =>
+  !!proposalSummary &&
+  proposalSummary.status === PROPOSAL_SUMMARY_STATUS_COMPLETED;
 
 /**
  * Return the amount of blocks left to the end of the voting period

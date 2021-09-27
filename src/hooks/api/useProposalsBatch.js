@@ -111,7 +111,7 @@ export default function useProposalsBatch({
     () => currentStatuses[statusIndex],
     [currentStatuses, statusIndex]
   );
-  const voteSummaries = useSelector(sel.summaryByToken);
+  const voteSummaries = useSelector(sel.voteSummariesByToken);
   updateCacheVoteStatusMap(voteSummaries);
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus

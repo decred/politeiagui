@@ -1,14 +1,13 @@
 import Promise from "promise";
-import { PROPOSAL_STATUS_PUBLIC } from "../constants";
-import * as api from "../lib/api";
+import * as api from "src/lib/api";
 import {
   resetNewInvoiceData,
   resetNewProposalData,
   resetNewDccData
-} from "../lib/editors_content_backup";
-import { clearStateLocalStorage } from "../lib/local_storage";
-import * as pki from "../lib/pki";
-import * as sel from "../selectors";
+} from "src/lib/editors_content_backup";
+import { clearStateLocalStorage } from "src/lib/local_storage";
+import * as pki from "src/lib/pki";
+import * as sel from "src/selectors";
 import act from "./methods";
 import {
   PAYWALL_STATUS_PAID,
@@ -1256,16 +1255,11 @@ export const onSetProposalStatus = ({
             oldStatus
           })
         );
-        if (status === PROPOSAL_STATUS_PUBLIC) {
-          dispatch(onFetchProposalsBatchVoteSummary([token]));
-          if (linkto) {
-            dispatch(
-              onFetchProposalsBatch({
-                tokens: [linkto]
-              })
-            );
-          }
-        }
+        dispatch(
+          onFetchProposalsBatch({
+            tokens: linkto ? [linkto, token] : [token]
+          })
+        );
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
@@ -1279,11 +1273,16 @@ export const onSetBillingStatus = (token, billingStatus, reason) =>
     dispatch(act.REQUEST_SET_BILLING_STATUS({ token, billingStatus, reason }));
     return api
       .proposalSetBillingStatus(userid, csrf, token, billingStatus, reason)
-      .then(() =>
+      .then(() => {
         dispatch(
           act.RECEIVE_SET_BILLING_STATUS({ token, billingStatus, reason })
-        )
-      )
+        );
+        dispatch(
+          onFetchProposalsBatch({
+            tokens: [token]
+          })
+        );
+      })
       .catch((error) => {
         act.RECEIVE_SET_BILLING_STATUS(null, error);
         throw error;
