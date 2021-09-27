@@ -28,7 +28,8 @@ export function useDownloadComments(token) {
     [token]
   );
   const allCommentsBySection = useSelector(commentsSelector);
-  const comments = Object.values(allCommentsBySection).flat();
+  const comments =
+    allCommentsBySection && Object.values(allCommentsBySection).flat();
   const { onFetchCommentsTimestamps } = useTimestamps();
 
   return { comments, onFetchCommentsTimestamps };
