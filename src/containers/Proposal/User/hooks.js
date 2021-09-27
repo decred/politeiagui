@@ -89,6 +89,7 @@ export function useUserProposals({
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
   const voteSummaries = useSelector(sel.voteSummariesByToken);
+  const proposalSummaries = useSelector(sel.proposalSummariesByToken);
   const tokensSelector = useMemo(
     () => sel.makeGetUserProposalsTokens(userID),
     [userID]
@@ -204,7 +205,9 @@ export function useUserProposals({
 
   return {
     proposals: proposals
-      ? Object.values(getRfpLinkedProposals(proposals, voteSummaries))
+      ? Object.values(
+          getRfpLinkedProposals(proposals, voteSummaries, proposalSummaries)
+        )
       : [],
     onFetchProposalsBatch,
     proposalsTokens: tokens,

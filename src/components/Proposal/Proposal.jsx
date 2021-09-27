@@ -159,7 +159,7 @@ const Proposal = React.memo(function Proposal({
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isVoteActive = isVoteActiveProposal(voteSummary);
-  const isAbandoned = isAbandonedProposal(proposal);
+  const isAbandoned = isAbandonedProposal(proposalSummary);
   const isCensored = isCensoredProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
@@ -178,7 +178,8 @@ const Proposal = React.memo(function Proposal({
     extended &&
     !!rfpSubmissions &&
     !isEmpty(rfpSubmissions.proposals) &&
-    !isEmpty(rfpSubmissions.voteSummaries);
+    !isEmpty(rfpSubmissions.voteSummaries) &&
+    !isEmpty(rfpSubmissions.proposalSummaries);
   const showEditIcon =
     isAuthor &&
     isVotingAuthorized &&
@@ -321,6 +322,7 @@ const Proposal = React.memo(function Proposal({
                       {...getProposalStatusTagProps(
                         proposal,
                         voteSummary,
+                        proposalSummary,
                         isDarkTheme
                       )}
                     />

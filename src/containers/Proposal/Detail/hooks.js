@@ -52,6 +52,9 @@ export function useProposal(token, threadParentID) {
   const onFetchProposalsVoteSummary = useAction(
     act.onFetchProposalsBatchVoteSummary
   );
+  const onFetchBatchProposalSummary = useAction(
+    act.onFetchBatchProposalSummary
+  );
   const proposalSelector = useMemo(
     () => sel.makeGetProposalByToken(tokenShort),
     [tokenShort]
@@ -60,6 +63,10 @@ export function useProposal(token, threadParentID) {
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.voteSummariesByToken);
   const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
+  const proposalSummaries = useSelector(sel.proposalSummariesByToken);
+  const loadingProposalSummary = useSelector(
+    sel.isApiRequestingBatchProposalSummary
+  );
   const rfpLinks = getProposalRfpLinksTokens(proposal);
   const isRfp = proposal && !!proposal.linkby;
   const isSubmission = proposal && !!proposal.linkto;
@@ -89,11 +96,16 @@ export function useProposal(token, threadParentID) {
       voteSummaries: pick(
         voteSummaries,
         rfpLinks.map((l) => shortRecordToken(l))
+      ),
+      proposalSummaries: pick(
+        proposalSummaries,
+        rfpLinks.map((l) => shortRecordToken(l))
       )
     };
 
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !voteSummaries[tokenShort];
+  const isMissingProposalSummary = !proposalSummaries[tokenShort];
   const needsInitialFetch = token && isMissingDetails;
 
   const [remainingTokens, setRemainingTokens] = useState(
@@ -159,6 +171,12 @@ export function useProposal(token, threadParentID) {
           !loadingVoteSummary
         ) {
           onFetchProposalsVoteSummary(unfetchedSummariesTokens)
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        }
+        if (isMissingProposalSummary && !loadingProposalSummary) {
+          onFetchBatchProposalSummary([tokenShort])
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);

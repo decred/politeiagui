@@ -113,6 +113,7 @@ export default function useProposalsBatch({
   );
   const voteSummaries = useSelector(sel.voteSummariesByToken);
   updateCacheVoteStatusMap(voteSummaries);
+  const proposalSummaries = useSelector(sel.proposalSummariesByToken);
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
@@ -345,7 +346,8 @@ export default function useProposalsBatch({
   return {
     proposals: getRfpLinkedProposals(
       proposalWithCacheVotetatus(proposals),
-      voteSummaries
+      voteSummaries,
+      proposalSummaries
     ),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,

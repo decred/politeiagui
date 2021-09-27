@@ -36,12 +36,13 @@ import { useRouter } from "src/components/Router";
 const ProposalItem = ({
   proposal,
   proposal: { commentsCount, name, censorshiprecord },
-  voteSummary
+  voteSummary,
+  proposalSummary
 }) => {
   const { history } = useRouter();
   const isVoteActive = isVoteActiveProposal(voteSummary);
   const hasvoteSummary = !!voteSummary && !!voteSummary.endblockheight;
-  const isAbandoned = isAbandonedProposal(proposal);
+  const isAbandoned = isAbandonedProposal(proposalSummary);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const proposalToken = censorshiprecord && censorshiprecord.token;
@@ -128,6 +129,7 @@ const ProposalItem = ({
                 {...getProposalStatusTagProps(
                   proposal,
                   voteSummary,
+                  proposalSummary,
                   isDarkTheme
                 )}
               />

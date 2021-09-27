@@ -14,6 +14,10 @@ import {
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_SUMMARY_STATUS_CLOSED,
   PROPOSAL_SUMMARY_STATUS_COMPLETED,
+  PROPOSAL_SUMMARY_STATUS_ACTIVE,
+  PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED,
+  PROPOSAL_SUMMARY_STATUS_ABANDONED,
+  PROPOSAL_SUMMARY_STATUS_REJECTED,
   AUTHORIZED,
   ACTIVE_VOTE,
   APPROVED,
@@ -198,11 +202,13 @@ export const isUnderDiscussionProposal = (proposal, voteSummary) =>
 
 /**
  * Returns true if the given proposal is abandoned
- * @param {Object} proposal
+ * @param {Object} proposalSummary
  * @returns {Boolean} isAbandoned
  */
-export const isAbandonedProposal = (proposal) =>
-  !!proposal && proposal.status === PROPOSAL_STATUS_ARCHIVED;
+export const isAbandonedProposal = (proposalSummary) =>
+  !!proposalSummary &&
+  (proposalSummary.status === PROPOSAL_SUMMARY_STATUS_ABANDONED ||
+    proposalSummary.status === PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED);
 
 /**
  * Returns true if the given proposal is approved
@@ -242,6 +248,24 @@ export const isClosedProposal = (proposalSummary) =>
 export const isCompletedProposal = (proposalSummary) =>
   !!proposalSummary &&
   proposalSummary.status === PROPOSAL_SUMMARY_STATUS_COMPLETED;
+
+/**
+ * Returns true if the proposal is active
+ * @param {Object} proposalSummary
+ * @returns {Boolean} isActiveProposal
+ */
+export const isActiveProposal = (proposalSummary) =>
+  !!proposalSummary &&
+  proposalSummary.status === PROPOSAL_SUMMARY_STATUS_ACTIVE;
+
+/**
+ * Returns true if the proposal is rejected
+ * @param {Object} proposalSummary
+ * @returns {Boolean} isRejectedProposal
+ */
+export const isRejectedProposal = (proposalSummary) =>
+  !!proposalSummary &&
+  proposalSummary.status === PROPOSAL_SUMMARY_STATUS_REJECTED;
 
 /**
  * Return the amount of blocks left to the end of the voting period
@@ -328,9 +352,15 @@ export const goToFullProposal = (history, proposalURL) => () =>
 
 /**
  * Returns the proposal list with RFP Proposal linked to RFP submissions
- * @param {object} proposals
+ * @param {object} proposalsByToken
+ * @param {object} voteSumamries
+ * @param {object} proposalSummaries
  */
-export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
+export const getRfpLinkedProposals = (
+  proposalsByToken,
+  voteSummaries,
+  proposalSummaries
+) =>
   values(proposalsByToken).reduce((acc, proposal) => {
     const shortProposalToken = shortRecordToken(getProposalToken(proposal));
     const isRfp = !!proposal.linkby;
@@ -346,7 +376,8 @@ export const getRfpLinkedProposals = (proposalsByToken, voteSummaries) =>
       const linkedFrom = proposal.linkedfrom;
       const rfpSubmissions = linkedFrom && {
         proposals: values(pick(proposalsByToken, linkedFrom)),
-        voteSummaries: pick(voteSummaries, linkedFrom)
+        voteSummaries: pick(voteSummaries, linkedFrom),
+        proposalSummaries: pick(proposalSummaries, linkedFrom)
       };
       return {
         ...acc,

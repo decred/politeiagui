@@ -5,9 +5,7 @@ import {
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal,
   isRfpReadyToRunoff,
-  isApprovedProposal,
-  isClosedProposal,
-  isCompletedProposal
+  isActiveProposal
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
@@ -83,11 +81,8 @@ const PublicActions = ({
     rfpSubmissionsVoteSummaries
   );
   const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
-  const isApproved = isApprovedProposal(proposal, voteSummary);
-  const isClosed = isClosedProposal(proposalSummary);
-  const isCompleted = isCompletedProposal(proposalSummary);
-  const isSetBillingStatusAllowed =
-    isApproved && !isLegacy && !isClosed && !isCompleted;
+  const isActive = isActiveProposal(proposalSummary);
+  const isSetBillingStatusAllowed = isActive;
 
   const withProposal = (fn, cb) => () => {
     fn(proposal, cb);

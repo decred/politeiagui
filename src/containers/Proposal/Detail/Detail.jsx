@@ -14,7 +14,7 @@ import {
   isCensoredProposal,
   isAbandonedProposal,
   getProposalLink,
-  isApprovedProposal
+  isActiveProposal
 } from "../helpers";
 import {
   UnvettedActionsProvider,
@@ -75,17 +75,16 @@ const ProposalDetail = ({ Main, match, history }) => {
   const proposal = proposals[tokenFromUrl];
   const proposalToken = getProposalToken(proposal);
   const proposalState = proposal?.state;
-  const { voteSummary } = useProposalVote(proposalToken || tokenFromUrl);
+  const { voteSummary, proposalSummary } = useProposalVote(
+    proposalToken || tokenFromUrl
+  );
   const areCommentsAllowed =
-    !isVotingFinishedProposal(voteSummary) && !isAbandonedProposal(proposal);
-  // XXX this should be to false when the proposal billing status is set
-  // to closed or completed.
-  // Currently this piece of info isn't available and should be returned
-  // from the BE somehow.
-  const areAuthorUpdatesAllowed = isApprovedProposal(proposal, voteSummary);
+    !isVotingFinishedProposal(voteSummary) &&
+    !isAbandonedProposal(proposalSummary);
+  const areAuthorUpdatesAllowed = isActiveProposal(proposalSummary);
   const isUnvetted = proposalState === PROPOSAL_STATE_UNVETTED;
   const readOnly = !areCommentsAllowed && !areAuthorUpdatesAllowed;
-  const readOnlyReason = getCommentBlockedReason(proposal, voteSummary);
+  const readOnlyReason = getCommentBlockedReason(proposalSummary);
   const { javascriptEnabled } = useConfig();
   const { isPaid, paywallEnabled } = usePaywall();
   const paywallMissing = paywallEnabled && !isPaid;

@@ -23,7 +23,9 @@ const Placeholder = () => {
   );
 };
 
-const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
+const ProposalsList = ({
+  data: { proposals, voteSummaries, proposalSummaries }
+}) => {
   const hasSubmissions = proposals.length > 0;
   return (
     <div className="margin-top-l">
@@ -42,6 +44,11 @@ const ProposalsList = ({ data: { proposals, voteSummaries } }) => {
               proposal={proposal}
               voteSummary={
                 voteSummaries[
+                  shortRecordToken(proposals[index]?.censorshiprecord.token)
+                ]
+              }
+              proposalSummary={
+                proposalSummaries[
                   shortRecordToken(proposals[index]?.censorshiprecord.token)
                 ]
               }

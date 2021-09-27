@@ -440,28 +440,34 @@ export const onFetchProposalsBatchWithoutState = (
   tokens,
   state,
   fetchProposals = true,
-  fetchVoteSummary = true
+  fetchVoteSummary = true,
+  fetchProposalSummary = true
 ) =>
   withCsrf(async (_, __, csrf) => {
     const requests = tokens?.map((token) => ({
       token,
       filenames: [PROPOSAL_METADATA_FILENAME, VOTE_METADATA_FILENAME]
     }));
-    const res = await Promise.all([
-      fetchProposals &&
-        api.proposalsBatch(csrf, {
-          requests,
-          state,
-          includefiles: true
-        }),
-      fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
-    ]);
-    const proposals =
-      fetchProposals && res.find((res) => res && res.records).records;
+    const [proposalsRes, voteSummariesRes, proposalSummariesRes] =
+      await Promise.all([
+        fetchProposals &&
+          api.proposalsBatch(csrf, {
+            requests,
+            state,
+            includefiles: true
+          }),
+        fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens),
+        fetchProposalSummary && api.batchProposalSummary(csrf, tokens)
+      ]);
+    const proposals = fetchProposals && proposalsRes && proposalsRes.records;
     const parsedProposals = proposals && parseReceivedProposalsMap(proposals);
-    const summaries =
-      fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
-    return [parsedProposals, summaries];
+    const voteSummaries =
+      fetchVoteSummary && voteSummariesRes && voteSummariesRes.summaries;
+    const proposalSummaries =
+      fetchProposalSummary &&
+      proposalSummariesRes &&
+      proposalSummariesRes.summaries;
+    return [parsedProposals, voteSummaries, proposalSummaries];
   });
 
 export const onFetchProposalDetailsWithoutState =

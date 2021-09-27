@@ -20,6 +20,9 @@ export const isApiRequestingPropVoteResults = getIsApiRequesting(
 export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
   "proposalsVoteSummary"
 );
+export const isApiRequestingBatchProposalSummary = getIsApiRequesting(
+  "batchProposalSummary"
+);
 export const isApiRequestingVotesDetails = getIsApiRequesting("votesDetails");
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequestingProposalPaywall = getIsApiRequesting(

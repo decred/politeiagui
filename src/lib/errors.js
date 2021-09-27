@@ -296,6 +296,7 @@ function PiPluginError(code, context) {
     10: `Proposal amount is invalid, ${context}`,
     11: `Proposal domain is invalid, ${context}`,
     15: `${context}`,
+    16: `${context}`,
     18: "Author update title is missing"
   };
 

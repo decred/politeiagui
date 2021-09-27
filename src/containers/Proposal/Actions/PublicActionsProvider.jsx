@@ -139,13 +139,17 @@ const PublicActionsProvider = ({ children, history }) => {
       if (!submissionsTokens || !submissionsTokens.length) {
         throw Error("No RFP submissions available");
       }
-      const [submissions] = await onFetchProposalsBatchWithoutState(
-        submissionsTokens,
-        PROPOSAL_STATE_VETTED
-      );
-      // Filter abandoned submmsions out & maps to proposal tokens.
+      const [submissions, , submissionsProposalSummaries] =
+        await onFetchProposalsBatchWithoutState(
+          submissionsTokens,
+          PROPOSAL_STATE_VETTED
+        );
       const submissionVotes = values(submissions).flatMap((prop) =>
-        isAbandonedProposal(prop)
+        isAbandonedProposal(
+          submissionsProposalSummaries[
+            shortRecordToken(proposal.censorshiprecord.token)
+          ]
+        )
           ? []
           : [
               {

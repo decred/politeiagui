@@ -30,6 +30,7 @@ export const getStatusBarData = (voteSummary) =>
 export const getProposalStatusTagProps = (
   proposal,
   voteSummary,
+  proposalSummary,
   isDarkTheme
 ) => {
   const isRfpSubmission = !!proposal.linkto;
@@ -66,7 +67,7 @@ export const getProposalStatusTagProps = (
     }
   }
 
-  if (isAbandonedProposal(proposal)) {
+  if (isAbandonedProposal(proposalSummary)) {
     return {
       type: isDarkTheme ? "blueNegative" : "grayNegative",
       text: "Abandoned"
