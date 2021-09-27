@@ -1,32 +1,5 @@
-import {
-  PROPOSAL_METADATA_FILENAME,
-  VOTE_METADATA_FILENAME
-} from "../../utils";
-import compose from "lodash/fp/compose";
-import filter from "lodash/fp/filter";
-import keys from "lodash/fp/keys";
-import first from "lodash/fp/first";
-import get from "lodash/fp/get";
-import find from "lodash/fp/find";
-
-function findRecordFileByName(record, name) {
-  return compose(
-    find((file) => file.name === name),
-    get("files")
-  )(record);
-}
-
-function getShortProposalToken(records = {}) {
-  return compose(
-    first,
-    filter(
-      (token) =>
-        !findRecordFileByName(records[token], VOTE_METADATA_FILENAME) &&
-        findRecordFileByName(records[token], PROPOSAL_METADATA_FILENAME)
-    ),
-    keys
-  )(records);
-}
+import { getFirstShortProposalToken } from "../../utils";
+import path from "path";
 
 describe("Record Details", () => {
   describe("proposal details", () => {
@@ -40,7 +13,7 @@ describe("Record Details", () => {
         cy.visit("/");
         cy.wait("@records").then(({ response: { body } }) => {
           const { records } = body;
-          shortToken = getShortProposalToken(records);
+          shortToken = getFirstShortProposalToken(records);
           token = records[shortToken].censorshiprecord.token;
           expect(
             shortToken,
@@ -48,11 +21,11 @@ describe("Record Details", () => {
           ).to.exist;
         });
       });
-      it("can render proposal correctly by short token", () => {
+      it("should render a propsoal with a short token", () => {
         cy.visit(`/record/${shortToken}`);
         cy.wait("@details");
       });
-      it("can render proposal correctly by full token", () => {
+      it("should render a proposal with a full token", () => {
         cy.visit(`/record/${token}`);
         cy.wait("@details");
       });
@@ -77,6 +50,41 @@ describe("Record Details", () => {
           .and("include.text", "End Date");
       });
     });
+    describe("proposal downloads", () => {
+      beforeEach(() => {
+        cy.visit("/");
+        cy.wait("@records").then(({ response: { body } }) => {
+          const { records } = body;
+          shortToken = getFirstShortProposalToken(records);
+          token = records[shortToken].censorshiprecord.token;
+          expect(
+            shortToken,
+            "You should have at least one record Under Review."
+          ).to.exist;
+        });
+      });
+      it("should publicly allow to download proposal bundle", () => {
+        cy.visit(`/record/${shortToken}`);
+        cy.wait("@details");
+        cy.findByTestId("record-links").click();
+        cy.findByText(/proposal bundle/i).click();
+        const downloadsFolder = Cypress.config("downloadsFolder");
+        cy.readFile(path.join(downloadsFolder, `${shortToken}-v1.json`)).should(
+          "exist"
+        );
+      });
+      it("should publicly allow to download proposal timestamps", () => {
+        cy.visit(`/record/${shortToken}`);
+        cy.wait("@details");
+        cy.findByTestId("record-links").click();
+        cy.findByText(/proposal timestamps/i).click();
+        const config = Cypress.config();
+        const downloadsFolder = Cypress.config("downloadsFolder");
+        cy.readFile(
+          path.join(downloadsFolder, `${shortToken}-v1-timestamps.json`)
+        ).should("exist");
+      });
+    });
     describe("invalid proposal rendering", () => {
       it("should dislpay not found message for nonexistent proposals", () => {
         cy.visit("/record/invalidtoken");
@@ -94,7 +102,7 @@ describe("Record Details", () => {
         cy.visit("/admin/records");
         cy.wait("@records").then(({ response: { body } }) => {
           const { records } = body;
-          shortToken = getShortProposalToken(records);
+          shortToken = getFirstShortProposalToken(records);
           expect(shortToken, "You should have at least one unvetted record.").to
             .exist;
         });

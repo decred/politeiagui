@@ -21,7 +21,7 @@ const getTokensByStatusTab = (inventory, currentTab) =>
 
 describe("Records list", () => {
   describe("records and inventory pagination", () => {
-    it("work correct with 0 item in some statuses.", () => {
+    it("should render list correctly when some status are empty", () => {
       // emulate api
       cy.middleware("ticketvote.inventory", {
         authorized: 0,
@@ -41,7 +41,33 @@ describe("Records list", () => {
       cy.assertListLengthByTestId("record-title", 1);
     });
 
-    it("do not lose any status.", () => {
+    it("should switch tabs and show empty message when list is empty", () => {
+      cy.middleware("ticketvote.inventory", {
+        authorized: 0,
+        started: 0,
+        unauthorized: 0,
+        approved: 0,
+        rejected: 0,
+        ineligible: 0
+      });
+      cy.middleware("records.records");
+
+      cy.visit(`/`);
+      cy.wait("@ticketvote.inventory");
+      cy.findByTestId("help-message").should("be.visible");
+      cy.scrollTo("bottom");
+      // switch to another tab
+      cy.findByTestId("tab-1").click();
+      // assert legacy proposals
+      cy.assertListLengthByTestId("record-title", 0);
+      // back to empty list tab
+      cy.findByTestId("tab-0").click();
+      // wait to see if no requests are done, since inventory is fully fetched
+      cy.wait(1000);
+      cy.findByTestId("help-message").should("be.visible");
+    });
+
+    it("should render all status even when page batch is not complete", () => {
       // emulate api
       cy.middleware("ticketvote.inventory", {
         authorized: 1,
@@ -61,7 +87,7 @@ describe("Records list", () => {
       cy.assertListLengthByTestId("record-title", 3);
     });
 
-    it("scan inventory pages correctly", () => {
+    it("should scan inventory pages correctly", () => {
       // emulate api
       cy.middleware("ticketvote.inventory", {
         authorized: 20,
@@ -149,7 +175,7 @@ describe("Records list", () => {
       });
       cy.middleware("records.records");
     });
-    it("can render first proposals batch according to inventory order", () => {
+    it("should render first proposals batch according to inventory order", () => {
       let inventory;
       cy.visit(`/`);
       cy.wait("@ticketvote.inventory").then(({ response: { body } }) => {
@@ -164,7 +190,7 @@ describe("Records list", () => {
           expect(id).to.have.string(expectedToken);
         });
     });
-    it("can switch tabs and load proposals correctly", () => {
+    it("should switch tabs and load proposals correctly", () => {
       cy.visit("/?tab=approved");
       cy.wait("@ticketvote.inventory");
       cy.wait("@records.records");
@@ -174,7 +200,7 @@ describe("Records list", () => {
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 5);
     });
-    it("can list legacy proposals", () => {
+    it("should list legacy proposals", () => {
       // for approved proposals
       cy.visit("/?tab=approved");
       cy.wait("@ticketvote.inventory");
@@ -189,7 +215,7 @@ describe("Records list", () => {
       cy.wait(1000);
       cy.assertListLengthByTestId("record-title-legacy", 20);
     });
-    it("can load sidebar according to screen resolution", () => {
+    it("should load sidebar according to screen resolution", () => {
       cy.visit("/");
       cy.findByTestId("sidebar").should("be.visible");
       cy.viewport("iphone-6");
@@ -200,7 +226,7 @@ describe("Records list", () => {
       cy.viewport(1001, 500);
       cy.findByTestId("sidebar").should("be.visible");
     });
-    it("can render loading placeholders properly", () => {
+    it("should render loading placeholders properly", () => {
       cy.visit(`/`);
       cy.get('[data-testid="loading-placeholders"] > div').should(
         "have.length",

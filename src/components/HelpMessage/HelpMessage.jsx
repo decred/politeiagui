@@ -6,7 +6,9 @@ const HelpMessage = ({ className, children }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
-    <div className={classNames("justify-center", styles.container)}>
+    <div
+      className={classNames("justify-center", styles.container)}
+      data-testid="help-message">
       <Text
         textAlign="center"
         className={classNames(

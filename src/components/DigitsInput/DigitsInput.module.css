@@ -35,3 +35,9 @@
   height: 0;
   width: 0;
 }
+
+@media screen and (max-width: 560px) {
+  .digitsWrapper > div {
+    margin-right: 1rem;
+  }
+}
