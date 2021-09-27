@@ -95,7 +95,7 @@ describe("User comments", () => {
     );
   });
 });
-describe.only("Comments downloads", () => {
+describe("Comments downloads", () => {
   let shortToken = "";
   beforeEach(() => {
     cy.server();
