@@ -82,7 +82,7 @@ argument.
 
 > Check the Cypress and Jest docs for more info.
 
-However, the most applications are not static, and you can't test it only
+However, applications are mostly not static, and you can't test them only
 visually, because users are supposed to **interact** with the platform: click
 on page buttons and links, fill forms, scroll the page... Basically, if there's
 a button, users will click on it.
@@ -234,5 +234,5 @@ describe("Proposals list", () => {
 });
 ```
 
-Now, if we turned off the backend, the tests would still be able to render the
+Now, if we turn off the backend, the tests will still be able to render the
 proposals list.
