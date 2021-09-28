@@ -13,7 +13,11 @@ import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
-import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
+import {
+  getProposalStatusTagProps,
+  getLegacyProposalStatusTagProps,
+  getStatusBarData
+} from "./helpers";
 import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
 import {
   getMarkdownContent,
@@ -205,6 +209,10 @@ const Proposal = React.memo(function Proposal({
     [files, rawMarkdown]
   );
 
+  const statusTagProps = isLegacy
+    ? getLegacyProposalStatusTagProps(proposal, voteSummary, isDarkTheme)
+    : getProposalStatusTagProps(proposal, proposalSummary, isDarkTheme);
+
   return (
     <>
       <RecordWrapper
@@ -316,14 +324,7 @@ const Proposal = React.memo(function Proposal({
               }
               status={
                 <Status>
-                  <StatusTag
-                    className={styles.statusTag}
-                    {...getProposalStatusTagProps(
-                      proposal,
-                      proposalSummary,
-                      isDarkTheme
-                    )}
-                  />
+                  <StatusTag className={styles.statusTag} {...statusTagProps} />
                   {showVoteEnd && (
                     <Event
                       event={`vote end${isVoteActive ? "s" : "ed"}`}
