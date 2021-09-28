@@ -1,13 +1,13 @@
 import Promise from "promise";
-import * as api from "src/lib/api";
+import * as api from "../lib/api";
 import {
   resetNewInvoiceData,
   resetNewProposalData,
   resetNewDccData
-} from "src/lib/editors_content_backup";
-import { clearStateLocalStorage } from "src/lib/local_storage";
-import * as pki from "src/lib/pki";
-import * as sel from "src/selectors";
+} from "../lib/editors_content_backup";
+import { clearStateLocalStorage } from "../lib/local_storage";
+import * as pki from "../lib/pki";
+import * as sel from "../selectors";
 import act from "./methods";
 import {
   PAYWALL_STATUS_PAID,
