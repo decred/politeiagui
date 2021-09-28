@@ -128,7 +128,6 @@ const ProposalItem = ({
                 className={styles.statusTag}
                 {...getProposalStatusTagProps(
                   proposal,
-                  voteSummary,
                   proposalSummary,
                   isDarkTheme
                 )}

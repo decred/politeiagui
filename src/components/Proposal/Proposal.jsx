@@ -321,7 +321,6 @@ const Proposal = React.memo(function Proposal({
                       className={styles.statusTag}
                       {...getProposalStatusTagProps(
                         proposal,
-                        voteSummary,
                         proposalSummary,
                         isDarkTheme
                       )}
