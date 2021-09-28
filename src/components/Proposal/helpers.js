@@ -1,4 +1,5 @@
 import {
+  PROPOSAL_SUMMARY_STATUS_UNVETTED,
   PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED,
   PROPOSAL_SUMMARY_STATUS_ABANDONED,
   PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED,
@@ -35,6 +36,11 @@ export const getProposalStatusTagProps = (
   const isRfpSubmission = !!proposal.linkto;
   if (proposalSummary) {
     switch (proposalSummary.status) {
+      case PROPOSAL_SUMMARY_STATUS_UNVETTED:
+        return {
+          type: "yellowTime",
+          text: "Unvetted"
+        };
       case PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED:
       case PROPOSAL_SUMMARY_STATUS_ABANDONED:
         return {

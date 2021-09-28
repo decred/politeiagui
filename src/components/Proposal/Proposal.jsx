@@ -315,57 +315,55 @@ const Proposal = React.memo(function Proposal({
                 </Subtitle>
               }
               status={
-                (isPublic || isAbandoned || isCensored) && (
-                  <Status>
-                    <StatusTag
-                      className={styles.statusTag}
-                      {...getProposalStatusTagProps(
-                        proposal,
-                        proposalSummary,
-                        isDarkTheme
-                      )}
+                <Status>
+                  <StatusTag
+                    className={styles.statusTag}
+                    {...getProposalStatusTagProps(
+                      proposal,
+                      proposalSummary,
+                      isDarkTheme
+                    )}
+                  />
+                  {showVoteEnd && (
+                    <Event
+                      event={`vote end${isVoteActive ? "s" : "ed"}`}
+                      timestamp={voteEndTimestamp}
+                      className={styles.subtitleStatusTag}
+                      size="small"
                     />
-                    {showVoteEnd && (
-                      <Event
-                        event={`vote end${isVoteActive ? "s" : "ed"}`}
-                        timestamp={voteEndTimestamp}
-                        className={styles.subtitleStatusTag}
-                        size="small"
-                      />
-                    )}
-                    {isAbandoned && (
-                      <Event
-                        event="abandoned"
-                        timestamp={abandonedat}
-                        className={styles.subtitleStatusTag}
-                        size="small"
-                      />
-                    )}
-                    {isCensored && (
-                      <Event
-                        event="censored"
-                        timestamp={censoredat}
-                        className={styles.subtitleStatusTag}
-                        size="small"
-                        username={statuschangeusername}
-                      />
-                    )}
-                    {isVoteActive && (
-                      <>
-                        <Text
-                          className={classNames(
-                            "hide-on-mobile",
-                            styles.blocksLeft
-                          )}
-                          size="small">
-                          {`${voteBlocksLeft} block${
-                            voteBlocksLeft > 1 ? "s" : ""
-                          } left`}
-                        </Text>
-                      </>
-                    )}
-                  </Status>
-                )
+                  )}
+                  {isAbandoned && (
+                    <Event
+                      event="abandoned"
+                      timestamp={abandonedat}
+                      className={styles.subtitleStatusTag}
+                      size="small"
+                    />
+                  )}
+                  {isCensored && (
+                    <Event
+                      event="censored"
+                      timestamp={censoredat}
+                      className={styles.subtitleStatusTag}
+                      size="small"
+                      username={statuschangeusername}
+                    />
+                  )}
+                  {isVoteActive && (
+                    <>
+                      <Text
+                        className={classNames(
+                          "hide-on-mobile",
+                          styles.blocksLeft
+                        )}
+                        size="small">
+                        {`${voteBlocksLeft} block${
+                          voteBlocksLeft > 1 ? "s" : ""
+                        } left`}
+                      </Text>
+                    </>
+                  )}
+                </Status>
               }
               mobile={mobile}
             />
