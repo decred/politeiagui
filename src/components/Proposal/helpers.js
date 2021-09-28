@@ -64,7 +64,7 @@ export const getProposalStatusTagProps = (
         };
 
       case PROPOSAL_SUMMARY_STATUS_VOTE_STARTED:
-        return { type: "bluePending", text: "Active" };
+        return { type: "blueTime", text: "Voting" };
 
       case PROPOSAL_SUMMARY_STATUS_REJECTED:
         return {
@@ -73,10 +73,10 @@ export const getProposalStatusTagProps = (
         };
 
       case PROPOSAL_SUMMARY_STATUS_ACTIVE:
-        return { type: "greenCheck", text: "Approved" };
+        return { type: "bluePending", text: "Active" };
 
       case PROPOSAL_SUMMARY_STATUS_CLOSED:
-        return { type: "greenCheck", text: "Closed" };
+        return { type: "grayNegative", text: "Closed" };
 
       case PROPOSAL_SUMMARY_STATUS_COMPLETED:
         return { type: "greenCheck", text: "Completed" };
