@@ -146,9 +146,7 @@ const PublicActionsProvider = ({ children, history }) => {
         );
       const submissionVotes = values(submissions).flatMap((prop) =>
         isAbandonedProposal(
-          submissionsProposalSummaries[
-            shortRecordToken(proposal.censorshiprecord.token)
-          ]
+          submissionsProposalSummaries[prop.censorshiprecord.token]
         )
           ? []
           : [
