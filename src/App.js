@@ -42,7 +42,7 @@ const Metatags = () => (
         process.env.REACT_APP_WEBSITE_BANNER_FILENAME
       }
     />
-    <meta name="og:url" content={document.URL} />
+    <meta name="og:url" content={document.location.origin} />
     <meta
       name="twitter:image"
       content={
