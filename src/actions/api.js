@@ -1283,11 +1283,6 @@ export const onSetBillingStatus = (token, billingStatus, reason) =>
         dispatch(
           act.RECEIVE_SET_BILLING_STATUS({ token, billingStatus, reason })
         );
-        dispatch(
-          onFetchProposalsBatch({
-            tokens: [token]
-          })
-        );
       })
       .catch((error) => {
         act.RECEIVE_SET_BILLING_STATUS(null, error);

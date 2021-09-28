@@ -21,9 +21,12 @@ import {
   INELIGIBLE,
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_STATE_VETTED,
+  PROPOSAL_BILLING_STATUS_CLOSED,
   PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW,
   PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
-  PROPOSAL_SUMMARY_STATUS_VOTE_STARTED
+  PROPOSAL_SUMMARY_STATUS_VOTE_STARTED,
+  PROPOSAL_SUMMARY_STATUS_CLOSED,
+  PROPOSAL_SUMMARY_STATUS_COMPLETED
 } from "src/constants";
 import {
   shortRecordToken,
@@ -182,17 +185,20 @@ const onReceiveLogout = (state) =>
     set("numOfProposalsByUserId", DEFAULT_STATE.numOfProposalsByUserId)
   )(state);
 
-const updateMultiProposalSummaryStatus = (tokens, newStatus) => (state) => {
-  tokens.forEach(
-    (token) => (state = updateProposalSummaryStatus(state, token, newStatus))
-  );
-  return state;
-};
+const updateMultiProposalSummary =
+  (tokens, newStatus, newReason) => (state) => {
+    tokens.forEach(
+      (token) =>
+        (state = updateProposalSummary(state, token, newStatus, newReason))
+    );
+    return state;
+  };
 
-const updateProposalSummaryStatus = (state, token, newStatus) =>
+const updateProposalSummary = (state, token, newStatus, reason) =>
   update(["summaries", shortRecordToken(token)], (proposalSummary) => ({
     ...proposalSummary,
-    status: newStatus
+    status: newStatus,
+    statusreason: reason
   }))(state);
 
 const proposals = (state = DEFAULT_STATE, action) =>
@@ -345,22 +351,31 @@ const proposals = (state = DEFAULT_STATE, action) =>
                   action.payload.tokens
                 )
               ),
-              updateMultiProposalSummaryStatus(
+              updateMultiProposalSummary(
                 action.payload.tokens,
                 PROPOSAL_SUMMARY_STATUS_VOTE_STARTED
               )
             )(state),
           [act.RECEIVE_AUTHORIZE_VOTE]: () =>
-            updateProposalSummaryStatus(
+            updateProposalSummary(
               state,
               action.payload.token,
               PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED
             ),
           [act.RECEIVE_REVOKE_AUTH_VOTE]: () =>
-            updateProposalSummaryStatus(
+            updateProposalSummary(
               state,
               action.payload.token,
               PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW
+            ),
+          [act.RECEIVE_SET_BILLING_STATUS]: () =>
+            updateProposalSummary(
+              state,
+              action.payload.token,
+              action.payload.billingStatus === PROPOSAL_BILLING_STATUS_CLOSED
+                ? PROPOSAL_SUMMARY_STATUS_CLOSED
+                : PROPOSAL_SUMMARY_STATUS_COMPLETED,
+              action.payload.reason
             ),
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
