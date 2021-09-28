@@ -1,18 +1,6 @@
-import {
-  // router,
-  // navigateTo,
-  // fetchApi,
-  // selectApiStatus,
-  store,
-  selectRecordsInventoryStatus,
-  fetchRecordsInventory,
-  selectRecordsInventoryLastPage,
-  selectRecordsInventoryByStateAndStatus,
-  setRecordsFetchQueue,
-  fetchRecordsNextPage,
-  selectHasMoreRecordsToFetch,
-  selectRecordsByStateAndStatus,
-} from "@politeiagui/core";
+import { store } from "@politeiagui/core";
+import { records } from "@politeiagui/core/records";
+import { recordsInventory } from "@politeiagui/core/records/inventory";
 
 const publicRecord = {
   recordsState: "vetted",
@@ -30,15 +18,15 @@ const archivedRecord = {
 };
 
 function getInventoryStatus(state) {
-  const inventoryVettedPublicStatus = selectRecordsInventoryStatus(
+  const inventoryVettedPublicStatus = recordsInventory.selectStatus(
     state,
     publicRecord
   );
-  const inventoryVettedCensoredStatus = selectRecordsInventoryStatus(
+  const inventoryVettedCensoredStatus = recordsInventory.selectStatus(
     state,
     censoredRecord
   );
-  const inventoryVettedArchivedStatus = selectRecordsInventoryStatus(
+  const inventoryVettedArchivedStatus = recordsInventory.selectStatus(
     state,
     archivedRecord
   );
@@ -57,28 +45,28 @@ async function fetchInventory() {
   } = getInventoryStatus(store.getState());
   if (inventoryVettedPublicStatus === "idle") {
     await store.dispatch(
-      fetchRecordsInventory({
+      recordsInventory.fetch({
         ...publicRecord,
         page:
-          selectRecordsInventoryLastPage(store.getState(), publicRecord) + 1,
+          recordsInventory.selectLastPage(store.getState(), publicRecord) + 1,
       })
     );
   }
   if (inventoryVettedCensoredStatus === "idle") {
     await store.dispatch(
-      fetchRecordsInventory({
+      recordsInventory.fetch({
         ...censoredRecord,
         page:
-          selectRecordsInventoryLastPage(store.getState(), censoredRecord) + 1,
+        recordsInventory.selectLastPage(store.getState(), censoredRecord) + 1,
       })
     );
   }
   if (inventoryVettedArchivedStatus === "idle") {
     await store.dispatch(
-      fetchRecordsInventory({
+      recordsInventory.fetch({
         ...archivedRecord,
         page:
-          selectRecordsInventoryLastPage(store.getState(), archivedRecord) + 1,
+        recordsInventory.selectLastPage(store.getState(), archivedRecord) + 1,
       })
     );
   }
@@ -86,15 +74,14 @@ async function fetchInventory() {
 
 async function fetchRecords(status, opt) {
   if (status) {
-    const records = selectRecordsInventoryByStateAndStatus(
+    recordsInventory.selectByStateAndStatus(
       store.getState(),
       opt
     );
-    store.dispatch(setRecordsFetchQueue({ ...opt, records }));
-    let hasMoreRecords = selectHasMoreRecordsToFetch(store.getState(), opt);
+    let hasMoreRecords = records.selectHasMoreToFetch(store.getState(), opt);
     while (hasMoreRecords) {
-      await store.dispatch(fetchRecordsNextPage(opt));
-      hasMoreRecords = selectHasMoreRecordsToFetch(store.getState(), opt);
+      await store.dispatch(records.fetchNextPage(opt));
+      hasMoreRecords = records.selectHasMoreToFetch(store.getState(), opt);
     }
   }
 }
@@ -109,15 +96,15 @@ async function statisticsPage() {
   await fetchRecords(inventoryVettedPublicStatus, publicRecord);
   await fetchRecords(inventoryVettedCensoredStatus, censoredRecord);
   await fetchRecords(inventoryVettedArchivedStatus, archivedRecord);
-  const publicRecords = selectRecordsByStateAndStatus(
+  const publicRecords = records.selectByStateAndStatus(
     store.getState(),
     publicRecord
   );
-  const censoredRecords = selectRecordsByStateAndStatus(
+  const censoredRecords = records.selectByStateAndStatus(
     store.getState(),
     censoredRecord
   );
-  const archivedRecords = selectRecordsByStateAndStatus(
+  const archivedRecords = records.selectByStateAndStatus(
     store.getState(),
     archivedRecord
   );
@@ -135,11 +122,11 @@ async function statisticsPage() {
   </div>`;
 }
 
-function renderNumOfRecords(status, records) {
+function renderNumOfRecords(status, recordsArr) {
   return `
     <div>
       <h2># of ${status} records</h2>
-      <span>${records.length}</span>
+      <span>${recordsArr.length}</span>
     </div>
     `;
 }

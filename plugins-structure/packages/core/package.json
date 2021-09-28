@@ -1,9 +1,17 @@
 {
   "name": "@politeiagui/core",
   "version": "1.0.0",
-  "main": "./dist/main.js",
-  "module": "src/index.js",
   "license": "MIT",
+  "exports": {
+    ".": "./src/index.js",
+    "./api": "./src/api/index.js",
+    "./client": "./src/client/index.js",
+    "./records": "./src/records/records/index.js",
+    "./records/inventory": "./src/records/inventory/index.js",
+    "./records/ui": "./src/records/ui/index.js",
+    "./router": "./src/router/index.js",
+    "./routes": "./src/routes/index.js"
+  },
   "scripts": {
     "prettier": "prettier \"src/**/*.js\"",
     "format": "yarn prettier --write",

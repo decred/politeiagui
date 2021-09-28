@@ -29,7 +29,7 @@ const initialState = {
 
 // Thunks
 export const fetchRecordsInventory = createAsyncThunk(
-  "records/fetchRecordsInventory",
+  "recordsInventory/fetch",
   async (
     { recordsState, status, page },
     { dispatch, extra, rejectWithValue }
@@ -90,10 +90,6 @@ const recordsInventorySlice = createSlice({
       });
   },
 });
-
-// Actions - notice they have the same name than the properties on reducers
-// that's because createSlice automatically generate action creators for us
-export const { increment } = recordsInventorySlice.actions;
 
 // Selectors
 export const selectRecordsInventoryByStateAndStatus = (

@@ -22,7 +22,7 @@ const initialState = {
 
 // Thunks
 export const fetchRecords = createAsyncThunk(
-  "records/fetchRecords",
+  "records/fetch",
   async (body, { getState, extra, rejectWithValue }) => {
     try {
       return await extra.fetchRecords(getState(), body);
@@ -33,7 +33,7 @@ export const fetchRecords = createAsyncThunk(
 );
 
 export const fetchRecordsNextPage = createAsyncThunk(
-  "records/fetchRecordsNextPage",
+  "records/fetchNextPage",
   async (body = { pageSize: RECORDS_PAGE_SIZE }, { dispatch, getState }) => {
     let { pageSize, recordsState, status } = body;
     if (!pageSize) pageSize = RECORDS_PAGE_SIZE;

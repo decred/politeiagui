@@ -14,7 +14,7 @@ const initialState = {
 
 // Thunks
 export const fetchApi = createAsyncThunk(
-  "api/fetchApi",
+  "api/fetch",
   async (_, { extra }) => await extra.fetchApi()
 );
 
