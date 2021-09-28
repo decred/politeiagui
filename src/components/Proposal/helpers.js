@@ -138,7 +138,7 @@ export const getProposalStatusTagProps = (
         };
 
       case PROPOSAL_SUMMARY_STATUS_VOTE_STARTED:
-        return { type: "blueTime", text: "Voting" };
+        return { type: "bluePending", text: "Voting" };
 
       case PROPOSAL_SUMMARY_STATUS_REJECTED:
         return {
