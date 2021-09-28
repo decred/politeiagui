@@ -37,7 +37,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummary: false,
-    fetchProposalSummary: false,
+    fetchProposalSummary: true,
     unvetted: true,
     proposalStatus: statusByTab[tabLabels[tabIndex]]
   });
