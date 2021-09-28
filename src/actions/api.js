@@ -482,7 +482,7 @@ export const onFetchProposalsBatch = ({
   fetchVoteSummary = true,
   fetchProposalSummary = true,
   userid,
-  fetchProposalsCount = true
+  fetchCommentCounts = true
 }) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
@@ -497,7 +497,7 @@ export const onFetchProposalsBatch = ({
         }),
         fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
         fetchProposalSummary && dispatch(onFetchBatchProposalSummary(tokens)),
-        fetchProposalsCount && api.commentsCount(tokens)
+        fetchCommentCounts && api.commentsCount(tokens)
       ]);
       const proposals = response.find((res) => res && res.records).records;
       const summaries =
@@ -507,8 +507,8 @@ export const onFetchProposalsBatch = ({
         fetchProposalSummary &&
         response.find((res) => res && res.proposalSummaries).proposalSummaries;
       const commentsCount =
-        fetchProposalsCount && response.find((res) => res && res.counts).counts;
-      const proposalsWithCommentsCount = Object.keys(proposals).reduce(
+        fetchCommentCounts && response.find((res) => res && res.counts).counts;
+      const proposalsWithCommentCounts = Object.keys(proposals).reduce(
         (acc, curr) => ({
           ...acc,
           [curr]: {
@@ -520,12 +520,12 @@ export const onFetchProposalsBatch = ({
       );
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({
-          proposals: proposalsWithCommentsCount,
+          proposals: proposalsWithCommentCounts,
           userid
         })
       );
       return [
-        parseRawProposalsBatch(proposalsWithCommentsCount),
+        parseRawProposalsBatch(proposalsWithCommentCounts),
         summaries,
         proposalSummaries
       ];

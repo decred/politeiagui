@@ -102,9 +102,9 @@ const PublicActionsProvider = ({ children, history }) => {
   const handleSetBillingStatusModal = useCallback(
     (proposal) =>
       handleOpenModal(ModalSetBillingStatus, {
-        title: `Set billing status - ${proposal.name}`,
+        title: `Set Billing Status - ${proposal.name}`,
         onSubmit: onSetBillingStatus(proposal),
-        successTitle: "Billing status set",
+        successTitle: "Billing Status Set",
         successMessage: (
           <Text>The proposal billing status has been successfully set!</Text>
         ),

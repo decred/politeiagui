@@ -156,7 +156,7 @@ export function useProposal(token, threadParentID) {
             tokens: tokensBatch,
             fetchVoteSummary: isRfp,
             fetchProposalSummary: isRfp,
-            fetchProposalsCount: !isSubmission
+            fetchCommentCounts: !isSubmission
           })
             .then(() => {
               setRemainingTokens(next);

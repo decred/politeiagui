@@ -20,8 +20,11 @@ import {
   ARCHIVED,
   INELIGIBLE,
   PROPOSAL_STATE_UNVETTED,
-  PROPOSAL_STATE_VETTED
-} from "../../constants";
+  PROPOSAL_STATE_VETTED,
+  PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW,
+  PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
+  PROPOSAL_SUMMARY_STATUS_VOTE_STARTED
+} from "src/constants";
 import {
   shortRecordToken,
   getIndexMdFromText,
@@ -179,6 +182,19 @@ const onReceiveLogout = (state) =>
     set("numOfProposalsByUserId", DEFAULT_STATE.numOfProposalsByUserId)
   )(state);
 
+const updateMultiProposalSummaryStatus = (tokens, newStatus) => (state) => {
+  tokens.forEach(
+    (token) => (state = updateProposalSummaryStatus(state, token, newStatus))
+  );
+  return state;
+};
+
+const updateProposalSummaryStatus = (state, token, newStatus) =>
+  update(["summaries", shortRecordToken(token)], (proposalSummary) => ({
+    ...proposalSummary,
+    status: newStatus
+  }))(state);
+
 const proposals = (state = DEFAULT_STATE, action) =>
   action.error
     ? state
@@ -308,8 +324,8 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 };
               })
             )(state),
-          [act.RECEIVE_USER_INVENTORY]: () => {
-            return compose(
+          [act.RECEIVE_USER_INVENTORY]: () =>
+            compose(
               update(["allTokensByUserId"], () => {
                 return {
                   [action.payload.userid]: action.payload.proposals
@@ -319,16 +335,33 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 ["numOfProposalsByUserId", action.payload.userid],
                 action.payload.numofproposals
               )
-            )(state);
-          },
+            )(state),
           [act.RECEIVE_START_VOTE]: () =>
-            update("allByVoteStatus", (allProps) =>
-              updateAllByVoteStatus(
-                allProps,
-                ACTIVE_VOTE,
-                action.payload.tokens
+            compose(
+              update("allByVoteStatus", (allProps) =>
+                updateAllByVoteStatus(
+                  allProps,
+                  ACTIVE_VOTE,
+                  action.payload.tokens
+                )
+              ),
+              updateMultiProposalSummaryStatus(
+                action.payload.tokens,
+                PROPOSAL_SUMMARY_STATUS_VOTE_STARTED
               )
             )(state),
+          [act.RECEIVE_AUTHORIZE_VOTE]: () =>
+            updateProposalSummaryStatus(
+              state,
+              action.payload.token,
+              PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED
+            ),
+          [act.RECEIVE_REVOKE_AUTH_VOTE]: () =>
+            updateProposalSummaryStatus(
+              state,
+              action.payload.token,
+              PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW
+            ),
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
             if (!state.byToken[comment.token]) return state;

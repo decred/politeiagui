@@ -127,7 +127,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       index={index}
       onSetIndex={handleSetIndex}
       onFetchMoreProposals={onFetchMoreProposals}
-      dropdownTabsForMobile={true}
+      dropdownTabsForMobile
       hasMore={hasMoreProposals}
       isLoading={loading || verifying || mdLoading}
       sort={sort}>
