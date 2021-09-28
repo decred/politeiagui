@@ -11,7 +11,6 @@ import {
   PROPOSAL_SUMMARY_STATUS_CLOSED,
   PROPOSAL_SUMMARY_STATUS_COMPLETED
 } from "src/constants";
-import { isPublicProposal } from "src/containers/Proposal/helpers";
 
 /**
  * Converts the api data for vote status into an array of data
@@ -34,7 +33,7 @@ export const getProposalStatusTagProps = (
   isDarkTheme
 ) => {
   const isRfpSubmission = !!proposal.linkto;
-  if (isPublicProposal(proposal) && !!proposalSummary) {
+  if (proposalSummary) {
     switch (proposalSummary.status) {
       case PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED:
       case PROPOSAL_SUMMARY_STATUS_ABANDONED:
