@@ -57,7 +57,7 @@ async function fetchInventory() {
       recordsInventory.fetch({
         ...censoredRecord,
         page:
-        recordsInventory.selectLastPage(store.getState(), censoredRecord) + 1,
+          recordsInventory.selectLastPage(store.getState(), censoredRecord) + 1,
       })
     );
   }
@@ -66,7 +66,7 @@ async function fetchInventory() {
       recordsInventory.fetch({
         ...archivedRecord,
         page:
-        recordsInventory.selectLastPage(store.getState(), archivedRecord) + 1,
+          recordsInventory.selectLastPage(store.getState(), archivedRecord) + 1,
       })
     );
   }
@@ -74,10 +74,7 @@ async function fetchInventory() {
 
 async function fetchRecords(status, opt) {
   if (status) {
-    recordsInventory.selectByStateAndStatus(
-      store.getState(),
-      opt
-    );
+    recordsInventory.selectByStateAndStatus(store.getState(), opt);
     let hasMoreRecords = records.selectHasMoreToFetch(store.getState(), opt);
     while (hasMoreRecords) {
       await store.dispatch(records.fetchNextPage(opt));

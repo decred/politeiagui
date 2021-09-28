@@ -64,17 +64,17 @@ const recordsSlice = createSlice({
   initialState,
   reducers: {
     // set the recordsFetchQueue object per state and status
-    setRecordsFetchQueue(state, action) {
+    setFetchQueue(state, action) {
       const { recordsState, status, records } = action.payload;
       setQueue(state, { recordsState, status, records });
     },
     // push values into an already initialzed recordsFetchQueue
-    pushRecordsFetchQueue(state, action) {
+    pushFetchQueue(state, action) {
       const { recordsState, status, records } = action.payload;
       state.recordsFetchQueue[recordsState][status].push(...records);
     },
     // pop values from the recordsFetchQueue
-    popRecordsFetchQueue(state, action) {
+    popFetchQueue(state, action) {
       const { recordsState, status, records } = action.payload;
       state.recordsFetchQueue[recordsState][status] = state.recordsFetchQueue[
         recordsState
@@ -118,11 +118,8 @@ const recordsSlice = createSlice({
 
 // Actions - notice they have the same name than the properties on reducers
 // that's because createSlice automatically generate action creators for us
-export const {
-  pushRecordsFetchQueue,
-  setRecordsFetchQueue,
-  popRecordsFetchQueue,
-} = recordsSlice.actions;
+export const { pushFetchQueue, setFetchQueue, popFetchQueue } =
+  recordsSlice.actions;
 
 // Selectors
 // export const selectRecordsInventory = state => state.recordsInventory.recordsInventory;

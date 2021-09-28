@@ -1,4 +1,9 @@
-import { fetchRecordsInventory, selectRecordsInventoryByStateAndStatus, selectRecordsInventoryStatus, selectRecordsInventoryLastPage } from "./recordsInventorySlice";
+import {
+  fetchRecordsInventory,
+  selectRecordsInventoryByStateAndStatus,
+  selectRecordsInventoryStatus,
+  selectRecordsInventoryLastPage,
+} from "./recordsInventorySlice";
 import { useFetchRecordsInventory } from "./useFetchRecordsInventory";
 
 export const recordsInventory = {
@@ -6,5 +11,5 @@ export const recordsInventory = {
   selectByStateAndStatus: selectRecordsInventoryByStateAndStatus,
   selectStatus: selectRecordsInventoryStatus,
   selectLastPage: selectRecordsInventoryLastPage,
-  useFetch: useFetchRecordsInventory
+  useFetch: useFetchRecordsInventory,
 };

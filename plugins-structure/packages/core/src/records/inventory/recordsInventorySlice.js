@@ -3,10 +3,7 @@
 // start/success/failure actions
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getRecordStatusCode, getRecordStateCode } from "../../utils";
-import {
-  setRecordsFetchQueue,
-  fetchRecordsNextPage,
-} from "../records/recordsSlice";
+import { setFetchQueue, fetchRecordsNextPage } from "../records/recordsSlice";
 
 const initialObj = {
   tokens: [],
@@ -43,10 +40,10 @@ export const fetchRecordsInventory = createAsyncThunk(
       const res = await extra.fetchRecordsInventory(obj);
       // Set the queue and fetch the first batch of records
       // Dispatching these actions here because they are necessary to populate the view and should run synchronously.
-      // setRecordsFetchQueue should always be dispatched here unless you have a really good reason to do it anywhere else.
+      // setFetchQueue should always be dispatched here unless you have a really good reason to do it anywhere else.
       // fetchRecordsNextPage should be called everytime the user wants to fetch a new batch.
       dispatch(
-        setRecordsFetchQueue({
+        setFetchQueue({
           recordsState,
           status,
           records: res[recordsState][status],

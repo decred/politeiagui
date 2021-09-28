@@ -1,20 +1,29 @@
-import { fetchRecords, fetchRecordsNextPage, pushRecordsFetchQueue, setRecordsFetchQueue, popRecordsFetchQueue, selectRecordsStatus, selectRecordByToken, selectRecords,
+import {
+  fetchRecords,
+  fetchRecordsNextPage,
+  pushFetchQueue,
+  setFetchQueue,
+  popFetchQueue,
+  selectRecordsStatus,
+  selectRecordByToken,
+  selectRecords,
   selectRecordsByStateAndStatus,
   selectRecordsFetchQueue,
-  selectHasMoreRecordsToFetch } from "./recordsSlice";
+  selectHasMoreRecordsToFetch,
+} from "./recordsSlice";
 import { useFetchRecords } from "./useFetchRecords";
 
 export const records = {
   fetch: fetchRecords,
   fetchNextPage: fetchRecordsNextPage,
-  pushFetchQueue: pushRecordsFetchQueue,
-  setFetchQueue: setRecordsFetchQueue,
-  popFetchQueue: popRecordsFetchQueue,
+  pushFetchQueue,
+  setFetchQueue,
+  popFetchQueue,
   selectStatus: selectRecordsStatus,
   selectByToken: selectRecordByToken,
   selectAll: selectRecords,
   selectByStateAndStatus: selectRecordsByStateAndStatus,
   selectFetchQueue: selectRecordsFetchQueue,
   selectHasMoreToFetch: selectHasMoreRecordsToFetch,
-  useFetch: useFetchRecords
+  useFetch: useFetchRecords,
 };

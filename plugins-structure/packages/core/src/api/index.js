@@ -4,5 +4,5 @@ export const api = {
   select: selectApi,
   selectStatus: selectApiStatus,
   fetch: fetchApi,
-  useFetch: useFetchApi
+  useFetch: useFetchApi,
 };
