@@ -1,5 +1,4 @@
 import React from "react";
-import { Helmet } from "react-helmet";
 import { Router } from "src/components/Router";
 import Config from "src/containers/Config";
 import {
@@ -31,28 +30,6 @@ const themes = {
   [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme, ...themeCustomVariables },
   [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme, ...themeCustomVariables }
 };
-
-const Metatags = () => (
-  <Helmet>
-    <meta
-      name="og:image"
-      content={
-        document.location.origin +
-        "/assets/images/" +
-        process.env.REACT_APP_WEBSITE_BANNER_FILENAME
-      }
-    />
-    <meta name="og:url" content={document.location.origin} />
-    <meta
-      name="twitter:image"
-      content={
-        document.location.origin +
-        "/assets/images/" +
-        process.env.REACT_APP_WEBSITE_BANNER_FILENAME
-      }
-    />
-  </Helmet>
-);
 
 const fonts = [
   {
@@ -89,7 +66,6 @@ const App = () => {
       themes={themes}
       defaultThemeName={DEFAULT_LIGHT_THEME_NAME}
       fonts={fonts}>
-      <Metatags />
       <ReduxProvider>
         <Config>
           <Loader>
