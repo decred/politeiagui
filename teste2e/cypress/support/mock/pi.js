@@ -5,5 +5,14 @@ export const middlewares = {
         body,
         statusCode
       })
-    )
+    ),
+  summaries: ({ token, status }) =>
+    cy.intercept("/api/pi/v1/summaries", (req) => {
+      req.continue((res) => {
+        res.body.summaries[token] = {
+          status
+        };
+        res.send(res.body);
+      });
+    })
 };

@@ -3,7 +3,7 @@ import {
   buildComment,
   buildAuthorUpdate
 } from "../../support/generate";
-import { shortRecordToken, PROPOSAL_VOTING_APPROVED } from "../../utils";
+import { shortRecordToken, PROPOSAL_SUMMARY_STATUS_ACTIVE } from "../../utils";
 
 describe("Proposal author updates", () => {
   it("Should allow proposal author to submit update on approved proposals, and normal users should be able to reply on the latest author update only", () => {
@@ -37,14 +37,14 @@ describe("Proposal author updates", () => {
         cy.route("POST", "/api/records/v1/setstatus").as("setstatus");
         cy.findByText(/confirm/i).click();
         cy.wait("@setstatus");
-        // Mock vote summary reply to set proposal vote status to
+        // Mock propsoal summary reply to set proposal status to
         // approved to test author updates.
-        cy.middleware("ticketvote.summaries", {
+        cy.middleware("pi.summaries", {
           token,
-          status: PROPOSAL_VOTING_APPROVED
+          status: PROPOSAL_SUMMARY_STATUS_ACTIVE
         });
         cy.visit(`record/${shortRecordToken(token)}`);
-        cy.wait("@ticketvote.summaries");
+        cy.wait("@pi.summaries");
         const { title, text } = buildAuthorUpdate();
         cy.findByTestId(/update-title/i).type(title);
         cy.findByTestId(/text-area/i).type(text);
@@ -60,6 +60,7 @@ describe("Proposal author updates", () => {
         cy.login(user1);
         cy.identity();
         cy.visit(`record/${shortRecordToken(token)}`);
+        cy.wait("@pi.summaries");
         cy.findByTestId(/text-area/i).should("not.exist");
         const { text: replyText } = buildComment();
         cy.findByText(/reply/i).click();
