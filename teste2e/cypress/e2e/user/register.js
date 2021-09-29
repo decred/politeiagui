@@ -1,4 +1,4 @@
-import { buildUser } from "../support/generate";
+import { buildUser } from "../../support/generate";
 
 describe("Registration", () => {
   it("Can register users", () => {
