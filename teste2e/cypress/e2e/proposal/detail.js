@@ -1,4 +1,5 @@
 import { getFirstShortProposalToken } from "../../utils";
+import { buildProposal } from "../../support/generate";
 import path from "path";
 
 describe("Record Details", () => {
@@ -99,13 +100,27 @@ describe("Record Details", () => {
       };
       beforeEach(() => {
         cy.login(admin);
-        cy.visit("/admin/records");
-        cy.wait("@records").then(({ response: { body } }) => {
-          const { records } = body;
-          shortToken = getFirstShortProposalToken(records);
-          expect(shortToken, "You should have at least one unvetted record.").to
-            .exist;
-        });
+        cy.identity();
+        const proposal = buildProposal();
+        cy.createProposal(proposal).then(
+          ({
+            body: {
+              record: {
+                censorshiprecord: { token }
+              }
+            }
+          }) => {
+            cy.visit("/admin/records");
+            cy.wait("@records").then(({ response: { body } }) => {
+              const { records } = body;
+              shortToken = getFirstShortProposalToken(records);
+              expect(
+                shortToken,
+                "You should have at least one unvetted record."
+              ).to.exist;
+            });
+          }
+        );
       });
       it("should be able to logout from unvetted proposal details page", () => {
         cy.middleware("comments.comments", 10, 1);
