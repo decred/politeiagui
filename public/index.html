@@ -1,24 +1,69 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <title>%REACT_APP_WEBSITE_NAME%</title>
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="%REACT_APP_WEBSITE_DESCRIPTION%" />
+    <!-- Facebook SEO -->
+    <meta property="og:type" content="website" />
+    <meta
+      name="og:title"
+      content="%REACT_APP_WEBSITE_NAME% - %REACT_APP_WEBSITE_SUBTITLE%"
+    />
+    <meta name="og:description" content="%REACT_APP_WEBSITE_DESCRIPTION%" />
+    <meta
+      name="og:image"
+      content="https://proposals.decred.org/assets/icons/android-chrome-512x512.png"
+    />
+    <!-- Twitter SEO -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="%REACT_APP_WEBSITE_NAME% - %REACT_APP_WEBSITE_SUBTITLE%"
+    />
+    <meta
+      name="twitter:description"
+      content="%REACT_APP_WEBSITE_DESCRIPTION%"
+    />
+    <meta
+      name="twitter:image"
+      content="https://proposals.decred.org/assets/icons/android-chrome-512x512.png"
+    />
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico?v=2">
-    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/assets/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/assets/icons/favicon-16x16.png">
-    <link rel="mask-icon" href="%PUBLIC_URL%/assets/icons/safari-pinned-tab.svg" color="#5bbad5">
-    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="%PUBLIC_URL%/assets/icons/apple-touch-icon.png">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="canonical" href="%PUBLIC_URL%" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico?v=2" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="%PUBLIC_URL%/assets/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="%PUBLIC_URL%/assets/icons/favicon-16x16.png"
+    />
+    <link
+      rel="mask-icon"
+      href="%PUBLIC_URL%/assets/icons/safari-pinned-tab.svg"
+      color="#5bbad5"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      sizes="180x180"
+      href="%PUBLIC_URL%/assets/icons/apple-touch-icon.png"
+    />
+    <meta name="theme-color" content="#ffffff" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -28,17 +73,20 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <link rel="stylesheet" href="%PUBLIC_URL%/nojs.css">
+    <link rel="stylesheet" href="%PUBLIC_URL%/nojs.css" />
   </head>
   <body class="subscriber">
     <noscript>
       <div class="nojs">
         <div>
-          JavaScript is <b>disabled.</b> It is currently required to access all the functionality of Politeia. There is a 
-          basic read-only version for disabled JavaScript clients. 
-        </div><br>
+          JavaScript is <b>disabled.</b> It is currently required to access all
+          the functionality of Politeia. There is a basic read-only version for
+          disabled JavaScript clients.
+        </div>
+        <br />
         <div>
-          <a href="/nojavascript/">No JS version</a> || <a href="/">Full version</a>
+          <a href="/nojavascript/">No JS version</a> ||
+          <a href="/">Full version</a>
         </div>
       </div>
     </noscript>
