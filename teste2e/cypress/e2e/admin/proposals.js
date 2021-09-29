@@ -1,5 +1,5 @@
 import { buildProposal } from "../../support/generate";
-import { shortRecordToken, PROPOSAL_VOTING_APPROVED } from "../../utils";
+import { shortRecordToken, PROPOSAL_SUMMARY_STATUS_ACTIVE } from "../../utils";
 
 describe("Admin proposals actions", () => {
   it("Should allow admins to approve propsoals", () => {
@@ -164,14 +164,14 @@ describe("Admin proposals actions", () => {
         cy.route("POST", "/api/records/v1/setstatus").as("setstatus");
         cy.findByText(/confirm/i).click();
         cy.wait("@setstatus");
-        // Mock vote summary reply to set proposal vote status to
-        // approved to test author updates.
-        cy.middleware("ticketvote.summaries", {
+        // Mock proposal summary reply and set proposal status to
+        // active in order to test author updates.
+        cy.middleware("pi.summaries", {
           token,
-          status: PROPOSAL_VOTING_APPROVED
+          status: PROPOSAL_SUMMARY_STATUS_ACTIVE
         });
         cy.visit(`record/${shortRecordToken(token)}`);
-        cy.wait("@ticketvote.summaries");
+        cy.wait("@pi.summaries");
         cy.findByText(/set billing status/i).click();
         cy.get("#select-billing-status").click();
         // Pick the completed billing status.
@@ -183,7 +183,10 @@ describe("Admin proposals actions", () => {
           .its("response.statusCode")
           .should("eq", 200);
         // Ensure success modal is displayed
-        cy.findByText(/ok/i).should("be.visible");
+        cy.findByText(/ok/i).click();
+        // Ensure Set Billing Status button is gone after setting billing
+        // status successfully.
+        cy.findByText(/set billing status/i).should("not.exist");
       }
     );
   });
