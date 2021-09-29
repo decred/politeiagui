@@ -50,6 +50,7 @@ const VerifyTotp = ({
         />
         {extended && (
           <Button
+            data-testid="totp-verify-button"
             type="submit"
             kind={
               enableVerify ? (extended ? "primary" : "secondary") : "disabled"
