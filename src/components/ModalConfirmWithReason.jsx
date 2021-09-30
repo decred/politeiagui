@@ -10,6 +10,7 @@ import {
 } from "pi-ui";
 import PropTypes from "prop-types";
 import FormWrapper from "src/components/FormWrapper";
+import ErrorBoundary from "src/components/ErrorBoundary";
 import * as Yup from "yup";
 
 const ModalConfirmWithReason = ({
@@ -36,6 +37,7 @@ const ModalConfirmWithReason = ({
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
+      throw e;
     }
   };
   useEffect(() => {
@@ -55,89 +57,91 @@ const ModalConfirmWithReason = ({
   );
 
   return (
-    <Modal
-      style={{ width: "600px" }}
-      title={(success && successTitle) || title}
-      show={show}
-      onClose={success && onCloseSuccess ? onCloseSuccess : onClose}
-      iconComponent={
-        !success ? (
-          <Icon type={"info"} size={26} />
-        ) : (
-          <Icon
-            type={"checkmark"}
-            size={26}
-            iconColor={iconCheckmarkColor}
-            backgroundColor={successIconBgColor}
-          />
-        )
-      }>
-      {!success && (
-        <P style={{ marginBottom: "20px" }}>
-          Please, provide a reason for this action.
-        </P>
-      )}
-      {!success && (
-        <FormWrapper
-          initialValues={{
-            reason: ""
-          }}
-          validationSchema={Yup.object().shape({
-            reason: Yup.string().required("Required")
-          })}
-          onSubmit={onSubmitReason}>
-          {({
-            Form,
-            Actions,
-            ErrorMessage,
-            values,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            errors,
-            touched,
-            isSubmitting
-          }) => (
-            <Form onSubmit={handleSubmit}>
-              {errors && errors.global && (
-                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
-              )}
-              <TextInput
-                data-testid="reason"
-                label={reasonLabel}
-                name="reason"
-                id={`reason-for-${subject}`}
-                type="text"
-                value={values.reason}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.reason && errors.reason}
-              />
-              <Actions className="no-padding-bottom">
-                <Button
-                  data-testid="reason-confirm"
-                  loading={isSubmitting}
-                  type="submit">
-                  Confirm
-                </Button>
-              </Actions>
-            </Form>
-          )}
-        </FormWrapper>
-      )}
-      {success && (
-        <>
-          {successMessage}
-          <div className="justify-right margin-top-m">
-            <Button
-              data-testid="reason-confirm-success"
-              onClick={onCloseSuccess || onClose}>
-              Ok
-            </Button>
-          </div>
-        </>
-      )}
-    </Modal>
+    <ErrorBoundary>
+      <Modal
+        style={{ width: "600px" }}
+        title={(success && successTitle) || title}
+        show={show}
+        onClose={success && onCloseSuccess ? onCloseSuccess : onClose}
+        iconComponent={
+          !success ? (
+            <Icon type={"info"} size={26} />
+          ) : (
+            <Icon
+              type={"checkmark"}
+              size={26}
+              iconColor={iconCheckmarkColor}
+              backgroundColor={successIconBgColor}
+            />
+          )
+        }>
+        {!success && (
+          <P style={{ marginBottom: "20px" }}>
+            Please, provide a reason for this action.
+          </P>
+        )}
+        {!success && (
+          <FormWrapper
+            initialValues={{
+              reason: ""
+            }}
+            validationSchema={Yup.object().shape({
+              reason: Yup.string().required("Required")
+            })}
+            onSubmit={onSubmitReason}>
+            {({
+              Form,
+              Actions,
+              ErrorMessage,
+              values,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              errors,
+              touched,
+              isSubmitting
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                {errors && errors.global && (
+                  <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+                )}
+                <TextInput
+                  data-testid="reason"
+                  label={reasonLabel}
+                  name="reason"
+                  id={`reason-for-${subject}`}
+                  type="text"
+                  value={values.reason}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.reason && errors.reason}
+                />
+                <Actions className="no-padding-bottom">
+                  <Button
+                    data-testid="reason-confirm"
+                    loading={isSubmitting}
+                    type="submit">
+                    Confirm
+                  </Button>
+                </Actions>
+              </Form>
+            )}
+          </FormWrapper>
+        )}
+        {success && (
+          <>
+            {successMessage}
+            <div className="justify-right margin-top-m">
+              <Button
+                data-testid="reason-confirm-success"
+                onClick={onCloseSuccess || onClose}>
+                Ok
+              </Button>
+            </div>
+          </>
+        )}
+      </Modal>
+    </ErrorBoundary>
   );
 };
 
