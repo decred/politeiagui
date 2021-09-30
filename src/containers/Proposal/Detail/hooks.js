@@ -52,14 +52,21 @@ export function useProposal(token, threadParentID) {
   const onFetchProposalsVoteSummary = useAction(
     act.onFetchProposalsBatchVoteSummary
   );
+  const onFetchBatchProposalSummary = useAction(
+    act.onFetchBatchProposalSummary
+  );
   const proposalSelector = useMemo(
     () => sel.makeGetProposalByToken(tokenShort),
     [tokenShort]
   );
   const proposal = useSelector(proposalSelector);
   const proposals = useSelector(sel.proposalsByToken);
-  const voteSummaries = useSelector(sel.summaryByToken);
+  const voteSummaries = useSelector(sel.voteSummariesByToken);
   const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
+  const proposalSummaries = useSelector(sel.proposalSummariesByToken);
+  const loadingProposalSummary = useSelector(
+    sel.isApiRequestingBatchProposalSummary
+  );
   const rfpLinks = getProposalRfpLinksTokens(proposal);
   const isRfp = proposal && !!proposal.linkby;
   const isSubmission = proposal && !!proposal.linkto;
@@ -89,11 +96,16 @@ export function useProposal(token, threadParentID) {
       voteSummaries: pick(
         voteSummaries,
         rfpLinks.map((l) => shortRecordToken(l))
+      ),
+      proposalSummaries: pick(
+        proposalSummaries,
+        rfpLinks.map((l) => shortRecordToken(l))
       )
     };
 
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !voteSummaries[tokenShort];
+  const isMissingProposalSummary = !proposalSummaries[tokenShort];
   const needsInitialFetch = token && isMissingDetails;
 
   const [remainingTokens, setRemainingTokens] = useState(
@@ -138,9 +150,14 @@ export function useProposal(token, threadParentID) {
         if (hasRemainingTokens) {
           const [tokensBatch, next] =
             getTokensForProposalsPagination(remainingTokens);
-          // Fetch summaries and count only if the proposal is a RFP.
+          // Fetch vote & proposal summaries only if the proposal is a RFP.
           // If it is a submission, just grab the records info.
-          onFetchProposalsBatch(tokensBatch, isRfp, undefined, !isSubmission)
+          onFetchProposalsBatch({
+            tokens: tokensBatch,
+            fetchVoteSummary: isRfp,
+            fetchProposalSummary: isRfp,
+            fetchCommentCounts: !isSubmission
+          })
             .then(() => {
               setRemainingTokens(next);
               return send(VERIFY);
@@ -154,6 +171,12 @@ export function useProposal(token, threadParentID) {
           !loadingVoteSummary
         ) {
           onFetchProposalsVoteSummary(unfetchedSummariesTokens)
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        }
+        if (isMissingProposalSummary && !loadingProposalSummary) {
+          onFetchBatchProposalSummary([tokenShort])
             .then(() => send(VERIFY))
             .catch((e) => send(REJECT, e));
           return send(FETCH);

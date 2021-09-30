@@ -53,7 +53,11 @@ export function useInvoice(invoiceToken) {
         },
         verify: function verifyRemainingProposalsTokens() {
           if (invoice && hasUnfetchedProposalsTokens) {
-            onFetchProposalsBatch(unfetchedProposalsTokens, false)
+            onFetchProposalsBatch({
+              tokens: unfetchedProposalsTokens,
+              fetchVoteSummary: false,
+              fetchProposalSummary: false
+            })
               .then(() => send(VERIFY))
               .catch((e) => send(REJECT, e));
           }

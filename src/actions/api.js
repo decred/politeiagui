@@ -1,5 +1,4 @@
 import Promise from "promise";
-import { PROPOSAL_STATUS_PUBLIC } from "../constants";
 import * as api from "../lib/api";
 import {
   resetNewInvoiceData,
@@ -27,7 +26,8 @@ import {
   VOTE_METADATA_FILENAME,
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_UPDATE_HINT,
-  PROPOSAL_MAIN_THREAD_KEY
+  PROPOSAL_MAIN_THREAD_KEY,
+  PROPOSAL_STATUS_PUBLIC
 } from "src/constants";
 import {
   parseReceivedProposalsMap,
@@ -437,34 +437,38 @@ export const onFetchProposalBilling = (token) =>
   });
 
 // state should be the state of requested proposals
-// XXX ensure all ref. call with state provided
-// XXX and includefiles param
 export const onFetchProposalsBatchWithoutState = (
   tokens,
   state,
   fetchProposals = true,
-  fetchVoteSummary = true
+  fetchVoteSummary = true,
+  fetchProposalSummary = true
 ) =>
   withCsrf(async (_, __, csrf) => {
     const requests = tokens?.map((token) => ({
       token,
       filenames: [PROPOSAL_METADATA_FILENAME, VOTE_METADATA_FILENAME]
     }));
-    const res = await Promise.all([
-      fetchProposals &&
-        api.proposalsBatch(csrf, {
-          requests,
-          state,
-          includefiles: true
-        }),
-      fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens)
-    ]);
-    const proposals =
-      fetchProposals && res.find((res) => res && res.records).records;
+    const [proposalsRes, voteSummariesRes, proposalSummariesRes] =
+      await Promise.all([
+        fetchProposals &&
+          api.proposalsBatch(csrf, {
+            requests,
+            state,
+            includefiles: true
+          }),
+        fetchVoteSummary && api.proposalsBatchVoteSummary(csrf, tokens),
+        fetchProposalSummary && api.batchProposalSummary(csrf, tokens)
+      ]);
+    const proposals = fetchProposals && proposalsRes && proposalsRes.records;
     const parsedProposals = proposals && parseReceivedProposalsMap(proposals);
-    const summaries =
-      fetchVoteSummary && res.find((res) => res && res.summaries).summaries;
-    return [parsedProposals, summaries];
+    const voteSummaries =
+      fetchVoteSummary && voteSummariesRes && voteSummariesRes.summaries;
+    const proposalSummaries =
+      fetchProposalSummary &&
+      proposalSummariesRes &&
+      proposalSummariesRes.summaries;
+    return [parsedProposals, voteSummaries, proposalSummaries];
   });
 
 export const onFetchProposalDetailsWithoutState =
@@ -474,12 +478,13 @@ export const onFetchProposalDetailsWithoutState =
   };
 
 // state should be the state of requested proposals
-export const onFetchProposalsBatch = (
+export const onFetchProposalsBatch = ({
   tokens,
   fetchVoteSummary = true,
+  fetchProposalSummary = true,
   userid,
-  fetchProposalsCount = true
-) =>
+  fetchCommentCounts = true
+}) =>
   withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_PROPOSALS_BATCH(tokens));
     const requests = tokens?.map((token) => ({
@@ -492,33 +497,39 @@ export const onFetchProposalsBatch = (
           requests
         }),
         fetchVoteSummary && dispatch(onFetchProposalsBatchVoteSummary(tokens)),
-        fetchProposalsCount && api.commentsCount(tokens)
+        fetchProposalSummary && dispatch(onFetchBatchProposalSummary(tokens)),
+        fetchCommentCounts && api.commentsCount(tokens)
       ]);
       const proposals = response.find((res) => res && res.records).records;
       const summaries =
         fetchVoteSummary &&
         response.find((res) => res && res.summaries).summaries;
+      const proposalSummaries =
+        fetchProposalSummary &&
+        response.find((res) => res && res.proposalSummaries).proposalSummaries;
       const commentsCount =
-        fetchProposalsCount && response.find((res) => res && res.counts).counts;
-      const proposalsWithCommentsCount = Object.keys(proposals).reduce(
-        (acc, curr) => {
-          return {
-            ...acc,
-            [curr]: {
-              ...proposals[curr],
-              commentsCount: commentsCount[curr]
-            }
-          };
-        },
+        fetchCommentCounts && response.find((res) => res && res.counts).counts;
+      const proposalsWithCommentCounts = Object.keys(proposals).reduce(
+        (acc, curr) => ({
+          ...acc,
+          [curr]: {
+            ...proposals[curr],
+            commentsCount: commentsCount[curr]
+          }
+        }),
         {}
       );
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({
-          proposals: proposalsWithCommentsCount,
+          proposals: proposalsWithCommentCounts,
           userid
         })
       );
-      return [parseRawProposalsBatch(proposalsWithCommentsCount), summaries];
+      return [
+        parseRawProposalsBatch(proposalsWithCommentCounts),
+        summaries,
+        proposalSummaries
+      ];
     } catch (e) {
       dispatch(act.RECEIVE_PROPOSALS_BATCH(null, e));
       throw e;
@@ -1251,6 +1262,7 @@ export const onSetProposalStatus = ({
             oldStatus
           })
         );
+        dispatch(onFetchBatchProposalSummary([token]));
         if (status === PROPOSAL_STATUS_PUBLIC) {
           dispatch(onFetchProposalsBatchVoteSummary([token]));
           if (linkto) {
@@ -1260,6 +1272,23 @@ export const onSetProposalStatus = ({
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
+        throw error;
+      });
+  });
+
+export const onSetBillingStatus = (token, billingStatus, reason) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const userid = sel.currentUserID(getState());
+    dispatch(act.REQUEST_SET_BILLING_STATUS({ token, billingStatus, reason }));
+    return api
+      .proposalSetBillingStatus(userid, csrf, token, billingStatus, reason)
+      .then(() => {
+        dispatch(
+          act.RECEIVE_SET_BILLING_STATUS({ token, billingStatus, reason })
+        );
+      })
+      .catch((error) => {
+        act.RECEIVE_SET_BILLING_STATUS(null, error);
         throw error;
       });
   });
@@ -1394,6 +1423,23 @@ export const onFetchProposalsBatchVoteSummary = (tokens) =>
       })
       .catch((error) => {
         dispatch(act.RECEIVE_PROPOSALS_VOTE_SUMMARY(null, error));
+        throw error;
+      });
+  });
+
+export const onFetchBatchProposalSummary = (tokens) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_BATCH_PROPOSAL_SUMMARY({ tokens }));
+    return api
+      .batchProposalSummary(csrf, tokens)
+      .then(({ summaries }) => {
+        dispatch(
+          act.RECEIVE_BATCH_PROPOSAL_SUMMARY({ summaries, success: true })
+        );
+        return { proposalSummaries: summaries };
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_BATCH_PROPOSAL_SUMMARY(null, error));
         throw error;
       });
   });

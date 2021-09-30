@@ -88,7 +88,8 @@ const proposalWithCacheVotetatus = (proposals) => {
 
 export default function useProposalsBatch({
   fetchRfpLinks,
-  fetchVoteSummaries = false,
+  fetchVoteSummary = false,
+  fetchProposalSummary = false,
   unvetted = false,
   proposalStatus,
   statuses,
@@ -110,8 +111,9 @@ export default function useProposalsBatch({
     () => currentStatuses[statusIndex],
     [currentStatuses, statusIndex]
   );
-  const voteSummaries = useSelector(sel.summaryByToken);
+  const voteSummaries = useSelector(sel.voteSummariesByToken);
   updateCacheVoteStatusMap(voteSummaries);
+  const proposalSummaries = useSelector(sel.proposalSummariesByToken);
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
@@ -238,7 +240,11 @@ export default function useProposalsBatch({
           remainingTokens,
           proposalPageSize
         );
-        onFetchProposalsBatch(tokensToFetch, fetchVoteSummaries)
+        onFetchProposalsBatch({
+          tokens: tokensToFetch,
+          fetchVoteSummary,
+          fetchProposalSummary
+        })
           .then(([fetchedProposals]) => {
             if (isEmpty(fetchedProposals)) {
               setRemainingTokens(next);
@@ -340,7 +346,8 @@ export default function useProposalsBatch({
   return {
     proposals: getRfpLinkedProposals(
       proposalWithCacheVotetatus(proposals),
-      voteSummaries
+      voteSummaries,
+      proposalSummaries
     ),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,

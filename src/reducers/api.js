@@ -174,6 +174,10 @@ const api = (state = DEFAULT_STATE, action) =>
         request("setStatusProposal", state, action),
       [act.RECEIVE_SETSTATUS_PROPOSAL]: () =>
         receive("setStatusProposal", state),
+      [act.REQUEST_SET_BILLING_STATUS]: () =>
+        request("setBillingStatus", state, action),
+      [act.RECEIVE_SET_BILLING_STATUS]: () =>
+        receive("setBillingStatus", state),
       [act.REQUEST_START_VOTE]: () => request("startVote", state, action),
       [act.RECEIVE_START_VOTE]: () => receive("startVote", state),
       [act.RECEIVE_START_RUNOFF_VOTE]: () => receive("startRunoffVote", state),
@@ -187,6 +191,10 @@ const api = (state = DEFAULT_STATE, action) =>
         request("proposalsVoteSummary", state, action),
       [act.RECEIVE_PROPOSALS_VOTE_SUMMARY]: () =>
         receive("proposalsVoteSummary", state, {}),
+      [act.REQUEST_BATCH_PROPOSAL_SUMMARY]: () =>
+        request("batchProposalSummary", state, action),
+      [act.RECEIVE_BATCH_PROPOSAL_SUMMARY]: () =>
+        receive("batchProposalSummary", state, action),
       [act.REQUEST_PROPOSAL_VOTE_RESULTS]: () =>
         request("proposalVoteResults", state, action),
       [act.RECEIVE_PROPOSAL_VOTE_RESULTS]: () =>

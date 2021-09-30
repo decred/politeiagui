@@ -10,6 +10,7 @@ import {
 import ModalConfirm from "src/components/ModalConfirm";
 import ModalConfirmWithReason from "src/components/ModalConfirmWithReason";
 import ModalStartVote from "src/components/ModalStartVote";
+import ModalSetBillingStatus from "src/components/ModalSetBillingStatus";
 import useModalContext from "src/hooks/utils/useModalContext";
 import values from "lodash/fp/values";
 import { shortRecordToken } from "src/helpers";
@@ -26,6 +27,7 @@ const PublicActionsProvider = ({ children, history }) => {
     onAuthorizeVote,
     onRevokeVote,
     onStartVote,
+    onSetBillingStatus,
     onFetchProposalsBatchWithoutState
   } = usePublicActions();
 
@@ -97,6 +99,21 @@ const PublicActionsProvider = ({ children, history }) => {
     [handleCloseModal, handleOpenModal, onRevokeVote]
   );
 
+  const handleSetBillingStatusModal = useCallback(
+    (proposal) =>
+      handleOpenModal(ModalSetBillingStatus, {
+        title: `Set Billing Status - ${proposal.name}`,
+        onSubmit: onSetBillingStatus(proposal),
+        successTitle: "Billing Status Set",
+        successMessage: (
+          <Text>The proposal billing status has been successfully set!</Text>
+        ),
+        onClose: handleCloseModal,
+        proposal
+      }),
+    [handleCloseModal, handleOpenModal, onSetBillingStatus]
+  );
+
   const handleStartVoteModal = useCallback(
     (proposal) => {
       const token = getProposalToken(proposal);
@@ -122,13 +139,15 @@ const PublicActionsProvider = ({ children, history }) => {
       if (!submissionsTokens || !submissionsTokens.length) {
         throw Error("No RFP submissions available");
       }
-      const [submissions] = await onFetchProposalsBatchWithoutState(
-        submissionsTokens,
-        PROPOSAL_STATE_VETTED
-      );
-      // Filter abandoned submmsions out & maps to proposal tokens.
+      const [submissions, , submissionsProposalSummaries] =
+        await onFetchProposalsBatchWithoutState(
+          submissionsTokens,
+          PROPOSAL_STATE_VETTED
+        );
       const submissionVotes = values(submissions).flatMap((prop) =>
-        isAbandonedProposal(prop)
+        isAbandonedProposal(
+          submissionsProposalSummaries[prop.censorshiprecord.token]
+        )
           ? []
           : [
               {
@@ -188,7 +207,8 @@ const PublicActionsProvider = ({ children, history }) => {
         onRevokeVote: handleOpenRevokeVoteModal,
         onStartVote: handleStartVoteModal,
         onCensor: handleOpenCensorModal,
-        onStartRunoffVote: handleStartRunoffVoteModal
+        onStartRunoffVote: handleStartRunoffVoteModal,
+        onSetBillingStatus: handleSetBillingStatusModal
       }}>
       {children}
     </PublicProposalsActionsContext.Provider>

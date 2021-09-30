@@ -1,10 +1,12 @@
 import { createSelector } from "reselect";
 import get from "lodash/fp/get";
+import keys from "lodash/keys";
 import { isEmpty } from "src/helpers";
 import { shortRecordToken } from "src/helpers";
 import { createDeepEqualSelector } from "../helpers";
 
 export const proposalsByToken = get(["proposals", "byToken"]);
+export const proposalSummariesByToken = get(["proposals", "summaries"]);
 export const legacyProposals = get(["proposals", "legacyProposals"]);
 export const allProposalsByUserID = get(["proposals", "allProposalsByUserId"]);
 export const allTokensByUserID = get(["proposals", "allTokensByUserId"]);
@@ -33,6 +35,14 @@ export const makeGetProposalByToken = (token) =>
     proposalsByToken,
     (propsByToken) => propsByToken[shortRecordToken(token)]
   );
+
+export const makeGetProposalSummaryByToken = (token) =>
+  createSelector(proposalSummariesByToken, (summaries) => {
+    const tokenFromSummary = keys(summaries).find(
+      (s) => shortRecordToken(s) === shortRecordToken(token)
+    );
+    return summaries[tokenFromSummary];
+  });
 
 export const makeGetUserProposalsTokens = (userId) =>
   createSelector(allTokensByUserID, get(userId));

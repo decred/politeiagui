@@ -7,7 +7,6 @@ import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChange
 import { PROPOSAL_STATUS_CENSORED } from "src/constants";
 import { tabValues, statusByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
-// XXX change to AdminActionsProvider
 import {
   UnvettedActionsProvider,
   PublicActionsProvider
@@ -37,7 +36,8 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     onFetchMoreProposals
   } = useProposalsBatch({
     fetchRfpLinks: true,
-    fetchVoteSummaries: false,
+    fetchVoteSummary: false,
+    fetchProposalSummary: true,
     unvetted: true,
     proposalStatus: statusByTab[tabLabels[tabIndex]]
   });

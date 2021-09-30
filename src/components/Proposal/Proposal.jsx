@@ -13,7 +13,11 @@ import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
-import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
+import {
+  getProposalStatusTagProps,
+  getLegacyProposalStatusTagProps,
+  getStatusBarData
+} from "./helpers";
 import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
 import {
   getMarkdownContent,
@@ -24,6 +28,7 @@ import {
   isActiveRfp,
   isEditableProposal,
   getQuorumInVotes,
+  isVoteActiveProposal,
   isVotingFinishedProposal,
   getProposalToken,
   isVotingAuthorizedProposal,
@@ -81,7 +86,7 @@ function replaceImgDigestWithPayload(text, files) {
 }
 
 const ProposalWrapper = (props) => {
-  const { voteSummary, voteBlocksLeft, voteActive, voteEndTimestamp } =
+  const { voteSummary, proposalSummary, voteBlocksLeft, voteEndTimestamp } =
     useProposalVote(getProposalToken(props.proposal));
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
@@ -90,8 +95,8 @@ const ProposalWrapper = (props) => {
       {...{
         ...props,
         voteSummary,
+        proposalSummary,
         voteBlocksLeft,
-        voteActive,
         voteEndTimestamp,
         currentUser,
         history
@@ -105,7 +110,7 @@ const Proposal = React.memo(function Proposal({
   extended,
   collapseBodyContent,
   voteSummary,
-  voteActive: isVoteActive,
+  proposalSummary,
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
@@ -157,7 +162,8 @@ const Proposal = React.memo(function Proposal({
   } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
-  const isAbandoned = isAbandonedProposal(proposal);
+  const isVoteActive = isVoteActiveProposal(voteSummary);
+  const isAbandoned = isAbandonedProposal(proposalSummary);
   const isCensored = isCensoredProposal(proposal);
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
@@ -176,7 +182,8 @@ const Proposal = React.memo(function Proposal({
     extended &&
     !!rfpSubmissions &&
     !isEmpty(rfpSubmissions.proposals) &&
-    !isEmpty(rfpSubmissions.voteSummaries);
+    !isEmpty(rfpSubmissions.voteSummaries) &&
+    !isEmpty(rfpSubmissions.proposalSummaries);
   const showEditIcon =
     isAuthor &&
     isVotingAuthorized &&
@@ -201,6 +208,10 @@ const Proposal = React.memo(function Proposal({
     () => replaceImgDigestWithPayload(rawMarkdown, files),
     [files, rawMarkdown]
   );
+
+  const statusTagProps = isLegacy
+    ? getLegacyProposalStatusTagProps(proposal, voteSummary, isDarkTheme)
+    : getProposalStatusTagProps(proposal, proposalSummary, isDarkTheme);
 
   return (
     <>
@@ -312,57 +323,48 @@ const Proposal = React.memo(function Proposal({
                 </Subtitle>
               }
               status={
-                (isPublic || isAbandoned || isCensored) && (
-                  <Status>
-                    <StatusTag
-                      className={styles.statusTag}
-                      {...getProposalStatusTagProps(
-                        proposal,
-                        voteSummary,
-                        isDarkTheme
-                      )}
+                <Status>
+                  <StatusTag className={styles.statusTag} {...statusTagProps} />
+                  {showVoteEnd && (
+                    <Event
+                      event={`vote end${isVoteActive ? "s" : "ed"}`}
+                      timestamp={voteEndTimestamp}
+                      className={styles.subtitleStatusTag}
+                      size="small"
                     />
-                    {showVoteEnd && (
-                      <Event
-                        event={`vote end${isVoteActive ? "s" : "ed"}`}
-                        timestamp={voteEndTimestamp}
-                        className={styles.subtitleStatusTag}
-                        size="small"
-                      />
-                    )}
-                    {isAbandoned && (
-                      <Event
-                        event="abandoned"
-                        timestamp={abandonedat}
-                        className={styles.subtitleStatusTag}
-                        size="small"
-                      />
-                    )}
-                    {isCensored && (
-                      <Event
-                        event="censored"
-                        timestamp={censoredat}
-                        className={styles.subtitleStatusTag}
-                        size="small"
-                        username={statuschangeusername}
-                      />
-                    )}
-                    {isVoteActive && (
-                      <>
-                        <Text
-                          className={classNames(
-                            "hide-on-mobile",
-                            styles.blocksLeft
-                          )}
-                          size="small">
-                          {`${voteBlocksLeft} block${
-                            voteBlocksLeft > 1 ? "s" : ""
-                          } left`}
-                        </Text>
-                      </>
-                    )}
-                  </Status>
-                )
+                  )}
+                  {isAbandoned && (
+                    <Event
+                      event="abandoned"
+                      timestamp={abandonedat}
+                      className={styles.subtitleStatusTag}
+                      size="small"
+                    />
+                  )}
+                  {isCensored && (
+                    <Event
+                      event="censored"
+                      timestamp={censoredat}
+                      className={styles.subtitleStatusTag}
+                      size="small"
+                      username={statuschangeusername}
+                    />
+                  )}
+                  {isVoteActive && (
+                    <>
+                      <Text
+                        className={classNames(
+                          "hide-on-mobile",
+                          styles.blocksLeft
+                        )}
+                        size="small">
+                        {`${voteBlocksLeft} block${
+                          voteBlocksLeft > 1 ? "s" : ""
+                        } left`}
+                      </Text>
+                    </>
+                  )}
+                </Status>
               }
               mobile={mobile}
             />
@@ -523,9 +525,11 @@ const Proposal = React.memo(function Proposal({
               <ProposalActions
                 proposal={proposal}
                 voteSummary={voteSummary}
+                proposalSummary={proposalSummary}
                 rfpSubmissionsVoteSummaries={
                   isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }
+                isLegacy={isLegacy}
               />
             </LoggedInContent>
           </>
