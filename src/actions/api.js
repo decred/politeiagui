@@ -26,7 +26,8 @@ import {
   VOTE_METADATA_FILENAME,
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_UPDATE_HINT,
-  PROPOSAL_MAIN_THREAD_KEY
+  PROPOSAL_MAIN_THREAD_KEY,
+  PROPOSAL_STATUS_PUBLIC
 } from "src/constants";
 import {
   parseReceivedProposalsMap,
@@ -1261,11 +1262,13 @@ export const onSetProposalStatus = ({
             oldStatus
           })
         );
-        dispatch(
-          onFetchProposalsBatch({
-            tokens: linkto ? [linkto, token] : [token]
-          })
-        );
+        dispatch(onFetchBatchProposalSummary([token]));
+        if (status === PROPOSAL_STATUS_PUBLIC) {
+          dispatch(onFetchProposalsBatchVoteSummary([token]));
+          if (linkto) {
+            dispatch(onFetchProposalsBatch([linkto]));
+          }
+        }
       })
       .catch((error) => {
         dispatch(act.RECEIVE_SETSTATUS_PROPOSAL(null, error));
