@@ -13,6 +13,7 @@ import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import { PROPOSAL_STATUS_CENSORED } from "src/constants";
 import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const renderProposal = (record) => (
   <Proposal key={record.censorshiprecord.token} proposal={record} />
@@ -29,6 +30,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const statuses = statusByTab[tabLabels[index]];
   const sort = sortByTab[tabLabels[index]];
+  const { policyTicketVote: { summariespagesize: proposalPageSize, inventorypagesize: inventoryPageSize } } = usePolicy();
   const {
     proposals: batchProposals,
     proposalsTokens,
@@ -41,7 +43,9 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
-    statuses: statuses
+    statuses: statuses,
+    proposalPageSize: proposalPageSize,
+    inventoryPageSize: inventoryPageSize
   });
 
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
@@ -129,6 +133,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
       isLoading={loading || verifying || mdLoading}
+      pageSize={proposalPageSize}
       sort={sort}>
       {content}
     </RecordsView>

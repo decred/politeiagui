@@ -57,10 +57,6 @@ const getUnfetchedTokens = (proposals, tokens) =>
     keys(proposals).map((token) => shortRecordToken(token))
   );
 
-const getCurrentPage = (tokens) => {
-  return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
-};
-
 const cacheVoteStatus = {};
 
 const updateCacheVoteStatusMap = (voteSummaries, isRefresh) => {
@@ -92,7 +88,8 @@ export default function useProposalsBatch({
   unvetted = false,
   proposalStatus,
   statuses,
-  proposalPageSize = PROPOSAL_PAGE_SIZE
+  proposalPageSize = PROPOSAL_PAGE_SIZE,
+  inventoryPageSize = INVENTORY_PAGE_SIZE
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
   const [voteStatuses, setStatuses] = useState(statuses);
@@ -123,8 +120,8 @@ export default function useProposalsBatch({
     [allByStatus, isByRecordStatus, currentStatus]
   );
   const page = useMemo(() => {
-    return getCurrentPage(tokens);
-  }, [tokens]);
+    return  tokens ? Math.floor(+tokens.length / inventoryPageSize) : 0;
+  }, [tokens, inventoryPageSize]);
   const errorSelector = useMemo(
     () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
     []
@@ -163,7 +160,7 @@ export default function useProposalsBatch({
         // there are no tokens to be fetched from the next page
         const scanNextStatus =
           initializedInventory &&
-          (!(tokens.length % INVENTORY_PAGE_SIZE === 0 && tokens.length > 0) ||
+          (!(tokens.length % inventoryPageSize === 0 && tokens.length > 0) ||
             remainingTokens.length === proposalPageSize);
         if (scanNextStatus) {
           const { index, tokens } = scanNextStatusTokens(
@@ -326,7 +323,7 @@ export default function useProposalsBatch({
     !getUnfetchedTokens(proposals, tokens).length;
 
   const isAnotherTokensScanningRequired =
-    tokens && tokens.length && tokens.length % INVENTORY_PAGE_SIZE === 0;
+    tokens && tokens.length && tokens.length % inventoryPageSize === 0;
 
   const onFetchMoreProposals = useCallback(() => {
     if (remainingTokens.length < proposalPageSize) return send(START);

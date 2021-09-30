@@ -7,6 +7,7 @@ import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChange
 import { PROPOSAL_STATUS_CENSORED } from "src/constants";
 import { tabValues, statusByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
+import usePolicy from "src/hooks/api/usePolicy";
 // XXX change to AdminActionsProvider
 import {
   UnvettedActionsProvider,
@@ -27,6 +28,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     0,
     tabLabels
   );
+  const { policyTicketVote: { summariespagesize: proposalPageSize, inventorypagesize: inventoryPageSize } } = usePolicy();
   const {
     proposals: batchProposals,
     proposalsTokens,
@@ -39,7 +41,9 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     fetchRfpLinks: true,
     fetchVoteSummaries: false,
     unvetted: true,
-    proposalStatus: statusByTab[tabLabels[tabIndex]]
+    proposalStatus: statusByTab[tabLabels[tabIndex]],
+    proposalPageSize: proposalPageSize,
+    inventoryPageSize: inventoryPageSize
   });
 
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
@@ -78,6 +82,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
       isLoading={loading || verifying || mdLoading}
+      pageSize={proposalPageSize}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (
         <>
