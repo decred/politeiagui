@@ -1,19 +1,24 @@
 import { buildProposal } from "../../support/generate";
-import { shortRecordToken, PROPOSAL_SUMMARY_STATUS_ACTIVE } from "../../utils";
+import {
+  shortRecordToken,
+  PROPOSAL_SUMMARY_STATUS_ACTIVE,
+  PROPOSAL_SUMMARY_STATUS_ClOSED,
+  PROPOSAL_SUMMARY_STATUS_COMPLETED
+} from "../../utils";
 
 describe("Admin proposals actions", () => {
   it("Should allow admins to approve propsoals", () => {
-    // paid admin user with proposal credits
     cy.server();
-    // create proposal
+    // paid admin user with proposal credits
     const user = {
       email: "adminuser@example.com",
       username: "adminuser",
       password: "password"
     };
-    const proposal = buildProposal();
     cy.login(user);
     cy.identity();
+    // create proposal
+    const proposal = buildProposal();
     cy.createProposal(proposal).then(
       ({
         body: {
@@ -28,24 +33,25 @@ describe("Admin proposals actions", () => {
         cy.route("POST", "/api/records/v1/setstatus").as("confirm");
         cy.findByText(/confirm/i).click();
         cy.wait("@confirm");
-        cy.findByText(/ok/i).click();
+        cy.findByText(/Ok/).click();
+        cy.wait(1000);
         cy.findByText(/waiting for author/i).should("be.visible");
       }
     );
   });
 
   it("Should allow admins to report a proposal as a spam", () => {
-    // paid admin user with proposal credits
     cy.server();
-    // create proposal
+    // paid admin user with proposal credits
     const user = {
       email: "adminuser@example.com",
       username: "adminuser",
       password: "password"
     };
-    const proposal = buildProposal();
     cy.login(user);
     cy.identity();
+    // create proposal
+    const proposal = buildProposal();
     cy.createProposal(proposal).then(
       ({
         body: {
@@ -63,7 +69,9 @@ describe("Admin proposals actions", () => {
         cy.wait("@confirm");
         cy.findByText(/ok/i).click();
         cy.findByText(/approve/i).should("not.exist");
+        cy.intercept("/api/records/v1/records").as("records");
         cy.visit("/admin/records?tab=censored");
+        cy.wait("@records");
         cy.findByText(shortRecordToken(token)).should("be.visible");
       }
     );
@@ -71,15 +79,15 @@ describe("Admin proposals actions", () => {
 
   it("Should allow admins to abandon proposals", () => {
     cy.server();
-    // create proposal
     const user = {
       email: "adminuser@example.com",
       username: "adminuser",
       password: "password"
     };
-    const proposal = buildProposal();
     cy.login(user);
     cy.identity();
+    // create proposal
+    const proposal = buildProposal();
     cy.createProposal(proposal).then(
       ({
         body: {
@@ -103,15 +111,15 @@ describe("Admin proposals actions", () => {
 
   it("Should allow proposal author to authorize voting", () => {
     cy.server();
-    // create proposal
     const user = {
       email: "adminuser@example.com",
       username: "adminuser",
       password: "password"
     };
-    const proposal = buildProposal();
     cy.login(user);
     cy.identity();
+    // create proposal
+    const proposal = buildProposal();
     cy.createProposal(proposal).then(
       ({
         body: {
@@ -137,19 +145,18 @@ describe("Admin proposals actions", () => {
     );
   });
 
-  it("Should allow admins to set the billing status of an approved propsoal", () => {
+  it("Should allow admins to set the billing status of an active propsoal", () => {
     cy.server();
     // paid admin user with proposal credits
-    cy.server();
-    // create proposal
     const admin = {
       email: "adminuser@example.com",
       username: "adminuser",
       password: "password"
     };
-    const proposal = buildProposal();
     cy.login(admin);
     cy.identity();
+    // create proposal
+    const proposal = buildProposal();
     cy.createProposal(proposal).then(
       ({
         body: {
@@ -186,6 +193,86 @@ describe("Admin proposals actions", () => {
         cy.findByText(/ok/i).click();
         // Ensure Set Billing Status button is gone after setting billing
         // status successfully.
+        cy.findByText(/set billing status/i).should("not.exist");
+      }
+    );
+  });
+
+  it("Shouldn't allow admins to set the billing status of a closed propsoal", () => {
+    cy.server();
+    // paid admin user with proposal credits
+    const admin = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    cy.login(admin);
+    cy.identity();
+    // create proposal
+    const proposal = buildProposal();
+    cy.createProposal(proposal).then(
+      ({
+        body: {
+          record: {
+            censorshiprecord: { token }
+          }
+        }
+      }) => {
+        cy.visit(`record/${shortRecordToken(token)}`);
+        // Manually approve proposal
+        cy.findByText(/approve/i).click();
+        cy.route("POST", "/api/records/v1/setstatus").as("setstatus");
+        cy.findByText(/confirm/i).click();
+        cy.wait("@setstatus");
+        // Mock proposal summary reply and set proposal status to
+        // active closed.
+        cy.middleware("pi.summaries", {
+          token,
+          status: PROPOSAL_SUMMARY_STATUS_ClOSED
+        });
+        cy.visit(`record/${shortRecordToken(token)}`);
+        cy.wait("@pi.summaries");
+        // Ensure set billing status button isn't displayed.
+        cy.findByText(/set billing status/i).should("not.exist");
+      }
+    );
+  });
+
+  it("Shouldn't allow admins to set the billing status of a completed propsoal", () => {
+    cy.server();
+    // paid admin user with proposal credits
+    const admin = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    cy.login(admin);
+    cy.identity();
+    // create proposal
+    const proposal = buildProposal();
+    cy.createProposal(proposal).then(
+      ({
+        body: {
+          record: {
+            censorshiprecord: { token }
+          }
+        }
+      }) => {
+        cy.visit(`record/${shortRecordToken(token)}`);
+        // Manually approve proposal
+        cy.findByText(/approve/i).click();
+        cy.route("POST", "/api/records/v1/setstatus").as("setstatus");
+        cy.findByText(/confirm/i).click();
+        cy.wait("@setstatus");
+        // Mock proposal summary reply and set proposal status to
+        // completed.
+        cy.middleware("pi.summaries", {
+          token,
+          status: PROPOSAL_SUMMARY_STATUS_COMPLETED
+        });
+        cy.visit(`record/${shortRecordToken(token)}`);
+        cy.wait("@pi.summaries");
+        // Ensure set billing status button isn't displayed.
         cy.findByText(/set billing status/i).should("not.exist");
       }
     );
