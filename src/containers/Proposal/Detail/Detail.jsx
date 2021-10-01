@@ -40,6 +40,7 @@ import { shortRecordToken } from "src/helpers";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
 import { usePaywall, useIdentity } from "src/hooks";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 
@@ -51,6 +52,7 @@ const SetPageTitle = ({ title }) => {
 const ProposalDetail = ({ Main, match, history }) => {
   const tokenFromUrl = shortRecordToken(get("params.token", match));
   const threadParentCommentID = get("params.commentid", match);
+  const { policyTicketVote: { summariespagesize: proposalPageSize } } = usePolicy();
   const {
     proposal: fetchedProposal,
     loading,
@@ -65,7 +67,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     commentsError,
     commentsLoading,
     onReloadProposalDetails
-  } = useProposal(tokenFromUrl, threadParentCommentID);
+  } = useProposal(tokenFromUrl, proposalPageSize, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
