@@ -227,7 +227,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
               (acc, key) => ({
                 ...acc,
                 [shortRecordToken(key)]: {
-                  ...state.byToken[shortRecordToken(key)],
+                  ...state.summaries[shortRecordToken(key)],
                   ...action.payload.summaries[key]
                 }
               }),

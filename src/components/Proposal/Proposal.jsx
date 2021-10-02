@@ -3,6 +3,7 @@ import {
   StatusBar,
   StatusTag,
   Text,
+  Message,
   useMediaQuery,
   useTheme,
   Tooltip,
@@ -25,6 +26,7 @@ import {
   isAbandonedProposal,
   isCensoredProposal,
   isPublicProposal,
+  isClosedProposal,
   isActiveRfp,
   isEditableProposal,
   getQuorumInVotes,
@@ -165,6 +167,13 @@ const Proposal = React.memo(function Proposal({
   const isVoteActive = isVoteActiveProposal(voteSummary);
   const isAbandoned = isAbandonedProposal(proposalSummary);
   const isCensored = isCensoredProposal(proposal);
+  const isClosed = isClosedProposal(proposalSummary);
+  const proposalStatusReason =
+    isCensored || isAbandoned
+      ? statuschangemsg
+      : isClosed
+      ? proposalSummary.statusreason
+      : "";
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
   const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
@@ -243,6 +252,11 @@ const Proposal = React.memo(function Proposal({
           Metadata
         }) => (
           <>
+            {extended && proposalStatusReason && !collapseBodyContent && (
+              <Message kind="warning" className="margin-bottom-m">
+                {proposalStatusReason}
+              </Message>
+            )}
             <Header
               title={
                 <Title
@@ -410,16 +424,6 @@ const Proposal = React.memo(function Proposal({
                   showRfpSubmissions && styles.rfpMarkdownContainer
                 )}
                 body={text}
-              />
-            )}
-            {extended && isCensored && !collapseBodyContent && (
-              <Markdown
-                className={classNames(
-                  styles.markdownContainer,
-                  isDarkTheme && "dark",
-                  showRfpSubmissions && styles.rfpMarkdownContainer
-                )}
-                body={statuschangemsg}
               />
             )}
             {collapseBodyContent && (
