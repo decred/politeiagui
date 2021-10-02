@@ -6,13 +6,14 @@ import { TOTP_CODE_LENGTH } from "src/constants";
 
 const ModalTotpVerifyContent = ({ onClose, onVerify }) => {
   const [error, setError] = useState();
-  const handleChange = (v) => {
+  const handleChange = (v, clearCode) => {
     if (v.length === TOTP_CODE_LENGTH) {
       onVerify(v)
         .then(() => {
           onClose();
         })
         .catch((e) => {
+          clearCode();
           setError(e);
         });
     }
@@ -20,7 +21,10 @@ const ModalTotpVerifyContent = ({ onClose, onVerify }) => {
   return (
     <div>
       {error && (
-        <Message kind="error" className="margin-bottom-m">
+        <Message
+          kind="error"
+          data-testid="modal-totp-verify-error"
+          className="margin-bottom-m">
           {error.toString()}
         </Message>
       )}

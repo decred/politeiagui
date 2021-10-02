@@ -59,6 +59,7 @@ export function usePublicActions() {
   const onStart = useAction(act.onStartVote);
   const onAuthorize = useAction(act.onAuthorizeVote);
   const onRevoke = useAction(act.onRevokeVote);
+  const onSetBillingStatusAction = useAction(act.onSetBillingStatus);
   const onFetchProposalsBatchWithoutState = useAction(
     act.onFetchProposalsBatchWithoutState
   );
@@ -137,12 +138,24 @@ export function usePublicActions() {
     [onStart, currentUserID]
   );
 
+  const onSetBillingStatus = useCallback(
+    (proposal) =>
+      ({ billingStatus, reason }) =>
+        onSetBillingStatusAction(
+          proposal.censorshiprecord.token,
+          billingStatus,
+          reason
+        ),
+    [onSetBillingStatusAction]
+  );
+
   return {
     onCensorProposal,
     onAbandonProposal,
     onAuthorizeVote,
     onRevokeVote,
     onStartVote,
+    onSetBillingStatus,
     onFetchProposalsBatchWithoutState
   };
 }

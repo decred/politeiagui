@@ -1,7 +1,11 @@
-.navContainer {
+.sharedNavAtribute {
   height: 100%;
   display: flex;
   align-items: center;
+}
+
+.navContainer {
+  composes: sharedNavAtribute;
 }
 
 .loggedInContainer {
@@ -14,22 +18,19 @@
   justify-content: center !important;
 }
 
+.navLinkCtn {
+  composes: sharedNavAtribute;
+}
+
 .navLink {
-  composes: navContainer;
+  margin: 0 15px;
+  composes: sharedNavAtribute;
   text-decoration: none !important;
   border-bottom: 0.2rem solid transparent;
 }
 
 .navLink > span {
   color: var(--tab-text-color);
-}
-
-.navLinkText {
-  padding: 0 2rem;
-}
-
-.rightGreyBorder {
-  border-right: 0.1rem solid var(--separator-color);
 }
 
 .activeDropdownItem {
@@ -49,20 +50,16 @@ ul.dropdownList {
 }
 
 .themeToggleWrapper {
+  border-right: 0.1rem solid var(--separator-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .publicWrapper {
-  padding: 0 1rem;
+  margin-right: 15px;
+  padding: 0 30px;
   border-bottom: 0.2rem solid transparent;
-}
-
-.themeToggleLabel {
-  margin-left: 1rem;
-  margin-top: 0.1rem;
-  cursor: pointer;
 }
 
 @media screen and (max-width: 1000px) {
@@ -73,6 +70,16 @@ ul.dropdownList {
   div.dropdown {
     position: relative;
     right: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .themeToggleWrapper {
+    border-right: 0;
+  }
+  .navContainer {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 

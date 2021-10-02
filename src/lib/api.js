@@ -617,6 +617,27 @@ export const proposalSetStatus = (
     )
     .then(getResponse);
 
+export const proposalSetBillingStatus = (userid, csrf, token, status, reason) =>
+  pki
+    .myPubKeyHex(userid)
+    .then((publickey) =>
+      pki.signStringHex(userid, token + status + reason).then((signature) =>
+        POST(
+          "/setbillingstatus",
+          csrf,
+          {
+            token,
+            status,
+            reason,
+            signature,
+            publickey
+          },
+          apiPi
+        )
+      )
+    )
+    .then(getResponse);
+
 export const newProposal = (csrf, proposal) =>
   POST("/new", csrf, proposal, apiRecords).then(getResponse);
 
@@ -653,6 +674,9 @@ export const startVote = (csrf, userid, voteParams) =>
 
 export const proposalsBatchVoteSummary = (csrf, tokens) =>
   POST("/summaries", csrf, { tokens }, apiTicketVote).then(getResponse);
+
+export const batchProposalSummary = (csrf, tokens) =>
+  POST("/summaries", csrf, { tokens }, apiPi).then(getResponse);
 
 export const proposalVoteResults = (csrf, token) =>
   POST("/results", csrf, { token }, apiTicketVote).then(getResponse);

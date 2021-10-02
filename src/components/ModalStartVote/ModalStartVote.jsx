@@ -112,17 +112,17 @@ const ModalStartVote = ({
       onClose={onClose}
       iconComponent={
         !success ? (
-          <Icon type={"info"} size={26} />
+          <Icon type="info" size={26} />
         ) : (
           <Icon
-            type={"checkmark"}
+            type="checkmark"
             iconColor={iconCheckmarkColor}
             backgroundColor={successIconBgColor}
             size={26}
           />
         )
       }>
-      {!success && (
+      {!success ? (
         <FormWrapper
           initialValues={initialValues}
           validationSchema={validationSchema(apiInfo.testnet)}
@@ -192,8 +192,7 @@ const ModalStartVote = ({
             );
           }}
         </FormWrapper>
-      )}
-      {success && (
+      ) : (
         <>
           {successMessage}
           <div className="justify-right margin-top-m">

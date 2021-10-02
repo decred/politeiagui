@@ -28,7 +28,8 @@ export function useDownloadComments(token) {
     [token]
   );
   const allCommentsBySection = useSelector(commentsSelector);
-  const comments = Object.values(allCommentsBySection).flat();
+  const comments =
+    allCommentsBySection && Object.values(allCommentsBySection).flat();
   const { onFetchCommentsTimestamps } = useTimestamps();
 
   return { comments, onFetchCommentsTimestamps };
@@ -44,7 +45,10 @@ export function useDownloadCommentsTimestamps(recordToken) {
     [recordToken]
   );
   const allCommentsBySection = useSelector(commentsSelector);
-  const comments = Object.values(allCommentsBySection).flat();
+  const comments = useMemo(
+    () => Object.values(allCommentsBySection).flat(),
+    [allCommentsBySection]
+  );
   const commentsLength = comments?.length || 0;
   const multiPage = commentsLength > TIMESTAMPS_PAGE_SIZE;
   const onFetchCommentsTimestamps = useAction(act.onFetchCommentsTimestamps);

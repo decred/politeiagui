@@ -24,7 +24,9 @@ const VerifyTotp = ({
   const onFillCode = (newCode) => {
     setEnableVerify(newCode.length === TOTP_CODE_LENGTH);
     setCode(newCode);
-    onType(newCode);
+    onType(newCode, () => {
+      setCode("");
+    });
   };
   const handleVerify = (e) => {
     e && e.preventDefault();
@@ -50,6 +52,7 @@ const VerifyTotp = ({
         />
         {extended && (
           <Button
+            data-testid="totp-verify-button"
             type="submit"
             kind={
               enableVerify ? (extended ? "primary" : "secondary") : "disabled"

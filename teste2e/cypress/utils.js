@@ -1,7 +1,13 @@
 import CryptoJS from "crypto-js";
-import get from "lodash/fp/get";
 import * as pki from "./pki";
 import MerkleTree from "./merkle";
+import compose from "lodash/fp/compose";
+import filter from "lodash/fp/filter";
+import keys from "lodash/fp/keys";
+import first from "lodash/fp/first";
+import get from "lodash/fp/get";
+import find from "lodash/fp/find";
+import path from "path";
 
 const PROPOSAL_TYPE_REGULAR = 1;
 const PROPOSAL_TYPE_RFP = 2;
@@ -31,6 +37,35 @@ const PROPOSAL_STATUS_UNREVIEWED = 1;
 const PROPOSAL_STATUS_PUBLIC = 2;
 const PROPOSAL_STATUS_CENSORED = 3;
 const PROPOSAL_STATUS_ARCHIVED = 4;
+export const PROPOSAL_SUMMARY_STATUS_UNVETTED = "unvetted";
+export const PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED = "unvetted-abandoned";
+export const PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED = "unvetted-censored";
+export const PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW = "under-review";
+export const PROPOSAL_SUMMARY_STATUS_ABANDONED = "abandoned";
+export const PROPOSAL_SUMMARY_STATUS_CENSORED = "censored";
+export const PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED = "vote-authorized";
+export const PROPOSAL_SUMMARY_STATUS_VOTE_STARTED = "vote-started";
+export const PROPOSAL_SUMMARY_STATUS_REJECTED = "rejected";
+export const PROPOSAL_SUMMARY_STATUS_ACTIVE = "active";
+export const PROPOSAL_SUMMARY_STATUS_COMPLETED = "completed";
+export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
+
+const findRecordFileByName = (record, name) =>
+  compose(
+    find((file) => file.name === name),
+    get("files")
+  )(record);
+
+export const getFirstShortProposalToken = (records = {}) =>
+  compose(
+    first,
+    filter(
+      (token) =>
+        !findRecordFileByName(records[token], VOTE_METADATA_FILENAME) &&
+        findRecordFileByName(records[token], PROPOSAL_METADATA_FILENAME)
+    ),
+    keys
+  )(records);
 
 export const requestWithCsrfToken = (url, body, failOnStatusCode = true) =>
   cy.request("/api").then((res) =>

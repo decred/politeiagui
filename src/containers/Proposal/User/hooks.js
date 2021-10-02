@@ -83,11 +83,13 @@ const getUnfetchedTokens = (proposals, tokens) =>
 export function useUserProposals({
   proposalPageSize = PROPOSAL_PAGE_SIZE,
   fetchRfpLinks = true,
-  fetchVoteSummaries = true,
+  fetchVoteSummary = true,
+  fetchProposalSummary = true,
   userID
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
-  const voteSummaries = useSelector(sel.summaryByToken);
+  const voteSummaries = useSelector(sel.voteSummariesByToken);
+  const proposalSummaries = useSelector(sel.proposalSummariesByToken);
   const tokensSelector = useMemo(
     () => sel.makeGetUserProposalsTokens(userID),
     [userID]
@@ -139,7 +141,12 @@ export function useUserProposals({
           remainingTokens,
           proposalPageSize
         );
-        onFetchProposalsBatch(tokensToFetch, fetchVoteSummaries, userID)
+        onFetchProposalsBatch({
+          tokens: tokensToFetch,
+          fetchVoteSummary,
+          fetchProposalSummary,
+          userid: userID
+        })
           .then(([fetchedProposals]) => {
             if (isEmpty(fetchedProposals)) {
               setRemainingTokens(next);
@@ -153,11 +160,12 @@ export function useUserProposals({
                 ...rfpSubmissions
               ]);
               if (!isEmpty(unfetchedRfpLinks)) {
-                onFetchProposalsBatch(
-                  unfetchedRfpLinks,
-                  fetchVoteSummaries,
-                  userID
-                )
+                onFetchProposalsBatch({
+                  tokens: unfetchedRfpLinks,
+                  fetchVoteSummary,
+                  fetchProposalSummary,
+                  userid: userID
+                })
                   .then(() => {
                     const unfetchedTokens = getUnfetchedTokens(
                       assign(proposals, fetchedProposals),
@@ -197,7 +205,9 @@ export function useUserProposals({
 
   return {
     proposals: proposals
-      ? Object.values(getRfpLinkedProposals(proposals, voteSummaries))
+      ? Object.values(
+          getRfpLinkedProposals(proposals, voteSummaries, proposalSummaries)
+        )
       : [],
     onFetchProposalsBatch,
     proposalsTokens: tokens,

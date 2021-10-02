@@ -4,7 +4,8 @@ import {
   isUnreviewedProposal,
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal,
-  isRfpReadyToRunoff
+  isRfpReadyToRunoff,
+  isActiveProposal
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
@@ -49,8 +50,10 @@ const UnvettedActions = ({ proposal }) => {
 const PublicActions = ({
   proposal,
   voteSummary,
+  proposalSummary,
   rfpSubmissionsVoteSummaries,
-  resetRfpSubmissionsData
+  resetRfpSubmissionsData,
+  isLegacy
 }) => {
   if (!usePublicProposalActions()) {
     throw Error(
@@ -59,37 +62,35 @@ const PublicActions = ({
   }
 
   const { currentUser } = useLoaderContext();
-
   const {
     onAuthorizeVote,
     onRevokeVote,
     onAbandon,
     onStartVote,
     onStartRunoffVote,
-    onCensor
+    onCensor,
+    onSetBillingStatus
   } = usePublicProposalActions();
-
-  const withProposal = (fn, cb) => () => {
-    fn(proposal, cb);
-  };
-
   const isProposalOwner =
     currentUser && proposal && currentUser.username === proposal.username;
-
   const isRfpSubmission = !!proposal.linkto;
-
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
-
   const isReadyToRunoff = isRfpReadyToRunoff(
     proposal,
     voteSummary,
     rfpSubmissionsVoteSummaries
   );
-
   const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
+  const isActive = isActiveProposal(proposalSummary);
+  const isSetBillingStatusAllowed = isActive;
+
+  const withProposal = (fn, cb) => () => {
+    fn(proposal, cb);
+  };
+
   return (
     <>
-      {isUnderDiscussion && (
+      {isUnderDiscussion && !isLegacy && (
         <div className="justify-right margin-top-m">
           <AdminContent>
             <Button
@@ -119,6 +120,15 @@ const PublicActions = ({
             )}
           </AdminContent>
         </div>
+      )}
+      {isSetBillingStatusAllowed && (
+        <AdminContent>
+          <div className="justify-right margin-top-m">
+            <Button onClick={withProposal(onSetBillingStatus)}>
+              Set Billing Status
+            </Button>
+          </div>
+        </AdminContent>
       )}
       {isReadyToRunoff && (
         <AdminContent>

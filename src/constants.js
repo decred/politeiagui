@@ -38,12 +38,28 @@ export const PROPOSAL_STATUS_PUBLIC = 2;
 export const PROPOSAL_STATUS_CENSORED = 3;
 export const PROPOSAL_STATUS_ARCHIVED = 4;
 
+export const PROPOSAL_SUMMARY_STATUS_UNVETTED = "unvetted";
+export const PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED = "unvetted-abandoned";
+export const PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED = "unvetted-censored";
+export const PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW = "under-review";
+export const PROPOSAL_SUMMARY_STATUS_ABANDONED = "abandoned";
+export const PROPOSAL_SUMMARY_STATUS_CENSORED = "censored";
+export const PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED = "vote-authorized";
+export const PROPOSAL_SUMMARY_STATUS_VOTE_STARTED = "vote-started";
+export const PROPOSAL_SUMMARY_STATUS_REJECTED = "rejected";
+export const PROPOSAL_SUMMARY_STATUS_ACTIVE = "active";
+export const PROPOSAL_SUMMARY_STATUS_COMPLETED = "completed";
+export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
+
 export const PROPOSAL_STATE_UNVETTED = 1;
 export const PROPOSAL_STATE_VETTED = 2;
 
 export const PROPOSAL_TYPE_REGULAR = 1;
 export const PROPOSAL_TYPE_RFP = 2;
 export const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
+
+export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
+export const PROPOSAL_BILLING_STATUS_COMPLETED = 3;
 
 export const VOTE_TYPE_STANDARD = 1;
 export const VOTE_TYPE_RUNOFF = 2;

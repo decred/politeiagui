@@ -55,7 +55,9 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     fetchVoteSummaries: true,
     statuses: statuses,
     proposalPageSize: proposalPageSize,
-    inventoryPageSize: inventoryPageSize
+    inventoryPageSize: inventoryPageSize,
+    fetchVoteSummary: true,
+    fetchProposalSummary: true
   });
 
   const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
@@ -140,7 +142,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       index={index}
       onSetIndex={handleSetIndex}
       onFetchMoreProposals={onFetchMoreProposals}
-      dropdownTabsForMobile={true}
+      dropdownTabsForMobile
       hasMore={hasMoreProposals}
       isLoading={loading || verifying || mdLoading}
       pageSize={proposalPageSize}

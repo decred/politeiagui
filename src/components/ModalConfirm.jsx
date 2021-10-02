@@ -77,11 +77,16 @@ const ModalConfirm = ({
           }) => (
             <Form onSubmit={handleSubmit}>
               {errors && errors.global && (
-                <ErrorMessage>{errors.global.toString()}</ErrorMessage>
+                <ErrorMessage data-testid="modal-confirm-error">
+                  {errors.global.toString()}
+                </ErrorMessage>
               )}
               <Text>{message}</Text>
               <Actions className="no-padding-bottom">
-                <Button loading={isSubmitting} type="submit">
+                <Button
+                  loading={isSubmitting}
+                  type="submit"
+                  data-testid="modal-confirm-button">
                   Confirm
                 </Button>
               </Actions>
@@ -95,7 +100,7 @@ const ModalConfirm = ({
           <div className="justify-right margin-top-m">
             <Button
               onClick={onCloseSuccess || onClose}
-              data-testid="close-confirm-msg">
+              data-testid="modal-confirm-success-msg">
               Ok
             </Button>
           </div>

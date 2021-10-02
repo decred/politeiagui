@@ -4,7 +4,7 @@ import { H2, P, CopyableText } from "pi-ui";
 
 const SetTotp = ({ totp = {}, isAlreadySet }) =>
   !isAlreadySet ? (
-    <div className="margin-bottom-m">
+    <div className="margin-bottom-m" data-testid="totp-set-wrapper">
       <H2>Set Two-Factor Authentication</H2>
       <div className={styles.setContainer}>
         <div className={styles.qrcode}>
