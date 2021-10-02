@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from "react";
+import get from "lodash/fp/get";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
 import { tabValues, statusByTab, sortByTab } from "./helpers";
@@ -30,8 +31,10 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const statuses = statusByTab[tabLabels[index]];
   const sort = sortByTab[tabLabels[index]];
-  const { policyTicketVote: { summariespagesize: proposalPageSize, inventorypagesize: inventoryPageSize } } = usePolicy();
-  console.log("policy: ", proposalPageSize, inventoryPageSize);
+  const policy = usePolicy();
+  const proposalPageSize = get(policy, ["policyTicketVote", "summariespagesize"]);
+  const inventoryPageSize = get(policy, ["policyTicketVote", "inventorypagesize"]);
+
   const {
     proposals: batchProposals,
     proposalsTokens,
