@@ -28,7 +28,12 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     0,
     tabLabels
   );
-  const { policyTicketVote: { summariespagesize: proposalPageSize, inventorypagesize: inventoryPageSize } } = usePolicy();
+  const {
+    policyTicketVote: {
+      summariespagesize: proposalPageSize,
+      inventorypagesize: inventoryPageSize
+    }
+  } = usePolicy();
   const {
     proposals: batchProposals,
     proposalsTokens,

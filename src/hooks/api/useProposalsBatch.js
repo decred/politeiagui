@@ -120,7 +120,7 @@ export default function useProposalsBatch({
     [allByStatus, isByRecordStatus, currentStatus]
   );
   const page = useMemo(() => {
-    return  tokens ? Math.floor(+tokens.length / inventoryPageSize) : 0;
+    return tokens ? Math.floor(+tokens.length / inventoryPageSize) : 0;
   }, [tokens, inventoryPageSize]);
   const errorSelector = useMemo(
     () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),

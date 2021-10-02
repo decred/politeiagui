@@ -136,8 +136,10 @@ export function useProposal(token, proposalPageSize, threadParentID) {
       },
       verify: () => {
         if (hasRemainingTokens) {
-          const [tokensBatch, next] =
-            getTokensForProposalsPagination(remainingTokens, proposalPageSize);
+          const [tokensBatch, next] = getTokensForProposalsPagination(
+            remainingTokens,
+            proposalPageSize
+          );
           // Fetch summaries and count only if the proposal is a RFP.
           // If it is a submission, just grab the records info.
           onFetchProposalsBatch(tokensBatch, isRfp, undefined, !isSubmission)

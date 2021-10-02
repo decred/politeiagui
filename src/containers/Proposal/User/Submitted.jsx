@@ -21,7 +21,9 @@ const Proposals = (props) => {
   const [hasMoreToLoad, setHasMore] = useState(false);
 
   const { userID } = props;
-  const { policyTicketVote: { summariespagesize: proposalPageSize } } = usePolicy();
+  const {
+    policyTicketVote: { summariespagesize: proposalPageSize }
+  } = usePolicy();
   const { proposals, loading, numOfUserProposals, onFetchMoreProposals } =
     useUserProposals({ proposalPageSize, userID });
 
