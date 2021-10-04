@@ -141,7 +141,8 @@ const Proposal = React.memo(function Proposal({
     amount,
     domain,
     startDate,
-    endDate
+    endDate,
+    billingStatusChangeMetadata
   } = proposal;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
@@ -172,7 +173,7 @@ const Proposal = React.memo(function Proposal({
     isCensored || isAbandoned
       ? statuschangemsg
       : isClosed
-      ? proposalSummary.statusreason
+      ? billingStatusChangeMetadata?.reason
       : "";
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
@@ -276,9 +277,7 @@ const Proposal = React.memo(function Proposal({
                * */
               edit={
                 isEditable ? (
-                  <Edit
-                    url={`/record/${shortRecordToken(proposalToken)}/edit`}
-                  />
+                  <Edit url={`/record/${proposalToken}/edit`} />
                 ) : showEditIcon ? (
                   <Tooltip
                     placement={mobile ? "left" : "right"}
@@ -447,9 +446,7 @@ const Proposal = React.memo(function Proposal({
                   )}
                 </div>
                 {extended && (
-                  <MarkdownLink
-                    to={`/record/${shortRecordToken(proposalToken)}/raw`}
-                  />
+                  <MarkdownLink to={`/record/${proposalToken}/raw`} />
                 )}
               </Row>
             )}
@@ -518,9 +515,7 @@ const Proposal = React.memo(function Proposal({
                     <ChartsLink token={fullToken} />
                   )}
                   {extended && (
-                    <MarkdownLink
-                      to={`/record/${shortRecordToken(proposalToken)}/raw`}
-                    />
+                    <MarkdownLink to={`/record/${proposalToken}/raw`} />
                   )}
                 </Row>
               </Row>

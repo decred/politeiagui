@@ -23,6 +23,9 @@ export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
 export const isApiRequestingBatchProposalSummary = getIsApiRequesting(
   "batchProposalSummary"
 );
+export const isApiRequestingBillingStatusChanges = getIsApiRequesting(
+  "billingStatusChanges"
+);
 export const isApiRequestingVotesDetails = getIsApiRequesting("votesDetails");
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
 export const isApiRequestingProposalPaywall = getIsApiRequesting(

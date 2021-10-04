@@ -1293,6 +1293,26 @@ export const onSetBillingStatus = (token, billingStatus, reason) =>
       });
   });
 
+export const onFetchBillingStatusChanges = (token) =>
+  withCsrf((dispatch, _, csrf) => {
+    dispatch(act.REQUEST_BILLING_STATUS_CHANGES({ token }));
+    return api
+      .billingStatusChanges(csrf, token)
+      .then(({ billingstatuschanges }) =>
+        dispatch(
+          act.RECEIVE_BILLING_STATUS_CHANGES({
+            token,
+            billingstatuschanges,
+            success: true
+          })
+        )
+      )
+      .catch((error) => {
+        dispatch(act.RECEIVE_BILLING_STATUS_CHANGES(null, error));
+        throw error;
+      });
+  });
+
 export const onResetPassword = ({ username, email }) =>
   withCsrf((dispatch, _, csrf) => {
     dispatch(act.REQUEST_RESET_PASSWORD({ username, email }));

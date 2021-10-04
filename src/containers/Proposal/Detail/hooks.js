@@ -7,6 +7,7 @@ import {
   getProposalToken,
   getTokensForProposalsPagination
 } from "../helpers";
+import { useBillingStatusChanges } from "../hooks";
 import { getDetailsFile } from "./helpers";
 import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
@@ -117,6 +118,12 @@ export function useProposal(token, threadParentID) {
     status: "idle"
   };
 
+  const billingstatuschanges = proposal?.billingstatuschanges;
+  useBillingStatusChanges({ token: tokenShort });
+  const billingStatusChangeMetadata =
+    billingstatuschanges?.length > 0 &&
+    billingstatuschanges[billingstatuschanges.length - 1];
+
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
       initial: () => {
@@ -223,7 +230,10 @@ export function useProposal(token, threadParentID) {
   } = useComments(proposalToken, proposalState, null, threadParentID);
 
   return {
-    proposal: proposalWithLinks,
+    proposal: proposalWithLinks && {
+      ...proposalWithLinks,
+      billingStatusChangeMetadata
+    },
     error: state.error,
     loading: state.status === "idle" || state.status === "loading",
     threadParentID,
