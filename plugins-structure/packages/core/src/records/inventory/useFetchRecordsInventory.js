@@ -6,7 +6,7 @@ import {
 } from "./recordsInventorySlice";
 import { useSelector, useDispatch } from "react-redux";
 
-export function useFetchRecordsInventory({ recordsState, status, page }) {
+export function useFetchRecordsInventory({ recordsState, status, page = 1 }) {
   const dispatch = useDispatch();
   const recordsInvStatus = useSelector((state) =>
     selectRecordsInventoryStatus(state, { recordsState, status })

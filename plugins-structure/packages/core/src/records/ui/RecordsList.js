@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useFetchRecordsInventory } from "../inventory/useFetchRecordsInventory";
 import {
   fetchRecordsNextPage,
   selectRecordsByStateAndStatus,
   selectHasMoreRecordsToFetch,
-  selectRecordsFetchQueue,
 } from "../records/recordsSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 // fetch inventory and pass it down
 export function RecordsListWrapper({ recordsState, status }) {
   const [page, setPage] = useState(1);
-  const { status: inventoryStatus, inventory } = useFetchRecordsInventory({
+  const { status: inventoryStatus } = useFetchRecordsInventory({
     recordsState,
     status,
     page,
@@ -19,16 +18,12 @@ export function RecordsListWrapper({ recordsState, status }) {
   function fetchOneMoreInventoryPage() {
     setPage(page + 1);
   }
-  const recordsQueue = useSelector((state) =>
-    selectRecordsFetchQueue(state, { recordsState, status })
-  );
+
   return inventoryStatus !== "idle" ? (
-    <MemoizedList
+    <RecordsList
       recordsState={recordsState}
       status={status}
       inventoryStatus={inventoryStatus}
-      inventory={inventory}
-      queue={recordsQueue}
       fetchOneMoreInventoryPage={fetchOneMoreInventoryPage}
     />
   ) : (
@@ -36,11 +31,10 @@ export function RecordsListWrapper({ recordsState, status }) {
   );
 }
 
-const MemoizedList = React.memo(function RecordsList({
+function RecordsList({
   recordsState,
   status,
   inventoryStatus,
-  queue,
   fetchOneMoreInventoryPage,
 }) {
   const dispatch = useDispatch();
@@ -82,4 +76,4 @@ const MemoizedList = React.memo(function RecordsList({
       </button>
     </>
   );
-});
+}

@@ -56,7 +56,7 @@ export const fetchRecordsInventory = createAsyncThunk(
     }
   },
   {
-    condition: ({ recordsState, status, page = 1 }) => {
+    condition: ({ recordsState, status }) => {
       if (!recordsState || !status) {
         const error = Error("recordsState and status are required");
         console.error(error);
@@ -79,7 +79,7 @@ const recordsInventorySlice = createSlice({
       })
       .addCase(fetchRecordsInventory.fulfilled, (state, action) => {
         const recordsInventory = action.payload;
-        const { recordsState, status, page } = action.meta.arg;
+        const { recordsState, status } = action.meta.arg;
         if (recordsInventory[recordsState][status].length === 20) {
           state[recordsState][status].status = "succeeded/hasMore";
         } else {
