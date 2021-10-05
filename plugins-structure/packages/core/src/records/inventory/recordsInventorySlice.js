@@ -28,7 +28,7 @@ const initialState = {
 export const fetchRecordsInventory = createAsyncThunk(
   "recordsInventory/fetch",
   async (
-    { recordsState, status, page },
+    { recordsState, status, page = 1 },
     { dispatch, extra, rejectWithValue }
   ) => {
     try {
@@ -54,6 +54,15 @@ export const fetchRecordsInventory = createAsyncThunk(
     } catch (e) {
       return rejectWithValue(e.message);
     }
+  },
+  {
+    condition: ({ recordsState, status, page = 1 }) => {
+      if (!recordsState || !status) {
+        const error = Error("recordsState and status are required");
+        console.error(error);
+        return false;
+      }
+    },
   }
 );
 
@@ -71,7 +80,6 @@ const recordsInventorySlice = createSlice({
       .addCase(fetchRecordsInventory.fulfilled, (state, action) => {
         const recordsInventory = action.payload;
         const { recordsState, status, page } = action.meta.arg;
-        state[recordsState][status].lastPage = page;
         if (recordsInventory[recordsState][status].length === 20) {
           state[recordsState][status].status = "succeeded/hasMore";
         } else {
@@ -95,10 +103,6 @@ export const selectRecordsInventoryByStateAndStatus = (
 ) => state.recordsInventory[recordsState][status].tokens;
 export const selectRecordsInventoryStatus = (state, { recordsState, status }) =>
   state.recordsInventory[recordsState][status].status;
-export const selectRecordsInventoryLastPage = (
-  state,
-  { recordsState, status }
-) => state.recordsInventory[recordsState][status].lastPage;
 
 // Export default reducer
 export default recordsInventorySlice.reducer;

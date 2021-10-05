@@ -1,5 +1,6 @@
 import { RECORDS_API_ROUTE, ROUTE_INVENTORY, ROUTE_RECORDS } from "./constants";
 
+const filenames = ["proposalmetadata.json", "votemetadata.json"];
 const VERSION = "v1";
 
 // export client object with functions to interact with the API
@@ -22,7 +23,7 @@ export const client = {
     const body = {
       requests: records.map((token) => ({
         token,
-        filenames: ["proposalmetadata.json", "votemetadata.json"],
+        filenames,
       })),
     };
     const response = await fetch(
