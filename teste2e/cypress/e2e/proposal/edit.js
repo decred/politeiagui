@@ -25,9 +25,13 @@ describe("Proposal Edit", () => {
         }
       }) => {
         cy.approveProposal(censorshiprecord);
+        cy.intercept("/api/records/v1/details").as("details");
+        cy.intercept("/api/ticketvote/v1/summaries").as("summaries");
         cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         // user is able to edit the proposal
-        cy.wait(1000);
+        cy.wait("@details");
+        cy.wait("@summaries");
+        cy.wait(2000);
         cy.findByTestId(/record-edit-button/i).click();
         cy.findByRole("button", { name: /submit/i }).should("be.disabled");
         cy.findByTestId("text-area").type(newDescription);
