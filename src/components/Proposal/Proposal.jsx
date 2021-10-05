@@ -230,6 +230,8 @@ const Proposal = React.memo(function Proposal({
     : getProposalStatusTagProps(proposal, proposalSummary, isDarkTheme);
 
   const { text: proposalStatusLabel } = statusTagProps || {};
+  const hasProposalStatusInformation =
+    proposalStatusReason && !!proposalStatusLabel && proposalStatusUsername;
 
   return (
     <>
@@ -261,7 +263,7 @@ const Proposal = React.memo(function Proposal({
           Metadata
         }) => (
           <>
-            {extended && proposalStatusReason && !collapseBodyContent && (
+            {extended && hasProposalStatusInformation && !collapseBodyContent && (
               <Message kind="warning" className="margin-bottom-m">
                 <>
                   <div>{`This proposal has been ${proposalStatusLabel.toLowerCase()} by ${proposalStatusUsername}.`}</div>
