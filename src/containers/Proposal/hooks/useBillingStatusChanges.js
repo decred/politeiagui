@@ -9,11 +9,11 @@ export default function useBillingStatusChanges({ token }) {
     () => sel.makeGetProposalByToken(token),
     [token]
   );
-  const proposal = useSelector(proposalSelector);
+  const { billingstatuschanges } = useSelector(proposalSelector) || {};
   const proposalSummaries = useSelector(sel.proposalSummariesByToken);
   const proposalSummary = proposalSummaries[token];
   const isClosed = isClosedProposal(proposalSummary);
-  const hasBillingStatusChanges = !!proposal?.billingstatuschanges?.length;
+  const hasBillingStatusChanges = !!billingstatuschanges?.length;
   const onFetchBillingStatusChanges = useAction(
     act.onFetchBillingStatusChanges
   );

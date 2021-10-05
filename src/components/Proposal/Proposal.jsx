@@ -175,6 +175,12 @@ const Proposal = React.memo(function Proposal({
       : isClosed
       ? billingStatusChangeMetadata?.reason
       : "";
+  const proposalStatusUsername =
+    isCensored || isAbandoned
+      ? statuschangeusername
+      : isClosed
+      ? billingStatusChangeMetadata?.username
+      : "";
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
   const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
@@ -223,6 +229,8 @@ const Proposal = React.memo(function Proposal({
     ? getLegacyProposalStatusTagProps(proposal, voteSummary, isDarkTheme)
     : getProposalStatusTagProps(proposal, proposalSummary, isDarkTheme);
 
+  const { text: proposalStatusLabel } = statusTagProps || {};
+
   return (
     <>
       <RecordWrapper
@@ -255,7 +263,10 @@ const Proposal = React.memo(function Proposal({
           <>
             {extended && proposalStatusReason && !collapseBodyContent && (
               <Message kind="warning" className="margin-bottom-m">
-                {proposalStatusReason}
+                <>
+                  <div>{`This proposal has been ${proposalStatusLabel.toLowerCase()} by ${proposalStatusUsername}.`}</div>
+                  <div>{`Reason: ${proposalStatusReason}`}</div>
+                </>
               </Message>
             )}
             <Header
@@ -360,7 +371,6 @@ const Proposal = React.memo(function Proposal({
                       timestamp={censoredat}
                       className={styles.subtitleStatusTag}
                       size="small"
-                      username={statuschangeusername}
                     />
                   )}
                   {isVoteActive && (

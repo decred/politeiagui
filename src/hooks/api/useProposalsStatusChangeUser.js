@@ -19,10 +19,9 @@ import useFetchMachine, {
 import { shortRecordToken } from "src/helpers";
 
 // useProposalsStatusChangeUser receives a key-value object of proposals
-// and a status. For all proposals that are in the passed in status, the
-// hook adds a 'statuschangeusername' field to the proposal object, which
-// corresponds to the username of the user that submitted the status change
-// action to the server.
+// and a status. It adds a 'statuschangeusername' field to all the propsoals
+// matching the given status, which corresponds to the username of the user
+// that submitted the status change action to the server.
 export default function useProposalsStatusChangeUser(proposals = {}, status) {
   const [publicKeys, setPublicKeys] = useState([]);
   const onSearchUser = useAction(act.onSearchUser);

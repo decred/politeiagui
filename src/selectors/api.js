@@ -14,6 +14,7 @@ export const isApiRequestingInit = getIsApiRequesting("init");
 export const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 export const isApiRequestingUser = getIsApiRequesting("user");
+export const isApiRequestingUserSearch = getIsApiRequesting("userSearch");
 export const isApiRequestingPropVoteResults = getIsApiRequesting(
   "proposalVoteResults"
 );

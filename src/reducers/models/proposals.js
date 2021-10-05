@@ -216,7 +216,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 : (state) => state,
               update("byToken", (proposals) => ({
                 ...proposals,
-                ...parseReceivedProposalsMap(action.payload.proposals)
+                ...parseReceivedProposalsMap(
+                  action.payload.proposals,
+                  proposals
+                )
               }))
             )(state),
           [act.RECEIVE_BATCH_PROPOSAL_SUMMARY]: () => {

@@ -7,7 +7,7 @@ import {
   getProposalToken,
   getTokensForProposalsPagination
 } from "../helpers";
-import { useBillingStatusChanges } from "../hooks";
+import { useBillingStatusChanges, useBillingStatusChangeUser } from "../hooks";
 import { getDetailsFile } from "./helpers";
 import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
@@ -81,11 +81,13 @@ export function useProposal(token, threadParentID) {
       rfpLinks.map((r) => shortRecordToken(r)),
       keys(proposals)
     );
+
   const unfetchedSummariesTokens = getUnfetchedVoteSummaries(
     proposal,
     voteSummaries,
     isSubmission
   );
+
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
       proposals: values(
@@ -120,9 +122,17 @@ export function useProposal(token, threadParentID) {
 
   const billingstatuschanges = proposal?.billingstatuschanges;
   useBillingStatusChanges({ token: tokenShort });
-  const billingStatusChangeMetadata =
+  const latestBillingStatusChange =
     billingstatuschanges?.length > 0 &&
     billingstatuschanges[billingstatuschanges.length - 1];
+  const { publickey: billingStatusAdminPubKey } = latestBillingStatusChange;
+  const { username } = useBillingStatusChangeUser({
+    userPubKey: billingStatusAdminPubKey
+  });
+  const billingStatusChangeMetadata = username && {
+    ...latestBillingStatusChange,
+    username
+  };
 
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
     actions: {
