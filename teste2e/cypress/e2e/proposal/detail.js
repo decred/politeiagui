@@ -1,4 +1,5 @@
 import {
+  shortRecordToken,
   getFirstShortProposalToken,
   PROPOSAL_SUMMARY_STATUS_UNVETTED,
   PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED,
@@ -313,5 +314,61 @@ describe("Proposal details", () => {
       cy.wait("@pi.summaries");
       cy.findByText(/completed/i).should("be.visible");
     });
+  });
+  describe.only("propsoal status metadata", () => {
+    // paid admin user with proposal credits
+    const admin = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    beforeEach(() => {
+      cy.login(admin);
+      cy.identity();
+      const proposal = buildProposal();
+      cy.createProposal(proposal).then(
+        ({
+          body: {
+            record: { censorshiprecord }
+          }
+        }) => {
+          token = censorshiprecord.token;
+          shortToken = shortRecordToken(token);
+        }
+      );
+      cy.intercept("/api/records/v1/details").as("details");
+    });
+    it("should display proposal status metadata on censored proposal", () => {
+      cy.visit(`record/${shortToken}`);
+      cy.wait("@details");
+      // Manually report proposal
+      cy.findByText(/report/i).click();
+      cy.findByLabelText(/censor reason/i).type("censor!");
+      cy.route("POST", "/api/records/v1/setstatus").as("confirm");
+      cy.findByText(/confirm/i).click();
+      cy.wait("@confirm");
+      cy.findByText(/ok/i).click();
+      cy.findByText(/this proposal has been censored by adminuser/i).should(
+        "be.visible"
+      );
+      cy.findByText(/reason: censor!/i).should("be.visible");
+    });
+    it("should display proposal status metadata on abandoned proposal", () => {
+      cy.approveProposal({ token });
+      cy.visit(`record/${shortToken}`);
+      cy.wait("@details");
+      // Manually abandon
+      cy.findByText(/abandon/i).click();
+      cy.findByLabelText(/abandon reason/i).type("abandon!");
+      cy.route("POST", "/api/records/v1/setstatus").as("confirm");
+      cy.findByText(/confirm/i).click();
+      cy.wait("@confirm");
+      cy.findByText(/ok/i).click();
+      cy.findByText(/this proposal has been abandoned by adminuser/i).should(
+        "be.visible"
+      );
+      cy.findByText(/reason: abandon!/i).should("be.visible");
+    });
+    it("should display proposal status metadata on closed proposal", () => {});
   });
 });
