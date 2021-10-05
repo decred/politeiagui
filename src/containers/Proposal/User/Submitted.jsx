@@ -11,8 +11,6 @@ import LoadingPlaceholders from "src/components/LoadingPlaceholders";
 import HelpMessage from "src/components/HelpMessage";
 import usePolicy from "src/hooks/api/usePolicy";
 
-const PAGE_SIZE = 20;
-
 const Proposals = (props) => {
   const renderProposal = (record) => {
     return <Proposal key={record.censorshiprecord.token} proposal={record} />;
@@ -57,7 +55,9 @@ const Proposals = (props) => {
   const amountOfMissingProposals =
     numOfUserProposals - amountOfProposalsFetched;
   const itemsToBeLoaded =
-    amountOfMissingProposals > PAGE_SIZE ? PAGE_SIZE : amountOfMissingProposals;
+    amountOfMissingProposals > proposalPageSize
+      ? proposalPageSize
+      : amountOfMissingProposals;
 
   return (
     <UnvettedActionsProvider>

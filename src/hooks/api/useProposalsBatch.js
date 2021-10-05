@@ -23,8 +23,6 @@ import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
 import assign from "lodash/fp/assign";
 import {
-  INVENTORY_PAGE_SIZE,
-  PROPOSAL_PAGE_SIZE,
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATUS_UNREVIEWED
@@ -89,8 +87,8 @@ export default function useProposalsBatch({
   unvetted = false,
   proposalStatus,
   statuses,
-  proposalPageSize = PROPOSAL_PAGE_SIZE,
-  inventoryPageSize = INVENTORY_PAGE_SIZE
+  proposalPageSize,
+  inventoryPageSize
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
   const [voteStatuses, setStatuses] = useState(statuses);

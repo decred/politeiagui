@@ -32,6 +32,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const statuses = statusByTab[tabLabels[index]];
   const sort = sortByTab[tabLabels[index]];
   const policy = usePolicy();
+  console.log(policy);
   const proposalPageSize = get(policy, [
     "policyTicketVote",
     "summariespagesize"
