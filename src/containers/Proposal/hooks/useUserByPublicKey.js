@@ -3,7 +3,7 @@ import { useSelector, useAction } from "src/redux";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 
-export default function useBillingStatusChangeUser({ userPubKey }) {
+export default function useUserByPublicKey({ userPubKey }) {
   const onSearchUser = useAction(act.onSearchUser);
   const resultsByPk = useSelector(sel.queryResultsByPublicKey);
   const resultsByID = useSelector(sel.searchResultsByID);

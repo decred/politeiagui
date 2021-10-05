@@ -7,7 +7,7 @@ import {
   getProposalToken,
   getTokensForProposalsPagination
 } from "../helpers";
-import { useBillingStatusChanges, useBillingStatusChangeUser } from "../hooks";
+import { useBillingStatusChanges, useUserByPublicKey } from "../hooks";
 import { getDetailsFile } from "./helpers";
 import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
@@ -120,18 +120,25 @@ export function useProposal(token, threadParentID) {
     status: "idle"
   };
 
-  const billingstatuschanges = proposal?.billingstatuschanges;
+  // Fetch status change user name.
+  const { statuschangepk } = proposal || {};
+  const { username: statuschangeusername } = useUserByPublicKey({
+    userPubKey: statuschangepk
+  });
+
+  // Fetch billing status change metadata.
   useBillingStatusChanges({ token: tokenShort });
+  const billingstatuschanges = proposal?.billingstatuschanges;
   const latestBillingStatusChange =
     billingstatuschanges?.length > 0 &&
     billingstatuschanges[billingstatuschanges.length - 1];
   const { publickey: billingStatusAdminPubKey } = latestBillingStatusChange;
-  const { username } = useBillingStatusChangeUser({
+  const { username: billingStatusChangeUsername } = useUserByPublicKey({
     userPubKey: billingStatusAdminPubKey
   });
-  const billingStatusChangeMetadata = username && {
+  const billingStatusChangeMetadata = billingStatusChangeUsername && {
     ...latestBillingStatusChange,
-    username
+    username: billingStatusChangeUsername
   };
 
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
@@ -242,6 +249,7 @@ export function useProposal(token, threadParentID) {
   return {
     proposal: proposalWithLinks && {
       ...proposalWithLinks,
+      statuschangeusername,
       billingStatusChangeMetadata
     },
     error: state.error,
