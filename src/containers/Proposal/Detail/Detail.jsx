@@ -30,10 +30,7 @@ import LoggedInContent from "src/components/LoggedInContent";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
-import {
-  PROPOSAL_UPDATE_HINT,
-  PROPOSAL_STATE_UNVETTED
-} from "src/constants";
+import { PROPOSAL_UPDATE_HINT, PROPOSAL_STATE_UNVETTED } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
