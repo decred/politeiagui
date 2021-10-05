@@ -156,7 +156,7 @@ describe("Proposal details", () => {
       cy.get("#commentArea").should("exist");
     });
   });
-  describe.only("proposal status tags", () => {
+  describe("proposal status tags", () => {
     beforeEach(() => {
       cy.visit("/");
       cy.wait("@records").then(({ response: { body } }) => {
