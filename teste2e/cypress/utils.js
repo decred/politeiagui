@@ -49,6 +49,8 @@ export const PROPOSAL_SUMMARY_STATUS_REJECTED = "rejected";
 export const PROPOSAL_SUMMARY_STATUS_ACTIVE = "active";
 export const PROPOSAL_SUMMARY_STATUS_COMPLETED = "completed";
 export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
+export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
+const PROPOSAL_BILLING_STATUS_COMPLETED = 3;
 
 const findRecordFileByName = (record, name) =>
   compose(

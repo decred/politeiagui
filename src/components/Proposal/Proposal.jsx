@@ -231,7 +231,7 @@ const Proposal = React.memo(function Proposal({
 
   const { text: proposalStatusLabel } = statusTagProps || {};
   const hasProposalStatusInformation =
-    proposalStatusReason && !!proposalStatusLabel && proposalStatusUsername;
+    proposalStatusReason && proposalStatusLabel && proposalStatusUsername;
 
   return (
     <>

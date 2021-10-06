@@ -5,7 +5,9 @@ import { useSelector, useAction } from "src/redux";
 import {
   getProposalRfpLinks,
   getProposalToken,
-  getTokensForProposalsPagination
+  getTokensForProposalsPagination,
+  isAbandonedProposal,
+  isCensoredProposal
 } from "../helpers";
 import { useBillingStatusChanges, useUserByPublicKey } from "../hooks";
 import { getDetailsFile } from "./helpers";
@@ -65,6 +67,7 @@ export function useProposal(token, threadParentID) {
   const voteSummaries = useSelector(sel.voteSummariesByToken);
   const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
   const proposalSummaries = useSelector(sel.proposalSummariesByToken);
+  const proposalSummary = proposalSummaries[tokenShort];
   const loadingProposalSummary = useSelector(
     sel.isApiRequestingBatchProposalSummary
   );
@@ -108,8 +111,10 @@ export function useProposal(token, threadParentID) {
 
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !voteSummaries[tokenShort];
-  const isMissingProposalSummary = !proposalSummaries[tokenShort];
+  const isMissingProposalSummary = !proposalSummary;
   const needsInitialFetch = token && isMissingDetails;
+  const isCensored = isCensoredProposal(proposal);
+  const isAbandoned = isAbandonedProposal(proposalSummary);
 
   const [remainingTokens, setRemainingTokens] = useState(
     unfetchedProposalTokens
@@ -123,7 +128,7 @@ export function useProposal(token, threadParentID) {
   // Fetch status change user name.
   const { statuschangepk } = proposal || {};
   const { username: statuschangeusername } = useUserByPublicKey({
-    userPubKey: statuschangepk
+    userPubKey: (isCensored || isAbandoned) && statuschangepk
   });
 
   // Fetch billing status change metadata.

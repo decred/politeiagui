@@ -12,7 +12,8 @@ import {
   PROPOSAL_SUMMARY_STATUS_REJECTED,
   PROPOSAL_SUMMARY_STATUS_ACTIVE,
   PROPOSAL_SUMMARY_STATUS_COMPLETED,
-  PROPOSAL_SUMMARY_STATUS_CLOSED
+  PROPOSAL_SUMMARY_STATUS_CLOSED,
+  PROPOSAL_BILLING_STATUS_CLOSED
 } from "../../utils";
 import { buildProposal } from "../../support/generate";
 import path from "path";
@@ -369,6 +370,46 @@ describe("Proposal details", () => {
       );
       cy.findByText(/reason: abandon!/i).should("be.visible");
     });
-    it("should display proposal status metadata on closed proposal", () => {});
+    it("should display proposal status metadata on closed proposal", () => {
+      cy.approveProposal({ token });
+      // Mock propsoal summary reply to set proposal status to
+      // approved to test author updates.
+      cy.middleware("pi.summaries", {
+        token: shortToken,
+        status: PROPOSAL_SUMMARY_STATUS_CLOSED
+      });
+      // Mock billing status changes request.
+      cy.middleware("pi.billingstatuschanges", {
+        body: {
+          billingstatuschanges: [
+            {
+              token,
+              publickey: "some_public_key",
+              reason: "closed!",
+              status: PROPOSAL_BILLING_STATUS_CLOSED
+            }
+          ]
+        }
+      });
+      // Mock users reply to retrieve billing status change user name.
+      cy.middleware("users.users", {
+        body: {
+          users: [
+            {
+              username: "adminuser",
+              id: "user_id"
+            }
+          ]
+        }
+      });
+      cy.visit(`record/${shortToken}`);
+      cy.wait("@pi.summaries");
+      cy.wait("@pi.billingstatuschanges");
+      cy.wait("@users.users");
+      cy.findByText(/this proposal has been closed by adminuser/i).should(
+        "be.visible"
+      );
+      cy.findByText(/reason: closed!/i).should("be.visible");
+    });
   });
 });
