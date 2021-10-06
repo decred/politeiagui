@@ -149,7 +149,7 @@ const Proposal = React.memo(function Proposal({
   const isRfpActive = isRfp && isActiveRfp(linkby);
   const isNotExtendedRfpOrSubmission = (isRfp || isRfpSubmission) && !extended;
   const hasVoteSummary = !!voteSummary && !!voteSummary.endblockheight;
-  const proposalToken = shortRecordToken(
+  const shortToken = shortRecordToken(
     censorshiprecord && censorshiprecord.token
   );
   const fullToken = censorshiprecord && censorshiprecord.token;
@@ -162,7 +162,7 @@ const Proposal = React.memo(function Proposal({
     isLegacy,
     rfpProposalURL,
     legacyRfpName
-  } = useProposalURLs(proposalToken, userid, isRfpSubmission, linkto);
+  } = useProposalURLs(shortToken, userid, isRfpSubmission, linkto);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isVoteActive = isVoteActiveProposal(voteSummary);
@@ -236,7 +236,7 @@ const Proposal = React.memo(function Proposal({
   return (
     <>
       <RecordWrapper
-        id={proposalToken}
+        id={shortToken}
         className={classNames(
           (isAbandoned || isCensored) && styles.abandonedProposal,
           isNotExtendedRfpOrSubmission && styles.rfpProposal
@@ -274,12 +274,12 @@ const Proposal = React.memo(function Proposal({
             <Header
               title={
                 <Title
-                  id={`proposal-title-${proposalToken}`}
+                  id={`proposal-title-${shortToken}`}
                   truncate
                   isLegacy={isLegacy}
                   linesBeforeTruncate={2}
                   url={extended ? "" : proposalURL}>
-                  {name || proposalToken}
+                  {name || shortToken}
                 </Title>
               }
               /**
@@ -290,7 +290,7 @@ const Proposal = React.memo(function Proposal({
                * */
               edit={
                 isEditable ? (
-                  <Edit url={`/record/${proposalToken}/edit`} />
+                  <Edit url={`/record/${shortToken}/edit`} />
                 ) : showEditIcon ? (
                   <Tooltip
                     placement={mobile ? "left" : "right"}
@@ -331,7 +331,7 @@ const Proposal = React.memo(function Proposal({
                   )}
                   {showVersionAsText && (
                     <Text
-                      id={`proposal-${proposalToken}-version`}
+                      id={`proposal-${shortToken}-version`}
                       className={styles.version}
                       truncate>{`version ${version}`}</Text>
                   )}
@@ -342,7 +342,7 @@ const Proposal = React.memo(function Proposal({
                         isDarkTheme && styles.darkVersionPicker
                       )}
                       version={version}
-                      token={proposalToken}
+                      token={shortToken}
                       proposalState={state}
                     />
                   )}
@@ -458,7 +458,7 @@ const Proposal = React.memo(function Proposal({
                   )}
                 </div>
                 {extended && (
-                  <MarkdownLink to={`/record/${proposalToken}/raw`} />
+                  <MarkdownLink to={`/record/${shortToken}/raw`} />
                 )}
               </Row>
             )}
@@ -476,43 +476,43 @@ const Proposal = React.memo(function Proposal({
                   className={styles.downloadLinksWrapper}
                   title="Available Downloads">
                   <DownloadRecord
-                    fileName={`${proposalToken}-v${version}`}
+                    fileName={`${shortToken}-v${version}`}
                     content={proposal}
                     serverpublickey={apiInfo.pubkey}
                     label="Proposal Bundle"
                   />
                   <DownloadTimestamps
                     label="Proposal Timestamps"
-                    token={proposalToken}
+                    token={shortToken}
                     version={version}
                     state={state}
                   />
                   {isPublic && commentsCount > 0 && (
                     <DownloadComments
                       label="Comments Bundle"
-                      recordToken={proposalToken}
+                      recordToken={shortToken}
                     />
                   )}
                   {isPublic && commentsCount > 0 && (
                     <DownloadCommentsTimestamps
                       label="Comments Timestamps"
-                      recordToken={proposalToken}
+                      recordToken={shortToken}
                       commentsCount={commentsCount}
                     />
                   )}
                   {votesCount > 0 && (
                     <DownloadVotes
                       label="Votes Bundle"
-                      fileName={`${proposalToken}-votes`}
+                      fileName={`${shortToken}-votes`}
                       serverpublickey={apiInfo.pubkey}
-                      token={proposalToken}
+                      token={shortToken}
                     />
                   )}
                   {votesCount > 0 && (
                     <DownloadVotesTimestamps
                       label="Votes Timestamp"
                       votesCount={votesCount}
-                      recordToken={proposalToken}
+                      recordToken={shortToken}
                     />
                   )}
                 </LinkSection>
@@ -527,7 +527,7 @@ const Proposal = React.memo(function Proposal({
                     <ChartsLink token={fullToken} />
                   )}
                   {extended && (
-                    <MarkdownLink to={`/record/${proposalToken}/raw`} />
+                    <MarkdownLink to={`/record/${shortToken}/raw`} />
                   )}
                 </Row>
               </Row>
