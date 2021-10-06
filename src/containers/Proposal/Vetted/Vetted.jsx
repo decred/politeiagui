@@ -11,8 +11,6 @@ import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
-import { PROPOSAL_STATUS_CENSORED } from "src/constants";
-import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
 
 const renderProposal = (record) => (
   <Proposal key={record.censorshiprecord.token} proposal={record} />
@@ -30,7 +28,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const statuses = statusByTab[tabLabels[index]];
   const sort = sortByTab[tabLabels[index]];
   const {
-    proposals: batchProposals,
+    proposals,
     proposalsTokens,
     loading,
     verifying,
@@ -44,11 +42,6 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     fetchProposalSummary: true,
     statuses: statuses
   });
-
-  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
-    batchProposals,
-    PROPOSAL_STATUS_CENSORED
-  );
 
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
@@ -129,7 +122,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying || mdLoading}
+      isLoading={loading || verifying}
       sort={sort}>
       {content}
     </RecordsView>

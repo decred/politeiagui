@@ -33,7 +33,7 @@ import { formatUnixTimestampToObj } from "src/utils";
 export const Author = ({ username, url, isLegacy }) =>
   isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
 
-export const Event = ({ event, timestamp, username, className, size }) => (
+export const Event = ({ event, timestamp, className, size }) => (
   <DateTooltip timestamp={timestamp} placement="bottom">
     {({ timeAgo }) => (
       <Text
@@ -41,9 +41,7 @@ export const Event = ({ event, timestamp, username, className, size }) => (
         className={classNames(styles.eventTooltip, className)}
         truncate
         size={size}>
-        {username
-          ? `${event} ${timeAgo} by ${username}`
-          : `${event} ${timeAgo}`}
+        {`${event} ${timeAgo}`}
       </Text>
     )}
   </DateTooltip>

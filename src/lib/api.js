@@ -638,6 +638,9 @@ export const proposalSetBillingStatus = (userid, csrf, token, status, reason) =>
     )
     .then(getResponse);
 
+export const billingStatusChanges = (csrf, token) =>
+  POST("/billingstatuschanges", csrf, { token }, apiPi).then(getResponse);
+
 export const newProposal = (csrf, proposal) =>
   POST("/new", csrf, proposal, apiRecords).then(getResponse);
 

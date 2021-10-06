@@ -134,24 +134,22 @@ const updateProposalRfpLinks = (proposal) => (state) => {
   )(state);
 };
 
-const updateInventory = (payload) => (allProps) => {
-  return {
-    ...allProps,
-    ...Object.keys(payload).reduce((res, status) => {
-      const propsStatus = allProps[status] ? allProps[status] : [];
-      const payloadStatus = payload[status] ? payload[status] : [];
-      return {
-        ...res,
-        [status]: [
-          ...new Set([
-            ...payloadStatus.map((token) => shortRecordToken(token)),
-            ...propsStatus
-          ])
-        ]
-      };
-    }, {})
-  };
-};
+const updateInventory = (payload) => (allProps) => ({
+  ...allProps,
+  ...Object.keys(payload).reduce((res, status) => {
+    const propsStatus = allProps[status] ? allProps[status] : [];
+    const payloadStatus = payload[status] ? payload[status] : [];
+    return {
+      ...res,
+      [status]: [
+        ...new Set([
+          ...payloadStatus.map((token) => shortRecordToken(token)),
+          ...propsStatus
+        ])
+      ]
+    };
+  }, {})
+});
 
 const onReceiveLogout = (state) =>
   compose(
@@ -218,7 +216,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 : (state) => state,
               update("byToken", (proposals) => ({
                 ...proposals,
-                ...parseReceivedProposalsMap(action.payload.proposals)
+                ...parseReceivedProposalsMap(
+                  action.payload.proposals,
+                  proposals
+                )
               }))
             )(state),
           [act.RECEIVE_BATCH_PROPOSAL_SUMMARY]: () => {
@@ -227,7 +228,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
               (acc, key) => ({
                 ...acc,
                 [shortRecordToken(key)]: {
-                  ...state.byToken[shortRecordToken(key)],
+                  ...state.summaries[shortRecordToken(key)],
                   ...action.payload.summaries[key]
                 }
               }),
@@ -377,6 +378,15 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 : PROPOSAL_SUMMARY_STATUS_COMPLETED,
               action.payload.reason
             ),
+          [act.RECEIVE_BILLING_STATUS_CHANGES]: () =>
+            set(
+              [
+                "byToken",
+                shortRecordToken(action.payload.token),
+                "billingstatuschanges"
+              ],
+              action.payload.billingstatuschanges
+            )(state),
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
             if (!state.byToken[comment.token]) return state;

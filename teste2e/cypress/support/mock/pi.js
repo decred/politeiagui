@@ -14,5 +14,12 @@ export const middlewares = {
         };
         res.send(res.body);
       });
-    })
+    }),
+  billingstatuschanges: ({ body = {}, statusCode = 200 } = {}) =>
+    cy.intercept("/api/pi/v1/billingstatuschanges", (req) =>
+      req.reply({
+        body,
+        statusCode
+      })
+    )
 };

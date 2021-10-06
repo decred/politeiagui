@@ -178,6 +178,10 @@ const api = (state = DEFAULT_STATE, action) =>
         request("setBillingStatus", state, action),
       [act.RECEIVE_SET_BILLING_STATUS]: () =>
         receive("setBillingStatus", state),
+      [act.REQUEST_BILLING_STATUS_CHANGES]: () =>
+        request("billingStatusChanges", state, action),
+      [act.RECEIVE_BILLING_STATUS_CHANGES]: () =>
+        receive("billingStatusChanges", state),
       [act.REQUEST_START_VOTE]: () => request("startVote", state, action),
       [act.RECEIVE_START_VOTE]: () => receive("startVote", state),
       [act.RECEIVE_START_RUNOFF_VOTE]: () => receive("startRunoffVote", state),
