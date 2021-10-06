@@ -457,9 +457,7 @@ const Proposal = React.memo(function Proposal({
                     <ChartsLink token={fullToken} />
                   )}
                 </div>
-                {extended && (
-                  <MarkdownLink to={`/record/${shortToken}/raw`} />
-                )}
+                {extended && <MarkdownLink to={`/record/${shortToken}/raw`} />}
               </Row>
             )}
             {extended && files.length > 1 && (
