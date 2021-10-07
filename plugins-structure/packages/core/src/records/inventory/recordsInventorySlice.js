@@ -2,7 +2,13 @@
 // createAsyncThunk gnerate thunks that automatically dispatch
 // start/success/failure actions
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getRecordStatusCode, getRecordStateCode } from "../../utils";
+import {
+  getHumanReadableRecordState,
+  getRecordStatusCode,
+  getRecordStateCode,
+  getHumanReadableRecordStatus,
+} from "../../utils";
+import { validateRecordStateAndStatus } from "./validation";
 import { setFetchQueue, fetchRecordsNextPage } from "../records/recordsSlice";
 
 const initialObj = {
@@ -31,10 +37,12 @@ export const fetchRecordsInventory = createAsyncThunk(
     { recordsState, status, page = 1 },
     { dispatch, extra, rejectWithValue }
   ) => {
+    const requestState = getRecordStateCode(recordsState);
+    const requestStatus = getRecordStatusCode(status);
     try {
       const obj = {
-        state: getRecordStateCode(recordsState),
-        status: getRecordStatusCode(status),
+        state: requestState,
+        status: requestStatus,
         page,
       };
       const res = await extra.fetchRecordsInventory(obj);
@@ -42,27 +50,29 @@ export const fetchRecordsInventory = createAsyncThunk(
       // Dispatching these actions here because they are necessary to populate the view and should run synchronously.
       // setFetchQueue should always be dispatched here unless you have a really good reason to do it anywhere else.
       // fetchRecordsNextPage should be called everytime the user wants to fetch a new batch.
+      const stringState = getHumanReadableRecordState(recordsState);
+      const stringStatus = getHumanReadableRecordStatus(status);
       dispatch(
         setFetchQueue({
-          recordsState,
-          status,
-          records: res[recordsState][status],
+          recordsState: stringState,
+          status: stringStatus,
+          records: res[stringState][stringStatus],
         })
       );
-      dispatch(fetchRecordsNextPage({ recordsState, status }));
+      dispatch(
+        fetchRecordsNextPage({
+          recordsState: stringState,
+          status: stringStatus,
+        })
+      );
       return res;
     } catch (e) {
       return rejectWithValue(e.message);
     }
   },
   {
-    condition: ({ recordsState, status }) => {
-      if (!recordsState || !status) {
-        const error = Error("recordsState and status are required");
-        console.error(error);
-        return false;
-      }
-    },
+    condition: ({ recordsState, status }) =>
+      validateRecordStateAndStatus(recordsState, status),
   }
 );
 
@@ -75,18 +85,22 @@ const recordsInventorySlice = createSlice({
     builder
       .addCase(fetchRecordsInventory.pending, (state, action) => {
         const { recordsState, status } = action.meta.arg;
-        state[recordsState][status].status = "loading";
+        const stringState = getHumanReadableRecordState(recordsState);
+        const stringStatus = getHumanReadableRecordStatus(status);
+        state[stringState][stringStatus].status = "loading";
       })
       .addCase(fetchRecordsInventory.fulfilled, (state, action) => {
         const recordsInventory = action.payload;
         const { recordsState, status } = action.meta.arg;
-        if (recordsInventory[recordsState][status].length === 20) {
-          state[recordsState][status].status = "succeeded/hasMore";
+        const stringState = getHumanReadableRecordState(recordsState);
+        const stringStatus = getHumanReadableRecordStatus(status);
+        if (recordsInventory[stringState][stringStatus].length === 20) {
+          state[stringState][stringStatus].status = "succeeded/hasMore";
         } else {
-          state[recordsState][status].status = "succeeded/isDone";
+          state[stringState][stringStatus].status = "succeeded/isDone";
         }
-        state[recordsState][status].tokens.push(
-          ...recordsInventory[recordsState][status]
+        state[stringState][stringStatus].tokens.push(
+          ...recordsInventory[stringState][stringStatus]
         );
       })
       .addCase(fetchRecordsInventory.rejected, (state, action) => {
@@ -100,9 +114,27 @@ const recordsInventorySlice = createSlice({
 export const selectRecordsInventoryByStateAndStatus = (
   state,
   { recordsState, status }
-) => state.recordsInventory[recordsState][status].tokens;
-export const selectRecordsInventoryStatus = (state, { recordsState, status }) =>
-  state.recordsInventory[recordsState][status].status;
+) => {
+  if (validateRecordStateAndStatus(recordsState, status)) {
+    // We have valids record state and status.
+    // Convert them to strings if they are not.
+    const stringRecordsState = getHumanReadableRecordState(recordsState);
+    const stringStatus = getHumanReadableRecordStatus(status);
+    return state.recordsInventory[stringRecordsState][stringStatus].tokens;
+  }
+};
+export const selectRecordsInventoryStatus = (
+  state,
+  { recordsState, status }
+) => {
+  if (validateRecordStateAndStatus(recordsState, status)) {
+    // We have valids record state and status.
+    // Convert them to strings if they are not.
+    const stringRecordsState = getHumanReadableRecordState(recordsState);
+    const stringStatus = getHumanReadableRecordStatus(status);
+    return state.recordsInventory[stringRecordsState][stringStatus].status;
+  }
+};
 
 // Export default reducer
 export default recordsInventorySlice.reducer;
