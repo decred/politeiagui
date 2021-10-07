@@ -12,8 +12,6 @@ import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
-import { PROPOSAL_STATUS_CENSORED } from "src/constants";
-import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
 import usePolicy from "src/hooks/api/usePolicy";
 
 const renderProposal = (record) => (
@@ -42,7 +40,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   );
 
   const {
-    proposals: batchProposals,
+    proposals,
     proposalsTokens,
     loading,
     verifying,
@@ -59,11 +57,6 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     fetchVoteSummary: true,
     fetchProposalSummary: true
   });
-
-  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
-    batchProposals,
-    PROPOSAL_STATUS_CENSORED
-  );
 
   // TODO: remove legacy
   const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
@@ -144,8 +137,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying || mdLoading}
       pageSize={proposalPageSize}
+      isLoading={loading || verifying}
       sort={sort}>
       {content}
     </RecordsView>

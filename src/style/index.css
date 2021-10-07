@@ -147,6 +147,11 @@
   margin-bottom: var(--spacing-large) !important;
 }
 
+.margin-y-m {
+  margin-bottom: var(--spacing-medium) !important;
+  margin-top: var(--spacing-medium) !important;
+}
+
 /* Padding helpers */
 .no-padding-bottom {
   padding-bottom: 0 !important;

@@ -22,7 +22,6 @@ import {
 } from "src/containers/Proposal/Actions";
 import { useProposalVote } from "../hooks";
 import useDocumentTitle from "src/hooks/utils/useDocumentTitle";
-import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
 import Link from "src/components/Link";
 import { GoBackLink } from "src/components/Router";
 import { useConfig } from "src/containers/Config";
@@ -31,11 +30,7 @@ import LoggedInContent from "src/components/LoggedInContent";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
 import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
 import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
-import {
-  PROPOSAL_STATUS_CENSORED,
-  PROPOSAL_UPDATE_HINT,
-  PROPOSAL_STATE_UNVETTED
-} from "src/constants";
+import { PROPOSAL_UPDATE_HINT, PROPOSAL_STATE_UNVETTED } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import ModalLogin from "src/components/ModalLogin";
 import useModalContext from "src/hooks/utils/useModalContext";
@@ -56,7 +51,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     policyTicketVote: { summariespagesize: proposalPageSize }
   } = usePolicy();
   const {
-    proposal: fetchedProposal,
+    proposal,
     loading,
     threadParentID,
     error,
@@ -72,11 +67,6 @@ const ProposalDetail = ({ Main, match, history }) => {
   } = useProposal(tokenFromUrl, proposalPageSize, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
-  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
-    { [tokenFromUrl]: fetchedProposal },
-    PROPOSAL_STATUS_CENSORED
-  );
-  const proposal = proposals[tokenFromUrl];
   const proposalToken = getProposalToken(proposal);
   const proposalState = proposal?.state;
   const { voteSummary, proposalSummary } = useProposalVote(
@@ -261,7 +251,7 @@ const ProposalDetail = ({ Main, match, history }) => {
           <PublicActionsProvider>
             {error ? (
               <Message kind="error">{error.toString()}</Message>
-            ) : loading || mdLoading || !proposal ? (
+            ) : loading || !proposal ? (
               <ProposalLoader extended />
             ) : (
               <Proposal

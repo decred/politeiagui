@@ -5,8 +5,11 @@ import { useSelector, useAction } from "src/redux";
 import {
   getProposalRfpLinks,
   getProposalToken,
-  getTokensForProposalsPagination
+  getTokensForProposalsPagination,
+  isAbandonedProposal,
+  isCensoredProposal
 } from "../helpers";
+import { useBillingStatusChanges, useUserByPublicKey } from "../hooks";
 import { getDetailsFile } from "./helpers";
 import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
@@ -64,6 +67,7 @@ export function useProposal(token, proposalPageSize, threadParentID) {
   const voteSummaries = useSelector(sel.voteSummariesByToken);
   const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
   const proposalSummaries = useSelector(sel.proposalSummariesByToken);
+  const proposalSummary = proposalSummaries[tokenShort];
   const loadingProposalSummary = useSelector(
     sel.isApiRequestingBatchProposalSummary
   );
@@ -80,11 +84,13 @@ export function useProposal(token, proposalPageSize, threadParentID) {
       rfpLinks.map((r) => shortRecordToken(r)),
       keys(proposals)
     );
+
   const unfetchedSummariesTokens = getUnfetchedVoteSummaries(
     proposal,
     voteSummaries,
     isSubmission
   );
+
   const rfpSubmissions = rfpLinks &&
     proposal.linkby && {
       proposals: values(
@@ -105,8 +111,10 @@ export function useProposal(token, proposalPageSize, threadParentID) {
 
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
   const isMissingVoteSummary = !voteSummaries[tokenShort];
-  const isMissingProposalSummary = !proposalSummaries[tokenShort];
+  const isMissingProposalSummary = !proposalSummary;
   const needsInitialFetch = token && isMissingDetails;
+  const isCensored = isCensoredProposal(proposal);
+  const isAbandoned = isAbandonedProposal(proposalSummary);
 
   const [remainingTokens, setRemainingTokens] = useState(
     unfetchedProposalTokens
@@ -115,6 +123,27 @@ export function useProposal(token, proposalPageSize, threadParentID) {
 
   const initialValues = {
     status: "idle"
+  };
+
+  // Fetch status change user name.
+  const { statuschangepk } = proposal || {};
+  const { username: statuschangeusername } = useUserByPublicKey({
+    userPubKey: (isCensored || isAbandoned) && statuschangepk
+  });
+
+  // Fetch billing status change metadata.
+  useBillingStatusChanges({ token: tokenShort });
+  const billingstatuschanges = proposal?.billingstatuschanges;
+  const latestBillingStatusChange =
+    billingstatuschanges?.length > 0 &&
+    billingstatuschanges[billingstatuschanges.length - 1];
+  const { publickey: billingStatusAdminPubKey } = latestBillingStatusChange;
+  const { username: billingStatusChangeUsername } = useUserByPublicKey({
+    userPubKey: billingStatusAdminPubKey
+  });
+  const billingStatusChangeMetadata = billingStatusChangeUsername && {
+    ...latestBillingStatusChange,
+    username: billingStatusChangeUsername
   };
 
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
@@ -225,7 +254,11 @@ export function useProposal(token, proposalPageSize, threadParentID) {
   } = useComments(proposalToken, proposalState, null, threadParentID);
 
   return {
-    proposal: proposalWithLinks,
+    proposal: proposalWithLinks && {
+      ...proposalWithLinks,
+      statuschangeusername,
+      billingStatusChangeMetadata
+    },
     error: state.error,
     loading: state.status === "idle" || state.status === "loading",
     threadParentID,

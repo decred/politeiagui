@@ -3,8 +3,6 @@ import useProposalsBatch from "src/hooks/api/useProposalsBatch";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
-import useProposalsStatusChangeUser from "src/hooks/api/useProposalsStatusChangeUser";
-import { PROPOSAL_STATUS_CENSORED } from "src/constants";
 import { tabValues, statusByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import usePolicy from "src/hooks/api/usePolicy";
@@ -36,7 +34,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     }
   } = usePolicy();
   const {
-    proposals: batchProposals,
+    proposals,
     proposalsTokens,
     loading,
     verifying,
@@ -52,11 +50,6 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     proposalPageSize: proposalPageSize,
     inventoryPageSize: inventoryPageSize
   });
-
-  const { proposals, loading: mdLoading } = useProposalsStatusChangeUser(
-    batchProposals,
-    PROPOSAL_STATUS_CENSORED
-  );
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -88,8 +81,8 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying || mdLoading}
       pageSize={proposalPageSize}
+      isLoading={loading || verifying}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (
         <>

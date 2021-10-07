@@ -1,4 +1,5 @@
 import {
+  shortRecordToken,
   getFirstShortProposalToken,
   PROPOSAL_SUMMARY_STATUS_UNVETTED,
   PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED,
@@ -11,7 +12,8 @@ import {
   PROPOSAL_SUMMARY_STATUS_REJECTED,
   PROPOSAL_SUMMARY_STATUS_ACTIVE,
   PROPOSAL_SUMMARY_STATUS_COMPLETED,
-  PROPOSAL_SUMMARY_STATUS_CLOSED
+  PROPOSAL_SUMMARY_STATUS_CLOSED,
+  PROPOSAL_BILLING_STATUS_CLOSED
 } from "../../utils";
 import { buildProposal } from "../../support/generate";
 import path from "path";
@@ -156,7 +158,7 @@ describe("Proposal details", () => {
       cy.get("#commentArea").should("exist");
     });
   });
-  describe.only("proposal status tags", () => {
+  describe("proposal status tags", () => {
     beforeEach(() => {
       cy.visit("/");
       cy.wait("@records").then(({ response: { body } }) => {
@@ -312,6 +314,102 @@ describe("Proposal details", () => {
       cy.wait("@details");
       cy.wait("@pi.summaries");
       cy.findByText(/completed/i).should("be.visible");
+    });
+  });
+  describe.only("propsoal status metadata", () => {
+    // paid admin user with proposal credits
+    const admin = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    beforeEach(() => {
+      cy.login(admin);
+      cy.identity();
+      const proposal = buildProposal();
+      cy.createProposal(proposal).then(
+        ({
+          body: {
+            record: { censorshiprecord }
+          }
+        }) => {
+          token = censorshiprecord.token;
+          shortToken = shortRecordToken(token);
+        }
+      );
+      cy.intercept("/api/records/v1/details").as("details");
+    });
+    it("should display proposal status metadata on censored proposal", () => {
+      cy.visit(`record/${shortToken}`);
+      cy.wait("@details");
+      // Manually report proposal
+      cy.findByText(/report/i).click();
+      cy.findByLabelText(/censor reason/i).type("censor!");
+      cy.route("POST", "/api/records/v1/setstatus").as("confirm");
+      cy.findByText(/confirm/i).click();
+      cy.wait("@confirm");
+      cy.findByText(/ok/i).click();
+      cy.findByText(/this proposal has been censored by adminuser/i).should(
+        "be.visible"
+      );
+      cy.findByText(/reason: censor!/i).should("be.visible");
+    });
+    it("should display proposal status metadata on abandoned proposal", () => {
+      cy.approveProposal({ token });
+      cy.visit(`record/${shortToken}`);
+      cy.wait("@details");
+      // Manually abandon
+      cy.findByText(/abandon/i).click();
+      cy.findByLabelText(/abandon reason/i).type("abandon!");
+      cy.route("POST", "/api/records/v1/setstatus").as("confirm");
+      cy.findByText(/confirm/i).click();
+      cy.wait("@confirm");
+      cy.findByText(/ok/i).click();
+      cy.findByText(/this proposal has been abandoned by adminuser/i).should(
+        "be.visible"
+      );
+      cy.findByText(/reason: abandon!/i).should("be.visible");
+    });
+    it("should display proposal status metadata on closed proposal", () => {
+      cy.approveProposal({ token });
+      // Mock propsoal summary reply to set proposal status to
+      // approved to test author updates.
+      cy.middleware("pi.summaries", {
+        token: shortToken,
+        status: PROPOSAL_SUMMARY_STATUS_CLOSED
+      });
+      // Mock billing status changes request.
+      cy.middleware("pi.billingstatuschanges", {
+        body: {
+          billingstatuschanges: [
+            {
+              token,
+              publickey: "some_public_key",
+              reason: "closed!",
+              status: PROPOSAL_BILLING_STATUS_CLOSED
+            }
+          ]
+        }
+      });
+      // Mock users reply to retrieve billing status change user name.
+      cy.middleware("users.users", {
+        body: {
+          users: [
+            {
+              username: "adminuser",
+              id: "user_id"
+            }
+          ]
+        }
+      });
+      cy.visit(`record/${shortToken}`);
+      cy.wait("@pi.summaries");
+      cy.wait("@pi.billingstatuschanges");
+      cy.wait("@users.users");
+      cy.findByText(/this proposal has been closed by adminuser/i).should(
+        "be.visible"
+      );
+      cy.findByText(/reason: closed!/i).should("be.visible");
     });
   });
 });

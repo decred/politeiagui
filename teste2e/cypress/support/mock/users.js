@@ -49,5 +49,12 @@ export const middlewares = {
               image: totpImage
             }
       });
-    })
+    }),
+  users: ({ body = {}, statusCode = 200 } = {}) =>
+    cy.intercept(`${API_URL}s?publickey=*`, (req) =>
+      req.reply({
+        body,
+        statusCode
+      })
+    )
 };

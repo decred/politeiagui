@@ -14,6 +14,7 @@ export const isApiRequestingInit = getIsApiRequesting("init");
 export const isApiRequestingPolicy = getIsApiRequesting("policy");
 export const isApiRequestingUserProposals = getIsApiRequesting("userProposals");
 export const isApiRequestingUser = getIsApiRequesting("user");
+export const isApiRequestingUserSearch = getIsApiRequesting("userSearch");
 export const isApiRequestingPropVoteResults = getIsApiRequesting(
   "proposalVoteResults"
 );
@@ -22,6 +23,9 @@ export const isApiRequestingProposalsVoteSummary = getIsApiRequesting(
 );
 export const isApiRequestingBatchProposalSummary = getIsApiRequesting(
   "batchProposalSummary"
+);
+export const isApiRequestingBillingStatusChanges = getIsApiRequesting(
+  "billingStatusChanges"
 );
 export const isApiRequestingVotesDetails = getIsApiRequesting("votesDetails");
 export const isApiRequestingEditUser = getIsApiRequesting("editUser");
