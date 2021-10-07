@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
@@ -152,6 +152,7 @@ export default function useProposalsBatch({
     actions: {
       initial: () => send(START),
       start: () => {
+        if (!proposalPageSize) return send(RESOLVE);
         if (remainingTokens.length > proposalPageSize) return send(VERIFY);
         // If remaining tokens length is smaller than proposal page size.
         // Find more tokens from inventory or scan from the next status
@@ -337,6 +338,13 @@ export default function useProposalsBatch({
 
   const anyError = error || state.error;
   useThrowError(anyError);
+
+  // Recall fetch machine when proposalPageSize is changed. Since it is
+  // not hard code and be fetched from policy and will be undefined when
+  // the policy is not fetched yet.
+  useEffect(() => {
+    send(START);
+  }, [proposalPageSize, send]);
 
   return {
     proposals: getRfpLinkedProposals(
