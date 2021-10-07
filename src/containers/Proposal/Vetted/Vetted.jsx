@@ -32,14 +32,14 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const statuses = statusByTab[tabLabels[index]];
   const sort = sortByTab[tabLabels[index]];
   const policy = usePolicy();
-  const proposalPageSize = get([
-    "policyTicketVote",
-    "summariespagesize"
-  ], policy);
-  const inventoryPageSize = get([
-    "policyTicketVote",
-    "inventorypagesize"
-  ], policy);
+  const proposalPageSize = get(
+    ["policyTicketVote", "summariespagesize"],
+    policy
+  );
+  const inventoryPageSize = get(
+    ["policyTicketVote", "inventorypagesize"],
+    policy
+  );
 
   const {
     proposals: batchProposals,
