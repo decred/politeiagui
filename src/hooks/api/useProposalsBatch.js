@@ -177,7 +177,8 @@ export default function useProposalsBatch({
           setRemainingTokens(tokens);
           if (isEmpty(tokens)) {
             // When the tokens are empty and the fetched proposals are empty
-            // too, wait 1 second to avoid remove loading indicator suddenly.
+            // too, wait 1 second to avoid removing the loading indicator
+            // suddenly.
             if (Object.keys(proposals)) {
               setInitialWaiting(true);
               setTimeout(() => {
