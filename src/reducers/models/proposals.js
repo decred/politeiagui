@@ -22,11 +22,13 @@ import {
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_BILLING_STATUS_CLOSED,
+  PROPOSAL_BILLING_STATUS_COMPLETED,
   PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW,
   PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
   PROPOSAL_SUMMARY_STATUS_VOTE_STARTED,
   PROPOSAL_SUMMARY_STATUS_CLOSED,
-  PROPOSAL_SUMMARY_STATUS_COMPLETED
+  PROPOSAL_SUMMARY_STATUS_COMPLETED,
+  PROPOSAL_SUMMARY_STATUS_ACTIVE
 } from "src/constants";
 import {
   shortRecordToken,
@@ -192,11 +194,10 @@ const updateMultiProposalSummary =
     return state;
   };
 
-const updateProposalSummary = (state, token, newStatus, reason) =>
+const updateProposalSummary = (state, token, newStatus) =>
   update(["summaries", shortRecordToken(token)], (proposalSummary) => ({
     ...proposalSummary,
-    status: newStatus,
-    statusreason: reason
+    status: newStatus
   }))(state);
 
 const proposals = (state = DEFAULT_STATE, action) =>
@@ -369,15 +370,38 @@ const proposals = (state = DEFAULT_STATE, action) =>
               action.payload.token,
               PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW
             ),
-          [act.RECEIVE_SET_BILLING_STATUS]: () =>
-            updateProposalSummary(
+          [act.RECEIVE_SET_BILLING_STATUS]: () => {
+            state = updateProposalSummary(
               state,
               action.payload.token,
               action.payload.billingStatus === PROPOSAL_BILLING_STATUS_CLOSED
                 ? PROPOSAL_SUMMARY_STATUS_CLOSED
-                : PROPOSAL_SUMMARY_STATUS_COMPLETED,
-              action.payload.reason
-            ),
+                : action.payload.billingStatus ===
+                  PROPOSAL_BILLING_STATUS_COMPLETED
+                ? PROPOSAL_SUMMARY_STATUS_COMPLETED
+                : PROPOSAL_SUMMARY_STATUS_ACTIVE
+            );
+            state = update(
+              [
+                "byToken",
+                shortRecordToken(action.payload.token),
+                "billingStatusChangeMetadata"
+              ],
+              (billingStatusChangeMetadata) => ({
+                ...billingStatusChangeMetadata,
+                token: action.payload.token,
+                status: action.payload.billingStatus,
+                numbillingstatuschanges:
+                  (billingStatusChangeMetadata?.numbillingstatuschanges || 0) +
+                  1,
+                reason: action.payload.reason,
+                receipt: action.payload.receipt,
+                timestamp: action.payload.timestamp,
+                publickey: action.payload.publickey
+              })
+            )(state);
+            return state;
+          },
           [act.RECEIVE_BILLING_STATUS_CHANGES]: () => {
             const billingstatuschanges = action.payload.billingstatuschanges;
             const numbillingstatuschanges = billingstatuschanges?.length;

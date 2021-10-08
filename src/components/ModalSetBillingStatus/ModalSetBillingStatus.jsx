@@ -25,7 +25,7 @@ const ModalSetBillingStatus = ({
 }) => {
   const [success, setSuccess] = useState(false);
 
-  const typeOptions = useMemo(
+  const billingStatusOptions = useMemo(
     () => getProposalBillingStatusOptionsForSelect(),
     []
   );
@@ -107,7 +107,7 @@ const ModalSetBillingStatus = ({
               billingStatus === PROPOSAL_BILLING_STATUS_CLOSED;
 
             return (
-              <Form onSubmit={handleSubmit}>
+              <Form className={styles.content} onSubmit={handleSubmit}>
                 {errors && errors.global && (
                   <ErrorMessage>{errors.global.toString()}</ErrorMessage>
                 )}
@@ -116,7 +116,7 @@ const ModalSetBillingStatus = ({
                   placeholder="Billing Status"
                   className={styles.statusSelectWrapper}
                   onChange={handleSelectFiledChange("billingStatus")}
-                  options={typeOptions}
+                  options={billingStatusOptions}
                   id="select-billing-status"
                 />
                 {isBillingStatusClosed && (

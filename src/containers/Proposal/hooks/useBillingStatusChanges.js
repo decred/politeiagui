@@ -2,18 +2,18 @@ import { useEffect, useMemo } from "react";
 import { useSelector, useAction } from "src/redux";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
-import { isClosedProposal } from "../helpers";
+import { isApprovedProposal } from "../helpers";
 
 export default function useBillingStatusChanges({ token }) {
   const proposalSelector = useMemo(
     () => sel.makeGetProposalByToken(token),
     [token]
   );
-  const { billingStatusChangeMetadata } = useSelector(proposalSelector) || {};
-  const proposalSummaries = useSelector(sel.proposalSummariesByToken);
-  const proposalSummary = proposalSummaries[token];
-  const isClosed = isClosedProposal(proposalSummary);
-  const hasBillingStatusMetadata = !!billingStatusChangeMetadata;
+  const proposal = useSelector(proposalSelector);
+  const voteSummaries = useSelector(sel.voteSummariesByToken);
+  const voteSummary = voteSummaries[token];
+  const isApproved = isApprovedProposal(proposal, voteSummary);
+  const hasBillingStatusMetadata = !!proposal?.billingStatusChangeMetadata;
   const onFetchBillingStatusChanges = useAction(
     act.onFetchBillingStatusChanges
   );
@@ -21,7 +21,7 @@ export default function useBillingStatusChanges({ token }) {
     sel.isApiRequestingBatchProposalSummary
   );
   const fetchBillingStatusChanges =
-    isClosed && !loadingBillingStatusChanges && !hasBillingStatusMetadata;
+    isApproved && !loadingBillingStatusChanges && !hasBillingStatusMetadata;
 
   useEffect(() => {
     if (fetchBillingStatusChanges) onFetchBillingStatusChanges(token);

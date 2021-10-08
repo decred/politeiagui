@@ -1282,9 +1282,16 @@ export const onSetBillingStatus = (token, billingStatus, reason) =>
     dispatch(act.REQUEST_SET_BILLING_STATUS({ token, billingStatus, reason }));
     return api
       .proposalSetBillingStatus(userid, csrf, token, billingStatus, reason)
-      .then(() => {
+      .then(({ receipt, timestamp, publickey }) => {
         dispatch(
-          act.RECEIVE_SET_BILLING_STATUS({ token, billingStatus, reason })
+          act.RECEIVE_SET_BILLING_STATUS({
+            receipt,
+            timestamp,
+            token,
+            billingStatus,
+            reason,
+            publickey
+          })
         );
       })
       .catch((error) => {
