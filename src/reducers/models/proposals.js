@@ -404,14 +404,14 @@ const proposals = (state = DEFAULT_STATE, action) =>
           },
           [act.RECEIVE_BILLING_STATUS_CHANGES]: () => {
             const billingstatuschanges = action.payload.billingstatuschanges;
-            const numbillingstatuschanges = billingstatuschanges?.length;
+            const numbillingstatuschanges = billingstatuschanges?.length || 0;
             const billingStatusChangeMetadata =
-              numbillingstatuschanges > 0 &&
-              billingstatuschanges[numbillingstatuschanges - 1];
-            if (numbillingstatuschanges) {
-              billingStatusChangeMetadata.numbillingstatuschanges =
-                numbillingstatuschanges;
-            }
+              (numbillingstatuschanges > 0 &&
+                billingstatuschanges[numbillingstatuschanges - 1]) ||
+              {};
+            billingStatusChangeMetadata.numbillingstatuschanges =
+              numbillingstatuschanges;
+
             return set(
               [
                 "byToken",
