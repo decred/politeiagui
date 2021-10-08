@@ -38,7 +38,8 @@ import {
 } from "src/containers/Proposal/helpers";
 import {
   useProposalVote,
-  useProposalURLs
+  useProposalURLs,
+  useBillingStatusChanges
 } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
 import { useLoader } from "src/containers/Loader";
@@ -88,8 +89,11 @@ function replaceImgDigestWithPayload(text, files) {
 }
 
 const ProposalWrapper = (props) => {
+  const shortToken = shortRecordToken(getProposalToken(props.proposal));
   const { voteSummary, proposalSummary, voteBlocksLeft, voteEndTimestamp } =
-    useProposalVote(getProposalToken(props.proposal));
+    useProposalVote(shortToken);
+  // Fetch billing status change metadata.
+  useBillingStatusChanges({ token: shortToken });
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -534,7 +538,6 @@ const Proposal = React.memo(function Proposal({
               <ProposalActions
                 proposal={proposal}
                 voteSummary={voteSummary}
-                proposalSummary={proposalSummary}
                 rfpSubmissionsVoteSummaries={
                   isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }

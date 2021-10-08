@@ -9,11 +9,11 @@ export default function useBillingStatusChanges({ token }) {
     () => sel.makeGetProposalByToken(token),
     [token]
   );
-  const { billingstatuschanges } = useSelector(proposalSelector) || {};
+  const { billingStatusChangeMetadata } = useSelector(proposalSelector) || {};
   const proposalSummaries = useSelector(sel.proposalSummariesByToken);
   const proposalSummary = proposalSummaries[token];
   const isClosed = isClosedProposal(proposalSummary);
-  const hasBillingStatusChanges = !!billingstatuschanges?.length;
+  const hasBillingStatusMetadata = !!billingStatusChangeMetadata;
   const onFetchBillingStatusChanges = useAction(
     act.onFetchBillingStatusChanges
   );
@@ -21,13 +21,12 @@ export default function useBillingStatusChanges({ token }) {
     sel.isApiRequestingBatchProposalSummary
   );
   const fetchBillingStatusChanges =
-    isClosed && !loadingBillingStatusChanges && !hasBillingStatusChanges;
+    isClosed && !loadingBillingStatusChanges && !hasBillingStatusMetadata;
 
   useEffect(() => {
     if (fetchBillingStatusChanges) onFetchBillingStatusChanges(token);
   }, [
     fetchBillingStatusChanges,
-    hasBillingStatusChanges,
     loadingBillingStatusChanges,
     onFetchBillingStatusChanges,
     token

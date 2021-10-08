@@ -378,15 +378,25 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 : PROPOSAL_SUMMARY_STATUS_COMPLETED,
               action.payload.reason
             ),
-          [act.RECEIVE_BILLING_STATUS_CHANGES]: () =>
-            set(
+          [act.RECEIVE_BILLING_STATUS_CHANGES]: () => {
+            const billingstatuschanges = action.payload.billingstatuschanges;
+            const numbillingstatuschanges = billingstatuschanges?.length;
+            const billingStatusChangeMetadata =
+              numbillingstatuschanges > 0 &&
+              billingstatuschanges[numbillingstatuschanges - 1];
+            if (numbillingstatuschanges) {
+              billingStatusChangeMetadata.numbillingstatuschanges =
+                numbillingstatuschanges;
+            }
+            return set(
               [
                 "byToken",
                 shortRecordToken(action.payload.token),
-                "billingstatuschanges"
+                "billingStatusChangeMetadata"
               ],
-              action.payload.billingstatuschanges
-            )(state),
+              billingStatusChangeMetadata
+            )(state);
+          },
           [act.RECEIVE_NEW_COMMENT]: () => {
             const comment = action.payload;
             if (!state.byToken[comment.token]) return state;
