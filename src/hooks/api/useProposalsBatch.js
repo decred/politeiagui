@@ -98,6 +98,7 @@ export default function useProposalsBatch({
   const [remainingTokens, setRemainingTokens] = useState([]);
   const [voteStatuses, setStatuses] = useState(statuses);
   const [initializedInventory, setInitializedInventory] = useState(false);
+  const [initialWaiting, setInitialWaiting] = useState(false);
   const isByRecordStatus = isUndefined(voteStatuses);
   const proposals = useSelector(sel.proposalsByToken);
   const recordState = unvetted
@@ -174,7 +175,15 @@ export default function useProposalsBatch({
           );
           setStatusIndex(index);
           setRemainingTokens(tokens);
-          if (isEmpty(tokens)) return send(RESOLVE);
+          if (isEmpty(tokens)) {
+            if (Object.keys(proposals)) {
+              setInitialWaiting(true);
+              setTimeout(() => {
+                setInitialWaiting(false);
+              }, 1000);
+            }
+            return send(RESOLVE);
+          }
 
           return send(VERIFY);
         }
@@ -355,6 +364,7 @@ export default function useProposalsBatch({
     // proposals fetched to avoid flickering at starting.
     loading:
       state.loading ||
+      initialWaiting ||
       (!values(proposals).length && statusIndex + 1 < voteStatuses?.length),
     verifying: state.verifying,
     onRestartMachine,
