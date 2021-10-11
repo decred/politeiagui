@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RECORDS_PAGE_SIZE } from "../constants";
-import { getRecordStatusCode, getRecordStateCode } from "../../utils";
+import {
+  getHumanReadableRecordState,
+  getHumanReadableRecordStatus,
+  getRecordStatusCode,
+  getRecordStateCode,
+} from "../utils";
+import { validateRecordStateAndStatus } from "../validation";
 import take from "lodash/fp/take";
 import without from "lodash/fp/without";
 
@@ -34,14 +40,20 @@ export const fetchRecords = createAsyncThunk(
 
 export const fetchRecordsNextPage = createAsyncThunk(
   "records/fetchNextPage",
-  async (body = { pageSize: RECORDS_PAGE_SIZE }, { dispatch, getState }) => {
-    let { pageSize, recordsState, status } = body;
+  async (body, { dispatch, getState }) => {
+    const { recordsState, status } = body;
+    let { pageSize } = body;
     if (!pageSize) pageSize = RECORDS_PAGE_SIZE;
-    if (!recordsState) throw Error("recordsState is required");
-    if (!status) throw Error("status is required");
-    const queue = getState().records.recordsFetchQueue[recordsState][status];
+    const stringState = getHumanReadableRecordState(recordsState);
+    const stringStatus = getHumanReadableRecordStatus(status);
+    const queue =
+      getState().records.recordsFetchQueue[stringState][stringStatus];
     const nextTokens = take(pageSize, queue);
     return await dispatch(fetchRecords(nextTokens));
+  },
+  {
+    condition: ({ recordsState, status }) =>
+      validateRecordStateAndStatus(recordsState, status),
   }
 );
 
@@ -66,22 +78,31 @@ const recordsSlice = createSlice({
     // set the recordsFetchQueue object per state and status
     setFetchQueue(state, action) {
       const { recordsState, status, records } = action.payload;
-      setQueue(state, { recordsState, status, records });
+      const stringState = getHumanReadableRecordState(recordsState);
+      const stringStatus = getHumanReadableRecordStatus(status);
+      setQueue(state, {
+        recordsState: stringState,
+        status: stringStatus,
+        records,
+      });
     },
     // push values into an already initialzed recordsFetchQueue
     pushFetchQueue(state, action) {
       const { recordsState, status, records } = action.payload;
-      state.recordsFetchQueue[recordsState][status].push(...records);
+      const stringState = getHumanReadableRecordState(recordsState);
+      const stringStatus = getHumanReadableRecordStatus(status);
+      state.recordsFetchQueue[stringState][stringStatus].push(...records);
     },
     // pop values from the recordsFetchQueue
     popFetchQueue(state, action) {
       const { recordsState, status, records } = action.payload;
-      state.recordsFetchQueue[recordsState][status] = state.recordsFetchQueue[
-        recordsState
-      ][status].filter(
-        (outerRecord) =>
-          !records.find((innerRecord) => outerRecord === innerRecord)
-      );
+      const stringState = getHumanReadableRecordState(recordsState);
+      const stringStatus = getHumanReadableRecordStatus(status);
+      state.recordsFetchQueue[stringState][stringStatus] =
+        state.recordsFetchQueue[stringState][stringStatus].filter(
+          (outerRecord) =>
+            !records.find((innerRecord) => outerRecord === innerRecord)
+        );
     },
   },
   extraReducers(builder) {
@@ -103,11 +124,17 @@ const recordsSlice = createSlice({
       .addCase(fetchRecordsNextPage.fulfilled, (state, action) => {
         const { recordsState, status } = action.meta.arg;
         const recordsFetched = action.payload.meta.arg;
+        const stringState = getHumanReadableRecordState(recordsState);
+        const stringStatus = getHumanReadableRecordStatus(status);
         const newQueue = without(
           recordsFetched,
-          state.recordsFetchQueue[recordsState][status]
+          state.recordsFetchQueue[stringState][stringStatus]
         );
-        setQueue(state, { recordsState, status, records: newQueue });
+        setQueue(state, {
+          recordsState: stringState,
+          status: stringStatus,
+          records: newQueue,
+        });
       })
       .addCase(fetchRecordsNextPage.rejected, (state, action) => {
         state.status = "failed";
@@ -130,22 +157,48 @@ export const selectRecords = (state) => state.records.records;
 export const selectRecordsByStateAndStatus = (
   state,
   { recordsState, status }
-) =>
-  Object.values(state.records.records).filter((record) => {
+) => {
+  if (validateRecordStateAndStatus(recordsState, status)) {
+    // We have valids record state and status.
+    return Object.values(state.records.records).filter((record) => {
+      return (
+        record.state === getRecordStateCode(recordsState) &&
+        record.status === getRecordStatusCode(status)
+      );
+    });
+  }
+};
+
+export const selectRecordsFetchQueue = (state, { recordsState, status }) => {
+  if (validateRecordStateAndStatus(recordsState, status)) {
+    // We have valids record state and status.
+    // Convert them to strings if they are not.
+    const stringRecordsState = getHumanReadableRecordState(recordsState);
+    const stringStatus = getHumanReadableRecordStatus(status);
+    return state.records.recordsFetchQueue[stringRecordsState]
+      ? state.records.recordsFetchQueue[stringRecordsState][stringStatus]
+      : [];
+  }
+};
+
+export const selectHasMoreRecordsToFetch = (
+  state,
+  { recordsState, status }
+) => {
+  if (validateRecordStateAndStatus(recordsState, status)) {
+    // We have valids record state and status.
+    // Convert them to strings if they are not.
+    const stringRecordsState = getHumanReadableRecordState(recordsState);
+    const stringStatus = getHumanReadableRecordStatus(status);
     return (
-      record.state === getRecordStateCode(recordsState) &&
-      record.status === getRecordStatusCode(status)
+      state.records.status === "idle" ||
+      (state.records.recordsFetchQueue[stringRecordsState] &&
+        state.records.recordsFetchQueue[stringRecordsState][stringStatus] &&
+        state.records.recordsFetchQueue[stringRecordsState][stringStatus]
+          .length > 0)
     );
-  });
-export const selectRecordsFetchQueue = (state, { recordsState, status }) =>
-  state.records.recordsFetchQueue[recordsState]
-    ? state.records.recordsFetchQueue[recordsState][status]
-    : [];
-export const selectHasMoreRecordsToFetch = (state, { recordsState, status }) =>
-  state.records.status === "idle" ||
-  (state.records.recordsFetchQueue[recordsState] &&
-    state.records.recordsFetchQueue[recordsState][status] &&
-    state.records.recordsFetchQueue[recordsState][status].length > 0);
+  }
+};
 
 // Export default reducer
 export default recordsSlice.reducer;

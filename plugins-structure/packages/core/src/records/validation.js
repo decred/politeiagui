@@ -1,4 +1,4 @@
-import { validRecordStatuses, validRecordStates } from "../../utils";
+import { validRecordStatuses, validRecordStates } from "./utils";
 
 export function validateRecordState(recordState, isRequired = true) {
   if (isRequired && !recordState) {

@@ -7,8 +7,8 @@ import {
   getRecordStatusCode,
   getRecordStateCode,
   getHumanReadableRecordStatus,
-} from "../../utils";
-import { validateRecordStateAndStatus } from "./validation";
+} from "../utils";
+import { validateRecordStateAndStatus } from "../validation";
 import { setFetchQueue, fetchRecordsNextPage } from "../records/recordsSlice";
 
 const initialObj = {

@@ -6,7 +6,7 @@ import {
   RECORD_STATUS_ARCHIVED,
   RECORD_STATE_UNVETTED,
   RECORD_STATE_VETTED,
-} from "./records/constants.js";
+} from "./constants.js";
 
 const statusToString = {
   [RECORD_STATUS_UNREVIEWED]: "unreviewed",
