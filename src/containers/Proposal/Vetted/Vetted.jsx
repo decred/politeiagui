@@ -3,7 +3,11 @@ import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
 import { tabValues, statusByTab, sortByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
-import { useProposalsBatch, useLegacyVettedProposals, useQueryStringWithIndexValue }  from "src/hooks";
+import {
+  useProposalsBatch,
+  useLegacyVettedProposals,
+  useQueryStringWithIndexValue
+} from "src/hooks";
 import { useBillingStatusChanges } from "src/containers/Proposal/hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
