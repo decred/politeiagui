@@ -1,34 +1,92 @@
-import { useEffect, useMemo } from "react";
-import { useSelector, useAction } from "src/redux";
-import * as sel from "src/selectors";
+import { useEffect, useState } from "react";
+import isEmpty from "lodash/fp/isEmpty";
+import take from "lodash/fp/take";
+import takeRight from "lodash/fp/takeRight";
+import useFetchMachine from "src/hooks/utils/useFetchMachine";
+import { useAction } from "src/redux";
 import * as act from "src/actions";
 import { isApprovedProposal } from "../helpers";
+import { BILLING_STATUS_CHANGES_PAGE_SIZE } from "src/constants";
 
-export default function useBillingStatusChanges({ token }) {
-  const proposalSelector = useMemo(
-    () => sel.makeGetProposalByToken(token),
-    [token]
+export default function useBillingStatusChanges({
+  proposals = {},
+  voteSummaries = {}
+}) {
+  const [remainingTokens, setRemainingTokens] = useState([]);
+  const hasRemainingTokens = !isEmpty(remainingTokens);
+  const pageSize = BILLING_STATUS_CHANGES_PAGE_SIZE;
+
+  // Collect tokens of all approved proposals with missing billing
+  // status changes metadata.
+  const unfetchedBillingStatusChanges = Object.keys(proposals).reduce(
+    (tokens, token) => {
+      const proposal = proposals[token];
+      const voteSummary = voteSummaries[token];
+      const isApproved = isApprovedProposal(proposal, voteSummary);
+      const hasBillingStatusMetadata = !!proposal.billingStatusChangeMetadata;
+      if (isApproved && !hasBillingStatusMetadata) {
+        return [...tokens, token];
+      }
+      return tokens;
+    },
+    []
   );
-  const proposal = useSelector(proposalSelector);
-  const voteSummaries = useSelector(sel.voteSummariesByToken);
-  const voteSummary = voteSummaries[token];
-  const isApproved = isApprovedProposal(proposal, voteSummary);
-  const hasBillingStatusMetadata = !!proposal?.billingStatusChangeMetadata;
+
+  useEffect(() => {
+    if (unfetchedBillingStatusChanges && !hasRemainingTokens) {
+      setRemainingTokens(unfetchedBillingStatusChanges);
+    }
+  }, [hasRemainingTokens, unfetchedBillingStatusChanges]);
+
   const onFetchBillingStatusChanges = useAction(
     act.onFetchBillingStatusChanges
   );
-  const loadingBillingStatusChanges = useSelector(
-    sel.isApiRequestingBatchProposalSummary
-  );
-  const fetchBillingStatusChanges =
-    isApproved && !loadingBillingStatusChanges && !hasBillingStatusMetadata;
 
-  useEffect(() => {
-    if (fetchBillingStatusChanges) onFetchBillingStatusChanges(token);
-  }, [
-    fetchBillingStatusChanges,
-    loadingBillingStatusChanges,
-    onFetchBillingStatusChanges,
-    token
-  ]);
+  const getNextTokensPage = (tokens) => [
+    take(pageSize)(tokens),
+    takeRight(tokens.length - pageSize)(tokens)
+  ];
+
+  const [state, send, { START, VERIFY, FETCH, RESOLVE, REJECT }] =
+    useFetchMachine({
+      actions: {
+        initial: () => {
+          if (hasRemainingTokens) {
+            return send(START);
+          }
+          return;
+        },
+        start: () => {
+          // fetch first page of comments timestamps
+          const [page, remaining] = getNextTokensPage(remainingTokens || []);
+          onFetchBillingStatusChanges(page)
+            .then(() => {
+              setRemainingTokens(remaining);
+              return send(VERIFY);
+            })
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        },
+        verify: () => {
+          if (!hasRemainingTokens) return send(RESOLVE);
+          // fetch remaining timestamps
+          const [page, remaining] = getNextTokensPage(remainingTokens);
+          onFetchBillingStatusChanges(page)
+            .then(() => {
+              setRemainingTokens(remaining);
+              return send(VERIFY);
+            })
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        }
+      },
+      initialValues: {
+        status: "idle",
+        loading: false
+      }
+    });
+
+  return {
+    loading: state.loading
+  };
 }

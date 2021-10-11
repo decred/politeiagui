@@ -1300,15 +1300,14 @@ export const onSetBillingStatus = (token, billingStatus, reason) =>
       });
   });
 
-export const onFetchBillingStatusChanges = (token) =>
+export const onFetchBillingStatusChanges = (tokens) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_BILLING_STATUS_CHANGES({ token }));
+    dispatch(act.REQUEST_BILLING_STATUS_CHANGES({ tokens }));
     return api
-      .billingStatusChanges(csrf, token)
+      .billingStatusChanges(csrf, tokens)
       .then(({ billingstatuschanges }) =>
         dispatch(
           act.RECEIVE_BILLING_STATUS_CHANGES({
-            token,
             billingstatuschanges,
             success: true
           })

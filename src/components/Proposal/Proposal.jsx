@@ -38,8 +38,7 @@ import {
 } from "src/containers/Proposal/helpers";
 import {
   useProposalVote,
-  useProposalURLs,
-  useBillingStatusChanges
+  useProposalURLs
 } from "src/containers/Proposal/hooks";
 import { useLoaderContext } from "src/containers/Loader";
 import { useLoader } from "src/containers/Loader";
@@ -92,8 +91,6 @@ const ProposalWrapper = (props) => {
   const shortToken = shortRecordToken(getProposalToken(props.proposal));
   const { voteSummary, proposalSummary, voteBlocksLeft, voteEndTimestamp } =
     useProposalVote(shortToken);
-  // Fetch billing status change metadata.
-  useBillingStatusChanges({ token: shortToken });
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (

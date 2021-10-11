@@ -349,6 +349,7 @@ export default function useProposalsBatch({
       voteSummaries,
       proposalSummaries
     ),
+    voteSummaries,
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,
     // loading is true when fetching cycle is running and there are no
