@@ -2,7 +2,7 @@ import {
   fetchRecordsInventory,
   selectRecordsInventoryByStateAndStatus,
   selectRecordsInventoryStatus,
-  selectRecordsInventoryLastPage
+  selectRecordsInventoryLastPage,
 } from "./recordsInventorySlice";
 import { useFetchRecordsInventory } from "./useFetchRecordsInventory";
 

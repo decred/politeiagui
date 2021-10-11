@@ -1,11 +1,11 @@
-export const router = function() {
+export const router = (function () {
   const settings = {
     routes: null,
     selector: "[data-link]",
     title: "",
     onpopstate: true,
-    cleanup: null
-  }
+    cleanup: null,
+  };
 
   function pathToRegex(path) {
     return new RegExp(
@@ -59,7 +59,7 @@ export const router = function() {
     await match.route.view(getParams(match));
 
     // Set cleanup
-    settings.cleanup =  match.route.cleanup;
+    settings.cleanup = match.route.cleanup;
   }
 
   return {
@@ -84,7 +84,8 @@ export const router = function() {
 
     async init(routes, options) {
       if (this.getIsInitialized()) return;
-      if (!routes || !Array.isArray(routes)) throw Error("routes is required and must be an array");
+      if (!routes || !Array.isArray(routes))
+        throw Error("routes is required and must be an array");
 
       for (var key in options) {
         if (options.hasOwnProperty(key)) {
@@ -114,6 +115,6 @@ export const router = function() {
           verifyMatch();
         });
       }
-    }
-  }
-}();
+    },
+  };
+})();

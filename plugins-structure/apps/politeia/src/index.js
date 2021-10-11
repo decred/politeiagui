@@ -41,7 +41,7 @@ function initializeApp() {
   if (apiStatus === "succeeded") {
     unsubscribe();
   }
-};
+}
 
 function initializeApi() {
   const apiStatus = api.selectStatus(store.getState());
