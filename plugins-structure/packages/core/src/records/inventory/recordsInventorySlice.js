@@ -91,7 +91,7 @@ const recordsInventorySlice = createSlice({
       })
       .addCase(fetchRecordsInventory.fulfilled, (state, action) => {
         const recordsInventory = action.payload;
-        const { recordsState, status } = action.meta.arg;
+        const { recordsState, status, page } = action.meta.arg;
         const stringState = getHumanReadableRecordState(recordsState);
         const stringStatus = getHumanReadableRecordStatus(status);
         if (recordsInventory[stringState][stringStatus].length === 20) {
@@ -99,6 +99,7 @@ const recordsInventorySlice = createSlice({
         } else {
           state[stringState][stringStatus].status = "succeeded/isDone";
         }
+        state[stringState][stringStatus].lastPage = page;
         state[stringState][stringStatus].tokens.push(
           ...recordsInventory[stringState][stringStatus]
         );
@@ -133,6 +134,18 @@ export const selectRecordsInventoryStatus = (
     const stringRecordsState = getHumanReadableRecordState(recordsState);
     const stringStatus = getHumanReadableRecordStatus(status);
     return state.recordsInventory[stringRecordsState][stringStatus].status;
+  }
+};
+export const selectRecordsInventoryLastPage = (
+  state,
+  { recordsState, status }
+) => {
+  if (validateRecordStateAndStatus(recordsState, status)) {
+    // We have valids record state and status.
+    // Convert them to strings if they are not.
+    const stringRecordsState = getHumanReadableRecordState(recordsState);
+    const stringStatus = getHumanReadableRecordStatus(status);
+    return state.recordsInventory[stringRecordsState][stringStatus].lastPage;
   }
 };
 
