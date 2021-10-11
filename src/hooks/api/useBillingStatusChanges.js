@@ -5,7 +5,7 @@ import takeRight from "lodash/fp/takeRight";
 import useFetchMachine from "src/hooks/utils/useFetchMachine";
 import { useAction } from "src/redux";
 import * as act from "src/actions";
-import { isApprovedProposal } from "../helpers";
+import { isApprovedProposal } from "src/containers/Proposal/helpers";
 import { BILLING_STATUS_CHANGES_PAGE_SIZE } from "src/constants";
 
 export default function useBillingStatusChanges({
@@ -31,12 +31,19 @@ export default function useBillingStatusChanges({
     },
     []
   );
+  console.log({ unfetchedBillingStatusChanges });
+  const unfetchedTokensLength = unfetchedBillingStatusChanges?.length;
+  const remainingTokensLength = remainingTokens?.length;
 
   useEffect(() => {
-    if (unfetchedBillingStatusChanges && !hasRemainingTokens) {
+    if (unfetchedTokensLength !== remainingTokensLength) {
       setRemainingTokens(unfetchedBillingStatusChanges);
     }
-  }, [hasRemainingTokens, unfetchedBillingStatusChanges]);
+  }, [
+    remainingTokensLength,
+    unfetchedBillingStatusChanges,
+    unfetchedTokensLength
+  ]);
 
   const onFetchBillingStatusChanges = useAction(
     act.onFetchBillingStatusChanges
@@ -85,6 +92,12 @@ export default function useBillingStatusChanges({
         loading: false
       }
     });
+
+  // Restart machine if there are unfetched billing status changes.
+  if (hasRemainingTokens && state.status === "success") {
+    console.log("restart");
+    send(START);
+  }
 
   return {
     loading: state.loading

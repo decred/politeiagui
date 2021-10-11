@@ -248,7 +248,7 @@ export function useProposal(token, threadParentID) {
     proposal: proposalWithLinks && {
       ...proposalWithLinks,
       statuschangeusername,
-      billingStatusChangeMetadata: {
+      billingStatusChangeMetadata: !isEmpty(billingStatusChangeMetadata) && {
         ...billingStatusChangeMetadata,
         username: billingStatusChangeUsername
       }

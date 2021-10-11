@@ -15,6 +15,7 @@ export { default as useUserDetail } from "./api/useUserDetail";
 export { default as useUserIdentity } from "./api/useUserIdentity";
 export { default as useValidationSchema } from "./api/useValidationSchema";
 export { default as useVerifyKey } from "./api/useVerifyKey";
+export { default as useBillingStatusChanges } from "./api/useBillingStatusChanges";
 
 // Utils
 export { default as useAPIAction } from "./utils/useAPIAction";

@@ -6,9 +6,9 @@ import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import {
   useProposalsBatch,
   useLegacyVettedProposals,
-  useQueryStringWithIndexValue
+  useQueryStringWithIndexValue,
+  useBillingStatusChanges
 } from "src/hooks";
-import { useBillingStatusChanges } from "src/containers/Proposal/hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";

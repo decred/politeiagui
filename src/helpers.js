@@ -57,7 +57,7 @@ export const parseReceivedProposalsMap = (
   const parsedProps = {};
   for (const [token, prop] of Object.entries(proposals)) {
     parsedProps[shortRecordToken(token)] = {
-      ...originalProposals[token],
+      ...originalProposals[shortRecordToken(token)],
       ...parseRawProposal(prop)
     };
   }
