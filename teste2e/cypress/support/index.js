@@ -17,6 +17,18 @@
 import "@testing-library/cypress/add-commands";
 // Import commands.js using ES2015 syntax:
 import "./commands";
+import "./core/commands";
+import "./ticketvote/commands";
+import "./users/commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+beforeEach(function useProposalsMiddlewares() {
+  cy.middleware("www.policy");
+  cy.middleware("comments.policy");
+  cy.middleware("pi.policy");
+  cy.middleware("ticketvote.policy");
+  cy.middleware("www.api");
+  cy.useRecordsApi();
+});

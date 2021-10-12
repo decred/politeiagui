@@ -52,5 +52,29 @@ export const middlewares = {
       req.reply({
         statusCode: errorCode || 200
       });
+    }),
+  policy: () =>
+    cy.intercept("/api/comments/v1/policy", (req) => {
+      req.reply({
+        body: {
+          lengthmax: 8000,
+          votechangesmax: 5
+        }
+      });
+    }),
+  count: () =>
+    cy.intercept("/api/comments/v1/count", (req) => {
+      const tokens = req.body.tokens;
+      req.reply({
+        body: {
+          counts: tokens.reduce(
+            (acc, t) => ({
+              ...acc,
+              [t]: Math.round(Math.random() * 10)
+            }),
+            {}
+          )
+        }
+      });
     })
 };

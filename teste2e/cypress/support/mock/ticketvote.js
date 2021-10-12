@@ -41,23 +41,41 @@ export const middlewares = {
         });
       }
     }),
-  summaries: ({ token, status }) =>
+  summaries: ({ status } = {}) =>
+    // TODO: Allow more than one status
     cy.intercept("/api/ticketvote/v1/summaries", (req) => {
-      req.continue((res) => {
-        res.body.summaries[token] = {
-          type: 0,
-          status,
-          duration: 0,
-          startblockheight: 0,
-          startblockhash: "",
-          endblockheight: 0,
-          eligibletickets: 0,
-          quorumpercentage: 0,
-          passpercentage: 0,
-          results: [],
-          bestblock: 767301
-        };
-        res.send(res.body);
+      const makeSummary = (status = 0) => ({
+        type: 0,
+        status,
+        duration: 0,
+        startblockheight: 0,
+        startblockhash: "",
+        endblockheight: 0,
+        eligibletickets: 0,
+        quorumpercentage: 0,
+        passpercentage: 0,
+        results: [],
+        bestblock: 767301
+      });
+      const { tokens } = req.body;
+      const summaries = tokens.reduce(
+        (acc, t) => ({
+          ...acc,
+          [t]: makeSummary(status)
+        }),
+        {}
+      );
+      req.reply({ body: { summaries } });
+    }),
+  policy: () =>
+    cy.intercept("/api/ticketvote/v1/policy", (req) => {
+      req.reply({
+        body: {
+          linkbyperiodmin: 1,
+          linkbyperiodmax: 7776000,
+          votedurationmin: 1,
+          votedurationmax: 4032
+        }
       });
     })
 };

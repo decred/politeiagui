@@ -36,6 +36,7 @@ import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";
 import { middlewares as commentsMiddlewares } from "./mock/comments";
 import { middlewares as usersMiddlewares } from "./mock/users";
 import { middlewares as piMiddlewares } from "./mock/pi";
+import { middlewares as wwwMiddlewares } from "./mock/www";
 
 Cypress.Commands.add("assertHome", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
@@ -59,6 +60,7 @@ Cypress.Commands.add("assertLoggedInAs", () => {
 
 Cypress.Commands.add("typeLogin", (user) => {
   cy.visit("/user/login");
+  cy.middleware("users.login");
   cy.findByLabelText(/email/i).type(user.email);
   cy.findByLabelText(/password/i).type(user.password);
   cy.findByTestId("login-form-button").click();
@@ -176,7 +178,8 @@ Cypress.Commands.add("middleware", (path, ...args) => {
     records: recordMiddlewares,
     comments: commentsMiddlewares,
     users: usersMiddlewares,
-    pi: piMiddlewares
+    pi: piMiddlewares,
+    www: wwwMiddlewares
   });
   return mw(...args).as(path);
 });

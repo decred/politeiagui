@@ -9,6 +9,7 @@ import get from "lodash/fp/get";
 import find from "lodash/fp/find";
 import path from "path";
 
+// TODO: move record related utils to core package
 export const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 export const VOTE_METADATA_FILENAME = "votemetadata.json";
 export const PROPOSAL_VOTING_APPROVED = 5;
