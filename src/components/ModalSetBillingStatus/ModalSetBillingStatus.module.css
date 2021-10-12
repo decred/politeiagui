@@ -1,11 +1,8 @@
-.content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 200px;
-}
-
 .statusSelectWrapper {
   height: 4.4rem;
   width: 20rem;
+}
+
+.status {
+  font-weight: var(--font-weight-semi-bold);
 }

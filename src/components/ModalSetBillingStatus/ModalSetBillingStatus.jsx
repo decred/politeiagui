@@ -107,7 +107,7 @@ const ModalSetBillingStatus = ({
               billingStatus === PROPOSAL_BILLING_STATUS_CLOSED;
 
             return (
-              <Form className={styles.content} onSubmit={handleSubmit}>
+              <Form onSubmit={handleSubmit}>
                 {errors && errors.global && (
                   <ErrorMessage>{errors.global.toString()}</ErrorMessage>
                 )}
@@ -131,6 +131,23 @@ const ModalSetBillingStatus = ({
                     error={touched.reason && errors.reason}
                   />
                 )}
+                <div>
+                  <div className="margin-y-m">
+                    <span className={styles.status}>Active</span> - the proposal
+                    is actively being billed against.
+                  </div>
+                  <div className="margin-y-m">
+                    <span className={styles.status}>Completed</span> - the
+                    deliverables have been completed and the proposal is no
+                    longer being billed against or the budget has been exausted
+                    and the proposal owner must request additional funds.
+                  </div>
+                  <div className="margin-y-m">
+                    <span className={styles.status}>Closed</span> - the proposal
+                    owner failed to deliver a finished work product and the
+                    ability to bill against the proposal is being closed.
+                  </div>
+                </div>
                 <Actions className="no-padding-bottom">
                   <Button
                     data-testid="set-billing-status"
