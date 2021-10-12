@@ -7,7 +7,8 @@ import {
   getProposalToken,
   getTokensForProposalsPagination,
   isAbandonedProposal,
-  isCensoredProposal
+  isCensoredProposal,
+  isClosedProposal
 } from "../helpers";
 import { useUserByPublicKey } from "../hooks";
 import { getDetailsFile } from "./helpers";
@@ -115,6 +116,7 @@ export function useProposal(token, threadParentID) {
   const needsInitialFetch = token && isMissingDetails;
   const isCensored = isCensoredProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposalSummary);
+  const isClosed = isClosedProposal(proposalSummary);
 
   const [remainingTokens, setRemainingTokens] = useState(
     unfetchedProposalTokens
@@ -136,7 +138,8 @@ export function useProposal(token, threadParentID) {
     proposal?.billingStatusChangeMetadata || {};
   const { publickey: billingStatusAdminPubKey } = billingStatusChangeMetadata;
   const { username: billingStatusChangeUsername } = useUserByPublicKey({
-    userPubKey: billingStatusAdminPubKey
+    userPubKey: billingStatusAdminPubKey,
+    fetch: isClosed
   });
 
   const [state, send, { FETCH, RESOLVE, VERIFY, REJECT }] = useFetchMachine({
