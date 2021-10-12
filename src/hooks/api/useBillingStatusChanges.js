@@ -31,7 +31,6 @@ export default function useBillingStatusChanges({
     },
     []
   );
-  console.log({ unfetchedBillingStatusChanges });
   const unfetchedTokensLength = unfetchedBillingStatusChanges?.length;
   const remainingTokensLength = remainingTokens?.length;
 
@@ -94,10 +93,7 @@ export default function useBillingStatusChanges({
     });
 
   // Restart machine if there are unfetched billing status changes.
-  if (hasRemainingTokens && state.status === "success") {
-    console.log("restart");
-    send(START);
-  }
+  if (hasRemainingTokens && state.status === "success") send(START);
 
   return {
     loading: state.loading

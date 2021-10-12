@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, classNames } from "pi-ui";
+import isEmpty from "lodash/fp/isEmpty";
+import { Button, Spinner, classNames } from "pi-ui";
 import {
   isUnreviewedProposal,
   isVotingNotAuthorizedProposal,
@@ -85,11 +86,13 @@ const PublicActions = ({
   );
   const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
   const isApproved = isApprovedProposal(proposal, voteSummary);
-  const { numbillingstatuschanges } =
-    proposal?.billingStatusChangeMetadata || {};
+  const billingStatusChangeMetadata = proposal?.billingStatusChangeMetadata;
+  const numbillingstatuschanges =
+    billingStatusChangeMetadata?.numbillingstatuschanges;
   const isSetBillingStatusAllowed =
     !isLegacy &&
     isApproved &&
+    !isEmpty(billingStatusChangeMetadata) &&
     numbillingstatuschanges < billingstatuschangesmax;
 
   const withProposal = (fn, cb) => () => {
@@ -127,6 +130,11 @@ const PublicActions = ({
               <Button onClick={withProposal(onStartVote)}>Start Vote</Button>
             )}
           </AdminContent>
+        </div>
+      )}
+      {isApproved && !isLegacy && isEmpty(billingStatusChangeMetadata) && (
+        <div className="justify-right margin-top-m">
+          <Spinner width="2rem" height="2rem" invert />
         </div>
       )}
       {isSetBillingStatusAllowed && (
