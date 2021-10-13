@@ -89,8 +89,13 @@ function replaceImgDigestWithPayload(text, files) {
 
 const ProposalWrapper = (props) => {
   const shortToken = shortRecordToken(getProposalToken(props.proposal));
-  const { voteSummary, proposalSummary, voteBlocksLeft, voteEndTimestamp } =
-    useProposalVote(shortToken);
+  const {
+    voteSummary,
+    proposalSummary,
+    voteBlocksLeft,
+    voteEndTimestamp,
+    billingStatusChangeMetadata
+  } = useProposalVote(shortToken);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -99,6 +104,7 @@ const ProposalWrapper = (props) => {
         ...props,
         voteSummary,
         proposalSummary,
+        billingStatusChangeMetadata,
         voteBlocksLeft,
         voteEndTimestamp,
         currentUser,
@@ -114,6 +120,7 @@ const Proposal = React.memo(function Proposal({
   collapseBodyContent,
   voteSummary,
   proposalSummary,
+  billingStatusChangeMetadata,
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
@@ -142,8 +149,7 @@ const Proposal = React.memo(function Proposal({
     amount,
     domain,
     startDate,
-    endDate,
-    billingStatusChangeMetadata
+    endDate
   } = proposal;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
@@ -535,6 +541,7 @@ const Proposal = React.memo(function Proposal({
               <ProposalActions
                 proposal={proposal}
                 voteSummary={voteSummary}
+                billingStatusChangeMetadata={billingStatusChangeMetadata}
                 rfpSubmissionsVoteSummaries={
                   isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }
