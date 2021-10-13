@@ -11,7 +11,6 @@ import path from "path";
 
 export const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 export const VOTE_METADATA_FILENAME = "votemetadata.json";
-export const PROPOSAL_VOTING_APPROVED = 5;
 export const PROPOSAL_SUMMARY_STATUS_UNVETTED = "unvetted";
 export const PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED = "unvetted-abandoned";
 export const PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED = "unvetted-censored";
@@ -25,6 +24,28 @@ export const PROPOSAL_SUMMARY_STATUS_ACTIVE = "active";
 export const PROPOSAL_SUMMARY_STATUS_COMPLETED = "completed";
 export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
 export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
+export const PROPOSAL_STATE_UNVETTED = 1;
+export const PROPOSAL_STATE_VETTED = 2;
+export const PROPOSAL_VOTING_NOT_AUTHORIZED = 1;
+export const PROPOSAL_VOTING_AUTHORIZED = 2;
+export const PROPOSAL_VOTING_ACTIVE = 3;
+export const PROPOSAL_VOTING_APPROVED = 5;
+export const PROPOSAL_VOTING_REJECTED = 6;
+export const PROPOSAL_VOTING_INELIGIBLE = 7;
+export const UNAUTHORIZED = "unauthorized";
+export const AUTHORIZED = "authorized";
+export const ACTIVE_VOTE = "started";
+export const APPROVED = "approved";
+export const REJECTED = "rejected";
+export const INELIGIBLE = "ineligible";
+export const PROPOSAL_STATUS_UNREVIEWED = 1;
+export const PROPOSAL_STATUS_PUBLIC = 2;
+export const PROPOSAL_STATUS_CENSORED = 3;
+export const PROPOSAL_STATUS_ARCHIVED = 4;
+export const UNREVIEWED = "unreviewed";
+export const ARCHIVED = "archived";
+export const CENSORED = "censored";
+export const PUBLIC = "public";
 
 const findRecordFileByName = (record, name) =>
   compose(
