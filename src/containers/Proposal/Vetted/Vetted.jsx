@@ -6,8 +6,7 @@ import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import {
   useProposalsBatch,
   useLegacyVettedProposals,
-  useQueryStringWithIndexValue,
-  useBillingStatusChanges
+  useQueryStringWithIndexValue
 } from "src/hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -32,7 +31,6 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const sort = sortByTab[tabLabels[index]];
   const {
     proposals,
-    voteSummaries,
     proposalsTokens,
     loading,
     verifying,
@@ -45,12 +43,6 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     fetchVoteSummary: true,
     fetchProposalSummary: true,
     statuses: statuses
-  });
-
-  // Fetch billing status changes.
-  useBillingStatusChanges({
-    proposals,
-    voteSummaries
   });
 
   // TODO: remove legacy

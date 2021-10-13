@@ -1,4 +1,6 @@
 import Promise from "promise";
+import take from "lodash/fp/take";
+import takeRight from "lodash/fp/takeRight";
 import * as api from "../lib/api";
 import {
   resetNewInvoiceData,
@@ -632,6 +634,13 @@ export const onFetchTokenInventory =
         };
         !isVoteStatus && dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
         isVoteStatus && dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
+        // Fetch billing status changes of approved proposals.
+        const approvedTokens = byVotes && byVotes[APPROVED];
+        console.log({ approvedTokens });
+        if (approvedTokens?.length) {
+          dispatch(onFetchBillingStatusChanges(approvedTokens));
+        }
+
         return { records: byRecords, votes: byVotes };
       });
     } catch (error) {
@@ -1300,11 +1309,44 @@ export const onSetBillingStatus = (token, billingStatus, reason) =>
       });
   });
 
+const getNextTokensPage = (tokens, pageSize) => [
+  take(pageSize)(tokens),
+  takeRight(tokens.length - pageSize)(tokens)
+];
+
+/*
+ * onFetchBillingStatusChanges gets array of approved proposals tokens and
+ * it fetch them page by page is the current user is an admin.
+ *
+ * *Note: this action is called from onFetchInventory and assumes we have
+ * fetched the pi billingstatuschangesmax plicy & the current user.
+ */
 export const onFetchBillingStatusChanges = (tokens) =>
-  withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_BILLING_STATUS_CHANGES({ tokens }));
+  withCsrf((dispatch, getState, csrf) => {
+    const {
+      pi: { billingstatuschangespagesize }
+    } = sel.policy(getState());
+    const isAdmin = sel.currentUserIsAdmin(getState());
+    // Billing status changes are needed only when an admin is logged in.
+    if (!isAdmin) {
+      return;
+    }
+    // If number of tokens exceeds the route's max page fetch one
+    // page and call self with rest of tokens.
+    let tokensToFetch;
+    if (tokens.length > billingstatuschangespagesize) {
+      const [page, remaining] = getNextTokensPage(
+        tokens,
+        billingstatuschangespagesize
+      );
+      dispatch(onFetchBillingStatusChanges(remaining));
+      tokensToFetch = page;
+    } else {
+      tokensToFetch = tokens;
+    }
+    dispatch(act.REQUEST_BILLING_STATUS_CHANGES({ tokens: tokensToFetch }));
     return api
-      .billingStatusChanges(csrf, tokens)
+      .billingStatusChanges(csrf, tokensToFetch)
       .then(({ billingstatuschanges }) =>
         dispatch(
           act.RECEIVE_BILLING_STATUS_CHANGES({
@@ -1417,7 +1459,7 @@ export const onUserProposalCredits = () => (dispatch, getState) => {
 };
 
 export const onFetchUserProposals = (userid) =>
-  withCsrf(async (dispatch, getState, csrf) => {
+  withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_USER_INVENTORY({ userid }));
     try {
       const response = await api.userProposals(csrf, userid);

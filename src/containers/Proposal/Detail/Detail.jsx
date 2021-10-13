@@ -9,8 +9,7 @@ import {
   usePaywall,
   useIdentity,
   useDocumentTitle,
-  useModalContext,
-  useBillingStatusChanges
+  useModalContext
 } from "src/hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -72,10 +71,6 @@ const ProposalDetail = ({ Main, match, history }) => {
   const { voteSummary, proposalSummary } = useProposalVote(
     proposalToken || tokenFromUrl
   );
-  useBillingStatusChanges({
-    proposals: { [tokenFromUrl]: proposal || {} },
-    voteSummaries: { [tokenFromUrl]: voteSummary || {} }
-  });
   const areCommentsAllowed =
     !isVotingFinishedProposal(voteSummary) &&
     !isAbandonedProposal(proposalSummary);

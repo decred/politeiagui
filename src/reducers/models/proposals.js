@@ -49,6 +49,7 @@ const mapStatusToName = {
 const DEFAULT_STATE = {
   byToken: {},
   summaries: {},
+  billingStatusChanges: {},
   allByVoteStatus: {
     [UNAUTHORIZED]: [],
     [AUTHORIZED]: [],
@@ -216,7 +217,7 @@ const updateBillingStatusChanges = (state, token, billingstatuschanges) => {
   billingStatusChangeMetadata.numbillingstatuschanges = numbillingstatuschanges;
 
   return set(
-    ["byToken", shortRecordToken(token), "billingStatusChangeMetadata"],
+    ["billingStatusChanges", shortRecordToken(token)],
     billingStatusChangeMetadata
   )(state);
 };
@@ -403,11 +404,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 : PROPOSAL_SUMMARY_STATUS_ACTIVE
             );
             return update(
-              [
-                "byToken",
-                shortRecordToken(action.payload.token),
-                "billingStatusChangeMetadata"
-              ],
+              ["billingStatusChanges", shortRecordToken(action.payload.token)],
               (billingStatusChangeMetadata) => ({
                 ...billingStatusChangeMetadata,
                 token: action.payload.token,
