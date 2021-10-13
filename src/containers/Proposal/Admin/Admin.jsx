@@ -6,8 +6,6 @@ import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithInde
 import { tabValues, statusByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import usePolicy from "src/hooks/api/usePolicy";
-// XXX change to AdminActionsProvider
-
 import {
   UnvettedActionsProvider,
   PublicActionsProvider
