@@ -8,7 +8,8 @@ import {
   getTokensForProposalsPagination,
   isAbandonedProposal,
   isCensoredProposal,
-  isClosedProposal
+  isClosedProposal,
+  isApprovedProposal
 } from "../helpers";
 import { useUserByPublicKey } from "../hooks";
 import { getDetailsFile } from "./helpers";
@@ -59,18 +60,31 @@ export function useProposal(token, threadParentID) {
   const onFetchBatchProposalSummary = useAction(
     act.onFetchBatchProposalSummary
   );
+  const onFetchBillingStatusChanges = useAction(
+    act.onFetchBillingStatusChanges
+  );
   const proposalSelector = useMemo(
     () => sel.makeGetProposalByToken(tokenShort),
     [tokenShort]
+  );
+  const billingStatusChangeMetadataSelector = useMemo(
+    () => sel.makeGetBillingStatusChangeMetadata(token),
+    [token]
   );
   const proposal = useSelector(proposalSelector);
   const proposals = useSelector(sel.proposalsByToken);
   const voteSummaries = useSelector(sel.voteSummariesByToken);
   const loadingVoteSummary = useSelector(sel.isApiRequestingVoteSummary);
   const proposalSummaries = useSelector(sel.proposalSummariesByToken);
-  const proposalSummary = proposalSummaries[tokenShort];
   const loadingProposalSummary = useSelector(
     sel.isApiRequestingBatchProposalSummary
+  );
+  const proposalSummary = proposalSummaries[tokenShort];
+  const billingStatusChangeMetadata = useSelector(
+    billingStatusChangeMetadataSelector
+  );
+  const loadingBillingStatusChanges = useSelector(
+    sel.isApiRequestingBillingStatusChanges
   );
   const rfpLinks = getProposalRfpLinksTokens(proposal);
   const isRfp = proposal && !!proposal.linkby;
@@ -111,8 +125,13 @@ export function useProposal(token, threadParentID) {
     };
 
   const isMissingDetails = !(proposal && getDetailsFile(proposal.files));
-  const isMissingVoteSummary = !voteSummaries[tokenShort];
+  const voteSummary = voteSummaries[tokenShort];
+  const isMissingVoteSummary = !voteSummary;
   const isMissingProposalSummary = !proposalSummary;
+  const isAdmin = currentUser?.isadmin;
+  const isApproved = isApprovedProposal(proposal, voteSummary);
+  const isMissingBillingStatusChangeMetadata =
+    isAdmin && isApproved && isEmpty(billingStatusChangeMetadata);
   const needsInitialFetch = token && isMissingDetails;
   const isCensored = isCensoredProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposalSummary);
@@ -134,9 +153,8 @@ export function useProposal(token, threadParentID) {
   });
 
   // Fetch billing status change user name.
-  const billingStatusChangeMetadata =
-    proposal?.billingStatusChangeMetadata || {};
-  const { publickey: billingStatusAdminPubKey } = billingStatusChangeMetadata;
+  const { publickey: billingStatusAdminPubKey } =
+    billingStatusChangeMetadata || {};
   const { username: billingStatusChangeUsername } = useUserByPublicKey({
     userPubKey: billingStatusAdminPubKey,
     fetch: isClosed
@@ -206,6 +224,12 @@ export function useProposal(token, threadParentID) {
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
+        if (
+          isMissingBillingStatusChangeMetadata &&
+          !loadingBillingStatusChanges
+        ) {
+          onFetchBillingStatusChanges([tokenShort]);
+        }
         if (rfpLinks && rfpSubmissions) {
           // is a RFP
           return send(RESOLVE, { proposal, rfpSubmissions });
@@ -257,7 +281,10 @@ export function useProposal(token, threadParentID) {
       }
     },
     error: state.error,
-    loading: state.status === "idle" || state.status === "loading",
+    loading:
+      state.status === "idle" ||
+      state.status === "loading" ||
+      isMissingBillingStatusChangeMetadata,
     threadParentID,
     isCurrentUserProposalAuthor,
     commentSectionIds,
