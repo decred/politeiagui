@@ -3,8 +3,12 @@ import { stateToString } from "./utils";
 
 export const API_BASE_URL = "/api/records/v1";
 
-// errorReply is the reply that the server returns when you want to force
-// an error
+/**
+ * errorReply is the reply that the server returns when you want to force
+ * an error
+ *
+ * @param {Object} { errorParams }
+ */
 export function errorReply({
   errorcode,
   errorcontext,
@@ -18,19 +22,30 @@ export function errorReply({
   };
 }
 
-// policyReply is the reply to the Policy command.
-export function policyReply({ recordspagesize = 5, inventorypagesize = 20 }) {
+/**
+ * policyReply is the reply to the Policy command.
+ *
+ * @param {Object} { testParams }
+ */
+export function policyReply({
+  testParams: { recordspagesize = 5, inventorypagesize = 20 }
+}) {
   return {
     recordspagesize,
     inventorypagesize
   };
 }
 
-// recordsReply is the reply to the Records command.
-export function recordsReply(
-  { status, state, metadatafiles, recordfiles, user } = {},
-  { requests = [] }
-) {
+/**
+ * recordsReply is the reply to the Records command. It returns a records batch
+ * map: { [token]: Record }
+ *
+ * @param {Object} { testParams, requestParams }
+ */
+export function recordsReply({
+  testParams: { status, state, metadatafiles, recordfiles, user },
+  requestParams: { requests = [] }
+}) {
   const findFile = (name, files) => files.find((f) => f.name === name);
   const records = requests.reduce((acc, { token, filenames }) => {
     const files =
@@ -49,12 +64,16 @@ export function recordsReply(
   return { records };
 }
 
-// inventoryReply is the reply to the Inventory command. The returned maps are
-// map[status][]token where the status is the human readable record status..
-export function inventoryReply(
-  { amountByStatus = {}, pageLimit = 20 } = {},
-  { state = 2, page }
-) {
+/**
+ * inventoryReply is the reply to the Inventory command. The returned maps are
+ * map[status][]token where the status is the human readable record status.
+ *
+ * @param {Object} { testParams, requestParams }
+ */
+export function inventoryReply({
+  testParams: { amountByStatus = {}, pageLimit = 20 },
+  requestParams: { state = 2, page }
+}) {
   const inventory = new Inventory(amountByStatus, {
     page,
     pageLimit

@@ -4,15 +4,18 @@ import { PaymentCredits, User, userByType } from "./generate";
 
 export const API_BASE_URL = "/api/v1/user";
 
-export function loginReply({ userType, ...props } = {}, { email } = {}) {
+export function loginReply({
+  testParams: { userType, ...props },
+  requestParams: { email }
+}) {
   return userByType(userType, { ...props, email });
 }
 
-export function meReply({ userType } = {}) {
+export function meReply({ testParams: { userType } }) {
   return userByType(userType);
 }
 
-export function paymentsRegistrationReply({ haspaid = true } = {}) {
+export function paymentsRegistrationReply({ testParams: { haspaid = true } }) {
   const user = haspaid ? new User() : userByType("unpaid");
   const userRegistrationPayment = pick([
     "paywalladdress",
@@ -23,9 +26,8 @@ export function paymentsRegistrationReply({ haspaid = true } = {}) {
 }
 
 export function paymentsPaywallReply({
-  haspaid = true,
-  creditprice = 10000000
-} = {}) {
+  testParams: { haspaid = true, creditprice = 10000000 }
+}) {
   const user = haspaid ? new User() : userByType("unpaid");
   const userPaywallPayment = pick(["paywalltxnotbefore", "paywalladdress"])(
     user
@@ -33,7 +35,9 @@ export function paymentsPaywallReply({
   return { creditprice, ...userPaywallPayment };
 }
 
-export function paymentsCreditsReply({ spent = 0, credits = 100 } = {}) {
+export function paymentsCreditsReply({
+  testParams: { spent = 0, credits = 100 }
+}) {
   return new PaymentCredits({ spent, unspent: credits });
 }
 

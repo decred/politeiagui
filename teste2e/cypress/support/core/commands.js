@@ -4,7 +4,7 @@ import { repliers, errorReply, API_BASE_URL } from "./api";
 export function createMiddleware({ packageName, repliers, baseUrl }) {
   return function middleware(
     endpoint,
-    { error, ...props } = {},
+    { error, ...testParams } = {},
     responseParams = {}
   ) {
     return cy
@@ -12,7 +12,7 @@ export function createMiddleware({ packageName, repliers, baseUrl }) {
         const replyfn = repliers[endpoint];
         if (!replyfn)
           throw new Error(`no ${packageName} replier found for ${endpoint}`);
-        const requestParams = req.body;
+        const requestParams = req.body || {};
         if (error) {
           req.reply({
             ...errorReply(error),
@@ -20,7 +20,7 @@ export function createMiddleware({ packageName, repliers, baseUrl }) {
           });
         } else {
           req.reply({
-            body: replyfn(props, requestParams),
+            body: replyfn({ testParams, requestParams }),
             ...responseParams
           });
         }

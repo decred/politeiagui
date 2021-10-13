@@ -4,7 +4,10 @@ import { statusToString } from "./utils";
 
 export const API_BASE_URL = "/api/ticketvote/v1";
 
-export function summariesReply({ results, status } = {}, { tokens = [] } = {}) {
+export function summariesReply({
+  testParams: { results, status },
+  requestParams: { tokens = [] }
+}) {
   // TODO: Improve summary replier
   return tokens.reduce(
     (acc, t) => ({
@@ -22,8 +25,11 @@ export function summariesReply({ results, status } = {}, { tokens = [] } = {}) {
  * @param {Object} props
  * @param {Object} requestParams
  */
-export function inventoryReply(props, { status, ...requestParams } = {}) {
-  const inventory = recordsInventoryReply(props, requestParams);
+export function inventoryReply({
+  testParams,
+  requestParams: { status, ...requestParams }
+}) {
+  const inventory = recordsInventoryReply({ testParams, requestParams });
   if (status) {
     const readableStatus = statusToString(status);
     return Object.entries(inventory).reduce(

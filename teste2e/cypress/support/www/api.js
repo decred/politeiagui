@@ -1,6 +1,6 @@
 import faker from "faker";
 
-export function apiReply({ isActive = false }) {
+export function apiReply({ testParams: { isActive = false } }) {
   return {
     version: 1,
     route: "/v1",
