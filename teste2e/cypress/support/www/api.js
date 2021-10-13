@@ -1,5 +1,11 @@
 import faker from "faker";
 
+/**
+ * apiReply is the replier to the Api command.
+ *
+ * @param {Object} { testParams }
+ * @returns API status object
+ */
 export function apiReply({ testParams: { isActive = false } }) {
   return {
     version: 1,
@@ -12,6 +18,11 @@ export function apiReply({ testParams: { isActive = false } }) {
   };
 }
 
+/**
+ * policyReply is the replier to the Policy command.
+ *
+ * @returns Policy
+ */
 export function policyReply() {
   return {
     minpasswordlength: 8,

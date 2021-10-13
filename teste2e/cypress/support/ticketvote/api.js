@@ -22,8 +22,8 @@ export function summariesReply({
  * inventoryReply is the reply to the Inventory command. The returned maps are
  * map[status][]token where the status is the human readable ticketvote status.
  * This method extends the core `inventoryReply` method.
- * @param {Object} props
- * @param {Object} requestParams
+ *
+ * @param {Object} { testParams, requestParams }
  */
 export function inventoryReply({
   testParams,

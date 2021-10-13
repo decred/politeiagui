@@ -4,17 +4,35 @@ import { PaymentCredits, User, userByType } from "./generate";
 
 export const API_BASE_URL = "/api/v1/user";
 
+/**
+ * loginReply is the replier to the Login command.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns User
+ */
 export function loginReply({
-  testParams: { userType, ...props },
+  testParams: { userType, ...userProps },
   requestParams: { email }
 }) {
-  return userByType(userType, { ...props, email });
+  return userByType(userType, { ...userProps, email });
 }
 
+/**
+ * meReply is the replier to the Me command.
+ *
+ * @param {Object} { testParams }
+ * @returns User
+ */
 export function meReply({ testParams: { userType } }) {
   return userByType(userType);
 }
 
+/**
+ * paymentsRegistrationReply is the replier to the PaymentsRegistration command.
+ *
+ * @param {Object} { testParams }
+ * @returns Payment registration object
+ */
 export function paymentsRegistrationReply({ testParams: { haspaid = true } }) {
   const user = haspaid ? new User() : userByType("unpaid");
   const userRegistrationPayment = pick([
@@ -25,6 +43,12 @@ export function paymentsRegistrationReply({ testParams: { haspaid = true } }) {
   return { haspaid, ...userRegistrationPayment };
 }
 
+/**
+ * paymentsPaywallReply is the replier to the PaymentsPaywall command.
+ *
+ * @param {Object} { testParams }
+ * @returns Payment paywall object
+ */
 export function paymentsPaywallReply({
   testParams: { haspaid = true, creditprice = 10000000 }
 }) {
@@ -35,6 +59,12 @@ export function paymentsPaywallReply({
   return { creditprice, ...userPaywallPayment };
 }
 
+/**
+ * paymentsCreditsReply is the replier for the PaymentsCredits command.
+ *
+ * @param {Object} { testParams }
+ * @returns Payment credits object
+ */
 export function paymentsCreditsReply({
   testParams: { spent = 0, credits = 100 }
 }) {

@@ -1,6 +1,14 @@
 import "@testing-library/cypress/add-commands";
 import { repliers, errorReply, API_BASE_URL } from "./api";
 
+/**
+ * createMiddleware is a HoF that creates a custom middleware for some package.
+ * It returns a request interceptor with an alias composed by
+ * `"{packageName}.{endpoint}"`
+ *
+ * @param {Object} { packageName, repliers, baseUrl }
+ * @returns Middleware aliased by `"{packageName}.{endpoint}"`
+ */
 export function createMiddleware({ packageName, repliers, baseUrl }) {
   return function middleware(
     endpoint,

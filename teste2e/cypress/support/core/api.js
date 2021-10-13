@@ -8,6 +8,7 @@ export const API_BASE_URL = "/api/records/v1";
  * an error
  *
  * @param {Object} { errorParams }
+ * @returns error reply
  */
 export function errorReply({
   errorcode,
@@ -26,6 +27,7 @@ export function errorReply({
  * policyReply is the reply to the Policy command.
  *
  * @param {Object} { testParams }
+ * @returns Policy
  */
 export function policyReply({
   testParams: { recordspagesize = 5, inventorypagesize = 20 }
@@ -38,9 +40,10 @@ export function policyReply({
 
 /**
  * recordsReply is the reply to the Records command. It returns a records batch
- * map: { [token]: Record }
+ * map: `{ [token]: Record }`
  *
  * @param {Object} { testParams, requestParams }
+ * @returns Records batch map: `{ [token]: Record }`
  */
 export function recordsReply({
   testParams: { status, state, metadatafiles, recordfiles, user },
@@ -66,9 +69,11 @@ export function recordsReply({
 
 /**
  * inventoryReply is the reply to the Inventory command. The returned maps are
- * map[status][]token where the status is the human readable record status.
+ * `{ [state]: { [status]: token } }` where the status is the human readable
+ * record status.
  *
  * @param {Object} { testParams, requestParams }
+ * @return Inventory map: `{ [state]: { [status]: token } }`
  */
 export function inventoryReply({
   testParams: { amountByStatus = {}, pageLimit = 20 },
