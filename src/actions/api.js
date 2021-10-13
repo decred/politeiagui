@@ -634,12 +634,6 @@ export const onFetchTokenInventory =
         };
         !isVoteStatus && dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
         isVoteStatus && dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
-        // Fetch billing status changes of approved proposals.
-        const approvedTokens = byVotes && byVotes[APPROVED];
-        console.log({ approvedTokens });
-        if (approvedTokens?.length) {
-          dispatch(onFetchBillingStatusChanges(approvedTokens));
-        }
 
         return { records: byRecords, votes: byVotes };
       });
