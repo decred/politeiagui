@@ -121,6 +121,7 @@ const Proposal = React.memo(function Proposal({
   voteSummary,
   proposalSummary,
   billingStatusChangeMetadata,
+  billingStatusChangeUsername,
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
@@ -186,7 +187,7 @@ const Proposal = React.memo(function Proposal({
     isCensored || isAbandoned
       ? statuschangeusername
       : isClosed
-      ? billingStatusChangeMetadata?.username
+      ? billingStatusChangeUsername
       : "";
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;

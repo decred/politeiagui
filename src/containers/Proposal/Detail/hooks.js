@@ -274,12 +274,9 @@ export function useProposal(token, threadParentID) {
   return {
     proposal: proposalWithLinks && {
       ...proposalWithLinks,
-      statuschangeusername,
-      billingStatusChangeMetadata: !isEmpty(billingStatusChangeMetadata) && {
-        ...billingStatusChangeMetadata,
-        username: billingStatusChangeUsername
-      }
+      statuschangeusername
     },
+    billingStatusChangeUsername,
     error: state.error,
     loading:
       state.status === "idle" ||

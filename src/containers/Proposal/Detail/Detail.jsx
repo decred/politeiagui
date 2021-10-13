@@ -62,7 +62,8 @@ const ProposalDetail = ({ Main, match, history }) => {
     currentUser,
     commentsError,
     commentsLoading,
-    onReloadProposalDetails
+    onReloadProposalDetails,
+    billingStatusChangeUsername
   } = useProposal(tokenFromUrl, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
@@ -255,6 +256,7 @@ const ProposalDetail = ({ Main, match, history }) => {
             ) : (
               <Proposal
                 proposal={proposal}
+                billingStatusChangeUsername={billingStatusChangeUsername}
                 extended
                 collapseBodyContent={!!threadParentID}
               />
