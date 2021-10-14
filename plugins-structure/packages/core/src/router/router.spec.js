@@ -1,5 +1,4 @@
 import { router } from "./router";
-import { getByText, waitFor, fireEvent } from "@testing-library/dom";
 
 const mockRoutes = [
   {
@@ -23,14 +22,11 @@ function getGoodDOM() {
   return div;
 }
 
-// function getGoodDOM() {
-//   const div = document.createElement('div')
-//   div.innerHTML = `
-//     <a href="/" data-link>Go to home</a>
-//     <a href="/test-url" data-link>Go to test url</a>
-//   `
-//   return div;
-// }
+const routerArg = {
+  routes: [],
+  clickHandler: () => {},
+  popStateHandler: () => {},
+};
 
 describe("Given the router", () => {
   beforeEach(() => {
@@ -77,6 +73,44 @@ describe("Given the router", () => {
       TypeError,
       routesTypeErrorMsg
     );
+  });
+
+  it("should throw an error if clickHandler is not a function", async () => {
+    const routesTypeErrorMsg = "clickHandler must be a function";
+    await expect(
+      router.init({ ...routerArg, clickHandler: "string" })
+    ).rejects.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+    await expect(
+      router.init({ ...routerArg, clickHandler: 123 })
+    ).rejects.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+    await expect(
+      router.init({ ...routerArg, clickHandler: [] })
+    ).rejects.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+    await expect(
+      router.init({ ...routerArg, clickHandler: {} })
+    ).rejects.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+    await expect(
+      router.init({ ...routerArg, clickHandler: () => {} })
+    ).not.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+  });
+
+  it("should throw an error if popStateHandler is not a function", async () => {
+    const routesTypeErrorMsg = "popStateHandler must be a function";
+    await expect(
+      router.init({ ...routerArg, popStateHandler: "string" })
+    ).rejects.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+    await expect(
+      router.init({ ...routerArg, popStateHandler: 123 })
+    ).rejects.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+    await expect(
+      router.init({ ...routerArg, popStateHandler: [] })
+    ).rejects.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+    await expect(
+      router.init({ ...routerArg, popStateHandler: {} })
+    ).rejects.toThrowWithMessage(TypeError, routesTypeErrorMsg);
+    await expect(
+      router.init({ ...routerArg, popStateHandler: () => {} })
+    ).not.toThrowWithMessage(TypeError, routesTypeErrorMsg);
   });
 
   it("should be initialized", () => {

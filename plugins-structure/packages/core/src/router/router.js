@@ -1,3 +1,6 @@
+import isFunction from "lodash/fp/isFunction";
+import isArray from "lodash/fp/isArray";
+
 const routerInitialSettings = {
   routes: null,
   selector: "[data-link]",
@@ -118,8 +121,12 @@ export const router = (function () {
       popStateHandler = onPopStateHandler,
     } = {}) {
       if (this.getIsInitialized()) return;
-      if (!routes || !Array.isArray(routes))
+      if (!routes || !isArray(routes))
         throw TypeError("routes is required and must be an array");
+      if (!isFunction(clickHandler))
+        throw TypeError("clickHandler must be a function");
+      if (!isFunction(popStateHandler))
+        throw TypeError("popStateHandler must be a function");
 
       for (var key in options) {
         if (options.hasOwnProperty(key)) {
