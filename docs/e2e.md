@@ -162,8 +162,8 @@ teste2e/cypress/support/core
 
 #### `api.js`:
 
-Contains all repliers for the plugin api calls. Each replier will accept two
-parameters: `test data` and `request body`. Both are objects and describe
+Contains all repliers for the plugin api calls. Each replier will accept one
+object with two parameters: `testParams` and `requestParams`. Both describe
 respectively test configuration parameters, which can be used to configure
 the response to match test pre-conditions, and request data sent to the API.
 
@@ -173,11 +173,10 @@ Let's build some replier for the `/records/v1/inventory` call:
 import { Inventory } from "./generate";
 import { stateToString } from "./utils";
 
-export function inventoryReply(
-  { amountByStatus = {}, pageLimit = 20 } = {},
-  { state = 2, page }
-) {
-  // inventory generator (see below on generate.js)
+export function inventoryReply({
+  testParams: { amountByStatus = {}, pageLimit = 20 },
+  requestParams: { state = 2, page }
+}) {
   const inventory = new Inventory(amountByStatus, {
     page,
     pageLimit
