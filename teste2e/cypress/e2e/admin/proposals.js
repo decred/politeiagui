@@ -3,7 +3,8 @@ import {
   shortRecordToken,
   PROPOSAL_SUMMARY_STATUS_ACTIVE,
   PROPOSAL_SUMMARY_STATUS_ClOSED,
-  PROPOSAL_SUMMARY_STATUS_COMPLETED
+  PROPOSAL_SUMMARY_STATUS_COMPLETED,
+  PROPOSAL_VOTING_APPROVED
 } from "../../utils";
 
 describe("Admin proposals actions", () => {
@@ -177,7 +178,14 @@ describe("Admin proposals actions", () => {
           token,
           status: PROPOSAL_SUMMARY_STATUS_ACTIVE
         });
+        // Mock vote summary reply to set proposal vote status to
+        // approved to test author updates.
+        cy.middleware("ticketvote.summaries", {
+          token,
+          status: PROPOSAL_VOTING_APPROVED
+        });
         cy.visit(`record/${shortRecordToken(token)}`);
+        cy.wait("@ticketvote.summaries");
         cy.wait("@pi.summaries");
         cy.findByText(/set billing status/i).click();
         cy.get("#select-billing-status").click();
@@ -191,14 +199,11 @@ describe("Admin proposals actions", () => {
           .should("eq", 200);
         // Ensure success modal is displayed
         cy.findByText(/ok/i).click();
-        // Ensure Set Billing Status button is gone after setting billing
-        // status successfully.
-        cy.findByText(/set billing status/i).should("not.exist");
       }
     );
   });
 
-  it("Shouldn't allow admins to set the billing status of a closed propsoal", () => {
+  it("Should allow admins to set the billing status of a closed propsoal", () => {
     cy.server();
     // paid admin user with proposal credits
     const admin = {
@@ -230,15 +235,32 @@ describe("Admin proposals actions", () => {
           token,
           status: PROPOSAL_SUMMARY_STATUS_ClOSED
         });
+        // Mock vote summary reply to set proposal vote status to
+        // approved to test author updates.
+        cy.middleware("ticketvote.summaries", {
+          token,
+          status: PROPOSAL_VOTING_APPROVED
+        });
         cy.visit(`record/${shortRecordToken(token)}`);
         cy.wait("@pi.summaries");
-        // Ensure set billing status button isn't displayed.
-        cy.findByText(/set billing status/i).should("not.exist");
+        cy.wait("@ticketvote.summaries");
+        cy.findByText(/set billing status/i).click();
+        cy.get("#select-billing-status").click();
+        // Pick the completed billing status.
+        cy.get("#react-select-3-option-0").click();
+        cy.middleware("pi.setBillingStatus");
+        cy.findByTestId("set-billing-status").click();
+        // Ensure mocked response has 200 status code
+        cy.wait("@pi.setBillingStatus")
+          .its("response.statusCode")
+          .should("eq", 200);
+        // Ensure success modal is displayed
+        cy.findByText(/ok/i).click();
       }
     );
   });
 
-  it("Shouldn't allow admins to set the billing status of a completed propsoal", () => {
+  it("Should allow admins to set the billing status of a completed propsoal", () => {
     cy.server();
     // paid admin user with proposal credits
     const admin = {
@@ -270,10 +292,27 @@ describe("Admin proposals actions", () => {
           token,
           status: PROPOSAL_SUMMARY_STATUS_COMPLETED
         });
+        // Mock vote summary reply to set proposal vote status to
+        // approved to test author updates.
+        cy.middleware("ticketvote.summaries", {
+          token,
+          status: PROPOSAL_VOTING_APPROVED
+        });
         cy.visit(`record/${shortRecordToken(token)}`);
         cy.wait("@pi.summaries");
-        // Ensure set billing status button isn't displayed.
-        cy.findByText(/set billing status/i).should("not.exist");
+        cy.wait("@ticketvote.summaries");
+        cy.findByText(/set billing status/i).click();
+        cy.get("#select-billing-status").click();
+        // Pick the completed billing status.
+        cy.get("#react-select-3-option-0").click();
+        cy.middleware("pi.setBillingStatus");
+        cy.findByTestId("set-billing-status").click();
+        // Ensure mocked response has 200 status code
+        cy.wait("@pi.setBillingStatus")
+          .its("response.statusCode")
+          .should("eq", 200);
+        // Ensure success modal is displayed
+        cy.findByText(/ok/i).click();
       }
     );
   });
