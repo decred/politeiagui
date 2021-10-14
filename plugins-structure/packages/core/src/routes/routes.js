@@ -8,7 +8,6 @@ import { store } from "../storeSetup";
 const root = document.querySelector("#root");
 
 export const routes = [
-  { path: "/404", view: () => (root.innerHTML = "<h1>Not found!</h1>") },
   {
     path: "/",
     view: () =>

@@ -1,11 +1,13 @@
+const routerInitialSettings = {
+  routes: null,
+  selector: "[data-link]",
+  title: "",
+  onpopstate: true,
+  cleanup: null,
+};
+
 export const router = (function () {
-  const settings = {
-    routes: null,
-    selector: "[data-link]",
-    title: "",
-    onpopstate: true,
-    cleanup: null,
-  };
+  let settings = routerInitialSettings;
 
   function pathToRegex(path) {
     return new RegExp(
@@ -49,8 +51,13 @@ export const router = (function () {
     );
 
     if (!match) {
+      // default to 404 route
       match = {
-        route: settings.routes[0], // 404 is first route by default.
+        route: {
+          path: "/404",
+          view: () =>
+            (document.querySelector("#root").innerHTML = "<h1>Not found!</h1>"),
+        },
         result: [window.location.pathname],
       };
     }
@@ -62,8 +69,24 @@ export const router = (function () {
     settings.cleanup = match.route.cleanup;
   }
 
+  function onClickHandler(e) {
+    if (e.target.matches(settings.selector)) {
+      e.preventDefault();
+      this.navigateTo(e.target.href);
+    }
+  }
+
+  function onPopStateHandler() {
+    const cleanup = settings.cleanup;
+    cleanup && cleanup();
+    verifyMatch();
+  }
+
   return {
     navigateTo(url) {
+      if (!this.getIsInitialized()) {
+        throw Error("router is not initialized. Use the init method");
+      }
       const cleanup = settings.cleanup;
       cleanup && cleanup();
       push(url);
@@ -82,10 +105,21 @@ export const router = (function () {
       return !!settings.routes;
     },
 
-    async init(routes, options) {
+    reset() {
+      settings = { ...routerInitialSettings };
+      document.body.removeEventListener("click", onClickHandler);
+      window.removeEventListener("popstate", onPopStateHandler);
+    },
+
+    async init({
+      routes,
+      options,
+      clickHandler = onClickHandler,
+      popStateHandler = onPopStateHandler,
+    } = {}) {
       if (this.getIsInitialized()) return;
       if (!routes || !Array.isArray(routes))
-        throw Error("routes is required and must be an array");
+        throw TypeError("routes is required and must be an array");
 
       for (var key in options) {
         if (options.hasOwnProperty(key)) {
@@ -98,22 +132,13 @@ export const router = (function () {
 
       // Add events
       // Make anchor tags work
-      document.body.addEventListener("click", (e) => {
-        if (e.target.matches(settings.selector)) {
-          e.preventDefault();
-          this.navigateTo(e.target.href);
-        }
-      });
+      document.body.addEventListener("click", clickHandler.bind(this));
 
       // Router history
       if (settings.onpopstate) {
         // Pop state happens everytime a back button is clicked
         // in the browser or a call to history.back.
-        window.addEventListener("popstate", () => {
-          const cleanup = settings.cleanup;
-          cleanup && cleanup();
-          verifyMatch();
-        });
+        window.addEventListener("popstate", popStateHandler);
       }
     },
   };

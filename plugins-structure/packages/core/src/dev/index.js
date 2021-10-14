@@ -31,7 +31,7 @@ function handleApi() {
   }
   if (status === "succeeded" && !routerInitialized) {
     routerInitialized = true;
-    router.init(routes);
+    router.init({routes});
   }
 }
 
