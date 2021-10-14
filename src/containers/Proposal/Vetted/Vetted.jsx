@@ -6,19 +6,13 @@ import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import {
   useProposalsBatch,
   useLegacyVettedProposals,
-  useQueryStringWithIndexValue,
-  useBillingStatusChanges
+  useQueryStringWithIndexValue
 } from "src/hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
-import {
-  LIST_HEADER_VETTED,
-  INELIGIBLE,
-  PROPOSAL_VOTING_APPROVED,
-  APPROVED
-} from "src/constants";
+import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
 
 const renderProposal = (record) => (
   <Proposal key={record.censorshiprecord.token} proposal={record} />
@@ -49,14 +43,6 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     fetchVoteSummary: true,
     fetchProposalSummary: true,
     statuses: statuses
-  });
-
-  // Fetch billing status changes of approved proposals if current user is
-  // admin.
-  const [status] = statuses;
-  const isApprovedTab = status === PROPOSAL_VOTING_APPROVED;
-  const { loading: loadingBillingStatusChanges } = useBillingStatusChanges({
-    tokens: isApprovedTab && proposalsTokens[APPROVED]
   });
 
   // TODO: remove legacy
@@ -138,7 +124,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile
       hasMore={hasMoreProposals}
-      isLoading={loading || verifying || loadingBillingStatusChanges}
+      isLoading={loading || verifying}
       sort={sort}>
       {content}
     </RecordsView>
