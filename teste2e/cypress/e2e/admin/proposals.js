@@ -317,6 +317,7 @@ describe("Admin proposals actions", () => {
         // Mock policy reply
         cy.middleware("pi.policy", {
           body: {
+            namesupportedchars: ["A-z", "0-9"],
             billingstatuschangesmax: 2
           }
         });
