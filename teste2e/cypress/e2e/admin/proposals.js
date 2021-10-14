@@ -4,6 +4,8 @@ import {
   PROPOSAL_SUMMARY_STATUS_ACTIVE,
   PROPOSAL_SUMMARY_STATUS_ClOSED,
   PROPOSAL_SUMMARY_STATUS_COMPLETED,
+  PROPOSAL_BILLING_STATUS_CLOSED,
+  PROPOSAL_BILLING_STATUS_COMPLETED,
   PROPOSAL_VOTING_APPROVED
 } from "../../utils";
 
@@ -298,9 +300,31 @@ describe("Admin proposals actions", () => {
           token,
           status: PROPOSAL_VOTING_APPROVED
         });
+        // Mock billing status changes request.
+        cy.middleware("pi.billingstatuschanges", {
+          body: {
+            billingstatuschanges: {
+              [token]: [
+                {
+                  token,
+                  publickey: "some_public_key",
+                  status: PROPOSAL_BILLING_STATUS_COMPLETED
+                }
+              ]
+            }
+          }
+        });
+        // Mock policy reply
+        cy.middleware("pi.policy", {
+          body: {
+            billingstatuschangesmax: 2
+          }
+        });
         cy.visit(`record/${shortRecordToken(token)}`);
+        cy.wait("@pi.policy");
         cy.wait("@pi.summaries");
         cy.wait("@ticketvote.summaries");
+        cy.wait("@pi.billingstatuschanges");
         cy.findByText(/set billing status/i).click();
         cy.get("#select-billing-status").click();
         // Pick the completed billing status.
@@ -313,6 +337,80 @@ describe("Admin proposals actions", () => {
           .should("eq", 200);
         // Ensure success modal is displayed
         cy.findByText(/ok/i).click();
+      }
+    );
+  });
+
+  it("Shouldn't allow admins set a billing status when number of billing status changes exceeds the `billingstatuschangesmax` policy", () => {
+    cy.server();
+    // paid admin user with proposal credits
+    const admin = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    cy.login(admin);
+    cy.identity();
+    // create proposal
+    const proposal = buildProposal();
+    cy.createProposal(proposal).then(
+      ({
+        body: {
+          record: {
+            censorshiprecord: { token }
+          }
+        }
+      }) => {
+        cy.visit(`record/${shortRecordToken(token)}`);
+        // Manually approve proposal
+        cy.findByText(/approve/i).click();
+        cy.route("POST", "/api/records/v1/setstatus").as("setstatus");
+        cy.findByText(/confirm/i).click();
+        cy.wait("@setstatus");
+        // Mock proposal summary reply and set proposal status to
+        // completed.
+        cy.middleware("pi.summaries", {
+          token,
+          status: PROPOSAL_SUMMARY_STATUS_COMPLETED
+        });
+        // Mock vote summary reply to set proposal vote status to
+        // approved to test author updates.
+        cy.middleware("ticketvote.summaries", {
+          token,
+          status: PROPOSAL_VOTING_APPROVED
+        });
+        // Mock billing status changes request.
+        cy.middleware("pi.billingstatuschanges", {
+          body: {
+            billingstatuschanges: {
+              [token]: [
+                {
+                  token,
+                  publickey: "some_public_key",
+                  reason: "closed!",
+                  status: PROPOSAL_BILLING_STATUS_CLOSED
+                },
+                {
+                  token,
+                  publickey: "some_public_key",
+                  status: PROPOSAL_BILLING_STATUS_COMPLETED
+                }
+              ]
+            }
+          }
+        });
+        // Mock policy reply
+        cy.middleware("pi.policy", {
+          body: {
+            billingstatuschangesmax: 1
+          }
+        });
+        cy.visit(`record/${shortRecordToken(token)}`);
+        cy.wait("@pi.policy");
+        cy.wait("@pi.summaries");
+        cy.wait("@pi.billingstatuschanges");
+        cy.wait("@ticketvote.summaries");
+        cy.findByText(/set billing status/i).should("not.exist");
       }
     );
   });
