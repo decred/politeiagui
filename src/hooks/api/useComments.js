@@ -85,14 +85,15 @@ export default function useComments(
   // comments are not public on cms. User needs to be logged in
   const isProposal = recordType === constants.RECORD_TYPE_PROPOSAL;
   const needsToFetchComments = isProposal
-    ? !!recordToken && !comments
-    : !!recordToken && !comments && userLoggedIn;
+    ? !!recordToken && !allCommentsBySection
+    : !!recordToken && !allCommentsBySection && userLoggedIn;
 
   const needsToFetchCommentsLikes =
     !!recordToken &&
     !commentsLikes &&
     enableCommentVote &&
     userLoggedIn &&
+    !loadingLikes &&
     proposalState === PROPOSAL_STATE_VETTED;
 
   useEffect(
