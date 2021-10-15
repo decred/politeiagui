@@ -128,7 +128,6 @@ export default function useProposalsBatch({
     () => getProposalStatusLabel(currentStatus, isByRecordStatus),
     [currentStatus, isByRecordStatus]
   );
-  console.log({ status, currentStatus, statusIndex });
   const isStatusApproved = status === APPROVED;
   const tokens = useMemo(
     () => allByStatus[status] || [],
@@ -186,7 +185,6 @@ export default function useProposalsBatch({
             statusIndex + 1,
             remainingTokens
           );
-          console.log({ tokens });
           setStatusIndex(index);
           setRemainingTokens(tokens);
           if (isEmpty(tokens)) return send(RESOLVE);
@@ -264,11 +262,6 @@ export default function useProposalsBatch({
             isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
           );
         }
-        console.log({
-          missingBillingStatusChangesTokens,
-          tokensToFetch,
-          isStatusApproved
-        });
         Promise.all([
           missingBillingStatusChangesTokens?.length &&
             onFetchBillingStatusChanges(missingBillingStatusChangesTokens),
