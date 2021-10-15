@@ -1,4 +1,3 @@
-import Promise from "promise";
 import { useCallback, useMemo, useState } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
