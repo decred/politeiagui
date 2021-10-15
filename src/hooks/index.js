@@ -36,3 +36,4 @@ export { default as useScrollToTop } from "./utils/useScrollToTop";
 export { default as useSessionStorage } from "./utils/useSessionStorage";
 export { default as useThrowError } from "./utils/useThrowError";
 export { default as useWhyDidYouUpdate } from "./utils/useWhyDidYouUpdate";
+export { default as useCrash } from "./utils/useCrash";

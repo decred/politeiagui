@@ -7,7 +7,7 @@ import { useEditProposal } from "./hooks";
 import usePaywall from "src/hooks/api/usePaywall";
 import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/components/Or";
-import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
+import IdentityMessageError from "src/components/IdentityMessageError";
 import ProposalForm from "src/components/ProposalForm/ProposalFormLazy";
 import Link from "src/components/Link";
 import ProposalFormLoader from "src/components/ProposalForm/ProposalFormLoader";

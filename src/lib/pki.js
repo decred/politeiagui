@@ -3,12 +3,7 @@ import localforage from "localforage";
 import nacl from "tweetnacl";
 import util from "tweetnacl-util";
 import get from "lodash/fp/get";
-
-export const STORAGE_PREFIX = "ed255191~";
-export const IDENTITY_ERROR = `
-  Your identity is invalid. You cannot currently submit proposals or comments, 
-  please visit your account page to correct this problem.
-`;
+import { STORAGE_PREFIX, IDENTITY_ERROR } from "src/constants";
 
 export const toHex = (x) => Buffer.from(toUint8Array(x)).toString("hex");
 

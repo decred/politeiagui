@@ -3,7 +3,7 @@ import { Message, P } from "pi-ui";
 import Link from "./Link";
 import { useLoaderContext } from "src/containers/Loader";
 
-export const IdentityMessageError = () => {
+const IdentityMessageError = () => {
   const { currentUser } = useLoaderContext();
   return currentUser ? (
     <Message className="margin-bottom-m" kind="error">
@@ -16,3 +16,5 @@ export const IdentityMessageError = () => {
     </Message>
   ) : null;
 };
+
+export default IdentityMessageError;

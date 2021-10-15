@@ -1,7 +1,8 @@
+import React, { useEffect, useState } from "react";
 import { Button, Icon, Modal, Text, useTheme, getThemeProperty } from "pi-ui";
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
 import FormWrapper from "src/components/FormWrapper";
+import { useCrash, useModalContext } from "src/hooks";
 
 const ModalConfirm = ({
   show,
@@ -13,6 +14,8 @@ const ModalConfirm = ({
   successMessage,
   onCloseSuccess
 }) => {
+  const [, handleCloseModal] = useModalContext();
+  const crash = useCrash();
   const [success, setSuccess] = useState(false);
 
   const { theme } = useTheme();
@@ -25,17 +28,15 @@ const ModalConfirm = ({
     "success-icon-checkmark-color"
   );
 
-  const onSubmitForm = async (
-    _,
-    { resetForm, setFieldError, setSubmitting }
-  ) => {
+  const onSubmitForm = async (_, { resetForm, setSubmitting }) => {
     try {
       await onSubmit();
       resetForm();
       setSuccess(true);
     } catch (e) {
-      setFieldError("global", e);
       setSubmitting(false);
+      crash(e);
+      handleCloseModal();
     }
   };
   useEffect(

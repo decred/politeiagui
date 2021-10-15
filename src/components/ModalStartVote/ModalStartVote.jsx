@@ -12,7 +12,7 @@ import {
 import PropTypes from "prop-types";
 import { useLoaderContext } from "src/containers/Loader";
 import { validationSchema } from "./validation";
-import usePolicy from "src/hooks/api/usePolicy";
+import { useCrash, useModalContext, usePolicy } from "src/hooks";
 import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
 import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
 
@@ -47,6 +47,8 @@ const ModalStartVote = ({
   proposal,
   voteType
 }) => {
+  const [, handleCloseModal] = useModalContext();
+  const crash = useCrash();
   const [success, setSuccess] = useState(false);
   const { apiInfo } = useLoaderContext();
   const { theme } = useTheme();
@@ -63,7 +65,7 @@ const ModalStartVote = ({
   );
   const onSubmitStartVote = async (
     values,
-    { resetForm, setFieldError, setSubmitting }
+    { resetForm, setSubmitting }
   ) => {
     try {
       const { linkby } = proposal;
@@ -83,7 +85,8 @@ const ModalStartVote = ({
       setSuccess(true);
     } catch (e) {
       setSubmitting(false);
-      setFieldError("global", e);
+      crash(e);
+      handleCloseModal();
     }
   };
   useEffect(
