@@ -25,9 +25,7 @@ const DownloadCommentsTimestampsWrapper = ({
 
 const DownloadCommentsTimestamps = ({ recordToken }) => {
   const {
-    policy: {
-      policyTicketVote: { timestampspagesize: timestampsPageSize }
-    }
+    policyComments: { timestampspagesize: timestampsPageSize }
   } = usePolicy();
   const { loading, progress, timestamps, multiPage } =
     useDownloadCommentsTimestamps(recordToken, timestampsPageSize);
