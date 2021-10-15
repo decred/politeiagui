@@ -10,14 +10,18 @@ import {
   PROPOSAL_COMMENT_UPVOTE,
   PROPOSAL_COMMENT_DOWNVOTE
 } from "src/constants";
+import { getQueryStringValue } from "src/lib/queryString";
 
-const ContextLink = React.memo(({ parentid, recordToken }) => (
-  <Link
-    className={styles.contextLink}
-    to={`/record/${recordToken}/comments/${parentid}`}>
-    see in context
-  </Link>
-));
+const ContextLink = React.memo(({ parentid, recordToken, sort }) => {
+  const sortQuery = sort ? `?sort=${sort}` : "";
+  return (
+    <Link
+      className={styles.contextLink}
+      to={`/record/${recordToken}/comments/${parentid}${sortQuery}`}>
+      see in context
+    </Link>
+  );
+});
 
 const Replies = React.memo(({ children }) => (
   <div className={styles.childrenContainer}>{children}</div>
@@ -107,6 +111,8 @@ const CommentWrapper = ({
     parentid
   } = comment;
 
+  const sort = getQueryStringValue("sort");
+
   const isInLatestUpdateCommentTree =
     comments && isInCommentTree(latestAuthorUpdateId, commentid, comments);
   const notInLatestAuthorUpdateThread =
@@ -180,7 +186,7 @@ const CommentWrapper = ({
   }, [commentid, openCensorModal]);
 
   const contextLink = isFlatReply && (
-    <ContextLink parentid={parentid} recordToken={recordToken} />
+    <ContextLink parentid={parentid} recordToken={recordToken} sort={sort} />
   );
 
   const isLikeCommentDisabled =
