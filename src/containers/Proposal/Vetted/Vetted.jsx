@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import get from "lodash/fp/get";
+import get from "lodash/get";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
 import { tabValues, statusByTab, sortByTab } from "./helpers";
@@ -31,12 +31,12 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const sort = sortByTab[tabLabels[index]];
   const policy = usePolicy();
   const proposalPageSize = get(
-    ["policyTicketVote", "summariespagesize"],
-    policy
+    policy,
+    ["policyTicketVote", "summariespagesize"]
   );
   const inventoryPageSize = get(
-    ["policyTicketVote", "inventorypagesize"],
-    policy
+    policy,
+    ["policyTicketVote", "inventorypagesize"]
   );
 
   const {

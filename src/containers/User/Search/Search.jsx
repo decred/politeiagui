@@ -53,7 +53,7 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const [searchError, setSearchError] = useState(null);
   const [foundUsers, setFoundUsers] = useState([]);
   const [filterValue, setFilterValue] = useState(); // filters on the client-side
-  const supportedDomains = get(["policyPi", "domains"], usePolicy());
+  const supportedDomains = get(usePolicy(), ["policyPi", "domains"]);
   const contractorDomains = isCMS ? getContractorDomains(supportedDomains) : [];
   const searchOptions = useMemo(() => {
     if (isCMS) {
