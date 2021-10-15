@@ -5,7 +5,6 @@ import React, {
   useEffect,
   useMemo
 } from "react";
-import isEqual from "lodash/isEqual";
 import { withRouter } from "react-router-dom";
 
 const routerCtx = createContext();
@@ -16,7 +15,7 @@ const RouterProvider = ({ location, children, ...rest }) => {
   const [pastLocations, setPastLocations] = useState([]);
 
   useEffect(() => {
-    if (!isEqual(pastLocations[0], location)) {
+    if (pastLocations[0]?.pathname !== location.pathname) {
       setPastLocations([location].concat(pastLocations));
     }
   }, [location, pastLocations]);
