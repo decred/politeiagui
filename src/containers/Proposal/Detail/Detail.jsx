@@ -5,6 +5,12 @@ import { withRouter } from "react-router-dom";
 import Proposal from "src/components/Proposal";
 import styles from "./Detail.module.css";
 import { useProposal } from "./hooks";
+import {
+  usePaywall,
+  useIdentity,
+  useDocumentTitle,
+  useModalContext
+} from "src/hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { getCommentBlockedReason } from "./helpers";
@@ -21,7 +27,6 @@ import {
   PublicActionsProvider
 } from "src/containers/Proposal/Actions";
 import { useProposalVote } from "../hooks";
-import useDocumentTitle from "src/hooks/utils/useDocumentTitle";
 import Link from "src/components/Link";
 import { GoBackLink } from "src/components/Router";
 import { useConfig } from "src/containers/Config";
@@ -33,8 +38,6 @@ import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
 import { PROPOSAL_UPDATE_HINT, PROPOSAL_STATE_UNVETTED } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import ModalLogin from "src/components/ModalLogin";
-import useModalContext from "src/hooks/utils/useModalContext";
-import { usePaywall, useIdentity } from "src/hooks";
 
 const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 
@@ -59,7 +62,8 @@ const ProposalDetail = ({ Main, match, history }) => {
     currentUser,
     commentsError,
     commentsLoading,
-    onReloadProposalDetails
+    onReloadProposalDetails,
+    billingStatusChangeUsername
   } = useProposal(tokenFromUrl, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
@@ -252,6 +256,7 @@ const ProposalDetail = ({ Main, match, history }) => {
             ) : (
               <Proposal
                 proposal={proposal}
+                billingStatusChangeUsername={billingStatusChangeUsername}
                 extended
                 collapseBodyContent={!!threadParentID}
               />

@@ -58,6 +58,7 @@ export const PROPOSAL_TYPE_REGULAR = 1;
 export const PROPOSAL_TYPE_RFP = 2;
 export const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
 
+export const PROPOSAL_BILLING_STATUS_ACTIVE = 1;
 export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
 export const PROPOSAL_BILLING_STATUS_COMPLETED = 3;
 
@@ -100,6 +101,7 @@ export const PROPOSAL_COMMENT_UPVOTE = 1;
 export const PROPOSAL_COMMENT_DOWNVOTE = -1;
 
 export const PROPOSAL_PAGE_SIZE = 5;
+export const BILLING_STATUS_CHANGES_PAGE_SIZE = 5;
 export const INVENTORY_PAGE_SIZE = 20;
 
 // Proposals presentational statuses returned by the 'voteinv' &

@@ -27,7 +27,8 @@ import {
   PROPOSAL_PAGE_SIZE,
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_STATE_VETTED,
-  PROPOSAL_STATUS_UNREVIEWED
+  PROPOSAL_STATUS_UNREVIEWED,
+  APPROVED
 } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import {
@@ -99,6 +100,7 @@ export default function useProposalsBatch({
   const [voteStatuses, setStatuses] = useState(statuses);
   const [initializedInventory, setInitializedInventory] = useState(false);
   const isByRecordStatus = isUndefined(voteStatuses);
+  const isAdmin = useSelector(sel.currentUserIsAdmin);
   const proposals = useSelector(sel.proposalsByToken);
   const recordState = unvetted
     ? PROPOSAL_STATE_UNVETTED
@@ -114,19 +116,23 @@ export default function useProposalsBatch({
   const voteSummaries = useSelector(sel.voteSummariesByToken);
   updateCacheVoteStatusMap(voteSummaries);
   const proposalSummaries = useSelector(sel.proposalSummariesByToken);
+  const billingStatusChangesByToken = useSelector(
+    sel.billingStatusChangesByToken
+  );
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
 
-  const tokens = useMemo(
-    () =>
-      allByStatus[getProposalStatusLabel(currentStatus, isByRecordStatus)] ||
-      [],
-    [allByStatus, isByRecordStatus, currentStatus]
+  const status = useMemo(
+    () => getProposalStatusLabel(currentStatus, isByRecordStatus),
+    [currentStatus, isByRecordStatus]
   );
-  const page = useMemo(() => {
-    return getCurrentPage(tokens);
-  }, [tokens]);
+  const isStatusApproved = status === APPROVED;
+  const tokens = useMemo(
+    () => allByStatus[status] || [],
+    [allByStatus, status]
+  );
+  const page = useMemo(() => getCurrentPage(tokens), [tokens]);
   const errorSelector = useMemo(
     () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
     []
@@ -134,6 +140,9 @@ export default function useProposalsBatch({
   const error = useSelector(errorSelector);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
+  const onFetchBillingStatusChanges = useAction(
+    act.onFetchBillingStatusChanges
+  );
   const hasRemainingTokens = !isEmpty(remainingTokens);
 
   const scanNextStatusTokens = (index, oldTokens) => {
@@ -147,8 +156,11 @@ export default function useProposalsBatch({
     if (tokens.length < proposalPageSize && index < currentStatuses.length) {
       return scanNextStatusTokens(index + 1, tokens);
     }
+
     return {
-      index,
+      // If added no tokens of the new status return old index as the returned
+      // tokens are old tokens which means corresponding to the new status.
+      index: newTokens?.length ? index : index - 1,
       tokens
     };
   };
@@ -240,12 +252,25 @@ export default function useProposalsBatch({
           remainingTokens,
           proposalPageSize
         );
-        onFetchProposalsBatch({
-          tokens: tokensToFetch,
-          fetchVoteSummary,
-          fetchProposalSummary
-        })
-          .then(([fetchedProposals]) => {
+        // If fetch tokens of approved proposals and current user is admin
+        // fetch the billing status changes metadata if doesn't exist in
+        // the redux store.
+        let missingBillingStatusChangesTokens;
+        if (isStatusApproved && isAdmin) {
+          missingBillingStatusChangesTokens = tokensToFetch.filter((token) =>
+            isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
+          );
+        }
+        Promise.all([
+          missingBillingStatusChangesTokens?.length &&
+            onFetchBillingStatusChanges(missingBillingStatusChangesTokens),
+          onFetchProposalsBatch({
+            tokens: tokensToFetch,
+            fetchVoteSummary,
+            fetchProposalSummary
+          })
+        ])
+          .then(([, [fetchedProposals]]) => {
             if (isEmpty(fetchedProposals)) {
               setRemainingTokens(next);
               return send(RESOLVE);

@@ -124,7 +124,7 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
         </>
       ) : (
         <div className={styles.versionSpinnerContainer}>
-          <Spinner width={50} height={50} invert />
+          <Spinner width="5rem" height="5rem" invert />
         </div>
       )}
     </>
