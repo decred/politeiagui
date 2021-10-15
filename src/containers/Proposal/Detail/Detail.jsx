@@ -9,7 +9,8 @@ import {
   usePaywall,
   useIdentity,
   useDocumentTitle,
-  useModalContext
+  useModalContext,
+  useScrollTo
 } from "src/hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -38,6 +39,7 @@ import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
 import { PROPOSAL_UPDATE_HINT, PROPOSAL_STATE_UNVETTED } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import ModalLogin from "src/components/ModalLogin";
+import { getQueryStringValue } from "src/lib/queryString";
 
 const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 
@@ -49,6 +51,8 @@ const SetPageTitle = ({ title }) => {
 const ProposalDetail = ({ Main, match, history }) => {
   const tokenFromUrl = shortRecordToken(get("params.token", match));
   const threadParentCommentID = get("params.commentid", match);
+  const hasScrollToQuery = !!getQueryStringValue("scrollToComments");
+
   const {
     proposal,
     loading,
@@ -63,7 +67,8 @@ const ProposalDetail = ({ Main, match, history }) => {
     commentsError,
     commentsLoading,
     onReloadProposalDetails,
-    billingStatusChangeUsername
+    billingStatusChangeUsername,
+    commentsFinishedLoading
   } = useProposal(tokenFromUrl, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
@@ -83,6 +88,10 @@ const ProposalDetail = ({ Main, match, history }) => {
   const { isPaid, paywallEnabled } = usePaywall();
   const paywallMissing = paywallEnabled && !isPaid;
   const [, identityError] = useIdentity();
+
+  const shouldScrollToComments =
+    (hasScrollToQuery || isSingleThread) && proposal && commentsFinishedLoading;
+  useScrollTo("commentArea", shouldScrollToComments);
 
   const onRedirectToSignup = useCallback(
     () => history.push("/user/signup"),

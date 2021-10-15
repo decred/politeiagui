@@ -21,12 +21,7 @@ import { CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/components/Link";
-import {
-  useQueryString,
-  useScrollTo,
-  useComments,
-  useLocalStorage
-} from "src/hooks";
+import { useQueryString, useComments, useLocalStorage } from "src/hooks";
 import {
   getSortOptionsForSelect,
   createSelectOptionFromSortOption,
@@ -36,7 +31,6 @@ import {
 } from "./helpers";
 import { PROPOSAL_MAIN_THREAD_KEY } from "src/constants";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
-import { getQueryStringValue } from "src/lib/queryString";
 import { debounce } from "lodash";
 
 const FlatModeButton = ({ isActive, onClick }) => (
@@ -367,11 +361,6 @@ const Comments = ({
   const numOfComments = comments?.length;
 
   const [state, dispatch] = useReducer(commentsReducer, initialState);
-  const hasComments = !!comments;
-  const hasScrollToQuery = !!getQueryStringValue("scrollToComments");
-  const shouldScrollToComments =
-    (hasScrollToQuery || isSingleThread) && hasComments;
-  useScrollTo("commentArea", shouldScrollToComments);
 
   const [sortOption, setSortOption] = useQueryString(
     "sort",

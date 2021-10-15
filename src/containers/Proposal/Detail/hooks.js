@@ -268,7 +268,8 @@ export function useProposal(token, threadParentID) {
     hasAuthorUpdates,
     singleThreadRootId,
     error: commentsError,
-    loading: commentsLoading
+    loading: commentsLoading,
+    finishedCommentsFetch
   } = useComments(proposalToken, proposalState, null, threadParentID);
 
   return {
@@ -291,6 +292,7 @@ export function useProposal(token, threadParentID) {
     commentsError,
     currentUser,
     commentsLoading,
+    commentsFinishedLoading: finishedCommentsFetch,
     onReloadProposalDetails
   };
 }

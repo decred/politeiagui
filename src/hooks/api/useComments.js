@@ -185,6 +185,7 @@ export default function useComments(
     getCommentVotes,
     commentSectionIds,
     hasAuthorUpdates,
+    finishedCommentsFetch: !!allCommentsBySection,
     latestAuthorUpdateId: hasAuthorUpdates && commentSectionIds[0],
     singleThreadRootId
   };
