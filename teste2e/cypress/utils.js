@@ -11,6 +11,27 @@ import path from "path";
 
 export const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 export const VOTE_METADATA_FILENAME = "votemetadata.json";
+const UNREVIEWED = "unreviewed";
+const ACTIVE_VOTE = "started";
+const APPROVED = "approved";
+const AUTHORIZED = "authorized";
+const UNAUTHORIZED = "unauthorized";
+const REJECTED = "rejected";
+const INELIGIBLE = "ineligible";
+const ARCHIVED = "archived";
+const PUBLIC = "public";
+const CENSORED = "censored";
+const PROPOSAL_VOTING_NOT_AUTHORIZED = 1;
+const PROPOSAL_VOTING_AUTHORIZED = 2;
+const PROPOSAL_VOTING_ACTIVE = 3;
+export const PROPOSAL_VOTING_APPROVED = 5;
+const PROPOSAL_VOTING_REJECTED = 6;
+const PROPOSAL_VOTING_INELIGIBLE = 7;
+const PROPOSAL_STATUS_UNREVIEWED = 1;
+const PROPOSAL_STATUS_PUBLIC = 2;
+const PROPOSAL_STATUS_CENSORED = 3;
+const PROPOSAL_STATUS_ARCHIVED = 4;
+
 export const PROPOSAL_SUMMARY_STATUS_UNVETTED = "unvetted";
 export const PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED = "unvetted-abandoned";
 export const PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED = "unvetted-censored";
@@ -26,26 +47,6 @@ export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
 export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
 const PROPOSAL_STATE_UNVETTED = 1;
 const PROPOSAL_STATE_VETTED = 2;
-const PROPOSAL_VOTING_NOT_AUTHORIZED = 1;
-const PROPOSAL_VOTING_AUTHORIZED = 2;
-const PROPOSAL_VOTING_ACTIVE = 3;
-const PROPOSAL_VOTING_APPROVED = 5;
-const PROPOSAL_VOTING_REJECTED = 6;
-const PROPOSAL_VOTING_INELIGIBLE = 7;
-const UNAUTHORIZED = "unauthorized";
-const AUTHORIZED = "authorized";
-const ACTIVE_VOTE = "started";
-const APPROVED = "approved";
-const REJECTED = "rejected";
-const INELIGIBLE = "ineligible";
-const PROPOSAL_STATUS_UNREVIEWED = 1;
-const PROPOSAL_STATUS_PUBLIC = 2;
-const PROPOSAL_STATUS_CENSORED = 3;
-const PROPOSAL_STATUS_ARCHIVED = 4;
-const UNREVIEWED = "unreviewed";
-const ARCHIVED = "archived";
-const CENSORED = "censored";
-const PUBLIC = "public";
 
 const findRecordFileByName = (record, name) =>
   compose(

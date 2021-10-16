@@ -5,12 +5,13 @@ import {
   isVotingNotAuthorizedProposal,
   isUnderDiscussionProposal,
   isRfpReadyToRunoff,
-  isActiveProposal
+  isApprovedProposal
 } from "src/containers/Proposal/helpers";
 import {
   useUnvettedProposalActions,
   usePublicProposalActions
 } from "src/containers/Proposal/Actions";
+import { usePolicy } from "src/hooks";
 import AdminContent from "src/components/AdminContent";
 import { useLoaderContext } from "src/containers/Loader";
 import styles from "./ProposalActions.module.css";
@@ -50,7 +51,7 @@ const UnvettedActions = ({ proposal }) => {
 const PublicActions = ({
   proposal,
   voteSummary,
-  proposalSummary,
+  billingStatusChangeMetadata,
   rfpSubmissionsVoteSummaries,
   resetRfpSubmissionsData,
   isLegacy
@@ -62,6 +63,9 @@ const PublicActions = ({
   }
 
   const { currentUser } = useLoaderContext();
+  const {
+    policyPi: { billingstatuschangesmax }
+  } = usePolicy();
   const {
     onAuthorizeVote,
     onRevokeVote,
@@ -81,8 +85,12 @@ const PublicActions = ({
     rfpSubmissionsVoteSummaries
   );
   const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
-  const isActive = isActiveProposal(proposalSummary);
-  const isSetBillingStatusAllowed = isActive;
+  const isApproved = isApprovedProposal(proposal, voteSummary);
+  const { numbillingstatuschanges } = billingStatusChangeMetadata || {};
+  const isSetBillingStatusAllowed =
+    !isLegacy &&
+    isApproved &&
+    numbillingstatuschanges < billingstatuschangesmax;
 
   const withProposal = (fn, cb) => () => {
     fn(proposal, cb);

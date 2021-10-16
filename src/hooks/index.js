@@ -2,6 +2,7 @@
 export { default as useApprovedProposals } from "./api/useApprovedProposals";
 export { default as useExchangeRate } from "./api/useExchangeRate";
 export { default as useIdentity } from "./api/useIdentity";
+export { default as useLegacyVettedProposals } from "./api/useLegacyVettedProposals";
 export { default as useNavigation } from "./api/useNavigation";
 export { default as usePaywall } from "./api/usePaywall";
 export { default as usePolicy } from "./api/usePolicy";

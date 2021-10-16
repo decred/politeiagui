@@ -13,6 +13,13 @@ export default function useProposalVote(token) {
     () => sel.makeGetProposalSummaryByToken(token),
     [token]
   );
+  const billingStatusChangeMetadataSelector = useMemo(
+    () => sel.makeGetBillingStatusChangeMetadata(token),
+    [token]
+  );
+  const billingStatusChangeMetadata = useSelector(
+    billingStatusChangeMetadataSelector
+  );
   const voteSummary = useSelector(voteSummarySelector);
   const proposalSummary = useSelector(proposalSummarySelector);
   const voteActive = isVoteActiveProposal(voteSummary);
@@ -21,6 +28,7 @@ export default function useProposalVote(token) {
   return {
     voteSummary,
     proposalSummary,
+    billingStatusChangeMetadata,
     voteBlocksLeft,
     voteActive,
     voteEndTimestamp

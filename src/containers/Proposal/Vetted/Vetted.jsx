@@ -4,14 +4,16 @@ import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
 import { tabValues, statusByTab, sortByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
-import useProposalsBatch from "src/hooks/api/useProposalsBatch";
-import useLegacyVettedProposals from "src/hooks/api/useLegacyVettedProposals";
+import {
+  useProposalsBatch,
+  useLegacyVettedProposals,
+  useQueryStringWithIndexValue
+} from "src/hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
-import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import usePolicy from "src/hooks/api/usePolicy";
 
 const renderProposal = (record) => (

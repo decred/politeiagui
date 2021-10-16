@@ -13,7 +13,8 @@ import {
   PROPOSAL_SUMMARY_STATUS_ACTIVE,
   PROPOSAL_SUMMARY_STATUS_COMPLETED,
   PROPOSAL_SUMMARY_STATUS_CLOSED,
-  PROPOSAL_BILLING_STATUS_CLOSED
+  PROPOSAL_BILLING_STATUS_CLOSED,
+  PROPOSAL_VOTING_APPROVED
 } from "../../utils";
 import { buildProposal } from "../../support/generate";
 import path from "path";
@@ -316,7 +317,7 @@ describe("Proposal details", () => {
       cy.findByText(/completed/i).should("be.visible");
     });
   });
-  describe.only("propsoal status metadata", () => {
+  describe("propsoal status metadata", () => {
     // paid admin user with proposal credits
     const admin = {
       email: "adminuser@example.com",
@@ -378,17 +379,25 @@ describe("Proposal details", () => {
         token: shortToken,
         status: PROPOSAL_SUMMARY_STATUS_CLOSED
       });
+      // Mock vote summary reply to set proposal vote status to
+      // approved to test author updates.
+      cy.middleware("ticketvote.summaries", {
+        token,
+        status: PROPOSAL_VOTING_APPROVED
+      });
       // Mock billing status changes request.
       cy.middleware("pi.billingstatuschanges", {
         body: {
-          billingstatuschanges: [
-            {
-              token,
-              publickey: "some_public_key",
-              reason: "closed!",
-              status: PROPOSAL_BILLING_STATUS_CLOSED
-            }
-          ]
+          billingstatuschanges: {
+            [token]: [
+              {
+                token,
+                publickey: "some_public_key",
+                reason: "closed!",
+                status: PROPOSAL_BILLING_STATUS_CLOSED
+              }
+            ]
+          }
         }
       });
       // Mock users reply to retrieve billing status change user name.
