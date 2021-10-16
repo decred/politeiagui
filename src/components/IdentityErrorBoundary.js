@@ -1,12 +1,17 @@
 import React, { Component } from "react";
+import { Button } from "pi-ui";
 import { withRouter } from "react-router-dom";
 import SingleContentPage from "./layout/SingleContentPage";
 import IdentityMessageError from "./IdentityMessageError";
-import { IDENTITY_ERROR } from "src/constants";
+import { isIdentityError } from "src/utils";
+import { Row } from "./layout";
 
 const identityErrorRenderer = (history) => (
   <SingleContentPage noCardWrap>
     <IdentityMessageError />
+    <Row justify="center">
+      <Button onClick={() => history.push("/")}>Return home</Button>
+    </Row>
   </SingleContentPage>
 );
 
@@ -35,9 +40,8 @@ class IdentityErrorBoundary extends Component {
       }
     });
     const { error } = this.state;
-    const isIdentityError = error?.message === IDENTITY_ERROR;
-    return isIdentityError
-      ? identityErrorRenderer(error, history)
+    return isIdentityError(error)
+      ? identityErrorRenderer(history)
       : this.props.children;
   }
 }

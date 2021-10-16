@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as Yup from "yup";
 import {
   P,
   Button,
@@ -11,7 +12,7 @@ import {
 import PropTypes from "prop-types";
 import { useCrash, useModalContext } from "src/hooks";
 import FormWrapper from "src/components/FormWrapper";
-import * as Yup from "yup";
+import { isIdentityError } from "src/utils";
 
 const ModalConfirmWithReason = ({
   show,
@@ -30,7 +31,7 @@ const ModalConfirmWithReason = ({
 
   const onSubmitReason = async (
     values,
-    { resetForm, setSubmitting }
+    { resetForm, setFieldError, setSubmitting }
   ) => {
     try {
       await onSubmit(values.reason);
@@ -38,8 +39,11 @@ const ModalConfirmWithReason = ({
       setSuccess(true);
     } catch (e) {
       setSubmitting(false);
-      crash(e);
-      handleCloseModal();
+      setFieldError("global", e);
+      if (isIdentityError(e)) {
+        crash(e);
+        handleCloseModal();
+      }
     }
   };
   useEffect(() => {

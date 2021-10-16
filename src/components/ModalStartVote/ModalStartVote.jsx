@@ -15,6 +15,7 @@ import { validationSchema } from "./validation";
 import { useCrash, useModalContext, usePolicy } from "src/hooks";
 import { isRfpReadyToVote } from "src/containers/Proposal/helpers";
 import { VOTE_TYPE_STANDARD, VOTE_TYPE_RUNOFF } from "src/constants";
+import { isIdentityError } from "src/utils";
 
 const getRoundedAverage = (a, b) => Math.round((a + b) / 2);
 
@@ -65,7 +66,7 @@ const ModalStartVote = ({
   );
   const onSubmitStartVote = async (
     values,
-    { resetForm, setSubmitting }
+    { resetForm, setFieldError, setSubmitting }
   ) => {
     try {
       const { linkby } = proposal;
@@ -85,8 +86,11 @@ const ModalStartVote = ({
       setSuccess(true);
     } catch (e) {
       setSubmitting(false);
-      crash(e);
-      handleCloseModal();
+      setFieldError("global", e);
+      if (isIdentityError(e)) {
+        crash(e);
+        handleCloseModal();
+      }
     }
   };
   useEffect(

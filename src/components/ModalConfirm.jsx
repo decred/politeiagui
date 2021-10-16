@@ -3,6 +3,7 @@ import { Button, Icon, Modal, Text, useTheme, getThemeProperty } from "pi-ui";
 import PropTypes from "prop-types";
 import FormWrapper from "src/components/FormWrapper";
 import { useCrash, useModalContext } from "src/hooks";
+import { isIdentityError } from "src/utils";
 
 const ModalConfirm = ({
   show,
@@ -28,15 +29,21 @@ const ModalConfirm = ({
     "success-icon-checkmark-color"
   );
 
-  const onSubmitForm = async (_, { resetForm, setSubmitting }) => {
+  const onSubmitForm = async (
+    _,
+    { resetForm, setFieldError, setSubmitting }
+  ) => {
     try {
       await onSubmit();
       resetForm();
       setSuccess(true);
     } catch (e) {
       setSubmitting(false);
-      crash(e);
-      handleCloseModal();
+      setFieldError("global", e);
+      if (isIdentityError(e)) {
+        crash(e);
+        handleCloseModal();
+      }
     }
   };
   useEffect(
