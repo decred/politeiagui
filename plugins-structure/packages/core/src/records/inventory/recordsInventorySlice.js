@@ -17,7 +17,7 @@ const initialObj = {
   status: "idle",
 };
 
-const initialState = {
+export const initialState = {
   unvetted: {
     censored: initialObj,
     unreviewed: initialObj,
@@ -40,12 +40,11 @@ export const fetchRecordsInventory = createAsyncThunk(
     const requestState = getRecordStateCode(recordsState);
     const requestStatus = getRecordStatusCode(status);
     try {
-      const obj = {
+      const res = await extra.fetchRecordsInventory({
         state: requestState,
         status: requestStatus,
         page,
-      };
-      const res = await extra.fetchRecordsInventory(obj);
+      });
       // Set the queue and fetch the first batch of records
       // Dispatching these actions here because they are necessary to populate the view and should run synchronously.
       // setFetchQueue should always be dispatched here unless you have a really good reason to do it anywhere else.
@@ -106,7 +105,7 @@ const recordsInventorySlice = createSlice({
       })
       .addCase(fetchRecordsInventory.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload;
       });
   },
 });
