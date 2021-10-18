@@ -21,7 +21,7 @@ import { CommentContext } from "./hooks";
 import CommentsListWrapper from "./CommentsList/CommentsListWrapper";
 import CommentLoader from "./Comment/CommentLoader";
 import Link from "src/components/Link";
-import { useQueryString, useComments, useLocalStorage } from "src/hooks";
+import { useComments, useLocalStorage } from "src/hooks";
 import {
   getSortOptionsForSelect,
   createSelectOptionFromSortOption,
@@ -32,7 +32,6 @@ import {
 import { PROPOSAL_MAIN_THREAD_KEY } from "src/constants";
 import { commentsReducer, initialState, actions } from "./commentsReducer";
 import { debounce } from "lodash";
-import { getQueryStringValue } from "src/lib/queryString";
 
 const FlatModeButton = ({ isActive, onClick }) => (
   <>
@@ -109,8 +108,6 @@ const CommentsListAndActions = React.memo(
     authorUpdateTitle,
     sectionId
   }) => {
-    const sort = getQueryStringValue("sort");
-    const sortQuery = sort ? `&sort=${sort}` : "";
     const {
       getCommentLikeOption,
       enableCommentVote,
@@ -263,8 +260,7 @@ const CommentsListAndActions = React.memo(
           {isSingleThread && (
             <div className="justify-left margin-top-s">
               <Text className="margin-right-xs">Single comment thread. </Text>
-              <Link
-                to={`/record/${recordToken}?scrollToComments=true${sortQuery}`}>
+              <Link to={`/record/${recordToken}?scrollToComments=true`}>
                 View all.
               </Link>
             </div>
@@ -366,8 +362,8 @@ const Comments = ({
 
   const [state, dispatch] = useReducer(commentsReducer, initialState);
 
-  const [sortOption, setSortOption] = useQueryString(
-    "sort",
+  const [sortOption, setSortOption] = useLocalStorage(
+    `sortComments-${recordToken}`,
     commentSortOptions.SORT_BY_TOP
   );
 

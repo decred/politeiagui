@@ -17,7 +17,6 @@ import Likes from "src/components/Likes";
 import CopyLink from "src/components/CopyLink";
 import { useConfig } from "src/containers/Config";
 import { NOJS_ROUTE_PREFIX } from "src/constants";
-import { getQueryStringValue } from "src/lib/queryString";
 
 const forbiddenCommentsMdElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
@@ -50,8 +49,6 @@ const Comment = ({
   seeInContextLink,
   ...props
 }) => {
-  const sort = getQueryStringValue("sort");
-  const sortQuery = sort ? `?sort=${sort}` : "";
   const extraSmall = useMediaQuery("(max-width: 560px)");
   const { javascriptEnabled } = useConfig();
 
@@ -91,7 +88,7 @@ const Comment = ({
           </Link>
           <DateTooltip timestamp={createdAt} placement="bottom">
             {({ timeAgo }) => (
-              <Link className={styles.timeAgo} to={`${permalink}${sortQuery}`}>
+              <Link className={styles.timeAgo} to={`${permalink}`}>
                 {timeAgo}
               </Link>
             )}

@@ -10,14 +10,12 @@ import {
   PROPOSAL_COMMENT_UPVOTE,
   PROPOSAL_COMMENT_DOWNVOTE
 } from "src/constants";
-import { getQueryStringValue } from "src/lib/queryString";
 
-const ContextLink = React.memo(({ parentid, recordToken, sort }) => {
-  const sortQuery = sort ? `?sort=${sort}` : "";
+const ContextLink = React.memo(({ parentid, recordToken }) => {
   return (
     <Link
       className={styles.contextLink}
-      to={`/record/${recordToken}/comments/${parentid}${sortQuery}`}>
+      to={`/record/${recordToken}/comments/${parentid}`}>
       see in context
     </Link>
   );
@@ -111,8 +109,6 @@ const CommentWrapper = ({
     parentid
   } = comment;
 
-  const sort = getQueryStringValue("sort");
-
   const isInLatestUpdateCommentTree =
     comments && isInCommentTree(latestAuthorUpdateId, commentid, comments);
   const notInLatestAuthorUpdateThread =
@@ -186,7 +182,7 @@ const CommentWrapper = ({
   }, [commentid, openCensorModal]);
 
   const contextLink = isFlatReply && (
-    <ContextLink parentid={parentid} recordToken={recordToken} sort={sort} />
+    <ContextLink parentid={parentid} recordToken={recordToken} />
   );
 
   const isLikeCommentDisabled =
