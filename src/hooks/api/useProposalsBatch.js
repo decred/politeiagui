@@ -158,8 +158,8 @@ export default function useProposalsBatch({
     }
 
     return {
-      // If added no tokens of the new status return old index as the returned
-      // tokens are old tokens which means corresponding to the new status.
+      // If no tokens of the new status added return old index as the returned
+      // tokens correspond to the old status.
       index: newTokens?.length ? index : index - 1,
       tokens
     };

@@ -155,6 +155,10 @@ export const NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW = 1 << 5;
 export const NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED = 1 << 6;
 export const NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL = 1 << 7;
 export const NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT = 1 << 8;
+
+// Identity
+export const STORAGE_PREFIX = "ed255191~";
+export const IDENTITY_ERROR = "IDENTITY_ERROR";
 // Import key errors
 export const PUBLIC_KEY_MISMATCH =
   "The provided public key doesn't match the key stored in the server.";
