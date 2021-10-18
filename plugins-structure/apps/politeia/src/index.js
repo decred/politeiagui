@@ -61,7 +61,7 @@ function handleApi() {
   }
   // only start the app if can fetch api
   if (status === "succeeded") {
-    router.init(routes);
+    router.init({routes});
   }
 }
 
