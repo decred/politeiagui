@@ -9,7 +9,8 @@ import {
   usePaywall,
   useIdentity,
   useDocumentTitle,
-  useModalContext
+  useModalContext,
+  usePolicy
 } from "src/hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -50,6 +51,9 @@ const ProposalDetail = ({ Main, match, history }) => {
   const tokenFromUrl = shortRecordToken(get("params.token", match));
   const threadParentCommentID = get("params.commentid", match);
   const {
+    policyTicketVote: { summariespagesize: proposalPageSize }
+  } = usePolicy();
+  const {
     proposal,
     loading,
     threadParentID,
@@ -64,7 +68,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     commentsLoading,
     onReloadProposalDetails,
     billingStatusChangeUsername
-  } = useProposal(tokenFromUrl, threadParentCommentID);
+  } = useProposal(tokenFromUrl, proposalPageSize, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
   const proposalToken = getProposalToken(proposal);

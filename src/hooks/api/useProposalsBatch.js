@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
@@ -23,8 +23,6 @@ import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
 import assign from "lodash/fp/assign";
 import {
-  INVENTORY_PAGE_SIZE,
-  PROPOSAL_PAGE_SIZE,
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATUS_UNREVIEWED,
@@ -58,10 +56,6 @@ const getUnfetchedTokens = (proposals, tokens) =>
     keys(proposals).map((token) => shortRecordToken(token))
   );
 
-const getCurrentPage = (tokens) => {
-  return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
-};
-
 const cacheVoteStatus = {};
 
 const updateCacheVoteStatusMap = (voteSummaries, isRefresh) => {
@@ -94,7 +88,8 @@ export default function useProposalsBatch({
   unvetted = false,
   proposalStatus,
   statuses,
-  proposalPageSize = PROPOSAL_PAGE_SIZE
+  proposalPageSize,
+  inventoryPageSize
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
   const [voteStatuses, setStatuses] = useState(statuses);
@@ -132,7 +127,9 @@ export default function useProposalsBatch({
     () => allByStatus[status] || [],
     [allByStatus, status]
   );
-  const page = useMemo(() => getCurrentPage(tokens), [tokens]);
+  const page = useMemo(() => {
+    return tokens ? Math.floor(+tokens.length / inventoryPageSize) : 0;
+  }, [tokens, inventoryPageSize]);
   const errorSelector = useMemo(
     () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
     []
@@ -169,6 +166,7 @@ export default function useProposalsBatch({
     actions: {
       initial: () => send(START),
       start: () => {
+        if (!proposalPageSize) return send(RESOLVE);
         if (remainingTokens.length > proposalPageSize) return send(VERIFY);
         // If remaining tokens length is smaller than proposal page size.
         // Find more tokens from inventory or scan from the next status
@@ -177,7 +175,7 @@ export default function useProposalsBatch({
         // there are no tokens to be fetched from the next page
         const scanNextStatus =
           initializedInventory &&
-          (!(tokens.length % INVENTORY_PAGE_SIZE === 0 && tokens.length > 0) ||
+          (!(tokens.length % inventoryPageSize === 0 && tokens.length > 0) ||
             remainingTokens.length === proposalPageSize);
         if (scanNextStatus) {
           const { index, tokens } = scanNextStatusTokens(
@@ -357,7 +355,7 @@ export default function useProposalsBatch({
     !getUnfetchedTokens(proposals, tokens).length;
 
   const isAnotherTokensScanningRequired =
-    tokens && tokens.length && tokens.length % INVENTORY_PAGE_SIZE === 0;
+    tokens && tokens.length && tokens.length % inventoryPageSize === 0;
 
   const onFetchMoreProposals = useCallback(() => {
     if (remainingTokens.length < proposalPageSize) return send(START);
@@ -367,6 +365,13 @@ export default function useProposalsBatch({
 
   const anyError = error || state.error;
   useThrowError(anyError);
+
+  // Recall fetch machine when proposalPageSize is changed. Since it is
+  // not hard code and be fetched from policy and will be undefined when
+  // the policy is not fetched yet.
+  useEffect(() => {
+    send(START);
+  }, [proposalPageSize, send]);
 
   return {
     proposals: getRfpLinkedProposals(

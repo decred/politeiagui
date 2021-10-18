@@ -21,7 +21,6 @@ import isEmpty from "lodash/fp/isEmpty";
 import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
 import assign from "lodash/fp/assign";
-import { PROPOSAL_PAGE_SIZE } from "src/constants";
 import {
   getRfpLinkedProposals,
   getTokensForProposalsPagination
@@ -81,7 +80,7 @@ const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens)(keys(proposals));
 
 export function useUserProposals({
-  proposalPageSize = PROPOSAL_PAGE_SIZE,
+  proposalPageSize,
   fetchRfpLinks = true,
   fetchVoteSummary = true,
   fetchProposalSummary = true,
