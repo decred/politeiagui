@@ -1,5 +1,4 @@
-import React, { useState, createContext } from "react";
-import isEmpty from "lodash/fp/isEmpty";
+import React, { useState, createContext, useCallback, useRef } from "react";
 
 export const modalContext = createContext({ component: () => null, props: {} });
 
@@ -11,36 +10,45 @@ const initialState = {
 };
 
 const ModalProvider = ({ children }) => {
-  const [modalStack] = useState([]);
-  const [currentModal, setModal] = useState(initialState);
-  const handleOpenModal = function handleOpenModal(
+  const modalStack = useRef([]);
+  const modalToDisplay = useRef(initialState);
+  // Modals are refs, and refs doesn't trigger component re-render. This
+  // will force the state update, hence a modal update.
+  const [, setIsDisplaying] = useState(false);
+
+  const handleOpenModal = useCallback(function (
     modal,
     props = {},
     { overlay } = {}
   ) {
     const newModal = { component: modal, props: { show: true, ...props } };
-    if (isEmpty(modalStack) || overlay) {
-      modalStack.push(newModal);
-      setModal(newModal);
-    } else if (!currentModal || !currentModal.props.show) {
-      setModal(newModal);
+    if (!modalStack.current || overlay) {
+      modalStack.current && modalStack.current.push(newModal);
+      modalToDisplay.current = newModal;
+      setIsDisplaying(true);
+    } else if (modalToDisplay.current && !modalToDisplay.current.props.show) {
+      modalToDisplay.current = newModal;
+      setIsDisplaying(true);
     }
-  };
+  },
+  []);
 
-  const handleCloseModal = function handleCloseModal() {
-    modalStack.pop();
-    const previousModal = modalStack.pop();
-    setModal(previousModal || initialState);
-  };
+  const handleCloseModal = useCallback(function () {
+    modalStack.current && modalStack.current.pop();
+    const previousModal = modalStack.current && modalStack.current.pop();
+    modalToDisplay.current = previousModal || initialState;
+    setIsDisplaying(false);
+  }, []);
 
   const props = {
     onClose: handleCloseModal,
-    ...currentModal.props
+    ...modalToDisplay.current.props
   };
+
   return (
     <modalContext.Provider value={[handleOpenModal, handleCloseModal]}>
       {children}
-      <currentModal.component {...props} />
+      <modalToDisplay.current.component {...props} />
     </modalContext.Provider>
   );
 };
