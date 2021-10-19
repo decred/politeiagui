@@ -3,6 +3,7 @@ import DownloadJSON from "src/components/DownloadJSON";
 import { useDownloadCommentsTimestamps } from "./hooks";
 import { Spinner, Link } from "pi-ui";
 import { loadCommentsTimestamps } from "src/lib/local_storage";
+import { usePolicy } from "src/hooks";
 
 const DownloadCommentsTimestampsWrapper = ({
   label,
@@ -23,8 +24,11 @@ const DownloadCommentsTimestampsWrapper = ({
 };
 
 const DownloadCommentsTimestamps = ({ recordToken }) => {
+  const {
+    policyComments: { timestampspagesize: timestampsPageSize }
+  } = usePolicy();
   const { loading, progress, timestamps, multiPage } =
-    useDownloadCommentsTimestamps(recordToken);
+    useDownloadCommentsTimestamps(recordToken, timestampsPageSize);
 
   return loading ? (
     <>

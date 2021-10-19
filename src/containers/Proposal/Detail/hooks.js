@@ -50,7 +50,7 @@ const getProposalRfpLinksTokens = (proposal) => {
   return isSubmission ? [proposal.linkto] : proposal.linkedfrom;
 };
 
-export function useProposal(token, threadParentID) {
+export function useProposal(token, proposalPageSize, threadParentID) {
   const tokenShort = shortRecordToken(token);
   const onFetchProposalDetails = useAction(act.onFetchProposalDetails);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
@@ -191,8 +191,10 @@ export function useProposal(token, threadParentID) {
       },
       verify: () => {
         if (hasRemainingTokens) {
-          const [tokensBatch, next] =
-            getTokensForProposalsPagination(remainingTokens);
+          const [tokensBatch, next] = getTokensForProposalsPagination(
+            remainingTokens,
+            proposalPageSize
+          );
           // Fetch vote & proposal summaries only if the proposal is a RFP.
           // If it is a submission, just grab the records info.
           onFetchProposalsBatch({

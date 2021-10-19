@@ -9,8 +9,7 @@ import {
 import LazyList from "src/components/LazyList";
 import LoadingPlaceholders from "src/components/LoadingPlaceholders";
 import HelpMessage from "src/components/HelpMessage";
-
-const PAGE_SIZE = 20;
+import usePolicy from "src/hooks/api/usePolicy";
 
 const Proposals = (props) => {
   const renderProposal = (record) => {
@@ -20,8 +19,11 @@ const Proposals = (props) => {
   const [hasMoreToLoad, setHasMore] = useState(false);
 
   const { userID } = props;
+  const {
+    policyTicketVote: { summariespagesize: proposalPageSize }
+  } = usePolicy();
   const { proposals, loading, numOfUserProposals, onFetchMoreProposals } =
-    useUserProposals({ userID });
+    useUserProposals({ proposalPageSize, userID });
 
   const amountOfProposalsFetched = proposals ? proposals.length : 0;
 
@@ -53,7 +55,9 @@ const Proposals = (props) => {
   const amountOfMissingProposals =
     numOfUserProposals - amountOfProposalsFetched;
   const itemsToBeLoaded =
-    amountOfMissingProposals > PAGE_SIZE ? PAGE_SIZE : amountOfMissingProposals;
+    amountOfMissingProposals > proposalPageSize
+      ? proposalPageSize
+      : amountOfMissingProposals;
 
   return (
     <UnvettedActionsProvider>

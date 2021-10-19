@@ -9,11 +9,15 @@ import { useEditInvoice } from "./hooks";
 import { fromUSDCentsToUSDUnits } from "src/helpers";
 import InvoiceLoader from "src/components/Invoice/InvoiceLoader";
 import InvoiceForm from "src/components/InvoiceForm";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const EditInvoice = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
   const { onEditInvoice } = useEditInvoice();
   const { invoice, loading, error } = useInvoice(tokenFromUrl);
+  const {
+    policyTicketVote: { summariespagesize: proposalPageSize }
+  } = usePolicy();
 
   const isInvoiceLoaded = !loading && !!invoice;
 
@@ -37,7 +41,7 @@ const EditInvoice = ({ match }) => {
     : null;
 
   const { proposalsNotRFP: proposals, error: proposalsError } =
-    useApprovedProposals();
+    useApprovedProposals(proposalPageSize);
   return (
     <Card className="container margin-bottom-l">
       {error ? (

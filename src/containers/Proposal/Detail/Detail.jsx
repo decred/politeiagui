@@ -10,7 +10,8 @@ import {
   useIdentity,
   useDocumentTitle,
   useModalContext,
-  useScrollTo
+  useScrollTo,
+  usePolicy
 } from "src/hooks";
 import Comments from "src/containers/Comments";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
@@ -34,7 +35,7 @@ import { useConfig } from "src/containers/Config";
 import Or from "src/components/Or";
 import LoggedInContent from "src/components/LoggedInContent";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
-import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
+import IdentityMessageError from "src/components/IdentityMessageError";
 import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
 import { PROPOSAL_UPDATE_HINT, PROPOSAL_STATE_UNVETTED } from "src/constants";
 import { shortRecordToken } from "src/helpers";
@@ -54,6 +55,9 @@ const ProposalDetail = ({ Main, match, history }) => {
   const hasScrollToQuery = !!getQueryStringValue("scrollToComments");
 
   const {
+    policyTicketVote: { summariespagesize: proposalPageSize }
+  } = usePolicy();
+  const {
     proposal,
     loading,
     threadParentID,
@@ -69,7 +73,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     onReloadProposalDetails,
     billingStatusChangeUsername,
     commentsFinishedLoading
-  } = useProposal(tokenFromUrl, threadParentCommentID);
+  } = useProposal(tokenFromUrl, proposalPageSize, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
   const proposalToken = getProposalToken(proposal);

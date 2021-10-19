@@ -22,6 +22,7 @@ import Link from "src/components/Link";
 import { usePolicy } from "src/hooks";
 import { searchSchema } from "./validation";
 import { getContractorDomains, getDomainName } from "src/helpers";
+import get from "lodash/get";
 
 const getFormattedSearchResults = (users = [], isCMS, supporteddomains) =>
   users.map((u) =>
@@ -52,10 +53,8 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
   const [searchError, setSearchError] = useState(null);
   const [foundUsers, setFoundUsers] = useState([]);
   const [filterValue, setFilterValue] = useState(); // filters on the client-side
-  const {
-    policy: { supporteddomains }
-  } = usePolicy();
-  const contractorDomains = isCMS ? getContractorDomains(supporteddomains) : [];
+  const supportedDomains = get(usePolicy(), ["policyPi", "domains"]);
+  const contractorDomains = isCMS ? getContractorDomains(supportedDomains) : [];
   const searchOptions = useMemo(() => {
     if (isCMS) {
       return [
@@ -112,11 +111,11 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
       const filteredResult = filterUserResult(searchResult, filterValue);
       if (filteredResult) {
         setFoundUsers(
-          getFormattedSearchResults(filteredResult, isCMS, supporteddomains)
+          getFormattedSearchResults(filteredResult, isCMS, supportedDomains)
         );
       }
     },
-    [searchResult, isCMS, supporteddomains, filterValue]
+    [searchResult, isCMS, filterValue, supportedDomains]
   );
 
   return (

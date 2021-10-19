@@ -1,4 +1,5 @@
 import React, { useState, createContext, useCallback, useRef } from "react";
+import IdentityErrorBoundary from "src/components/IdentityErrorBoundary";
 
 export const modalContext = createContext({ component: () => null, props: {} });
 
@@ -46,10 +47,12 @@ const ModalProvider = ({ children }) => {
   };
 
   return (
-    <modalContext.Provider value={[handleOpenModal, handleCloseModal]}>
-      {children}
-      <modalToDisplay.current.component {...props} />
-    </modalContext.Provider>
+    <IdentityErrorBoundary>
+      <modalContext.Provider value={[handleOpenModal, handleCloseModal]}>
+        {children}
+        <modalToDisplay.current.component {...props} />
+      </modalContext.Provider>
+    </IdentityErrorBoundary>
   );
 };
 

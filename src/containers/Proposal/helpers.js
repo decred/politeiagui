@@ -30,7 +30,6 @@ import {
   PROPOSAL_VOTING_REJECTED,
   PROPOSAL_VOTING_INELIGIBLE,
   INELIGIBLE,
-  PROPOSAL_PAGE_SIZE,
   UNAUTHORIZED
 } from "src/constants";
 import { getTextFromIndexMd, shortRecordToken } from "src/helpers";
@@ -453,10 +452,10 @@ export const getProposalLink = (proposal, isJsEnabled) =>
  * @param {*} tokens
  * @param {*} pageSize
  */
-export const getTokensForProposalsPagination = (
-  tokens,
-  pageSize = PROPOSAL_PAGE_SIZE
-) => [take(pageSize)(tokens), takeRight(tokens.length - pageSize)(tokens)];
+export const getTokensForProposalsPagination = (tokens, pageSize) => [
+  take(pageSize)(tokens),
+  takeRight(tokens.length - pageSize)(tokens)
+];
 
 /**
  * Returns the proposal tokens by status from an inventory of tokens

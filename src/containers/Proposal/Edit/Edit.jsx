@@ -7,7 +7,7 @@ import { useEditProposal } from "./hooks";
 import usePaywall from "src/hooks/api/usePaywall";
 import useIdentity from "src/hooks/api/useIdentity";
 import Or from "src/components/Or";
-import { IdentityMessageError } from "src/components/IdentityErrorIndicators";
+import IdentityMessageError from "src/components/IdentityMessageError";
 import ProposalForm from "src/components/ProposalForm/ProposalFormLazy";
 import Link from "src/components/Link";
 import ProposalFormLoader from "src/components/ProposalForm/ProposalFormLoader";
@@ -20,10 +20,14 @@ import { getMarkdownContent, isPublicProposal } from "../helpers";
 import { formatUnixTimestampToObj } from "src/utils";
 import { getAttachmentsFiles } from "src/helpers";
 import { usdFormatter } from "src/utils";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const EditProposal = ({ match }) => {
   const tokenFromUrl = get("params.token", match);
-  const { proposal, loading } = useProposal(tokenFromUrl);
+  const {
+    policyTicketVote: { summariespagesize: proposalPageSize }
+  } = usePolicy();
+  const { proposal, loading } = useProposal(tokenFromUrl, proposalPageSize);
   const isPublic = isPublicProposal(proposal);
   const { onEditProposal, currentUser } = useEditProposal();
   const { userid } = currentUser || {};

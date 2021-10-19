@@ -16,10 +16,13 @@ import styles from "./ModalDiff.module.css";
 import { presentationalInvoiceName } from "src/containers/Invoice/helpers";
 import uniq from "lodash/uniq";
 import useApprovedProposals from "src/hooks/api/useApprovedProposals";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
   const prevInput = prevInvoice && prevInvoice.input ? prevInvoice.input : [];
-
+  const {
+    policyTicketVote: { summariespagesize: proposalPageSize }
+  } = usePolicy();
   const proposalsTokens = useMemo(() => {
     const prevTokens = prevInput.lineitems
       ? prevInput.lineitems.map(({ proposaltoken }) => proposaltoken)
@@ -30,7 +33,10 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
     return uniq([...prevTokens, ...tokens]).filter((t) => t !== "");
   }, [invoice.input.lineitems, prevInput]);
 
-  const { proposalsByToken, error } = useApprovedProposals(proposalsTokens);
+  const { proposalsByToken, error } = useApprovedProposals(
+    proposalPageSize,
+    proposalsTokens
+  );
 
   return (
     <Modal

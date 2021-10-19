@@ -1,4 +1,4 @@
-import { MONTHS_LABELS } from "./constants";
+import { MONTHS_LABELS, IDENTITY_ERROR } from "./constants";
 
 /**
  * Converts atoms to DCR
@@ -62,3 +62,8 @@ export const formatCentsToUSD = (centsInput) => {
   const dollars = centsInput / 100;
   return dollars.toFixed(2) + " USD";
 };
+
+/*
+ * Verifies whether given error is the global identity error.
+ */
+export const isIdentityError = (error) => error?.message === IDENTITY_ERROR;

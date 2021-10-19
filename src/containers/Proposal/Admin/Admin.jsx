@@ -5,6 +5,7 @@ import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
 import { tabValues, statusByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
+import usePolicy from "src/hooks/api/usePolicy";
 import {
   UnvettedActionsProvider,
   PublicActionsProvider
@@ -25,6 +26,12 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     tabLabels
   );
   const {
+    policyTicketVote: {
+      summariespagesize: proposalPageSize,
+      inventorypagesize: inventoryPageSize
+    }
+  } = usePolicy();
+  const {
     proposals,
     proposalsTokens,
     loading,
@@ -37,7 +44,9 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
     fetchVoteSummary: false,
     fetchProposalSummary: true,
     unvetted: true,
-    proposalStatus: statusByTab[tabLabels[tabIndex]]
+    proposalStatus: statusByTab[tabLabels[tabIndex]],
+    proposalPageSize: proposalPageSize,
+    inventoryPageSize: inventoryPageSize
   });
 
   const getEmptyMessage = useCallback((tab) => {
@@ -70,6 +79,7 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile={true}
       hasMore={hasMoreProposals}
+      pageSize={proposalPageSize}
       isLoading={loading || verifying}
       getEmptyMessage={getEmptyMessage}>
       {({ tabs, content }) => (

@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from "react";
+import get from "lodash/get";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
 import { tabValues, statusByTab, sortByTab } from "./helpers";
@@ -13,6 +14,7 @@ import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
 import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
+import usePolicy from "src/hooks/api/usePolicy";
 
 const renderProposal = (record) => (
   <Proposal key={record.censorshiprecord.token} proposal={record} />
@@ -29,6 +31,16 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const statuses = statusByTab[tabLabels[index]];
   const sort = sortByTab[tabLabels[index]];
+  const policy = usePolicy();
+  const proposalPageSize = get(policy, [
+    "policyTicketVote",
+    "summariespagesize"
+  ]);
+  const inventoryPageSize = get(policy, [
+    "policyTicketVote",
+    "inventorypagesize"
+  ]);
+
   const {
     proposals,
     proposalsTokens,
@@ -40,9 +52,12 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     isProposalsBatchComplete
   } = useProposalsBatch({
     fetchRfpLinks: true,
+    fetchVoteSummaries: true,
+    statuses: statuses,
+    proposalPageSize: proposalPageSize,
+    inventoryPageSize: inventoryPageSize,
     fetchVoteSummary: true,
-    fetchProposalSummary: true,
-    statuses: statuses
+    fetchProposalSummary: true
   });
 
   // TODO: remove legacy
@@ -124,6 +139,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       onFetchMoreProposals={onFetchMoreProposals}
       dropdownTabsForMobile
       hasMore={hasMoreProposals}
+      pageSize={proposalPageSize}
       isLoading={loading || verifying}
       sort={sort}>
       {content}
