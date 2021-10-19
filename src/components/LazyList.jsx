@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroller";
 
@@ -19,9 +19,16 @@ const LazyList = ({
   hasMore,
   emptyListComponent,
   renderItem,
-  pageStart
+  pageStart,
+  minimumInitialLoading = 1000
 }) => {
   const isEmpty = !items.length;
+  const [initialLoading, setInitialLoading] = useState(true);
+  if (minimumInitialLoading > 0 && initialLoading) {
+    setTimeout(() => {
+      setInitialLoading(false);
+    }, minimumInitialLoading);
+  }
   return (
     <div data-testid="lazy-list">
       <InfiniteScroll
@@ -31,7 +38,7 @@ const LazyList = ({
         hasMore={hasMore}>
         {items.map(renderItem)}
       </InfiniteScroll>
-      {isLoading ? (
+      {isLoading && minimumInitialLoading ? (
         <div data-testid="loading-placeholders">{loadingPlaceholder}</div>
       ) : isEmpty ? (
         emptyListComponent
