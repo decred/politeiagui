@@ -1,6 +1,7 @@
 {
   "extends": ["react-app", "react-app/jest", "prettier"],
   "rules": {
-    "testing-library/no-dom-import": "off"
+    "testing-library/no-dom-import": "off",
+    "eqeqeq": 0
   }
 }

@@ -28,11 +28,11 @@ describe("Given the recordsInventorySlice", () => {
           },
         }),
     });
-    fetchRecordsInventorySpy = jest.spyOn(client, "fetchRecordsInventory")
+    fetchRecordsInventorySpy = jest.spyOn(client, "fetchRecordsInventory");
   });
   afterEach(() => {
     fetchRecordsInventorySpy.mockRestore();
-  })
+  });
   describe("when empty parameters", () => {
     it("should return the initial state", () => {
       expect(reducer(undefined, {})).toEqual(initialState);
@@ -47,19 +47,23 @@ describe("Given the recordsInventorySlice", () => {
       };
 
       // spy on console error
-      const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation();
+      const consoleErrorMock = jest
+        .spyOn(console, "error")
+        .mockImplementation();
       // spy on the method used to fetch
 
       await store.dispatch(fetchRecordsInventory(badParams));
-      expect(consoleErrorMock).toBeCalledWith(Error("recordsState is required"));
+      expect(consoleErrorMock).toBeCalledWith(
+        Error("recordsState is required")
+      );
       expect(fetchRecordsInventorySpy).not.toBeCalled();
       const state = store.getState();
       expect(state.vetted.public.tokens).toEqual([]);
       expect(state.vetted.public.lastPage).toEqual(0);
       expect(state.vetted.public.status).toEqual("idle");
       consoleErrorMock.mockRestore();
-    })
-  })
+    });
+  });
   describe("when fetchRecordsInventory dispatches", () => {
     it("updates the status to loading", () => {
       // do now await for store.dispatch since we want to test
@@ -77,8 +81,8 @@ describe("Given the recordsInventorySlice", () => {
       expect(state.vetted.public.tokens).toEqual([]);
       expect(state.vetted.public.lastPage).toEqual(0);
       expect(state.vetted.public.status).toEqual("loading");
-    })
-  })
+    });
+  });
   describe("when fetchRecordsInventory succeeds", () => {
     it("updates tokens, last page and status (succeeded/isDone for tokens.length < 20)", async () => {
       // spy on the method used to fetch
@@ -104,8 +108,11 @@ describe("Given the recordsInventorySlice", () => {
     it("updates tokens, last page and status (succeeded/hasMore for tokens.length == 20)", async () => {
       // spy on the method used to fetch
       // mock resolved value
-      const dummyToken = "testToken"
-      const resValue = { vetted: { public: Array(20).fill(dummyToken) }, unvetted: {} };
+      const dummyToken = "testToken";
+      const resValue = {
+        vetted: { public: Array(20).fill(dummyToken) },
+        unvetted: {},
+      };
       fetchRecordsInventorySpy.mockResolvedValueOnce(resValue);
 
       await store.dispatch(fetchRecordsInventory(params));
@@ -125,7 +132,7 @@ describe("Given the recordsInventorySlice", () => {
   });
   describe("when fetchRecordsInventory fails", () => {
     it("dispatches failure and update the error", async () => {
-      const error = new Error('FAIL!');
+      const error = new Error("FAIL!");
       const objAfterTransformation = {
         state: params.recordsState,
         status: params.status,
@@ -138,7 +145,7 @@ describe("Given the recordsInventorySlice", () => {
       expect(state.vetted.public.tokens).toEqual([]);
       expect(state.vetted.public.lastPage).toEqual(0);
       expect(state.status).toEqual("failed");
-      expect(state.error).toEqual('FAIL!');
+      expect(state.error).toEqual("FAIL!");
     });
   });
 });

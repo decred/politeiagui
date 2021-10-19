@@ -1,12 +1,12 @@
 import { validRecordStatuses, validRecordStates } from "./utils";
 
 export function validateRecordState(recordState, isRequired = true) {
-  if (isRequired && !recordState) {
+  if (isRequired && (recordState === null || recordState === undefined)) {
     const error = Error("recordsState is required");
     console.error(error);
     throw error;
   }
-  if (!validRecordStates.find((st) => recordState === st)) {
+  if (!validRecordStates.find((st) => recordState == st)) {
     const error = Error(
       `State '${recordState}' invalid. Valid states are: ${validRecordStates}`
     );
@@ -17,12 +17,12 @@ export function validateRecordState(recordState, isRequired = true) {
 }
 
 export function validateRecordStatus(recordStatus, isRequired = true) {
-  if (isRequired && !recordStatus) {
+  if (isRequired && (recordStatus === null || recordStatus === undefined)) {
     const error = Error("status is required");
     console.error(error);
     throw error;
   }
-  if (!validRecordStatuses.find((st) => recordStatus === st)) {
+  if (!validRecordStatuses.find((st) => recordStatus == st)) {
     const error = Error(
       `Status '${recordStatus}' invalid. Valid statuses are: ${validRecordStatuses}`
     );
