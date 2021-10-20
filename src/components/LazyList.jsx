@@ -20,7 +20,8 @@ const LazyList = ({
   emptyListComponent,
   renderItem,
   pageStart,
-  minimumInitialLoading = 1000
+  minimumInitialLoading = 1250
+  // 1250 allows the animation to complete one full cycle.
 }) => {
   const isEmpty = !items.length;
   const [initialLoading, setInitialLoading] = useState(true);
