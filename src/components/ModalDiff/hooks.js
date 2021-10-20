@@ -48,7 +48,7 @@ export function useCompareVersionSelector(initVersion, token) {
     return parseProposal(proposal);
   }, [compareVersion, fetchedProposals]);
   const onFetchProposalDetailsWithoutState = useAction(
-      act.onFetchProposalDetailsWithoutState
+    act.onFetchProposalDetailsWithoutState
   );
 
   const [state, send] = useFetchMachine({
@@ -69,18 +69,18 @@ export function useCompareVersionSelector(initVersion, token) {
           return send(START);
         }
         onFetchProposalDetailsWithoutState(token, version)
-            .then((proposal) => {
-              setFetchedProposals({
-                ...fetchedProposals,
-                [version]: proposal
-              });
-              setVersionsQueue(drop(versionsQueue));
-              if (setVersionsQueue.length) {
-                return send(START);
-              }
-              return send(RESOLVE);
-            })
-            .catch((e) => send(REJECT, e));
+          .then((proposal) => {
+            setFetchedProposals({
+              ...fetchedProposals,
+              [version]: proposal
+            });
+            setVersionsQueue(drop(versionsQueue));
+            if (setVersionsQueue.length) {
+              return send(START);
+            }
+            return send(RESOLVE);
+          })
+          .catch((e) => send(REJECT, e));
 
         return send(FETCH);
       },

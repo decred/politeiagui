@@ -25,11 +25,7 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
   } = useCompareVersionSelector(initVersion, token);
 
   const isDiffAvailable = useMemo(() => {
-    return (
-      !!baseProposal.details &&
-      !!compareProposal.details &&
-      !loading
-    );
+    return !!baseProposal.details && !!compareProposal.details && !loading;
   }, [baseProposal, compareProposal, loading]);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
