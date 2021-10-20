@@ -29,6 +29,7 @@ const LazyList = ({
       setInitialLoading(false);
     }, minimumInitialLoading);
   }
+  const placeholdersLoading = isLoading || initialLoading;
   return (
     <div data-testid="lazy-list">
       <InfiniteScroll
@@ -38,7 +39,7 @@ const LazyList = ({
         hasMore={hasMore}>
         {items.map(renderItem)}
       </InfiniteScroll>
-      {isLoading && minimumInitialLoading ? (
+      {placeholdersLoading ? (
         <div data-testid="loading-placeholders">{loadingPlaceholder}</div>
       ) : isEmpty ? (
         emptyListComponent
