@@ -18,21 +18,15 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
   const {
     baseVersion,
     compareVersion,
-    baseLoading,
-    compareLoading,
     changedVersion,
     baseProposal,
-    compareProposal
+    compareProposal,
+    loading
   } = useCompareVersionSelector(initVersion, token);
 
   const isDiffAvailable = useMemo(() => {
-    return (
-      !!baseProposal.details &&
-      !!compareProposal.details &&
-      !baseLoading &&
-      !compareLoading
-    );
-  }, [baseProposal, compareProposal, baseLoading, compareLoading]);
+    return !!baseProposal.details && !!compareProposal.details && !loading;
+  }, [baseProposal, compareProposal, loading]);
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   useEffect(() => {
@@ -54,8 +48,6 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
         onChange={changedVersion}
         base={baseVersion}
         compare={compareVersion}
-        baseLoading={baseLoading}
-        compareLoading={compareLoading}
       />
       {isDiffAvailable ? (
         <>

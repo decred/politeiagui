@@ -19,6 +19,10 @@
   flex-wrap: wrap;
 }
 
+.flexWrap {
+  flex-wrap: wrap;
+}
+
 .eventTooltip {
   color: var(--text-secondary-color) !important;
 }

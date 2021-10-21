@@ -112,7 +112,7 @@ export const Subtitle = ({ children, separatorSymbol = "•" }) => (
 
 export const JoinTitle = ({ children, className, separatorSymbol = "•" }) => (
   <Join
-    className={classNames(className, styles.subtitleWrapper)}
+    className={classNames(className, styles.flexWrap)}
     SeparatorComponent={() => (
       <span className="text-secondary-color margin-left-s margin-right-s">
         {separatorSymbol}
