@@ -25,11 +25,16 @@ const LazyList = ({
   const isEmpty = !items.length;
   const [initialLoading, setInitialLoading] = useState(true);
   useEffect(() => {
+    let timer;
     if (minimumInitialLoading > 0 && initialLoading) {
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setInitialLoading(false);
       }, minimumInitialLoading);
     }
+    return () => {
+      // clearTimeout when the component is unmounted.
+      clearTimeout(timer);
+    };
   }, [minimumInitialLoading, initialLoading]);
   const placeholdersLoading = isLoading || initialLoading;
   return (
