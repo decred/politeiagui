@@ -54,9 +54,9 @@ const ProposalDetail = ({ Main, match, history }) => {
   const threadParentCommentID = get("params.commentid", match);
   const hasScrollToQuery = !!getQueryStringValue("scrollToComments");
 
-  const {
-    policyTicketVote: { summariespagesize: proposalPageSize }
-  } = usePolicy();
+  const { policyTicketVote } = usePolicy();
+  const proposalPageSize = policyTicketVote?.summariespagesize;
+
   const {
     proposal,
     loading,
@@ -258,7 +258,7 @@ const ProposalDetail = ({ Main, match, history }) => {
   return (
     <>
       <Main className={styles.customMain} fillScreen>
-        <GoBackLink />
+        <GoBackLink to={"/"} />
         {proposal && <SetPageTitle title={proposal.name} />}
         <UnvettedActionsProvider>
           <PublicActionsProvider>
