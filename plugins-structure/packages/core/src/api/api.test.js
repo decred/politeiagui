@@ -8,8 +8,8 @@ const mockApiReturn = {
   pubkey: "fake_pubkey",
   testnet: true,
   mode: "piwww",
-  activeusersession: true
-}
+  activeusersession: true,
+};
 
 const mockCsrfToken = "fake_csrf";
 
@@ -47,19 +47,22 @@ describe("Given the apiSlice", () => {
       expect(fetchApiSpy).toBeCalled();
       const state = store.getState();
       expect(state.status).toEqual("loading");
-    })
-  })
+    });
+  });
   describe("when fetchApi succeeds", () => {
     it("updates api state and csrf token", async () => {
-      fetchApiSpy.mockResolvedValueOnce({ api: mockApiReturn, csrf: mockCsrfToken });
+      fetchApiSpy.mockResolvedValueOnce({
+        api: mockApiReturn,
+        csrf: mockCsrfToken,
+      });
       await store.dispatch(fetchApi());
       expect(fetchApiSpy).toBeCalled();
       const state = store.getState();
       expect(state.api).toEqual(mockApiReturn);
       expect(state.csrf).toEqual(mockCsrfToken);
       expect(state.status).toEqual("succeeded");
-    })
-  })
+    });
+  });
   describe("when fetchApi fails", () => {
     it("dispatches failure and update the error", async () => {
       const error = new Error("FAIL!");
@@ -71,6 +74,6 @@ describe("Given the apiSlice", () => {
       expect(state.csrf).toEqual("");
       expect(state.status).toEqual("failed");
       expect(state.error).toEqual("FAIL!");
-    })
-  })
+    });
+  });
 });
