@@ -4,7 +4,7 @@ import {
   getHumanReadableRecordState,
   getRecordStateCode,
   validRecordStatuses,
-  validRecordStates
+  validRecordStates,
 } from "./utils";
 
 const invalidStates = [3, -1, 0, "some_string"];
@@ -14,7 +14,10 @@ describe("Given utils", () => {
   describe("Given getHumanReadableRecordStatus", () => {
     it("should throw when invalid status", () => {
       for (const item of invalidStatus) {
-        expect(() => getHumanReadableRecordStatus(item)).toThrowWithMessage(TypeError, `Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`)
+        expect(() => getHumanReadableRecordStatus(item)).toThrowWithMessage(
+          TypeError,
+          `Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`
+        );
       }
     });
     it("should return the string equivalent of a status", () => {
@@ -35,7 +38,10 @@ describe("Given utils", () => {
   describe("Given getRecordStatusCode", () => {
     it("should throw when invalid status", () => {
       for (const item of invalidStatus) {
-        expect(() => getRecordStatusCode(item)).toThrowWithMessage(TypeError, `Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`)
+        expect(() => getRecordStatusCode(item)).toThrowWithMessage(
+          TypeError,
+          `Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`
+        );
       }
     });
     it("should return the code equivalent of a status", () => {
@@ -56,7 +62,10 @@ describe("Given utils", () => {
   describe("Given getHumanReadableRecordState", () => {
     it("should throw when invalid state", () => {
       for (const item of invalidStates) {
-        expect(() => getHumanReadableRecordState(item)).toThrowWithMessage(TypeError, `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`)
+        expect(() => getHumanReadableRecordState(item)).toThrowWithMessage(
+          TypeError,
+          `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`
+        );
       }
     });
     it("should return the string equivalent of a state", () => {
@@ -71,7 +80,10 @@ describe("Given utils", () => {
   describe("Given getRecordStateCode", () => {
     it("should throw when invalid state", () => {
       for (const item of invalidStates) {
-        expect(() => getRecordStateCode(item)).toThrowWithMessage(TypeError, `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`)
+        expect(() => getRecordStateCode(item)).toThrowWithMessage(
+          TypeError,
+          `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`
+        );
       }
     });
     it("should return the code equivalent of a state", () => {

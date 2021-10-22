@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
 // Possible error types: string | null
-const initialState = {
+export const initialState = {
   api: {},
   csrf: "",
   status: "idle",

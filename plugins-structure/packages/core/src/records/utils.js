@@ -27,11 +27,15 @@ export function getHumanReadableRecordStatus(status) {
     }
   }
   if (isNaN(status)) {
-    throw TypeError(`Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`);
+    throw TypeError(
+      `Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`
+    );
   }
   if (status < RECORD_STATUS_UNREVIEWED || status > RECORD_STATUS_ARCHIVED) {
-    throw TypeError(`Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`);
- } else return statusToString[status];
+    throw TypeError(
+      `Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`
+    );
+  } else return statusToString[status];
 }
 
 export function getRecordStatusCode(statusString) {
@@ -55,12 +59,15 @@ export function getHumanReadableRecordState(state) {
     }
   }
   if (isNaN(state)) {
-    throw TypeError(`Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`);
+    throw TypeError(
+      `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`
+    );
   }
   if (state < RECORD_STATE_UNVETTED || state > RECORD_STATE_VETTED) {
-    throw TypeError(`Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`);
-  }
-  else return stateToString[state];
+    throw TypeError(
+      `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`
+    );
+  } else return stateToString[state];
 }
 
 export function getRecordStateCode(stateString) {
