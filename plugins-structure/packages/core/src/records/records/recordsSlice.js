@@ -8,10 +8,11 @@ import {
 } from "../utils";
 import { validateRecordStateAndStatus } from "../validation";
 import take from "lodash/fp/take";
+import isArray from "lodash/fp/isArray";
 import without from "lodash/fp/without";
 
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
-const initialState = {
+export const initialState = {
   records: {},
   /**
    * recordsFetchQueue:
@@ -35,6 +36,9 @@ export const fetchRecords = createAsyncThunk(
     } catch (e) {
       return rejectWithValue(e.message);
     }
+  },
+  {
+    condition: (records) => isArray(records),
   }
 );
 
