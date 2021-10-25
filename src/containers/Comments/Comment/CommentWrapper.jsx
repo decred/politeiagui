@@ -11,15 +11,13 @@ import {
   PROPOSAL_COMMENT_DOWNVOTE
 } from "src/constants";
 
-const ContextLink = React.memo(({ parentid, recordToken }) => {
-  return (
-    <Link
-      className={styles.contextLink}
-      to={`/record/${recordToken}/comments/${parentid}`}>
-      see in context
-    </Link>
-  );
-});
+const ContextLink = React.memo(({ parentid, recordToken }) => (
+  <Link
+    className={styles.contextLink}
+    to={`/record/${recordToken}/comments/${parentid}`}>
+    see in context
+  </Link>
+));
 
 const Replies = React.memo(({ children }) => (
   <div className={styles.childrenContainer}>{children}</div>
