@@ -80,9 +80,8 @@ export function useProposal(token, proposalPageSize, threadParentID) {
     sel.isApiRequestingBatchProposalSummary
   );
   const proposalSummary = proposalSummaries[tokenShort];
-  const billingStatusChangeMetadata = useSelector(
-    billingStatusChangeMetadataSelector
-  );
+  const billingStatusChangeMetadata =
+    useSelector(billingStatusChangeMetadataSelector) || {};
   const loadingBillingStatusChanges = useSelector(
     sel.isApiRequestingBillingStatusChanges
   );
@@ -153,8 +152,7 @@ export function useProposal(token, proposalPageSize, threadParentID) {
   });
 
   // Fetch billing status change user name.
-  const { publickey: billingStatusAdminPubKey } =
-    billingStatusChangeMetadata || {};
+  const { publickey: billingStatusAdminPubKey } = billingStatusChangeMetadata;
   const { username: billingStatusChangeUsername } = useUserByPublicKey({
     userPubKey: billingStatusAdminPubKey,
     fetch: isClosed
@@ -282,9 +280,7 @@ export function useProposal(token, proposalPageSize, threadParentID) {
     billingStatusChangeUsername,
     error: state.error,
     loading:
-      state.status === "idle" ||
-      state.status === "loading" ||
-      isMissingBillingStatusChangeMetadata,
+      state.status !== "success" || !!isMissingBillingStatusChangeMetadata,
     threadParentID,
     isCurrentUserProposalAuthor,
     commentSectionIds,

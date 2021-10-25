@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useEffect, useState } from "react";
 import { Card, Message, P, classNames } from "pi-ui";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
@@ -93,8 +93,13 @@ const ProposalDetail = ({ Main, match, history }) => {
   const paywallMissing = paywallEnabled && !isPaid;
   const [, identityError] = useIdentity();
 
+  const [isWaitingMount, setIsWaitingMount] = useState(true);
+  const hasLoadedDetails = proposal && !isWaitingMount && !loading;
+
   const shouldScrollToComments =
-    (hasScrollToQuery || isSingleThread) && proposal && commentsFinishedLoading;
+    (hasScrollToQuery || isSingleThread) &&
+    hasLoadedDetails &&
+    commentsFinishedLoading;
   useScrollTo("commentArea", shouldScrollToComments);
 
   const onRedirectToSignup = useCallback(
@@ -255,6 +260,13 @@ const ProposalDetail = ({ Main, match, history }) => {
     ]
   );
 
+  useEffect(() => {
+    const mountTimeout = setTimeout(() => {
+      setIsWaitingMount(false);
+    }, 500);
+    return () => clearTimeout(mountTimeout);
+  }, []);
+
   return (
     <>
       <Main className={styles.customMain} fillScreen>
@@ -264,19 +276,22 @@ const ProposalDetail = ({ Main, match, history }) => {
           <PublicActionsProvider>
             {error ? (
               <Message kind="error">{error.toString()}</Message>
-            ) : loading || !proposal ? (
+            ) : !hasLoadedDetails ? (
               <ProposalLoader extended />
             ) : (
-              <Proposal
-                proposal={proposal}
-                billingStatusChangeUsername={billingStatusChangeUsername}
-                extended
-                collapseBodyContent={!!threadParentID}
-              />
+              <>
+                <Proposal
+                  proposal={proposal}
+                  billingStatusChangeUsername={billingStatusChangeUsername}
+                  extended
+                  collapseBodyContent={!!threadParentID}
+                />
+                {!isCensoredProposal(proposal) &&
+                  !commentsLoading &&
+                  commentsFinishedLoading &&
+                  proposalComments}
+              </>
             )}
-            {!isCensoredProposal(proposal) &&
-              !commentsLoading &&
-              proposalComments}
           </PublicActionsProvider>
         </UnvettedActionsProvider>
       </Main>
