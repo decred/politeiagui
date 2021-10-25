@@ -270,7 +270,13 @@ const ProposalDetail = ({ Main, match, history }) => {
   return (
     <>
       <Main className={styles.customMain} fillScreen>
-        <GoBackLink defaultLink={"/"} />
+        <GoBackLink
+          hierarchy={[
+            "/",
+            "/record/:token",
+            "/record/:token/comments/:commentid"
+          ]}
+        />
         {proposal && <SetPageTitle title={proposal.name} />}
         <UnvettedActionsProvider>
           <PublicActionsProvider>
