@@ -6,13 +6,13 @@ import styles from "./GoBackLink.module.css";
 
 const backArrow = <>&#8592;</>;
 
-const GoBackLink = ({ to: targetLink, label }) => {
+const GoBackLink = ({ defaultLink, label }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const { pastLocations, history } = useRouter();
   const previousLocation = pastLocations[1];
 
-  if (!previousLocation && !targetLink) return null;
+  if (!previousLocation && !defaultLink) return null;
   return (
     <div className={styles.returnLinkContainer}>
       <Link
@@ -21,7 +21,9 @@ const GoBackLink = ({ to: targetLink, label }) => {
           isDarkTheme && styles.darkReturnLink
         )}
         onClick={() =>
-          targetLink ? history.push(targetLink) : history.goBack()
+          !previousLocation && defaultLink
+            ? history.push(defaultLink)
+            : history.goBack()
         }>
         {backArrow} {label}
       </Link>
@@ -30,7 +32,7 @@ const GoBackLink = ({ to: targetLink, label }) => {
 };
 
 GoBackLink.propTypes = {
-  to: PropTypes.string,
+  defaultLink: PropTypes.string,
   label: PropTypes.string
 };
 

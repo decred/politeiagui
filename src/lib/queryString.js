@@ -7,7 +7,7 @@ export const setQueryStringWithoutPageReload = (qsValue) => {
     window.location.host +
     window.location.pathname +
     qsValue;
-  window.history.pushState({ path: newurl }, "", newurl);
+  window.history.pushState({ path: newurl, search: qsValue }, "", newurl);
 };
 
 export const getQueryStringValue = (

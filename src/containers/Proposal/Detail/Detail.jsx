@@ -270,7 +270,7 @@ const ProposalDetail = ({ Main, match, history }) => {
   return (
     <>
       <Main className={styles.customMain} fillScreen>
-        <GoBackLink to={"/"} />
+        <GoBackLink defaultLink={"/"} />
         {proposal && <SetPageTitle title={proposal.name} />}
         <UnvettedActionsProvider>
           <PublicActionsProvider>
