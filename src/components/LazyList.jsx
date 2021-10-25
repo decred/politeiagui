@@ -20,23 +20,23 @@ const LazyList = ({
   emptyListComponent,
   renderItem,
   pageStart,
-  minimumInitialLoading
+  minInitialLoading
 }) => {
   const isEmpty = !items.length;
   const [initialLoading, setInitialLoading] = useState(true);
   useEffect(() => {
     let timer;
-    if (minimumInitialLoading > 0 && initialLoading) {
+    if (minInitialLoading > 0 && initialLoading) {
       timer = setTimeout(() => {
         setInitialLoading(false);
-      }, minimumInitialLoading);
+      }, minInitialLoading);
     }
     return () => {
       // clearTimeout when the component is unmounted.
       clearTimeout(timer);
     };
-  }, [minimumInitialLoading, initialLoading]);
-  const placeholdersLoading = isLoading || initialLoading;
+  }, [minInitialLoading, initialLoading]);
+  const arePlaceholdersLoading = isLoading || initialLoading;
   return (
     <div data-testid="lazy-list">
       <InfiniteScroll
@@ -46,7 +46,7 @@ const LazyList = ({
         hasMore={hasMore}>
         {items.map(renderItem)}
       </InfiniteScroll>
-      {placeholdersLoading ? (
+      {arePlaceholdersLoading ? (
         <div data-testid="loading-placeholders">{loadingPlaceholder}</div>
       ) : isEmpty ? (
         emptyListComponent
@@ -64,7 +64,7 @@ LazyList.propTypes = {
   loadingPlaceholder: PropTypes.node,
   hasMore: PropTypes.bool,
   pageStart: PropTypes.number,
-  minimumInitialLoading: PropTypes.number
+  minInitialLoading: PropTypes.number
 };
 
 LazyList.defaultProps = {
@@ -72,7 +72,7 @@ LazyList.defaultProps = {
   emptyListComponent: <DefaultEmptyList />,
   loadingPlaceholder: <DefaultLoader />,
   pageStart: 0,
-  minimumInitialLoading: 1250
+  minInitialLoading: 1250
   // 1250 allows the animation to complete one full cycle.
 };
 
