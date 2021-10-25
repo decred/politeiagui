@@ -152,11 +152,8 @@ describe("Proposal details", () => {
       cy.visit(`/record/${shortToken}`);
       cy.wait("@details");
       cy.wait(1000);
-      // cy.findByTestId("wayt-login-button").click();
-      // cy.typeLoginModal(admin);
       cy.login(admin);
       cy.visit(`/record/${shortToken}`);
-      // cy.wait("@details");
       cy.findByTestId("proposal-body").should("exist");
       cy.get("#commentArea").should("exist");
     });
