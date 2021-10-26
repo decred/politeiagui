@@ -2,3 +2,7 @@
   height: 4.4rem;
   width: 20rem;
 }
+
+.status {
+  font-weight: var(--font-weight-semi-bold);
+}

@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from "react";
 import { Button, Icon, Modal, Text, useTheme, getThemeProperty } from "pi-ui";
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
 import FormWrapper from "src/components/FormWrapper";
+import { useCrash, useModalContext } from "src/hooks";
+import { isIdentityError } from "src/utils";
 
 const ModalConfirm = ({
   show,
@@ -13,6 +15,8 @@ const ModalConfirm = ({
   successMessage,
   onCloseSuccess
 }) => {
+  const [, handleCloseModal] = useModalContext();
+  const crash = useCrash();
   const [success, setSuccess] = useState(false);
 
   const { theme } = useTheme();
@@ -34,8 +38,12 @@ const ModalConfirm = ({
       resetForm();
       setSuccess(true);
     } catch (e) {
-      setFieldError("global", e);
       setSubmitting(false);
+      setFieldError("global", e);
+      if (isIdentityError(e)) {
+        crash(e);
+        handleCloseModal();
+      }
     }
   };
   useEffect(

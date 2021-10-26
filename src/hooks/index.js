@@ -2,6 +2,7 @@
 export { default as useApprovedProposals } from "./api/useApprovedProposals";
 export { default as useExchangeRate } from "./api/useExchangeRate";
 export { default as useIdentity } from "./api/useIdentity";
+export { default as useLegacyVettedProposals } from "./api/useLegacyVettedProposals";
 export { default as useNavigation } from "./api/useNavigation";
 export { default as usePaywall } from "./api/usePaywall";
 export { default as usePolicy } from "./api/usePolicy";
@@ -35,3 +36,4 @@ export { default as useScrollToTop } from "./utils/useScrollToTop";
 export { default as useSessionStorage } from "./utils/useSessionStorage";
 export { default as useThrowError } from "./utils/useThrowError";
 export { default as useWhyDidYouUpdate } from "./utils/useWhyDidYouUpdate";
+export { default as useCrash } from "./utils/useCrash";

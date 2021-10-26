@@ -22,11 +22,13 @@ import {
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_BILLING_STATUS_CLOSED,
+  PROPOSAL_BILLING_STATUS_COMPLETED,
   PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW,
   PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
   PROPOSAL_SUMMARY_STATUS_VOTE_STARTED,
   PROPOSAL_SUMMARY_STATUS_CLOSED,
-  PROPOSAL_SUMMARY_STATUS_COMPLETED
+  PROPOSAL_SUMMARY_STATUS_COMPLETED,
+  PROPOSAL_SUMMARY_STATUS_ACTIVE
 } from "src/constants";
 import {
   shortRecordToken,
@@ -47,6 +49,7 @@ const mapStatusToName = {
 const DEFAULT_STATE = {
   byToken: {},
   summaries: {},
+  billingStatusChanges: {},
   allByVoteStatus: {
     [UNAUTHORIZED]: [],
     [AUTHORIZED]: [],
@@ -192,12 +195,32 @@ const updateMultiProposalSummary =
     return state;
   };
 
-const updateProposalSummary = (state, token, newStatus, reason) =>
+const updateProposalSummary = (state, token, newStatus) =>
   update(["summaries", shortRecordToken(token)], (proposalSummary) => ({
     ...proposalSummary,
-    status: newStatus,
-    statusreason: reason
+    status: newStatus
   }))(state);
+
+const updateMultiBillingStatusChanges = (billingstatuschanges) => (state) => {
+  for (const [token, statuschanges] of Object.entries(billingstatuschanges)) {
+    state = updateBillingStatusChanges(state, token, statuschanges);
+  }
+  return state;
+};
+
+const updateBillingStatusChanges = (state, token, billingstatuschanges) => {
+  const numbillingstatuschanges = billingstatuschanges?.length || 0;
+  const billingStatusChangeMetadata =
+    (numbillingstatuschanges > 0 &&
+      billingstatuschanges[numbillingstatuschanges - 1]) ||
+    {};
+  billingStatusChangeMetadata.numbillingstatuschanges = numbillingstatuschanges;
+
+  return set(
+    ["billingStatusChanges", shortRecordToken(token)],
+    billingStatusChangeMetadata
+  )(state);
+};
 
 const proposals = (state = DEFAULT_STATE, action) =>
   action.error
@@ -216,10 +239,7 @@ const proposals = (state = DEFAULT_STATE, action) =>
                 : (state) => state,
               update("byToken", (proposals) => ({
                 ...proposals,
-                ...parseReceivedProposalsMap(
-                  action.payload.proposals,
-                  proposals
-                )
+                ...parseReceivedProposalsMap(action.payload.proposals)
               }))
             )(state),
           [act.RECEIVE_BATCH_PROPOSAL_SUMMARY]: () => {
@@ -369,22 +389,35 @@ const proposals = (state = DEFAULT_STATE, action) =>
               action.payload.token,
               PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW
             ),
-          [act.RECEIVE_SET_BILLING_STATUS]: () =>
-            updateProposalSummary(
+          [act.RECEIVE_SET_BILLING_STATUS]: () => {
+            state = updateProposalSummary(
               state,
               action.payload.token,
               action.payload.billingStatus === PROPOSAL_BILLING_STATUS_CLOSED
                 ? PROPOSAL_SUMMARY_STATUS_CLOSED
-                : PROPOSAL_SUMMARY_STATUS_COMPLETED,
-              action.payload.reason
-            ),
+                : action.payload.billingStatus ===
+                  PROPOSAL_BILLING_STATUS_COMPLETED
+                ? PROPOSAL_SUMMARY_STATUS_COMPLETED
+                : PROPOSAL_SUMMARY_STATUS_ACTIVE
+            );
+            return update(
+              ["billingStatusChanges", shortRecordToken(action.payload.token)],
+              (billingStatusChangeMetadata) => ({
+                ...billingStatusChangeMetadata,
+                token: action.payload.token,
+                status: action.payload.billingStatus,
+                numbillingstatuschanges:
+                  (billingStatusChangeMetadata?.numbillingstatuschanges || 0) +
+                  1,
+                reason: action.payload.reason,
+                receipt: action.payload.receipt,
+                timestamp: action.payload.timestamp,
+                publickey: action.payload.publickey
+              })
+            )(state);
+          },
           [act.RECEIVE_BILLING_STATUS_CHANGES]: () =>
-            set(
-              [
-                "byToken",
-                shortRecordToken(action.payload.token),
-                "billingstatuschanges"
-              ],
+            updateMultiBillingStatusChanges(
               action.payload.billingstatuschanges
             )(state),
           [act.RECEIVE_NEW_COMMENT]: () => {

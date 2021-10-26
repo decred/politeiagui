@@ -4,6 +4,7 @@ import DownloadJSON from "src/components/DownloadJSON";
 import { useDownloadVoteTimestamps } from "./hooks";
 import { Spinner, Link } from "pi-ui";
 import { loadVotesTimestamps } from "src/lib/local_storage";
+import { usePolicy } from "src/hooks";
 
 const DownloadVotesTimestampsWrapper = ({ label, recordToken, votesCount }) => {
   const [start, setStart] = useState(false);
@@ -26,8 +27,13 @@ const DownloadVotesTimestampsWrapper = ({ label, recordToken, votesCount }) => {
 };
 
 const DownloadVotesTimestamps = ({ recordToken, votesCount }) => {
+  const {
+    policy: {
+      policyTicketVote: { timestampspagesize: timestampsPageSize }
+    }
+  } = usePolicy();
   const { timestamps, progress, loading, error, multiPage } =
-    useDownloadVoteTimestamps(recordToken, votesCount);
+    useDownloadVoteTimestamps(recordToken, votesCount, timestampsPageSize);
 
   return loading ? (
     <>

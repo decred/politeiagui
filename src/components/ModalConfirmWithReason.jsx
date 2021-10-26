@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as Yup from "yup";
 import {
   P,
   Button,
@@ -9,8 +10,9 @@ import {
   useTheme
 } from "pi-ui";
 import PropTypes from "prop-types";
+import { useCrash, useModalContext } from "src/hooks";
 import FormWrapper from "src/components/FormWrapper";
-import * as Yup from "yup";
+import { isIdentityError } from "src/utils";
 
 const ModalConfirmWithReason = ({
   show,
@@ -23,6 +25,8 @@ const ModalConfirmWithReason = ({
   successTitle,
   onCloseSuccess
 }) => {
+  const [, handleCloseModal] = useModalContext();
+  const crash = useCrash();
   const [success, setSuccess] = useState(false);
 
   const onSubmitReason = async (
@@ -36,6 +40,10 @@ const ModalConfirmWithReason = ({
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
+      if (isIdentityError(e)) {
+        crash(e);
+        handleCloseModal();
+      }
     }
   };
   useEffect(() => {
@@ -62,10 +70,10 @@ const ModalConfirmWithReason = ({
       onClose={success && onCloseSuccess ? onCloseSuccess : onClose}
       iconComponent={
         !success ? (
-          <Icon type={"info"} size={26} />
+          <Icon type="info" size={26} />
         ) : (
           <Icon
-            type={"checkmark"}
+            type="checkmark"
             size={26}
             iconColor={iconCheckmarkColor}
             backgroundColor={successIconBgColor}

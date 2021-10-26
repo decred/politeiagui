@@ -39,8 +39,10 @@ const ManageDccForm = ({ onUpdate, user }) => {
     proposalsowned = []
   } = user;
   const {
-    policy: { supporteddomains }
+    policy: { supporteddomains },
+    policyTicketVote: { summariespagesize: proposalPageSize }
   } = usePolicy();
+
   const contractorDomains = getContractorDomains(supporteddomains);
   const [updated, setUpdated] = useState(false);
 
@@ -58,7 +60,7 @@ const ManageDccForm = ({ onUpdate, user }) => {
     proposals,
     isLoading: loadingOwnedProposals,
     error: approvedProposalsError
-  } = useApprovedProposals();
+  } = useApprovedProposals(proposalPageSize);
   const { proposalsOptions, initialOwnedProposals } =
     getInitialAndOptionsProposals(proposals, proposalsowned);
 

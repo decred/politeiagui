@@ -108,7 +108,7 @@ describe("Proposal Edit", () => {
       }) => {
         cy.approveProposal(censorshiprecord);
         cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        cy.wait(1000);
+        cy.wait(3000);
         cy.findByTestId(/record-edit-button/i).click();
         cy.findByRole("button", { name: /submit/i }).should("be.disabled");
       }

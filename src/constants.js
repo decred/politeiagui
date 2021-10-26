@@ -58,6 +58,7 @@ export const PROPOSAL_TYPE_REGULAR = 1;
 export const PROPOSAL_TYPE_RFP = 2;
 export const PROPOSAL_TYPE_RFP_SUBMISSION = 3;
 
+export const PROPOSAL_BILLING_STATUS_ACTIVE = 1;
 export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
 export const PROPOSAL_BILLING_STATUS_COMPLETED = 3;
 
@@ -98,9 +99,6 @@ export const PROPOSAL_APPROVED = 8;
 
 export const PROPOSAL_COMMENT_UPVOTE = 1;
 export const PROPOSAL_COMMENT_DOWNVOTE = -1;
-
-export const PROPOSAL_PAGE_SIZE = 5;
-export const INVENTORY_PAGE_SIZE = 20;
 
 // Proposals presentational statuses returned by the 'voteinv' &
 // 'proposalinv' endpoints from the API.
@@ -153,6 +151,10 @@ export const NOTIFICATION_EMAIL_ADMIN_PROPOSAL_NEW = 1 << 5;
 export const NOTIFICATION_EMAIL_ADMIN_PROPOSAL_VOTE_AUTHORIZED = 1 << 6;
 export const NOTIFICATION_EMAIL_COMMENT_ON_MY_PROPOSAL = 1 << 7;
 export const NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT = 1 << 8;
+
+// Identity
+export const STORAGE_PREFIX = "ed255191~";
+export const IDENTITY_ERROR = "IDENTITY_ERROR";
 // Import key errors
 export const PUBLIC_KEY_MISMATCH =
   "The provided public key doesn't match the key stored in the server.";

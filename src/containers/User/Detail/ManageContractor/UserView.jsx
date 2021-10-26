@@ -16,10 +16,13 @@ const UserDccInfo = ({
   supervisorsError
 }) => {
   const {
+    policyTicketVote: { summariespagesize: proposalPageSize }
+  } = usePolicy();
+  const {
     proposalsByToken,
     isLoading,
     error: proposalsError
-  } = useApprovedProposals(proposalsOwned);
+  } = useApprovedProposals(proposalsOwned, proposalPageSize);
 
   const ownedProposals = getOwnedProposals(proposalsOwned, proposalsByToken);
 

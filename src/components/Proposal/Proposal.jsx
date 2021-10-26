@@ -19,7 +19,11 @@ import {
   getLegacyProposalStatusTagProps,
   getStatusBarData
 } from "./helpers";
-import { PROPOSAL_TYPE_RFP, PROPOSAL_TYPE_RFP_SUBMISSION } from "src/constants";
+import {
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_RFP_SUBMISSION,
+  PROPOSAL_STATE_VETTED
+} from "src/constants";
 import {
   getMarkdownContent,
   getVotesReceived,
@@ -56,6 +60,8 @@ import useModalContext from "src/hooks/utils/useModalContext";
 import { useRouter } from "src/components/Router";
 import { shortRecordToken, isEmpty, getKeyByValue } from "src/helpers";
 import { usdFormatter } from "src/utils";
+import * as sel from "src/selectors";
+import { useSelector } from "../../redux";
 
 /**
  * replaceImgDigestWithPayload uses a regex to parse images
@@ -88,8 +94,14 @@ function replaceImgDigestWithPayload(text, files) {
 }
 
 const ProposalWrapper = (props) => {
-  const { voteSummary, proposalSummary, voteBlocksLeft, voteEndTimestamp } =
-    useProposalVote(getProposalToken(props.proposal));
+  const shortToken = shortRecordToken(getProposalToken(props.proposal));
+  const {
+    voteSummary,
+    proposalSummary,
+    voteBlocksLeft,
+    voteEndTimestamp,
+    billingStatusChangeMetadata
+  } = useProposalVote(shortToken);
   const { currentUser } = useLoaderContext();
   const { history } = useRouter();
   return (
@@ -98,6 +110,7 @@ const ProposalWrapper = (props) => {
         ...props,
         voteSummary,
         proposalSummary,
+        billingStatusChangeMetadata,
         voteBlocksLeft,
         voteEndTimestamp,
         currentUser,
@@ -113,6 +126,8 @@ const Proposal = React.memo(function Proposal({
   collapseBodyContent,
   voteSummary,
   proposalSummary,
+  billingStatusChangeMetadata,
+  billingStatusChangeUsername,
   voteEndTimestamp,
   voteBlocksLeft,
   currentUser,
@@ -141,9 +156,10 @@ const Proposal = React.memo(function Proposal({
     amount,
     domain,
     startDate,
-    endDate,
-    billingStatusChangeMetadata
+    endDate
   } = proposal;
+  const isAdmin = useSelector(sel.currentUserIsAdmin);
+  const isVetted = state === PROPOSAL_STATE_VETTED;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
   const isRfpSubmission = !!linkto || type === PROPOSAL_TYPE_RFP_SUBMISSION;
   const isRfpActive = isRfp && isActiveRfp(linkby);
@@ -179,7 +195,7 @@ const Proposal = React.memo(function Proposal({
     isCensored || isAbandoned
       ? statuschangeusername
       : isClosed
-      ? billingStatusChangeMetadata?.username
+      ? billingStatusChangeUsername
       : "";
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
@@ -190,7 +206,8 @@ const Proposal = React.memo(function Proposal({
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate = version > 1 && timestamp !== publishedat && !mobile;
   const showPublishedDate = publishedat && !mobile && !showEditedDate;
-  const showExtendedVersionPicker = extended && version > 1;
+  const showExtendedVersionPicker =
+    extended && version > 1 && !isCensored && (isVetted || isAuthor || isAdmin);
   const showVersionAsText = !extended && !mobile;
   const showVoteEnd =
     (isVoteActive || isVotingFinished) && !isAbandoned && !isCensored;
@@ -534,7 +551,7 @@ const Proposal = React.memo(function Proposal({
               <ProposalActions
                 proposal={proposal}
                 voteSummary={voteSummary}
-                proposalSummary={proposalSummary}
+                billingStatusChangeMetadata={billingStatusChangeMetadata}
                 rfpSubmissionsVoteSummaries={
                   isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }

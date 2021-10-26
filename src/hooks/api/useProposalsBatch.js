@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import * as sel from "src/selectors";
 import * as act from "src/actions";
 import { or } from "src/lib/fp";
@@ -23,11 +23,10 @@ import keys from "lodash/fp/keys";
 import difference from "lodash/fp/difference";
 import assign from "lodash/fp/assign";
 import {
-  INVENTORY_PAGE_SIZE,
-  PROPOSAL_PAGE_SIZE,
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_STATE_VETTED,
-  PROPOSAL_STATUS_UNREVIEWED
+  PROPOSAL_STATUS_UNREVIEWED,
+  APPROVED
 } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import {
@@ -56,10 +55,6 @@ const getUnfetchedTokens = (proposals, tokens) =>
   difference(tokens.map((token) => shortRecordToken(token)))(
     keys(proposals).map((token) => shortRecordToken(token))
   );
-
-const getCurrentPage = (tokens) => {
-  return tokens ? Math.floor(+tokens.length / INVENTORY_PAGE_SIZE) : 0;
-};
 
 const cacheVoteStatus = {};
 
@@ -93,12 +88,14 @@ export default function useProposalsBatch({
   unvetted = false,
   proposalStatus,
   statuses,
-  proposalPageSize = PROPOSAL_PAGE_SIZE
+  proposalPageSize,
+  inventoryPageSize
 }) {
   const [remainingTokens, setRemainingTokens] = useState([]);
   const [voteStatuses, setStatuses] = useState(statuses);
   const [initializedInventory, setInitializedInventory] = useState(false);
   const isByRecordStatus = isUndefined(voteStatuses);
+  const isAdmin = useSelector(sel.currentUserIsAdmin);
   const proposals = useSelector(sel.proposalsByToken);
   const recordState = unvetted
     ? PROPOSAL_STATE_UNVETTED
@@ -114,19 +111,25 @@ export default function useProposalsBatch({
   const voteSummaries = useSelector(sel.voteSummariesByToken);
   updateCacheVoteStatusMap(voteSummaries);
   const proposalSummaries = useSelector(sel.proposalSummariesByToken);
+  const billingStatusChangesByToken = useSelector(
+    sel.billingStatusChangesByToken
+  );
   const allByStatus = useSelector(
     isByRecordStatus ? sel.allByRecordStatus : sel.allByVoteStatus
   );
 
+  const status = useMemo(
+    () => getProposalStatusLabel(currentStatus, isByRecordStatus),
+    [currentStatus, isByRecordStatus]
+  );
+  const isStatusApproved = status === APPROVED;
   const tokens = useMemo(
-    () =>
-      allByStatus[getProposalStatusLabel(currentStatus, isByRecordStatus)] ||
-      [],
-    [allByStatus, isByRecordStatus, currentStatus]
+    () => allByStatus[status] || [],
+    [allByStatus, status]
   );
   const page = useMemo(() => {
-    return getCurrentPage(tokens);
-  }, [tokens]);
+    return tokens ? Math.floor(+tokens.length / inventoryPageSize) : 0;
+  }, [tokens, inventoryPageSize]);
   const errorSelector = useMemo(
     () => or(sel.apiProposalsBatchError, sel.apiPropsVoteSummaryError),
     []
@@ -134,6 +137,9 @@ export default function useProposalsBatch({
   const error = useSelector(errorSelector);
   const onFetchProposalsBatch = useAction(act.onFetchProposalsBatch);
   const onFetchTokenInventory = useAction(act.onFetchTokenInventory);
+  const onFetchBillingStatusChanges = useAction(
+    act.onFetchBillingStatusChanges
+  );
   const hasRemainingTokens = !isEmpty(remainingTokens);
 
   const scanNextStatusTokens = (index, oldTokens) => {
@@ -147,8 +153,11 @@ export default function useProposalsBatch({
     if (tokens.length < proposalPageSize && index < currentStatuses.length) {
       return scanNextStatusTokens(index + 1, tokens);
     }
+
     return {
-      index,
+      // If no tokens of the new status added return old index as the returned
+      // tokens correspond to the old status.
+      index: newTokens?.length ? index : index - 1,
       tokens
     };
   };
@@ -157,6 +166,7 @@ export default function useProposalsBatch({
     actions: {
       initial: () => send(START),
       start: () => {
+        if (!proposalPageSize) return send(RESOLVE);
         if (remainingTokens.length > proposalPageSize) return send(VERIFY);
         // If remaining tokens length is smaller than proposal page size.
         // Find more tokens from inventory or scan from the next status
@@ -165,7 +175,7 @@ export default function useProposalsBatch({
         // there are no tokens to be fetched from the next page
         const scanNextStatus =
           initializedInventory &&
-          (!(tokens.length % INVENTORY_PAGE_SIZE === 0 && tokens.length > 0) ||
+          (!(tokens.length % inventoryPageSize === 0 && tokens.length > 0) ||
             remainingTokens.length === proposalPageSize);
         if (scanNextStatus) {
           const { index, tokens } = scanNextStatusTokens(
@@ -240,12 +250,25 @@ export default function useProposalsBatch({
           remainingTokens,
           proposalPageSize
         );
-        onFetchProposalsBatch({
-          tokens: tokensToFetch,
-          fetchVoteSummary,
-          fetchProposalSummary
-        })
-          .then(([fetchedProposals]) => {
+        // If fetch tokens of approved proposals and current user is admin
+        // fetch the billing status changes metadata if doesn't exist in
+        // the redux store.
+        let missingBillingStatusChangesTokens;
+        if (isStatusApproved && isAdmin) {
+          missingBillingStatusChangesTokens = tokensToFetch.filter((token) =>
+            isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
+          );
+        }
+        Promise.all([
+          missingBillingStatusChangesTokens?.length &&
+            onFetchBillingStatusChanges(missingBillingStatusChangesTokens),
+          onFetchProposalsBatch({
+            tokens: tokensToFetch,
+            fetchVoteSummary,
+            fetchProposalSummary
+          })
+        ])
+          .then(([, [fetchedProposals]]) => {
             if (isEmpty(fetchedProposals)) {
               setRemainingTokens(next);
               return send(RESOLVE);
@@ -332,7 +355,7 @@ export default function useProposalsBatch({
     !getUnfetchedTokens(proposals, tokens).length;
 
   const isAnotherTokensScanningRequired =
-    tokens && tokens.length && tokens.length % INVENTORY_PAGE_SIZE === 0;
+    tokens && tokens.length && tokens.length % inventoryPageSize === 0;
 
   const onFetchMoreProposals = useCallback(() => {
     if (remainingTokens.length < proposalPageSize) return send(START);
@@ -342,6 +365,13 @@ export default function useProposalsBatch({
 
   const anyError = error || state.error;
   useThrowError(anyError);
+
+  // Recall fetch machine when proposalPageSize is changed. Since it is
+  // not hard code and be fetched from policy and will be undefined when
+  // the policy is not fetched yet.
+  useEffect(() => {
+    send(START);
+  }, [proposalPageSize, send]);
 
   return {
     proposals: getRfpLinkedProposals(

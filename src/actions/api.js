@@ -632,6 +632,7 @@ export const onFetchTokenInventory =
         };
         !isVoteStatus && dispatch(act.RECEIVE_RECORDS_INVENTORY(byRecords));
         isVoteStatus && dispatch(act.RECEIVE_VOTES_INVENTORY(byVotes));
+
         return { records: byRecords, votes: byVotes };
       });
     } catch (error) {
@@ -1282,9 +1283,16 @@ export const onSetBillingStatus = (token, billingStatus, reason) =>
     dispatch(act.REQUEST_SET_BILLING_STATUS({ token, billingStatus, reason }));
     return api
       .proposalSetBillingStatus(userid, csrf, token, billingStatus, reason)
-      .then(() => {
+      .then(({ receipt, timestamp, publickey }) => {
         dispatch(
-          act.RECEIVE_SET_BILLING_STATUS({ token, billingStatus, reason })
+          act.RECEIVE_SET_BILLING_STATUS({
+            receipt,
+            timestamp,
+            token,
+            billingStatus,
+            reason,
+            publickey
+          })
         );
       })
       .catch((error) => {
@@ -1293,15 +1301,14 @@ export const onSetBillingStatus = (token, billingStatus, reason) =>
       });
   });
 
-export const onFetchBillingStatusChanges = (token) =>
+export const onFetchBillingStatusChanges = (tokens) =>
   withCsrf((dispatch, _, csrf) => {
-    dispatch(act.REQUEST_BILLING_STATUS_CHANGES({ token }));
+    dispatch(act.REQUEST_BILLING_STATUS_CHANGES({ tokens }));
     return api
-      .billingStatusChanges(csrf, token)
+      .billingStatusChanges(csrf, tokens)
       .then(({ billingstatuschanges }) =>
         dispatch(
           act.RECEIVE_BILLING_STATUS_CHANGES({
-            token,
             billingstatuschanges,
             success: true
           })
@@ -1411,7 +1418,7 @@ export const onUserProposalCredits = () => (dispatch, getState) => {
 };
 
 export const onFetchUserProposals = (userid) =>
-  withCsrf(async (dispatch, getState, csrf) => {
+  withCsrf(async (dispatch, _, csrf) => {
     dispatch(act.REQUEST_USER_INVENTORY({ userid }));
     try {
       const response = await api.userProposals(csrf, userid);

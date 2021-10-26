@@ -2,9 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import useProposalsBatch from "./useProposalsBatch";
 import { difference, keys } from "lodash";
 
-const PAGE_SIZE = 20;
-
-export default function useApprovedProposals(initialTokens) {
+export default function useApprovedProposals(proposalPageSize, initialTokens) {
   const [remainingTokens, setRemainingTokens] = useState(initialTokens);
   const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
     remainingTokens,
@@ -22,11 +20,11 @@ export default function useApprovedProposals(initialTokens) {
         proposalsTokens.approved &&
         difference(proposalsTokens.approved, keys(proposals)).splice(
           0,
-          PAGE_SIZE
+          proposalPageSize
         );
       setRemainingTokens(tokens);
     }
-  }, [proposals, proposalsTokens.approved, isLoading]);
+  }, [proposals, proposalsTokens.approved, isLoading, proposalPageSize]);
 
   const proposalsNotRFP = useMemo(
     () => proposals && Object.values(proposals).filter((p) => !p.linkby),

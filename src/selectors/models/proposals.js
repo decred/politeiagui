@@ -7,6 +7,10 @@ import { createDeepEqualSelector } from "../helpers";
 
 export const proposalsByToken = get(["proposals", "byToken"]);
 export const proposalSummariesByToken = get(["proposals", "summaries"]);
+export const billingStatusChangesByToken = get([
+  "proposals",
+  "billingStatusChanges"
+]);
 export const legacyProposals = get(["proposals", "legacyProposals"]);
 export const allProposalsByUserID = get(["proposals", "allProposalsByUserId"]);
 export const allTokensByUserID = get(["proposals", "allTokensByUserId"]);
@@ -42,6 +46,14 @@ export const makeGetProposalSummaryByToken = (token) =>
       (s) => shortRecordToken(s) === shortRecordToken(token)
     );
     return summaries[tokenFromSummary];
+  });
+
+export const makeGetBillingStatusChangeMetadata = (token) =>
+  createSelector(billingStatusChangesByToken, (billingStatusChanges) => {
+    const t = keys(billingStatusChanges).find(
+      (s) => shortRecordToken(s) === shortRecordToken(token)
+    );
+    return billingStatusChanges[t];
   });
 
 export const makeGetUserProposalsTokens = (userId) =>

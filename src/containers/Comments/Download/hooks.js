@@ -35,8 +35,7 @@ export function useDownloadComments(token) {
   return { comments, onFetchCommentsTimestamps };
 }
 
-const TIMESTAMPS_PAGE_SIZE = 100;
-export function useDownloadCommentsTimestamps(recordToken) {
+export function useDownloadCommentsTimestamps(recordToken, timestampsPageSize) {
   const [timestamps, setTimestamps] = useState(null);
   const [remaining, setRemaining] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -50,7 +49,7 @@ export function useDownloadCommentsTimestamps(recordToken) {
     [allCommentsBySection]
   );
   const commentsLength = comments?.length || 0;
-  const multiPage = commentsLength > TIMESTAMPS_PAGE_SIZE;
+  const multiPage = commentsLength > timestampsPageSize;
   const onFetchCommentsTimestamps = useAction(act.onFetchCommentsTimestamps);
 
   useEffect(() => {
@@ -59,8 +58,8 @@ export function useDownloadCommentsTimestamps(recordToken) {
   }, [comments]);
 
   const getCommentIdsForPagination = (commentIds) => [
-    take(TIMESTAMPS_PAGE_SIZE)(commentIds),
-    takeRight(commentIds.length - TIMESTAMPS_PAGE_SIZE)(commentIds)
+    take(timestampsPageSize)(commentIds),
+    takeRight(commentIds.length - timestampsPageSize)(commentIds)
   ];
 
   const getProgressPercentage = useCallback(

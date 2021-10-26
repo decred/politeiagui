@@ -1,4 +1,5 @@
 import React, { useState, createContext } from "react";
+import IdentityErrorBoundary from "src/components/IdentityErrorBoundary";
 import isEmpty from "lodash/fp/isEmpty";
 
 export const modalContext = createContext({ component: () => null, props: {} });
@@ -38,10 +39,12 @@ const ModalProvider = ({ children }) => {
     ...currentModal.props
   };
   return (
-    <modalContext.Provider value={[handleOpenModal, handleCloseModal]}>
-      {children}
-      <currentModal.component {...props} />
-    </modalContext.Provider>
+    <IdentityErrorBoundary>
+      <modalContext.Provider value={[handleOpenModal, handleCloseModal]}>
+        {children}
+        <currentModal.component {...props} />
+      </modalContext.Provider>
+    </IdentityErrorBoundary>
   );
 };
 
