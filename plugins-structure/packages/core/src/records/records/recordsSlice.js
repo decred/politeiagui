@@ -94,9 +94,21 @@ const recordsSlice = createSlice({
     // push values into an already initialzed recordsFetchQueue
     pushFetchQueue(state, action) {
       const { recordsState, status, records } = action.payload;
+      if (!isArray(records)) throw TypeError("records must be an array");
       const stringState = getHumanReadableRecordState(recordsState);
       const stringStatus = getHumanReadableRecordStatus(status);
-      state.recordsFetchQueue[stringState][stringStatus].push(...records);
+      if (
+        state.recordsFetchQueue[stringState] &&
+        state.recordsFetchQueue[stringState][stringStatus]
+      ) {
+        state.recordsFetchQueue[stringState][stringStatus].push(...records);
+      } else {
+        setQueue(state, {
+          recordsState: stringState,
+          status: stringStatus,
+          records,
+        });
+      }
     },
     // pop values from the recordsFetchQueue
     popFetchQueue(state, action) {
