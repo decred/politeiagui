@@ -31,7 +31,8 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_ARCHIVED,
   VOTE_METADATA_FILENAME,
-  USER_METADATA_PLUGIN
+  USER_METADATA_PLUGIN,
+  MONTHS_LABELS
 } from "./constants.js";
 
 export const digestPayload = (payload) =>
@@ -618,4 +619,9 @@ export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
     allTreeComments = uniq([...authorUpdateTree, ...children]);
   }
   return allTreeComments;
+};
+
+export const formatDateView = (value) => {
+  const dayView = ("0" + value.day).slice(-2);
+  return `${dayView} ${MONTHS_LABELS[value.month - 1]} ${value.year}`;
 };

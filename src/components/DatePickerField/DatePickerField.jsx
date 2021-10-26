@@ -5,6 +5,7 @@ import { FormikConsumer } from "formik";
 import styles from "./DatePickerField.module.css";
 import { Row } from "../layout";
 import { MONTHS_LABELS } from "src/constants";
+import { formatDateView } from "src/helpers";
 
 const DatePickerField = ({
   name,
@@ -47,20 +48,21 @@ const DatePickerField = ({
         };
 
         const formattedValue = () => {
+          console.log(value);
           // If range mode is on, format both values and return as string.
           if (isRange) {
             let firstFormattedValue = "";
             if (value[0]) {
-              firstFormattedValue = `${value[0].month}/${value[0].day}/${value[0].year} - `;
+              firstFormattedValue = `${formatDateView(value[0])} - `;
             }
             let secondFormattedValue;
             if (value[1]) {
-              secondFormattedValue = `${value[1].month}/${value[1].day}/${value[1].year}`;
+              secondFormattedValue = `${formatDateView(value[1])}`;
             }
             return `${firstFormattedValue}${secondFormattedValue}`;
           }
           // In single mode return the formatted picked date.
-          return `${value.month}/${value.day}/${value.year}`;
+          return formatDateView(value);
         };
 
         return (

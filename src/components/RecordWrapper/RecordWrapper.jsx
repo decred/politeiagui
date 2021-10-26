@@ -28,6 +28,7 @@ import CopyLink from "../CopyLink";
 import rfpTag from "src/assets/images/rfp-tag.svg";
 import useTimestamps from "src/hooks/api/useTimestamps";
 import { formatUnixTimestampToObj } from "src/utils";
+import { formatDateView } from "src/helpers";
 
 // TODO: remove legacy
 export const Author = ({ username, url, isLegacy }) =>
@@ -383,16 +384,12 @@ const MetadataValue = ({ value }) => (
 );
 
 export const Metadata = ({ amount, domain, startDate, endDate, isRFP }) => {
-  const {
-    day: startDay,
-    month: startMonth,
-    year: startYear
-  } = (startDate && formatUnixTimestampToObj(startDate)) || {};
-  const {
-    day: endDay,
-    month: endMonth,
-    year: endYear
-  } = (endDate && formatUnixTimestampToObj(endDate)) || {};
+  const startDateView = formatDateView(
+    (startDate && formatUnixTimestampToObj(startDate)) || {}
+  );
+  const endDateView = formatDateView(
+    (endDate && formatUnixTimestampToObj(endDate)) || {}
+  );
 
   const metadataAvailable = !!amount || !!domain || !!startDate || !!endDate;
 
@@ -411,11 +408,11 @@ export const Metadata = ({ amount, domain, startDate, endDate, isRFP }) => {
             </Row>
             <Row>
               <MetadataLabel label="Start Date" />
-              <MetadataValue value={`${startMonth}/${startDay}/${startYear}`} />
+              <MetadataValue value={startDateView} />
             </Row>
             <Row>
               <MetadataLabel label="End Date" />
-              <MetadataValue value={`${endMonth}/${endDay}/${endYear}`} />
+              <MetadataValue value={endDateView} />
             </Row>
           </>
         )}
