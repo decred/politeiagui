@@ -82,6 +82,7 @@ const recordsSlice = createSlice({
     // set the recordsFetchQueue object per state and status
     setFetchQueue(state, action) {
       const { recordsState, status, records } = action.payload;
+      if (!isArray(records)) throw TypeError("records must be an array");
       const stringState = getHumanReadableRecordState(recordsState);
       const stringStatus = getHumanReadableRecordStatus(status);
       setQueue(state, {
