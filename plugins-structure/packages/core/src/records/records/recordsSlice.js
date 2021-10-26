@@ -9,6 +9,7 @@ import {
 import { validateRecordStateAndStatus } from "../validation";
 import take from "lodash/fp/take";
 import isArray from "lodash/fp/isArray";
+import isEmpty from "lodash/fp/isEmpty";
 import without from "lodash/fp/without";
 
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -112,14 +113,15 @@ const recordsSlice = createSlice({
     },
     // pop values from the recordsFetchQueue
     popFetchQueue(state, action) {
-      const { recordsState, status, records } = action.payload;
+      const { recordsState, status } = action.payload;
       const stringState = getHumanReadableRecordState(recordsState);
       const stringStatus = getHumanReadableRecordStatus(status);
-      state.recordsFetchQueue[stringState][stringStatus] =
-        state.recordsFetchQueue[stringState][stringStatus].filter(
-          (outerRecord) =>
-            !records.find((innerRecord) => outerRecord === innerRecord)
-        );
+      if (
+        isEmpty(state.recordsFetchQueue) ||
+        !state.recordsFetchQueue[stringState]
+      )
+        return;
+      state.recordsFetchQueue[stringState][stringStatus].shift();
     },
   },
   extraReducers(builder) {

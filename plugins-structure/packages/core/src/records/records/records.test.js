@@ -3,6 +3,7 @@ import reducer, {
   initialState,
   setFetchQueue,
   pushFetchQueue,
+  popFetchQueue,
 } from "./recordsSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { client } from "../../client";
@@ -152,7 +153,7 @@ describe("Given the recordsSlice", () => {
       expect(state.error).toEqual("FAIL!");
     });
   });
-  describe("when dispatching setFetchQueue", () => {
+  describe("when dispatching actions", () => {
     const goodParams = {
       recordsState: "vetted",
       status: "public",
@@ -190,23 +191,24 @@ describe("Given the recordsSlice", () => {
         records: ["fake_token"],
       },
     ];
-
-    it("should update the fetch queue when passing valid params", () => {
-      store.dispatch(setFetchQueue(goodParams));
-      const state = store.getState();
-      const { recordsState, status, records } = goodParams;
-      expect(state.recordsFetchQueue[recordsState][status]).toEqual(records);
-    });
-
-    it("should throw when passing invalid params", () => {
-      for (const arg of badParams) {
-        // eslint-disable-next-line no-loop-func
-        expect(() => store.dispatch(setFetchQueue(arg))).toThrow();
+    describe("when dispatching setFetchQueue", () => {
+      it("should update the fetch queue when passing valid params", () => {
+        store.dispatch(setFetchQueue(goodParams));
         const state = store.getState();
-        expect(state.records).toEqual({});
-        expect(state.status).toEqual("idle");
-        expect(state.error).toEqual(null);
-      }
+        const { recordsState, status, records } = goodParams;
+        expect(state.recordsFetchQueue[recordsState][status]).toEqual(records);
+      });
+
+      it("should throw when passing invalid params", () => {
+        for (const arg of badParams) {
+          // eslint-disable-next-line no-loop-func
+          expect(() => store.dispatch(setFetchQueue(arg))).toThrow();
+          const state = store.getState();
+          expect(state.records).toEqual({});
+          expect(state.status).toEqual("idle");
+          expect(state.error).toEqual(null);
+        }
+      });
     });
     describe("when dispatching pushFetchQueue", () => {
       it("should push to the empty queue when passing valid params", () => {
@@ -239,15 +241,64 @@ describe("Given the recordsSlice", () => {
           expect(() => store.dispatch(pushFetchQueue(arg))).toThrow();
           const state = store.getState();
           expect(state.records).toEqual({});
+          expect(state.recordsFetchQueue).toEqual({});
           expect(state.status).toEqual("idle");
           expect(state.error).toEqual(null);
         }
       });
     });
-  });
-  describe("when dispatching popFetchQueue", () => {
-    it.todo("should do nothing when trying to pop from an empty queue");
-    it.todo("should pop from the populated queue when passing valid params");
-    it.todo("should throw when passing invalid params");
+    describe("when dispatching popFetchQueue", () => {
+      it("should do nothing when trying to pop from an empty queue", () => {
+        const { recordsState, status } = goodParams;
+        store.dispatch(popFetchQueue({ recordsState, status }));
+        const state = store.getState();
+        expect(state.records).toEqual({});
+        expect(state.recordsFetchQueue).toEqual({});
+        expect(state.status).toEqual("idle");
+        expect(state.error).toEqual(null);
+      });
+      it("should pop from the populated queue when passing valid params", () => {
+        store.dispatch(pushFetchQueue(goodParams));
+        let state = store.getState();
+        const { recordsState, status, records } = goodParams;
+        expect(state.recordsFetchQueue[recordsState][status]).toEqual(records);
+        store.dispatch(pushFetchQueue(goodParams2));
+        const {
+          records: records2,
+          recordsState: recordsState2,
+          status: status2,
+        } = goodParams2;
+        state = store.getState();
+        expect(state.recordsFetchQueue[recordsState2][status2]).toEqual([
+          ...records,
+          ...records2,
+        ]);
+        store.dispatch(popFetchQueue({ recordsState, status }));
+        state = store.getState();
+        expect(state.recordsFetchQueue[recordsState2][status2]).toEqual([
+          "fake_token2",
+        ]);
+      });
+      it("should throw when passing invalid params", () => {
+        const popBadParams = [
+          {
+            recordsState: "vtted",
+            status: "public",
+          },
+          {
+            recordsState: "vetted",
+            status: "publ",
+          },
+        ];
+        for (const arg of popBadParams) {
+          // eslint-disable-next-line no-loop-func
+          expect(() => store.dispatch(popFetchQueue(arg))).toThrow();
+          const state = store.getState();
+          expect(state.records).toEqual({});
+          expect(state.status).toEqual("idle");
+          expect(state.error).toEqual(null);
+        }
+      });
+    });
   });
 });
