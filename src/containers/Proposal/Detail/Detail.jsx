@@ -50,9 +50,8 @@ const SetPageTitle = ({ title }) => {
 const ProposalDetail = ({ Main, match, history }) => {
   const tokenFromUrl = shortRecordToken(get("params.token", match));
   const threadParentCommentID = get("params.commentid", match);
-  const {
-    policyTicketVote: { summariespagesize: proposalPageSize }
-  } = usePolicy();
+  const { policyTicketVote: { summariespagesize: proposalPageSize } = {} } =
+    usePolicy();
   const {
     proposal,
     loading,

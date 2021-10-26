@@ -19,15 +19,6 @@ const getTokensByStatusTab = (inventory, currentTab) =>
       )
     : [];
 
-beforeEach(function useProposalsListMiddlewares() {
-  cy.middleware("comments.count");
-  cy.middleware("pi.summaries");
-  cy.middleware("ticketvote.summaries");
-  cy.ticketvoteMiddleware("inventory", {
-    amountByStatus: { unauthorized: 0 }
-  });
-});
-
 describe("Multiple status tab", () => {
   beforeEach(() => {
     cy.recordsMiddleware("records", { status: 2, state: 2 });
@@ -37,6 +28,7 @@ describe("Multiple status tab", () => {
     cy.ticketvoteMiddleware("inventory", {
       amountByStatus: { authorized: 0, started: 0, unauthorized: 1 }
     });
+    cy.ticketvoteMiddleware("summaries", { status: 1 });
     // Test
     cy.visit(`/`);
     cy.wait("@ticketvote.inventory");
@@ -282,6 +274,7 @@ describe("Admin proposals list", () => {
     cy.recordsMiddleware("inventory", {
       amountByStatus: { unreviewed: 22, censored: 8 }
     });
+    cy.recordsMiddleware("records");
   });
   it("can render records list according to inventory order", () => {
     let inventory;

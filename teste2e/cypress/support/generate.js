@@ -102,22 +102,6 @@ export const buildPaymentPaywall = build("PaymentPaywall").fields({
   creditprice: 10000000
 });
 
-export const buildPaymentCredits = (spent, unspent) => {
-  const makeCredits = compose(
-    map(() => ({
-      paywallid: 0,
-      price: 0,
-      datepurchased: Date.now() / 1000,
-      txid: "created_by_dbutil"
-    })),
-    times
-  );
-  return build("PaymentCredits").fields({
-    spentcredits: makeCredits(spent),
-    unspentcredits: makeCredits(unspent)
-  })();
-};
-
 const fakeToken = () => buildRecord().token;
 
 /**
@@ -141,31 +125,4 @@ export function makeCustomInventoryByStatus(
     ),
     entries
   )(tokensAmountByStatus);
-}
-
-/**
- * makeCustomUserSession returns some custom user credentials
- * for given user type
- * @param {String} userType admin, paid, unpaid, totpActive, noCredits
- */
-export function makeCustomUserSession(userType = "paid") {
-  const user = buildUserSession();
-  return get(userType)({
-    admin: { ...user, isadmin: true },
-    unpaid: {
-      ...user,
-      paywallamount: 0,
-      paywalladdress: "",
-      paywalltxid: ""
-    },
-    paid: user,
-    totpActive: {
-      ...user,
-      totpverified: true
-    },
-    noCredits: {
-      ...user,
-      proposalcredits: 0
-    }
-  });
 }

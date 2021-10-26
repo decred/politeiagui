@@ -8,14 +8,14 @@ export function summariesReply({
   testParams: { results, status },
   requestParams: { tokens = [] }
 }) {
-  // TODO: Improve summary replier
-  return tokens.reduce(
+  const summaries = tokens.reduce(
     (acc, t) => ({
       ...acc,
       [t]: new Summary({ results, status })
     }),
     {}
   );
+  return { summaries };
 }
 
 /**

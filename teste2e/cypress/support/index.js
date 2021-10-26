@@ -24,11 +24,6 @@ import "./users/commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-beforeEach(function useProposalsMiddlewares() {
-  cy.middleware("www.policy");
-  cy.middleware("comments.policy");
-  cy.middleware("pi.policy");
-  cy.middleware("ticketvote.policy");
-  cy.middleware("www.api");
-  cy.useRecordsApi();
+beforeEach(function useAppMiddlewares() {
+  // here you can define global middlewares
 });
