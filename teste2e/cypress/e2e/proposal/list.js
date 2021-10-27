@@ -19,16 +19,20 @@ const getTokensByStatusTab = (inventory, currentTab) =>
       )
     : [];
 
+beforeEach(function mockApiCalls() {
+  cy.useTicketvoteApi();
+  cy.useRecordsApi();
+});
+
 describe("Multiple status tab", () => {
   beforeEach(() => {
     cy.recordsMiddleware("records", { status: 2, state: 2 });
     cy.middleware("pi.summaries", { tab: "Under Review" });
   });
   it("should render list correctly when some statuses are empty", () => {
-    cy.ticketvoteMiddleware("inventory", {
-      amountByStatus: { authorized: 0, started: 0, unauthorized: 1 }
-    });
-    cy.ticketvoteMiddleware("summaries", { status: 1 });
+    const amountByStatus = { authorized: 0, started: 0, unauthorized: 1 };
+    cy.ticketvoteMiddleware("inventory", { amountByStatus });
+    cy.ticketvoteMiddleware("summaries", { amountByStatus });
     // Test
     cy.visit(`/`);
     cy.wait("@ticketvote.inventory");
@@ -39,38 +43,11 @@ describe("Multiple status tab", () => {
     cy.wait(1000);
     cy.assertListLengthByTestId("record-title", 1);
   });
-  it("should switch tabs and show empty message when list is empty", () => {
-    // Inventory Setup
-    cy.ticketvoteMiddleware("inventory", {
-      amountByStatus: {
-        authorized: 0,
-        started: 0,
-        unauthorized: 0,
-        approved: 0,
-        rejected: 0,
-        ineligible: 0
-      }
-    });
-    // Test
-    cy.visit(`/`);
-    cy.wait("@ticketvote.inventory");
-    cy.findByTestId("help-message").should("be.visible");
-    cy.scrollTo("bottom");
-    // switch to another tab
-    cy.findByTestId("tab-1").click();
-    // assert empty list
-    cy.assertListLengthByTestId("record-title", 0);
-    // back to Under Review tab
-    cy.findByTestId("tab-0").click();
-    // wait to see if no requests are done, since inventory is fully fetched
-    cy.wait(1000);
-    cy.findByTestId("help-message").should("be.visible");
-  });
   it("should render all status even when page batch is not complete", () => {
     // Inventory Setup
-    cy.ticketvoteMiddleware("inventory", {
-      amountByStatus: { authorized: 1, started: 1, unauthorized: 1 }
-    });
+    const amountByStatus = { authorized: 1, started: 1, unauthorized: 1 };
+    cy.ticketvoteMiddleware("inventory", { amountByStatus });
+    cy.ticketvoteMiddleware("summaries", { amountByStatus });
     // Test
     cy.visit(`/`);
     cy.wait("@ticketvote.inventory");
@@ -84,15 +61,21 @@ describe("Multiple status tab", () => {
   it("should fetch all inventory tokens", () => {
     // Inventory Setup
     cy.ticketvoteMiddleware("inventory", {
-      amountByStatus: { authorized: 20, started: 3, unauthorized: 45 }
+      amountByStatus: { started: 3, authorized: 20, unauthorized: 45 }
     });
     // Test
     cy.visit(`/`);
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { started: 3, authorized: 2 }
+    });
     cy.wait("@ticketvote.inventory");
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 5);
     // 3 started and 2 authorized
     cy.scrollTo("bottom");
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { authorized: 5 }
+    });
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 10);
     cy.scrollTo("bottom");
@@ -102,6 +85,9 @@ describe("Multiple status tab", () => {
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 20);
     cy.scrollTo("bottom");
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { authorized: 3, unauthorized: 2 }
+    });
     // prepare to fetch 25 items: 3 started, 20 authorized and 2 unauthorized
     // scan inventory: page 2 of authorized
     cy.wait("@ticketvote.inventory")
@@ -110,6 +96,9 @@ describe("Multiple status tab", () => {
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 25);
     cy.scrollTo("bottom");
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { unauthorized: 5 }
+    });
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 30);
     cy.scrollTo("bottom");
@@ -166,6 +155,10 @@ describe("General pagination", () => {
       }
     });
     cy.recordsMiddleware("records", { status: 2, state: 2 });
+    // initial ticketvote batch config
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { started: 3, unauthorized: 2 }
+    });
   });
   it("should render first proposals batch according to inventory order", () => {
     let inventory;
@@ -184,37 +177,72 @@ describe("General pagination", () => {
     );
   });
   it("should switch tabs and load proposals correctly", () => {
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { approved: 4 }
+    });
     cy.visit("/?tab=approved");
     cy.wait("@ticketvote.inventory");
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 4);
     // navigate to in discussion tab
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { started: 3, unauthorized: 2 }
+    });
     cy.findByTestId("tab-0").click();
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 5);
   });
   it("should list legacy proposals", () => {
     // for approved proposals
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { approved: 4 }
+    });
     cy.visit("/?tab=approved");
     cy.wait("@ticketvote.inventory");
     cy.wait(1000);
     cy.assertListLengthByTestId("record-title-legacy", 58);
     // for rejected proposals
     cy.visit("/?tab=rejected");
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { rejected: 5 }
+    });
     cy.wait(1000);
     cy.assertListLengthByTestId("record-title-legacy", 37);
     // for abandoned proposals
     cy.recordsMiddleware("records", { status: 3, state: 2 });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { ineligible: 3 }
+    });
     cy.visit("/?tab=abandoned");
     cy.wait(1000);
     cy.assertListLengthByTestId("record-title-legacy", 20);
   });
+});
+
+describe("Given an empty proposals list", () => {
   it("should render loading placeholders properly", () => {
+    cy.ticketvoteMiddleware("inventory", {}, { delay: 2000 });
     cy.visit(`/`);
     cy.get('[data-testid="loading-placeholders"] > div').should(
       "have.length",
       5
     );
+  });
+  it("should switch tabs and show empty message", () => {
+    // Test
+    cy.visit(`/`);
+    cy.wait("@ticketvote.inventory");
+    cy.findByTestId("help-message").should("be.visible");
+    cy.scrollTo("bottom");
+    // switch to another tab
+    cy.findByTestId("tab-1").click();
+    // assert empty list
+    cy.assertListLengthByTestId("record-title", 0);
+    // back to Under Review tab
+    cy.findByTestId("tab-0").click();
+    // wait to see if no requests are done, since inventory is fully fetched
+    cy.wait(1000);
+    cy.findByTestId("help-message").should("be.visible");
   });
 });
 
@@ -222,25 +250,19 @@ describe("Big screens proposals list", () => {
   beforeEach(() => {
     cy.viewport(1500, 1500);
     cy.recordsMiddleware("records", { status: 2, state: 2 });
+    cy.ticketvoteMiddleware("summaries");
+    cy.middleware("pi.summaries", { tab: "Under Review" });
   });
   it("can render under review records with 5 autorized tokens", () => {
     // setup
     cy.ticketvoteMiddleware("inventory", {
       amountByStatus: { authorized: 5, started: 0, unauthorized: 13 }
     });
-    cy.middleware("pi.summaries", { tab: "Under Review" });
-    // test
-    cy.visit(`/`);
-    cy.wait("@ticketvote.inventory");
-    // Should trigger at least 2 records batch requests
-    cy.wait("@records.records");
-    cy.wait("@records.records");
-    cy.assertListLengthByTestId("record-title", 10);
-    cy.scrollTo("bottom");
-    cy.wait(1000);
-    cy.assertListLengthByTestId("record-title", 15);
   });
   it("can render under review records with 5 started tokens", () => {
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { started: 5 }
+    });
     cy.ticketvoteMiddleware("inventory", {
       amountByStatus: { authorized: 0, started: 5, unauthorized: 13 }
     });
@@ -336,6 +358,7 @@ describe("Admin proposals list", () => {
 
 describe("Additional page content", () => {
   it("should load sidebar according to screen resolution", () => {
+    cy.ticketvoteMiddleware("inventory");
     cy.visit("/");
     cy.findByTestId("sidebar").should("be.visible");
     cy.viewport("iphone-6");

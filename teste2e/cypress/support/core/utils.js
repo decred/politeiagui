@@ -1,5 +1,10 @@
 import CryptoJS from "crypto-js";
 import invert from "lodash/fp/invert";
+import compose from "lodash/fp/compose";
+import entries from "lodash/fp/entries";
+import reduce from "lodash/fp/reduce";
+import slice from "lodash/fp/slice";
+import isEmpty from "lodash/fp/isEmpty";
 
 const RECORD_STATE_UNVETTED = 1;
 const RECORD_STATE_VETTED = 2;
@@ -51,6 +56,20 @@ export const getIndexMdFromText = (text = "") => ({
   mime: "text/plain; charset=utf-8",
   payload: utoa(text)
 });
+
+export function chunkByStatusAmount(arr = [], amountByStatus = { status: 0 }) {
+  let count = 0;
+  const newChunk = compose(
+    reduce((acc, [status, amount]) => {
+      const elements = slice(count, amount + count)(arr);
+      count += amount;
+      if (isEmpty(elements)) return acc;
+      return { ...acc, [status]: elements };
+    }, {}),
+    entries
+  )(amountByStatus);
+  return newChunk;
+}
 
 // Record Utils
 const RECORD_STATE_LABEL_MAP = {
