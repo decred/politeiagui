@@ -8,8 +8,12 @@ Cypress.Commands.add(
     packageName: "www",
     repliers: {
       api: apiReply,
-      policy: policyReply
+      "api/v1/policy": policyReply
     },
     baseUrl: "/"
   })
 );
+
+Cypress.Commands.add("useWwwApi", () => {
+  cy.wwwMiddleware("api/v1/policy");
+});

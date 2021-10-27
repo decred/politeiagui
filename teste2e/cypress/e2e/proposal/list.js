@@ -20,19 +20,30 @@ const getTokensByStatusTab = (inventory, currentTab) =>
     : [];
 
 beforeEach(function mockApiCalls() {
+  // currently mocking pi and ticketvote summaries calls with any status, since
+  // they aren't used for assertions. the `Missing` status will show up, but it
+  // doesn't affect the list behavior.
   cy.useTicketvoteApi();
   cy.useRecordsApi();
+  cy.usePiApi();
+  cy.useWwwApi();
+  cy.useCommentsApi();
+  cy.userEnvironment("noLogin");
 });
 
 describe("Multiple status tab", () => {
   beforeEach(() => {
     cy.recordsMiddleware("records", { status: 2, state: 2 });
-    cy.middleware("pi.summaries", { tab: "Under Review" });
   });
   it("should render list correctly when some statuses are empty", () => {
     const amountByStatus = { authorized: 0, started: 0, unauthorized: 1 };
     cy.ticketvoteMiddleware("inventory", { amountByStatus });
     cy.ticketvoteMiddleware("summaries", { amountByStatus });
+    cy.piMiddleware("summaries", {
+      amountByStatus: {
+        "under-review": 1
+      }
+    });
     // Test
     cy.visit(`/`);
     cy.wait("@ticketvote.inventory");
@@ -48,6 +59,13 @@ describe("Multiple status tab", () => {
     const amountByStatus = { authorized: 1, started: 1, unauthorized: 1 };
     cy.ticketvoteMiddleware("inventory", { amountByStatus });
     cy.ticketvoteMiddleware("summaries", { amountByStatus });
+    cy.piMiddleware("summaries", {
+      amountByStatus: {
+        "vote-authorized": 1,
+        "vote-started": 1,
+        "under-review": 1
+      }
+    });
     // Test
     cy.visit(`/`);
     cy.wait("@ticketvote.inventory");
@@ -65,17 +83,11 @@ describe("Multiple status tab", () => {
     });
     // Test
     cy.visit(`/`);
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { started: 3, authorized: 2 }
-    });
     cy.wait("@ticketvote.inventory");
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 5);
     // 3 started and 2 authorized
     cy.scrollTo("bottom");
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { authorized: 5 }
-    });
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 10);
     cy.scrollTo("bottom");
@@ -84,10 +96,8 @@ describe("Multiple status tab", () => {
     cy.scrollTo("bottom");
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 20);
+    // fetch 3 authorized and 2 unauthorized
     cy.scrollTo("bottom");
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { authorized: 3, unauthorized: 2 }
-    });
     // prepare to fetch 25 items: 3 started, 20 authorized and 2 unauthorized
     // scan inventory: page 2 of authorized
     cy.wait("@ticketvote.inventory")
@@ -96,9 +106,6 @@ describe("Multiple status tab", () => {
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 25);
     cy.scrollTo("bottom");
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { unauthorized: 5 }
-    });
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 30);
     cy.scrollTo("bottom");
@@ -155,10 +162,6 @@ describe("General pagination", () => {
       }
     });
     cy.recordsMiddleware("records", { status: 2, state: 2 });
-    // initial ticketvote batch config
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { started: 3, unauthorized: 2 }
-    });
   });
   it("should render first proposals batch according to inventory order", () => {
     let inventory;
@@ -177,42 +180,27 @@ describe("General pagination", () => {
     );
   });
   it("should switch tabs and load proposals correctly", () => {
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { approved: 4 }
-    });
     cy.visit("/?tab=approved");
     cy.wait("@ticketvote.inventory");
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 4);
     // navigate to in discussion tab
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { started: 3, unauthorized: 2 }
-    });
     cy.findByTestId("tab-0").click();
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 5);
   });
   it("should list legacy proposals", () => {
     // for approved proposals
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { approved: 4 }
-    });
     cy.visit("/?tab=approved");
     cy.wait("@ticketvote.inventory");
     cy.wait(1000);
     cy.assertListLengthByTestId("record-title-legacy", 58);
     // for rejected proposals
     cy.visit("/?tab=rejected");
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { rejected: 5 }
-    });
     cy.wait(1000);
     cy.assertListLengthByTestId("record-title-legacy", 37);
     // for abandoned proposals
     cy.recordsMiddleware("records", { status: 3, state: 2 });
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { ineligible: 3 }
-    });
     cy.visit("/?tab=abandoned");
     cy.wait(1000);
     cy.assertListLengthByTestId("record-title-legacy", 20);
@@ -250,8 +238,6 @@ describe("Big screens proposals list", () => {
   beforeEach(() => {
     cy.viewport(1500, 1500);
     cy.recordsMiddleware("records", { status: 2, state: 2 });
-    cy.ticketvoteMiddleware("summaries");
-    cy.middleware("pi.summaries", { tab: "Under Review" });
   });
   it("can render under review records with 5 autorized tokens", () => {
     // setup
@@ -260,9 +246,6 @@ describe("Big screens proposals list", () => {
     });
   });
   it("can render under review records with 5 started tokens", () => {
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { started: 5 }
-    });
     cy.ticketvoteMiddleware("inventory", {
       amountByStatus: { authorized: 0, started: 5, unauthorized: 13 }
     });
@@ -296,7 +279,6 @@ describe("Admin proposals list", () => {
     cy.recordsMiddleware("inventory", {
       amountByStatus: { unreviewed: 22, censored: 8 }
     });
-    cy.recordsMiddleware("records");
   });
   it("can render records list according to inventory order", () => {
     let inventory;

@@ -11,7 +11,7 @@ Cypress.Commands.add(
 Cypress.Commands.add("userEnvironment", (userType) => {
   cy.wwwMiddleware(
     "api",
-    { isActive: true },
+    { isActive: userType !== "noLogin" },
     { headers: { "x-csrf-token": "abcdefghijklmnopqrstuvwxyz" } }
   );
   cy.userMiddleware("me", { userType });

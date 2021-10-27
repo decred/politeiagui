@@ -63,6 +63,8 @@ export function userByType(userType, props) {
       return User(props);
     case "totp":
       return UserTotp(props);
+    case "noLogin":
+      return {};
     default:
       return User(props);
   }

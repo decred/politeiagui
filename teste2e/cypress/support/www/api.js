@@ -10,7 +10,7 @@ export function apiReply({ testParams: { isActive = false } }) {
   return {
     version: 1,
     route: "/v1",
-    buildversion: "(devel)",
+    buildversion: "(test-e2e-mock)",
     pubkey: faker.datatype.hexaDecimal(64, false, /[0-9a-z]/),
     testnet: true,
     mode: "piwww",

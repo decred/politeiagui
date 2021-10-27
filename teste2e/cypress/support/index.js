@@ -20,6 +20,9 @@ import "./commands";
 import "./core/commands";
 import "./ticketvote/commands";
 import "./users/commands";
+import "./pi/commands";
+import "./comments/commands";
+import "./www/commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
