@@ -32,7 +32,8 @@ import {
   PROPOSAL_STATUS_ARCHIVED,
   VOTE_METADATA_FILENAME,
   USER_METADATA_PLUGIN,
-  MONTHS_LABELS
+  MONTHS_LABELS,
+  INVALID_DATE_LABEL
 } from "./constants.js";
 
 export const digestPayload = (payload) =>
@@ -621,7 +622,17 @@ export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
   return allTreeComments;
 };
 
-export const formatDateView = (value) => {
-  const dayView = ("0" + value.day).slice(-2);
-  return `${dayView} ${MONTHS_LABELS[value.month - 1]} ${value.year}`;
+/**
+ * getInternationalDateString accepts an object of day, month and year.
+ * It returns a string of human viewable international date.
+ * String format: 08 Sep 2021
+ * @param {object} { day, month, year }
+ * @returns {string}
+ */
+export const getInternationalDateString = ({ day, month, year }) => {
+  if ((day >= 1 && day <= 31) && (month >= 1 && month <= 12) && (year >= 1)) {
+    const dayView = `0${day}`.slice(-2);
+    return `${dayView} ${MONTHS_LABELS[month - 1]} ${year}`;
+  }
+  return INVALID_DATE_LABEL;
 };

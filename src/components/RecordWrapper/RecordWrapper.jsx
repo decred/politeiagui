@@ -28,7 +28,7 @@ import CopyLink from "../CopyLink";
 import rfpTag from "src/assets/images/rfp-tag.svg";
 import useTimestamps from "src/hooks/api/useTimestamps";
 import { formatUnixTimestampToObj } from "src/utils";
-import { formatDateView } from "src/helpers";
+import { getInternationalDateString } from "src/helpers";
 
 // TODO: remove legacy
 export const Author = ({ username, url, isLegacy }) =>
@@ -384,10 +384,10 @@ const MetadataValue = ({ value }) => (
 );
 
 export const Metadata = ({ amount, domain, startDate, endDate, isRFP }) => {
-  const startDateView = formatDateView(
+  const startDateView = getInternationalDateString(
     (startDate && formatUnixTimestampToObj(startDate)) || {}
   );
-  const endDateView = formatDateView(
+  const endDateView = getInternationalDateString(
     (endDate && formatUnixTimestampToObj(endDate)) || {}
   );
 
