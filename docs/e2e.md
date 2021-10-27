@@ -27,6 +27,25 @@ There are two ways two run the e2e tests, either in terminal or in browser:
 
 E2E Test files are located under the `/teste2e` directory.
 
+### (Experimental) Run tests in parallel
+
+> Note: currently on experimental mode. Use it only for local development to
+> speed up your tests run.
+
+> You need to have Docker running in order to make this parallel testing
+
+You can run parallel tests using the [sorry-cypress](https://docs.sorry-cypress.dev/)
+alternative, instead of regular Cypress in order to avoid using Cypress
+Dashboard, which requires an account and other KYC stuff. Fortunately, this
+alternative wraps cypress into one docker image and opens it for usage.
+
+**Parallel tests will only work with Mocked APIs tests suites**
+
+1. Setup your sorry-cypress docker image: `yarn && yarn test:e2e:parallel:setup`
+2. Run the application on development mode: `yarn start`
+3. Open a new terminal windows (yes, plural) and run `yarn cy:run:parallel` on
+   each.
+
 ## How to write E2E tests
 
 E2E tests are created to simulate **user** behavior among the application. This
