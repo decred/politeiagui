@@ -52,7 +52,9 @@ const DatePickerField = ({
           if (isRange) {
             let firstFormattedValue = "";
             if (value[0]) {
-              firstFormattedValue = `${getInternationalDateString(value[0])} - `;
+              firstFormattedValue = `${getInternationalDateString(
+                value[0]
+              )} - `;
             }
             let secondFormattedValue;
             if (value[1]) {

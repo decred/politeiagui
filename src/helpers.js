@@ -630,7 +630,7 @@ export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
  * @returns {string}
  */
 export const getInternationalDateString = ({ day, month, year }) => {
-  if ((day >= 1 && day <= 31) && (month >= 1 && month <= 12) && (year >= 1)) {
+  if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1) {
     const dayView = `0${day}`.slice(-2);
     return `${dayView} ${MONTHS_LABELS[month - 1]} ${year}`;
   }

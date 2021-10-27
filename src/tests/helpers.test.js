@@ -80,27 +80,65 @@ describe("test getTimeDiffInMinutes function", () => {
 
 describe("test getInternationalDateString function", () => {
   test("it should return correctly with valid date input", () => {
-    expect(help.getInternationalDateString({ day: 5, month: 1, year: 2019 })).toEqual("05 Jan 2019");
-    expect(help.getInternationalDateString({ day: 12, month: 2, year: 2021 })).toEqual("12 Feb 2021");
-    expect(help.getInternationalDateString({ day: 6, month: 3, year: 2019 })).toEqual("06 Mar 2019");
-    expect(help.getInternationalDateString({ day: 21, month: 4, year: 2021 })).toEqual("21 Apr 2021");
-    expect(help.getInternationalDateString({ day: 21, month: 5, year: 2019 })).toEqual("21 May 2019");
-    expect(help.getInternationalDateString({ day: 30, month: 6, year: 2021 })).toEqual("30 Jun 2021");
-    expect(help.getInternationalDateString({ day: 15, month: 7, year: 2019 })).toEqual("15 Jul 2019");
-    expect(help.getInternationalDateString({ day: 26, month: 8, year: 2021 })).toEqual("26 Aug 2021");
-    expect(help.getInternationalDateString({ day: 15, month: 9, year: 2019 })).toEqual("15 Sep 2019");
-    expect(help.getInternationalDateString({ day: 9, month: 10, year: 2021 })).toEqual("09 Oct 2021");
-    expect(help.getInternationalDateString({ day: 25, month: 11, year: 2019 })).toEqual("25 Nov 2019");
-    expect(help.getInternationalDateString({ day: 30, month: 12, year: 2021 })).toEqual("30 Dec 2021");
+    expect(
+      help.getInternationalDateString({ day: 5, month: 1, year: 2019 })
+    ).toEqual("05 Jan 2019");
+    expect(
+      help.getInternationalDateString({ day: 12, month: 2, year: 2021 })
+    ).toEqual("12 Feb 2021");
+    expect(
+      help.getInternationalDateString({ day: 6, month: 3, year: 2019 })
+    ).toEqual("06 Mar 2019");
+    expect(
+      help.getInternationalDateString({ day: 21, month: 4, year: 2021 })
+    ).toEqual("21 Apr 2021");
+    expect(
+      help.getInternationalDateString({ day: 21, month: 5, year: 2019 })
+    ).toEqual("21 May 2019");
+    expect(
+      help.getInternationalDateString({ day: 30, month: 6, year: 2021 })
+    ).toEqual("30 Jun 2021");
+    expect(
+      help.getInternationalDateString({ day: 15, month: 7, year: 2019 })
+    ).toEqual("15 Jul 2019");
+    expect(
+      help.getInternationalDateString({ day: 26, month: 8, year: 2021 })
+    ).toEqual("26 Aug 2021");
+    expect(
+      help.getInternationalDateString({ day: 15, month: 9, year: 2019 })
+    ).toEqual("15 Sep 2019");
+    expect(
+      help.getInternationalDateString({ day: 9, month: 10, year: 2021 })
+    ).toEqual("09 Oct 2021");
+    expect(
+      help.getInternationalDateString({ day: 25, month: 11, year: 2019 })
+    ).toEqual("25 Nov 2019");
+    expect(
+      help.getInternationalDateString({ day: 30, month: 12, year: 2021 })
+    ).toEqual("30 Dec 2021");
   });
 
   test("it should return error with invalid date input", () => {
-    expect(help.getInternationalDateString({ day: 0, month: 1, year: 2019 })).toEqual(INVALID_DATE_LABEL);
-    expect(help.getInternationalDateString({ day: 10, month: 0, year: 2019 })).toEqual(INVALID_DATE_LABEL);
-    expect(help.getInternationalDateString({ day: 10, month: 13, year: 2019 })).toEqual(INVALID_DATE_LABEL);
-    expect(help.getInternationalDateString({ day: null, month: 10, year: 2019 })).toEqual(INVALID_DATE_LABEL);
-    expect(help.getInternationalDateString({ day: undefined, month: 10, year: 2019 })).toEqual(INVALID_DATE_LABEL);
-    expect(help.getInternationalDateString({ day: 8, month: null, year: 2019 })).toEqual(INVALID_DATE_LABEL);
-    expect(help.getInternationalDateString({ day: 8, month: 10, year: null })).toEqual(INVALID_DATE_LABEL);
+    expect(
+      help.getInternationalDateString({ day: 0, month: 1, year: 2019 })
+    ).toEqual(INVALID_DATE_LABEL);
+    expect(
+      help.getInternationalDateString({ day: 10, month: 0, year: 2019 })
+    ).toEqual(INVALID_DATE_LABEL);
+    expect(
+      help.getInternationalDateString({ day: 10, month: 13, year: 2019 })
+    ).toEqual(INVALID_DATE_LABEL);
+    expect(
+      help.getInternationalDateString({ day: null, month: 10, year: 2019 })
+    ).toEqual(INVALID_DATE_LABEL);
+    expect(
+      help.getInternationalDateString({ day: undefined, month: 10, year: 2019 })
+    ).toEqual(INVALID_DATE_LABEL);
+    expect(
+      help.getInternationalDateString({ day: 8, month: null, year: 2019 })
+    ).toEqual(INVALID_DATE_LABEL);
+    expect(
+      help.getInternationalDateString({ day: 8, month: 10, year: null })
+    ).toEqual(INVALID_DATE_LABEL);
   });
 });
