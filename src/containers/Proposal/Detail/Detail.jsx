@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useEffect, useState } from "react";
 import { Card, Message, P, classNames } from "pi-ui";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
@@ -10,6 +10,7 @@ import {
   useIdentity,
   useDocumentTitle,
   useModalContext,
+  useScrollTo,
   usePolicy
 } from "src/hooks";
 import Comments from "src/containers/Comments";
@@ -39,6 +40,7 @@ import WhatAreYourThoughts from "src/components/WhatAreYourThoughts";
 import { PROPOSAL_UPDATE_HINT, PROPOSAL_STATE_UNVETTED } from "src/constants";
 import { shortRecordToken } from "src/helpers";
 import ModalLogin from "src/components/ModalLogin";
+import { getQueryStringValue } from "src/lib/queryString";
 
 const COMMENTS_LOGIN_MODAL_ID = "commentsLoginModal";
 
@@ -50,9 +52,11 @@ const SetPageTitle = ({ title }) => {
 const ProposalDetail = ({ Main, match, history }) => {
   const tokenFromUrl = shortRecordToken(get("params.token", match));
   const threadParentCommentID = get("params.commentid", match);
-  const {
-    policyTicketVote: { summariespagesize: proposalPageSize }
-  } = usePolicy();
+  const hasScrollToQuery = !!getQueryStringValue("scrollToComments");
+
+  const { policyTicketVote } = usePolicy();
+  const proposalPageSize = policyTicketVote?.summariespagesize;
+
   const {
     proposal,
     loading,
@@ -67,7 +71,8 @@ const ProposalDetail = ({ Main, match, history }) => {
     commentsError,
     commentsLoading,
     onReloadProposalDetails,
-    billingStatusChangeUsername
+    billingStatusChangeUsername,
+    commentsFinishedLoading
   } = useProposal(tokenFromUrl, proposalPageSize, threadParentCommentID);
   const { userid } = currentUser || {};
   const isSingleThread = !!threadParentID;
@@ -87,6 +92,15 @@ const ProposalDetail = ({ Main, match, history }) => {
   const { isPaid, paywallEnabled } = usePaywall();
   const paywallMissing = paywallEnabled && !isPaid;
   const [, identityError] = useIdentity();
+
+  const [isWaitingMount, setIsWaitingMount] = useState(true);
+  const hasLoadedDetails = proposal && !isWaitingMount && !loading;
+
+  const shouldScrollToComments =
+    (hasScrollToQuery || isSingleThread) &&
+    hasLoadedDetails &&
+    commentsFinishedLoading;
+  useScrollTo("commentArea", shouldScrollToComments);
 
   const onRedirectToSignup = useCallback(
     () => history.push("/user/signup"),
@@ -246,28 +260,44 @@ const ProposalDetail = ({ Main, match, history }) => {
     ]
   );
 
+  useEffect(() => {
+    const mountTimeout = setTimeout(() => {
+      setIsWaitingMount(false);
+    }, 500);
+    return () => clearTimeout(mountTimeout);
+  }, []);
+
   return (
     <>
       <Main className={styles.customMain} fillScreen>
-        <GoBackLink />
+        <GoBackLink
+          hierarchy={[
+            "/",
+            "/record/:token",
+            "/record/:token/comments/:commentid"
+          ]}
+        />
         {proposal && <SetPageTitle title={proposal.name} />}
         <UnvettedActionsProvider>
           <PublicActionsProvider>
             {error ? (
               <Message kind="error">{error.toString()}</Message>
-            ) : loading || !proposal ? (
+            ) : !hasLoadedDetails ? (
               <ProposalLoader extended />
             ) : (
-              <Proposal
-                proposal={proposal}
-                billingStatusChangeUsername={billingStatusChangeUsername}
-                extended
-                collapseBodyContent={!!threadParentID}
-              />
+              <>
+                <Proposal
+                  proposal={proposal}
+                  billingStatusChangeUsername={billingStatusChangeUsername}
+                  extended
+                  collapseBodyContent={!!threadParentID}
+                />
+                {!isCensoredProposal(proposal) &&
+                  !commentsLoading &&
+                  commentsFinishedLoading &&
+                  proposalComments}
+              </>
             )}
-            {!isCensoredProposal(proposal) &&
-              !commentsLoading &&
-              proposalComments}
           </PublicActionsProvider>
         </UnvettedActionsProvider>
       </Main>

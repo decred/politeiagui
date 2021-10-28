@@ -79,20 +79,26 @@ export default function useComments(
   const { currentUser } = useLoaderContext();
   const userid = currentUser && currentUser.userid;
   const email = currentUser && currentUser.email;
+  const isCurrentUserAdmin = currentUser && currentUser.isadmin;
 
   const userLoggedIn = !!email;
 
   // comments are not public on cms. User needs to be logged in
   const isProposal = recordType === constants.RECORD_TYPE_PROPOSAL;
+  const hasRecordToken = !!recordToken;
+  const hasCommentsLeft = !allCommentsBySection;
+  const isRecordMissingComments = hasRecordToken && hasCommentsLeft;
+  const isVettedProposal = proposalState === PROPOSAL_STATE_VETTED;
   const needsToFetchComments = isProposal
-    ? !!recordToken && !comments
-    : !!recordToken && !comments && userLoggedIn;
+    ? isRecordMissingComments && (isVettedProposal || isCurrentUserAdmin)
+    : isRecordMissingComments && userLoggedIn;
 
   const needsToFetchCommentsLikes =
     !!recordToken &&
     !commentsLikes &&
     enableCommentVote &&
     userLoggedIn &&
+    !loadingLikes &&
     proposalState === PROPOSAL_STATE_VETTED;
 
   useEffect(
@@ -184,6 +190,7 @@ export default function useComments(
     getCommentVotes,
     commentSectionIds,
     hasAuthorUpdates,
+    finishedCommentsFetch: !hasCommentsLeft,
     latestAuthorUpdateId: hasAuthorUpdates && commentSectionIds[0],
     singleThreadRootId
   };

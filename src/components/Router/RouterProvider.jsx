@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useMemo
-} from "react";
-import isEqual from "lodash/isEqual";
+import React, { createContext, useContext, useMemo } from "react";
 import { withRouter } from "react-router-dom";
 
 const routerCtx = createContext();
@@ -13,18 +6,7 @@ const routerCtx = createContext();
 export const useRouter = () => useContext(routerCtx);
 
 const RouterProvider = ({ location, children, ...rest }) => {
-  const [pastLocations, setPastLocations] = useState([]);
-
-  useEffect(() => {
-    if (!isEqual(pastLocations[0], location)) {
-      setPastLocations([location].concat(pastLocations));
-    }
-  }, [location, pastLocations]);
-
-  const ctxValue = useMemo(
-    () => ({ ...rest, location, pastLocations }),
-    [rest, location, pastLocations]
-  );
+  const ctxValue = useMemo(() => ({ ...rest, location }), [rest, location]);
 
   return <routerCtx.Provider value={ctxValue}>{children}</routerCtx.Provider>;
 };
