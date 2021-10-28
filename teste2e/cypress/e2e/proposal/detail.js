@@ -137,12 +137,12 @@ describe("Proposal details", () => {
       cy.visit(`/record/${shortToken}`);
       cy.wait("@details");
       cy.findByTestId("record-header").should("be.visible");
-      cy.findByTestId("markdown-wrapper").should("exist");
+      cy.findByTestId("proposal-body").should("exist");
       cy.userLogout(admin.username);
       cy.wait(2000);
       // assert that proposal files were removed from store
       cy.findByTestId("record-header").should("be.visible");
-      cy.findByTestId("markdown-wrapper").should("not.exist");
+      cy.findByTestId("proposal-body").should("not.exist");
       cy.get("#commentArea").should("not.exist");
     });
     it("should render unvetted proposal details after admin/author login", () => {
@@ -152,10 +152,9 @@ describe("Proposal details", () => {
       cy.visit(`/record/${shortToken}`);
       cy.wait("@details");
       cy.wait(1000);
-      cy.findByTestId("wayt-login-button").click();
-      cy.typeLoginModal(admin);
-      cy.wait("@details");
-      cy.findByTestId("markdown-wrapper").should("exist");
+      cy.login(admin);
+      cy.visit(`/record/${shortToken}`);
+      cy.findByTestId("proposal-body").should("exist");
       cy.get("#commentArea").should("exist");
     });
   });

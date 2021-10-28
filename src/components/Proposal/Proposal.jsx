@@ -445,14 +445,16 @@ const Proposal = React.memo(function Proposal({
               />
             )}
             {extended && files && !!files.length && !collapseBodyContent && (
-              <Markdown
-                className={classNames(
-                  styles.markdownContainer,
-                  isDarkTheme && "dark",
-                  showRfpSubmissions && styles.rfpMarkdownContainer
-                )}
-                body={text}
-              />
+              <div data-testid="proposal-body">
+                <Markdown
+                  className={classNames(
+                    styles.markdownContainer,
+                    isDarkTheme && "dark",
+                    showRfpSubmissions && styles.rfpMarkdownContainer
+                  )}
+                  body={text}
+                />
+              </div>
             )}
             {collapseBodyContent && (
               <IconButton

@@ -1,33 +1,59 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
+import PropTypes from "prop-types";
+import { matchPath } from "react-router-dom";
 import { Link, classNames, useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import { useRouter } from "src/components/Router";
 import styles from "./GoBackLink.module.css";
 
 const backArrow = <>&#8592;</>;
 
-const GoBackLink = () => {
+function isExactMatch(match) {
+  return match?.isExact;
+}
+
+const GoBackLink = ({ label, hierarchy }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  const { pastLocations, history } = useRouter();
-  const previousLocation = pastLocations[1];
+  const { history } = useRouter();
+  const hierarchyRef = useRef(hierarchy);
 
-  const goBackLinkFromPreviousLocation = useMemo(() => {
-    if (!previousLocation) return null;
-    return (
-      <div className={styles.returnLinkContainer}>
-        <Link
-          className={classNames(
-            styles.returnLink,
-            isDarkTheme && styles.darkReturnLink
-          )}
-          onClick={() => history.goBack()}>
-          {backArrow} Go back
-        </Link>
-      </div>
+  const previousLink = useMemo(() => {
+    const hierarchyMatches = hierarchyRef.current.map((path) =>
+      matchPath(history.location.pathname, {
+        path,
+        strict: true
+      })
     );
-  }, [previousLocation, isDarkTheme, history]);
+    const currentIndex = hierarchyMatches.findIndex(isExactMatch);
+    const previousIndex = currentIndex > 0 ? currentIndex - 1 : 0;
+    const previousMatch = hierarchyMatches[previousIndex];
+    return previousMatch.url;
+  }, [history]);
 
-  return goBackLinkFromPreviousLocation;
+  return (
+    <div className={styles.returnLinkContainer}>
+      <Link
+        className={classNames(
+          styles.returnLink,
+          isDarkTheme && styles.darkReturnLink
+        )}
+        onClick={() =>
+          previousLink ? history.push(previousLink) : history.goBack()
+        }>
+        {backArrow} {label}
+      </Link>
+    </div>
+  );
+};
+
+GoBackLink.propTypes = {
+  label: PropTypes.string,
+  hierarchy: PropTypes.arrayOf(PropTypes.string)
+};
+
+GoBackLink.defaultProps = {
+  label: "Go Back",
+  hierarchy: ["/"]
 };
 
 export default GoBackLink;
