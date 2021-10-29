@@ -42,7 +42,7 @@ describe("Given the apiSlice", () => {
     });
   });
   describe("when fetchApi dispatches", () => {
-    it("updated the status to loading", () => {
+    it("should update the status to loading", () => {
       store.dispatch(fetchApi());
       expect(fetchApiSpy).toBeCalled();
       const state = store.getState();
@@ -50,7 +50,7 @@ describe("Given the apiSlice", () => {
     });
   });
   describe("when fetchApi succeeds", () => {
-    it("updates api state and csrf token", async () => {
+    it("should update api state and csrf token", async () => {
       fetchApiSpy.mockResolvedValueOnce({
         api: mockApiReturn,
         csrf: mockCsrfToken,
@@ -64,7 +64,7 @@ describe("Given the apiSlice", () => {
     });
   });
   describe("when fetchApi fails", () => {
-    it("dispatches failure and update the error", async () => {
+    it("should dispatch failure and update the error", async () => {
       const error = new Error("FAIL!");
       fetchApiSpy.mockRejectedValue(error);
       await store.dispatch(fetchApi());

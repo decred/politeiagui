@@ -39,7 +39,7 @@ describe("Given the recordsInventorySlice", () => {
     });
   });
   describe("when invalid params are passed to fetchRecordsInventory", () => {
-    it("does not fetch nor fire actions", async () => {
+    it("should not fetch nor fire actions", async () => {
       // define default parameters
       const badParams = {
         status: 2,
@@ -65,7 +65,7 @@ describe("Given the recordsInventorySlice", () => {
     });
   });
   describe("when fetchRecordsInventory dispatches", () => {
-    it("updates the status to loading", () => {
+    it("should update the status to loading", () => {
       // do now await for store.dispatch since we want to test
       // loading
       store.dispatch(fetchRecordsInventory(params));
@@ -84,7 +84,7 @@ describe("Given the recordsInventorySlice", () => {
     });
   });
   describe("when fetchRecordsInventory succeeds", () => {
-    it("updates tokens, last page and status (succeeded/isDone for tokens.length < 20)", async () => {
+    it("should update tokens, last page and status (succeeded/isDone for tokens.length < 20)", async () => {
       // spy on the method used to fetch
       // mock resolved value
       const resValue = { vetted: { public: [] }, unvetted: {} };
@@ -105,7 +105,7 @@ describe("Given the recordsInventorySlice", () => {
       expect(state.vetted.public.status).toEqual("succeeded/isDone");
     });
 
-    it("updates tokens, last page and status (succeeded/hasMore for tokens.length == 20)", async () => {
+    it("should update tokens, last page and status (succeeded/hasMore for tokens.length == 20)", async () => {
       // spy on the method used to fetch
       // mock resolved value
       const dummyToken = "testToken";
@@ -131,7 +131,7 @@ describe("Given the recordsInventorySlice", () => {
     });
   });
   describe("when fetchRecordsInventory fails", () => {
-    it("dispatches failure and update the error", async () => {
+    it("should dispatch failure and update the error", async () => {
       const error = new Error("FAIL!");
       const objAfterTransformation = {
         state: params.recordsState,

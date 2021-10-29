@@ -110,8 +110,8 @@ describe("Given the recordsInventory slice and the records slice", () => {
       expect(records.status).toEqual("loading");
     });
   });
-  describe("when recordsFetchQueue", () => {
-    it("should", async () => {
+  describe("when dispatching fetchRecordsNextPage", () => {
+    it("should remove RECORDS_PAGE_SIZE tokens from the fetchQueue", async () => {
       fetchApiSpy.mockResolvedValueOnce({
         api: mockApiReturn,
         csrf: mockCsrfToken,

@@ -49,7 +49,7 @@ describe("Given the recordsSlice", () => {
     });
   });
   describe("when fetchRecords dispatches", () => {
-    it("updates the status to loading", () => {
+    it("should update the status to loading", () => {
       store.dispatch(fetchRecords(params));
       let state = store.getState();
       expect(fetchRecordsSpy).toBeCalledWith(state, params);

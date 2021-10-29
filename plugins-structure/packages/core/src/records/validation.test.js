@@ -13,7 +13,7 @@ describe("State and Status validation", () => {
     consoleErrorMock.mockRestore();
   });
   describe("Given validateRecordState", () => {
-    it("throws if is required and no argument is provided", () => {
+    it("should throw if is required and no argument is provided", () => {
       expect(() => validateRecordState(undefined, true)).toThrowWithMessage(
         TypeError,
         "recordsState is required"
@@ -22,7 +22,7 @@ describe("State and Status validation", () => {
         TypeError("recordsState is required")
       );
     });
-    it("does not throw required error if is not required and no argument is provided. Throws invalid error", () => {
+    it("should not throw required error if is not required and no argument is provided. Throws invalid error", () => {
       expect(() =>
         validateRecordState(undefined, false)
       ).not.toThrowWithMessage(TypeError, "recordsState is required");
@@ -36,7 +36,7 @@ describe("State and Status validation", () => {
         )
       );
     });
-    it("throws and console error if invalid state is passed", () => {
+    it("should throw and console error if invalid state is passed", () => {
       for (const item of invalidStates) {
         expect(() => validateRecordState(item)).toThrowWithMessage(
           TypeError,
@@ -49,7 +49,7 @@ describe("State and Status validation", () => {
         );
       }
     });
-    it("returns true if states are valid", () => {
+    it("should return true if states are valid", () => {
       expect(validateRecordState("vetted")).toBeTruthy();
       expect(validateRecordState("unvetted")).toBeTruthy();
       expect(validateRecordState(1)).toBeTruthy();
@@ -60,14 +60,14 @@ describe("State and Status validation", () => {
   });
 
   describe("Given validateRecordStatus", () => {
-    it("throws if is required and no argument is provided", () => {
+    it("should throw if is required and no argument is provided", () => {
       expect(() => validateRecordStatus(undefined, true)).toThrowWithMessage(
         TypeError,
         "status is required"
       );
       expect(consoleErrorMock).toBeCalledWith(TypeError("status is required"));
     });
-    it("does not throw required error if is not required and no argument is provided. Throws invalid error", () => {
+    it("should not throw required error if is not required and no argument is provided. Throws invalid error", () => {
       expect(() =>
         validateRecordStatus(undefined, false)
       ).not.toThrowWithMessage(TypeError, "status is required");
@@ -81,7 +81,7 @@ describe("State and Status validation", () => {
         )
       );
     });
-    it("throws and console error if invalid state is passed", () => {
+    it("should throw and console error if invalid state is passed", () => {
       for (const item of invalidStatus) {
         expect(() => validateRecordStatus(item)).toThrowWithMessage(
           TypeError,
@@ -94,7 +94,7 @@ describe("State and Status validation", () => {
         );
       }
     });
-    it("returns true if statuses are valid", () => {
+    it("should return true if statuses are valid", () => {
       expect(validateRecordStatus("unreviewed")).toBeTruthy();
       expect(validateRecordStatus("public")).toBeTruthy();
       expect(validateRecordStatus("censored")).toBeTruthy();
