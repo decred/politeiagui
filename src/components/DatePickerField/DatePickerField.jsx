@@ -58,7 +58,9 @@ const DatePickerField = ({
             }
             let secondFormattedValue;
             if (value[1]) {
-              secondFormattedValue = `${formatDateToInternationalString(value[1])}`;
+              secondFormattedValue = `${formatDateToInternationalString(
+                value[1]
+              )}`;
             }
             return `${firstFormattedValue}${secondFormattedValue}`;
           }

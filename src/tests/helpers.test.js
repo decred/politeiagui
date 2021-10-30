@@ -132,7 +132,11 @@ describe("test getInternationalDateString function", () => {
       help.formatDateToInternationalString({ day: null, month: 10, year: 2019 })
     ).toEqual(INVALID_DATE_LABEL);
     expect(
-      help.formatDateToInternationalString({ day: undefined, month: 10, year: 2019 })
+      help.formatDateToInternationalString({
+        day: undefined,
+        month: 10,
+        year: 2019
+      })
     ).toEqual(INVALID_DATE_LABEL);
     expect(
       help.formatDateToInternationalString({ day: 8, month: null, year: 2019 })
