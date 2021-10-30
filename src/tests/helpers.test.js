@@ -123,7 +123,7 @@ describe("test getInternationalDateString function", () => {
       help.formatDateToInternationalString({ day: 10, month: 13, year: 2019 })
     ).toEqual(INVALID_DATE_LABEL);
     expect(
-        help.formatDateToInternationalString({ day: 10, month: 0, year: 2019 })
+      help.formatDateToInternationalString({ day: 10, month: 0, year: 2019 })
     ).toEqual(INVALID_DATE_LABEL);
   });
 });
