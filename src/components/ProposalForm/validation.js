@@ -7,7 +7,7 @@ import {
 } from "src/utils/validation";
 import {
   convertObjectToUnixTimestamp,
-  getInternationalDateString
+  formatDateToInternationalString
 } from "src/helpers";
 import {
   PROPOSAL_TYPE_RFP,
@@ -108,7 +108,7 @@ export const proposalValidation =
         startdateTimestamp = convertObjectToUnixTimestamp(startdate);
         const minStartdateTimestamp =
           Math.round(new Date().getTime() / 1000) + startdatemin;
-        const dateString = getInternationalDateString(
+        const dateString = formatDateToInternationalString(
           formatUnixTimestampToObj(minStartdateTimestamp)
         );
         if (startdateTimestamp < minStartdateTimestamp) {

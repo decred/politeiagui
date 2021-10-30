@@ -5,7 +5,7 @@ import { FormikConsumer } from "formik";
 import styles from "./DatePickerField.module.css";
 import { Row } from "../layout";
 import { MONTHS_LABELS } from "src/constants";
-import { getInternationalDateString } from "src/helpers";
+import { formatDateToInternationalString } from "src/helpers";
 
 const DatePickerField = ({
   name,
@@ -52,18 +52,18 @@ const DatePickerField = ({
           if (isRange) {
             let firstFormattedValue = "";
             if (value[0]) {
-              firstFormattedValue = `${getInternationalDateString(
+              firstFormattedValue = `${formatDateToInternationalString(
                 value[0]
               )} - `;
             }
             let secondFormattedValue;
             if (value[1]) {
-              secondFormattedValue = `${getInternationalDateString(value[1])}`;
+              secondFormattedValue = `${formatDateToInternationalString(value[1])}`;
             }
             return `${firstFormattedValue}${secondFormattedValue}`;
           }
           // In single mode return the formatted picked date.
-          return getInternationalDateString(value);
+          return formatDateToInternationalString(value);
         };
 
         return (

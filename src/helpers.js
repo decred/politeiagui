@@ -623,16 +623,18 @@ export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
 };
 
 /**
- * getInternationalDateString accepts an object of day, month and year.
- * It returns a string of human viewable international date.
+ * formatDateToInternationalString accepts an object of day, month and year.
+ * It returns a string of human viewable international date from the result
+ * of DatePicker or BackEnd and supposes they are correct.
  * String format: 08 Sep 2021
  * @param {object} { day, month, year }
  * @returns {string}
  */
-export const getInternationalDateString = ({ day, month, year }) => {
-  if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1) {
-    const dayView = `0${day}`.slice(-2);
-    return `${dayView} ${MONTHS_LABELS[month - 1]} ${year}`;
+export const formatDateToInternationalString = ({ day, month, year }) => {
+  const monthLabel = MONTHS_LABELS[month - 1];
+  if (monthLabel === undefined) {
+    return INVALID_DATE_LABEL;
   }
-  return INVALID_DATE_LABEL;
+  const dayView = `0${day}`.slice(-2);
+  return `${dayView} ${MONTHS_LABELS[month - 1]} ${year}`;
 };
