@@ -120,29 +120,10 @@ describe("test getInternationalDateString function", () => {
 
   test("it should return error with invalid date input", () => {
     expect(
-      help.formatDateToInternationalString({ day: 0, month: 1, year: 2019 })
-    ).toEqual(INVALID_DATE_LABEL);
-    expect(
-      help.formatDateToInternationalString({ day: 10, month: 0, year: 2019 })
-    ).toEqual(INVALID_DATE_LABEL);
-    expect(
       help.formatDateToInternationalString({ day: 10, month: 13, year: 2019 })
     ).toEqual(INVALID_DATE_LABEL);
     expect(
-      help.formatDateToInternationalString({ day: null, month: 10, year: 2019 })
-    ).toEqual(INVALID_DATE_LABEL);
-    expect(
-      help.formatDateToInternationalString({
-        day: undefined,
-        month: 10,
-        year: 2019
-      })
-    ).toEqual(INVALID_DATE_LABEL);
-    expect(
-      help.formatDateToInternationalString({ day: 8, month: null, year: 2019 })
-    ).toEqual(INVALID_DATE_LABEL);
-    expect(
-      help.formatDateToInternationalString({ day: 8, month: 10, year: null })
+        help.formatDateToInternationalString({ day: 10, month: 0, year: 2019 })
     ).toEqual(INVALID_DATE_LABEL);
   });
 });
