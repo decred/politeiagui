@@ -1,0 +1,58 @@
+{
+  "name": "@politeiagui/cli",
+  "version": "1.0.0",
+  "description": "politeiagui cli",
+  "keywords": [
+    "pgui",
+    "politeiagui-cli",
+    "@politeiagui/cli"
+  ],
+  "author": "Victor Guedes <victorgcramos@gmail.com>",
+  "homepage": "https://github.com/decred/politeiagui#readme",
+  "license": "ISC",
+  "main": "lib/pgui.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/decred/politeiagui.git"
+  },
+  "scripts": {
+    "prettier": "prettier \"**/*.js\"",
+    "format": "yarn prettier --write",
+    "test:format": "yarn prettier --check",
+    "test:eslint": "eslint --ext .js ./lib",
+    "test:ci": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --no-cache",
+    "test:dev": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll --no-cache",
+    "test": "is-ci \"test:ci\" \"test:dev\"",
+    "test:coverage": "yarn test:ci; open coverage/lcov-report/index.html"
+  },
+  "bugs": {
+    "url": "https://github.com/decred/politeiagui/issues"
+  },
+  "bin": {
+    "pgui": "lib/pgui.js"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs"
+        ]
+      }
+    }
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
+    "@testing-library/jest-dom": "^5.14.1",
+    "jest-extended": "^1.0.0"
+  },
+  "dependencies": {
+    "commander": "^8.3.0"
+  }
+}
