@@ -39,6 +39,12 @@ const mockApiReturn = {
 
 const mockCsrfToken = "fake_csrf";
 
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve("success"),
+  })
+);
+
 describe("Given the recordsInventory slice and the records slice", () => {
   let store;
   const params = {
@@ -54,6 +60,7 @@ describe("Given the recordsInventory slice and the records slice", () => {
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
+    fetch.mockClear();
     const staticReducers = {
       api: apiReducer,
       recordsInventory: recordsInventoryReducer,
@@ -111,7 +118,20 @@ describe("Given the recordsInventory slice and the records slice", () => {
     });
   });
   describe("when dispatching fetchRecordsNextPage", () => {
-    it("should remove RECORDS_PAGE_SIZE tokens from the fetchQueue", async () => {
+    it("should remove RECORDS_PAGE_SIZE tokens from the fetchQueue, populate records and status should be succeeded", async () => {
+      fetch.mockImplementation(() =>
+        Promise.resolve({
+          status: 200,
+          json: () =>
+            Promise.resolve({
+              records: {
+                fake_token: mockRecord,
+                fake_token2: mockRecord,
+                fake_token3: mockRecord,
+              },
+            }),
+        })
+      );
       fetchApiSpy.mockResolvedValueOnce({
         api: mockApiReturn,
         csrf: mockCsrfToken,
@@ -138,6 +158,13 @@ describe("Given the recordsInventory slice and the records slice", () => {
       );
       state = store.getState();
       expect(state.records.recordsFetchQueue.vetted.public).toEqual([]);
+      expect(state.records.records).toEqual({
+        fake_token: mockRecord,
+        fake_token2: mockRecord,
+        fake_token3: mockRecord,
+      });
+      expect(state.records.status).toEqual("succeeded");
+      expect(state.records.error).toEqual(null);
     });
   });
 });

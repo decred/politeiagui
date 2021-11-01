@@ -48,11 +48,11 @@ export const client = {
 
 // Not exported client utils
 async function getCsrf(state) {
-  const { csrf } = state.api;
+  const csrf = state.api && state.api.csrf;
   // if already has csrf just return it
   if (csrf) return csrf;
   // otherwise, call fetchApi to get it
-  const { csrf: newCsrf } = await this.fetchApi();
+  const { csrf: newCsrf } = await client.fetchApi();
   return newCsrf;
 }
 
