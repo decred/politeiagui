@@ -218,6 +218,8 @@ export const MONTHS_LABELS = [
   "Dec"
 ];
 
+export const INVALID_DATE_LABEL = "Invalid date";
+
 export const TOTP_CODE_LENGTH = 6;
 export const TOTP_DEFAULT_TYPE = 1;
 export const TOTP_MISSING_LOGIN_ERROR = 79;

@@ -5,7 +5,10 @@ import {
   exactLengthMessage,
   invalidMessage
 } from "src/utils/validation";
-import { convertObjectToUnixTimestamp } from "src/helpers";
+import {
+  convertObjectToUnixTimestamp,
+  formatDateToInternationalString
+} from "src/helpers";
 import {
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION,
@@ -105,11 +108,11 @@ export const proposalValidation =
         startdateTimestamp = convertObjectToUnixTimestamp(startdate);
         const minStartdateTimestamp =
           Math.round(new Date().getTime() / 1000) + startdatemin;
-        const { day, month, year } = formatUnixTimestampToObj(
-          minStartdateTimestamp
+        const dateString = formatDateToInternationalString(
+          formatUnixTimestampToObj(minStartdateTimestamp)
         );
         if (startdateTimestamp < minStartdateTimestamp) {
-          errors.startDate = `Minimum possible start date is: ${month}/${day}/${year}`;
+          errors.startDate = `Minimum possible start date is: ${dateString}`;
         }
       }
 
