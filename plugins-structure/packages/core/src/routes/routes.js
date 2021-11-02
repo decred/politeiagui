@@ -10,6 +10,7 @@ const root = document.querySelector("#root");
 export const routes = [
   {
     path: "/",
+    title: "Home",
     view: () =>
       ReactDOM.render(
         <Provider store={store}>
@@ -21,6 +22,7 @@ export const routes = [
   },
   {
     path: "/records",
+    title: "Records",
     view: () =>
       ReactDOM.render(
         <Provider store={store}>
@@ -32,6 +34,7 @@ export const routes = [
   },
   {
     path: "/records/:id",
+    title: "Record",
     view: (params) => ReactDOM.render(<Record {...params} />, root),
     cleanup: () => ReactDOM.unmountComponentAtNode(root),
   },

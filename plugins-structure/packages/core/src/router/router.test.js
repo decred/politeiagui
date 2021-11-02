@@ -128,6 +128,6 @@ describe("Given the router", () => {
     expect(window.location.pathname).toBe("/");
     router.init({ routes: mockRoutes });
     router.navigateTo(mockRoutes[0].path);
-    expect(pushState).toBeCalledWith(null, "", mockRoutes[0].path);
+    expect(pushState).toBeCalledWith(null, null, mockRoutes[0].path);
   });
 });

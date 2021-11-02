@@ -4,13 +4,13 @@ import isArray from "lodash/fp/isArray";
 const routerInitialSettings = {
   routes: null,
   selector: "[data-link]",
-  title: "",
   onpopstate: true,
-  cleanup: null,
 };
 
 export const router = (function () {
   let settings = routerInitialSettings;
+  let cleanup = null;
+  let title = null;
 
   function pathToRegex(path) {
     return new RegExp(
@@ -31,15 +31,12 @@ export const router = (function () {
     if (!window.history.pushState) return;
     // Don't run if already current page
     if (window.location.pathname === url) return;
-    // Update the page title
-    // Some browsers ignore the second param on pushState
-    if (settings.title) document.title = settings.title;
     // We are not sending a URL state (first param)
     // because we don't need it. All info we need in
     // the route is in the redux store or sent via
     // query params. All query params are sent to the
     // view.
-    window.history.pushState(null, settings.title, url);
+    window.history.pushState(null, null, url);
   }
 
   async function verifyMatch() {
@@ -61,15 +58,20 @@ export const router = (function () {
           view: () =>
             (document.querySelector("#root").innerHTML = "<h1>Not found!</h1>"),
         },
+        title: "Not found",
         result: [window.location.pathname],
       };
     }
+
+    // Set title
+    title = match.route.title;
+    if (title) document.title = title;
 
     // Call view cb and pass query params as parameter
     await match.route.view(getParams(match));
 
     // Set cleanup
-    settings.cleanup = match.route.cleanup;
+    cleanup = match.route.cleanup;
   }
 
   function onClickHandler(e) {
@@ -80,7 +82,6 @@ export const router = (function () {
   }
 
   function onPopStateHandler() {
-    const cleanup = settings.cleanup;
     cleanup && cleanup();
     verifyMatch();
   }
@@ -90,7 +91,6 @@ export const router = (function () {
       if (!this.getIsInitialized()) {
         throw Error("router is not initialized. Use the init method");
       }
-      const cleanup = settings.cleanup;
       cleanup && cleanup();
       push(url);
       // Call verifyMatch to update our router state after
@@ -106,6 +106,10 @@ export const router = (function () {
       // if we have the routes set, we know the router
       // has been initialized
       return !!settings.routes;
+    },
+
+    getHistory() {
+      return window.history;
     },
 
     reset() {
