@@ -7,6 +7,19 @@ const routerInitialSettings = {
   onpopstate: true,
 };
 
+export function generatePath(path, params) {
+  return path
+    .replace(/:(\w+)/g, (_, key) => {
+      if (params[key] === null || params[key] === undefined) {
+        throw new Error(`Missing ":${key}" param`);
+      }
+      return params[key];
+    })
+    .replace(/\/*\*$/, (_) =>
+      params["*"] == null ? "" : params["*"].replace(/^\/*/, "/")
+    );
+}
+
 export const router = (function () {
   let settings = routerInitialSettings;
   let cleanup = null;
@@ -23,7 +36,6 @@ export const router = (function () {
     const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map(
       (result) => result[1]
     );
-
     return Object.fromEntries(keys.map((key, i) => [key, values[i]]));
   }
 
@@ -96,6 +108,12 @@ export const router = (function () {
       // Call verifyMatch to update our router state after
       // changing the route.
       verifyMatch();
+    },
+
+    matchPath(path) {
+      return settings.routes.some((route) =>
+        path.match(pathToRegex(route.path))
+      );
     },
 
     getRoutes() {
