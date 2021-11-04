@@ -268,7 +268,7 @@ describe("Big screens proposals list", () => {
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 10);
     cy.scrollTo("bottom");
-    cy.wait(1000);
+    cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 15);
   });
 });

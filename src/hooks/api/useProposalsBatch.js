@@ -389,7 +389,9 @@ export default function useProposalsBatch({
     verifying: state.verifying,
     onRestartMachine,
     onFetchMoreProposals,
-    hasMoreProposals: !!remainingTokens.length && !!values(proposals).length,
+    hasMoreProposals:
+      (!!remainingTokens.length && !!values(proposals).length) ||
+      isAnotherTokensScanningRequired,
     isProposalsBatchComplete: isFetchDone && !isAnotherTokensScanningRequired,
     machineCurrentState: state.status
   };
