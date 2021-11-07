@@ -228,7 +228,7 @@ describe("Records list", () => {
     });
     it("should render loading placeholders properly", () => {
       cy.visit("/");
-      cy.get('[data-testid="loading-placeholders"] > div').should(
+      cy.get("[data-testid='loading-placeholders'] > div").should(
         "have.length",
         5
       );
