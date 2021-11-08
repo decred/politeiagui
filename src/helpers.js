@@ -31,7 +31,9 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATUS_ARCHIVED,
   VOTE_METADATA_FILENAME,
-  USER_METADATA_PLUGIN
+  USER_METADATA_PLUGIN,
+  MONTHS_LABELS,
+  INVALID_DATE_LABEL
 } from "./constants.js";
 
 export const digestPayload = (payload) =>
@@ -618,4 +620,21 @@ export const calculateAuthorUpdateTree = (authorUpdateId, comments) => {
     allTreeComments = uniq([...authorUpdateTree, ...children]);
   }
   return allTreeComments;
+};
+
+/**
+ * formatDateToInternationalString accepts an object of day, month and year.
+ * It returns a string of human viewable international date from the result
+ * of DatePicker or BackEnd and supposes they are correct.
+ * String format: 08 Sep 2021
+ * @param {object} { day, month, year }
+ * @returns {string}
+ */
+export const formatDateToInternationalString = ({ day, month, year }) => {
+  const monthLabel = MONTHS_LABELS[month - 1];
+  if (monthLabel === undefined) {
+    return INVALID_DATE_LABEL;
+  }
+  const dayView = `0${day}`.slice(-2);
+  return `${dayView} ${MONTHS_LABELS[month - 1]} ${year}`;
 };

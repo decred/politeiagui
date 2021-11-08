@@ -110,7 +110,7 @@ describe("Admin account actions", () => {
     cy.route("POST", "/api/v1/user/manage").as("manageUser");
 
     // register random unpaid user
-    let unpaidUser = buildUser();
+    const unpaidUser = buildUser();
 
     return pki.generateKeys().then((keys) =>
       pki.loadKeys(unpaidUser.username, keys).then(() =>

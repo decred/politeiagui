@@ -45,7 +45,7 @@ describe("Multiple status tab", () => {
       }
     });
     // Test
-    cy.visit(`/`);
+    cy.visit("/");
     cy.wait("@ticketvote.inventory");
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 1);
@@ -67,7 +67,7 @@ describe("Multiple status tab", () => {
       }
     });
     // Test
-    cy.visit(`/`);
+    cy.visit("/");
     cy.wait("@ticketvote.inventory");
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 3);
@@ -82,7 +82,7 @@ describe("Multiple status tab", () => {
       amountByStatus: { started: 3, authorized: 20, unauthorized: 45 }
     });
     // Test
-    cy.visit(`/`);
+    cy.visit("/");
     cy.wait("@ticketvote.inventory");
     cy.wait("@records.records");
     cy.assertListLengthByTestId("record-title", 5);
@@ -165,7 +165,7 @@ describe("General pagination", () => {
   });
   it("should render first proposals batch according to inventory order", () => {
     let inventory;
-    cy.visit(`/`);
+    cy.visit("/");
     cy.wait("@ticketvote.inventory").then(({ response: { body } }) => {
       inventory = body.vetted;
     });
@@ -210,15 +210,15 @@ describe("General pagination", () => {
 describe("Given an empty proposals list", () => {
   it("should render loading placeholders properly", () => {
     cy.ticketvoteMiddleware("inventory", {}, { delay: 2000 });
-    cy.visit(`/`);
-    cy.get('[data-testid="loading-placeholders"] > div').should(
+    cy.visit("/");
+    cy.get("[data-testid='loading-placeholders'] > div").should(
       "have.length",
       5
     );
   });
   it("should switch tabs and show empty message", () => {
     // Test
-    cy.visit(`/`);
+    cy.visit("/");
     cy.wait("@ticketvote.inventory");
     cy.findByTestId("help-message").should("be.visible");
     cy.scrollTo("bottom");
@@ -261,7 +261,7 @@ describe("Big screens proposals list", () => {
     });
   });
   afterEach(() => {
-    cy.visit(`/`);
+    cy.visit("/");
     cy.wait("@ticketvote.inventory");
     // Should trigger at least 2 records batch requests
     cy.wait("@records.records");

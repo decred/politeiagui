@@ -23,6 +23,7 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+//
 import { sha3_256 } from "js-sha3";
 import { requestWithCsrfToken, setProposalStatus } from "../utils";
 import * as pki from "../pki";

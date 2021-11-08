@@ -1,4 +1,5 @@
 import * as help from "../helpers";
+import { INVALID_DATE_LABEL } from "../constants";
 
 const FILE = {
   name: "example.jpeg",
@@ -74,5 +75,55 @@ describe("test getTimeDiffInMinutes function", () => {
 
   test("it should return correctly when the hour overflows", () => {
     expect(help.getTimeDiffInMinutes(1591031100000, 1591030500000)).toEqual(10);
+  });
+});
+
+describe("test getInternationalDateString function", () => {
+  test("it should return correctly with valid date input", () => {
+    expect(
+      help.formatDateToInternationalString({ day: 5, month: 1, year: 2019 })
+    ).toEqual("05 Jan 2019");
+    expect(
+      help.formatDateToInternationalString({ day: 12, month: 2, year: 2021 })
+    ).toEqual("12 Feb 2021");
+    expect(
+      help.formatDateToInternationalString({ day: 6, month: 3, year: 2019 })
+    ).toEqual("06 Mar 2019");
+    expect(
+      help.formatDateToInternationalString({ day: 21, month: 4, year: 2021 })
+    ).toEqual("21 Apr 2021");
+    expect(
+      help.formatDateToInternationalString({ day: 21, month: 5, year: 2019 })
+    ).toEqual("21 May 2019");
+    expect(
+      help.formatDateToInternationalString({ day: 30, month: 6, year: 2021 })
+    ).toEqual("30 Jun 2021");
+    expect(
+      help.formatDateToInternationalString({ day: 15, month: 7, year: 2019 })
+    ).toEqual("15 Jul 2019");
+    expect(
+      help.formatDateToInternationalString({ day: 26, month: 8, year: 2021 })
+    ).toEqual("26 Aug 2021");
+    expect(
+      help.formatDateToInternationalString({ day: 15, month: 9, year: 2019 })
+    ).toEqual("15 Sep 2019");
+    expect(
+      help.formatDateToInternationalString({ day: 9, month: 10, year: 2021 })
+    ).toEqual("09 Oct 2021");
+    expect(
+      help.formatDateToInternationalString({ day: 25, month: 11, year: 2019 })
+    ).toEqual("25 Nov 2019");
+    expect(
+      help.formatDateToInternationalString({ day: 30, month: 12, year: 2021 })
+    ).toEqual("30 Dec 2021");
+  });
+
+  test("it should return error with invalid date input", () => {
+    expect(
+      help.formatDateToInternationalString({ day: 10, month: 13, year: 2019 })
+    ).toEqual(INVALID_DATE_LABEL);
+    expect(
+      help.formatDateToInternationalString({ day: 10, month: 0, year: 2019 })
+    ).toEqual(INVALID_DATE_LABEL);
   });
 });
