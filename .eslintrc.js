@@ -5,6 +5,7 @@ module.exports = {
     jest: true,
     es6: true
   },
+  root: true,
   plugins: ["react", "react-hooks"],
   parser: "babel-eslint",
   parserOptions: {

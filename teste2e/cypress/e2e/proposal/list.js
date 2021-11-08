@@ -31,7 +31,7 @@ describe("Records list", () => {
       cy.middleware("records.records");
 
       // do testing
-      cy.visit(`/`);
+      cy.visit("/");
       cy.wait("@ticketvote.inventory");
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 1);
@@ -52,7 +52,7 @@ describe("Records list", () => {
       });
       cy.middleware("records.records");
 
-      cy.visit(`/`);
+      cy.visit("/");
       cy.wait("@ticketvote.inventory");
       cy.findByTestId("help-message").should("be.visible");
       cy.scrollTo("bottom");
@@ -77,7 +77,7 @@ describe("Records list", () => {
       cy.middleware("records.records");
 
       // do testing
-      cy.visit(`/`);
+      cy.visit("/");
       cy.wait("@ticketvote.inventory");
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 3);
@@ -97,7 +97,7 @@ describe("Records list", () => {
       cy.middleware("records.records");
 
       // do testing
-      cy.visit(`/`);
+      cy.visit("/");
       cy.wait("@ticketvote.inventory");
       cy.wait("@records.records");
       cy.assertListLengthByTestId("record-title", 5);
@@ -177,7 +177,7 @@ describe("Records list", () => {
     });
     it("should render first proposals batch according to inventory order", () => {
       let inventory;
-      cy.visit(`/`);
+      cy.visit("/");
       cy.wait("@ticketvote.inventory").then(({ response: { body } }) => {
         inventory = body.vetted;
       });
@@ -227,8 +227,8 @@ describe("Records list", () => {
       cy.findByTestId("sidebar").should("be.visible");
     });
     it("should render loading placeholders properly", () => {
-      cy.visit(`/`);
-      cy.get('[data-testid="loading-placeholders"] > div').should(
+      cy.visit("/");
+      cy.get("[data-testid='loading-placeholders'] > div").should(
         "have.length",
         5
       );
@@ -313,7 +313,7 @@ describe("Records list", () => {
       });
       cy.middleware("records.records");
       // test
-      cy.visit(`/`);
+      cy.visit("/");
       cy.wait("@ticketvote.inventory");
       // Should trigger at least 2 records batch requests
       cy.wait("@records.records");
@@ -348,7 +348,7 @@ describe("Records list", () => {
       cy.middleware("records.records");
     });
     afterEach(() => {
-      cy.visit(`/`);
+      cy.visit("/");
       cy.wait("@ticketvote.inventory");
       // Should trigger at least 2 records batch requests
       cy.wait("@records.records");

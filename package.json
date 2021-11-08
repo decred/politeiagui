@@ -63,9 +63,9 @@
     "test:e2e:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test 'yarn start' https-get://localhost:3000 cy:run",
     "test:e2e:browser": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test 'yarn start' https-get://localhost:3000 cy:open",
     "eject": "react-app-rewired eject",
-    "prettify": "prettier --write 'src/**/*.{js,jsx,css,json}'",
-    "prettify:diff": "prettier --list-different 'src/**/*.{js,jsx,css,json}'",
-    "lint": "./node_modules/.bin/eslint src --ext .js --ext .jsx"
+    "prettify": "prettier --write 'src/**/*.{js,jsx,css,json}' && prettier --write 'teste2e/**/*.{js,json}'",
+    "prettify:diff": "prettier --list-different 'src/**/*.{js,jsx,css,json}' && prettier --list-different 'teste2e/**/*.{js,json}'",
+    "lint": "./node_modules/.bin/eslint 'src/**/*.{jsx,js}' && ./node_modules/.bin/eslint 'teste2e/**/*.{js, json}' --ignore-pattern node_modules"
   },
   "jest": {
     "collectCoverageFrom": [
