@@ -6,9 +6,10 @@ import {
   selectHasMoreRecordsToFetch,
 } from "../records/recordsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import RecordCard from "./RecordCard";
 
 // fetch inventory and pass it down
-export function RecordsListWrapper({ recordsState, status }) {
+export function RecordsList({ recordsState, status }) {
   const [page, setPage] = useState(1);
   const { status: inventoryStatus } = useFetchRecordsInventory({
     recordsState,
@@ -20,7 +21,7 @@ export function RecordsListWrapper({ recordsState, status }) {
   }
 
   return inventoryStatus !== "idle" ? (
-    <RecordsList
+    <RecordsListAux
       recordsState={recordsState}
       status={status}
       inventoryStatus={inventoryStatus}
@@ -31,7 +32,7 @@ export function RecordsListWrapper({ recordsState, status }) {
   );
 }
 
-function RecordsList({
+function RecordsListAux({
   recordsState,
   status,
   inventoryStatus,
@@ -61,11 +62,7 @@ function RecordsList({
       {records.map((record) => {
         const { token } = record.censorshiprecord;
         return (
-          <div key={token}>
-            <a href={`/records/${token}`} data-link>
-              {token}
-            </a>
-          </div>
+          <RecordCard key={token} token={token} />
         );
       })}
       <button

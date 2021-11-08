@@ -1,11 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { Records } from "../records/ui/Records";
-import { Record } from "../records/ui/Record";
+import Records from "../records/pages/Records";
+import Record from "../records/pages/Record";
 import { store } from "../storeSetup";
-
-const root = document.querySelector("#root");
 
 export const routes = [
   {
@@ -16,9 +14,9 @@ export const routes = [
         <Provider store={store}>
           <Records />
         </Provider>,
-        root
+        document.querySelector("#root")
       ),
-    cleanup: () => ReactDOM.unmountComponentAtNode(root),
+    cleanup: () => ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   {
     path: "/records",
@@ -28,15 +26,15 @@ export const routes = [
         <Provider store={store}>
           <Records />
         </Provider>,
-        root
+        document.querySelector("#root")
       ),
-    cleanup: () => ReactDOM.unmountComponentAtNode(root),
+    cleanup: () => ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   {
     path: "/records/:id",
     title: "Record",
-    view: (params) => ReactDOM.render(<Record {...params} />, root),
-    cleanup: () => ReactDOM.unmountComponentAtNode(root),
+    view: (params) => ReactDOM.render(<Record {...params} />, document.querySelector("#root")),
+    cleanup: () => ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   { path: "/settings", view: () => console.log("view settings") },
 ];

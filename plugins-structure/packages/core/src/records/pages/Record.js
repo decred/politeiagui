@@ -1,5 +1,7 @@
 import React from "react";
 
-export function Record({ id }) {
+function Record({ id }) {
   return <h1>I am a record: {id}</h1>;
 }
+
+export default Record;
