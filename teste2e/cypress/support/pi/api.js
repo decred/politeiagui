@@ -62,7 +62,7 @@ export function policyReply() {
       ")",
       "!",
       "?",
-      "\"",
+      String.fromCharCode(34),
       "'"
     ],
     amountmin: 100,

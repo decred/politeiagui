@@ -70,7 +70,7 @@ export function policyReply() {
       ")",
       "!",
       "?",
-      "\"",
+      String.fromCharCode(34),
       "'"
     ],
     maxcommentlength: 8000,
