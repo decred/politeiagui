@@ -70,7 +70,7 @@ export function policyReply() {
       ")",
       "!",
       "?",
-      '"',
+      "\"",
       "'"
     ],
     maxcommentlength: 8000,

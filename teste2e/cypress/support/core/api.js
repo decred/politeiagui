@@ -52,7 +52,7 @@ export function recordsReply({
   const findFile = (name, files) => files.find((f) => f.name === name);
   const records = requests.reduce((acc, { token, filenames }) => {
     const files =
-      recordfiles && filenames.map((f) => new File(findFile(f, recordFiles)));
+      recordfiles && filenames.map((f) => new File(findFile(f, recordfiles)));
     return {
       ...acc,
       [token]: new Record({

@@ -62,7 +62,7 @@ export function policyReply() {
       ")",
       "!",
       "?",
-      '"',
+      "\"",
       "'"
     ],
     amountmin: 100,
