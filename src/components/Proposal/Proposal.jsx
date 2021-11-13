@@ -295,7 +295,7 @@ const Proposal = React.memo(function Proposal({
                   truncate
                   isLegacy={isLegacy}
                   linesBeforeTruncate={2}
-                  url={extended ? "" : proposalURL}>
+                  url={proposalURL}>
                   {name || shortToken}
                 </Title>
               }
