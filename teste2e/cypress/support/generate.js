@@ -1,15 +1,35 @@
 import compose from "lodash/fp/compose";
+import get from "lodash/fp/get";
 import entries from "lodash/fp/entries";
 import reduce from "lodash/fp/reduce";
 import range from "lodash/fp/range";
 import map from "lodash/fp/map";
 import chunk from "lodash/fp/chunk";
+import times from "lodash/fp/times";
 import { build, fake } from "test-data-bot";
 
 export const buildUser = build("User").fields({
   email: fake((f) => f.internet.email()),
   username: fake((f) => `user${f.datatype.number()}`),
   password: fake((f) => f.internet.password())
+});
+
+export const buildUserSession = build("User").fields({
+  isadmin: false,
+  userid: fake((f) => f.datatype.uuid()),
+  email: fake((f) => f.internet.email()),
+  username: fake((f) => f.internet.userName()),
+  publickey: fake((f) => f.datatype.hexaDecimal(64, false, /[0-9a-z]/)),
+  paywalladdress: fake(
+    (f) => `Ts${f.datatype.hexaDecimal(33, false, /[0-9a-z]/)}`
+  ),
+  paywallamount: 10000000,
+  paywalltxnotbefore: Date.now() / 1000 - 3600,
+  paywalltxid: fake((f) => f.datatype.hexaDecimal(64, false, /[0-9a-z]/)),
+  proposalcredits: fake((f) => f.datatype.number()),
+  lastlogintime: Date.now() / 1000,
+  sessionmaxage: 86400,
+  totpverified: false
 });
 
 export const buildProposal = build("Proposal").fields({
@@ -91,11 +111,11 @@ const fakeToken = () => buildRecord().token;
  * @param {Object} tokensAmountByStatus
  * @param {Number} pageLimit
  */
-export const makeCustomInventoryByStatus = (
+export function makeCustomInventoryByStatus(
   tokensAmountByStatus = {},
   pageLimit = 20
-) =>
-  compose(
+) {
+  return compose(
     reduce(
       (acc, [status, amount]) => ({
         ...acc,
@@ -105,3 +125,4 @@ export const makeCustomInventoryByStatus = (
     ),
     entries
   )(tokensAmountByStatus);
+}

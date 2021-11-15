@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Tabs, Tab } from "pi-ui";
 import LazyList from "src/components/LazyList";
-import orderBy from "lodash/fp/orderBy";
 import { getRecordsByTabOption } from "./helpers";
 import HelpMessage from "src/components/HelpMessage";
 import { useConfig } from "src/containers/Config";
@@ -17,20 +16,8 @@ const LoadingPlaceholders = ({ numberOfItems, placeholder }) => {
   return <>{placeholders}</>;
 };
 
-const defaultSort = {
-  fields: ["timestamp"],
-  order: ["desc"]
-};
-
-const getFilteredRecordsAndToken = (
-  records,
-  tokens,
-  tab,
-  filterCensored,
-  sort = defaultSort
-) => {
+const getFilteredRecordsAndToken = (records, tokens, tab, filterCensored) => {
   const filteredTokens = tokens[tab].map((token) => shortRecordToken(token));
-  const sortByNewestFirst = orderBy(sort.fields, sort.order);
   let filteredRecords =
     (records &&
       filteredTokens &&
@@ -41,7 +28,7 @@ const getFilteredRecordsAndToken = (
       ({ status }) => status !== PROPOSAL_STATUS_CENSORED
     );
   }
-  return [sortByNewestFirst(filteredRecords), filteredTokens];
+  return [filteredRecords, filteredTokens];
 };
 
 const getDefaultEmptyMessage = () => "No records available";

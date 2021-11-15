@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import get from "lodash/get";
 import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
-import { tabValues, statusByTab, sortByTab } from "./helpers";
+import { tabValues, statusByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import {
   useProposalsBatch,
@@ -30,7 +30,6 @@ const tabLabels = [
 const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
   const [index, onSetIndex] = useQueryStringWithIndexValue("tab", 0, tabLabels);
   const statuses = statusByTab[tabLabels[index]];
-  const sort = sortByTab[tabLabels[index]];
   const policy = usePolicy();
   const proposalPageSize = get(policy, [
     "policyTicketVote",
@@ -140,8 +139,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       dropdownTabsForMobile
       hasMore={hasMoreProposals}
       pageSize={proposalPageSize}
-      isLoading={loading || verifying}
-      sort={sort}>
+      isLoading={loading || verifying}>
       {content}
     </RecordsView>
   );

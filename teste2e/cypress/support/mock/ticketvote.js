@@ -41,7 +41,8 @@ export const middlewares = {
         });
       }
     }),
-  summaries: ({ token, status }) =>
+  summaries: ({ token, status } = {}) =>
+    // TODO: Allow more than one status
     cy.intercept("/api/ticketvote/v1/summaries", (req) => {
       req.continue((res) => {
         res.body.summaries[token] = {

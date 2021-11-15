@@ -17,6 +17,16 @@
 import "@testing-library/cypress/add-commands";
 // Import commands.js using ES2015 syntax:
 import "./commands";
+import "./core/commands";
+import "./ticketvote/commands";
+import "./users/commands";
+import "./pi/commands";
+import "./comments/commands";
+import "./www/commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+beforeEach(function useAppMiddlewares() {
+  // here you can define global middlewares
+});
