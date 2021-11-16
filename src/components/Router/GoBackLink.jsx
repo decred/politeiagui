@@ -12,7 +12,7 @@ function isExactMatch(match) {
   return match?.isExact;
 }
 
-const GoBackLink = ({ label, hierarchy, rootLink, breakpoint }) => {
+const GoBackLink = ({ label, hierarchy, breakpoint }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   const { history, navigationHistory } = useRouter();
@@ -43,9 +43,7 @@ const GoBackLink = ({ label, hierarchy, rootLink, breakpoint }) => {
     [navigationHistory, breakpoint]
   );
 
-  return !previousHierarchyLink &&
-    !rootLink &&
-    previousDefaultLinkIndex < 0 ? null : (
+  return !previousHierarchyLink && previousDefaultLinkIndex < 0 ? null : (
     <div className={styles.returnLinkContainer}>
       <Link
         className={classNames(
@@ -55,8 +53,6 @@ const GoBackLink = ({ label, hierarchy, rootLink, breakpoint }) => {
         onClick={() =>
           previousHierarchyLink
             ? history.push(previousHierarchyLink)
-            : rootLink
-            ? history.push(rootLink)
             : history.go(-(previousDefaultLinkIndex + 1))
         }>
         {backArrow} {label}
@@ -68,7 +64,6 @@ const GoBackLink = ({ label, hierarchy, rootLink, breakpoint }) => {
 GoBackLink.propTypes = {
   label: PropTypes.string,
   hierarchy: PropTypes.arrayOf(PropTypes.string),
-  rootLink: PropTypes.string,
   breakpoint: PropTypes.string
 };
 
