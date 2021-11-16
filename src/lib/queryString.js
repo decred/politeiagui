@@ -7,7 +7,7 @@ export const setQueryStringWithoutPageReload = (qsValue) => {
     window.location.host +
     window.location.pathname +
     qsValue;
-  window.history.pushState({ path: newurl, search: qsValue }, "", newurl);
+  window.history.replaceState({ path: newurl, search: qsValue }, "", newurl);
 };
 
 export const getQueryStringValue = (
@@ -40,5 +40,5 @@ export const removeQueryStringsFromUrl = (url, parameter, parameter2) => {
     .replace(new RegExp("([?&])" + parameter + "=[^&]*&"), "$1")
     .replace(new RegExp("[?&]" + parameter2 + "=[^&#]*(#.*)?$"), "$1")
     .replace(new RegExp("([?&])" + parameter2 + "=[^&]*&"), "$1");
-  window.history.pushState({ path: newurl }, "", newurl);
+  window.history.replaceState({ path: newurl }, "", newurl);
 };
