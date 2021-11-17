@@ -4,6 +4,7 @@ import { matchPath } from "react-router-dom";
 import { Link, classNames, useTheme, DEFAULT_DARK_THEME_NAME } from "pi-ui";
 import { useRouter } from "src/components/Router";
 import styles from "./GoBackLink.module.css";
+import findIndex from "lodash/fp/findIndex";
 
 const backArrow = <>&#8592;</>;
 
@@ -11,13 +12,13 @@ function isExactMatch(match) {
   return match?.isExact;
 }
 
-const GoBackLink = ({ label, hierarchy }) => {
+const GoBackLink = ({ label, hierarchy, breakpoint }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  const { history } = useRouter();
+  const { history, navigationHistory } = useRouter();
   const hierarchyRef = useRef(hierarchy);
-
-  const previousLink = useMemo(() => {
+  const previousHierarchyLink = useMemo(() => {
+    if (!hierarchyRef.current) return;
     const hierarchyMatches = hierarchyRef.current.map((path) =>
       matchPath(history.location.pathname, {
         path,
@@ -30,7 +31,19 @@ const GoBackLink = ({ label, hierarchy }) => {
     return previousMatch.url;
   }, [history]);
 
-  return (
+  const previousDefaultLinkIndex = useMemo(
+    () =>
+      findIndex(
+        (prev) =>
+          !matchPath(prev.pathname, {
+            path: breakpoint,
+            strict: true
+          })
+      )(navigationHistory),
+    [navigationHistory, breakpoint]
+  );
+
+  return !previousHierarchyLink && previousDefaultLinkIndex < 0 ? null : (
     <div className={styles.returnLinkContainer}>
       <Link
         className={classNames(
@@ -38,7 +51,9 @@ const GoBackLink = ({ label, hierarchy }) => {
           isDarkTheme && styles.darkReturnLink
         )}
         onClick={() =>
-          previousLink ? history.push(previousLink) : history.goBack()
+          previousHierarchyLink
+            ? history.push(previousHierarchyLink)
+            : history.go(-(previousDefaultLinkIndex + 1))
         }>
         {backArrow} {label}
       </Link>
@@ -48,12 +63,12 @@ const GoBackLink = ({ label, hierarchy }) => {
 
 GoBackLink.propTypes = {
   label: PropTypes.string,
-  hierarchy: PropTypes.arrayOf(PropTypes.string)
+  hierarchy: PropTypes.arrayOf(PropTypes.string),
+  breakpoint: PropTypes.string
 };
 
 GoBackLink.defaultProps = {
-  label: "Go Back",
-  hierarchy: ["/"]
+  label: "Go Back"
 };
 
 export default GoBackLink;

@@ -270,7 +270,13 @@ export function useProposal(token, proposalPageSize, threadParentID) {
     error: commentsError,
     loading: commentsLoading,
     finishedCommentsFetch
-  } = useComments(proposalToken, proposalState, null, threadParentID);
+  } = useComments(
+    proposalToken,
+    proposalState,
+    null,
+    threadParentID,
+    isCurrentUserProposalAuthor
+  );
 
   return {
     proposal: proposalWithLinks && {
