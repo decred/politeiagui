@@ -63,4 +63,15 @@ describe("2FA Login", () => {
     cy.findByTestId("digits-input").type("123456");
     cy.findByTestId("modal-totp-verify-error").should("be.visible");
   });
+  it("should display 2FA modal on login modal", () => {
+    cy.middleware("users.login", { error: { statusCode: 401, errorCode: 79 } });
+    cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
+    cy.visit("/");
+    cy.findAllByTestId("record-title").first().click();
+    cy.findByTestId("wayt-login-button").click();
+    cy.findByLabelText(/email/i).type(unpaidUser.email);
+    cy.findByLabelText(/password/i).type(unpaidUser.password);
+    cy.findByTestId("login-form-button").click();
+    cy.findByTestId("modal-totp-verify").should("be.visible");
+  });
 });
