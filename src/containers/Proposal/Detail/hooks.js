@@ -130,7 +130,7 @@ export function useProposal(token, proposalPageSize, threadParentID) {
   const isAdmin = currentUser?.isadmin;
   const isApproved = isApprovedProposal(proposal, voteSummary);
   const isMissingBillingStatusChangeMetadata =
-    isAdmin && isApproved && isEmpty(billingStatusChangeMetadata);
+    isAdmin && isApproved && isEmpty(billingStatusChangeMetadata) && !isRfp;
   const needsInitialFetch = token && isMissingDetails;
   const isCensored = isCensoredProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposalSummary);

@@ -49,6 +49,7 @@ export const PROPOSAL_SUMMARY_STATUS_VOTE_STARTED = "vote-started";
 export const PROPOSAL_SUMMARY_STATUS_REJECTED = "rejected";
 export const PROPOSAL_SUMMARY_STATUS_ACTIVE = "active";
 export const PROPOSAL_SUMMARY_STATUS_COMPLETED = "completed";
+export const PROPOSAL_SUMMARY_STATUS_APPROVED = "approved";
 export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
 
 export const PROPOSAL_STATE_UNVETTED = 1;
