@@ -1,4 +1,4 @@
-import React, { useState, createContext, useCallback, useRef } from "react";
+import React, { createContext, useCallback, useRef, useReducer } from "react";
 import IdentityErrorBoundary from "src/components/IdentityErrorBoundary";
 
 export const modalContext = createContext({ component: () => null, props: {} });
@@ -10,12 +10,16 @@ const initialState = {
   }
 };
 
+function toggleReducer(state) {
+  return { toggle: !state.toggle };
+}
+
 const ModalProvider = ({ children }) => {
   const modalStack = useRef([]);
   const modalToDisplay = useRef(initialState);
   // Modals are refs, and refs doesn't trigger component re-render. This
   // will force the state update, hence a modal update.
-  const [, toggleDisplay] = useState(Date.now());
+  const [, toggleDisplay] = useReducer(toggleReducer, { toggle: false });
 
   const handleOpenModal = useCallback(function (
     modal,
@@ -26,10 +30,10 @@ const ModalProvider = ({ children }) => {
     if (!modalStack.current || overlay) {
       modalStack.current && modalStack.current.push(newModal);
       modalToDisplay.current = newModal;
-      toggleDisplay(Date.now());
+      toggleDisplay();
     } else if (modalToDisplay.current && !modalToDisplay.current.props.show) {
       modalToDisplay.current = newModal;
-      toggleDisplay(Date.now());
+      toggleDisplay();
     }
   },
   []);
@@ -38,7 +42,7 @@ const ModalProvider = ({ children }) => {
     modalStack.current && modalStack.current.pop();
     const previousModal = modalStack.current && modalStack.current.pop();
     modalToDisplay.current = previousModal || initialState;
-    toggleDisplay(Date.now());
+    toggleDisplay();
   }, []);
 
   const props = {
