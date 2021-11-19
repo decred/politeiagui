@@ -228,7 +228,10 @@ export function useProposal(token, proposalPageSize, threadParentID) {
           isMissingBillingStatusChangeMetadata &&
           !loadingBillingStatusChanges
         ) {
-          onFetchBillingStatusChanges([tokenShort]);
+          onFetchBillingStatusChanges([tokenShort])
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
         }
         if (rfpLinks && rfpSubmissions) {
           // is a RFP
@@ -240,7 +243,11 @@ export function useProposal(token, proposalPageSize, threadParentID) {
         // verify proposal on proposal changes
         // TODO: improve this in the future so we don't need to verify once
         // it should be done.
-        if (!isEqual(state.proposal, proposal)) {
+        const needsVerification =
+          !isEqual(state.proposal, proposal) ||
+          isMissingBillingStatusChangeMetadata;
+
+        if (needsVerification) {
           return send(VERIFY);
         }
       }
