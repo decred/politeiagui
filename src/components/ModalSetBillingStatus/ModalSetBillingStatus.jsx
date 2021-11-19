@@ -14,6 +14,8 @@ import SelectField from "src/components/Select/SelectField";
 import { getProposalBillingStatusOptionsForSelect } from "./helpers";
 import { PROPOSAL_BILLING_STATUS_CLOSED } from "src/constants";
 import styles from "./ModalSetBillingStatus.module.css";
+import { useCrash, useModalContext } from "src/hooks";
+import { isIdentityError } from "src/utils";
 
 const StatusesExplanation = () => (
   <div>
@@ -44,6 +46,8 @@ const ModalSetBillingStatus = ({
   successTitle
 }) => {
   const [success, setSuccess] = useState(false);
+  const [, handleCloseModal] = useModalContext();
+  const crash = useCrash();
 
   const billingStatusOptions = useMemo(
     () => getProposalBillingStatusOptionsForSelect(),
@@ -66,6 +70,10 @@ const ModalSetBillingStatus = ({
     } catch (e) {
       setSubmitting(false);
       setFieldError("global", e);
+      if (isIdentityError(e)) {
+        crash(e);
+        handleCloseModal();
+      }
     }
   };
 

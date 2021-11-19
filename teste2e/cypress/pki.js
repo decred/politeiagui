@@ -5,7 +5,7 @@ import get from "lodash/fp/get";
 
 export const STORAGE_PREFIX = "ed255191~";
 export const IDENTITY_ERROR =
-  "User identity not found. You need to restore it from a backup or generate a new one. If this is a verification from an emailed link, please ensure to open it in the same browser where you requested it.";
+  "User identity not found. You need to restore it from a backup or generate a new one.";
 
 export const toHex = (x) => Buffer.from(toUint8Array(x)).toString("hex");
 
