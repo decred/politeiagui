@@ -137,7 +137,10 @@ const updateProposalRfpLinks = (proposal) => (state) => {
   )(state);
 };
 
-const updateInventory = (payload) => (allProps) => ({
+const updateInventory = (payload) => (allProps) => {
+  console.log("payload", payload);
+  console.log("allProps", allProps);
+  return ({
   ...allProps,
   ...Object.keys(payload).reduce((res, status) => {
     const propsStatus = allProps[status] ? allProps[status] : [];
@@ -146,13 +149,14 @@ const updateInventory = (payload) => (allProps) => ({
       ...res,
       [status]: [
         ...new Set([
-          ...payloadStatus.map((token) => shortRecordToken(token)),
-          ...propsStatus
+          ...propsStatus,
+          ...payloadStatus.map((token) => shortRecordToken(token))
         ])
       ]
     };
   }, {})
 });
+};
 
 const onReceiveLogout = (state) =>
   compose(
