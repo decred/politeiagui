@@ -7,7 +7,7 @@ export default function useApprovedProposals(proposalPageSize, initialTokens) {
   const { proposals, proposalsTokens, loading, verifying } = useProposalsBatch(
     remainingTokens,
     {
-      fetchRfpLinks: false,
+      fetchRfpLinks: true,
       fetchVoteSummaries: false
     }
   );

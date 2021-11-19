@@ -372,7 +372,7 @@ export const getRfpLinkedProposals = (
       return set([shortProposalToken, "proposedFor"], linkedProposal.name)(acc);
     }
     if (isRfp) {
-      const linkedFrom = proposal.linkedfrom;
+      const linkedFrom = proposal.linkedfrom.map(val => shortRecordToken(val));
       const rfpSubmissions = linkedFrom && {
         proposals: values(pick(proposalsByToken, linkedFrom)),
         voteSummaries: pick(voteSummaries, linkedFrom),
