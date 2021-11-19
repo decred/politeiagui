@@ -137,10 +137,7 @@ const updateProposalRfpLinks = (proposal) => (state) => {
   )(state);
 };
 
-const updateInventory = (payload) => (allProps) => {
-  console.log("payload", payload);
-  console.log("allProps", allProps);
-  return ({
+const updateInventory = (payload) => (allProps) => ({
   ...allProps,
   ...Object.keys(payload).reduce((res, status) => {
     const propsStatus = allProps[status] ? allProps[status] : [];
@@ -156,7 +153,6 @@ const updateInventory = (payload) => (allProps) => {
     };
   }, {})
 });
-};
 
 const onReceiveLogout = (state) =>
   compose(
