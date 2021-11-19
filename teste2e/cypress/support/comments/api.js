@@ -34,7 +34,19 @@ export function countReply({
   return { counts };
 }
 
+// commentsEmptyReply only erturns an empty comments list.
+export function commentsEmptyReply() {
+  return { comments: [] };
+}
+
+// votesEmptyReply only returns an empty comments votes list
+export function votesEmptyReply() {
+  return { votes: [] };
+}
+
 export const repliers = {
   policy: policyReply,
-  count: countReply
+  count: countReply,
+  comments: commentsEmptyReply,
+  votes: votesEmptyReply
 };

@@ -65,13 +65,31 @@ describe("2FA Login", () => {
   });
   it("should display 2FA modal on login modal", () => {
     cy.middleware("users.login", { error: { statusCode: 401, errorCode: 79 } });
-    cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
-    cy.visit("/");
-    cy.findAllByTestId("record-title").first().click();
+    cy.useCommentsApi();
+    cy.recordsMiddleware("details", { status: 2, state: 2 });
+    cy.ticketvoteMiddleware("summaries", { amountByStatus: { approved: 1 } });
+    cy.piMiddleware("summaries", { amountByStatus: { active: 1 } });
+    cy.visit("/record/1234567");
     cy.findByTestId("wayt-login-button").click();
     cy.findByLabelText(/email/i).type(unpaidUser.email);
     cy.findByLabelText(/password/i).type(unpaidUser.password);
     cy.findByTestId("login-form-button").click();
     cy.findByTestId("modal-totp-verify").should("be.visible");
+  });
+});
+
+describe("Given an admin account", () => {
+  it("should be able to login on approved proposals", () => {
+    cy.useCommentsApi();
+    cy.recordsMiddleware("details", { status: 2, state: 2 });
+    cy.ticketvoteMiddleware("summaries", { amountByStatus: { approved: 1 } });
+    cy.piMiddleware("summaries", { amountByStatus: { active: 1 } });
+    cy.piMiddleware("billingstatuschanges", { amountByStatus: { 3: 1 } });
+    cy.visit("/record/1234567");
+    cy.findByTestId("wayt-login-button").click();
+    cy.findByLabelText(/email/i).type(adminUser.email);
+    cy.findByLabelText(/password/i).type(adminUser.password);
+    cy.findByTestId("login-form-button").click();
+    cy.findByTestId("record-title").should("be.visible");
   });
 });

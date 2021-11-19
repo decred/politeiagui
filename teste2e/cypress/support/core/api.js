@@ -86,8 +86,24 @@ export function inventoryReply({
   return { [stateToString(state)]: inventory };
 }
 
+/**
+ * detailsReply is the reply to the Details command. It returns a record for the
+ * request token with given `state`, `status` and `username` testParams.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns Record
+ */
+export function detailsReply({
+  testParams: { state, status, username },
+  requestParams: { token }
+}) {
+  const record = new Record({ author: username, status, state, token });
+  return { record };
+}
+
 export const repliers = {
   records: recordsReply,
   inventory: inventoryReply,
-  policy: policyReply
+  policy: policyReply,
+  details: detailsReply
 };
