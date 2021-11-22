@@ -123,7 +123,9 @@ const HeaderNav = ({ history }) => {
             className={styles.navLink}
             activeClassName={styles.activeNavLink}
             to="/user/login">
-            <Text className={styles.navLinkText}>Log in</Text>
+            <Text className={styles.navLinkText} data-testid="nav-login">
+              Log in
+            </Text>
           </NavLink>
           <NavLink
             className={styles.navLink}

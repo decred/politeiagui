@@ -1,5 +1,6 @@
 import { chunkByStatusAmount } from "../core/utils";
 import { BillingStatusChanges, Summary } from "./generate";
+import times from "lodash/fp/times";
 
 export const API_BASE_URL = "/api/pi/v1";
 
@@ -85,7 +86,7 @@ export function policyReply() {
  * @returns {Object} summaries map
  */
 export function billingStatusChangesReply({
-  testParams: { amountByStatus },
+  testParams: { amountByStatus, billingChangesAmount = 1 },
   requestParams: { tokens = [] }
 }) {
   const tokensByStatus = chunkByStatusAmount(tokens, amountByStatus);
@@ -95,7 +96,9 @@ export function billingStatusChangesReply({
       ...tokens.reduce(
         (sum, token) => ({
           ...sum,
-          [token]: [new BillingStatusChanges({ status, token })]
+          [token]: times(() => new BillingStatusChanges({ status, token }))(
+            billingChangesAmount
+          )
         }),
         {}
       )

@@ -352,3 +352,36 @@ describe("Additional page content", () => {
     cy.findByTestId("sidebar").should("be.visible");
   });
 });
+
+describe("Given some previously loaded approved proposals", () => {
+  beforeEach(() => {
+    cy.ticketvoteMiddleware("inventory", {
+      fixedInventory: {
+        vetted: {
+          approved: ["token01", "token02", "token03", "token04", "token05"]
+        }
+      }
+    });
+    cy.ticketvoteMiddleware("summaries", { amountByStatus: { approved: 5 } });
+    cy.piMiddleware("billingstatuschanges", {
+      amountByStatus: { 3: 5 },
+      billingChangesAmount: 0
+    });
+    cy.recordsMiddleware("records", { status: 2, state: 2 });
+    cy.intercept("/api/v1/login", (req) => {
+      req.reply({});
+    });
+  });
+  it("should fetch the billing changes after admin login", () => {
+    cy.visit("/?tab=approved");
+    cy.wait("@records.records");
+    cy.userEnvironment("admin");
+    cy.findByTestId("nav-login").click();
+    cy.findByLabelText(/email/i).type("email@email.com");
+    cy.findByLabelText(/password/i).type("123123123");
+    cy.findByTestId("login-form-button").click();
+    cy.findByTestId("tab-1").click();
+    cy.wait(1000);
+    cy.get("@pi.billingstatuschanges.all").should("have.length", 1);
+  });
+});
