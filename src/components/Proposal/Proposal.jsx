@@ -28,6 +28,7 @@ import {
   getMarkdownContent,
   getVotesReceived,
   isAbandonedProposal,
+  isLegacyAbandonedProposal,
   isCensoredProposal,
   isPublicProposal,
   isClosedProposal,
@@ -182,7 +183,9 @@ const Proposal = React.memo(function Proposal({
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isVoteActive = isVoteActiveProposal(voteSummary);
-  const isAbandoned = isAbandonedProposal(proposalSummary);
+  const isAbandoned =
+    isAbandonedProposal(proposalSummary) ||
+    (isLegacy && isLegacyAbandonedProposal(proposal));
   const isCensored = isCensoredProposal(proposal);
   const isClosed = isClosedProposal(proposalSummary);
   const proposalStatusReason =

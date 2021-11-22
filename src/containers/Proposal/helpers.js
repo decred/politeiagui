@@ -199,6 +199,10 @@ export const isUnderDiscussionProposal = (proposal, voteSummary) =>
   !isVoteActiveProposal(voteSummary) &&
   !isVotingFinishedProposal(voteSummary);
 
+// TODO: remove legacy
+export const isLegacyAbandonedProposal = (proposal) =>
+  !!proposal && proposal.status === PROPOSAL_STATUS_ARCHIVED;
+
 /**
  * Returns true if the given proposal is abandoned
  * @param {Object} proposalSummary
