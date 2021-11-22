@@ -13,7 +13,8 @@ export default function useComments(
   recordToken,
   proposalState,
   sectionId,
-  threadParentID
+  threadParentID,
+  isCurrentUserProposalAuthor
 ) {
   const isSingleThread = !!threadParentID;
   const { enableCommentVote, recordType, constants } = useConfig();
@@ -89,8 +90,10 @@ export default function useComments(
   const hasCommentsLeft = !allCommentsBySection;
   const isRecordMissingComments = hasRecordToken && hasCommentsLeft;
   const isVettedProposal = proposalState === PROPOSAL_STATE_VETTED;
+  const canUserViewComments =
+    isVettedProposal || isCurrentUserAdmin || isCurrentUserProposalAuthor;
   const needsToFetchComments = isProposal
-    ? isRecordMissingComments && (isVettedProposal || isCurrentUserAdmin)
+    ? isRecordMissingComments && canUserViewComments
     : isRecordMissingComments && userLoggedIn;
 
   const needsToFetchCommentsLikes =

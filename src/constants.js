@@ -49,6 +49,7 @@ export const PROPOSAL_SUMMARY_STATUS_VOTE_STARTED = "vote-started";
 export const PROPOSAL_SUMMARY_STATUS_REJECTED = "rejected";
 export const PROPOSAL_SUMMARY_STATUS_ACTIVE = "active";
 export const PROPOSAL_SUMMARY_STATUS_COMPLETED = "completed";
+export const PROPOSAL_SUMMARY_STATUS_APPROVED = "approved";
 export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
 
 export const PROPOSAL_STATE_UNVETTED = 1;
@@ -154,7 +155,8 @@ export const NOTIFICATION_EMAIL_COMMENT_ON_MY_COMMENT = 1 << 8;
 
 // Identity
 export const STORAGE_PREFIX = "ed255191~";
-export const IDENTITY_ERROR = "IDENTITY_ERROR";
+export const IDENTITY_ERROR =
+  "User identity not found. You need to restore it from a backup or generate a new one.";
 // Import key errors
 export const PUBLIC_KEY_MISMATCH =
   "The provided public key doesn't match the key stored in the server.";

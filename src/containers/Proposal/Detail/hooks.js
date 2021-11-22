@@ -130,7 +130,7 @@ export function useProposal(token, proposalPageSize, threadParentID) {
   const isAdmin = currentUser?.isadmin;
   const isApproved = isApprovedProposal(proposal, voteSummary);
   const isMissingBillingStatusChangeMetadata =
-    isAdmin && isApproved && isEmpty(billingStatusChangeMetadata);
+    isAdmin && isApproved && isEmpty(billingStatusChangeMetadata) && !isRfp;
   const needsInitialFetch = token && isMissingDetails;
   const isCensored = isCensoredProposal(proposal);
   const isAbandoned = isAbandonedProposal(proposalSummary);
@@ -228,7 +228,10 @@ export function useProposal(token, proposalPageSize, threadParentID) {
           isMissingBillingStatusChangeMetadata &&
           !loadingBillingStatusChanges
         ) {
-          onFetchBillingStatusChanges([tokenShort]);
+          onFetchBillingStatusChanges([tokenShort])
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
         }
         if (rfpLinks && rfpSubmissions) {
           // is a RFP
@@ -240,7 +243,11 @@ export function useProposal(token, proposalPageSize, threadParentID) {
         // verify proposal on proposal changes
         // TODO: improve this in the future so we don't need to verify once
         // it should be done.
-        if (!isEqual(state.proposal, proposal)) {
+        const needsVerification =
+          !isEqual(state.proposal, proposal) ||
+          isMissingBillingStatusChangeMetadata;
+
+        if (needsVerification) {
           return send(VERIFY);
         }
       }
@@ -270,7 +277,13 @@ export function useProposal(token, proposalPageSize, threadParentID) {
     error: commentsError,
     loading: commentsLoading,
     finishedCommentsFetch
-  } = useComments(proposalToken, proposalState, null, threadParentID);
+  } = useComments(
+    proposalToken,
+    proposalState,
+    null,
+    threadParentID,
+    isCurrentUserProposalAuthor
+  );
 
   return {
     proposal: proposalWithLinks && {

@@ -64,6 +64,21 @@ export const formatCentsToUSD = (centsInput) => {
 };
 
 /*
- * Verifies whether given error is the global identity error.
+ * Verifies whether given error is some identity error.
  */
-export const isIdentityError = (error) => error?.message === IDENTITY_ERROR;
+export const isIdentityError = (error) => {
+  const mapPluginIdentityErrors = {
+    "comments-user": 3,
+    comments: 2,
+    "records-user": 10,
+    "pi-user": 2,
+    "ticketvote-user": 2,
+    ticketvote: 2,
+    www: 21
+  };
+  const isPluginIdentityError =
+    error &&
+    error.errorid &&
+    mapPluginIdentityErrors[error.errorid] === error.errorcode;
+  return error?.message === IDENTITY_ERROR || isPluginIdentityError;
+};

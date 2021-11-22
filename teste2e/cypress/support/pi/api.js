@@ -1,5 +1,5 @@
 import { chunkByStatusAmount } from "../core/utils";
-import { Summary } from "./generate";
+import { BillingStatusChanges, Summary } from "./generate";
 
 export const API_BASE_URL = "/api/pi/v1";
 
@@ -76,7 +76,37 @@ export function policyReply() {
   };
 }
 
+/**
+ * billingStatusChangesReply is the reply to the BillingStatusChanges command.
+ * The returned  maps are { [token]: [BillingStatusChanges] }, where
+ * BillingStatusChanges are generated.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns {Object} summaries map
+ */
+export function billingStatusChangesReply({
+  testParams: { amountByStatus },
+  requestParams: { tokens = [] }
+}) {
+  const tokensByStatus = chunkByStatusAmount(tokens, amountByStatus);
+  const billingstatuschanges = Object.entries(tokensByStatus).reduce(
+    (acc, [status, tokens]) => ({
+      ...acc,
+      ...tokens.reduce(
+        (sum, token) => ({
+          ...sum,
+          [token]: [new BillingStatusChanges({ status, token })]
+        }),
+        {}
+      )
+    }),
+    {}
+  );
+  return { billingstatuschanges };
+}
+
 export const repliers = {
   summaries: summariesReply,
-  policy: policyReply
+  policy: policyReply,
+  billingstatuschanges: billingStatusChangesReply
 };

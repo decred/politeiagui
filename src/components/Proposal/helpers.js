@@ -16,6 +16,7 @@ import {
   PROPOSAL_SUMMARY_STATUS_REJECTED,
   PROPOSAL_SUMMARY_STATUS_ACTIVE,
   PROPOSAL_SUMMARY_STATUS_CLOSED,
+  PROPOSAL_SUMMARY_STATUS_APPROVED,
   PROPOSAL_SUMMARY_STATUS_COMPLETED
 } from "src/constants";
 import {
@@ -154,6 +155,9 @@ export const getProposalStatusTagProps = (
 
       case PROPOSAL_SUMMARY_STATUS_COMPLETED:
         return { type: "greenCheck", text: "Completed" };
+
+      case PROPOSAL_SUMMARY_STATUS_APPROVED:
+        return { type: "greenCheck", text: "Approved" };
 
       default:
         break;

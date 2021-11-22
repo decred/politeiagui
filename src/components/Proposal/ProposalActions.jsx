@@ -78,6 +78,7 @@ const PublicActions = ({
   const isProposalOwner =
     currentUser && proposal && currentUser.username === proposal.username;
   const isRfpSubmission = !!proposal.linkto;
+  const isRfp = !!proposal.linkby;
   const isVotingStartAuthorized = !isVotingNotAuthorizedProposal(voteSummary);
   const isReadyToRunoff = isRfpReadyToRunoff(
     proposal,
@@ -89,6 +90,7 @@ const PublicActions = ({
   const { numbillingstatuschanges } = billingStatusChangeMetadata || {};
   const isSetBillingStatusAllowed =
     !isLegacy &&
+    !isRfp &&
     isApproved &&
     numbillingstatuschanges < billingstatuschangesmax;
 
