@@ -209,12 +209,18 @@ describe("General pagination", () => {
 
 describe("Given an empty proposals list", () => {
   it("should render loading placeholders properly", () => {
-    cy.ticketvoteMiddleware("inventory", {}, { delay: 2000 });
+    cy.ticketvoteMiddleware("inventory", {});
     cy.visit("/");
-    cy.get("[data-testid='loading-placeholders'] > div").should(
-      "have.length",
-      5
-    );
+    cy.get("[data-testid='loading-placeholders'] > div", {
+      timeout: 100
+    }).should("have.length", 5);
+    cy.findByTestId("help-message", { timeout: 1250 })
+      .should("be.visible")
+      .then(() => {
+        cy.get("[data-testid='loading-placeholders'] > div", {
+          timeout: 1
+        }).should("not.exist");
+      });
   });
   it("should switch tabs and show empty message", () => {
     // Test
@@ -231,6 +237,23 @@ describe("Given an empty proposals list", () => {
     // wait to see if no requests are done, since inventory is fully fetched
     cy.wait(1000);
     cy.findByTestId("help-message").should("be.visible");
+  });
+});
+
+describe("Given 1 under-review proposal", () => {
+  it("should render loading placeholders only once", () => {
+    cy.ticketvoteMiddleware("inventory", { amountByStatus: { started: 1 } });
+    cy.recordsMiddleware("records", { status: 2, state: 2 });
+    cy.visit("/?tab=under-review");
+    cy.get("[data-testid='loading-placeholders'] > div", {
+      timeout: 1200
+    }).should("have.length", 5);
+    cy.wait("@records.records");
+    cy.get("[data-testid='record-title']").then(() => {
+      cy.get("[data-testid='loading-placeholders'] > div", {
+        timeout: 1
+      }).should("not.exist");
+    });
   });
 });
 
