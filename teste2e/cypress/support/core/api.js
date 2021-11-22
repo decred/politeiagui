@@ -76,9 +76,10 @@ export function recordsReply({
  * @return Inventory map: `{ [state]: { [status]: token } }`
  */
 export function inventoryReply({
-  testParams: { amountByStatus = {}, pageLimit = 20 },
+  testParams: { amountByStatus = {}, pageLimit = 20, fixedInventory },
   requestParams: { state = 2, page }
 }) {
+  if (fixedInventory) return fixedInventory;
   const inventory = new Inventory(amountByStatus, {
     page,
     pageLimit

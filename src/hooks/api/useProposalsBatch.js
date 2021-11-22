@@ -142,6 +142,13 @@ export default function useProposalsBatch({
   );
   const hasRemainingTokens = !isEmpty(remainingTokens);
 
+  const missingBillingStatusChangesTokens = useMemo(() => {
+    if (!isAdmin || !isStatusApproved) return [];
+    return tokens.filter((token) =>
+      isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
+    );
+  }, [isAdmin, isStatusApproved, tokens, billingStatusChangesByToken]);
+
   const scanNextStatusTokens = (index, oldTokens) => {
     const status = currentStatuses[index];
     const newTokens = getUnfetchedTokens(
@@ -245,28 +252,44 @@ export default function useProposalsBatch({
         return send(FETCH);
       },
       verify: () => {
-        if (!hasRemainingTokens) return send(RESOLVE, { proposals });
+        if (!hasRemainingTokens && !missingBillingStatusChangesTokens.length)
+          return send(RESOLVE, { proposals });
         const [tokensToFetch, next] = getTokensForProposalsPagination(
           remainingTokens,
           proposalPageSize
         );
-        // If fetch tokens of approved proposals and current user is admin
-        // fetch the billing status changes metadata if doesn't exist in
-        // the redux store.
-        let missingBillingStatusChangesTokens;
+        // If proposals are loaded but there are still missing billing status
+        // changes. It happens when you have a proposal list loaded and then, as
+        // admin, navigate to approved proposals tab.
+        if (missingBillingStatusChangesTokens.length && !tokensToFetch.length) {
+          const [billingsToFetch] = getTokensForProposalsPagination(
+            missingBillingStatusChangesTokens,
+            proposalPageSize
+          );
+          onFetchBillingStatusChanges(billingsToFetch)
+            .then(() => send(VERIFY))
+            .catch((e) => send(REJECT, e));
+          return send(FETCH);
+        }
+        // If fetch tokens of approved proposals and current user is admin, and
+        // there are no billing status changes for the tokensToFetch, fetch the
+        // billing status changes metadata if doesn't exist in the redux store.
+        let missingBatchBillingStatusChangesTokens;
         if (isStatusApproved && isAdmin) {
-          missingBillingStatusChangesTokens = tokensToFetch.filter((token) =>
-            isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
+          missingBatchBillingStatusChangesTokens = tokensToFetch.filter(
+            (token) =>
+              isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
           );
         }
         Promise.all([
-          missingBillingStatusChangesTokens?.length &&
-            onFetchBillingStatusChanges(missingBillingStatusChangesTokens),
-          onFetchProposalsBatch({
-            tokens: tokensToFetch,
-            fetchVoteSummary,
-            fetchProposalSummary
-          })
+          missingBatchBillingStatusChangesTokens?.length &&
+            onFetchBillingStatusChanges(missingBatchBillingStatusChangesTokens),
+          tokensToFetch &&
+            onFetchProposalsBatch({
+              tokens: tokensToFetch,
+              fetchVoteSummary,
+              fetchProposalSummary
+            })
         ])
           .then(([, [fetchedProposals]]) => {
             if (isEmpty(fetchedProposals)) {
@@ -301,7 +324,11 @@ export default function useProposalsBatch({
 
         return send(FETCH);
       },
-      done: () => {}
+      done: () => {
+        if (missingBillingStatusChangesTokens.length) {
+          return send(VERIFY);
+        }
+      }
     },
     initialValues: {
       status: "idle",
