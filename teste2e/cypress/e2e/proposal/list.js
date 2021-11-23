@@ -207,39 +207,6 @@ describe("General pagination", () => {
   });
 });
 
-describe("Given an empty proposals list", () => {
-  it("should render loading placeholders properly", () => {
-    cy.ticketvoteMiddleware("inventory", {});
-    cy.visit("/");
-    cy.get("[data-testid='loading-placeholders'] > div", {
-      timeout: 100
-    }).should("have.length", 5);
-    cy.findByTestId("help-message", { timeout: 1250 })
-      .should("be.visible")
-      .then(() => {
-        cy.get("[data-testid='loading-placeholders'] > div", {
-          timeout: 1
-        }).should("not.exist");
-      });
-  });
-  it("should switch tabs and show empty message", () => {
-    // Test
-    cy.visit("/");
-    cy.wait("@ticketvote.inventory");
-    cy.findByTestId("help-message").should("be.visible");
-    cy.scrollTo("bottom");
-    // switch to another tab
-    cy.findByTestId("tab-1").click();
-    // assert empty list
-    cy.assertListLengthByTestId("record-title", 0);
-    // back to Under Review tab
-    cy.findByTestId("tab-0").click();
-    // wait to see if no requests are done, since inventory is fully fetched
-    cy.wait(1000);
-    cy.findByTestId("help-message").should("be.visible");
-  });
-});
-
 describe("Given 1 under-review proposal", () => {
   it("should render loading placeholders only once", () => {
     cy.ticketvoteMiddleware("inventory", { amountByStatus: { started: 1 } });
@@ -412,17 +379,25 @@ describe("Given some previously loaded approved proposals", () => {
   it("should fetch paginated billing status after admin login", () => {
     cy.visit("/?tab=approved");
     // fetch 20 approved proposals
-    cy.wait("@records.records");
     cy.wait("@ticketvote.summaries");
+    cy.wait("@comments.count");
+    cy.wait("@records.records");
+    cy.assertListLengthByTestId("record-title", 5);
+    cy.scrollTo("bottom");
+    cy.wait("@ticketvote.summaries");
+    cy.wait("@comments.count");
+    cy.wait("@records.records");
+    cy.assertListLengthByTestId("record-title", 10);
     cy.scrollTo("bottom");
     cy.wait("@records.records");
     cy.wait("@ticketvote.summaries");
+    cy.wait("@comments.count");
+    cy.assertListLengthByTestId("record-title", 15);
     cy.scrollTo("bottom");
     cy.wait("@records.records");
     cy.wait("@ticketvote.summaries");
-    cy.scrollTo("bottom");
-    cy.wait("@records.records");
-    cy.wait("@ticketvote.summaries");
+    cy.wait("@comments.count");
+    cy.assertListLengthByTestId("record-title", 20);
     // login as admin
     cy.findByTestId("nav-login").click();
     cy.userEnvironment("admin");
@@ -442,7 +417,44 @@ describe("Given some previously loaded approved proposals", () => {
     // navigate to approved tab, now logged in as admin
     cy.findByTestId("tab-1").click();
     cy.wait(5000);
+    cy.wait("@pi.billingstatuschanges");
+    cy.wait("@pi.billingstatuschanges");
+    cy.wait("@pi.billingstatuschanges");
+    cy.wait("@pi.billingstatuschanges");
     cy.get("@pi.billingstatuschanges.all").should("have.length", 4);
+  });
+});
+
+describe("Given an empty proposals list", () => {
+  it("should render loading placeholders properly", () => {
+    cy.ticketvoteMiddleware("inventory", {});
+    cy.visit("/");
+    cy.get("[data-testid='loading-placeholders'] > div", {
+      timeout: 100
+    }).should("have.length", 5);
+    cy.findByTestId("help-message", { timeout: 1250 })
+      .should("be.visible")
+      .then(() => {
+        cy.get("[data-testid='loading-placeholders'] > div", {
+          timeout: 1
+        }).should("not.exist");
+      });
+  });
+  it("should switch tabs and show empty message", () => {
+    // Test
+    cy.visit("/");
+    cy.wait("@ticketvote.inventory");
+    cy.findByTestId("help-message").should("be.visible");
+    cy.scrollTo("bottom");
+    // switch to another tab
+    cy.findByTestId("tab-1").click();
+    // assert empty list
+    cy.assertListLengthByTestId("record-title", 0);
+    // back to Under Review tab
+    cy.findByTestId("tab-0").click();
+    // wait to see if no requests are done, since inventory is fully fetched
+    cy.wait(1000);
+    cy.findByTestId("help-message").should("be.visible");
   });
 });
 
