@@ -127,6 +127,9 @@ export default function useProposalsBatch({
     () => allByStatus[status] || [],
     [allByStatus, status]
   );
+  const tokensFetched = useMemo(() => {
+    return proposals ? tokens.filter((t) => !!proposals[t]) : [];
+  }, [proposals, tokens]);
   const page = useMemo(() => {
     return tokens ? Math.floor(+tokens.length / inventoryPageSize) : 0;
   }, [tokens, inventoryPageSize]);
@@ -144,10 +147,11 @@ export default function useProposalsBatch({
 
   const missingBillingStatusChangesTokens = useMemo(() => {
     if (!isAdmin || !isStatusApproved) return [];
-    return tokens.filter((token) =>
+    const missingTokens = tokensFetched.filter((token) =>
       isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
     );
-  }, [isAdmin, isStatusApproved, tokens, billingStatusChangesByToken]);
+    return missingTokens;
+  }, [isAdmin, isStatusApproved, tokensFetched, billingStatusChangesByToken]);
 
   const scanNextStatusTokens = (index, oldTokens) => {
     const status = currentStatuses[index];
@@ -183,7 +187,8 @@ export default function useProposalsBatch({
         const scanNextStatus =
           initializedInventory &&
           (!(tokens.length % inventoryPageSize === 0 && tokens.length > 0) ||
-            remainingTokens.length === proposalPageSize);
+            (remainingTokens.length === proposalPageSize &&
+              currentStatuses[statusIndex + 1]));
         if (scanNextStatus) {
           const { index, tokens } = scanNextStatusTokens(
             statusIndex + 1,
@@ -254,14 +259,10 @@ export default function useProposalsBatch({
       verify: () => {
         if (!hasRemainingTokens && !missingBillingStatusChangesTokens.length)
           return send(RESOLVE, { proposals });
-        const [tokensToFetch, next] = getTokensForProposalsPagination(
-          remainingTokens,
-          proposalPageSize
-        );
         // If proposals are loaded but there are still missing billing status
         // changes. It happens when you have a proposal list loaded and then, as
         // admin, navigate to approved proposals tab.
-        if (missingBillingStatusChangesTokens.length && !tokensToFetch.length) {
+        if (missingBillingStatusChangesTokens.length) {
           const [billingsToFetch] = getTokensForProposalsPagination(
             missingBillingStatusChangesTokens,
             proposalPageSize
@@ -271,6 +272,10 @@ export default function useProposalsBatch({
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
+        const [tokensToFetch, next] = getTokensForProposalsPagination(
+          remainingTokens,
+          proposalPageSize
+        );
         // If fetch tokens of approved proposals and current user is admin, and
         // there are no billing status changes for the tokensToFetch, fetch the
         // billing status changes metadata if doesn't exist in the redux store.
