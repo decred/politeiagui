@@ -364,12 +364,7 @@ describe("Admin proposals list", () => {
 describe("Given some previously loaded approved proposals", () => {
   beforeEach(() => {
     cy.userEnvironment("noLogin");
-    cy.ticketvoteMiddleware("inventory", {
-      amountByStatus: {
-        approved: 15,
-        unauthorized: 5
-      }
-    });
+    cy.ticketvoteMiddleware("inventory", { amountByStatus: { approved: 25 } });
     cy.piMiddleware("billingstatuschanges", {
       amountByStatus: { 3: 5 },
       billingChangesAmount: 0
@@ -392,6 +387,9 @@ describe("Given some previously loaded approved proposals", () => {
       cy.userEnvironment("admin");
       cy.findByLabelText(/email/i).type("email@email.com");
       cy.findByLabelText(/password/i).type("123123123");
+      cy.ticketvoteMiddleware("inventory", {
+        amountByStatus: { unauthorized: 5 }
+      });
       cy.ticketvoteMiddleware("summaries", {
         amountByStatus: { unauthorized: 5 }
       });
@@ -411,6 +409,41 @@ describe("Given some previously loaded approved proposals", () => {
       cy.get("@ticketvote.summaries.all").should("have.length", 3);
     }
   );
+  it("should fetch paginated billing status after admin login", () => {
+    cy.visit("/?tab=approved");
+    // fetch 20 approved proposals
+    cy.wait("@records.records");
+    cy.wait("@ticketvote.summaries");
+    cy.scrollTo("bottom");
+    cy.wait("@records.records");
+    cy.wait("@ticketvote.summaries");
+    cy.scrollTo("bottom");
+    cy.wait("@records.records");
+    cy.wait("@ticketvote.summaries");
+    cy.scrollTo("bottom");
+    cy.wait("@records.records");
+    cy.wait("@ticketvote.summaries");
+    // login as admin
+    cy.findByTestId("nav-login").click();
+    cy.userEnvironment("admin");
+    cy.findByLabelText(/email/i).type("email@email.com");
+    cy.findByLabelText(/password/i).type("123123123");
+    cy.ticketvoteMiddleware("inventory", {
+      amountByStatus: { unauthorized: 5 }
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { unauthorized: 5 }
+    });
+    // back to under review tab
+    cy.findByTestId("login-form-button").click();
+    cy.wait("@records.records");
+    cy.wait("@ticketvote.summaries");
+    cy.wait(1000);
+    // navigate to approved tab, now logged in as admin
+    cy.findByTestId("tab-1").click();
+    cy.wait(5000);
+    cy.get("@pi.billingstatuschanges.all").should("have.length", 4);
+  });
 });
 
 describe("Additional page content", () => {
