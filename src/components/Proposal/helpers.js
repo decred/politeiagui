@@ -21,7 +21,7 @@ import {
 } from "src/constants";
 import {
   isPublicProposal,
-  isAbandonedProposal,
+  isLegacyAbandonedProposal,
   isCensoredProposal
 } from "src/containers/Proposal/helpers";
 
@@ -80,7 +80,7 @@ export const getLegacyProposalStatusTagProps = (
     }
   }
 
-  if (isAbandonedProposal(proposal)) {
+  if (isLegacyAbandonedProposal(proposal)) {
     return {
       type: isDarkTheme ? "blueNegative" : "grayNegative",
       text: "Abandoned"
