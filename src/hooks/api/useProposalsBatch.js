@@ -81,6 +81,33 @@ const proposalWithCacheVotetatus = (proposals) => {
   }, {});
 };
 
+const tagProposalsToForceReload = (tokensToLoad, proposalsByToken) => {
+  tokensToLoad &&
+    tokensToLoad.forEach((token) => {
+      if (proposalsByToken[token]) {
+        proposalsByToken[token].forceLoad = true;
+      }
+    });
+  return proposalsByToken;
+};
+
+function getProposals(
+  proposals,
+  voteSummaries,
+  proposalSummaries,
+  missingBillingStatusChangesTokens
+) {
+  const linkedProposals = getRfpLinkedProposals(
+    proposalWithCacheVotetatus(proposals),
+    voteSummaries,
+    proposalSummaries
+  );
+  return tagProposalsToForceReload(
+    missingBillingStatusChangesTokens,
+    linkedProposals
+  );
+}
+
 export default function useProposalsBatch({
   fetchRfpLinks,
   fetchVoteSummary = false,
@@ -279,22 +306,20 @@ export default function useProposalsBatch({
         // If fetch tokens of approved proposals and current user is admin, and
         // there are no billing status changes for the tokensToFetch, fetch the
         // billing status changes metadata if doesn't exist in the redux store.
-        let missingBatchBillingStatusChangesTokens;
+        let batchBillingTokensToFetch;
         if (isStatusApproved && isAdmin) {
-          missingBatchBillingStatusChangesTokens = tokensToFetch.filter(
-            (token) =>
-              isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
+          batchBillingTokensToFetch = tokensToFetch.filter((token) =>
+            isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
           );
         }
         Promise.all([
-          missingBatchBillingStatusChangesTokens?.length &&
-            onFetchBillingStatusChanges(missingBatchBillingStatusChangesTokens),
-          tokensToFetch &&
-            onFetchProposalsBatch({
-              tokens: tokensToFetch,
-              fetchVoteSummary,
-              fetchProposalSummary
-            })
+          batchBillingTokensToFetch?.length &&
+            onFetchBillingStatusChanges(batchBillingTokensToFetch),
+          onFetchProposalsBatch({
+            tokens: tokensToFetch,
+            fetchVoteSummary,
+            fetchProposalSummary
+          })
         ])
           .then(([, [fetchedProposals]]) => {
             if (isEmpty(fetchedProposals)) {
@@ -406,10 +431,11 @@ export default function useProposalsBatch({
   }, [proposalPageSize, send]);
 
   return {
-    proposals: getRfpLinkedProposals(
-      proposalWithCacheVotetatus(proposals),
+    proposals: getProposals(
+      proposals,
       voteSummaries,
-      proposalSummaries
+      proposalSummaries,
+      missingBillingStatusChangesTokens
     ),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,
