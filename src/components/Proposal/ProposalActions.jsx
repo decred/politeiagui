@@ -11,7 +11,6 @@ import {
   useUnvettedProposalActions,
   usePublicProposalActions
 } from "src/containers/Proposal/Actions";
-import { SetBillingStatusLoader } from "src/components/Proposal/ProposalLoader";
 import { usePolicy } from "src/hooks";
 import AdminContent from "src/components/AdminContent";
 import { useLoaderContext } from "src/containers/Loader";
@@ -94,9 +93,6 @@ const PublicActions = ({
   const isSetBillingStatusAllowed =
     needsBillingStatus && numbillingstatuschanges < billingstatuschangesmax;
 
-  const isBillingStatusLoading =
-    needsBillingStatus && !billingStatusChangeMetadata;
-
   const withProposal = (fn, cb) => () => {
     fn(proposal, cb);
   };
@@ -134,7 +130,7 @@ const PublicActions = ({
           </AdminContent>
         </div>
       )}
-      {isSetBillingStatusAllowed ? (
+      {isSetBillingStatusAllowed && (
         <AdminContent>
           <div className="justify-right margin-top-m">
             <Button onClick={withProposal(onSetBillingStatus)}>
@@ -142,9 +138,7 @@ const PublicActions = ({
             </Button>
           </div>
         </AdminContent>
-      ) : isBillingStatusLoading ? (
-        <SetBillingStatusLoader />
-      ) : null}
+      )}
       {isReadyToRunoff && (
         <AdminContent>
           <div className="justify-right margin-top-m">

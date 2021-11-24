@@ -70,22 +70,6 @@ const RegularLoader = ({ primaryColor, secondaryColor, extended, yOffset }) => (
   </ContentLoader>
 );
 
-export const SetBillingStatusLoader = () => {
-  const { theme } = useTheme();
-  const primaryColor = getThemeProperty(theme, "card-background");
-  const secondaryColor = getThemeProperty(theme, "dimmed-card-background");
-  return (
-    <ContentLoader
-      height={15}
-      width={195}
-      speed={2}
-      primaryColor={primaryColor}
-      secondaryColor={secondaryColor}>
-      <rect x="95" y="0" width="100" height="15" />
-    </ContentLoader>
-  );
-};
-
 const ProposalLoader = ({ extended }) => {
   const extraSmall = useMediaQuery("(max-width: 560px)");
   const yOffset = extended ? 100 : 0;
