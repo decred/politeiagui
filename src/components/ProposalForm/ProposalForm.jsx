@@ -308,6 +308,7 @@ const ProposalForm = React.memo(function ProposalForm({
           <BoxTextInput
             placeholder="Amount (USD)"
             name="amount"
+            data-testid="proposal-amount"
             tabIndex={1}
             value={values.amount}
             onChange={handleChangeWithTouched("amount")}
@@ -318,6 +319,7 @@ const ProposalForm = React.memo(function ProposalForm({
           />
           <DatePickerField
             className={classNames(styles.startDate, "margin-bottom-m")}
+            dataTestid="proposal-start-date"
             years={startAndEndDatesRange}
             value={values.startDate}
             name="startDate"
@@ -326,6 +328,7 @@ const ProposalForm = React.memo(function ProposalForm({
           />
           <DatePickerField
             className={classNames(styles.endDate, "margin-bottom-m")}
+            dataTestid="proposal-end-date"
             years={startAndEndDatesRange}
             value={values.endDate}
             name="endDate"
@@ -336,6 +339,8 @@ const ProposalForm = React.memo(function ProposalForm({
       )}
       <SelectField
         name="domain"
+        id="domain-selector"
+        dataTestid="domain-selector"
         onChange={handleSelectFiledChange("domain")}
         options={domainOptions}
         className={classNames(styles.typeSelectWrapper, "margin-top-m")}

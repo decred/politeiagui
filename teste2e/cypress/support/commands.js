@@ -30,8 +30,7 @@ import * as pki from "../pki";
 import get from "lodash/fp/get";
 // TODO: consider moving general functions like makeProposal and signRegister
 // to a more general lib file other than api.
-import { makeProposal, signRegister } from "../utils";
-import { shortRecordToken } from "../utils";
+import { makeProposal, signRegister, shortRecordToken, RECORD_DOMAINS, typeDatePicker } from "../utils";
 import { middlewares as recordMiddlewares } from "./mock/records";
 import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";
 import { middlewares as commentsMiddlewares } from "./mock/comments";
@@ -149,8 +148,14 @@ Cypress.Commands.add("approveProposal", ({ token }) =>
 Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.server();
   cy.findByTestId("proposal-name").type(proposal.name);
-  cy.findByTestId("text-area").type(proposal.description);
+  cy.findByTestId("proposal-amount").type(String(proposal.amount / 100)); // get dollars from cents.
+  typeDatePicker("proposal-start-date", proposal.startDate);
+  typeDatePicker("proposal-end-date", proposal.endDate);
+  // handler datepicker here
+  const domainTxt = RECORD_DOMAINS[proposal.domain];
+  cy.get("#domain-selector").click().contains(domainTxt).click({ force: true });
   cy.route("POST", "/api/records/v1/new").as("newProposal");
+  cy.findByTestId("text-area").type(proposal.description);
   cy.findByRole("button", { name: /submit/i }).click();
   // needs more time in general to complete this request so we increase the
   // responseTimeout

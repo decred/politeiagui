@@ -1,4 +1,4 @@
-import { Record, File, Inventory } from "./generate";
+import { Record, File, Inventory, Proposal } from "./generate";
 import { stateToString } from "./utils";
 
 export const API_BASE_URL = "/api/records/v1";
@@ -101,7 +101,34 @@ export function detailsReply({
   return { record };
 }
 
+/**
+ * newRecordReply is the reply to the new command. It returns a new record for the
+ * request data with given `files`, `publickey`, `signature` and `author` testParams.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns Proposal
+ */
+export function newRecordReply({
+ testParams: { username },
+ requestParams: { files = [], publickey, signature }
+}) {
+  const record = new Proposal(username, { files, publickey, signature  });
+  return { record };
+}
+
+export function newRecordSummaryReply({
+ requestParams: { tokens = [] }
+}) {
+  const summaries = tokens.reduce((sum, token) => {
+    sum[token] = { status: "unvetted" };
+    return sum;
+  }, {});
+  return { summaries };
+}
+
 export const repliers = {
+  new: newRecordReply,
+  newSummary: newRecordSummaryReply,
   records: recordsReply,
   inventory: inventoryReply,
   policy: policyReply,

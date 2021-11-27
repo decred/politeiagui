@@ -143,3 +143,27 @@ export function Inventory(amountByStatus = {}, { pageLimit = 20, page = 1 }) {
     entries
   )(amountByStatus);
 }
+
+/**
+ * Proposal returns a new proposal map base on the request params
+ * @param { User } user
+ * @param { Object } { files, publickey, signature }
+ */
+export function Proposal(user = new User(), { files = [], publickey, signature }) {
+  this.censorshiprecord = {
+    merkle: faker.datatype.hexaDecimal(64, false, /[0-9a-z]/),
+    signature: faker.datatype.hexaDecimal(128, false, /[0-9a-z]/),
+    token: Token()
+  };
+  this.files = files;
+  this.metadata = [{
+    payload: JSON.stringify({ userid: user.userid, publickey, signature }),
+    pluginid: "usermd",
+    streamid: 1
+  }];
+  this.state = 1;
+  this.status = 1;
+  this.timestamp = Math.floor(new Date().getTime() / 1000);
+  this.username = user.username;
+  this.version = 1;
+}

@@ -5,7 +5,7 @@ describe("Proposal Create", () => {
   // components, in order to fill the new form fields such as: start & end dates
   // and amount - issue to track <insert issue link>
   //
-  /*it("Paid user can create proposals manually", () => {
+  it("Paid user can create proposals manually", () => {
     // paid user with proposal credits
     const user = {
       email: "adminuser@example.com",
@@ -16,9 +16,11 @@ describe("Proposal Create", () => {
     cy.login(user);
     cy.visit("/");
     cy.identity();
+    cy.recordsMiddleware("new", {});
+    cy.recordsMiddleware("newSummary", {});
     cy.visit("/record/new");
     cy.typeCreateProposal(proposal);
-  });*/
+  });
 
   it("Non-paid user can not create proposals", () => {
     const user = {
