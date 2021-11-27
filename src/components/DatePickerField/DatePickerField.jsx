@@ -71,7 +71,9 @@ const DatePickerField = ({
         };
 
         return (
-          <div className={classNames("cursor-pointer", className)} data-testid={props["data-testid"]}>
+          <div
+            className={classNames("cursor-pointer", className)}
+            data-testid={props["data-testid"]}>
             <DatePicker
               show={isOpen}
               years={years}
@@ -108,8 +110,7 @@ DatePickerField.propTypes = {
   label: PropTypes.string,
   year: PropTypes.object,
   readOnly: PropTypes.bool,
-  className: PropTypes.string,
-  dataTestid: PropTypes.string
+  className: PropTypes.string
 };
 
 DatePickerField.defaultProps = {

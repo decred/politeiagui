@@ -109,16 +109,14 @@ export function detailsReply({
  * @returns Proposal
  */
 export function newRecordReply({
- testParams: { username },
- requestParams: { files = [], publickey, signature }
+  testParams: { username },
+  requestParams: { files = [], publickey, signature }
 }) {
-  const record = new Proposal(username, { files, publickey, signature  });
+  const record = new Proposal(username, { files, publickey, signature });
   return { record };
 }
 
-export function newRecordSummaryReply({
- requestParams: { tokens = [] }
-}) {
+export function newRecordSummaryReply({ requestParams: { tokens = [] } }) {
   const summaries = tokens.reduce((sum, token) => {
     sum[token] = { status: "unvetted" };
     return sum;

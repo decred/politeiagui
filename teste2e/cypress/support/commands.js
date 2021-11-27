@@ -25,12 +25,22 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 //
 import { sha3_256 } from "js-sha3";
-import { PROPOSAL_SUMMARY_STATUS_UNVETTED, requestWithCsrfToken, setProposalStatus } from "../utils";
+import {
+  PROPOSAL_SUMMARY_STATUS_UNVETTED,
+  requestWithCsrfToken,
+  setProposalStatus
+} from "../utils";
 import * as pki from "../pki";
 import get from "lodash/fp/get";
 // TODO: consider moving general functions like makeProposal and signRegister
 // to a more general lib file other than api.
-import { makeProposal, signRegister, shortRecordToken, RECORD_DOMAINS, typeDatePicker } from "../utils";
+import {
+  makeProposal,
+  signRegister,
+  shortRecordToken,
+  RECORD_DOMAINS,
+  typeDatePicker
+} from "../utils";
 import { middlewares as recordMiddlewares } from "./mock/records";
 import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";
 import { middlewares as commentsMiddlewares } from "./mock/comments";
@@ -150,9 +160,19 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.findByTestId("proposal-name").type(proposal.name);
   cy.findByTestId("proposal-amount").type(String(proposal.amount / 100)); // get dollars from cents.
   const startDate = new Date(proposal.startDate * 1000);
-  cy.get("[data-testid=datepicker]:eq(0)").children().first().as("startDate").click();
-  cy.get("[data-testid=days-list]:eq(0)").find(`>li:eq(${startDate.getDate()})`).click();
-  cy.get("[data-testid=datepicker]:eq(1)").children().first().as("startDate").click();
+  cy.get("[data-testid=datepicker]:eq(0)")
+    .children()
+    .first()
+    .as("startDate")
+    .click();
+  cy.get("[data-testid=days-list]:eq(0)")
+    .find(`>li:eq(${startDate.getDate()})`)
+    .click();
+  cy.get("[data-testid=datepicker]:eq(1)")
+    .children()
+    .first()
+    .as("startDate")
+    .click();
   cy.get("[data-testid=days-list]:eq(1)").find(">li").last().click();
   const domainTxt = RECORD_DOMAINS[proposal.domain];
   cy.get("#domain-selector").click().contains(domainTxt).click({ force: true });
