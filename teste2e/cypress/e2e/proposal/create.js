@@ -1,4 +1,5 @@
 import { buildProposal } from "../../support/generate";
+import { PROPOSAL_SUMMARY_STATUS_ACTIVE, PROPOSAL_SUMMARY_STATUS_UNVETTED } from "../../utils";
 
 describe("Proposal Create", () => {
   // XXX This test needs changes in the Datepicker and (probably) the Select
@@ -17,7 +18,6 @@ describe("Proposal Create", () => {
     cy.visit("/");
     cy.identity();
     cy.recordsMiddleware("new", {});
-    cy.recordsMiddleware("newSummary", {});
     cy.visit("/record/new");
     cy.typeCreateProposal(proposal);
   });

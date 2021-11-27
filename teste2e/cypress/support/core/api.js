@@ -128,7 +128,7 @@ export function newRecordSummaryReply({
 
 export const repliers = {
   new: newRecordReply,
-  newSummary: newRecordSummaryReply,
+  summary: newRecordSummaryReply,
   records: recordsReply,
   inventory: inventoryReply,
   policy: policyReply,

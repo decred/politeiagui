@@ -14,7 +14,8 @@ const DatePickerField = ({
   className,
   isRange,
   error,
-  dataTestid
+  dataTestid,
+  ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const togglePicker = useCallback(() => {
@@ -70,7 +71,7 @@ const DatePickerField = ({
         };
 
         return (
-          <div className={classNames("cursor-pointer", className)} data-testid={dataTestid}>
+          <div className={classNames("cursor-pointer", className)} data-testid={props["data-testid"]}>
             <DatePicker
               show={isOpen}
               years={years}
