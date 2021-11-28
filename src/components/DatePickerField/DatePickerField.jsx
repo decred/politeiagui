@@ -14,7 +14,6 @@ const DatePickerField = ({
   className,
   isRange,
   error,
-  dataTestid,
   ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
