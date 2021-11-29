@@ -187,11 +187,8 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
       .to.have.property("censorshiprecord")
       .and.be.a("object")
       .and.have.all.keys("token", "signature", "merkle");
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
     const token = xhr.response.body.record.censorshiprecord.token;
-    cy.middleware("pi.summaries", {
-      token,
-      status: PROPOSAL_SUMMARY_STATUS_UNVETTED
-    });
     cy.assertProposalPage({
       ...proposal,
       token: token
