@@ -249,16 +249,17 @@ export default function useProposalsBatch({
             const tokens = [...newTokens, ...remainingTokens];
             setRemainingTokens(tokens);
 
+            const isPageComplete = tokens.length === proposalPageSize;
+            const hasNextStatus = statusIndex + 1 < currentStatuses.length;
             // Means the current batch request accepts more tokens than
             // the current amount.
             const needsToCompletePaginationBatch =
-              tokens.length < proposalPageSize &&
-              statusIndex + 1 < currentStatuses.length;
+              tokens.length < proposalPageSize && hasNextStatus;
 
             // can scan more tokens from next status list in order to
             // populate the remainingTokens array and don't lose any token
             const needsNextStatusScan =
-              tokens.length === proposalPageSize ||
+              (isPageComplete && hasNextStatus) ||
               needsToCompletePaginationBatch;
 
             if (needsNextStatusScan) {

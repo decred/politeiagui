@@ -132,7 +132,9 @@ const PublicActions = ({
       )}
       {isSetBillingStatusAllowed && (
         <AdminContent>
-          <div className="justify-right margin-top-m">
+          <div
+            className="justify-right margin-top-m"
+            data-testid="proposal-set-billing-button">
             <Button onClick={withProposal(onSetBillingStatus)}>
               Set Billing Status
             </Button>

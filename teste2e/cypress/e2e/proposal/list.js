@@ -423,6 +423,16 @@ describe("Given some previously loaded approved proposals", () => {
     cy.wait("@pi.billingstatuschanges");
     cy.get("@pi.billingstatuschanges.all").should("have.length", 4);
   });
+  it("should be able to fetch 5 approved", () => {
+    cy.ticketvoteMiddleware("inventory", { amountByStatus: { approved: 5 } });
+    cy.userEnvironment("admin");
+    cy.visit("/?tab=approved");
+    cy.findAllByTestId("proposal-set-billing-button").should("have.length", 5);
+    cy.get("@pi.billingstatuschanges.all").should("have.length", 1);
+    cy.get("@records.records.all").should("have.length", 1);
+    cy.get("@ticketvote.summaries.all").should("have.length", 1);
+    cy.get("@ticketvote.inventory.all").should("have.length", 1);
+  });
 });
 
 describe("Given an empty proposals list", () => {
