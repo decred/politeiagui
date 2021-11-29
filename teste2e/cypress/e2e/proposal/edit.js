@@ -41,6 +41,8 @@ describe("Proposal Edit", () => {
           .its("status")
           .should("eq", 200);
         cy.findByText(/version 2/).should("exist");
+        cy.findByTestId("proposal-published-timestamp").should("be.visible");
+        cy.findByTestId("proposal-edited-timestamp").should("be.visible");
       }
     );
   });
@@ -67,6 +69,8 @@ describe("Proposal Edit", () => {
         cy.identity();
         cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
         cy.findByTestId(/record-edit-button/i).should("not.exist");
+        cy.findByTestId("proposal-published-timestamp").should("be.visible");
+        cy.findByTestId("proposal-edited-timestamp").should("not.exist");
       }
     );
   });

@@ -207,8 +207,7 @@ const Proposal = React.memo(function Proposal({
     isAuthor && isEditableProposal(proposal, voteSummary) && !isLegacy;
   const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
-  const showEditedDate = version > 1 && timestamp !== publishedat && !mobile;
-  const showPublishedDate = publishedat && !mobile && !showEditedDate;
+  const showEditedDate = version > 1 && timestamp !== publishedat;
   const showExtendedVersionPicker =
     extended && version > 1 && !isCensored && (isVetted || isAuthor || isAdmin);
   const showVersionAsText = !extended && !mobile;
@@ -343,11 +342,13 @@ const Proposal = React.memo(function Proposal({
                       timestamp={linkby}
                     />
                   )}
-                  {showPublishedDate && (
+                  <span data-testid="proposal-published-timestamp">
                     <Event event="published" timestamp={publishedat} />
-                  )}
+                  </span>
                   {showEditedDate && (
-                    <Event event="edited" timestamp={timestamp} />
+                    <span data-testid="proposal-edited-timestamp">
+                      <Event event="edited" timestamp={timestamp} />
+                    </span>
                   )}
                   {showVersionAsText && (
                     <Text
