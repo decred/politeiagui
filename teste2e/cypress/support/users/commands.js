@@ -8,13 +8,13 @@ Cypress.Commands.add(
   createMiddleware({ packageName: "user", repliers, baseUrl: API_BASE_URL })
 );
 
-Cypress.Commands.add("userEnvironment", (userType) => {
+Cypress.Commands.add("userEnvironment", (userType, { verifyIdentity } = {}) => {
   cy.wwwMiddleware(
     "api",
     { isActive: userType !== "noLogin" },
     { headers: { "x-csrf-token": "abcdefghijklmnopqrstuvwxyz" } }
   );
-  cy.userMiddleware("me", { userType });
+  cy.userMiddleware("me", { userType, verifyIdentity });
   cy.userMiddleware("payments/registration", {
     haspaid: userType !== "unpaid"
   });

@@ -2,6 +2,7 @@ import faker from "faker";
 import compose from "lodash/fp/compose";
 import map from "lodash/fp/map";
 import times from "lodash/fp/times";
+import * as pki from "../../pki";
 
 export function User({
   isadmin = false,
@@ -22,7 +23,7 @@ export function User({
   this.paywalladdress = paywalladdress || `Ts${faker.datatype.hexaDecimal(33)}`;
   this.paywalltxid =
     paywalltxid || faker.datatype.hexaDecimal(64, false, /[0-9a-z]/);
-  this.publickey = publickey || faker.datatype.hexaDecimal(64);
+  this.publickey = publickey || pki.toHex(faker.datatype.hexaDecimal(64));
   this.paywallamount = 10000000;
   this.paywalltxnotbefore = Date.now() / 1000 - 3600;
   this.lastlogintime = faker.time.recent() / 1000;
@@ -60,13 +61,13 @@ export function userByType(userType, props) {
     case "unpaid":
       return UserUnpaid(props);
     case "user":
-      return User(props);
+      return new User(props);
     case "totp":
       return UserTotp(props);
     case "noLogin":
       return {};
     default:
-      return User(props);
+      return new User(props);
   }
 }
 
@@ -82,4 +83,14 @@ export function PaymentCredits({ spent = 0, unspent = 0 } = {}) {
   );
   this.spentcredits = makeCredits(spent);
   this.unspentcredits = makeCredits(unspent);
+}
+
+export function Identity({ userid, publickey }) {
+  return pki.generateKeys().then((keys) => {
+    const stringKeys = {
+      secretKey: pki.toHex(keys.secretKey),
+      publicKey: publickey
+    };
+    pki.importKeys(userid, stringKeys);
+  });
 }
