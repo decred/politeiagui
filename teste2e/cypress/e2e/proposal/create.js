@@ -28,9 +28,9 @@ describe("Proposal Create", () => {
     cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
       expect(xhr.status).to.equal(200);
       expect(xhr.response.body.record)
-          .to.have.property("censorshiprecord")
-          .and.be.a("object")
-          .and.have.all.keys("token", "signature", "merkle");
+        .to.have.property("censorshiprecord")
+        .and.be.a("object")
+        .and.have.all.keys("token", "signature", "merkle");
       cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
       const token = xhr.response.body.record.censorshiprecord.token;
       cy.assertProposalPage({
@@ -48,8 +48,12 @@ describe("Proposal Create", () => {
     cy.findByRole("button", { name: /submit/i }).click();
     cy.findByTestId("proposal-name").parent().find("p").contains("Required");
     cy.findByTestId("proposal-amount").parent().find("p").contains("Required");
-    cy.get("[data-testid=datepicker]:eq(0)").find("p").contains("Please pick a start date");
-    cy.get("[data-testid=datepicker]:eq(1)").find("p").contains("Please pick an end date");
+    cy.get("[data-testid=datepicker]:eq(0)")
+      .find("p")
+      .contains("Please pick a start date");
+    cy.get("[data-testid=datepicker]:eq(1)")
+      .find("p")
+      .contains("Please pick an end date");
   });
 
   it("Non-paid user can not create proposals", () => {
