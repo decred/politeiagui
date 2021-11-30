@@ -27,16 +27,14 @@ describe("Proposal Create", () => {
     // responseTimeout
     cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
       expect(xhr.status).to.equal(200);
-      expect(xhr.response.body.record)
-        .to.have.property("censorshiprecord")
-        .and.be.a("object")
-        .and.have.all.keys("token", "signature", "merkle");
       cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
       const token = xhr.response.body.record.censorshiprecord.token;
       cy.assertProposalPage({
         ...proposal,
         token: token
       });
+      cy.wait("@pi.summaries", { timeout: 500 });
+      cy.findByTestId("record-title").should("have.text", proposal.name);
     });
   });
 

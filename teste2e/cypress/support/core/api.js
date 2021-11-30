@@ -116,6 +116,7 @@ export function newRecordReply({
   const record = new Record({
     status: 1,
     state: 1,
+    version: 1,
     files,
     author: username,
     publickey,
@@ -124,17 +125,8 @@ export function newRecordReply({
   return { record };
 }
 
-export function newRecordSummaryReply({ requestParams: { tokens = [] } }) {
-  const summaries = tokens.reduce((sum, token) => {
-    sum[token] = { status: "unvetted" };
-    return sum;
-  }, {});
-  return { summaries };
-}
-
 export const repliers = {
   new: newRecordReply,
-  summary: newRecordSummaryReply,
   records: recordsReply,
   inventory: inventoryReply,
   policy: policyReply,

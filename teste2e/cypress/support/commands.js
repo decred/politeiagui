@@ -160,18 +160,16 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.findByTestId("proposal-name").type(proposal.name);
   cy.findByTestId("proposal-amount").type(String(proposal.amount / 100)); // get dollars from cents.
   const startDate = new Date(proposal.startDate * 1000);
-  cy.get("[data-testid=datepicker]:eq(0)")
+  cy.findAllByTestId("datepicker").first()
     .children()
     .first()
-    .as("startDate")
     .click();
-  cy.get("[data-testid=days-list]:eq(0)")
-    .find(`>li:eq(${startDate.getDate()})`)
+  cy.findAllByTestId("days-list").first()
+    .findByText(startDate.getDate())
     .click();
-  cy.get("[data-testid=datepicker]:eq(1)")
+  cy.findAllByTestId("datepicker").first().next()
     .children()
     .first()
-    .as("startDate")
     .click();
   cy.get("[data-testid=days-list]:eq(1)").find(">li").last().click();
   const domainTxt = RECORD_DOMAINS[proposal.domain];
