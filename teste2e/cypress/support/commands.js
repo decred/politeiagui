@@ -178,22 +178,6 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.get("#domain-selector").click().contains(domainTxt).click({ force: true });
   cy.route("POST", "/api/records/v1/new").as("newProposal");
   cy.findByTestId("text-area").type(proposal.description);
-  cy.findByRole("button", { name: /submit/i }).click();
-  // needs more time in general to complete this request so we increase the
-  // responseTimeout
-  cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
-    expect(xhr.status).to.equal(200);
-    expect(xhr.response.body.record)
-      .to.have.property("censorshiprecord")
-      .and.be.a("object")
-      .and.have.all.keys("token", "signature", "merkle");
-    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
-    const token = xhr.response.body.record.censorshiprecord.token;
-    cy.assertProposalPage({
-      ...proposal,
-      token: token
-    });
-  });
 });
 
 Cypress.Commands.add("assertListLengthByTestId", (testid, expectedLength) =>
