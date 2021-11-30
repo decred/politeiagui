@@ -84,9 +84,19 @@ ul.dropdownList {
 }
 
 @media screen and (max-width: 560px) {
+  .loggedInContainer {
+    width: 100%;
+    padding: 0 var(--container-padding-right) 0 var(--container-padding-left);
+    display: flex;
+    justify-content: space-between;
+  }
+  ul.dropdownList {
+    left: 0;
+  }
+
   div.dropdown {
     position: relative;
-    right: 2.4rem;
+    right: 0;
   }
 
   div.noCreditsDropdown {
