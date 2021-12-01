@@ -207,39 +207,6 @@ describe("General pagination", () => {
   });
 });
 
-describe("Given an empty proposals list", () => {
-  it("should render loading placeholders properly", () => {
-    cy.ticketvoteMiddleware("inventory", {});
-    cy.visit("/");
-    cy.get("[data-testid='loading-placeholders'] > div", {
-      timeout: 100
-    }).should("have.length", 5);
-    cy.findByTestId("help-message", { timeout: 1250 })
-      .should("be.visible")
-      .then(() => {
-        cy.get("[data-testid='loading-placeholders'] > div", {
-          timeout: 1
-        }).should("not.exist");
-      });
-  });
-  it("should switch tabs and show empty message", () => {
-    // Test
-    cy.visit("/");
-    cy.wait("@ticketvote.inventory");
-    cy.findByTestId("help-message").should("be.visible");
-    cy.scrollTo("bottom");
-    // switch to another tab
-    cy.findByTestId("tab-1").click();
-    // assert empty list
-    cy.assertListLengthByTestId("record-title", 0);
-    // back to Under Review tab
-    cy.findByTestId("tab-0").click();
-    // wait to see if no requests are done, since inventory is fully fetched
-    cy.wait(1000);
-    cy.findByTestId("help-message").should("be.visible");
-  });
-});
-
 describe("Given 1 under-review proposal", () => {
   it("should render loading placeholders only once", () => {
     cy.ticketvoteMiddleware("inventory", { amountByStatus: { started: 1 } });
@@ -361,6 +328,146 @@ describe("Admin proposals list", () => {
   });
 });
 
+describe("Given some previously loaded approved proposals", () => {
+  beforeEach(() => {
+    cy.userEnvironment("noLogin");
+    cy.ticketvoteMiddleware("inventory", { amountByStatus: { approved: 25 } });
+    cy.piMiddleware("billingstatuschanges", {
+      amountByStatus: { 3: 5 },
+      billingChangesAmount: 0
+    });
+    cy.recordsMiddleware("records", { status: 2, state: 2 });
+    cy.intercept("/api/v1/login", (req) => {
+      req.reply({});
+    });
+    cy.ticketvoteMiddleware("summaries", { amountByStatus: { approved: 5 } });
+  });
+  it(
+    "should fetch the billing changes after admin login",
+    { scrollBehavior: false },
+    () => {
+      cy.visit("/?tab=approved");
+      cy.wait("@ticketvote.inventory");
+      cy.wait("@ticketvote.summaries");
+      cy.wait("@records.records");
+      cy.findByTestId("nav-login").click();
+      cy.userEnvironment("admin");
+      cy.findByLabelText(/email/i).type("email@email.com");
+      cy.findByLabelText(/password/i).type("123123123");
+      cy.ticketvoteMiddleware("inventory", {
+        amountByStatus: { unauthorized: 5 }
+      });
+      cy.ticketvoteMiddleware("summaries", {
+        amountByStatus: { unauthorized: 5 }
+      });
+      cy.findByTestId("login-form-button").click();
+      cy.wait("@ticketvote.inventory");
+      cy.wait("@ticketvote.summaries");
+      cy.wait("@records.records");
+      cy.ticketvoteMiddleware("summaries", { amountByStatus: { approved: 5 } });
+      cy.findByTestId("tab-1").click();
+      cy.wait("@ticketvote.summaries");
+      cy.wait("@records.records");
+      cy.wait("@pi.billingstatuschanges");
+      cy.wait("@pi.billingstatuschanges");
+      cy.get("@pi.billingstatuschanges.all").should("have.length", 2);
+      cy.get("@ticketvote.inventory.all").should("have.length", 2);
+      cy.get("@records.records.all").should("have.length", 3);
+      cy.get("@ticketvote.summaries.all").should("have.length", 3);
+    }
+  );
+  it("should fetch paginated billing status after admin login", () => {
+    cy.visit("/?tab=approved");
+    // fetch 20 approved proposals
+    cy.wait("@ticketvote.summaries");
+    cy.wait("@comments.count");
+    cy.wait("@records.records");
+    cy.assertListLengthByTestId("record-title", 5);
+    cy.scrollTo("bottom");
+    cy.wait("@ticketvote.summaries");
+    cy.wait("@comments.count");
+    cy.wait("@records.records");
+    cy.assertListLengthByTestId("record-title", 10);
+    cy.scrollTo("bottom");
+    cy.wait("@records.records");
+    cy.wait("@ticketvote.summaries");
+    cy.wait("@comments.count");
+    cy.assertListLengthByTestId("record-title", 15);
+    cy.scrollTo("bottom");
+    cy.wait("@records.records");
+    cy.wait("@ticketvote.summaries");
+    cy.wait("@comments.count");
+    cy.assertListLengthByTestId("record-title", 20);
+    // login as admin
+    cy.findByTestId("nav-login").click();
+    cy.userEnvironment("admin");
+    cy.findByLabelText(/email/i).type("email@email.com");
+    cy.findByLabelText(/password/i).type("123123123");
+    cy.ticketvoteMiddleware("inventory", {
+      amountByStatus: { unauthorized: 5 }
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { unauthorized: 5 }
+    });
+    // back to under review tab
+    cy.findByTestId("login-form-button").click();
+    cy.wait("@records.records");
+    cy.wait("@ticketvote.summaries");
+    cy.wait(1000);
+    // navigate to approved tab, now logged in as admin
+    cy.findByTestId("tab-1").click();
+    cy.wait(5000);
+    cy.wait("@pi.billingstatuschanges");
+    cy.wait("@pi.billingstatuschanges");
+    cy.wait("@pi.billingstatuschanges");
+    cy.wait("@pi.billingstatuschanges");
+    cy.get("@pi.billingstatuschanges.all").should("have.length", 4);
+  });
+  it("should be able to fetch 5 approved", () => {
+    cy.ticketvoteMiddleware("inventory", { amountByStatus: { approved: 5 } });
+    cy.userEnvironment("admin");
+    cy.visit("/?tab=approved");
+    cy.findAllByTestId("proposal-set-billing-button").should("have.length", 5);
+    cy.get("@pi.billingstatuschanges.all").should("have.length", 1);
+    cy.get("@records.records.all").should("have.length", 1);
+    cy.get("@ticketvote.summaries.all").should("have.length", 1);
+    cy.get("@ticketvote.inventory.all").should("have.length", 1);
+  });
+});
+
+describe("Given an empty proposals list", () => {
+  it("should render loading placeholders properly", () => {
+    cy.ticketvoteMiddleware("inventory", {});
+    cy.visit("/");
+    cy.get("[data-testid='loading-placeholders'] > div", {
+      timeout: 100
+    }).should("have.length", 5);
+    cy.findByTestId("help-message", { timeout: 1250 })
+      .should("be.visible")
+      .then(() => {
+        cy.get("[data-testid='loading-placeholders'] > div", {
+          timeout: 1
+        }).should("not.exist");
+      });
+  });
+  it("should switch tabs and show empty message", () => {
+    // Test
+    cy.visit("/");
+    cy.wait("@ticketvote.inventory");
+    cy.findByTestId("help-message").should("be.visible");
+    cy.scrollTo("bottom");
+    // switch to another tab
+    cy.findByTestId("tab-1").click();
+    // assert empty list
+    cy.assertListLengthByTestId("record-title", 0);
+    // back to Under Review tab
+    cy.findByTestId("tab-0").click();
+    // wait to see if no requests are done, since inventory is fully fetched
+    cy.wait(1000);
+    cy.findByTestId("help-message").should("be.visible");
+  });
+});
+
 describe("Additional page content", () => {
   it("should load sidebar according to screen resolution", () => {
     cy.ticketvoteMiddleware("inventory");
@@ -373,38 +480,5 @@ describe("Additional page content", () => {
     cy.findByTestId("sidebar").should("be.hidden");
     cy.viewport(1001, 500);
     cy.findByTestId("sidebar").should("be.visible");
-  });
-});
-
-describe("Given some previously loaded approved proposals", () => {
-  beforeEach(() => {
-    cy.ticketvoteMiddleware("inventory", {
-      fixedInventory: {
-        vetted: {
-          approved: ["token01", "token02", "token03", "token04", "token05"]
-        }
-      }
-    });
-    cy.ticketvoteMiddleware("summaries", { amountByStatus: { approved: 5 } });
-    cy.piMiddleware("billingstatuschanges", {
-      amountByStatus: { 3: 5 },
-      billingChangesAmount: 0
-    });
-    cy.recordsMiddleware("records", { status: 2, state: 2 });
-    cy.intercept("/api/v1/login", (req) => {
-      req.reply({});
-    });
-  });
-  it("should fetch the billing changes after admin login", () => {
-    cy.visit("/?tab=approved");
-    cy.wait("@records.records");
-    cy.userEnvironment("admin");
-    cy.findByTestId("nav-login").click();
-    cy.findByLabelText(/email/i).type("email@email.com");
-    cy.findByLabelText(/password/i).type("123123123");
-    cy.findByTestId("login-form-button").click();
-    cy.findByTestId("tab-1").click();
-    cy.wait(1000);
-    cy.get("@pi.billingstatuschanges.all").should("have.length", 1);
   });
 });

@@ -81,6 +81,33 @@ const proposalWithCacheVotetatus = (proposals) => {
   }, {});
 };
 
+const tagProposalsToForceReload = (tokensToLoad, proposalsByToken) => {
+  tokensToLoad &&
+    tokensToLoad.forEach((token) => {
+      if (proposalsByToken[token]) {
+        proposalsByToken[token].forceLoad = true;
+      }
+    });
+  return proposalsByToken;
+};
+
+function getProposals(
+  proposals,
+  voteSummaries,
+  proposalSummaries,
+  missingBillingStatusChangesTokens
+) {
+  const linkedProposals = getRfpLinkedProposals(
+    proposalWithCacheVotetatus(proposals),
+    voteSummaries,
+    proposalSummaries
+  );
+  return tagProposalsToForceReload(
+    missingBillingStatusChangesTokens,
+    linkedProposals
+  );
+}
+
 export default function useProposalsBatch({
   fetchRfpLinks,
   fetchVoteSummary = false,
@@ -127,6 +154,9 @@ export default function useProposalsBatch({
     () => allByStatus[status] || [],
     [allByStatus, status]
   );
+  const tokensFetched = useMemo(() => {
+    return proposals ? tokens.filter((t) => !!proposals[t]) : [];
+  }, [proposals, tokens]);
   const page = useMemo(() => {
     return tokens ? Math.floor(+tokens.length / inventoryPageSize) : 0;
   }, [tokens, inventoryPageSize]);
@@ -144,10 +174,11 @@ export default function useProposalsBatch({
 
   const missingBillingStatusChangesTokens = useMemo(() => {
     if (!isAdmin || !isStatusApproved) return [];
-    return tokens.filter((token) =>
+    const missingTokens = tokensFetched.filter((token) =>
       isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
     );
-  }, [isAdmin, isStatusApproved, tokens, billingStatusChangesByToken]);
+    return missingTokens;
+  }, [isAdmin, isStatusApproved, tokensFetched, billingStatusChangesByToken]);
 
   const scanNextStatusTokens = (index, oldTokens) => {
     const status = currentStatuses[index];
@@ -183,7 +214,8 @@ export default function useProposalsBatch({
         const scanNextStatus =
           initializedInventory &&
           (!(tokens.length % inventoryPageSize === 0 && tokens.length > 0) ||
-            remainingTokens.length === proposalPageSize);
+            (remainingTokens.length === proposalPageSize &&
+              currentStatuses[statusIndex + 1]));
         if (scanNextStatus) {
           const { index, tokens } = scanNextStatusTokens(
             statusIndex + 1,
@@ -217,16 +249,17 @@ export default function useProposalsBatch({
             const tokens = [...newTokens, ...remainingTokens];
             setRemainingTokens(tokens);
 
+            const isPageComplete = tokens.length === proposalPageSize;
+            const hasNextStatus = statusIndex + 1 < currentStatuses.length;
             // Means the current batch request accepts more tokens than
             // the current amount.
             const needsToCompletePaginationBatch =
-              tokens.length < proposalPageSize &&
-              statusIndex + 1 < currentStatuses.length;
+              tokens.length < proposalPageSize && hasNextStatus;
 
             // can scan more tokens from next status list in order to
             // populate the remainingTokens array and don't lose any token
             const needsNextStatusScan =
-              tokens.length === proposalPageSize ||
+              (isPageComplete && hasNextStatus) ||
               needsToCompletePaginationBatch;
 
             if (needsNextStatusScan) {
@@ -254,14 +287,10 @@ export default function useProposalsBatch({
       verify: () => {
         if (!hasRemainingTokens && !missingBillingStatusChangesTokens.length)
           return send(RESOLVE, { proposals });
-        const [tokensToFetch, next] = getTokensForProposalsPagination(
-          remainingTokens,
-          proposalPageSize
-        );
         // If proposals are loaded but there are still missing billing status
         // changes. It happens when you have a proposal list loaded and then, as
         // admin, navigate to approved proposals tab.
-        if (missingBillingStatusChangesTokens.length && !tokensToFetch.length) {
+        if (missingBillingStatusChangesTokens.length) {
           const [billingsToFetch] = getTokensForProposalsPagination(
             missingBillingStatusChangesTokens,
             proposalPageSize
@@ -271,25 +300,27 @@ export default function useProposalsBatch({
             .catch((e) => send(REJECT, e));
           return send(FETCH);
         }
+        const [tokensToFetch, next] = getTokensForProposalsPagination(
+          remainingTokens,
+          proposalPageSize
+        );
         // If fetch tokens of approved proposals and current user is admin, and
         // there are no billing status changes for the tokensToFetch, fetch the
         // billing status changes metadata if doesn't exist in the redux store.
-        let missingBatchBillingStatusChangesTokens;
+        let batchBillingTokensToFetch;
         if (isStatusApproved && isAdmin) {
-          missingBatchBillingStatusChangesTokens = tokensToFetch.filter(
-            (token) =>
-              isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
+          batchBillingTokensToFetch = tokensToFetch.filter((token) =>
+            isEmpty(billingStatusChangesByToken[shortRecordToken(token)])
           );
         }
         Promise.all([
-          missingBatchBillingStatusChangesTokens?.length &&
-            onFetchBillingStatusChanges(missingBatchBillingStatusChangesTokens),
-          tokensToFetch &&
-            onFetchProposalsBatch({
-              tokens: tokensToFetch,
-              fetchVoteSummary,
-              fetchProposalSummary
-            })
+          batchBillingTokensToFetch?.length &&
+            onFetchBillingStatusChanges(batchBillingTokensToFetch),
+          onFetchProposalsBatch({
+            tokens: tokensToFetch,
+            fetchVoteSummary,
+            fetchProposalSummary
+          })
         ])
           .then(([, [fetchedProposals]]) => {
             if (isEmpty(fetchedProposals)) {
@@ -401,10 +432,11 @@ export default function useProposalsBatch({
   }, [proposalPageSize, send]);
 
   return {
-    proposals: getRfpLinkedProposals(
-      proposalWithCacheVotetatus(proposals),
+    proposals: getProposals(
+      proposals,
       voteSummaries,
-      proposalSummaries
+      proposalSummaries,
+      missingBillingStatusChangesTokens
     ),
     onFetchProposalsBatch,
     proposalsTokens: allByStatus,
