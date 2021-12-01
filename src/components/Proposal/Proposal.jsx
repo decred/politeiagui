@@ -530,7 +530,7 @@ const Proposal = React.memo(function Proposal({
                   )}
                   {votesCount > 0 && (
                     <DownloadVotesTimestamps
-                      label="Votes Timestamp"
+                      label="Votes Timestamps"
                       votesCount={votesCount}
                       recordToken={shortToken}
                     />
