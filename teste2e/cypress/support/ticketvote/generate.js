@@ -1,3 +1,5 @@
+import faker from "faker";
+
 export function Results({ yes = 0, no = 0 } = {}) {
   return [
     {
@@ -29,4 +31,12 @@ export function Summary({ results, status, type = 0 } = {}) {
   this.passpercentage = type ? 1 : 0;
   this.results = type ? new Results(results) : 0;
   this.bestblock = 200;
+}
+
+export function Timestamp({ data } = {}) {
+  this.data = JSON.stringify(data || { key: faker.random.word() });
+  this.digest = faker.datatype.hexaDecimal(128, false, /[0-9a-z]/);
+  this.txid = faker.datatype.hexaDecimal(64, false, /[0-9a-z]/);
+  this.merkleroot = faker.datatype.hexaDecimal(64, false, /[0-9a-z]/);
+  this.proofs = faker.random.arrayElements();
 }
