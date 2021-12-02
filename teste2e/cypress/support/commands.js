@@ -168,7 +168,7 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.findAllByTestId("datepicker").first().next().children().first().click();
   cy.get("[data-testid=days-list]:eq(1)").find(">li").last().click();
   const domainTxt = RECORD_DOMAINS[proposal.domain];
-  cy.get("#domain-selector").click().contains(domainTxt).click({ force: true });
+  cy.get("#proposal-domain-selector").click().contains(domainTxt).click({ force: true });
   cy.route("POST", "/api/records/v1/new").as("newProposal");
   cy.findByTestId("text-area").type(proposal.description);
 });
