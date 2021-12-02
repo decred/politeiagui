@@ -26,7 +26,6 @@
 //
 import { sha3_256 } from "js-sha3";
 import {
-  PROPOSAL_SUMMARY_STATUS_UNVETTED,
   requestWithCsrfToken,
   setProposalStatus
 } from "../utils";
@@ -158,7 +157,9 @@ Cypress.Commands.add("approveProposal", ({ token }) =>
 Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.server();
   cy.findByTestId("proposal-name").type(proposal.name);
-  cy.findByTestId("proposal-amount").type(String(proposal.amount / 100)); // get dollars from cents.
+  cy.findByTestId("proposal-amount").type(String(proposal.amount / 100));
+  // get dollars from cents.
+
   const startDate = new Date(proposal.startDate * 1000);
   cy.findAllByTestId("datepicker").first().children().first().click();
   cy.findAllByTestId("days-list")
