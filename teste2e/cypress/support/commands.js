@@ -25,10 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 //
 import { sha3_256 } from "js-sha3";
-import {
-  requestWithCsrfToken,
-  setProposalStatus
-} from "../utils";
+import { requestWithCsrfToken, setProposalStatus } from "../utils";
 import * as pki from "../pki";
 import get from "lodash/fp/get";
 // TODO: consider moving general functions like makeProposal and signRegister
@@ -169,7 +166,10 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.findAllByTestId("datepicker").first().next().children().first().click();
   cy.get("[data-testid=days-list]:eq(1)").find(">li").last().click();
   const domainTxt = RECORD_DOMAINS[proposal.domain];
-  cy.get("#proposal-domain-selector").click().contains(domainTxt).click({ force: true });
+  cy.get("#proposal-domain-selector")
+    .click()
+    .contains(domainTxt)
+    .click({ force: true });
   cy.route("POST", "/api/records/v1/new").as("newProposal");
   cy.findByTestId("text-area").type(proposal.description);
 });
