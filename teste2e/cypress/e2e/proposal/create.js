@@ -15,7 +15,7 @@ describe("Proposal Create", () => {
   // components, in order to fill the new form fields such as: start & end dates
   // and amount - issue to track <insert issue link>
   //
-  it("Paid user can create proposals manually", () => {
+  it("should be able to create proposals", () => {
     // paid user with proposal credits
     cy.userEnvironment("user", { verifyIdentity: true });
     const proposal = buildProposal();
@@ -25,7 +25,7 @@ describe("Proposal Create", () => {
     cy.findByRole("button", { name: /submit/i }).click();
     // needs more time in general to complete this request so we increase the
     // responseTimeout
-    cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
+    cy.wait("@newProposal").should((xhr) => {
       expect(xhr.status).to.equal(200);
       cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
       const token = xhr.response.body.record.censorshiprecord.token;

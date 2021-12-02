@@ -1,4 +1,4 @@
-import { Record, File, Inventory, Proposal } from "./generate";
+import { Record, File, Inventory } from "./generate";
 import { stateToString } from "./utils";
 
 export const API_BASE_URL = "/api/records/v1";
@@ -103,7 +103,7 @@ export function detailsReply({
 
 /**
  * newRecordReply is the reply to the new command. It returns a new record for the
- * request data with given `files`, `publickey`, `signature` and `author` testParams.
+ * request data with given `files`, `publickey`, `signature` and `username` testParams.
  *
  * @param {Object} { testParams, requestParams }
  * @returns Proposal

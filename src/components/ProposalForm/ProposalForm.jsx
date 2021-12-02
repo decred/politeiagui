@@ -337,7 +337,7 @@ const ProposalForm = React.memo(function ProposalForm({
       )}
       <SelectField
         name="domain"
-        id="domain-selector"
+        id="proposal-domain-selector"
         onChange={handleSelectFiledChange("domain")}
         options={domainOptions}
         className={classNames(styles.typeSelectWrapper, "margin-top-m")}
