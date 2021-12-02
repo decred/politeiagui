@@ -34,8 +34,7 @@ import {
   makeProposal,
   signRegister,
   shortRecordToken,
-  RECORD_DOMAINS,
-  typeDatePicker
+  RECORD_DOMAINS
 } from "../utils";
 import { middlewares as recordMiddlewares } from "./mock/records";
 import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";

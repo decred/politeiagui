@@ -112,7 +112,6 @@ export function newRecordReply({
   testParams: { username },
   requestParams: { files = [], publickey, signature }
 }) {
-  // const record = new Proposal(username, { files, publickey, signature });
   const record = new Record({
     status: 1,
     state: 1,
