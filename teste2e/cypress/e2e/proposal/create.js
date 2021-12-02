@@ -38,7 +38,7 @@ describe("Proposal Create", () => {
     });
   });
 
-  it("Proposal can not be created without fill the input", () => {
+  it("should not be able to create proposals without fill the input", () => {
     // paid user with proposal credits
     cy.userEnvironment("user", { verifyIdentity: true });
     cy.recordsMiddleware("new", {});
@@ -54,7 +54,7 @@ describe("Proposal Create", () => {
       .contains("Please pick an end date");
   });
 
-  it("Non-paid user can not create proposals", () => {
+  it("should not be able create proposals with non-paid user", () => {
     cy.userEnvironment("unpaid", { verifyIdentity: true });
     cy.visit("/");
     cy.findByText(/new proposal/i).should("be.disabled");
