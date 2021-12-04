@@ -87,7 +87,11 @@ export function Record({
   state: recordState,
   version: recordVersion,
   publickey,
-  signature: recordSignature,
+  signature: recordSignature = faker.datatype.hexaDecimal(
+    128,
+    false,
+    /[0-9a-z]/
+  ),
   files = []
 } = {}) {
   const token = recordToken || Token();
@@ -120,7 +124,7 @@ export function Record({
       version,
       status,
       publickey: publickey || user.publickey,
-      recordSignature,
+      signature: recordSignature,
       timestamp
     })
   ];
