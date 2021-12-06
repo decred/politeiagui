@@ -15,7 +15,7 @@ describe("Proposal Create", () => {
   // components, in order to fill the new form fields such as: start & end dates
   // and amount - issue to track <insert issue link>
   //
-  it("should be able to create proposals", () => {
+  it("should allow paid user to create proposals", () => {
     // paid user with proposal credits
     cy.userEnvironment("user", { verifyIdentity: true });
     const proposal = buildProposal();
