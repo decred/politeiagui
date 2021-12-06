@@ -1,7 +1,8 @@
 import { inventoryReply as recordsInventoryReply } from "../core/api";
-import { Summary } from "./generate";
+import { Summary, Timestamp } from "./generate";
 import { statusToString, stringToStatus, typeFromStatus } from "./utils";
 import { chunkByStatusAmount } from "../core/utils";
+import times from "lodash/fp/times";
 
 export const API_BASE_URL = "/api/ticketvote/v1";
 
@@ -85,8 +86,18 @@ export function policyReply() {
   };
 }
 
+export function timestampsReply({
+  testParams: { votesAmount = 0, authsAmount = 0 }
+}) {
+  const timestamp = new Timestamp();
+  const votes = times(() => timestamp)(votesAmount);
+  const auths = times(() => timestamp)(authsAmount);
+  return { auths, details: timestamp, votes };
+}
+
 export const repliers = {
   inventory: inventoryReply,
+  policy: policyReply,
   summaries: summariesReply,
-  policy: policyReply
+  timestamps: timestampsReply
 };
