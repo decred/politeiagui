@@ -86,6 +86,12 @@ export function Record({
   status: recordStatus,
   state: recordState,
   version: recordVersion,
+  publickey,
+  signature: recordSignature = faker.datatype.hexaDecimal(
+    128,
+    false,
+    /[0-9a-z]/
+  ),
   files = []
 } = {}) {
   const token = recordToken || Token();
@@ -106,15 +112,19 @@ export function Record({
     signature,
     merkle: faker.datatype.hexaDecimal(64, false, /[0-9a-z]/)
   };
-  this.files = [new File(fileIndex), ...files.map((f) => new File(f))];
+  if (files.length == 2) {
+    this.files = files;
+  } else {
+    this.files = [new File(fileIndex), ...files.map((f) => new File(f))];
+  }
   this.metadata = [
     UserMetadata(user),
     RecordMetadata({
       token,
       version,
       status,
-      publickey: user.publickey,
-      signature,
+      publickey: publickey || user.publickey,
+      signature: recordSignature,
       timestamp
     })
   ];

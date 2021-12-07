@@ -1,6 +1,6 @@
 import pick from "lodash/fp/pick";
 
-import { PaymentCredits, User, userByType } from "./generate";
+import { PaymentCredits, User, userByType, Identity } from "./generate";
 
 export const API_BASE_URL = "/api/v1/user";
 
@@ -11,10 +11,15 @@ export const API_BASE_URL = "/api/v1/user";
  * @returns User
  */
 export function loginReply({
-  testParams: { userType, ...userProps },
+  testParams: { userType, verifyIdentity, ...userProps },
   requestParams: { email }
 }) {
-  return userByType(userType, { ...userProps, email });
+  const user = userByType(userType, { ...userProps, email });
+  if (verifyIdentity) {
+    const { userid, publickey } = user;
+    Identity({ userid, publickey });
+  }
+  return user;
 }
 
 /**
@@ -23,8 +28,13 @@ export function loginReply({
  * @param {Object} { testParams }
  * @returns User
  */
-export function meReply({ testParams: { userType } }) {
-  return userByType(userType);
+export function meReply({ testParams: { userType, verifyIdentity } }) {
+  const user = userByType(userType);
+  if (verifyIdentity) {
+    const { userid, publickey } = user;
+    Identity({ userid, publickey });
+  }
+  return user;
 }
 
 /**

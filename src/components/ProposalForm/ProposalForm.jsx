@@ -308,6 +308,7 @@ const ProposalForm = React.memo(function ProposalForm({
           <BoxTextInput
             placeholder="Amount (USD)"
             name="amount"
+            data-testid="proposal-amount"
             tabIndex={1}
             value={values.amount}
             onChange={handleChangeWithTouched("amount")}
@@ -336,6 +337,7 @@ const ProposalForm = React.memo(function ProposalForm({
       )}
       <SelectField
         name="domain"
+        id="proposal-domain-selector"
         onChange={handleSelectFiledChange("domain")}
         options={domainOptions}
         className={classNames(styles.typeSelectWrapper, "margin-top-m")}

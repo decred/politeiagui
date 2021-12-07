@@ -102,7 +102,31 @@ export function detailsReply({
   return { record };
 }
 
+/**
+ * newRecordReply is the reply to the new command. It returns a new record for the
+ * request data with given `files`, `publickey`, `signature` and `username` testParams.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns Proposal
+ */
+export function newRecordReply({
+  testParams: { username },
+  requestParams: { files = [], publickey, signature }
+}) {
+  const record = new Record({
+    status: 1,
+    state: 1,
+    version: 1,
+    files,
+    author: username,
+    publickey,
+    signature
+  });
+  return { record };
+}
+
 export const repliers = {
+  new: newRecordReply,
   records: recordsReply,
   inventory: inventoryReply,
   policy: policyReply,

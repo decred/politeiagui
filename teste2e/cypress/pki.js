@@ -70,7 +70,7 @@ export const keysToHex = ({ publicKey, secretKey }) => ({
   secretKey: toHex(secretKey)
 });
 
-const keysFromHex = ({ publicKey, secretKey }) => ({
+export const keysFromHex = ({ publicKey, secretKey }) => ({
   publicKey: toByteArray(publicKey),
   secretKey: toByteArray(secretKey)
 });

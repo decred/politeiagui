@@ -48,6 +48,27 @@ export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
 export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
 const PROPOSAL_STATE_UNVETTED = 1;
 const PROPOSAL_STATE_VETTED = 2;
+const monthLabels = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+];
+
+export const RECORD_DOMAINS = {
+  development: "Development",
+  marketing: "Marketing",
+  research: "Research",
+  design: "Design"
+};
 
 const findRecordFileByName = (record, name) =>
   compose(

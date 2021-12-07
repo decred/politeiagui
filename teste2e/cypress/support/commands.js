@@ -30,8 +30,12 @@ import * as pki from "../pki";
 import get from "lodash/fp/get";
 // TODO: consider moving general functions like makeProposal and signRegister
 // to a more general lib file other than api.
-import { makeProposal, signRegister } from "../utils";
-import { shortRecordToken } from "../utils";
+import {
+  makeProposal,
+  signRegister,
+  shortRecordToken,
+  RECORD_DOMAINS
+} from "../utils";
 import { middlewares as recordMiddlewares } from "./mock/records";
 import { middlewares as ticketVoteMiddlewares } from "./mock/ticketvote";
 import { middlewares as commentsMiddlewares } from "./mock/comments";
@@ -149,22 +153,24 @@ Cypress.Commands.add("approveProposal", ({ token }) =>
 Cypress.Commands.add("typeCreateProposal", (proposal) => {
   cy.server();
   cy.findByTestId("proposal-name").type(proposal.name);
-  cy.findByTestId("text-area").type(proposal.description);
+  cy.findByTestId("proposal-amount").type(String(proposal.amount / 100));
+  // get dollars from cents.
+
+  const startDate = new Date(proposal.startDate * 1000);
+  cy.findAllByTestId("datepicker").first().children().first().click();
+  cy.findAllByTestId("days-list")
+    .first()
+    .findByText(startDate.getDate())
+    .click();
+  cy.findAllByTestId("datepicker").first().next().children().first().click();
+  cy.get("[data-testid=days-list]:eq(1)").find(">li").last().click();
+  const domainTxt = RECORD_DOMAINS[proposal.domain];
+  cy.get("#proposal-domain-selector")
+    .click()
+    .contains(domainTxt)
+    .click({ force: true });
   cy.route("POST", "/api/records/v1/new").as("newProposal");
-  cy.findByRole("button", { name: /submit/i }).click();
-  // needs more time in general to complete this request so we increase the
-  // responseTimeout
-  cy.wait("@newProposal", { timeout: 10000 }).should((xhr) => {
-    expect(xhr.status).to.equal(200);
-    expect(xhr.response.body.record)
-      .to.have.property("censorshiprecord")
-      .and.be.a("object")
-      .and.have.all.keys("token", "signature", "merkle");
-    cy.assertProposalPage({
-      ...proposal,
-      token: xhr.response.body.record.censorshiprecord.token
-    });
-  });
+  cy.findByTestId("text-area").type(proposal.description);
 });
 
 Cypress.Commands.add("assertListLengthByTestId", (testid, expectedLength) =>

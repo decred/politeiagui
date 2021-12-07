@@ -69,7 +69,9 @@ const DatePickerField = ({
         };
 
         return (
-          <div className={classNames("cursor-pointer", className)}>
+          <div
+            className={classNames("cursor-pointer", className)}
+            data-testid="datepicker">
             <DatePicker
               show={isOpen}
               years={years}
