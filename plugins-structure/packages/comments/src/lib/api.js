@@ -22,3 +22,11 @@ export async function fetchComments({ token }) {
   );
   return await parseResponse(response);
 }
+
+export async function fetchCount({ tokens }) {
+  const response = await fetch(
+    getCommentsRoute(ROUTE_COUNT),
+    fetchOptions(null, { tokens }, "POST")
+  );
+  return await parseResponse(response);
+}

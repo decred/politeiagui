@@ -33,6 +33,7 @@ export function useRecordComments({ token, id, initialFetch = false }) {
   }, [commentsStatus, onFetchComments, initialFetch]);
 
   return {
+    comment,
     comments,
     commentsError,
     commentsStatus,
