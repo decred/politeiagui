@@ -53,7 +53,6 @@ export const client = {
   },
 };
 
-// Not exported client utils
 export async function getCsrf(state) {
   const csrf = state.api && state.api.csrf;
   // if already has csrf just return it

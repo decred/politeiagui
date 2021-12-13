@@ -1,64 +1,38 @@
 // @politeiagui/core is available for the plugin usage
 import { store } from "@politeiagui/core";
 import { router } from "@politeiagui/core/router";
-import { recordsInventory } from "@politeiagui/core/records/inventory";
+import { api } from "@politeiagui/core/api";
+import { routes } from "./routes";
 
-const publicRecord = {
-  recordsState: "vetted",
-  status: "public",
-};
-
-const navLinks = `<nav>
-<a href="/">Home Page</a>
-<a href="/comments">comments Page</a>
-</nav>`;
-
-function commentsPage() {
-  return `${navLinks}
-  <h1>comments PAGE</h1>`;
-}
-
-async function HomePage() {
-  // Select API status for public records
-  const publicRecordsInventoryStatus = recordsInventory.selectStatus(
-    store.getState(),
-    publicRecord
-  );
-  // idle state means API has not been initialized yet
-  if (publicRecordsInventoryStatus === "idle") {
-    await store.dispatch(recordsInventory.fetch(publicRecord));
+function initializePlugin() {
+  console.log("iniciou");
+  const unsubscribe = initializeApi();
+  const apiStatus = api.selectStatus(store.getState());
+  if (apiStatus === "succeeded") {
+    unsubscribe();
   }
-  const inventory = recordsInventory.selectByStateAndStatus(
-    store.getState(),
-    publicRecord
-  );
-  return `
-  <nav>
-    <a href="/">Home Page</a>
-    <a href="/comments">comments Page</a>
-  </nav>
-  <h1>comments Home</h1>
-  <h2>Public Tokens</h2>
-  <ol>
-    ${inventory.map((token) => `<li>${token}</li>`).join("")}
-  </ol>
-  `;
 }
 
-// Routes for comments plugin
-export const routes = [
-  {
-    path: "/comments",
-    view: async () => {
-      document.querySelector("#root").innerHTML = commentsPage();
-    },
-  },
-  {
-    path: "/",
-    view: async () => {
-      document.querySelector("#root").innerHTML = await HomePage();
-    },
-  },
-];
+function initializeApi() {
+  const apiStatus = api.selectStatus(store.getState());
+  let unsubscribe;
+  if (apiStatus === "idle") {
+    unsubscribe = store.subscribe(handleApi);
+    store.dispatch(api.fetch());
+  }
+  return unsubscribe;
+}
 
-router.init({ routes });
+function handleApi() {
+  const state = store.getState();
+  const status = api.selectStatus(state);
+  if (status === "loading") {
+    document.querySelector("#root").innerHTML = "<h1>Loading api...</h1>";
+  }
+  // only start the app if can fetch api
+  if (status === "succeeded") {
+    router.init({ routes });
+  }
+}
+
+initializePlugin();
