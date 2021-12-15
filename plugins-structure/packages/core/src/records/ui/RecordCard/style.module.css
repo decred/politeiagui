@@ -1,0 +1,40 @@
+.card {
+  padding: 2rem var(--container-padding-right) 2rem
+    var(--container-padding-left);
+  margin-bottom: var(--spacing-medium);
+  display: flex;
+  flex-direction: column;
+}
+
+.firstRow {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.secondRow {
+  display: flex;
+  flex-grow: 1;
+  margin-top: var(--spacing-medium);
+}
+
+.thirdRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-medium);
+}
+
+.subtitle {
+  margin-top: var(--spacing-small);
+}
+
+@media screen and (max-width: 560px) {
+  .firstRow {
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+  }
+
+  .header {
+    margin-top: var(--spacing-small);
+  }
+}
