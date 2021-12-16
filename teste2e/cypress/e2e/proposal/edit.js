@@ -1,117 +1,105 @@
 import { buildProposal } from "../../support/generate";
-import { shortRecordToken } from "../../utils";
+import { shortRecordToken, PROPOSAL_VOTING_AUTHORIZED } from "../../utils";
+import {
+  User,
+  USER_TYPE_ADMIN,
+  userByType
+} from "../../support/users/generate";
+import faker from "faker";
+
+beforeEach(function mockApiCalls() {
+  // currently mocking pi and ticketvote summaries calls with any status, since
+  // they aren't used for assertions.
+  cy.useTicketvoteApi();
+  cy.useRecordsApi();
+  cy.usePiApi();
+  cy.useWwwApi();
+  cy.useCommentsApi();
+});
 
 describe("Proposal Edit", () => {
-  const user = {
-    email: "adminuser@example.com",
-    username: "adminuser",
-    password: "password"
-  };
-
-  beforeEach(() => {
+  it("should be editable a public proposal as a proposal owner", () => {
     cy.server();
-    cy.login(user);
-    cy.identity();
-  });
-
-  it("Can edit a public proposal as a proposal owner", () => {
-    // create proposal
-    const proposal = buildProposal();
+    const user = userByType(USER_TYPE_ADMIN);
+    cy.log(user, user instanceof User);
+    cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true, user });
+    cy.recordsMiddleware("details", { status: 1, state: 1, username: user });
+    cy.recordsMiddleware("edit", { status: 1, state: 1, username: user });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.intercept("/api/records/v1/details").as("details");
+    cy.intercept("/api/pi/v1/summaries").as("summaries");
+    const token = faker.git.shortSha().slice(0, 7);
     const { description: newDescription } = buildProposal();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        cy.approveProposal(censorshiprecord);
-        cy.intercept("/api/records/v1/details").as("details");
-        cy.intercept("/api/ticketvote/v1/summaries").as("summaries");
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        // user is able to edit the proposal
-        cy.wait("@details");
-        cy.wait("@summaries");
-        cy.wait(2000);
-        cy.findByTestId(/record-edit-button/i).click();
-        cy.findByRole("button", { name: /submit/i }).should("be.disabled");
-        cy.findByTestId("text-area").type(newDescription);
-        cy.route("POST", "/api/records/v1/edit").as("editProposal");
-        cy.findByRole("button", { name: /submit/i }).click();
-        cy.wait("@editProposal", { timeout: 10000 })
-          .its("status")
-          .should("eq", 200);
-        cy.findByText(/version 2/).should("exist");
-      }
-    );
+    cy.visit(`record/${token}`);
+    cy.wait("@details");
+    cy.wait("@summaries");
+    cy.wait(2000);
+    cy.findByTestId(/record-edit-button/i).click();
+    cy.findByRole("button", { name: /submit/i }).should("be.disabled");
+    cy.findByTestId("text-area").type(newDescription);
+    cy.route("POST", "/api/records/v1/edit").as("editProposal");
+    cy.findByRole("button", { name: /submit/i }).click();
+    cy.wait("@editProposal", { timeout: 10000 })
+      .its("status")
+      .should("eq", 200);
   });
 
-  it("Can't edit a proposal if not the owner", () => {
-    // create proposal
-    const proposal = buildProposal();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        cy.approveProposal(censorshiprecord);
-        // logout
-        cy.logout(user);
-        // login paid user
-        const user1 = {
-          email: "user1@example.com",
-          username: "user1",
-          password: "password"
-        };
-        cy.login(user1);
-        cy.identity();
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        cy.findByTestId(/record-edit-button/i).should("not.exist");
-      }
-    );
+  it("shouldn't be editable a proposal if not be the owner", () => {
+    cy.server();
+    cy.userEnvironment(USER_TYPE_ADMIN);
+    cy.recordsMiddleware("details", { status: 1, state: 1 });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.intercept("/api/records/v1/details").as("details");
+    cy.intercept("/api/pi/v1/summaries").as("summaries");
+    const token = faker.git.shortSha().slice(0, 7);
+    cy.visit(`record/${token}`);
+    cy.wait("@details");
+    cy.wait("@summaries");
+    cy.findByTestId(/record-edit-button/i).should("not.exist");
   });
 
-  it("Can't edit an authorized voting proposal", () => {
-    const proposal = buildProposal();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        cy.approveProposal(censorshiprecord);
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        cy.route("POST", "api/ticketvote/v1/authorize").as("authorizeVote");
-        cy.findByRole("button", { name: /authorize voting/i }).click();
-        cy.findByRole("button", { name: /confirm/i }).click();
-        cy.wait("@authorizeVote", { timeout: 3000 })
-          .its("status")
-          .should("eq", 200);
-        cy.findByTestId(/modal-confirm-success-msg/i).click();
-        cy.findByTestId(/record-edit-button/i).should(
-          "have.css",
-          "pointer-events",
-          "none"
-        );
-      }
-    );
+  it("shouldn't be editable an authorized voting proposal", () => {
+    cy.server();
+    const user = userByType(USER_TYPE_ADMIN);
+    cy.log(user, user instanceof User);
+    cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true, user });
+    cy.recordsMiddleware("details", {
+      status: PROPOSAL_VOTING_AUTHORIZED,
+      state: 1,
+      username: user
+    });
+    cy.recordsMiddleware("edit", {
+      status: PROPOSAL_VOTING_AUTHORIZED,
+      state: 1,
+      username: user
+    });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.intercept("/api/records/v1/details").as("details");
+    cy.intercept("/api/pi/v1/summaries").as("summaries");
+    const token = faker.git.shortSha().slice(0, 7);
+    const { description: newDescription } = buildProposal();
+    cy.visit(`record/${token}`);
+    cy.wait("@details");
+    cy.wait("@summaries");
+    cy.findByTestId(/record-edit-button/i).should("not.exist");
   });
 
-  it("Can't edit without making any changes", () => {
-    // create proposal
-    const proposal = buildProposal();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        cy.approveProposal(censorshiprecord);
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        cy.wait(3000);
-        cy.findByTestId(/record-edit-button/i).click();
-        cy.findByRole("button", { name: /submit/i }).should("be.disabled");
-      }
-    );
+  it("shouldn't be editable without making any changes", () => {
+    cy.server();
+    const user = userByType(USER_TYPE_ADMIN);
+    cy.log(user, user instanceof User);
+    cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true, user });
+    cy.recordsMiddleware("details", { status: 1, state: 1, username: user });
+    cy.recordsMiddleware("edit", { status: 1, state: 1, username: user });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.intercept("/api/records/v1/details").as("details");
+    cy.intercept("/api/pi/v1/summaries").as("summaries");
+    const token = faker.git.shortSha().slice(0, 7);
+    cy.visit(`record/${token}`);
+    cy.wait("@details");
+    cy.wait("@summaries");
+    cy.wait(2000);
+    cy.findByTestId(/record-edit-button/i).click();
+    cy.findByRole("button", { name: /submit/i }).should("be.disabled");
   });
 });

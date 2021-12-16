@@ -1,6 +1,12 @@
 import pick from "lodash/fp/pick";
 
-import { PaymentCredits, User, userByType, Identity } from "./generate";
+import {
+  PaymentCredits,
+  User,
+  userByType,
+  Identity,
+  USER_TYPE_UNPAID
+} from "./generate";
 
 export const API_BASE_URL = "/api/v1/user";
 
@@ -28,8 +34,10 @@ export function loginReply({
  * @param {Object} { testParams }
  * @returns User
  */
-export function meReply({ testParams: { userType, verifyIdentity } }) {
-  const user = userByType(userType);
+export function meReply({ testParams: { userType, verifyIdentity, user } }) {
+  if (!user) {
+    user = userByType(userType);
+  }
   if (verifyIdentity) {
     const { userid, publickey } = user;
     Identity({ userid, publickey });
@@ -44,7 +52,7 @@ export function meReply({ testParams: { userType, verifyIdentity } }) {
  * @returns Payment registration object
  */
 export function paymentsRegistrationReply({ testParams: { haspaid = true } }) {
-  const user = haspaid ? new User() : userByType("unpaid");
+  const user = haspaid ? new User() : userByType(USER_TYPE_UNPAID);
   const userRegistrationPayment = pick([
     "paywalladdress",
     "paywallamount",
@@ -62,7 +70,7 @@ export function paymentsRegistrationReply({ testParams: { haspaid = true } }) {
 export function paymentsPaywallReply({
   testParams: { haspaid = true, creditprice = 10000000 }
 }) {
-  const user = haspaid ? new User() : userByType("unpaid");
+  const user = haspaid ? new User() : userByType(USER_TYPE_UNPAID);
   const userPaywallPayment = pick(["paywalltxnotbefore", "paywalladdress"])(
     user
   );

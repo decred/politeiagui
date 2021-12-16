@@ -1,5 +1,7 @@
 import { Record, File, Inventory } from "./generate";
 import { stateToString } from "./utils";
+import { makeProposal } from "../../utils";
+import { buildProposal } from "../generate";
 
 export const API_BASE_URL = "/api/records/v1";
 
@@ -98,7 +100,17 @@ export function detailsReply({
   testParams: { state, status, username },
   requestParams: { token }
 }) {
-  const record = new Record({ author: username, status, state, token });
+  const { name, description, startDate, endDate, amount, domain } =
+    buildProposal();
+  const { files } = makeProposal({
+    name,
+    markdown: description,
+    startdate: startDate,
+    enddate: endDate,
+    amount,
+    domain
+  });
+  const record = new Record({ author: username, status, state, token, files });
   return { record };
 }
 
@@ -110,6 +122,23 @@ export function detailsReply({
  * @returns Proposal
  */
 export function newRecordReply({
+  testParams: { username },
+  requestParams: { files = [], publickey, signature, token }
+}) {
+  const record = new Record({
+    status: 1,
+    state: 1,
+    version: 1,
+    files,
+    author: username,
+    publickey,
+    signature,
+    token
+  });
+  return { record };
+}
+
+export function editRecordReply({
   testParams: { username },
   requestParams: { files = [], publickey, signature }
 }) {
@@ -127,6 +156,7 @@ export function newRecordReply({
 
 export const repliers = {
   new: newRecordReply,
+  edit: editRecordReply,
   records: recordsReply,
   inventory: inventoryReply,
   policy: policyReply,

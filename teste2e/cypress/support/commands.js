@@ -169,7 +169,6 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
     .click()
     .contains(domainTxt)
     .click({ force: true });
-  cy.route("POST", "/api/records/v1/new").as("newProposal");
   cy.findByTestId("text-area").type(proposal.description);
 });
 

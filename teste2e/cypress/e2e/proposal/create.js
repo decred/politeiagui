@@ -25,6 +25,7 @@ describe("Proposal Create", () => {
     cy.findByRole("button", { name: /submit/i }).click();
     // needs more time in general to complete this request so we increase the
     // responseTimeout
+    cy.route("POST", "/api/records/v1/new").as("newProposal");
     cy.wait("@newProposal").should((xhr) => {
       expect(xhr.status).to.equal(200);
       cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
