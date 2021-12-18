@@ -1,12 +1,6 @@
 import { buildProposal } from "../../support/generate";
-import {
-  PROPOSAL_VOTING_AUTHORIZED,
-  makeProposal
-} from "../../utils";
-import {
-  USER_TYPE_ADMIN,
-  userByType
-} from "../../support/users/generate";
+import { PROPOSAL_VOTING_AUTHORIZED, makeProposal } from "../../utils";
+import { USER_TYPE_ADMIN, userByType } from "../../support/users/generate";
 import faker from "faker";
 
 beforeEach(function mockApiCalls() {
