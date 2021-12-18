@@ -1,7 +1,5 @@
 import { Record, File, Inventory } from "./generate";
 import { stateToString } from "./utils";
-import { makeProposal } from "../../utils";
-import { buildProposal } from "../generate";
 
 export const API_BASE_URL = "/api/records/v1";
 
@@ -97,19 +95,9 @@ export function inventoryReply({
  * @returns Record
  */
 export function detailsReply({
-  testParams: { state, status, username },
+  testParams: { state, status, username, files },
   requestParams: { token }
 }) {
-  const { name, description, startDate, endDate, amount, domain } =
-    buildProposal();
-  const { files } = makeProposal({
-    name,
-    markdown: description,
-    startdate: startDate,
-    enddate: endDate,
-    amount,
-    domain
-  });
   const record = new Record({ author: username, status, state, token, files });
   return { record };
 }
@@ -140,12 +128,12 @@ export function newRecordReply({
 
 export function editRecordReply({
   testParams: { username },
-  requestParams: { files = [], publickey, signature }
+  requestParams: { status, state, version, files = [], publickey, signature }
 }) {
   const record = new Record({
-    status: 1,
-    state: 1,
-    version: 1,
+    status: status,
+    state: state,
+    version: version,
     files,
     author: username,
     publickey,

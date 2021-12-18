@@ -7,7 +7,7 @@ import keys from "lodash/fp/keys";
 import first from "lodash/fp/first";
 import get from "lodash/fp/get";
 import find from "lodash/fp/find";
-import path from "path";
+import faker from "faker";
 
 // TODO: move record related utils to core package
 export const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
@@ -68,6 +68,12 @@ export const RECORD_DOMAINS = {
   marketing: "Marketing",
   research: "Research",
   design: "Design"
+};
+
+const randomDomain = () => {
+  const domains = ["development", "marketing", "research", "design"];
+  const random = Math.floor(Math.random() * domains.length);
+  return domains[random];
 };
 
 const findRecordFileByName = (record, name) =>
@@ -186,12 +192,12 @@ export const signRegister = (userid, record) => {
 };
 
 export const makeProposal = ({
-  name,
-  amount,
-  startdate,
-  enddate,
-  domain,
-  markdown,
+  name = faker.name.title(),
+  amount = 2000000,
+  startdate = Math.round(new Date().getTime() / 1000) + 1209600,
+  enddate = Math.round(new Date().getTime() / 1000) + 2629746,
+  domain = randomDomain(),
+  markdown = faker.lorem.sentence(),
   rfpDeadline,
   rfpLink,
   attachments = []
