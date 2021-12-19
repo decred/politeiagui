@@ -19,6 +19,12 @@
   flex-wrap: wrap;
 }
 
+.subtitleSeparator {
+  margin-right: var(--spacing-small);
+  margin-left: var(--spacing-small);
+  color: var(--text-secondary-color);
+}
+
 .flexWrap {
   flex-wrap: wrap;
 }
@@ -149,5 +155,18 @@ div.darkActionsTooltip {
 
   .title {
     max-width: 100%;
+  }
+
+  .subtitleWrapper {
+    flex-flow: column;
+    max-width: 100%;
+  }
+
+  .subtitleWrapper > .subtitleSeparator {
+    display: none;
+  }
+
+  .subtitleWrapper > *:not(:first-child) {
+    padding-top: 1rem;
   }
 }
