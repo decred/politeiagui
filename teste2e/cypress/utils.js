@@ -192,35 +192,42 @@ export const signRegister = (userid, record) => {
 };
 
 export const makeProposal = ({
-  name = faker.name.title(),
+  name,
   amount = 2000000,
-  startdate = Math.round(new Date().getTime() / 1000) + 1209600,
-  enddate = Math.round(new Date().getTime() / 1000) + 2629746,
-  domain = randomDomain(),
-  markdown = faker.lorem.sentence(),
+  startdate,
+  enddate,
+  domain,
+  markdown,
   rfpDeadline,
   rfpLink,
   attachments = []
-}) => ({
-  files: [
-    convertMarkdownToFile(name + "\n\n" + markdown),
-    {
-      //proposal metadata file
-      name: PROPOSAL_METADATA_FILENAME,
-      mime: "text/plain; charset=utf-8",
-      digest: objectToSHA256({ name, amount, startdate, enddate, domain }),
-      payload: bufferToBase64String(
-        objectToBuffer({ name, amount, startdate, enddate, domain })
-      )
-    },
-    ...(attachments || [])
-  ].map(({ name, mime, payload }) => ({
-    name,
-    mime,
-    payload,
-    digest: digestPayload(payload)
-  }))
-});
+}) => {
+  name = name || faker.name.title();
+  startdate = startdate || Math.round(new Date().getTime() / 1000) + 1209600;
+  enddate = enddate || Math.round(new Date().getTime() / 1000) + 2629746;
+  domain = domain || randomDomain();
+  markdown = markdown || faker.lorem.sentence();
+  return {
+    files: [
+      convertMarkdownToFile(name + "\n\n" + markdown),
+      {
+        //proposal metadata file
+        name: PROPOSAL_METADATA_FILENAME,
+        mime: "text/plain; charset=utf-8",
+        digest: objectToSHA256({ name, amount, startdate, enddate, domain }),
+        payload: bufferToBase64String(
+          objectToBuffer({ name, amount, startdate, enddate, domain })
+        )
+      },
+      ...(attachments || [])
+    ].map(({ name, mime, payload }) => ({
+      name,
+      mime,
+      payload,
+      digest: digestPayload(payload)
+    }))
+  };
+};
 
 export const shortRecordToken = (token) => token.substring(0, 7);
 

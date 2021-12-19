@@ -110,7 +110,7 @@ export function detailsReply({
  * @returns Proposal
  */
 export function newRecordReply({
-  testParams: { username },
+  testParams: { user },
   requestParams: { files = [], publickey, signature, token }
 }) {
   const record = new Record({
@@ -118,7 +118,7 @@ export function newRecordReply({
     state: 1,
     version: 1,
     files,
-    author: username,
+    author: user,
     publickey,
     signature,
     token
@@ -127,7 +127,7 @@ export function newRecordReply({
 }
 
 export function editRecordReply({
-  testParams: { username },
+  testParams: { user },
   requestParams: { status, state, version, files = [], publickey, signature }
 }) {
   const record = new Record({
@@ -135,7 +135,7 @@ export function editRecordReply({
     state: state,
     version: version,
     files,
-    author: username,
+    author: user,
     publickey,
     signature
   });

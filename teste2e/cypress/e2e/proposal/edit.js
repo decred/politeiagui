@@ -25,7 +25,7 @@ describe("Proposal Edit", () => {
       files,
       username: user
     });
-    cy.recordsMiddleware("edit", { status: 1, state: 1, username: user });
+    cy.recordsMiddleware("edit", { status: 1, state: 1, user });
     cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
     cy.intercept("/api/records/v1/details").as("details");
     cy.intercept("/api/pi/v1/summaries").as("summaries");
@@ -84,7 +84,7 @@ describe("Proposal Edit", () => {
       files,
       username: user
     });
-    cy.recordsMiddleware("edit", { status: 1, state: 1, username: user });
+    cy.recordsMiddleware("edit", { status: 1, state: 1, user });
     cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
     const token = faker.git.shortSha().slice(0, 7);
     cy.visit(`record/${token}`);
