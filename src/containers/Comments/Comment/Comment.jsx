@@ -124,7 +124,7 @@ const Comment = ({
         <Markdown
           renderImages={false}
           className={styles.censored}
-          body={`Censored by moderators; Reason: ${reason}`}
+          body={`Censored by moderators. Reason: ${reason}`}
         />
       )}
       <div className="justify-space-between margin-top-s">
