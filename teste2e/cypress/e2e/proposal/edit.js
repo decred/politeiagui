@@ -30,10 +30,14 @@ describe("Proposal Edit", () => {
     cy.intercept("/api/records/v1/details").as("details");
     cy.intercept("/api/pi/v1/summaries").as("summaries");
     const token = faker.git.shortSha().slice(0, 7);
-    const { description: newDescription } = buildProposal();
     cy.visit(`record/${token}`);
     cy.wait("@details");
     cy.wait("@summaries");
+    cy.findByTestId(/record-edit-button/i).click();
+    cy.findByRole("button", { name: /submit/i }).should("be.disabled");
+    const { description: newDescription } = buildProposal();
+    cy.findByTestId("text-area").type(newDescription);
+    cy.findByRole("button", { name: /submit/i }).should("not.be.disabled");
   });
 
   it("shouldn't allow editing if user is not the proposal owner", () => {
