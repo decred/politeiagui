@@ -26,7 +26,7 @@ const VotesCount = ({
     <div className={styles.voteCount}>
       {isVoteActive && (
         <>
-          {onSearchVotes && (
+          {onSearchVotes && votesReceived > 0 && (
             <div>
               <Icon
                 type="search"
