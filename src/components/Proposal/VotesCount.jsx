@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import {
   Text,
   Icon,
-  useMediaQuery,
-  Tooltip,
   useTheme,
   classNames,
   getThemeProperty,
@@ -18,7 +16,6 @@ const VotesCount = ({
   onSearchVotes,
   isVoteActive
 }) => {
-  const isMobileScreen = useMediaQuery("(max-width:560px)");
   const votesLeft = quorumVotes - votesReceived;
   const { theme, themeName } = useTheme();
   const color = getThemeProperty(theme, "icon-color");
@@ -27,9 +24,9 @@ const VotesCount = ({
 
   return (
     <div className={styles.voteCount}>
-      {!isMobileScreen ? (
+      {isVoteActive && (
         <>
-          {onSearchVotes && votesReceived > 0 && (
+          {onSearchVotes && (
             <div>
               <Icon
                 type="search"
@@ -39,28 +36,25 @@ const VotesCount = ({
               />
             </div>
           )}
-          <Tooltip
-            className={classNames(
-              styles.quorumTooltip,
-              isDarkTheme && styles.darkQuorumTooltip
-            )}
-            content={`${votesReceived} votes cast, quorum requirement is ${quorumVotes} votes`}
-            placement="left">
-            <Text className={styles.votesReceived} size="small">
-              {votesReceived}
-            </Text>
-            <Text className={styles.votesQuorum} size="small">
-              /{`${quorumVotes} votes`}
-            </Text>
-          </Tooltip>
+          <div className={styles.quorumAndVotes}>
+            <div>
+              <Text
+                className={classNames(styles.votesLeft, styles.quorumReached)}
+                size="small">
+                {votesLeft > 0 ? `${votesLeft} votes until quorum` : "quorum reached!"}
+              </Text>
+            </div>
+            <div>
+              <Text className={styles.votesReceived} size="small">
+                {votesReceived}
+              </Text>
+              <Text className={styles.votesQuorum} size="small">
+                /{`${quorumVotes} votes`}
+              </Text>
+            </div>
+          </div>
         </>
-      ) : isVoteActive ? (
-        <Text
-          className={classNames(styles.votesLeft, styles.quorumReached)}
-          size="small">
-          {votesLeft > 0 ? `${votesLeft} votes left` : "quorum reached"}
-        </Text>
-      ) : null}
+      )}
     </div>
   );
 };
