@@ -1112,8 +1112,8 @@ export const onCensorComment = (
   state,
   sectionId,
   reason
-) => {
-  return withCsrf((dispatch, _, csrf) => {
+) =>
+  withCsrf((dispatch, _, csrf) => {
     dispatch(
       act.REQUEST_CENSOR_COMMENT({ commentid, token, state, sectionId })
     );
@@ -1124,7 +1124,9 @@ export const onCensorComment = (
       .then((comment) => api.censorComment(csrf, comment))
       .then(({ comment: { receipt, commentid, token } }) => {
         if (receipt) {
-          dispatch(act.RECEIVE_CENSOR_COMMENT({ commentid, token, sectionId }));
+          dispatch(
+            act.RECEIVE_CENSOR_COMMENT({ commentid, token, sectionId, reason })
+          );
         }
       })
       .catch((error) => {
@@ -1132,7 +1134,6 @@ export const onCensorComment = (
         throw error;
       });
   });
-};
 
 export const onSubmitComment = (
   currentUserID,

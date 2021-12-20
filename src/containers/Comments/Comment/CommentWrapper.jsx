@@ -104,7 +104,8 @@ const CommentWrapper = ({
     userid,
     isNew,
     sumOfNewDescendants,
-    parentid
+    parentid,
+    reason
   } = comment;
 
   const isInLatestUpdateCommentTree =
@@ -200,6 +201,7 @@ const CommentWrapper = ({
         authorID={userid}
         createdAt={timestamp}
         censored={censored}
+        reason={reason}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
         disableLikes={
