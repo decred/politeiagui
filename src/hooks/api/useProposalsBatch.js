@@ -15,7 +15,6 @@ import values from "lodash/fp/values";
 import compact from "lodash/fp/compact";
 import uniq from "lodash/fp/uniq";
 import map from "lodash/fp/map";
-import reduce from "lodash/fp/reduce";
 import flow from "lodash/fp/flow";
 import isEmpty from "lodash/fp/isEmpty";
 import isUndefined from "lodash/fp/isUndefined";
@@ -39,14 +38,6 @@ const getRfpLinks = (proposals) =>
   flow(
     values,
     map((p) => p.linkto),
-    uniq,
-    compact
-  )(proposals);
-
-const getRfpSubmissions = (proposals) =>
-  flow(
-    values,
-    reduce((acc, p) => [...acc, ...(p.linkedfrom || [])], []),
     uniq,
     compact
   )(proposals);
@@ -334,11 +325,7 @@ export default function useProposalsBatch({
             setRemainingTokens([...unfetchedTokens, ...next]);
             if (fetchRfpLinks) {
               const rfpLinks = getRfpLinks(fetchedProposals);
-              const rfpSubmissions = getRfpSubmissions(fetchedProposals);
-              const unfetchedRfpLinks = getUnfetchedTokens(proposals, [
-                ...rfpLinks,
-                ...rfpSubmissions
-              ]);
+              const unfetchedRfpLinks = getUnfetchedTokens(proposals, rfpLinks);
               if (!isEmpty(unfetchedRfpLinks)) {
                 setRemainingTokens([
                   ...unfetchedRfpLinks,
