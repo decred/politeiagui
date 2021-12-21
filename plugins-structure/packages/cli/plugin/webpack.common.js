@@ -14,6 +14,7 @@ const jsRules = {
 module.exports = {
   entry: "./src/index.js",
   output: {
+    publicPath: "/",
     path: path.resolve(__dirname, "dist"),
     library: {
       name: pkgName + ".js",
