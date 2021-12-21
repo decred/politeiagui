@@ -10,7 +10,7 @@ import {
   ThemeProvider,
   defaultDarkTheme,
   DEFAULT_LIGHT_THEME_NAME,
-  DEFAULT_DARK_THEME_NAME
+  DEFAULT_DARK_THEME_NAME,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
 import "../styles/index.css";
@@ -19,18 +19,16 @@ const appRoot = document.querySelector("#app-root");
 
 const themes = {
   [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
-  [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme }
+  [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme },
 };
 
 // Define an element where the routes will be rendered
 // Initialize router
 function App() {
   useEffect(() => {
-    initializeApp()
+    initializeApp();
   }, []);
-  return (
-  <div id="root"></div>
-  )
+  return <div id="root"></div>;
 }
 
 let routerInitialized = false;
@@ -66,12 +64,10 @@ function handleApi() {
 }
 
 ReactDOM.render(
-  <ThemeProvider
-      themes={themes}
-      defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </ThemeProvider>,
   appRoot
 );

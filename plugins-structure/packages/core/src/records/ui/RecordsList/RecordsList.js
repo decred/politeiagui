@@ -60,9 +60,7 @@ function RecordsListAux({
       <ul className={style.recordsList}>
         {records.map((record) => {
           const { token } = record.censorshiprecord;
-          return (
-            <RecordCard key={token} token={token} />
-          );
+          return <RecordCard key={token} token={token} />;
         })}
       </ul>
       <button
