@@ -6,7 +6,10 @@ import { api } from "@politeiagui/core/api";
 import { router } from "@politeiagui/core/router";
 import { routes as coreRoutes } from "@politeiagui/core/routes";
 import { routes as statisticsRoutes } from "@politeiagui/statistics";
+import { routes as ticketvoteRoutes } from "@politeiagui/ticketvote";
 import { recordsInventory } from "@politeiagui/core/records/inventory";
+
+import { routes as proposalsRoutes } from "./proposals/routes";
 
 const root = document.querySelector("#root");
 
@@ -31,8 +34,10 @@ const routes = [
       ),
     cleanup: () => ReactDOM.unmountComponentAtNode(root),
   },
+  ...proposalsRoutes,
   ...coreRoutes,
   ...statisticsRoutes,
+  ...ticketvoteRoutes,
 ];
 
 function initializeApp() {

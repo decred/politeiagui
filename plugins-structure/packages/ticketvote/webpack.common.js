@@ -1,5 +1,5 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const pkgName = require("./package.json").name;
 
 const jsRules = {
   test: /\.js?$/,
@@ -33,21 +33,18 @@ const cssRules = [
   },
 ];
 
-const plugins = [
-  new HtmlWebpackPlugin({
-    template: "./src/public/index.html",
-  }),
-];
-
 module.exports = {
   entry: "./src/index.js",
   output: {
     publicPath: "/",
     path: path.resolve(__dirname, "dist"),
+    library: {
+      name: pkgName + ".js",
+      type: "umd",
+    },
     clean: true,
   },
   module: {
     rules: [jsRules, ...cssRules],
   },
-  plugins,
 };

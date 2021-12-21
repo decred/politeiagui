@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@politeiagui/core": "1.0.0",
-    "@politeiagui/statistics": "1.0.0"
+    "@politeiagui/statistics": "1.0.0",
+    "@politeiagui/ticketvote": "1.0.0"
   },
   "devDependencies": {
     "webpack-bundle-analyzer": "^4.4.2"

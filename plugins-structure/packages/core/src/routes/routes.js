@@ -16,7 +16,8 @@ export const routes = [
         </Provider>,
         document.querySelector("#root")
       ),
-    cleanup: () => ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    cleanup: () =>
+      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   {
     path: "/records",
@@ -28,13 +29,16 @@ export const routes = [
         </Provider>,
         document.querySelector("#root")
       ),
-    cleanup: () => ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    cleanup: () =>
+      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   {
     path: "/records/:id",
     title: "Record",
-    view: (params) => ReactDOM.render(<Record {...params} />, document.querySelector("#root")),
-    cleanup: () => ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    view: (params) =>
+      ReactDOM.render(<Record {...params} />, document.querySelector("#root")),
+    cleanup: () =>
+      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   { path: "/settings", view: () => console.log("view settings") },
 ];
