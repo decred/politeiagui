@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { useFetchRecordsInventory } from "../inventory/useFetchRecordsInventory";
+import { useFetchRecordsInventory } from "../../inventory/useFetchRecordsInventory";
 import {
   fetchRecordsNextPage,
   selectRecordsByStateAndStatus,
   selectHasMoreRecordsToFetch,
-} from "../records/recordsSlice";
+} from "../../records/recordsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import RecordCard from "./RecordCard";
+import RecordCard from "../RecordCard";
+import style from "./style.module.css";
 
 // fetch inventory and pass it down
 export function RecordsList({ recordsState, status }) {
@@ -56,15 +57,14 @@ function RecordsListAux({
   }
   return (
     <>
-      <h1>Records</h1>
-      <h3>{recordsState}</h3>
-      <h3>{status}</h3>
-      {records.map((record) => {
-        const { token } = record.censorshiprecord;
-        return (
-          <RecordCard key={token} token={token} />
-        );
-      })}
+      <ul className={style.recordsList}>
+        {records.map((record) => {
+          const { token } = record.censorshiprecord;
+          return (
+            <RecordCard key={token} token={token} />
+          );
+        })}
+      </ul>
       <button
         disabled={!hasMoreRecords && !hasMoreInventory}
         onClick={handleFetchMore}

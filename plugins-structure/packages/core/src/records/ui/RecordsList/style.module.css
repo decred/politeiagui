@@ -1,0 +1,7 @@
+.recordsList {
+  list-style-type: none;
+}
+
+.recordsList > * {
+  margin-bottom: var(--spacing-medium);
+}
