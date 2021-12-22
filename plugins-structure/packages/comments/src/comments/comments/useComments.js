@@ -1,27 +1,27 @@
 import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { commentsComments } from "./";
+import { recordComments } from "./";
 
 export function useRecordComments({ token, id, initialFetch = false }) {
   const dispatch = useDispatch();
 
   // Selectors
   const comments = useSelector((state) =>
-    commentsComments.selectByToken(state, token)
+    recordComments.selectByToken(state, token)
   );
   const comment = useSelector((state) =>
-    commentsComments.selectById(state, { token, id })
+    recordComments.selectById(state, { token, id })
   );
   const commentsStatus = useSelector((state) =>
-    commentsComments.selectStatus(state)
+    recordComments.selectStatus(state)
   );
   const commentsError = useSelector((state) =>
-    commentsComments.selectError(state)
+    recordComments.selectError(state)
   );
 
   // Actions
   const onFetchComments = useCallback(
-    () => dispatch(commentsComments.fetch({ token })),
+    () => dispatch(recordComments.fetch({ token })),
     [token, dispatch]
   );
 

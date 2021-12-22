@@ -6,7 +6,7 @@ import {
   selectRecordCommentsById,
 } from "./commentsSlice";
 
-export const commentsComments = {
+export const recordComments = {
   fetch: fetchComments,
   selectByToken: selectCommentsByToken,
   selectById: selectRecordCommentsById,
