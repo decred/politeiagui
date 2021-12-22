@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 
-const initialState = {
+export const initialState = {
   byToken: {},
   status: "idle",
   error: false,
@@ -9,15 +9,15 @@ const initialState = {
 
 export const fetchComments = createAsyncThunk(
   "comments/fetch",
-  async (body, { rejectWithValue }) => {
+  async (body, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchComments(body);
+      return await api.fetchComments(getState(), body);
     } catch (error) {
-      rejectWithValue(error.message);
+      return rejectWithValue(error.message);
     }
   },
   {
-    condition: (body) => body?.token,
+    condition: (body) => !!body?.token,
   }
 );
 
@@ -38,7 +38,6 @@ const commentsSlice = createSlice({
           (acc, c) => ({ ...acc, [c.commentid]: c }),
           {}
         );
-        console.log("action payload", commentsById);
         state.byToken[token] = commentsById;
         state.status = "succeeded";
       })

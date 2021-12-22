@@ -2,11 +2,9 @@ import {
   COMMENTS_API_ROUTE,
   VERSION,
   ROUTE_COMMENTS,
-  ROUTE_VOTE,
   ROUTE_VOTES,
-  ROUTE_NEW,
+  ROUTE_POLICY,
   ROUTE_COUNT,
-  ROUTE_DEL,
   ROUTE_TIMESTAMPS,
 } from "./constants";
 import { getCsrf, parseResponse, fetchOptions } from "@politeiagui/core/client";
@@ -15,18 +13,47 @@ function getCommentsRoute(route) {
   return `${COMMENTS_API_ROUTE}${VERSION}${route}`;
 }
 
-export async function fetchComments({ token }) {
+export async function fetchComments(state, { token }) {
+  const csrf = await getCsrf(state);
   const response = await fetch(
     getCommentsRoute(ROUTE_COMMENTS),
-    fetchOptions(null, { token }, "POST")
+    fetchOptions(csrf, { token }, "POST")
   );
   return await parseResponse(response);
 }
 
-export async function fetchCount({ tokens }) {
+export async function fetchCount(state, { tokens }) {
+  const csrf = await getCsrf(state);
   const response = await fetch(
     getCommentsRoute(ROUTE_COUNT),
-    fetchOptions(null, { tokens }, "POST")
+    fetchOptions(csrf, { tokens }, "POST")
+  );
+  return await parseResponse(response);
+}
+
+export async function fetchPolicy(state) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    getCommentsRoute(ROUTE_POLICY),
+    fetchOptions(csrf, {}, "POST")
+  );
+  return await parseResponse(response);
+}
+
+export async function fetchVotes(state, { token, userid }) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    getCommentsRoute(ROUTE_VOTES),
+    fetchOptions(csrf, { token, userid }, "POST")
+  );
+  return await parseResponse(response);
+}
+
+export async function fetchTimestamps(state, { token, commentids }) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    getCommentsRoute(ROUTE_TIMESTAMPS),
+    fetchOptions(csrf, { token, commentids }, "POST")
   );
   return await parseResponse(response);
 }

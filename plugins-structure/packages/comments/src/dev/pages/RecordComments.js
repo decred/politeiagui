@@ -4,7 +4,7 @@ import { store } from "@politeiagui/core";
 import { api } from "@politeiagui/core/api";
 import { Provider } from "react-redux";
 import commentsReducer from "../../comments/comments/commentsSlice";
-import RecordComments from "../../ui/RecordComments";
+import Comments from "../../ui/Comments";
 
 const RecordCommentsPage = async () => {
   const apiStatus = api.selectStatus(store.getState());
@@ -15,7 +15,7 @@ const RecordCommentsPage = async () => {
   await store.injectReducer("comments", commentsReducer);
   return ReactDOM.render(
     <Provider store={store}>
-      <RecordComments token="a8a16ca77aed7e7e" />
+      <Comments token="a8a16ca77aed7e7e" />
     </Provider>,
     document.querySelector("#root")
   );

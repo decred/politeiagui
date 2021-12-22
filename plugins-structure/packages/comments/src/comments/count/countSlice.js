@@ -8,22 +8,22 @@ const initialState = {
 };
 
 export const fetchCommentsCount = createAsyncThunk(
-  "comments/fetch",
-  async (body, { rejectWithValue }) => {
+  "commentsCount/fetch",
+  async (body, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchCount(body);
+      return await api.fetchCount(getState(), body);
     } catch (error) {
-      rejectWithValue(error.message);
+      return rejectWithValue(error.message);
     }
   },
   {
-    condition: (body) => body?.token,
+    condition: (body) => !!body?.token,
   }
 );
 
 // Reducer
-const commentsSlice = createSlice({
-  name: "comments",
+const commentsCountSlice = createSlice({
+  name: "commentsCount",
   initialState,
   extraReducers(builder) {
     builder
@@ -44,13 +44,13 @@ const commentsSlice = createSlice({
 });
 
 // Selectors
-export const selectCommentsCountStatus = (state) => state.comments.status;
+export const selectCommentsCountStatus = (state) => state.commentsCount.status;
 export const selectCommentsCountByToken = (state, token) =>
-  state.comments.byToken[token];
+  state.commentsCount.byToken[token];
 
 export const selectRecordCommentsCountById = (state, { token, id }) =>
-  state.comments.byToken[token] && state.comments.byToken[token][id];
+  state.commentsCount.byToken[token] && state.commentsCount.byToken[token][id];
 
 export const selectCommentsCountError = (state) => state.comments.error;
 
-export default commentsSlice.reducer;
+export default commentsCountSlice.reducer;

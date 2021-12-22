@@ -5,7 +5,6 @@ import { api } from "@politeiagui/core/api";
 import { routes } from "./routes";
 
 function initializePlugin() {
-  console.log("iniciou");
   const unsubscribe = initializeApi();
   const apiStatus = api.selectStatus(store.getState());
   if (apiStatus === "succeeded") {

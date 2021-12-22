@@ -11,9 +11,32 @@ const jsRules = {
   },
 };
 
+const cssRules = [
+  {
+    test: /\.css$/,
+    use: [
+      "style-loader",
+      {
+        loader: "css-loader",
+        options: {
+          importLoaders: 1,
+          modules: true,
+        },
+      },
+    ],
+    include: /\.module\.css$/,
+  },
+  {
+    test: /\.css$/,
+    use: ["style-loader", "css-loader"],
+    exclude: /\.module\.css$/,
+  },
+];
+
 module.exports = {
   entry: "./src/index.js",
   output: {
+    publicPath: "/",
     path: path.resolve(__dirname, "dist"),
     library: {
       name: pkgName + ".js",
@@ -22,6 +45,6 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules],
+    rules: [jsRules, ...cssRules],
   },
 };
