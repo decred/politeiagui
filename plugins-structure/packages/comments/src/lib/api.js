@@ -28,7 +28,8 @@ export async function fetchCount(state, { tokens }) {
     getCommentsRoute(ROUTE_COUNT),
     fetchOptions(csrf, { tokens }, "POST")
   );
-  return await parseResponse(response);
+  const parsedResponse = await parseResponse(response);
+  return parsedResponse.counts;
 }
 
 export async function fetchPolicy(state) {

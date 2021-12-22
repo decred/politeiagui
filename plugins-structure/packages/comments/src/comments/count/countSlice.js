@@ -17,7 +17,7 @@ export const fetchCommentsCount = createAsyncThunk(
     }
   },
   {
-    condition: (body) => !!body?.token,
+    condition: (body) => !!body?.tokens,
   }
 );
 
@@ -32,8 +32,12 @@ const commentsCountSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchCommentsCount.fulfilled, (state, action) => {
-        const { tokens } = action.meta.arg;
-        // state.byToken[token] = ;
+        // console.log("tokens", tokens, action.payload);
+        for (const token in action.payload) {
+          if (action.payload.hasOwnProperty(token)) {
+            state.byToken[token] = action.payload[token];
+          }
+        }
         state.status = "succeeded";
       })
       .addCase(fetchCommentsCount.rejected, (state, action) => {
@@ -45,12 +49,8 @@ const commentsCountSlice = createSlice({
 
 // Selectors
 export const selectCommentsCountStatus = (state) => state.commentsCount.status;
-export const selectCommentsCountByToken = (state, token) =>
-  state.commentsCount.byToken[token];
+export const selectCommentsCounts = (state) => state.commentsCount.byToken;
 
-export const selectRecordCommentsCountById = (state, { token, id }) =>
-  state.commentsCount.byToken[token] && state.commentsCount.byToken[token][id];
-
-export const selectCommentsCountError = (state) => state.comments.error;
+export const selectCommentsCountError = (state) => state.commentsCount.error;
 
 export default commentsCountSlice.reducer;
