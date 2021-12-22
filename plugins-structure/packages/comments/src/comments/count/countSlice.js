@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 
-const initialState = {
+export const initialState = {
   byToken: {},
   status: "idle",
   error: false,
