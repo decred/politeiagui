@@ -19,7 +19,8 @@ export async function fetchComments(state, { token }) {
     getCommentsRoute(ROUTE_COMMENTS),
     fetchOptions(csrf, { token }, "POST")
   );
-  return await parseResponse(response);
+  const commentsResponse = await parseResponse(response);
+  return commentsResponse.comments;
 }
 
 export async function fetchCount(state, { tokens }) {

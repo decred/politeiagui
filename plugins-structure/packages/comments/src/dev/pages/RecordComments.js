@@ -6,9 +6,15 @@ import { Provider } from "react-redux";
 import commentsReducer from "../../comments/comments/commentsSlice";
 import countReducer from "../../comments/count/countSlice";
 import policyReducer from "../../comments/policy/policySlice";
-import { Comments, CommentsCount, CommentsPolicyProvider } from "../../ui";
+import timestampsReducer from "../../comments/timestamps/timestampsSlice";
+import {
+  Comments,
+  CommentsCount,
+  CommentsPolicyProvider,
+  CommentsTimestamps,
+} from "../../ui";
 
-const RecordCommentsPage = async () => {
+const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
   const apiStatus = api.selectStatus(store.getState());
 
   if (apiStatus === "idle") {
@@ -17,11 +23,12 @@ const RecordCommentsPage = async () => {
   await store.injectReducer("comments", commentsReducer);
   await store.injectReducer("commentsCount", countReducer);
   await store.injectReducer("commentsPolicy", policyReducer);
+  await store.injectReducer("commentsTimestamps", timestampsReducer);
   return ReactDOM.render(
     <Provider store={store}>
       <CommentsPolicyProvider>
-        <h1>Comments for a8a16ca77aed7e7e:</h1>
-        <Comments token="a8a16ca77aed7e7e" />
+        <h1>Comments for {token}:</h1>
+        <Comments token={token} />
         <h1>Comments Count:</h1>
         <CommentsCount
           tokens={[
@@ -30,6 +37,14 @@ const RecordCommentsPage = async () => {
             "e1897786fe08d31f",
             "1fe2586a6f744e09",
           ]}
+        />
+        <h1>Comment Timestamps for {token}:</h1>
+        <CommentsTimestamps
+          token={token}
+          commentids={[1, 2, 3, 4]}
+          onFetchDone={(timestamps) => {
+            console.log(timestamps);
+          }}
         />
       </CommentsPolicyProvider>
     </Provider>,

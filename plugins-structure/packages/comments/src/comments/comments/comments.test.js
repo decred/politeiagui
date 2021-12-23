@@ -62,9 +62,7 @@ describe("Given the commentsSlice", () => {
   });
   describe("when fetchComments succeeds", () => {
     it("should update byToken and status", async () => {
-      const resValue = {
-        comments: [validComment],
-      };
+      const resValue = [validComment];
       fetchCommentsSpy.mockResolvedValueOnce(resValue);
 
       await store.dispatch(fetchComments(params));

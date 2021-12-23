@@ -33,7 +33,7 @@ const commentsSlice = createSlice({
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
         const { token } = action.meta.arg;
-        const { comments } = action.payload;
+        const comments = action.payload;
         const commentsById = comments.reduce(
           (acc, c) => ({ ...acc, [c.commentid]: c }),
           {}

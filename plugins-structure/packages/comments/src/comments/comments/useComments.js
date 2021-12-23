@@ -1,9 +1,11 @@
 import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { recordComments } from "./";
+import { checkReducersDeps } from "../helpers";
 
 export function useRecordComments({ token, id, initialFetch = false }) {
   const dispatch = useDispatch();
+  checkReducersDeps(["comments"]);
 
   // Selectors
   const comments = useSelector((state) =>

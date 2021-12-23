@@ -1,9 +1,11 @@
 import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { commentsCount } from "./";
+import { checkReducersDeps } from "../helpers";
 
 export function useCommentsCount({ tokens, initialFetch = false }) {
   const dispatch = useDispatch();
+  checkReducersDeps(["commentsCount"]);
 
   // Selectors
   const count = useSelector(commentsCount.selectAll);
@@ -19,7 +21,6 @@ export function useCommentsCount({ tokens, initialFetch = false }) {
   // Effects
   useEffect(() => {
     if (countStatus === "idle" && initialFetch) {
-      console.log("vai dar fetch");
       onFetchCount();
     }
   }, [countStatus, onFetchCount, initialFetch]);
