@@ -159,6 +159,8 @@ const Proposal = React.memo(function Proposal({
     startDate,
     endDate
   } = proposal;
+  const { startblockheight, endblockheight } = voteSummary;
+  const votingBlocks = Number(endblockheight) - Number(startblockheight);
   const isAdmin = useSelector(sel.currentUserIsAdmin);
   const isVetted = state === PROPOSAL_STATE_VETTED;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
@@ -397,7 +399,10 @@ const Proposal = React.memo(function Proposal({
                     />
                   )}
                   {isVoteActive && (
-                    <>
+                    <Tooltip
+                      placement="bottom"
+                      content={`Block heights: ${startblockheight} - ${endblockheight}`}
+                      contentClassName={styles.quorumTooltip}>
                       <Text
                         className={classNames(
                           "hide-on-mobile",
@@ -408,7 +413,24 @@ const Proposal = React.memo(function Proposal({
                           voteBlocksLeft > 1 ? "s" : ""
                         } left`}
                       </Text>
-                    </>
+                    </Tooltip>
+                  )}
+                  {isVotingFinished && (
+                    <Tooltip
+                      placement="bottom"
+                      content={`Block heights: ${startblockheight} - ${endblockheight}`}
+                      contentClassName={styles.quorumTooltip}>
+                      <Text
+                        className={classNames(
+                          "hide-on-mobile",
+                          styles.blocksLeft
+                        )}
+                        size="small">
+                        {`duration: ${votingBlocks} block${
+                          votingBlocks > 1 ? "s" : ""
+                        }`}
+                      </Text>
+                    </Tooltip>
                   )}
                 </Status>
               }
