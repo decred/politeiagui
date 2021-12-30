@@ -43,6 +43,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("useRecordsApi", (config = {}) => {
+  cy.recordsMiddleware("edit", config.edit);
   cy.recordsMiddleware("records", config.records);
   cy.recordsMiddleware("inventory", config.inventory);
   cy.recordsMiddleware("policy", config.policy);

@@ -97,7 +97,7 @@ export function Record({
   const token = recordToken || Token();
   const status = recordStatus || faker.datatype.number(3) + 1;
   const state = recordState || faker.datatype.number(1) + 1;
-  const user = author instanceof User || new User();
+  const user = author || new User();
   const timestamp = Date.now() / 1000;
   const version = recordVersion || faker.datatype.number(6) + 1;
   const signature = faker.datatype.hexaDecimal(128, false, /[0-9a-z]/);
@@ -112,7 +112,7 @@ export function Record({
     signature,
     merkle: faker.datatype.hexaDecimal(64, false, /[0-9a-z]/)
   };
-  if (files.length == 2) {
+  if (files.length >= 2) {
     this.files = files;
   } else {
     this.files = [new File(fileIndex), ...files.map((f) => new File(f))];
