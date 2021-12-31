@@ -1192,6 +1192,46 @@ export const onSubmitComment = (
       });
   });
 
+export const onEditComment = ({
+  userid,
+  token,
+  commentID,
+  comment,
+  parentID,
+  state,
+  extraData,
+  extraDataHint,
+  sectionId
+}) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const commentEdit = api.makeCommentEdit({
+      userid,
+      token,
+      comment,
+      parentid: parentID || 0,
+      state,
+      commentid: commentID,
+      extradata: extraData,
+      extradatahint: extraDataHint || ""
+    });
+    dispatch(act.REQUEST_EDIT_COMMENT(commentEdit));
+    return Promise.resolve(api.signCommentEdit(commentEdit))
+      .then((commentEdit) => api.editComment(csrf, commentEdit))
+      .then((response) => {
+        const responsecomment = response.comment || {};
+        return dispatch(
+          act.RECEIVE_EDIT_COMMENT({
+            ...responsecomment,
+            sectionId
+          })
+        );
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_EDIT_COMMENT(null, error));
+        throw error;
+      });
+  });
+
 export const onUpdateUserKey = (currentUserID) =>
   withCsrf((dispatch, getState, csrf) => {
     dispatch(act.REQUEST_UPDATED_KEY());

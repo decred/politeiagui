@@ -148,6 +148,8 @@ const api = (state = DEFAULT_STATE, action) =>
       [act.RECEIVE_EDIT_PROPOSAL]: () => receive("editProposal", state, action),
       [act.REQUEST_NEW_COMMENT]: () => request("newComment", state, action),
       [act.RECEIVE_NEW_COMMENT]: () => receive("newComment", state),
+      [act.REQUEST_EDIT_COMMENT]: () => request("editComment", state, action),
+      [act.RECEIVE_EDIT_COMMENT]: () => receive("editComment", state),
       [act.REQUEST_PROPOSAL_PAYWALL_DETAILS]: () =>
         request("proposalPaywallDetails", state, action),
       [act.RECEIVE_PROPOSAL_PAYWALL_DETAILS]: () =>

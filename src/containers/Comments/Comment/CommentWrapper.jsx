@@ -8,7 +8,8 @@ import Comment from "./Comment";
 import {
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_COMMENT_UPVOTE,
-  PROPOSAL_COMMENT_DOWNVOTE
+  PROPOSAL_COMMENT_DOWNVOTE,
+  PROPOSAL_UPDATE_HINT
 } from "src/constants";
 
 const ContextLink = React.memo(({ parentid, recordToken }) => (
@@ -73,6 +74,7 @@ const CommentWrapper = ({
 }) => {
   const {
     onSubmitComment,
+    onEditComment,
     onCommentVote,
     getCommentLikeOption,
     enableCommentVote,
@@ -97,16 +99,22 @@ const CommentWrapper = ({
   const {
     comment: commentText,
     token,
+    state,
     commentid,
     deleted: censored,
     timestamp,
+    createdat,
     username,
     userid,
     isNew,
     sumOfNewDescendants,
-    parentid
+    parentid,
+    extradatahint,
+    extradata
   } = comment;
 
+  const isAuthorUpdate = extradatahint === PROPOSAL_UPDATE_HINT;
+  const authorUpdateTitle = isAuthorUpdate ? JSON.parse(extradata).title : "";
   const isInLatestUpdateCommentTree =
     comments && isInCommentTree(latestAuthorUpdateId, commentid, comments);
   const notInLatestAuthorUpdateThread =
@@ -194,12 +202,18 @@ const CommentWrapper = ({
     <>
       <Comment
         permalink={`${recordBaseLink}/comments/${commentid}`}
+        commentID={commentid}
+        token={token}
+        state={state}
         seeInContextLink={contextLink}
         censorable={censorable}
         author={username}
         authorID={userid}
-        createdAt={timestamp}
+        authorUpdateTitle={authorUpdateTitle}
+        createdAt={createdat}
+        timestamp={timestamp}
         censored={censored}
+        sectionId={sectionId}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
         disableLikes={
@@ -222,6 +236,7 @@ const CommentWrapper = ({
         onClickCensor={handleClickCensor}
         onClickReply={handleToggleReplyForm}
         onClickShowReplies={handleToggleReplies}
+        onEditComment={onEditComment}
         numOfReplies={numOfReplies}
         numOfNewHiddenReplies={sumOfNewDescendants}
         commentBody={commentText}

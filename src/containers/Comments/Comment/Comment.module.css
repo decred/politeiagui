@@ -31,6 +31,12 @@ span.censor:hover {
   color: var(--text-secondary-color) !important;
 }
 
+.editIcon {
+  margin-top: 0.3rem;
+  margin-left: 0.7rem;
+  cursor: pointer;
+}
+
 .contextLink {
   font-size: var(--font-size-normal);
   color: var(--text-secondary-color) !important;

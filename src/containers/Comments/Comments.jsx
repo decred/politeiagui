@@ -99,6 +99,7 @@ const CommentsListAndActions = React.memo(
     recordAuthorUsername,
     recordBaseLink,
     onSubmitComment,
+    onEditComment,
     readOnly,
     identityError,
     paywallMissing,
@@ -273,6 +274,7 @@ const CommentsListAndActions = React.memo(
             <CommentContext.Provider
               value={{
                 onSubmitComment,
+                onEditComment,
                 onCommentVote: handleCommentVote,
                 recordAuthorID,
                 recordAuthorUsername,
@@ -342,6 +344,7 @@ const Comments = ({
   const isSingleThread = !!threadParentID;
   const {
     onSubmitComment,
+    onEditComment,
     onCommentVote,
     onCensorComment,
     comments,
@@ -435,6 +438,7 @@ const Comments = ({
             recordAuthorUsername={recordAuthorUsername}
             recordBaseLink={recordBaseLink}
             onSubmitComment={onSubmitComment}
+            onEditComment={onEditComment}
             readOnly={readOnly}
             identityError={identityError}
             paywallMissing={paywallMissing}

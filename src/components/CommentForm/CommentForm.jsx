@@ -31,7 +31,8 @@ const CommentForm = ({
   persistKey,
   className,
   isAuthorUpdate,
-  hasAuthorUpdates
+  hasAuthorUpdates,
+  values
 }) => {
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
@@ -47,6 +48,7 @@ const CommentForm = ({
     policyPi: { namesupportedchars, namelengthmax, namelengthmin }
   } = usePolicy();
   const smallTablet = useMediaQuery("(max-width: 685px)");
+
   async function handleSubmit(
     { comment, title },
     { resetForm, setSubmitting, setFieldError }
@@ -87,12 +89,15 @@ const CommentForm = ({
       }
     }
   }
+
+  const initialValues = {
+    title: values?.title !== "" ? values?.title : isAuthorUpdate ? "" : null,
+    comment: values?.comment || ""
+  };
+
   return (
     <Formik
-      initialValues={{
-        title: isAuthorUpdate ? "" : null,
-        comment: ""
-      }}
+      initialValues={initialValues}
       loading={!validationSchema}
       validationSchema={validationSchema({
         namesupportedchars,
@@ -187,6 +192,7 @@ will only be able to reply to your most recent update thread.">
 };
 
 CommentForm.propTypes = {
+  values: PropTypes.object,
   className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func,

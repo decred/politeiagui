@@ -191,6 +191,26 @@ export const makeComment = (
   extradatahint
 });
 
+export const makeCommentEdit = ({
+  userid,
+  token,
+  commentid,
+  parentid,
+  comment,
+  state,
+  extradata,
+  extradatahint
+}) => ({
+  userid,
+  token,
+  commentid,
+  parentid,
+  comment,
+  state,
+  extradata,
+  extradatahint
+});
+
 export const makeDccComment = (token, comment, parentid) => ({
   token,
   comment,
@@ -283,6 +303,46 @@ export const signComment = (userid, comment) =>
           ].join("")
         )
         .then((signature) => ({ ...comment, publickey, signature }))
+    );
+
+export const signCommentEdit = ({
+  userid,
+  token,
+  commentid,
+  parentid,
+  comment,
+  state,
+  extradata,
+  extradatahint
+}) =>
+  pki
+    .myPubKeyHex(userid)
+    .then((publickey) =>
+      pki
+        .signStringHex(
+          userid,
+          [
+            state,
+            token,
+            parentid,
+            commentid,
+            comment,
+            extradata,
+            extradatahint
+          ].join("")
+        )
+        .then((signature) => ({
+          userid,
+          token,
+          commentid,
+          parentid,
+          comment,
+          state,
+          extradata,
+          extradatahint,
+          publickey,
+          signature
+        }))
     );
 
 export const signDcc = (userid, dcc) =>
@@ -667,6 +727,9 @@ export const editProposal = (csrf, proposal) =>
 
 export const newComment = (csrf, comment) =>
   POST("/new", csrf, comment, apiComments).then(getResponse);
+
+export const editComment = (csrf, commentEdit) =>
+  POST("/edit", csrf, commentEdit, apiComments).then(getResponse);
 
 export const startVote = (csrf, userid, voteParams) =>
   pki

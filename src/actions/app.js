@@ -9,6 +9,7 @@ import {
   onSubmitNewDcc
 } from "./api";
 import {
+  onEditComment as onEditCommentApi,
   onSubmitComment as onSubmitCommentApi,
   onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
@@ -139,6 +140,34 @@ export const onEditProposal =
         files,
         token
       )
+    );
+  };
+
+export const onEditComment =
+  ({
+    commentID,
+    comment,
+    token,
+    parentID,
+    state,
+    extraData,
+    extraDataHint,
+    sectionId
+  }) =>
+  (dispatch, getState) => {
+    const userid = sel.currentUserID(getState());
+    return dispatch(
+      onEditCommentApi({
+        userid,
+        token,
+        commentID,
+        comment,
+        parentID,
+        state,
+        extraData,
+        extraDataHint,
+        sectionId
+      })
     );
   };
 
