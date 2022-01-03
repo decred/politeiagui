@@ -335,7 +335,9 @@ function CommentsPluginError(code, context) {
     8: `The provided parent ID is invalid, ${context}`,
     9: `The provided comment vote is invalid, ${context}`,
     10: "You have exceeded the max number of changes on your vote",
-    12: "Backend does not accept the extra data needed for author updates"
+    12: "Backend does not accept the extra data needed for author updates",
+    13: context,
+    14: context
   };
 
   this.message = errorMap[code] || defaultErrorMessage(code, PluginIdComments);

@@ -9,6 +9,11 @@
   color: var(--tab-text-color) !important;
 }
 
+.editForm {
+  margin-bottom: 2rem;
+  padding: 1rem 1.4rem;
+}
+
 span.censor {
   cursor: pointer;
   color: #ed6d47;

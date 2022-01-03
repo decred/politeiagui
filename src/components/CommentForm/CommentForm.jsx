@@ -34,6 +34,7 @@ const CommentForm = ({
   hasAuthorUpdates,
   values
 }) => {
+  const isEditing = !!values;
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
   const openLoginModal = useCallback(() => {
@@ -180,7 +181,7 @@ will only be able to reply to your most recent update thread.">
                 data-testid="comment-submit-button"
                 kind={!isValid || disableSubmit ? "disabled" : "primary"}
                 loading={isSubmitting}>
-                Add comment
+                {isEditing ? "Edit " : "Add "} comment
               </Button>
             </Row>
             {!!persistKey && <FormikPersist name={persistKey} />}

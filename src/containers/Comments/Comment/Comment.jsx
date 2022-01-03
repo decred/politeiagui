@@ -218,9 +218,8 @@ const Comment = ({
     </div>
   ) : (
     <CommentForm
-      /*persistKey={`commenting-on-${tokenFromUrl}`}
-      disableSubmit={!!identityError || paywallMissing}
-       hasAuthorUpdates={hasAuthorUpdates}*/
+      persistKey={`editing-comment-${commentID}-${token}`}
+      className={styles.editForm}
       onSubmit={handleEditComment}
       isAuthorUpdate={!!authorUpdateTitle}
       values={{

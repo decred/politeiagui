@@ -315,35 +315,33 @@ export const signCommentEdit = ({
   extradata,
   extradatahint
 }) =>
-  pki
-    .myPubKeyHex(userid)
-    .then((publickey) =>
-      pki
-        .signStringHex(
-          userid,
-          [
-            state,
-            token,
-            parentid,
-            commentid,
-            comment,
-            extradata,
-            extradatahint
-          ].join("")
-        )
-        .then((signature) => ({
-          userid,
-          token,
-          commentid,
-          parentid,
-          comment,
+  pki.myPubKeyHex(userid).then((publickey) =>
+    pki
+      .signStringHex(
+        userid,
+        [
           state,
+          token,
+          parentid,
+          commentid,
+          comment,
           extradata,
-          extradatahint,
-          publickey,
-          signature
-        }))
-    );
+          extradatahint
+        ].join("")
+      )
+      .then((signature) => ({
+        userid,
+        token,
+        commentid,
+        parentid,
+        comment,
+        state,
+        extradata,
+        extradatahint,
+        publickey,
+        signature
+      }))
+  );
 
 export const signDcc = (userid, dcc) =>
   pki
