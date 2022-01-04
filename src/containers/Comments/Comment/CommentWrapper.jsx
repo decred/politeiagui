@@ -205,6 +205,7 @@ const CommentWrapper = ({
       <Comment
         permalink={`${recordBaseLink}/comments/${commentid}`}
         commentID={commentid}
+        parentID={parentid}
         token={token}
         state={state}
         seeInContextLink={contextLink}

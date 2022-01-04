@@ -122,7 +122,7 @@ const CommentsListAndActions = React.memo(
     const hasDuplicatedComments =
       !!state.comments.length && numOfDuplicatedComments > 0;
     /** EDIT MODE START */
-    const [editCommentID, setEditCommentID] = useState(false);
+    const [editCommentID, setEditCommentID] = useState(null);
     const isEditing = !!editCommentID;
     /** EDIT MODE END*/
     /** SORT START */

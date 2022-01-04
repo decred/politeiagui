@@ -80,11 +80,6 @@ const Comment = ({
     allowedits &&
     currentTimeSec < createdAt + editperiodtime;
 
-  const toggleCommentEditMode = useCallback(
-    (commentID) => setEditCommentID(commentID),
-    [setEditCommentID]
-  );
-
   const censorButton = !censored && censorable && (
     <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
       Censor
@@ -123,7 +118,7 @@ const Comment = ({
         sectionId
       });
 
-      setEditCommentID(false);
+      setEditCommentID(null);
     },
     [
       onEditComment,
@@ -167,7 +162,7 @@ const Comment = ({
           {isEditable && (
             <Icon
               className={styles.editIcon}
-              onClick={() => toggleCommentEditMode(commentID)}
+              onClick={() => setEditCommentID(commentID)}
               type="edit"
             />
           )}
@@ -230,7 +225,7 @@ const Comment = ({
       persistKey={`editing-comment-${commentID}-${token}`}
       className={styles.editForm}
       onSubmit={handleEditComment}
-      onCancel={() => toggleCommentEditMode(false)}
+      onCancel={() => setEditCommentID(null)}
       isAuthorUpdate={!!authorUpdateTitle}
       values={{
         comment: commentBody,
@@ -268,6 +263,8 @@ Comment.propTypes = {
   onClickReply: PropTypes.func,
   onClickShowReplies: PropTypes.func,
   onEditComment: PropTypes.func,
+  editCommentID: PropTypes.number,
+  setEditCommentID: PropTypes.func,
   numOfReplies: PropTypes.number,
   numOfNewHiddenReplies: PropTypes.number,
   censorable: PropTypes.bool
