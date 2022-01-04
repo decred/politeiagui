@@ -121,6 +121,10 @@ const CommentsListAndActions = React.memo(
     const numOfDuplicatedComments = numOfComments - state.comments.length;
     const hasDuplicatedComments =
       !!state.comments.length && numOfDuplicatedComments > 0;
+    /** EDIT MODE START */
+    const [editCommentID, setEditCommentID] = useState(false);
+    const isEditing = !!editCommentID;
+    /** EDIT MODE END*/
     /** SORT START */
     const handleSetSortOption = useCallback(
       (option) => {
@@ -226,47 +230,51 @@ const CommentsListAndActions = React.memo(
     /** SINGLE THREAD VERIFICATION END */
     return (
       <>
-        <div className={classNames("container", styles.commentsHeader)}>
-          {!isSingleThread && (
-            <div className={styles.titleWrapper}>
-              <H2 className={styles.commentsTitle}>
-                {authorUpdateTitle ? authorUpdateTitle : "Comments"}{" "}
-                <span
-                  className={styles.commentsCount}>{`(${commentsCount})`}</span>
-              </H2>
-              {hasDuplicatedComments && (
-                <Text
-                  color="gray"
-                  size="small">{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
+        {!isEditing && (
+          <div className={classNames("container", styles.commentsHeader)}>
+            {!isSingleThread && (
+              <div className={styles.titleWrapper}>
+                <H2 className={styles.commentsTitle}>
+                  {authorUpdateTitle ? authorUpdateTitle : "Comments"}{" "}
+                  <span
+                    className={
+                      styles.commentsCount
+                    }>{`(${commentsCount})`}</span>
+                </H2>
+                {hasDuplicatedComments && (
+                  <Text
+                    color="gray"
+                    size="small">{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
+                )}
+              </div>
+            )}
+            <div className={styles.sortContainer}>
+              {!!comments && !!comments.length && (
+                <>
+                  <Select
+                    value={selectValue}
+                    onChange={handleSetSortOption}
+                    options={selectOptions}
+                  />
+                  {!isSingleThread && (
+                    <FlatModeButton
+                      isActive={isFlatCommentsMode}
+                      onClick={debouncedHandleCommentsModeToggle}
+                    />
+                  )}
+                </>
               )}
             </div>
-          )}
-          <div className={styles.sortContainer}>
-            {!!comments && !!comments.length && (
-              <>
-                <Select
-                  value={selectValue}
-                  onChange={handleSetSortOption}
-                  options={selectOptions}
-                />
-                {!isSingleThread && (
-                  <FlatModeButton
-                    isActive={isFlatCommentsMode}
-                    onClick={debouncedHandleCommentsModeToggle}
-                  />
-                )}
-              </>
+            {isSingleThread && (
+              <div className="justify-left margin-top-s">
+                <Text className="margin-right-xs">Single comment thread. </Text>
+                <Link to={`/record/${recordToken}?scrollToComments=true`}>
+                  View all.
+                </Link>
+              </div>
             )}
           </div>
-          {isSingleThread && (
-            <div className="justify-left margin-top-s">
-              <Text className="margin-right-xs">Single comment thread. </Text>
-              <Link to={`/record/${recordToken}?scrollToComments=true`}>
-                View all.
-              </Link>
-            </div>
-          )}
-        </div>
+        )}
         <div className={styles.commentsWrapper}>
           {loading ? (
             commentLoaders
@@ -275,6 +283,8 @@ const CommentsListAndActions = React.memo(
               value={{
                 onSubmitComment,
                 onEditComment,
+                editCommentID,
+                setEditCommentID,
                 onCommentVote: handleCommentVote,
                 recordAuthorID,
                 recordAuthorUsername,

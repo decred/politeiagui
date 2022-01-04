@@ -75,6 +75,8 @@ const CommentWrapper = ({
   const {
     onSubmitComment,
     onEditComment,
+    editCommentID,
+    setEditCommentID,
     onCommentVote,
     getCommentLikeOption,
     enableCommentVote,
@@ -237,6 +239,8 @@ const CommentWrapper = ({
         onClickReply={handleToggleReplyForm}
         onClickShowReplies={handleToggleReplies}
         onEditComment={onEditComment}
+        editCommentID={editCommentID}
+        setEditCommentID={setEditCommentID}
         numOfReplies={numOfReplies}
         numOfNewHiddenReplies={sumOfNewDescendants}
         commentBody={commentText}

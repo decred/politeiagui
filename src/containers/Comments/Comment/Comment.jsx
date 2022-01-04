@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import {
   Text,
@@ -53,6 +53,8 @@ const Comment = ({
   onClickReply,
   onClickShowReplies,
   onEditComment,
+  editCommentID,
+  setEditCommentID,
   numOfReplies,
   numOfNewHiddenReplies,
   highlightAsNew,
@@ -66,7 +68,6 @@ const Comment = ({
 
   // Get policy settings & current user id to determine whether the comment
   // is editable.
-  const [isEditing, setIsEditing] = useState(false);
   const {
     policyComments: { editperiodtime, allowedits }
   } = usePolicy();
@@ -79,9 +80,9 @@ const Comment = ({
     allowedits &&
     currentTimeSec < createdAt + editperiodtime;
 
-  const toggleIsEditing = useCallback(
-    () => setIsEditing(!isEditing),
-    [isEditing, setIsEditing]
+  const toggleCommentEditMode = useCallback(
+    (commentID) => setEditCommentID(commentID),
+    [setEditCommentID]
   );
 
   const censorButton = !censored && censorable && (
@@ -122,12 +123,12 @@ const Comment = ({
         sectionId
       });
 
-      setIsEditing(false);
+      setEditCommentID(false);
     },
-    [onEditComment, commentID, parentID, state, token, sectionId]
+    [onEditComment, commentID, parentID, state, token, sectionId, setEditCommentID]
   );
 
-  return !isEditing ? (
+  return editCommentID !== commentID ? (
     <div
       className={classNames(
         styles.comment,
@@ -158,7 +159,7 @@ const Comment = ({
           {isEditable && (
             <Icon
               className={styles.editIcon}
-              onClick={toggleIsEditing}
+              onClick={() => toggleCommentEditMode(commentID)}
               type="edit"
             />
           )}
@@ -221,6 +222,7 @@ const Comment = ({
       persistKey={`editing-comment-${commentID}-${token}`}
       className={styles.editForm}
       onSubmit={handleEditComment}
+      onCancel={() => toggleCommentEditMode(false)}
       isAuthorUpdate={!!authorUpdateTitle}
       values={{
         comment: commentBody,
