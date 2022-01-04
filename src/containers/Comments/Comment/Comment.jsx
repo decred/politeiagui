@@ -31,6 +31,7 @@ const Comment = ({
   parentID,
   createdAt,
   timestamp,
+  version,
   token,
   state,
   author,
@@ -152,6 +153,7 @@ const Comment = ({
           <DateTooltip timestamp={timestamp} placement="bottom">
             {({ timeAgo }) => (
               <Link className={styles.timeAgo} to={`${permalink}`}>
+                {version > 1 && <span>Edited </span>}
                 {timeAgo}
               </Link>
             )}
@@ -159,6 +161,11 @@ const Comment = ({
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
           {!extraSmall && censorButton}
           {!extraSmall && seeInContextLink}
+          {version > 1 && (
+            <Text
+              id={`comment-${commentID}-version`}
+              truncate>{`version ${version}`}</Text>
+          )}
           {isEditable && (
             <Icon
               className={styles.editIcon}
@@ -242,6 +249,7 @@ Comment.propTypes = {
   parentID: PropTypes.number,
   createdAt: PropTypes.number,
   timestamp: PropTypes.number,
+  version: PropTypes.number,
   token: PropTypes.string,
   state: PropTypes.number,
   author: PropTypes.string,

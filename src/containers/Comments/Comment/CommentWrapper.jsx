@@ -106,6 +106,7 @@ const CommentWrapper = ({
     deleted: censored,
     timestamp,
     createdat,
+    version,
     username,
     userid,
     isNew,
@@ -215,6 +216,7 @@ const CommentWrapper = ({
         authorUpdateTitle={authorUpdateTitle}
         createdAt={createdat}
         timestamp={timestamp}
+        version={version}
         censored={censored}
         sectionId={sectionId}
         highlightAuthor={isRecordAuthor}
