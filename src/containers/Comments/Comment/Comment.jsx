@@ -125,7 +125,15 @@ const Comment = ({
 
       setEditCommentID(false);
     },
-    [onEditComment, commentID, parentID, state, token, sectionId, setEditCommentID]
+    [
+      onEditComment,
+      commentID,
+      parentID,
+      state,
+      token,
+      sectionId,
+      setEditCommentID
+    ]
   );
 
   return editCommentID !== commentID ? (
