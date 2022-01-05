@@ -70,7 +70,7 @@ const Comment = ({
   // Get policy settings & current user id to determine whether the comment
   // is editable.
   const {
-    policyComments: { editperiodtime, allowedits }
+    policyComments: { editperiod, allowedits }
   } = usePolicy();
   const { currentUser } = useLoaderContext();
   const { userid } = currentUser || {};
@@ -79,7 +79,7 @@ const Comment = ({
   const isEditable =
     authorID === userid &&
     allowedits &&
-    currentTimeSec < createdAt + editperiodtime;
+    currentTimeSec < createdAt + editperiod;
 
   const censorButton = !censored && censorable && (
     <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
