@@ -161,11 +161,6 @@ const Comment = ({
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
           {!extraSmall && censorButton}
           {!extraSmall && seeInContextLink}
-          {version > 1 && (
-            <Text
-              id={`comment-${commentID}-version`}
-              truncate>{`version ${version}`}</Text>
-          )}
           {isEditable && (
             <Icon
               className={styles.editIcon}
