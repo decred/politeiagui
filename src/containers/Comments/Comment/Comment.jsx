@@ -171,6 +171,7 @@ const Comment = ({
               className={styles.editIcon}
               onClick={() => setEditCommentID(commentID)}
               type="edit"
+              data-testid={`edit-comment-${commentID}`}
             />
           )}
         </Join>
