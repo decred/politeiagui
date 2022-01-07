@@ -11,6 +11,9 @@ import take from "lodash/fp/take";
 import isArray from "lodash/fp/isArray";
 import isEmpty from "lodash/fp/isEmpty";
 import without from "lodash/fp/without";
+import pick from "lodash/fp/pick";
+import compose from "lodash/fp/compose";
+import values from "lodash/fp/values";
 
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
 export const initialState = {
@@ -187,6 +190,9 @@ export const selectRecordsByStateAndStatus = (
     });
   }
 };
+
+export const selectRecordsByTokensBatch = (state, tokens) =>
+  compose(values, pick(tokens))(state.records.records);
 
 export const selectRecordsFetchQueue = (state, { recordsState, status }) => {
   if (validateRecordStateAndStatus(recordsState, status)) {

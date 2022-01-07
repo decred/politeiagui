@@ -47,7 +47,7 @@ export const client = {
 };
 
 // Not exported client utils
-async function getCsrf(state) {
+export async function getCsrf(state) {
   const csrf = state.api && state.api.csrf;
   // if already has csrf just return it
   if (csrf) return csrf;
@@ -56,14 +56,14 @@ async function getCsrf(state) {
   return newCsrf;
 }
 
-async function parseResponse(response) {
+export async function parseResponse(response) {
   const { status, statusText } = response;
   const json = await response.json();
   if (status === 200) return json;
   throw Error(statusText);
 }
 
-function fetchOptions(csrf, json, method) {
+export function fetchOptions(csrf, json, method) {
   const headers = {
     Accept: "application/json",
     "Content-Type": "application/json; charset=utf-8",

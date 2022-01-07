@@ -8,6 +8,7 @@ import {
   selectRecordByToken,
   selectRecords,
   selectRecordsByStateAndStatus,
+  selectRecordsByTokensBatch,
   selectRecordsFetchQueue,
   selectHasMoreRecordsToFetch,
 } from "./recordsSlice";
@@ -21,6 +22,7 @@ export const records = {
   popFetchQueue,
   selectStatus: selectRecordsStatus,
   selectByToken: selectRecordByToken,
+  selectByTokensBatch: selectRecordsByTokensBatch,
   selectAll: selectRecords,
   selectByStateAndStatus: selectRecordsByStateAndStatus,
   selectFetchQueue: selectRecordsFetchQueue,
