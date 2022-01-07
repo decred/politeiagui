@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Text,
@@ -80,6 +80,22 @@ const Comment = ({
     authorID === userid &&
     allowedits &&
     currentTimeSec < createdAt + editperiod;
+  const remaining = createdAt + editperiod - currentTimeSec;
+  const [isEditableState, setIsEditableState] = useState(false);
+  useEffect(() => {
+    // If comment is editable, calculate the remaning time to hide the edit icon
+    // when the comment is not edited anymore.
+    let t;
+    if (isEditable) {
+      setIsEditableState(true);
+      t = setTimeout(() => {
+        setIsEditableState(false);
+      }, remaining * 1000);
+    }
+
+    // Cleanup timeout on unmount
+    return () => clearTimeout(t);
+  }, [isEditable, remaining]);
 
   const censorButton = !censored && censorable && (
     <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
@@ -161,7 +177,7 @@ const Comment = ({
           {highlightAsNew && !extraSmall && <Text color="gray">new</Text>}
           {!extraSmall && censorButton}
           {!extraSmall && seeInContextLink}
-          {isEditable && (
+          {isEditableState && (
             <Icon
               className={styles.editIcon}
               onClick={() => setEditCommentID(commentID)}
