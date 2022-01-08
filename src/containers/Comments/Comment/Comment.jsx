@@ -85,16 +85,15 @@ const Comment = ({
   useEffect(() => {
     // If comment is editable, calculate the remaning time to hide the edit icon
     // when the comment is not edited anymore.
-    let t;
     if (isEditable) {
       setIsEditableState(true);
-      t = setTimeout(() => {
+      const t = setTimeout(() => {
         setIsEditableState(false);
-      }, remaining * 1000);
-    }
+      }, Math.round(remaining * 1000));
 
-    // Cleanup timeout on unmount
-    return () => clearTimeout(t);
+      // Cleanup timeout on unmount
+      return () => clearTimeout(t);
+    }
   }, [isEditable, remaining]);
 
   const censorButton = !censored && censorable && (
