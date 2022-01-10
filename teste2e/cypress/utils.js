@@ -29,7 +29,7 @@ export const PROPOSAL_VOTING_APPROVED = 5;
 const PROPOSAL_VOTING_REJECTED = 6;
 const PROPOSAL_VOTING_INELIGIBLE = 7;
 const PROPOSAL_STATUS_UNREVIEWED = 1;
-const PROPOSAL_STATUS_PUBLIC = 2;
+export const PROPOSAL_STATUS_PUBLIC = 2;
 const PROPOSAL_STATUS_CENSORED = 3;
 const PROPOSAL_STATUS_ARCHIVED = 4;
 
@@ -230,6 +230,14 @@ export const makeProposal = ({
 };
 
 export const shortRecordToken = (token) => token.substring(0, 7);
+
+export const fullRecordToken = () => faker.git.commitSha().slice(0, 16);
+
+export const generateTokenPair = () => {
+  const token = faker.git.commitSha().slice(0, 16);
+  const shortToken = shortRecordToken(token);
+  return { token, shortToken };
+};
 
 export const getProposalStatusLabel = (status, isByRecordStatus) =>
   get(status)(
