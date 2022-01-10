@@ -161,12 +161,17 @@ export function editRecordReply({
   return { record };
 }
 
+// timestampsReply represents the data of /api/records/v1/timestamps endpoint
+// It currently returns empty data since it is serving the data for downloading
+// and we just check the existence of the downloaded file.
 export function timestampsReply({
-  testParams: {},
+  testParams: {
+    files = []
+  },
   requestParams: { token, version }
 }) {
   return {
-    files: [],
+    files: files,
     metadata: {},
     recordmetadata: {}
   };

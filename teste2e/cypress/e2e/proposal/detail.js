@@ -138,6 +138,8 @@ describe("Proposal details", () => {
       cy.wait("@records.details");
       cy.wait("@pi.summaries");
       cy.wait("@ticketvote.summaries");
+      // wait 2 seconds for the slow device
+      cy.wait(2000);
       cy.findByText(/Available Downloads/i).click();
       cy.findByText(/proposal bundle/i).click();
       const downloadsFolder = Cypress.config("downloadsFolder");
@@ -170,6 +172,8 @@ describe("Proposal details", () => {
       cy.wait("@records.details");
       cy.wait("@pi.summaries");
       cy.wait("@ticketvote.summaries");
+      // wait 2 seconds for the slow device
+      cy.wait(2000);
       cy.findByText(/Available Downloads/i).click();
       cy.findByText(/proposal timestamps/i).click();
       const downloadsFolder = Cypress.config("downloadsFolder");
