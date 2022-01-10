@@ -95,10 +95,10 @@ export function inventoryReply({
  * @returns Record
  */
 export function detailsReply({
-  testParams: { state, status, username },
+  testParams: { state, status, username, files },
   requestParams: { token }
 }) {
-  const record = new Record({ author: username, status, state, token });
+  const record = new Record({ author: username, status, state, token, files });
   return { record };
 }
 
@@ -110,15 +110,32 @@ export function detailsReply({
  * @returns Proposal
  */
 export function newRecordReply({
-  testParams: { username },
-  requestParams: { files = [], publickey, signature }
+  testParams: { user },
+  requestParams: { files = [], publickey, signature, token }
 }) {
   const record = new Record({
     status: 1,
     state: 1,
     version: 1,
     files,
-    author: username,
+    author: user,
+    publickey,
+    signature,
+    token
+  });
+  return { record };
+}
+
+export function editRecordReply({
+  testParams: { user },
+  requestParams: { status, state, version, files = [], publickey, signature }
+}) {
+  const record = new Record({
+    status: status,
+    state: state,
+    version: version,
+    files,
+    author: user,
     publickey,
     signature
   });
@@ -127,6 +144,7 @@ export function newRecordReply({
 
 export const repliers = {
   new: newRecordReply,
+  edit: editRecordReply,
   records: recordsReply,
   inventory: inventoryReply,
   policy: policyReply,

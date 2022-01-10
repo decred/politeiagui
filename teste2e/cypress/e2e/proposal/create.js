@@ -20,22 +20,13 @@ describe("Proposal Create", () => {
     cy.userEnvironment("user", { verifyIdentity: true });
     const proposal = buildProposal();
     cy.recordsMiddleware("new", {});
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
     cy.visit("/record/new");
     cy.typeCreateProposal(proposal);
     cy.findByRole("button", { name: /submit/i }).click();
     // needs more time in general to complete this request so we increase the
     // responseTimeout
-    cy.wait("@newProposal").should((xhr) => {
-      expect(xhr.status).to.equal(200);
-      cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
-      const token = xhr.response.body.record.censorshiprecord.token;
-      cy.assertProposalPage({
-        ...proposal,
-        token: token
-      });
-      cy.wait("@pi.summaries", { timeout: 500 });
-      cy.findByTestId("record-title").should("have.text", proposal.name);
-    });
+    cy.wait("@records.new");
   });
 
   it("should not be able to create proposals without fill the input", () => {

@@ -4,6 +4,12 @@ import map from "lodash/fp/map";
 import times from "lodash/fp/times";
 import * as pki from "../../pki";
 
+export const USER_TYPE_ADMIN = "admin";
+export const USER_TYPE_NO_CREDITS = "noCredits";
+export const USER_TYPE_UNPAID = "unpaid";
+export const USER_TYPE_USER = "user";
+export const USER_TYPE_TOTP = "totp";
+export const USER_TYPE_NO_LOGIN = "noLogin";
 export function User({
   isadmin = false,
   userid,
@@ -54,17 +60,17 @@ export function UserTotp(props = {}) {
 
 export function userByType(userType, props) {
   switch (userType) {
-    case "admin":
+    case USER_TYPE_ADMIN:
       return UserAdmin(props);
-    case "noCredits":
+    case USER_TYPE_NO_CREDITS:
       return UserNoCredits(props);
-    case "unpaid":
+    case USER_TYPE_UNPAID:
       return UserUnpaid(props);
-    case "user":
+    case USER_TYPE_USER:
       return new User(props);
-    case "totp":
+    case USER_TYPE_TOTP:
       return UserTotp(props);
-    case "noLogin":
+    case USER_TYPE_NO_LOGIN:
       return {};
     default:
       return new User(props);

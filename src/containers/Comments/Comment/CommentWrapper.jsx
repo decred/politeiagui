@@ -104,6 +104,7 @@ const CommentWrapper = ({
     state,
     commentid,
     deleted: censored,
+    publickey: censoredBy,
     timestamp,
     createdat,
     version,
@@ -113,7 +114,8 @@ const CommentWrapper = ({
     sumOfNewDescendants,
     parentid,
     extradatahint,
-    extradata
+    extradata,
+    reason
   } = comment;
 
   const isAuthorUpdate = extradatahint === PROPOSAL_UPDATE_HINT;
@@ -219,6 +221,8 @@ const CommentWrapper = ({
         version={version}
         censored={censored}
         sectionId={sectionId}
+        censoredBy={censoredBy}
+        reason={reason}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
         disableLikes={

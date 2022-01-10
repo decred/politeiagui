@@ -8,7 +8,6 @@ import {
   useTheme,
   DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
-import styles from "./Comment.module.css";
 import DateTooltip from "src/components/DateTooltip";
 import Markdown from "src/components/Markdown";
 import Join from "src/components/Join";
@@ -21,6 +20,8 @@ import { NOJS_ROUTE_PREFIX, PROPOSAL_UPDATE_HINT } from "src/constants";
 import { usePolicy } from "src/hooks";
 import { useLoaderContext } from "src/containers/Loader";
 import CommentForm from "src/components/CommentForm/CommentFormLazy";
+import { useUserByPublicKey } from "src/hooks";
+import styles from "./Comment.module.css";
 
 const forbiddenCommentsMdElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
@@ -38,6 +39,8 @@ const Comment = ({
   authorID,
   authorUpdateTitle,
   censored,
+  censoredBy,
+  reason,
   sectionId,
   highlightAuthor,
   likesUpCount,
@@ -101,6 +104,10 @@ const Comment = ({
       Censor
     </Text>
   );
+
+  const { username: censoredByUsername } = useUserByPublicKey({
+    userPubKey: censoredBy
+  });
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
@@ -211,7 +218,7 @@ const Comment = ({
         <Markdown
           renderImages={false}
           className={styles.censored}
-          body="Censored by moderators "
+          body={`Censored by ${censoredByUsername}. Reason: ${reason}`}
         />
       )}
       <div className="justify-space-between margin-top-s">
@@ -266,6 +273,9 @@ Comment.propTypes = {
   author: PropTypes.string,
   authorID: PropTypes.string,
   authorUpdateTitle: PropTypes.string,
+  censored: PropTypes.bool,
+  censoredBy: PropTypes.string,
+  reason: PropTypes.string,
   sectionId: PropTypes.string,
   highlightAuthor: PropTypes.bool,
   disableLikes: PropTypes.bool,
