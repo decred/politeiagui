@@ -32,7 +32,7 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
         <h1>Comments Count:</h1>
         <CommentsCount
           tokens={[
-            "a8a16ca77aed7e7e",
+            "fb74b286585c4219",
             "8a0630254c628734",
             "e1897786fe08d31f",
             "1fe2586a6f744e09",
@@ -41,7 +41,6 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
         <h1>Comment Timestamps for {token}:</h1>
         <CommentsTimestamps
           token={token}
-          commentids={[1, 2, 3, 4]}
           onFetchDone={(timestamps) => {
             console.log(timestamps);
           }}

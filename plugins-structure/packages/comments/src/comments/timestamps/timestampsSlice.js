@@ -32,13 +32,27 @@ const commentsTimestampsSlice = createSlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(fetchCommentsTimestamps.pending, (state) => {
+      .addCase(fetchCommentsTimestamps.pending, (state, action) => {
+        const { token } = action.meta.arg;
+        if (!state.byToken[token]) {
+          state.byToken[token] = {};
+        }
         state.status = "loading";
       })
       .addCase(fetchCommentsTimestamps.fulfilled, (state, action) => {
-        const { token } = action.meta.arg;
-        state.byToken[token] = action.payload;
-        state.status = "succeeded";
+        const { token, pageSize } = action.meta.arg;
+        const { comments } = action.payload;
+        const payloadSize = Object.keys(comments).length;
+        if (payloadSize === pageSize) {
+          state.status = "succeeded/hasMore";
+        } else {
+          state.status = "succeeded/isDone";
+        }
+        for (const commentid in comments) {
+          if (comments.hasOwnProperty(commentid)) {
+            state.byToken[token][commentid] = comments[commentid];
+          }
+        }
       })
       .addCase(fetchCommentsTimestamps.rejected, (state, action) => {
         state.status = "failed";
