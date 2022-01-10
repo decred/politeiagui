@@ -165,9 +165,7 @@ export function editRecordReply({
 // It currently returns empty data since it is serving the data for downloading
 // and we just check the existence of the downloaded file.
 export function timestampsReply({
-  testParams: {
-    files = []
-  },
+  testParams: { files = [] },
   requestParams: { token, version }
 }) {
   return {

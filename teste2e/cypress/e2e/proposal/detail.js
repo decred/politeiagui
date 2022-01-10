@@ -553,7 +553,9 @@ describe("Proposal details", () => {
       cy.wait("@records.details");
       cy.wait("@pi.summaries");
       cy.wait("@ticketvote.summaries");
-      cy.findByText(/This proposal has been abandoned by/i).should("be.visible");
+      cy.findByText(/This proposal has been abandoned by/i).should(
+        "be.visible"
+      );
     });
 
     it("should display proposal status metadata on closed proposal", () => {
