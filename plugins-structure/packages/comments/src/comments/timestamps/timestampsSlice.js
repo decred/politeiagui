@@ -40,7 +40,8 @@ const commentsTimestampsSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchCommentsTimestamps.fulfilled, (state, action) => {
-        const { token, pageSize } = action.meta.arg;
+        const { token } = action.meta.arg;
+        const pageSize = action.meta.arg.pageSize || 100;
         const { comments } = action.payload;
         const payloadSize = Object.keys(comments).length;
         if (payloadSize === pageSize) {
