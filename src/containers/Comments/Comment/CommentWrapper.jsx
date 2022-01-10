@@ -8,7 +8,8 @@ import Comment from "./Comment";
 import {
   PROPOSAL_STATE_UNVETTED,
   PROPOSAL_COMMENT_UPVOTE,
-  PROPOSAL_COMMENT_DOWNVOTE
+  PROPOSAL_COMMENT_DOWNVOTE,
+  PROPOSAL_UPDATE_HINT
 } from "src/constants";
 
 const ContextLink = React.memo(({ parentid, recordToken }) => (
@@ -73,6 +74,9 @@ const CommentWrapper = ({
 }) => {
   const {
     onSubmitComment,
+    onEditComment,
+    editCommentID,
+    setEditCommentID,
     onCommentVote,
     getCommentLikeOption,
     enableCommentVote,
@@ -97,18 +101,25 @@ const CommentWrapper = ({
   const {
     comment: commentText,
     token,
+    state,
     commentid,
     deleted: censored,
     publickey: censoredBy,
     timestamp,
+    createdat,
+    version,
     username,
     userid,
     isNew,
     sumOfNewDescendants,
     parentid,
+    extradatahint,
+    extradata,
     reason
   } = comment;
 
+  const isAuthorUpdate = extradatahint === PROPOSAL_UPDATE_HINT;
+  const authorUpdateTitle = isAuthorUpdate ? JSON.parse(extradata).title : "";
   const isInLatestUpdateCommentTree =
     comments && isInCommentTree(latestAuthorUpdateId, commentid, comments);
   const notInLatestAuthorUpdateThread =
@@ -196,12 +207,20 @@ const CommentWrapper = ({
     <>
       <Comment
         permalink={`${recordBaseLink}/comments/${commentid}`}
+        commentID={commentid}
+        parentID={parentid}
+        token={token}
+        state={state}
         seeInContextLink={contextLink}
         censorable={censorable}
         author={username}
         authorID={userid}
-        createdAt={timestamp}
+        authorUpdateTitle={authorUpdateTitle}
+        createdAt={createdat}
+        timestamp={timestamp}
+        version={version}
         censored={censored}
+        sectionId={sectionId}
         censoredBy={censoredBy}
         reason={reason}
         highlightAuthor={isRecordAuthor}
@@ -226,6 +245,9 @@ const CommentWrapper = ({
         onClickCensor={handleClickCensor}
         onClickReply={handleToggleReplyForm}
         onClickShowReplies={handleToggleReplies}
+        onEditComment={onEditComment}
+        editCommentID={editCommentID}
+        setEditCommentID={setEditCommentID}
         numOfReplies={numOfReplies}
         numOfNewHiddenReplies={sumOfNewDescendants}
         commentBody={commentText}

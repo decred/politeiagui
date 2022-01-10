@@ -13,7 +13,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add("useCommentsApi", (config = {}) => {
   cy.commentsMiddleware("count", config.count);
-  cy.commentsMiddleware("policy");
+  cy.commentsMiddleware("policy", config.policy);
   cy.commentsMiddleware("comments");
   cy.commentsMiddleware("votes");
 });

@@ -94,6 +94,155 @@ describe("User comments", () => {
       }
     );
   });
+  it("Should allow users edit their comment if comment edits feature is on and the comment edit period is not expired yet", () => {
+    cy.server();
+    // create proposal
+    const user = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    const proposal = buildProposal();
+    cy.login(user);
+    cy.identity();
+    cy.createProposal(proposal).then(
+      ({
+        body: {
+          record: { censorshiprecord }
+        }
+      }) => {
+        // Mock comments policy to enable comment edits
+        cy.middleware("comments.policy", {
+          body: {
+            lengthmax: 8000,
+            allowedits: true,
+            editperiod: 300
+          }
+        });
+        cy.approveProposal(censorshiprecord);
+        // logout
+        cy.logout(user);
+        // login paid user
+        const user1 = {
+          email: "user1@example.com",
+          username: "user1",
+          password: "password"
+        };
+        cy.login(user1);
+        cy.identity();
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
+        const { text } = buildComment();
+        cy.findByTestId(/text-area/i).type(text);
+        cy.route("POST", "/api/comments/v1/new").as("newComment");
+        cy.findByText(/add comment/i).click();
+        cy.wait("@newComment").its("status").should("eq", 200);
+        // Click edit comment icon
+        cy.findByTestId(/edit-comment-1/i).click();
+        const { text: editText } = buildComment();
+        // Edit comment
+        cy.findAllByTestId(/text-area/i)
+          .eq(1)
+          .type(editText);
+        cy.route("POST", "/api/comments/v1/edit").as("editComment");
+        cy.findByText(/edit comment/i).click();
+        cy.wait("@editComment").its("status").should("eq", 200);
+      }
+    );
+  });
+  it("Shouldn't allow comment edits if the comment edits feature is switched off", () => {
+    cy.server();
+    // create proposal
+    const user = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    const proposal = buildProposal();
+    cy.login(user);
+    cy.identity();
+    cy.createProposal(proposal).then(
+      ({
+        body: {
+          record: { censorshiprecord }
+        }
+      }) => {
+        // Mock comments policy to enable comment edits
+        cy.middleware("comments.policy", {
+          body: {
+            lengthmax: 8000,
+            allowedits: false,
+            editperiod: 300
+          }
+        });
+        cy.approveProposal(censorshiprecord);
+        // logout
+        cy.logout(user);
+        // login paid user
+        const user1 = {
+          email: "user1@example.com",
+          username: "user1",
+          password: "password"
+        };
+        cy.login(user1);
+        cy.identity();
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
+        const { text } = buildComment();
+        cy.findByTestId(/text-area/i).type(text);
+        cy.route("POST", "/api/comments/v1/new").as("newComment");
+        cy.findByText(/add comment/i).click();
+        cy.wait("@newComment").its("status").should("eq", 200);
+        // Click edit comment icon
+        cy.findByTestId(/edit-comment-1/i).should("not.exist");
+      }
+    );
+  });
+  it("Shouldn't allow comment edits if the comment edit period has expired", () => {
+    cy.server();
+    // create proposal
+    const user = {
+      email: "adminuser@example.com",
+      username: "adminuser",
+      password: "password"
+    };
+    const proposal = buildProposal();
+    cy.login(user);
+    cy.identity();
+    cy.createProposal(proposal).then(
+      ({
+        body: {
+          record: { censorshiprecord }
+        }
+      }) => {
+        // Mock comments policy to enable comment edits
+        cy.middleware("comments.policy", {
+          body: {
+            lengthmax: 8000,
+            allowedits: true,
+            editperiod: 0
+          }
+        });
+        cy.approveProposal(censorshiprecord);
+        // logout
+        cy.logout(user);
+        // login paid user
+        const user1 = {
+          email: "user1@example.com",
+          username: "user1",
+          password: "password"
+        };
+        cy.login(user1);
+        cy.identity();
+        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
+        const { text } = buildComment();
+        cy.findByTestId(/text-area/i).type(text);
+        cy.route("POST", "/api/comments/v1/new").as("newComment");
+        cy.findByText(/add comment/i).click();
+        cy.wait("@newComment").its("status").should("eq", 200);
+        // Click edit comment icon
+        cy.findByTestId(/edit-comment-1/i).should("not.exist");
+      }
+    );
+  });
 });
 describe("Comments downloads", () => {
   let shortToken = "";

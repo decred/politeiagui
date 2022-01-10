@@ -52,5 +52,12 @@ export const middlewares = {
       req.reply({
         statusCode: errorCode || 200
       });
+    }),
+  policy: ({ statusCode, body } = {}) =>
+    cy.intercept(`${COMMENTS_API}/policy`, (req) => {
+      req.reply({
+        statusCode: statusCode || 200,
+        body: body || req.body
+      });
     })
 };

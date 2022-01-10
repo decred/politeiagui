@@ -9,6 +9,11 @@
   color: var(--tab-text-color) !important;
 }
 
+.editForm {
+  margin-bottom: 2rem;
+  padding: 1rem 1.4rem;
+}
+
 span.censor {
   cursor: pointer;
   color: #ed6d47;
@@ -29,6 +34,12 @@ span.censor:hover {
 .timeAgo {
   font-size: var(--font-size-normal);
   color: var(--text-secondary-color) !important;
+}
+
+.editIcon {
+  margin-top: 0.3rem;
+  margin-left: 0.7rem;
+  cursor: pointer;
 }
 
 .contextLink {

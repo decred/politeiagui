@@ -66,6 +66,7 @@ export default function useComments(
       ? act.onSaveNewDccComment
       : act.onSaveNewComment
   );
+  const onEditComment = useAction(act.onEditComment);
   const onFetchComments = useAction(
     recordType === constants.RECORD_TYPE_PROPOSAL
       ? act.onFetchProposalComments
@@ -189,6 +190,7 @@ export default function useComments(
     loading: loading,
     loadingLikes,
     onSubmitComment,
+    onEditComment,
     error,
     getCommentVotes,
     commentSectionIds,
