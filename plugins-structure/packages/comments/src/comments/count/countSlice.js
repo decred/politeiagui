@@ -27,12 +27,10 @@ const commentsCountSlice = createSlice({
   initialState,
   extraReducers(builder) {
     builder
-      // Results
       .addCase(fetchCommentsCount.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchCommentsCount.fulfilled, (state, action) => {
-        // console.log("tokens", tokens, action.payload);
         for (const token in action.payload) {
           if (action.payload.hasOwnProperty(token)) {
             state.byToken[token] = action.payload[token];

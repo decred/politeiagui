@@ -32,15 +32,14 @@ const commentsTimestampsSlice = createSlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(fetchCommentsTimestamps.pending, (state, action) => {
-        const { token } = action.meta.arg;
-        if (!state.byToken[token]) {
-          state.byToken[token] = {};
-        }
+      .addCase(fetchCommentsTimestamps.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchCommentsTimestamps.fulfilled, (state, action) => {
         const { token } = action.meta.arg;
+        if (!state.byToken[token]) {
+          state.byToken[token] = {};
+        }
         const pageSize = action.meta.arg.pageSize || 100;
         const { comments } = action.payload;
         const payloadSize = Object.keys(comments).length;

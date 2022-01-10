@@ -43,7 +43,7 @@ describe("Given the timestampsSlice", () => {
 
       expect(fetchTimestampsSpy).toBeCalled();
       const state = store.getState();
-      expect(state.commentsTimestamps.byToken).toEqual({ fakeToken: {} });
+      expect(state.commentsTimestamps.byToken).toEqual({});
       expect(state.commentsTimestamps.status).toEqual("loading");
     });
   });
