@@ -7,7 +7,6 @@ import {
   useTheme,
   DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
-import styles from "./Comment.module.css";
 import DateTooltip from "src/components/DateTooltip";
 import Markdown from "src/components/Markdown";
 import Join from "src/components/Join";
@@ -17,6 +16,8 @@ import Likes from "src/components/Likes";
 import CopyLink from "src/components/CopyLink";
 import { useConfig } from "src/containers/Config";
 import { NOJS_ROUTE_PREFIX } from "src/constants";
+import { useUserByPublicKey } from "src/hooks";
+import styles from "./Comment.module.css";
 
 const forbiddenCommentsMdElements = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
@@ -27,6 +28,8 @@ const Comment = ({
   authorID,
   createdAt,
   censored,
+  censoredBy,
+  reason,
   highlightAuthor,
   likesUpCount,
   likesDownCount,
@@ -57,6 +60,10 @@ const Comment = ({
       Censor
     </Text>
   );
+
+  const { username: censoredByUsername } = useUserByPublicKey({
+    userPubKey: censoredBy
+  });
 
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
@@ -123,7 +130,7 @@ const Comment = ({
         <Markdown
           renderImages={false}
           className={styles.censored}
-          body="Censored by moderators "
+          body={`Censored by ${censoredByUsername}. Reason: ${reason}`}
         />
       )}
       <div className="justify-space-between margin-top-s">

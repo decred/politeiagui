@@ -11,7 +11,7 @@ import {
   isClosedProposal,
   isApprovedProposal
 } from "../helpers";
-import { useUserByPublicKey } from "../hooks";
+import { useUserByPublicKey } from "src/hooks";
 import { getDetailsFile } from "./helpers";
 import { shortRecordToken, parseRawProposal } from "src/helpers";
 import { PROPOSAL_STATE_VETTED } from "src/constants";
