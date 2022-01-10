@@ -7,11 +7,13 @@ import commentsReducer from "../../comments/comments/commentsSlice";
 import countReducer from "../../comments/count/countSlice";
 import policyReducer from "../../comments/policy/policySlice";
 import timestampsReducer from "../../comments/timestamps/timestampsSlice";
+import votesReducer from "../../comments/votes/votesSlice";
 import {
   Comments,
   CommentsCount,
   CommentsPolicyProvider,
   CommentsTimestamps,
+  CommentsVotes,
 } from "../../ui";
 
 const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
@@ -24,9 +26,15 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
   await store.injectReducer("commentsCount", countReducer);
   await store.injectReducer("commentsPolicy", policyReducer);
   await store.injectReducer("commentsTimestamps", timestampsReducer);
+  await store.injectReducer("commentsVotes", votesReducer);
   return ReactDOM.render(
     <Provider store={store}>
       <CommentsPolicyProvider>
+        <h1>Votes for {token}:</h1>
+        <CommentsVotes
+          token={token}
+          userId="225a7543-63e3-4d4d-bffe-98d2fad3d1dc"
+        />
         <h1>Comments for {token}:</h1>
         <Comments token={token} />
         <h1>Comments Count:</h1>
