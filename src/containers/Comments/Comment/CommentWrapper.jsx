@@ -99,6 +99,7 @@ const CommentWrapper = ({
     token,
     commentid,
     deleted: censored,
+    publickey: censoredBy,
     timestamp,
     username,
     userid,
@@ -201,6 +202,7 @@ const CommentWrapper = ({
         authorID={userid}
         createdAt={timestamp}
         censored={censored}
+        censoredBy={censoredBy}
         reason={reason}
         highlightAuthor={isRecordAuthor}
         highlightAsNew={isNew}
