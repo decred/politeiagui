@@ -279,11 +279,13 @@ const comments = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
-            const { commentid, token, sectionId, reason } = action.payload;
+            const { commentid, token, sectionId, reason, publickey } =
+              action.payload;
             const censorTargetComment = (comment) => {
               if (comment.commentid !== commentid) return comment;
               return {
                 ...comment,
+                publickey,
                 deleted: true,
                 comment: "",
                 reason

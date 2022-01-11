@@ -106,7 +106,7 @@ const Comment = ({
   );
 
   const { username: censoredByUsername } = useUserByPublicKey({
-    userPubKey: censoredBy
+    userPubKey: censored && censoredBy
   });
 
   const { themeName } = useTheme();

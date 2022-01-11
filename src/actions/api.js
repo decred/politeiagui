@@ -1114,6 +1114,7 @@ export const onCensorComment = (
   reason
 ) =>
   withCsrf((dispatch, _, csrf) => {
+    let publickey;
     dispatch(
       act.REQUEST_CENSOR_COMMENT({ commentid, token, state, sectionId })
     );
@@ -1121,11 +1122,20 @@ export const onCensorComment = (
       api.makeCensoredComment(state, token, reason, commentid)
     )
       .then((comment) => api.signCensorComment(userid, comment))
-      .then((comment) => api.censorComment(csrf, comment))
+      .then((comment) => {
+        publickey = comment.publickey;
+        return api.censorComment(csrf, comment);
+      })
       .then(({ comment: { receipt, commentid, token } }) => {
         if (receipt) {
           dispatch(
-            act.RECEIVE_CENSOR_COMMENT({ commentid, token, sectionId, reason })
+            act.RECEIVE_CENSOR_COMMENT({
+              commentid,
+              token,
+              sectionId,
+              reason,
+              publickey
+            })
           );
         }
       })
