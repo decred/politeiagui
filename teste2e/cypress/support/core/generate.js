@@ -74,34 +74,34 @@ export function RecordMetadata({
   oldStatus,
   reason
 }) {
+  const normalPayload = JSON.stringify({
+    token,
+    version,
+    status,
+    publickey,
+    signature,
+    timestamp
+  });
+  const oldPayload = JSON.stringify({
+    publickey,
+    signature,
+    status: oldStatus,
+    token,
+    version,
+    timestamp
+  });
+  const censoredPayload = JSON.stringify({
+    token,
+    version,
+    status,
+    publickey,
+    signature,
+    timestamp,
+    oldStatus,
+    reason
+  });
   const payload =
-    oldStatus && reason
-      ? JSON.stringify({
-          publickey,
-          signature,
-          status: oldStatus,
-          token,
-          version,
-          timestamp
-        }) +
-        JSON.stringify({
-          token,
-          version,
-          status,
-          publickey,
-          signature,
-          timestamp,
-          oldStatus,
-          reason
-        })
-      : JSON.stringify({
-          token,
-          version,
-          status,
-          publickey,
-          signature,
-          timestamp
-        });
+    oldStatus && reason ? `${oldPayload}${censoredPayload}` : normalPayload;
   return new Metadata("usermd", faker.datatype.number(3), payload);
 }
 

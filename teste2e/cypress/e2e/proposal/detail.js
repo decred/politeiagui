@@ -185,14 +185,11 @@ describe("Proposal details", () => {
 
   describe("invalid proposal rendering", () => {
     it("should dislpay not found message for nonexistent proposals", () => {
-      cy.intercept("POST", "/api/records/v1/details", {
-        statusCode: 400,
-        body: {
-          errorcode: 13
-        }
-      }).as("details");
+      cy.recordsMiddleware("details", {
+        error: { errorcode: 13, statusCode: 400 }
+      });
       cy.visit("/record/invalidtoken");
-      cy.wait("@details");
+      cy.wait("@records.details");
       cy.contains("Error: The record was not found").should("be.visible");
     });
   });
@@ -468,9 +465,9 @@ describe("Proposal details", () => {
         token
       });
       cy.ticketvoteMiddleware("summaries", {
-        amountByStatus: { ["unauthorized"]: 1 }
+        amountByStatus: { unauthorized: 1 }
       });
-      cy.piMiddleware("summaries", { amountByStatus: { ["under-review"]: 1 } });
+      cy.piMiddleware("summaries", { amountByStatus: { "under-review": 1 } });
       cy.recordsMiddleware("setstatus", {
         user,
         oldStatus: status,
@@ -522,10 +519,10 @@ describe("Proposal details", () => {
         reason: "censored!"
       });
       cy.ticketvoteMiddleware("summaries", {
-        amountByStatus: { ["ineligible"]: 1 }
+        amountByStatus: { ineligible: 1 }
       });
       cy.piMiddleware("summaries", {
-        amountByStatus: { ["censored"]: 1 }
+        amountByStatus: { censored: 1 }
       });
       cy.visit(`record/${shortToken}`);
       cy.wait("@records.details");
@@ -545,9 +542,9 @@ describe("Proposal details", () => {
         reason: "abandoned!"
       });
       cy.ticketvoteMiddleware("summaries", {
-        amountByStatus: { ["ineligible"]: 1 }
+        amountByStatus: { ineligible: 1 }
       });
-      cy.piMiddleware("summaries", { amountByStatus: { ["abandoned"]: 1 } });
+      cy.piMiddleware("summaries", { amountByStatus: { abandoned: 1 } });
 
       cy.visit(`record/${shortToken}`);
       cy.wait("@records.details");
@@ -570,7 +567,7 @@ describe("Proposal details", () => {
         token
       });
       cy.ticketvoteMiddleware("summaries", {
-        amountByStatus: { ["approved"]: 1 }
+        amountByStatus: { approved: 1 }
       });
       cy.piMiddleware("summaries", {
         amountByStatus: { [PROPOSAL_SUMMARY_STATUS_CLOSED]: 1 }
