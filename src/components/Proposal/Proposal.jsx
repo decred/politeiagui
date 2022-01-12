@@ -160,7 +160,6 @@ const Proposal = React.memo(function Proposal({
     endDate
   } = proposal;
   const { startblockheight, endblockheight } = voteSummary;
-  const votingBlocks = Number(endblockheight) - Number(startblockheight);
   const isAdmin = useSelector(sel.currentUserIsAdmin);
   const isVetted = state === PROPOSAL_STATE_VETTED;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
@@ -401,7 +400,7 @@ const Proposal = React.memo(function Proposal({
                   {isVoteActive && (
                     <Tooltip
                       placement="bottom"
-                      content={`Block heights: ${startblockheight} - ${endblockheight}`}
+                      content={`Block ${startblockheight} to ${endblockheight}`}
                       contentClassName={styles.quorumTooltip}>
                       <Text
                         className={classNames(
@@ -416,21 +415,14 @@ const Proposal = React.memo(function Proposal({
                     </Tooltip>
                   )}
                   {isVotingFinished && (
-                    <Tooltip
-                      placement="bottom"
-                      content={`Block heights: ${startblockheight} - ${endblockheight}`}
-                      contentClassName={styles.quorumTooltip}>
-                      <Text
-                        className={classNames(
-                          "hide-on-mobile",
-                          styles.blocksLeft
-                        )}
-                        size="small">
-                        {`duration: ${votingBlocks} block${
-                          votingBlocks > 1 ? "s" : ""
-                        }`}
-                      </Text>
-                    </Tooltip>
+                    <Text
+                      className={classNames(
+                        "hide-on-mobile",
+                        styles.blocksLeft
+                      )}
+                      size="small">
+                      {`Block ${startblockheight} to ${endblockheight}`}
+                    </Text>
                   )}
                 </Status>
               }
