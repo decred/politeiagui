@@ -231,6 +231,14 @@ export const makeProposal = ({
 
 export const shortRecordToken = (token) => token.substring(0, 7);
 
+export const fullRecordToken = () => faker.git.commitSha().slice(0, 16);
+
+export const generateTokenPair = () => {
+  const token = faker.git.commitSha().slice(0, 16);
+  const shortToken = shortRecordToken(token);
+  return { token, shortToken };
+};
+
 export const getProposalStatusLabel = (status, isByRecordStatus) =>
   get(status)(
     isByRecordStatus

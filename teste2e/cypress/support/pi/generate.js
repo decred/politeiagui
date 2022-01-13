@@ -9,5 +9,6 @@ export function BillingStatusChanges({ token, status }) {
   this.publickey = faker.datatype.hexaDecimal(64);
   this.timestamp = Date.now() / 1000;
   this.token = token;
-  this.status = status;
+  this.status = Number(status);
+  this.reason = faker.lorem.sentence();
 }

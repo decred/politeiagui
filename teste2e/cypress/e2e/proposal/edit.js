@@ -23,7 +23,7 @@ describe("Proposal Edit", () => {
       status: 1,
       state: 1,
       files,
-      username: user
+      user
     });
     cy.recordsMiddleware("edit", { status: 1, state: 1, user });
     cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
@@ -60,12 +60,12 @@ describe("Proposal Edit", () => {
       status: PROPOSAL_VOTING_AUTHORIZED,
       state: 1,
       files,
-      username: user
+      user
     });
     cy.recordsMiddleware("edit", {
       status: PROPOSAL_VOTING_AUTHORIZED,
       state: 1,
-      username: user
+      user
     });
     cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
     const token = faker.git.shortSha().slice(0, 7);
@@ -84,7 +84,7 @@ describe("Proposal Edit", () => {
       status: 1,
       state: 1,
       files,
-      username: user
+      user
     });
     cy.recordsMiddleware("edit", { status: 1, state: 1, user });
     cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });

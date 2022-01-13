@@ -1,5 +1,6 @@
 import { Record, File, Inventory } from "./generate";
 import { stateToString } from "./utils";
+import { USER_TYPE_ADMIN, userByType } from "../users/generate";
 
 export const API_BASE_URL = "/api/records/v1";
 
@@ -95,10 +96,28 @@ export function inventoryReply({
  * @returns Record
  */
 export function detailsReply({
-  testParams: { state, status, username, files },
+  testParams: {
+    state,
+    status,
+    user,
+    files,
+    fullToken,
+    version,
+    oldStatus,
+    reason
+  },
   requestParams: { token }
 }) {
-  const record = new Record({ author: username, status, state, token, files });
+  const record = new Record({
+    author: user,
+    status,
+    state,
+    version,
+    token: fullToken || token,
+    files,
+    oldStatus,
+    reason
+  });
   return { record };
 }
 
@@ -142,11 +161,51 @@ export function editRecordReply({
   return { record };
 }
 
+// timestampsReply represents the data of /api/records/v1/timestamps endpoint
+// It currently returns empty data since it is serving the data for downloading
+// and we just check the existence of the downloaded file.
+export function timestampsReply({
+  testParams: { files = [] },
+  requestParams: { token, version }
+}) {
+  return {
+    files: files,
+    metadata: {},
+    recordmetadata: {}
+  };
+}
+
+export function setstatusReply({
+  testParams: { user, oldStatus, state, files },
+  requestParams: { publickey, reason, signature, status, token, version }
+}) {
+  if (!user) {
+    user = userByType(USER_TYPE_ADMIN);
+  }
+  const record = new Record({
+    author: user,
+    publickey,
+    signature,
+    status,
+    token,
+    version,
+    state,
+    files,
+    oldStatus,
+    reason
+  });
+  return {
+    record
+  };
+}
+
 export const repliers = {
   new: newRecordReply,
   edit: editRecordReply,
   records: recordsReply,
   inventory: inventoryReply,
   policy: policyReply,
-  details: detailsReply
+  details: detailsReply,
+  timestamps: timestampsReply,
+  setstatus: setstatusReply
 };

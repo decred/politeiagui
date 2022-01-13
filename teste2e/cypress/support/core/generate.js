@@ -21,7 +21,8 @@ export const Token = (isShort) =>
 export function Metadata(pluginid, streamid, payload) {
   this.pluginid = pluginid;
   this.streamid = streamid;
-  this.payload = JSON.stringify(payload);
+  this.payload =
+    typeof payload === "string" ? payload : JSON.stringify(payload);
 }
 
 export function UserMetadata({ userid, publickey, signature }) {
@@ -32,15 +33,48 @@ export function UserMetadata({ userid, publickey, signature }) {
   });
 }
 
+export function CensorRecordMetadata({
+  oldStatus,
+  publickey,
+  reason,
+  signature,
+  status,
+  token,
+  version,
+  timestamp
+}) {
+  const payload =
+    JSON.stringify({
+      publickey,
+      signature,
+      status: oldStatus,
+      token,
+      version,
+      timestamp
+    }) +
+    JSON.stringify({
+      publickey,
+      reason,
+      signature,
+      status,
+      token,
+      version,
+      timestamp
+    });
+  return new Metadata("usermd", 2, payload);
+}
+
 export function RecordMetadata({
   token,
   version,
   status,
   publickey,
   signature,
-  timestamp
+  timestamp,
+  oldStatus,
+  reason
 }) {
-  return new Metadata("usermd", faker.datatype.number(3), {
+  const normalPayload = JSON.stringify({
     token,
     version,
     status,
@@ -48,6 +82,27 @@ export function RecordMetadata({
     signature,
     timestamp
   });
+  const oldPayload = JSON.stringify({
+    publickey,
+    signature,
+    status: oldStatus,
+    token,
+    version,
+    timestamp
+  });
+  const censoredPayload = JSON.stringify({
+    token,
+    version,
+    status,
+    publickey,
+    signature,
+    timestamp,
+    oldStatus,
+    reason
+  });
+  const payload =
+    oldStatus && reason ? `${oldPayload}${censoredPayload}` : normalPayload;
+  return new Metadata("usermd", faker.datatype.number(3), payload);
 }
 
 export const fileImage = {
@@ -92,7 +147,10 @@ export function Record({
     false,
     /[0-9a-z]/
   ),
-  files = []
+  files = [],
+  // information for censored record.
+  oldStatus,
+  reason
 } = {}) {
   const token = recordToken || Token();
   const status = recordStatus || faker.datatype.number(3) + 1;
@@ -112,11 +170,7 @@ export function Record({
     signature,
     merkle: faker.datatype.hexaDecimal(64, false, /[0-9a-z]/)
   };
-  if (files.length >= 2) {
-    this.files = files;
-  } else {
-    this.files = [new File(fileIndex), ...files.map((f) => new File(f))];
-  }
+  this.files = files;
   this.metadata = [
     UserMetadata(user),
     RecordMetadata({
@@ -125,7 +179,9 @@ export function Record({
       status,
       publickey: publickey || user.publickey,
       signature: recordSignature,
-      timestamp
+      timestamp,
+      oldStatus,
+      reason
     })
   ];
 }
