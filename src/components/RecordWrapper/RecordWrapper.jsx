@@ -34,8 +34,11 @@ import { formatDateToInternationalString } from "src/helpers";
 export const Author = ({ username, url, isLegacy }) =>
   isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
 
-export const Event = ({ event, timestamp, className, size }) => (
-  <DateTooltip timestamp={timestamp} placement="bottom">
+export const Event = ({ event, timestamp, className, size, additionInfo }) => (
+  <DateTooltip
+    timestamp={timestamp}
+    placement="bottom"
+    additionInfo={additionInfo}>
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}

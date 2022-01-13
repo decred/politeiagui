@@ -379,6 +379,10 @@ const Proposal = React.memo(function Proposal({
                       timestamp={voteEndTimestamp}
                       className={styles.subtitleStatusTag}
                       size="small"
+                      additionInfo={
+                        isVotingFinished &&
+                        `block ${startblockheight} to ${endblockheight}`
+                      }
                     />
                   )}
                   {isAbandoned && (
@@ -400,7 +404,7 @@ const Proposal = React.memo(function Proposal({
                   {isVoteActive && (
                     <Tooltip
                       placement="bottom"
-                      content={`Block ${startblockheight} to ${endblockheight}`}
+                      content={`block ${startblockheight} to ${endblockheight}`}
                       contentClassName={styles.quorumTooltip}>
                       <Text
                         className={classNames(
@@ -414,16 +418,16 @@ const Proposal = React.memo(function Proposal({
                       </Text>
                     </Tooltip>
                   )}
-                  {isVotingFinished && (
+                  {/*{isVotingFinished && (
                     <Text
                       className={classNames(
                         "hide-on-mobile",
                         styles.blocksLeft
                       )}
                       size="small">
-                      {`Block ${startblockheight} to ${endblockheight}`}
+                      {`block ${startblockheight} to ${endblockheight}`}
                     </Text>
-                  )}
+                  )}*/}
                 </Status>
               }
               mobile={mobile}
