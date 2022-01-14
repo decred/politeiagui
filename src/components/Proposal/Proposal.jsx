@@ -418,16 +418,6 @@ const Proposal = React.memo(function Proposal({
                       </Text>
                     </Tooltip>
                   )}
-                  {/*{isVotingFinished && (
-                    <Text
-                      className={classNames(
-                        "hide-on-mobile",
-                        styles.blocksLeft
-                      )}
-                      size="small">
-                      {`block ${startblockheight} to ${endblockheight}`}
-                    </Text>
-                  )}*/}
                 </Status>
               }
               mobile={mobile}
