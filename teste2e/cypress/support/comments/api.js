@@ -1,3 +1,6 @@
+import { Comment, Vote } from "./generate";
+import faker from "faker";
+
 export const API_BASE_URL = "/api/comments/v1";
 
 /**
@@ -34,19 +37,81 @@ export function countReply({
   return { counts };
 }
 
-// commentsEmptyReply only erturns an empty comments list.
-export function commentsEmptyReply() {
-  return { comments: [] };
+// commentsReply only erturns an comments list.
+export function commentsReply({
+  testParams: { count = 0 },
+  requestParams: { token }
+}) {
+  const comments = [];
+  if (count > 0) {
+    for (let commentid = 1; commentid <= count; commentid++) {
+      comments.push(new Comment({ commentid, token }));
+    }
+  }
+  return { comments };
 }
 
 // votesEmptyReply only returns an empty comments votes list
-export function votesEmptyReply() {
-  return { votes: [] };
+export function newCommentReply({
+  testParams: { user, commentid },
+  requestParams: { comment, parentid, publickey, signature, state, token }
+}) {
+  return {
+    comment: new Comment({
+      user,
+      commentid,
+      comment,
+      parentid,
+      publickey,
+      signature,
+      state,
+      token
+    })
+  };
+}
+
+// votesEmptyReply only returns an empty comments votes list
+export function votesReply({
+  testParams: { user, maxCommentID, amount },
+  requestParams: { token, userid }
+}) {
+  const votes = [];
+  for (let i = 0; i < amount; i++) {
+    votes.push(new Vote({ token, userid, user, maxCommentID }));
+  }
+  return { votes };
+}
+
+export function voteReply({
+  requestParams: { commentid, publickey, signature, state, token, vote }
+}) {
+  const upvotes = vote === 1 ? 1 : 0;
+  const downvotes = vote === 1 ? 0 : 1;
+  return {
+    downvotes,
+    upvotes,
+    timestamp: new Date().getTime() / 1000,
+    receipt: faker.datatype.hexaDecimal(128, false, /[0-9a-z]/)
+  };
+}
+
+/**
+ * timestampsReply represents the data of /api/comments/v1/timestamps endpoint
+ * It currently returns empty data since it is serving the data for downloading
+ * and we just check the existence of the downloaded file.
+ */
+export function timestampsReply({ requestParams: { token, commentids = [] } }) {
+  return {
+    comments: {}
+  };
 }
 
 export const repliers = {
   policy: policyReply,
   count: countReply,
-  comments: commentsEmptyReply,
-  votes: votesEmptyReply
+  comments: commentsReply,
+  votes: votesReply,
+  new: newCommentReply,
+  vote: voteReply,
+  timestamps: timestampsReply
 };

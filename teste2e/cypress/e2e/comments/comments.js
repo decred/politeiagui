@@ -1,284 +1,166 @@
-import { buildProposal, buildComment } from "../../support/generate";
-import { shortRecordToken, getFirstShortProposalToken } from "../../utils";
+import { buildComment } from "../../support/generate";
+import {
+  makeProposal,
+  PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
+  generateTokenPair
+} from "../../utils";
 import path from "path";
+import {
+  USER_TYPE_UNPAID,
+  USER_TYPE_USER,
+  userByType
+} from "../../support/users/generate";
+import faker from "faker";
+
+beforeEach(function mockApiCalls() {
+  // currently mocking pi and ticketvote summaries calls with any status, since
+  // they aren't used for assertions.
+  cy.useTicketvoteApi();
+  cy.useRecordsApi();
+  cy.usePiApi();
+  cy.useWwwApi();
+  cy.useCommentsApi();
+  cy.middleware("users.users", {
+    body: {
+      totalmatches: 1,
+      totalusers: 10,
+      users: [
+        {
+          id: faker.random.uuid(),
+          username: faker.internet.userName(),
+          email: faker.internet.email()
+        }
+      ]
+    }
+  });
+  cy.server();
+});
 
 describe("User comments", () => {
   it("Shouldn't allow submitting new comments if paywall not paid", () => {
-    cy.server();
-    // create proposal
-    const user = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    const proposal = buildProposal();
-    cy.login(user);
-    cy.identity();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        cy.approveProposal(censorshiprecord);
-        // logout
-        cy.logout(user);
-        // login non-paid user
-        const user3 = {
-          email: "user3@example.com",
-          username: "user3",
-          password: "password"
-        };
-        cy.login(user3);
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        cy.findByRole("button", { name: /add comment/i }).should("be.disabled");
-        cy.findByText(
-          /you won't be able to submit comments or proposals before paying the paywall/i
-        ).should("be.visible");
-      }
-    );
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.userEnvironment(USER_TYPE_UNPAID);
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { unauthorized: 1 }
+    });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED]: 1 }
+    });
+    cy.visit(`record/${shortToken}`);
+    cy.wait("@records.details");
+    cy.wait("@pi.summaries");
+
+    cy.findByRole("button", { name: /add comment/i }).should("be.disabled");
+    cy.findByText(
+      /you won't be able to submit comments or proposals before paying the paywall/i
+    ).should("be.visible");
   });
   it("Should allow user who paid the paywall to add new comments & vote or reply on others' comments", () => {
-    cy.server();
-    // create proposal
-    const user = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    const proposal = buildProposal();
-    cy.login(user);
-    cy.identity();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        cy.approveProposal(censorshiprecord);
-        // logout
-        cy.logout(user);
-        // login paid user
-        const user1 = {
-          email: "user1@example.com",
-          username: "user1",
-          password: "password"
-        };
-        cy.login(user1);
-        cy.identity();
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        const { text } = buildComment();
-        cy.findByTestId(/text-area/i).type(text);
-        cy.route("POST", "/api/comments/v1/new").as("newComment");
-        cy.findByText(/add comment/i).click();
-        cy.wait("@newComment").its("status").should("eq", 200);
-        // Comment author can't vote on his own comment so we login as the
-        // admin user again to vote on the comment.
-        cy.logout(user1);
-        cy.login(user);
-        cy.identity();
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        cy.route("POST", "/api/comments/v1/vote").as("likeComment");
-        cy.findByTestId("like-btn").click();
-        cy.wait("@likeComment", { timeout: 10000 })
-          .its("status")
-          .should("eq", 200);
-        cy.findByText(/reply/i).click();
-        cy.findAllByTestId(/text-area/i)
-          .eq(1)
-          .type(text);
-        cy.findAllByText(/add comment/i)
-          .eq(1)
-          .click();
-        cy.wait("@newComment").its("status").should("eq", 200);
-      }
-    );
+    const user = userByType(USER_TYPE_USER);
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    const count = 4;
+    cy.commentsMiddleware("count", { count });
+    cy.commentsMiddleware("comments", { count });
+    cy.commentsMiddleware("new", { commentid: count + 1, user });
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { unauthorized: 1 }
+    });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED]: 1 }
+    });
+    cy.visit(`record/${shortToken}`);
+    cy.wait("@records.details");
+    cy.wait("@pi.summaries");
+    cy.wait("@comments.comments");
+    cy.findAllByTestId("like-btn").first().click();
+    cy.wait("@comments.vote");
+    cy.findAllByTestId("like-btn").first().parent().should("have.text", "1");
+    const { text } = buildComment();
+    cy.findByTestId(/text-area/i).type(text);
+    cy.findByText(/add comment/i).click();
+    cy.wait("@comments.new");
+    cy.get("#commentArea").contains(text).should("be.visible");
   });
-  it("Should allow users edit their comment if comment edits feature is on and the comment edit period is not expired yet", () => {
-    cy.server();
-    // create proposal
-    const user = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    const proposal = buildProposal();
-    cy.login(user);
-    cy.identity();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        // Mock comments policy to enable comment edits
-        cy.middleware("comments.policy", {
-          body: {
-            lengthmax: 8000,
-            allowedits: true,
-            editperiod: 300
-          }
-        });
-        cy.approveProposal(censorshiprecord);
-        // logout
-        cy.logout(user);
-        // login paid user
-        const user1 = {
-          email: "user1@example.com",
-          username: "user1",
-          password: "password"
-        };
-        cy.login(user1);
-        cy.identity();
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        const { text } = buildComment();
-        cy.findByTestId(/text-area/i).type(text);
-        cy.route("POST", "/api/comments/v1/new").as("newComment");
-        cy.findByText(/add comment/i).click();
-        cy.wait("@newComment").its("status").should("eq", 200);
-        // Click edit comment icon
-        cy.findByTestId(/edit-comment-1/i).click();
-        const { text: editText } = buildComment();
-        // Edit comment
-        cy.findAllByTestId(/text-area/i)
-          .eq(1)
-          .type(editText);
-        cy.route("POST", "/api/comments/v1/edit").as("editComment");
-        cy.findByText(/edit comment/i).click();
-        cy.wait("@editComment").its("status").should("eq", 200);
-      }
-    );
-  });
-  it("Shouldn't allow comment edits if the comment edits feature is switched off", () => {
-    cy.server();
-    // create proposal
-    const user = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    const proposal = buildProposal();
-    cy.login(user);
-    cy.identity();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        // Mock comments policy to enable comment edits
-        cy.middleware("comments.policy", {
-          body: {
-            lengthmax: 8000,
-            allowedits: false,
-            editperiod: 300
-          }
-        });
-        cy.approveProposal(censorshiprecord);
-        // logout
-        cy.logout(user);
-        // login paid user
-        const user1 = {
-          email: "user1@example.com",
-          username: "user1",
-          password: "password"
-        };
-        cy.login(user1);
-        cy.identity();
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        const { text } = buildComment();
-        cy.findByTestId(/text-area/i).type(text);
-        cy.route("POST", "/api/comments/v1/new").as("newComment");
-        cy.findByText(/add comment/i).click();
-        cy.wait("@newComment").its("status").should("eq", 200);
-        // Click edit comment icon
-        cy.findByTestId(/edit-comment-1/i).should("not.exist");
-      }
-    );
-  });
-  it("Shouldn't allow comment edits if the comment edit period has expired", () => {
-    cy.server();
-    // create proposal
-    const user = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    const proposal = buildProposal();
-    cy.login(user);
-    cy.identity();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: { censorshiprecord }
-        }
-      }) => {
-        // Mock comments policy to enable comment edits
-        cy.middleware("comments.policy", {
-          body: {
-            lengthmax: 8000,
-            allowedits: true,
-            editperiod: 0
-          }
-        });
-        cy.approveProposal(censorshiprecord);
-        // logout
-        cy.logout(user);
-        // login paid user
-        const user1 = {
-          email: "user1@example.com",
-          username: "user1",
-          password: "password"
-        };
-        cy.login(user1);
-        cy.identity();
-        cy.visit(`record/${shortRecordToken(censorshiprecord.token)}`);
-        const { text } = buildComment();
-        cy.findByTestId(/text-area/i).type(text);
-        cy.route("POST", "/api/comments/v1/new").as("newComment");
-        cy.findByText(/add comment/i).click();
-        cy.wait("@newComment").its("status").should("eq", 200);
-        // Click edit comment icon
-        cy.findByTestId(/edit-comment-1/i).should("not.exist");
-      }
-    );
+  it("Should allow user who paid the paywall to reply on others' comments", () => {
+    const user = userByType(USER_TYPE_USER);
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    const count = 4;
+    cy.commentsMiddleware("count", { count });
+    cy.commentsMiddleware("comments", { count });
+    cy.commentsMiddleware("new", { commentid: count + 1, user });
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { unauthorized: 1 }
+    });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED]: 1 }
+    });
+    cy.visit(`record/${shortToken}`);
+    cy.wait("@records.details");
+    cy.wait("@pi.summaries");
+    cy.wait("@comments.comments");
+    const { text } = buildComment();
+    cy.findAllByText(/reply/i).first().click();
+    cy.findAllByTestId(/text-area/i)
+      .eq(1)
+      .type(text);
+    cy.findAllByText(/add comment/i)
+      .eq(1)
+      .click();
+    cy.wait("@comments.new");
+    cy.get("#commentArea").contains(text).should("be.visible");
   });
 });
+
 describe("Comments downloads", () => {
-  let shortToken = "";
+  const { token, shortToken } = generateTokenPair();
+  const user = userByType(USER_TYPE_USER);
   beforeEach(() => {
-    cy.server();
-    cy.intercept("/api/records/v1/records").as("records");
-    cy.intercept("/api/records/v1/details").as("details");
-    cy.visit("/");
-    cy.wait("@records").then(({ response: { body } }) => {
-      const { records } = body;
-      shortToken = getFirstShortProposalToken(records);
-      expect(shortToken, "You should have at least one record Under Review.").to
-        .exist;
-      // login paid user
-      const user1 = {
-        email: "user1@example.com",
-        username: "user1",
-        password: "password"
-      };
-      cy.login(user1);
-      cy.identity();
-      cy.visit(`record/${shortToken}`);
-      const { text } = buildComment();
-      cy.findByTestId(/text-area/i).type(text);
-      cy.route("POST", "/api/comments/v1/new").as("newComment");
-      cy.findByText(/add comment/i).click();
-      cy.wait("@newComment").its("status").should("eq", 200);
-      cy.intercept("/api/comments/v1/comments").as("comments");
-      cy.intercept("/api/comments/v1/votes").as("votes");
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    const count = 4;
+    cy.commentsMiddleware("count", { count });
+    cy.commentsMiddleware("comments", { count });
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { unauthorized: 1 }
+    });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED]: 1 }
     });
   });
   it("should publicly allow users to download comments bundle", () => {
     cy.visit(`/record/${shortToken}`);
-    cy.wait("@details");
-    cy.wait("@comments");
-    cy.wait("@votes");
+    cy.wait("@records.details");
+    cy.wait("@comments.comments");
+    cy.wait("@comments.votes");
     cy.findByTestId("record-links").click();
     cy.findByText(/comments bundle/i).click();
     const downloadsFolder = Cypress.config("downloadsFolder");
@@ -288,11 +170,12 @@ describe("Comments downloads", () => {
   });
   it("should publicly allow users to download comments timestamps", () => {
     cy.visit(`/record/${shortToken}`);
-    cy.wait("@details");
-    cy.wait("@comments");
-    cy.wait("@votes");
+    cy.wait("@records.details");
+    cy.wait("@comments.comments");
+    cy.wait("@comments.votes");
     cy.findByTestId("record-links").click();
     cy.findByText(/comments timestamps/i).click();
+    cy.wait("@comments.timestamps");
     const downloadsFolder = Cypress.config("downloadsFolder");
     cy.readFile(
       path.join(downloadsFolder, `${shortToken}-comments-timestamps.json`)
@@ -300,24 +183,33 @@ describe("Comments downloads", () => {
   });
 });
 describe("Comments error handling", () => {
-  let token = "";
+  const { token, shortToken } = generateTokenPair();
+  const user = userByType(USER_TYPE_USER);
+  const count = 4;
   beforeEach(() => {
-    const user = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    cy.login(user);
-    cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
-    cy.visit("/");
-    cy.wait("@inventory").then(({ response: { body } }) => {
-      token = body.vetted.unauthorized[0];
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    cy.commentsMiddleware("count", { count });
+    cy.commentsMiddleware("comments", { count });
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { unauthorized: 1 }
+    });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED]: 1 }
     });
   });
   it("should display login modal when commenting with an expired user session", () => {
     cy.middleware("comments.new", { errorCode: 403 });
-    cy.wait(1000);
-    cy.visit(`/record/${shortRecordToken(token)}`);
+    cy.visit(`/record/${shortToken}`);
+    cy.wait("@records.details");
+    cy.wait("@pi.summaries");
+    cy.wait("@comments.comments");
     cy.findByTestId(/text-area/i).type("new comment");
     cy.findByTestId(/comment-submit-button/i).click();
     cy.wait("@comments.new");
