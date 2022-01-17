@@ -510,40 +510,24 @@ export const onFetchProposalsBatch = ({
       const commentsCount =
         fetchCommentCounts && response.find((res) => res && res.counts).counts;
 
-      const proposalsWithCommentCountsAndSubmissions = await Object.keys(
-        proposals
-      ).reduce(async (acc, curr) => {
-        const { linkby } = parseRawProposal(proposals[curr]);
-        if (linkby) {
-          // proposal is a RFP
-          const { submissions } = await api.proposalSubmissions(curr); // get submissions
-          return {
-            ...(await acc),
-            [curr]: {
-              ...proposals[curr],
-              linkedfrom: submissions,
-              commentsCount: commentsCount[curr]
-            }
-          };
-        } else {
-          // proposal is not a RFP
-          return {
-            ...(await acc),
-            [curr]: {
-              ...proposals[curr],
-              commentsCount: commentsCount[curr]
-            }
-          };
-        }
-      }, {});
+      const proposalsWithCommentCounts = Object.keys(proposals).reduce(
+        (acc, curr) => ({
+          ...acc,
+          [curr]: {
+            ...proposals[curr],
+            commentsCount: commentsCount[curr]
+          }
+        }),
+        {}
+      );
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({
-          proposals: proposalsWithCommentCountsAndSubmissions,
+          proposals: proposalsWithCommentCounts,
           userid
         })
       );
       return [
-        parseRawProposalsBatch(proposalsWithCommentCountsAndSubmissions),
+        parseRawProposalsBatch(proposalsWithCommentCounts),
         summaries,
         proposalSummaries
       ];
