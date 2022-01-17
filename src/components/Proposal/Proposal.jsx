@@ -342,9 +342,17 @@ const Proposal = React.memo(function Proposal({
                       timestamp={linkby}
                     />
                   )}
-                  <span data-testid="proposal-published-timestamp">
-                    <Event event="published" timestamp={publishedat} />
-                  </span>
+                  {isVetted ? (
+                    <span data-testid="proposal-published-timestamp">
+                      <Event event="published" timestamp={publishedat} />
+                    </span>
+                  ) : (
+                    !showEditedDate && (
+                      <span data-testid="proposal-published-timestamp">
+                        <Event event="published" timestamp={timestamp} />
+                      </span>
+                    )
+                  )}
                   {showEditedDate && (
                     <span data-testid="proposal-edited-timestamp">
                       <Event event="edited" timestamp={timestamp} />
