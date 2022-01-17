@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { store } from "@politeiagui/core";
@@ -7,38 +7,44 @@ import { router } from "@politeiagui/core/router";
 import { routes as coreRoutes } from "@politeiagui/core/routes";
 import { routes as statisticsRoutes } from "@politeiagui/statistics";
 import { routes as ticketvoteRoutes } from "@politeiagui/ticketvote";
+import { routes as proposalsRoutes } from "./routes";
 import { recordsInventory } from "@politeiagui/core/records/inventory";
 
-import { routes as proposalsRoutes } from "./proposals/routes";
+import {
+  defaultLightTheme,
+  ThemeProvider,
+  defaultDarkTheme,
+  DEFAULT_LIGHT_THEME_NAME,
+  DEFAULT_DARK_THEME_NAME,
+} from "pi-ui";
+import "pi-ui/dist/index.css";
 
-const root = document.querySelector("#root");
+const appRoot = document.querySelector("#app-root");
 
-const App = () => {
-  const inv = recordsInventory.useFetch({
-    recordsState: "vetted",
-    status: "public",
-  });
-  console.log(inv);
-  return <h1>Hey</h1>;
+const themes = {
+  [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
+  [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme },
 };
 
+// Define an element where the routes will be rendered
+// Initialize router
+function App() {
+  useEffect(() => {
+    initializeApp();
+  }, []);
+  return <div id="root"></div>;
+}
+
 const routes = [
-  {
-    path: "/my-app-shell",
-    view: () =>
-      ReactDOM.render(
-        <Provider store={store}>
-          <App />
-        </Provider>,
-        root
-      ),
-    cleanup: () => ReactDOM.unmountComponentAtNode(root),
-  },
-  ...proposalsRoutes,
   ...coreRoutes,
   ...statisticsRoutes,
   ...ticketvoteRoutes,
+  // add proposals routes at the end so it overwrites
+  // routes from plugins
+  ...proposalsRoutes,
 ];
+
+let routerInitialized = false;
 
 function initializeApp() {
   const unsubscribe = initializeApi();
@@ -64,10 +70,17 @@ function handleApi() {
   if (status === "loading") {
     document.querySelector("#root").innerHTML = "<h1>Loading api...</h1>";
   }
-  // only start the app if can fetch api
-  if (status === "succeeded") {
+  if (status === "succeeded" && !routerInitialized) {
+    routerInitialized = true;
     router.init({ routes });
   }
 }
 
-initializeApp();
+ReactDOM.render(
+  <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </ThemeProvider>,
+  appRoot
+);
