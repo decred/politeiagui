@@ -65,6 +65,12 @@ export const getQuorumInVotes = (voteSummary) =>
   );
 
 /**
+ * Return the votes quorum of a given proposal vote status
+ * @param {Object} voteSummary
+ */
+export const getEligibleTickets = (voteSummary) => voteSummary.eligibletickets;
+
+/**
  * Returns true if the given proposal is public
  * @param {Object} proposal
  * @returns {Boolean} isPublic

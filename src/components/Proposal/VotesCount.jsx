@@ -11,6 +11,7 @@ import {
 import styles from "./Proposal.module.css";
 
 const VotesCount = ({
+  eligibleVotes,
   quorumVotes,
   votesReceived,
   onSearchVotes,
@@ -51,7 +52,7 @@ const VotesCount = ({
                 {votesReceived}
               </Text>
               <Text className={styles.votesQuorum} size="small">
-                /{`${quorumVotes} votes`}
+                /{`${eligibleVotes} votes`}
               </Text>
             </div>
           </div>

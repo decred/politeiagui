@@ -35,6 +35,7 @@ import {
   isActiveRfp,
   isEditableProposal,
   getQuorumInVotes,
+  getEligibleTickets,
   isVoteActiveProposal,
   isVotingFinishedProposal,
   getProposalToken,
@@ -430,6 +431,7 @@ const Proposal = React.memo(function Proposal({
                   renderStatusInfoComponent={
                     <VotesCount
                       isVoteActive={isVoteActive}
+                      eligibleVotes={getEligibleTickets(voteSummary)}
                       quorumVotes={getQuorumInVotes(voteSummary)}
                       votesReceived={getVotesReceived(voteSummary)}
                       onSearchVotes={!isLegacy ? openSearchVotesModal : null}
