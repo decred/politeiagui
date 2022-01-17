@@ -159,6 +159,7 @@ const Proposal = React.memo(function Proposal({
     startDate,
     endDate
   } = proposal;
+  const { startblockheight, endblockheight } = voteSummary;
   const isAdmin = useSelector(sel.currentUserIsAdmin);
   const isVetted = state === PROPOSAL_STATE_VETTED;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
@@ -386,6 +387,10 @@ const Proposal = React.memo(function Proposal({
                       timestamp={voteEndTimestamp}
                       className={styles.subtitleStatusTag}
                       size="small"
+                      additionInfo={
+                        isVotingFinished &&
+                        `block ${startblockheight} to ${endblockheight}`
+                      }
                     />
                   )}
                   {isAbandoned && (
@@ -405,7 +410,10 @@ const Proposal = React.memo(function Proposal({
                     />
                   )}
                   {isVoteActive && (
-                    <>
+                    <Tooltip
+                      placement="bottom"
+                      content={`block ${startblockheight} to ${endblockheight}`}
+                      contentClassName={styles.quorumTooltip}>
                       <Text
                         className={classNames(
                           "hide-on-mobile",
@@ -416,7 +424,7 @@ const Proposal = React.memo(function Proposal({
                           voteBlocksLeft > 1 ? "s" : ""
                         } left`}
                       </Text>
-                    </>
+                    </Tooltip>
                   )}
                 </Status>
               }
