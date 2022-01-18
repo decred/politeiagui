@@ -37,7 +37,12 @@ export function countReply({
   return { counts };
 }
 
-// commentsReply only erturns an comments list.
+/**
+ * commentsReply represents '/api/comments/v1/comments' endpoint.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns {Object} { comments }
+ */
 export function commentsReply({
   testParams: { count = 0 },
   requestParams: { token }
@@ -51,7 +56,13 @@ export function commentsReply({
   return { comments };
 }
 
-// votesEmptyReply only returns an empty comments votes list
+/**
+ * newCommentReply represents '/api/comments/v1/new' endpoint.
+ * it is called when the user is submitting a new comment.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns {Object} { comment }
+ */
 export function newCommentReply({
   testParams: { user, commentid },
   requestParams: { comment, parentid, publickey, signature, state, token }
@@ -70,7 +81,13 @@ export function newCommentReply({
   };
 }
 
-// votesEmptyReply only returns an empty comments votes list
+/**
+ * votesEmptyReply represents '/api/comments/v1/votes' endpoint.
+ * it returns a list of votes the logging in user votes on comments.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns {Object} { comments }
+ */
 export function votesReply({
   testParams: { user, maxCommentID, amount },
   requestParams: { token, userid }
@@ -82,6 +99,13 @@ export function votesReply({
   return { votes };
 }
 
+/**
+ * votesEmptyReply represents '/api/comments/v1/vote' endpoint.
+ * which is called when the user vote on a comment.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns {Object} { downvotes, upvotes, timestamp, receipt }
+ */
 export function voteReply({
   requestParams: { commentid, publickey, signature, state, token, vote }
 }) {
@@ -99,6 +123,9 @@ export function voteReply({
  * timestampsReply represents the data of /api/comments/v1/timestamps endpoint
  * It currently returns empty data since it is serving the data for downloading
  * and we just check the existence of the downloaded file.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object} { comments }
  */
 export function timestampsReply({ requestParams: { token, commentids = [] } }) {
   return {

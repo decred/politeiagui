@@ -13,10 +13,13 @@ export function createMiddleware({ packageName, repliers, baseUrl }) {
   return function middleware(
     endpoint,
     { error, ...testParams } = {},
-    responseParams = {}
+    responseParams = {},
+    getParams = []
   ) {
+    // search is built from getParams. Support for GET request.
+    const search = getParams.length > 0 ? `?${getParams.join("=*&")}=*` : "";
     return cy
-      .intercept(`${baseUrl}/${endpoint}`, (req) => {
+      .intercept(`${baseUrl}/${endpoint}${search}`, (req) => {
         const replyfn = repliers[endpoint];
         if (!replyfn)
           throw new Error(`no ${packageName} replier found for ${endpoint}`);

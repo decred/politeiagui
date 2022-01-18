@@ -10,7 +10,6 @@ import {
   USER_TYPE_USER,
   userByType
 } from "../../support/users/generate";
-import faker from "faker";
 
 beforeEach(function mockApiCalls() {
   // currently mocking pi and ticketvote summaries calls with any status, since
@@ -20,19 +19,7 @@ beforeEach(function mockApiCalls() {
   cy.usePiApi();
   cy.useWwwApi();
   cy.useCommentsApi();
-  cy.middleware("users.users", {
-    body: {
-      totalmatches: 1,
-      totalusers: 10,
-      users: [
-        {
-          id: faker.random.uuid(),
-          username: faker.internet.userName(),
-          email: faker.internet.email()
-        }
-      ]
-    }
-  });
+  cy.generalMiddleware("users", { amount: 1 }, {}, ["publickey"]);
   cy.server();
 });
 
@@ -162,6 +149,7 @@ describe("Comments downloads", () => {
     cy.wait("@comments.comments");
     cy.wait("@comments.votes");
     cy.findByTestId("record-links").click();
+    cy.wait(1000);
     cy.findByText(/comments bundle/i).click();
     const downloadsFolder = Cypress.config("downloadsFolder");
     cy.readFile(
@@ -174,6 +162,7 @@ describe("Comments downloads", () => {
     cy.wait("@comments.comments");
     cy.wait("@comments.votes");
     cy.findByTestId("record-links").click();
+    cy.wait(1000);
     cy.findByText(/comments timestamps/i).click();
     cy.wait("@comments.timestamps");
     const downloadsFolder = Cypress.config("downloadsFolder");

@@ -16,6 +16,7 @@
 // Import @testing-library/cypress commands:
 import "@testing-library/cypress/add-commands";
 // Import commands.js using ES2015 syntax:
+import "./general/commands";
 import "./commands";
 import "./core/commands";
 import "./ticketvote/commands";

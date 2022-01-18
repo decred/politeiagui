@@ -87,9 +87,12 @@ export function policyReply() {
 }
 
 /**
- * timestampsReply represents the data of /api/comments/v1/timestamps endpoint
+ * timestampsReply represents the data of /api/ticketvote/v1/timestamps endpoint
  * It currently returns empty data since it is serving the data for downloading
  * and we just check the existence of the downloaded file.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object} { auths, details, votes }
  */
 export function timestampsReply({
   testParams: { votesAmount = 0, authsAmount = 0 }
@@ -101,9 +104,12 @@ export function timestampsReply({
 }
 
 /**
- * detailsReply represents the data of /api/comments/v1/details endpoint
+ * detailsReply represents the data of /api/ticketvote/v1/details endpoint
  * It currently returns empty data since it is serving the data for downloading
  * and we just check the existence of the downloaded file.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object} { auths, vote }
  */
 export function detailsReply({ requestParams: { token } }) {
   return {
@@ -122,9 +128,12 @@ export function detailsReply({ requestParams: { token } }) {
 }
 
 /**
- * resultsReply represents the data of /api/comments/v1/results endpoint
+ * resultsReply represents the data of /api/ticketvote/v1/results endpoint
  * It currently returns empty data since it is serving the data for downloading
  * and we just check the existence of the downloaded file.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object}
  */
 export function resultsReply({ requestParams: { token } }) {
   return {};
