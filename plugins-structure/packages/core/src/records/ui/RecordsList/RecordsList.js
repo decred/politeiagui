@@ -7,7 +7,7 @@ import {
 } from "../../records/recordsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import RecordCard from "../RecordCard";
-import style from "./style.module.css";
+import styles from "./styles.module.css";
 
 // fetch inventory and pass it down
 export function RecordsList({ recordsState, status }) {
@@ -57,7 +57,7 @@ function RecordsListAux({
   }
   return (
     <>
-      <ul className={style.recordsList}>
+      <ul className={styles.recordsList}>
         {records.map((record) => {
           const { token } = record.censorshiprecord;
           return <RecordCard key={token} token={token} />;
