@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
+import { Header } from "./components";
 import { Provider } from "react-redux";
 import { store } from "@politeiagui/core";
 import { api } from "@politeiagui/core/api";
@@ -8,6 +9,7 @@ import { routes as coreRoutes } from "@politeiagui/core/routes";
 import { routes as statisticsRoutes } from "@politeiagui/statistics";
 import { routes as ticketvoteRoutes } from "@politeiagui/ticketvote";
 import { routes as proposalsRoutes } from "./routes";
+import { mergeRoutes } from "./utils/mergeRoutes"
 import { recordsInventory } from "@politeiagui/core/records/inventory";
 
 import {
@@ -32,17 +34,25 @@ function App() {
   useEffect(() => {
     initializeApp();
   }, []);
-  return <div id="root"></div>;
+
+  return (
+    <>
+      <Header />
+      <div id="root"></div>
+    </>
+  );
 }
 
-const routes = [
-  ...coreRoutes,
-  ...statisticsRoutes,
-  ...ticketvoteRoutes,
-  // add proposals routes at the end so it overwrites
-  // routes from plugins
-  ...proposalsRoutes,
-];
+function getRoutes() {
+  let routes = mergeRoutes(proposalsRoutes, coreRoutes, "core");
+  routes = mergeRoutes(routes, statisticsRoutes, "statistics");
+  routes = mergeRoutes(routes, ticketvoteRoutes, "ticketvote");
+  return routes;
+}
+
+const routes = getRoutes();
+
+console.log(routes);
 
 let routerInitialized = false;
 
