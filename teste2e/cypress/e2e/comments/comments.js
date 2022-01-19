@@ -19,7 +19,7 @@ beforeEach(function mockApiCalls() {
   cy.usePiApi();
   cy.useWwwApi();
   cy.useCommentsApi();
-  cy.generalMiddleware("users", { amount: 1 }, {}, ["publickey"]);
+  cy.usersMiddleware(null, { amount: 1 }, {}, ["publickey"]);
   cy.server();
 });
 

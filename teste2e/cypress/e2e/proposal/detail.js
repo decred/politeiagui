@@ -18,7 +18,6 @@ import {
   generateTokenPair
 } from "../../utils";
 import path from "path";
-import faker from "faker";
 import {
   USER_TYPE_ADMIN,
   USER_TYPE_NO_LOGIN,
@@ -33,6 +32,7 @@ beforeEach(function mockApiCalls() {
   cy.usePiApi();
   cy.useWwwApi();
   cy.useCommentsApi();
+  cy.usersMiddleware(null, { amount: 1 }, {}, ["publickey"]);
   cy.intercept("POST", "/api/v1/logout", {
     statusCode: 200,
     body: {}
@@ -403,19 +403,7 @@ describe("Proposal details", () => {
     beforeEach(() => {
       cy.server();
       cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true, user });
-      cy.middleware("users.users", {
-        body: {
-          totalmatches: 1,
-          totalusers: 10,
-          users: [
-            {
-              id: faker.random.uuid(),
-              username: faker.internet.userName(),
-              email: faker.internet.email()
-            }
-          ]
-        }
-      });
+      cy.usersMiddleware(null, { amount: 1 }, {}, ["publickey"]);
     });
     it("should able to report a proposal", () => {
       const { token, shortToken } = generateTokenPair();
@@ -494,19 +482,7 @@ describe("Proposal details", () => {
     beforeEach(() => {
       cy.server();
       cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true, user });
-      cy.middleware("users.users", {
-        body: {
-          totalmatches: 1,
-          totalusers: 10,
-          users: [
-            {
-              id: faker.random.uuid(),
-              username: faker.internet.userName(),
-              email: faker.internet.email()
-            }
-          ]
-        }
-      });
+      cy.usersMiddleware(null, { amount: 1 }, {}, ["publickey"]);
     });
     it("should display proposal status metadata on censored proposal", () => {
       const { token, shortToken } = generateTokenPair();
@@ -583,7 +559,7 @@ describe("Proposal details", () => {
       cy.visit(`record/${shortToken}`);
       cy.wait("@pi.summaries");
       cy.wait("@pi.billingstatuschanges");
-      cy.wait("@users.users");
+      cy.wait("@users");
       cy.findByText(/This proposal has been closed by/i).should("be.visible");
     });
   });

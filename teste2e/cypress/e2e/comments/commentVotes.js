@@ -1,5 +1,9 @@
 import { shortRecordToken } from "../../utils";
 
+beforeEach(() => {
+  cy.usersMiddleware(null, { amount: 1 }, {}, ["publickey"]);
+});
+
 describe("Comments Votes", () => {
   beforeEach(() => {
     const user = {
