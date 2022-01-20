@@ -1,4 +1,3 @@
-
 export function mergeRoutes(routes, pluginRoutes, pluginName) {
   const newArr = routes;
   let conflicting = false;

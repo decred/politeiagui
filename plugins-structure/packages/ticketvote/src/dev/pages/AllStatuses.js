@@ -2,16 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
-import { store } from "@politeiagui/core";
+import { store, connectReducers } from "@politeiagui/core";
+import { ticketvoteConstants } from "../../ticketvote";
 import { ticketvotePolicy } from "../../ticketvote/policy";
-import { ticketvoteConnectReducers } from "../../ticketvote/helpers";
 import { TicketvoteRecordsList, TicketvoteRecordVoteStatusBar } from "../../ui";
 
 import { PiThemeWrapper } from "../theme";
 import { Button, H2, H1 } from "pi-ui";
 
 const AllStatusPage = async () => {
-  await ticketvoteConnectReducers();
+  await connectReducers(ticketvoteConstants.reducersArray);
   await store.dispatch(ticketvotePolicy.fetch());
   const statuses = [
     "unauthorized",

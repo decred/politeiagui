@@ -52,8 +52,6 @@ function getRoutes() {
 
 const routes = getRoutes();
 
-console.log(routes);
-
 let routerInitialized = false;
 
 function initializeApp() {

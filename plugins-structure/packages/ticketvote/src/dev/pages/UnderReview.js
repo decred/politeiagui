@@ -1,16 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-
-import { store } from "@politeiagui/core";
+import { store, connectReducers } from "@politeiagui/core";
 import { ticketvotePolicy } from "../../ticketvote/policy";
-import { ticketvoteConnectReducers } from "../../ticketvote/helpers";
+import { ticketvoteConstants } from "../../ticketvote";
 import { TicketvoteRecordsList } from "../../ui";
-
 import { PiThemeWrapper } from "../theme";
 
 const UnderReviewPage = async () => {
-  await ticketvoteConnectReducers();
+  await connectReducers(ticketvoteConstants.reducersArray);
   await store.dispatch(ticketvotePolicy.fetch());
   const statuses = ["started", "authorized", "unauthorized"];
   ReactDOM.render(

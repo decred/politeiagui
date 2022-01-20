@@ -1,17 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import { Provider } from "react-redux";
-// import { store } from "@politeiagui/core";
+import { Provider } from "react-redux";
+import { store } from "@politeiagui/core";
 // import { ticketvoteConnectReducers } from "@politeiagui/ticketvote/helpers";
-import Details from "../pages/Details";
-import Home from "../pages/Home";
+// import Details from "../pages/Details";
+import { Home } from "../pages";
+import { connectReducers } from "@politeiagui/core";
+import { ticketvoteConstants } from "@politeiagui/ticketvote/ticketvote"
 
 export const routes = [
   {
     path: "/",
     view: async (params) => {
+      await connectReducers(ticketvoteConstants.reducersArray);
       return ReactDOM.render(
-        <Home {...params} />,
+        <Provider store={store}>
+          <Home {...params} />
+        </Provider>
+        ,
         document.querySelector("#root")
       );
     },

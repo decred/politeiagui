@@ -1,38 +1,25 @@
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ticketvotePolicy } from "./";
 
-export function useTicketvotePolicy({ token, initialFetch = false }) {
+export function useTicketvotePolicy() {
   const dispatch = useDispatch();
 
   // Selectors
-  const policy = useSelector((state) =>
-    ticketvotePolicy.selectByToken(state, token)
-  );
-  const policyStatus = useSelector((state) =>
-    ticketvotePolicy.selectStatus(state)
-  );
-  const policyError = useSelector((state) =>
-    ticketvotePolicy.selectError(state)
-  );
-
-  // Actions
-  const onFetchPolicy = useCallback(
-    () => dispatch(ticketvotePolicy.fetch({ token })),
-    [token, dispatch]
-  );
+  const policy = useSelector(ticketvotePolicy.select);
+  const policyStatus = useSelector(ticketvotePolicy.selectStatus);
+  const policyError = useSelector(ticketvotePolicy.selectError);
 
   // Effects
   useEffect(() => {
-    if (policyStatus === "idle" && initialFetch) {
-      onFetchPolicy();
+    if (policyStatus === "idle") {
+      dispatch(ticketvotePolicy.fetch());
     }
-  }, [policyStatus, onFetchPolicy, initialFetch]);
+  }, [policyStatus, dispatch]);
 
   return {
     policy,
     policyError,
-    policyStatus,
-    onFetchPolicy,
+    policyStatus
   };
 }

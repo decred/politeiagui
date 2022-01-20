@@ -10,13 +10,15 @@ import { useTicketvoteResults } from "./results/useResults";
 import { useTicketvoteDetails } from "./details/useDetails";
 import { useTicketvoteTimestamps } from "./timestamps/useTimestamps";
 import { useTicketvoteSummaries } from "./summaries/useSummaries";
+import { useTicketvotePolicy } from "./policy/usePolicy";
 
 import {
-  ticketvoteConnectReducers,
   ticketvoteGetQuorumInVotes,
   ticketvoteGetVotesReceived,
   ticketvoteGetVoteStatusBarData,
 } from "./helpers";
+
+import { reducersArray } from "./constants";
 
 export const ticketvote = {
   inventory: ticketvoteInventory,
@@ -33,11 +35,15 @@ export const ticketvoteHooks = {
   useResults: useTicketvoteResults,
   useTimestamps: useTicketvoteTimestamps,
   useSummaries: useTicketvoteSummaries,
+  usePolicy: useTicketvotePolicy
 };
 
 export const ticketvoteHelpers = {
-  connectReducers: ticketvoteConnectReducers,
   getQuorumInVotes: ticketvoteGetQuorumInVotes,
   getVotesReceived: ticketvoteGetVotesReceived,
   getStatusBarData: ticketvoteGetVoteStatusBarData,
 };
+
+export const ticketvoteConstants = {
+  reducersArray
+}

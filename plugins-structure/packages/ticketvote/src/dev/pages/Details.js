@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { store } from "@politeiagui/core";
+import { store, connectReducers } from "@politeiagui/core";
 import { H1 } from "pi-ui";
 
 import { ticketvotePolicy } from "../../ticketvote/policy";
-import { ticketvoteConnectReducers } from "../../ticketvote/helpers";
+
+import { ticketvoteConstants } from "../../ticketvote";
 
 import { PiThemeWrapper } from "../theme";
 import {
@@ -18,13 +19,7 @@ const DetailsPage = async ({ token }) => {
     ReactDOM.render(<h1>No records found</h1>, document.querySelector("#root"));
     return;
   }
-  await ticketvoteConnectReducers([
-    "policy",
-    "timestamps",
-    "results",
-    "details",
-    "summaries",
-  ]);
+  await connectReducers(ticketvoteConstants.reducersArray);
   await store.dispatch(ticketvotePolicy.fetch());
   ReactDOM.render(
     <PiThemeWrapper>
