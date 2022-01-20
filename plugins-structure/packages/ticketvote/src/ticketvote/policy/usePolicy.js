@@ -20,6 +20,6 @@ export function useTicketvotePolicy() {
   return {
     policy,
     policyError,
-    policyStatus
+    policyStatus,
   };
 }

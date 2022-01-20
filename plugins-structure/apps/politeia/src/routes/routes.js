@@ -6,7 +6,7 @@ import { store } from "@politeiagui/core";
 // import Details from "../pages/Details";
 import { Home } from "../pages";
 import { connectReducers } from "@politeiagui/core";
-import { ticketvoteConstants } from "@politeiagui/ticketvote/ticketvote"
+import { ticketvoteConstants } from "@politeiagui/ticketvote/ticketvote";
 
 export const routes = [
   {
@@ -16,12 +16,12 @@ export const routes = [
       return ReactDOM.render(
         <Provider store={store}>
           <Home {...params} />
-        </Provider>
-        ,
+        </Provider>,
         document.querySelector("#root")
       );
     },
-    cleanup: () => ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    cleanup: () =>
+      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   // {
   //   path: "/records/:token",

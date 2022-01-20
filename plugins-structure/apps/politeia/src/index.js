@@ -9,7 +9,7 @@ import { routes as coreRoutes } from "@politeiagui/core/routes";
 import { routes as statisticsRoutes } from "@politeiagui/statistics";
 import { routes as ticketvoteRoutes } from "@politeiagui/ticketvote";
 import { routes as proposalsRoutes } from "./routes";
-import { mergeRoutes } from "./utils/mergeRoutes"
+import { mergeRoutes } from "./utils/mergeRoutes";
 import { recordsInventory } from "@politeiagui/core/records/inventory";
 
 import {

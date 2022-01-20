@@ -3,7 +3,7 @@ import {
   selectTicketvotePolicy,
   selectTicketvotePolicyRule,
   selectTicketvotePolicyStatus,
-  selectTicketvotePolicyError
+  selectTicketvotePolicyError,
 } from "./policySlice";
 
 export const ticketvotePolicy = {

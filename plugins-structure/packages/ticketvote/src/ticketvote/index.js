@@ -35,7 +35,7 @@ export const ticketvoteHooks = {
   useResults: useTicketvoteResults,
   useTimestamps: useTicketvoteTimestamps,
   useSummaries: useTicketvoteSummaries,
-  usePolicy: useTicketvotePolicy
+  usePolicy: useTicketvotePolicy,
 };
 
 export const ticketvoteHelpers = {
@@ -45,5 +45,5 @@ export const ticketvoteHelpers = {
 };
 
 export const ticketvoteConstants = {
-  reducersArray
-}
+  reducersArray,
+};

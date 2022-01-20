@@ -1,6 +1,6 @@
 import React from "react";
 import { H1 } from "pi-ui";
-import { ticketvoteHooks } from "@politeiagui/ticketvote/ticketvote"
+import { ticketvoteHooks } from "@politeiagui/ticketvote/ticketvote";
 import styles from "./styles.module.css";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
 import UnderReview from "./UnderReview/UnderReview";
@@ -17,10 +17,10 @@ function renderChild(props) {
   const { tab } = getURLSearchParams();
   const mapTabComponent = {
     "under review": <UnderReview {...props} />,
-    "approved": <Approved {...props} />,
-    "rejected": <Rejected {...props} />,
-    "abandoned": <Abandoned {...props} />,
-  }
+    approved: <Approved {...props} />,
+    rejected: <Rejected {...props} />,
+    abandoned: <Abandoned {...props} />,
+  };
   return mapTabComponent[tab] || <UnderReview {...props} />;
 }
 
@@ -32,14 +32,20 @@ function Home() {
     <div>
       <H1>Proposals</H1>
       <div className={styles.tabs}>
-        <a href="/?tab=under review" data-link>Under Review</a>
-        <a href="/?tab=approved" data-link>Approved</a>
-        <a href="/?tab=rejected" data-link>Rejected</a>
-        <a href="/?tab=abandoned" data-link>Abandoned</a>
+        <a href="/?tab=under review" data-link>
+          Under Review
+        </a>
+        <a href="/?tab=approved" data-link>
+          Approved
+        </a>
+        <a href="/?tab=rejected" data-link>
+          Rejected
+        </a>
+        <a href="/?tab=abandoned" data-link>
+          Abandoned
+        </a>
       </div>
-      <div>
-        {renderChild()}
-      </div>
+      <div>{renderChild()}</div>
     </div>
   );
 }
