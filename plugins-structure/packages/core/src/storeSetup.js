@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { client } from "./client/client";
 import recordsInventoryReducer from "./records/inventory/recordsInventorySlice";
 import recordsReducer from "./records/records/recordsSlice";
+import policyReducer from "./records/policy/policySlice";
 import apiReducer from "./api/apiSlice";
 
 // Define the Reducers that will always be present in the application
@@ -10,6 +11,7 @@ const staticReducers = {
   api: apiReducer,
   recordsInventory: recordsInventoryReducer,
   records: recordsReducer,
+  recordsPolicy: policyReducer
 };
 
 function createReducer(asyncReducers) {

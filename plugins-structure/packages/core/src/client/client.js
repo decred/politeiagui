@@ -1,4 +1,4 @@
-import { RECORDS_API_ROUTE, ROUTE_INVENTORY, ROUTE_RECORDS } from "./constants";
+import { RECORDS_API_ROUTE, ROUTE_INVENTORY, ROUTE_RECORDS, ROUTE_POLICY } from "./constants";
 
 const filenames = ["proposalmetadata.json", "votemetadata.json"];
 const VERSION = "v1";
@@ -44,6 +44,14 @@ export const client = {
     const api = await parseResponse(response);
     return { api, csrf };
   },
+  async fetchPolicy(state) {
+    const csrf = await getCsrf(state);
+    const response = await fetch(
+      `${RECORDS_API_ROUTE}${VERSION}${ROUTE_POLICY}`,
+      fetchOptions(csrf, {}, "POST")
+    );
+    return await parseResponse(response);
+  }
 };
 
 // Not exported client utils

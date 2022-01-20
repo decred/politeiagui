@@ -1,6 +1,7 @@
 import React from "react";
 import { H1 } from "pi-ui";
 import { ticketvoteHooks } from "@politeiagui/ticketvote/ticketvote";
+import { recordsPolicy } from "@politeiagui/core/records/policy";
 import styles from "./styles.module.css";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
 import UnderReview from "./UnderReview/UnderReview";
@@ -25,9 +26,10 @@ function renderChild(props) {
 }
 
 function Home() {
-  const dispatch = useDispatch();
-  const policy = ticketvoteHooks.usePolicy();
-  console.log(policy);
+  // fetch ticketvote policy
+  ticketvoteHooks.usePolicy();
+  // fetch records policy
+  recordsPolicy.useFetch();
   return (
     <div>
       <H1>Proposals</H1>
