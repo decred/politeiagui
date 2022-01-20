@@ -3,8 +3,8 @@ import reducer, { fetchRecordsPolicy, initialState } from "./policySlice";
 import { client } from "../../client";
 
 const mockPolicy = {
-  "recordspagesize": 5,
-  "inventorypagesize": 20
+  recordspagesize: 5,
+  inventorypagesize: 20,
 };
 
 describe("Given the policySlice", () => {
@@ -14,7 +14,19 @@ describe("Given the policySlice", () => {
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
-    store = configureStore({ reducer: { recordsPolicy: reducer } });
+    // mock a minimal store with extra argument
+    // re-create the store before each test
+    store = configureStore({
+      reducer,
+      middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+          // This will make the client available in the 'extra' argument
+          // for all our thunks created with createAsyncThunk
+          thunk: {
+            extraArgument: client,
+          },
+        }),
+    });
     fetchPolicySpy = jest.spyOn(client, "fetchPolicy");
   });
   afterEach(() => {
@@ -31,8 +43,8 @@ describe("Given the policySlice", () => {
 
       expect(fetchPolicySpy).toBeCalled();
       const state = store.getState();
-      expect(state.recordsPolicy.policy).toEqual({});
-      expect(state.recordsPolicy.status).toEqual("loading");
+      expect(state.policy).toEqual({});
+      expect(state.status).toEqual("loading");
     });
   });
   describe("when fetchRecordsPolicy succeeds", () => {
@@ -43,8 +55,8 @@ describe("Given the policySlice", () => {
 
       expect(fetchPolicySpy).toBeCalled();
       const state = store.getState();
-      expect(state.recordsPolicy.policy).toEqual(mockPolicy);
-      expect(state.recordsPolicy.status).toEqual("succeeded");
+      expect(state.policy).toEqual(mockPolicy);
+      expect(state.status).toEqual("succeeded");
     });
   });
   describe("when fetchRecordsPolicy fails", () => {
@@ -56,8 +68,8 @@ describe("Given the policySlice", () => {
 
       expect(fetchPolicySpy).toBeCalled();
       const state = store.getState();
-      expect(state.recordsPolicy.status).toEqual("failed");
-      expect(state.recordsPolicy.error).toEqual("ERROR");
+      expect(state.status).toEqual("failed");
+      expect(state.error).toEqual("ERROR");
     });
   });
 });

@@ -11,7 +11,7 @@ const staticReducers = {
   api: apiReducer,
   recordsInventory: recordsInventoryReducer,
   records: recordsReducer,
-  recordsPolicy: policyReducer
+  recordsPolicy: policyReducer,
 };
 
 function createReducer(asyncReducers) {

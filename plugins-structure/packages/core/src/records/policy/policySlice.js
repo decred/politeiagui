@@ -40,11 +40,9 @@ const recordsPolicySlice = createSlice({
 export const selectRecordsPolicy = (state) => state.recordsPolicy.policy;
 export const selectRecordsPolicyRule = (state, rule) =>
   state.recordsPolicy.policy && state.recordsPolicy.policy[rule];
-export const selectRecordsPolicyStatus = (state) =>
-  state.recordsPolicy.status;
+export const selectRecordsPolicyStatus = (state) => state.recordsPolicy.status;
 
 // Errors
-export const selectRecordsPolicyError = (state) =>
-  state.recordsPolicy.error;
+export const selectRecordsPolicyError = (state) => state.recordsPolicy.error;
 
 export default recordsPolicySlice.reducer;
