@@ -1,5 +1,13 @@
-import { generateTokenPair, makeProposal, PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED, shortRecordToken } from "../../utils";
-import { USER_TYPE_ADMIN, USER_TYPE_UNPAID } from "../../support/users/generate";
+import {
+  generateTokenPair,
+  makeProposal,
+  PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
+  shortRecordToken
+} from "../../utils";
+import {
+  USER_TYPE_ADMIN,
+  USER_TYPE_UNPAID
+} from "../../support/users/generate";
 
 beforeEach(() => {
   cy.server();
@@ -108,7 +116,10 @@ describe("Comments Votes", () => {
       cy.findByText(/Error/).should("exist");
     });
     it("should reset votes count on error", () => {
-      cy.commentsMiddleware("vote", { delay: 3000, error: { errorcode: 10, statuscode: 400 } });
+      cy.commentsMiddleware("vote", {
+        delay: 3000,
+        error: { errorcode: 10, statuscode: 400 }
+      });
       let upvotes;
       cy.findAllByTestId("score-like")
         .first()
