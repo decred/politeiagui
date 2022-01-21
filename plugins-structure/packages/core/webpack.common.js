@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 const pkgName = require("./package.json").name;
 
 const jsRules = {
@@ -7,7 +7,7 @@ const jsRules = {
   exclude: /node_modules/,
   options: {
     presets: ["@babel/preset-env", "@babel/preset-react"],
-    plugins: ["@babel/plugin-transform-runtime"]
+    plugins: ["@babel/plugin-transform-runtime"],
   },
 };
 
@@ -31,20 +31,26 @@ const cssRules = [
     use: ["style-loader", "css-loader"],
     exclude: /\.module\.css$/,
   },
-]
+];
 
 module.exports = {
-  entry:  "./src/index.js",
+  entry: "./src/index.js",
   output: {
     publicPath: "/",
     path: path.resolve(__dirname, "dist"),
     library: {
       name: pkgName + ".js",
-      type: "umd"
+      type: "umd",
     },
-    clean: true
+    clean: true,
   },
   module: {
-    rules: [jsRules, ...cssRules]
-  }
+    rules: [jsRules, ...cssRules],
+  },
+  resolve: {
+    fallback: {
+      crypto: require.resolve("crypto-browserify"),
+      stream: require.resolve("stream-browserify"),
+    },
+  },
 };
