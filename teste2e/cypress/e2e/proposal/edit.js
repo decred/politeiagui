@@ -31,6 +31,7 @@ describe("Proposal Edit", () => {
     cy.visit(`record/${token}`);
     cy.wait("@records.details");
     cy.wait("@pi.summaries");
+    cy.wait(500);
     cy.findByTestId(/record-edit-button/i).click();
     cy.findByRole("button", { name: /submit/i }).should("be.disabled");
     const { description: newDescription } = buildProposal();

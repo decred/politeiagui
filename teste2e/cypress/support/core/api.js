@@ -20,7 +20,7 @@ export function errorReply({
 }) {
   return {
     statusCode: statuscode,
-    body: omitBody ? null : { errorcode, errorcontext, pluginid }
+    body: omitBody ? "" : { errorcode, errorcontext, pluginid }
   };
 }
 

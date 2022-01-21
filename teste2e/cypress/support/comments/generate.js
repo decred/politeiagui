@@ -8,14 +8,16 @@ export function Comment({
   comment,
   publickey,
   signature,
-  state = 2
+  state = 2,
+  maxUpvote = 0,
+  maxDownVote = 0
 } = {}) {
   if (!user) {
     user = new User();
   }
   this.commentid = commentid;
   this.comment = comment || faker.lorem.sentence();
-  this.downvotes = 0;
+  this.downvotes = faker.datatype.number({ min: 0, max: maxDownVote });
   this.parentid = parentid;
   this.publickey =
     publickey || faker.datatype.hexaDecimal(64, false, /[0-9a-z]/);
@@ -25,7 +27,7 @@ export function Comment({
   this.state = state;
   this.timestamp = new Date().getTime() / 1000;
   this.token = token;
-  this.upvotes = 0;
+  this.upvotes = faker.datatype.number({ min: 0, max: maxUpvote });
   this.userid = user.userid;
   this.username = user.username;
 }
