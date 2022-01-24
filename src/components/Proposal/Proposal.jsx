@@ -160,7 +160,7 @@ const Proposal = React.memo(function Proposal({
     startDate,
     endDate
   } = proposal;
-  const { startblockheight, endblockheight } = voteSummary;
+  const { startblockheight, endblockheight } = voteSummary || {};
   const isAdmin = useSelector(sel.currentUserIsAdmin);
   const isVetted = state === PROPOSAL_STATE_VETTED;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
