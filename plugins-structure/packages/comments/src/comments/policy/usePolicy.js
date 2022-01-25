@@ -2,7 +2,7 @@ import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { commentsPolicy } from "./";
 
-export function useCommentsPolicy({ initialFetch = false }) {
+export function useCommentsPolicy() {
   const dispatch = useDispatch();
 
   // Selectors
@@ -18,10 +18,10 @@ export function useCommentsPolicy({ initialFetch = false }) {
 
   // Effects
   useEffect(() => {
-    if (policyStatus === "idle" && initialFetch) {
+    if (policyStatus === "idle") {
       onFetchPolicy();
     }
-  }, [policyStatus, onFetchPolicy, initialFetch]);
+  }, [policyStatus, onFetchPolicy]);
 
   return {
     policy,

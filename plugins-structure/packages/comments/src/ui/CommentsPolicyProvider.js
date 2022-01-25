@@ -4,7 +4,7 @@ import { commentsPolicy } from "../comments/policy";
 export const commentsPolicyContext = createContext();
 
 const CommentsPolicyProvider = ({ children }) => {
-  const { policy } = commentsPolicy.useFetch({ initialFetch: true });
+  const { policy } = commentsPolicy.useFetch();
 
   return (
     <commentsPolicyContext.Provider value={{ commentsPolicy: policy }}>

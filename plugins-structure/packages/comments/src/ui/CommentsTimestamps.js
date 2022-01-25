@@ -15,22 +15,12 @@ const LinkComponent = (props) => (
   </Link>
 );
 
-const DownloadCommentsTimestamps = ({
-  token,
-  mode,
-  initialFetch,
-  commentids,
-  pageSize,
-}) => {
-  const { count, countStatus } = commentsCount.useFetch({
-    tokens: [token],
-    initialFetch,
-  });
+const DownloadCommentsTimestamps = ({ token, mode, commentids, pageSize }) => {
+  const { count, countStatus } = commentsCount.useFetch({ tokens: [token] });
   const commentsCounter = count[token];
   const { onFetchTimestamps, timestamps, timestampsStatus } =
     commentsTimestamps.useFetch({
       token,
-      initialFetch,
       commentids: !isEmpty(commentids)
         ? commentids
         : range(1, commentsCounter + 1),
@@ -66,14 +56,12 @@ DownloadCommentsTimestamps.propTypes = {
   token: PropTypes.string.isRequired,
   commentids: PropTypes.arrayOf(PropTypes.number),
   mode: PropTypes.oneOf(["button", "link"]),
-  initialFetch: PropTypes.bool,
   pageSize: PropTypes.number,
 };
 
 DownloadCommentsTimestamps.defaultProps = {
   mode: "button",
   onFetchDone: () => {},
-  initialFetch: false,
   pageSize: 100,
 };
 

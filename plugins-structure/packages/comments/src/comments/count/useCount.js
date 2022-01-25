@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { commentsCount } from "./";
 import { checkReducersDeps } from "../helpers";
 
-export function useCommentsCount({ tokens, initialFetch = false }) {
+export function useCommentsCount({ tokens }) {
   const dispatch = useDispatch();
   checkReducersDeps(["commentsCount"]);
 
@@ -20,10 +20,10 @@ export function useCommentsCount({ tokens, initialFetch = false }) {
 
   // Effects
   useEffect(() => {
-    if (countStatus === "idle" && initialFetch) {
+    if (countStatus === "idle") {
       onFetchCount();
     }
-  }, [countStatus, onFetchCount, initialFetch]);
+  }, [countStatus, onFetchCount]);
 
   return {
     count,

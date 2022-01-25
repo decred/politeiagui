@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { commentsVotes } from "./";
 import { checkReducersDeps } from "../helpers";
 
-export function useCommentsVotes({ token, userId, initialFetch = false }) {
+export function useCommentsVotes({ token, userId }) {
   const dispatch = useDispatch();
   checkReducersDeps(["commentsVotes"]);
 
@@ -22,10 +22,10 @@ export function useCommentsVotes({ token, userId, initialFetch = false }) {
 
   // Effects
   useEffect(() => {
-    if (votesStatus === "idle" && initialFetch) {
+    if (votesStatus === "idle") {
       onFetchVotes();
     }
-  }, [votesStatus, onFetchVotes, initialFetch]);
+  }, [votesStatus, onFetchVotes]);
 
   return {
     votes,

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { recordComments } from "./";
 import { checkReducersDeps } from "../helpers";
 
-export function useRecordComments({ token, id, initialFetch = false }) {
+export function useRecordComments({ token, id }) {
   const dispatch = useDispatch();
   checkReducersDeps(["comments"]);
 
@@ -29,10 +29,10 @@ export function useRecordComments({ token, id, initialFetch = false }) {
 
   // Effects
   useEffect(() => {
-    if (commentsStatus === "idle" && initialFetch) {
+    if (commentsStatus === "idle") {
       onFetchComments();
     }
-  }, [commentsStatus, onFetchComments, initialFetch]);
+  }, [commentsStatus, onFetchComments]);
 
   return {
     comment,
