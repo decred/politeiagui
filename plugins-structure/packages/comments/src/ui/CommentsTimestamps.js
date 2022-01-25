@@ -15,7 +15,12 @@ const LinkComponent = (props) => (
   </Link>
 );
 
-const DownloadCommentsTimestamps = ({ token, mode, commentids, pageSize }) => {
+export const DownloadCommentsTimestamps = ({
+  token,
+  mode,
+  commentids,
+  pageSize,
+}) => {
   const { count, countStatus } = commentsCount.useFetch({ tokens: [token] });
   const commentsCounter = count[token];
   const { onFetchTimestamps, timestamps, timestampsStatus } =
@@ -64,5 +69,3 @@ DownloadCommentsTimestamps.defaultProps = {
   onFetchDone: () => {},
   pageSize: 100,
 };
-
-export default DownloadCommentsTimestamps;

@@ -1,7 +1,7 @@
 import React from "react";
 import { commentsCount } from "../comments/count";
 
-const CommentsCount = ({ tokens }) => {
+export const CommentsCount = ({ tokens }) => {
   const { count } = commentsCount.useFetch({ tokens });
   return (
     <div>
@@ -15,5 +15,3 @@ const CommentsCount = ({ tokens }) => {
     </div>
   );
 };
-
-export default CommentsCount;

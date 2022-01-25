@@ -1,6 +1,2 @@
-export {
-  ticketvote,
-  ticketvoteConstants,
-  ticketvoteHelpers,
-} from "./ticketvote";
+export { comments } from "./comments";
 export { routes } from "./routes";
