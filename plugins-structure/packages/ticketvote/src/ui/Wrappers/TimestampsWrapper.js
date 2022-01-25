@@ -1,11 +1,9 @@
 import React from "react";
-import { ticketvoteHooks } from "../../ticketvote";
+import { ticketvoteTimestamps } from "../../ticketvote/timestamps";
 
 export const TicketvoteRecordVoteTimestampsWrapper = ({ children, token }) => {
   const { timestamps, onFetchTimestamps, timestampsStatus, timestampsError } =
-    ticketvoteHooks.useTimestamps({
-      token,
-    });
+    ticketvoteTimestamps.useFetch({ token });
   return (
     <div>
       {children &&

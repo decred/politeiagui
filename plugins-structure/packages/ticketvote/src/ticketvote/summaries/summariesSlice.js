@@ -63,29 +63,17 @@ const ticketvoteSummariesSlice = createSlice({
     setFetchQueue(state, action) {
       const { tokens } = action.payload;
       if (!isArray(tokens)) throw TypeError("tokens must be an array");
-      if (isEmpty(tokens)) {
-        state.summariesFetchQueue.status = "succeeded/isDone";
-      } else {
-        state.summariesFetchQueue.status = "succeeded/hasMore";
-      }
       state.summariesFetchQueue.tokens = tokens;
+      state.summariesFetchQueue.status = "idle";
     },
     pushFetchQueue(state, action) {
       const { tokens } = action.payload;
       if (!isArray(tokens)) throw TypeError("tokens must be an array");
-      if (!isEmpty(tokens)) {
-        state.summariesFetchQueue.status = "succeeded/hasMore";
-      }
       state.summariesFetchQueue.tokens.push(...tokens);
     },
     popFetchQueue(state, action) {
       const { tokens } = action.payload;
       if (!isArray(tokens)) throw TypeError("tokens must be an array");
-      const isQueueEmpty = isEmpty(state.summariesFetchQueue.tokens);
-      if (isQueueEmpty) {
-        state.summariesFetchQueue.status = "succeeded/isDone";
-        return;
-      }
       return state.summariesFetchQueue.tokens.shift();
     },
   },

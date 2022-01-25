@@ -50,12 +50,7 @@ export const fetchTicketvoteInventory = createAsyncThunk(
       });
       const readableStatus = getHumanReadableTicketvoteStatus(status);
       const tokens = res.vetted[readableStatus];
-      dispatch(
-        setFetchQueue({
-          status: readableStatus,
-          tokens,
-        })
-      );
+      dispatch(setFetchQueue({ tokens }));
       dispatch(pushRecordsFetchQueue({ tokens }));
       return { ...res.vetted, bestBlock: res.bestblock };
     } catch (error) {
@@ -69,7 +64,7 @@ export const fetchTicketvoteInventory = createAsyncThunk(
 
 export const fetchTicketvoteNextRecordsPage = createAsyncThunk(
   "ticketvoteInventory/fetchNextRecordsPage",
-  async (body = {}, { dispatch, getState, rejectWithValue, extra }) => {
+  async (body = {}, { dispatch, getState, rejectWithValue }) => {
     try {
       let { pageSize } = body;
       if (!pageSize) pageSize = RECORDS_PAGE_SIZE;

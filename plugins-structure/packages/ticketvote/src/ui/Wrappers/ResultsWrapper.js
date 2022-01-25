@@ -1,11 +1,9 @@
 import React from "react";
-import { ticketvoteHooks } from "../../ticketvote";
+import { ticketvoteResults } from "../../ticketvote/results";
 
 export const TicketvoteRecordVoteResultsWrapper = ({ children, token }) => {
   const { results, onFetchResults, resultsError, resultsStatus } =
-    ticketvoteHooks.useResults({
-      token,
-    });
+    ticketvoteResults.useFetch({ token });
   return (
     <div>
       {children &&

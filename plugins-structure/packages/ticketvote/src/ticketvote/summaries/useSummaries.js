@@ -1,8 +1,8 @@
-import { useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ticketvoteSummaries } from "./";
 
-export function useTicketvoteSummaries({ tokens, pageSize = 5, status }) {
+export function useTicketvoteSummaries({ tokens, pageSize = 5 }) {
   const dispatch = useDispatch();
 
   // Selectors
@@ -15,6 +15,7 @@ export function useTicketvoteSummaries({ tokens, pageSize = 5, status }) {
   );
   const summariesError = useSelector(ticketvoteSummaries.selectError);
   const allSummaries = useSelector(ticketvoteSummaries.selectAll);
+  const summariesQueue = useSelector(ticketvoteSummaries.selectFetchQueue);
 
   // Actions
   const onFetchSummaries = useCallback(
@@ -25,37 +26,25 @@ export function useTicketvoteSummaries({ tokens, pageSize = 5, status }) {
     () => dispatch(ticketvoteSummaries.fetchNextPage({ pageSize })),
     [dispatch, pageSize]
   );
-  const setSummariesFetchQueue = useCallback(
-    (tokens) => dispatch(ticketvoteSummaries.setFetchQueue({ tokens })),
-    [dispatch]
+  const onUpdateSummariesQueue = useCallback(
+    () => dispatch(ticketvoteSummaries.setFetchQueue({ tokens })),
+    [dispatch, tokens]
   );
   const pushSummariesFetchQueue = useCallback(
     (tokens) => dispatch(ticketvoteSummaries.pushFetchQueue({ tokens })),
     [dispatch]
   );
 
-  // Effects
-  useEffect(() => {
-    if (summariesQueueStatus === "idle") {
-      setSummariesFetchQueue(tokens);
-    }
-  }, [
-    summariesQueueStatus,
-    setSummariesFetchQueue,
-    tokens,
-    status,
-    onFetchSummariesNextPage,
-  ]);
-
   return {
     summaries,
     allSummaries,
     summariesError,
     summariesStatus,
+    summariesQueue,
     summariesQueueStatus,
     onFetchSummaries,
     onFetchSummariesNextPage,
-    setSummariesFetchQueue,
+    onUpdateSummariesQueue,
     pushSummariesFetchQueue,
   };
 }

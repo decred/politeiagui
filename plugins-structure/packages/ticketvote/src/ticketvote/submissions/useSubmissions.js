@@ -2,7 +2,7 @@ import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ticketvoteSubmissions } from "./";
 
-export function useTicketvoteSubmissions({ token, initialFetch = false }) {
+export function useTicketvoteSubmissions({ token }) {
   const dispatch = useDispatch();
 
   // Selectors
@@ -24,10 +24,10 @@ export function useTicketvoteSubmissions({ token, initialFetch = false }) {
 
   // Effects
   useEffect(() => {
-    if (submissionsStatus === "idle" && initialFetch) {
+    if (submissionsStatus === "idle") {
       onFetchSubmissions();
     }
-  }, [submissionsStatus, onFetchSubmissions, initialFetch]);
+  }, [submissionsStatus, onFetchSubmissions]);
 
   return {
     submissions,

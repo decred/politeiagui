@@ -46,7 +46,7 @@ const ProposalDetails = ({ token }) => {
           </div>
         )}
       </TicketvoteRecordVoteTimestampsWrapper>
-      <TicketvoteSummariesWrapper tokens={[token]} initialFetch={true}>
+      <TicketvoteSummariesWrapper tokens={[token]}>
         {(props) => <TicketvoteRecordVoteStatusBar {...props} />}
       </TicketvoteSummariesWrapper>
     </div>

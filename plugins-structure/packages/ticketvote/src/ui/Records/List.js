@@ -23,20 +23,21 @@ export function TicketvoteRecordsList({ statuses, children }) {
           onFetchDone={fetchNextStatusInventory}
         >
           {(inventoryProps) => {
+            const isFetchAllowed = inventoryProps.inventory.length > 0;
             return (
-              <TicketvoteSummariesWrapper
-                tokens={inventoryProps.inventory}
-                status={status}
-                initialFetch={true}
-                isFetchAllowed={inventoryProps.hasLoaded}
-              >
-                {(summariesProps) =>
-                  children({
-                    inventory: inventoryProps,
-                    summaries: summariesProps,
-                  })
-                }
-              </TicketvoteSummariesWrapper>
+              isFetchAllowed && (
+                <TicketvoteSummariesWrapper
+                  tokens={inventoryProps.inventory}
+                  onFetchDone={inventoryProps.onFetchInventoryNextPage}
+                >
+                  {(summariesProps) =>
+                    children({
+                      inventory: inventoryProps,
+                      summaries: summariesProps,
+                    })
+                  }
+                </TicketvoteSummariesWrapper>
+              )
             );
           }}
         </TicketvoteInventoryWrapper>

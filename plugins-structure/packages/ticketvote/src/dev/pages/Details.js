@@ -26,12 +26,13 @@ const DetailsPage = async ({ token }) => {
       <Provider store={store}>
         <div style={{ margin: "2rem" }}>
           <H1>Ticketvote Details for {token}</H1>
-          <TicketvoteSummariesWrapper tokens={[token]} initialFetch={true}>
-            {({ ticketvoteSummary }) => (
-              <TicketvoteRecordVoteStatusBar
-                ticketvoteSummary={ticketvoteSummary}
-              />
-            )}
+          <TicketvoteSummariesWrapper tokens={[token]}>
+            {(summariesProps) => {
+              const summary = summariesProps.allSummaries[token];
+              return (
+                <TicketvoteRecordVoteStatusBar ticketvoteSummary={summary} />
+              );
+            }}
           </TicketvoteSummariesWrapper>
         </div>
       </Provider>

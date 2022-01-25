@@ -6,7 +6,7 @@ import { store } from "@politeiagui/core";
 // import Details from "../pages/Details";
 import { Home } from "../pages";
 import { connectReducers } from "@politeiagui/core";
-import { ticketvoteConstants } from "@politeiagui/ticketvote/ticketvote";
+import { ticketvoteConstants } from "@politeiagui/ticketvote";
 
 export const routes = [
   {

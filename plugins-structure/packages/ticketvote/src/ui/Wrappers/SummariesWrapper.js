@@ -1,43 +1,49 @@
 import PropTypes from "prop-types";
-import { useState, useEffect, useCallback } from "react";
-import { ticketvoteHooks } from "../../ticketvote";
+import { useEffect, useCallback } from "react";
+import { ticketvoteSummaries } from "../../ticketvote/summaries";
 import { SUMMARIES_PAGE_SIZE } from "../../lib/constants";
+import isEmpty from "lodash/fp/isEmpty";
 
 export const TicketvoteSummariesWrapper = ({
   children,
   tokens,
   pageSize,
-  initialFetch,
-  isFetchAllowed,
   onFetchDone,
 }) => {
-  const [needsFetch, setNeedsFetch] = useState(initialFetch);
   const {
     onFetchSummariesNextPage,
     summariesQueueStatus,
+    summariesQueue,
     summaries,
     summariesStatus,
     allSummaries,
-  } = ticketvoteHooks.useSummaries({ tokens, pageSize });
+    onUpdateSummariesQueue,
+  } = ticketvoteSummaries.useFetch({ tokens, pageSize });
 
   const handleFetchSummariesNextPage = useCallback(async () => {
-    if (summariesQueueStatus === "succeeded/hasMore") {
-      await onFetchSummariesNextPage();
-    } else if (summariesQueueStatus === "succeeded/isDone") {
+    if (summariesQueueStatus === "succeeded/isDone") {
       await onFetchDone();
-      setNeedsFetch(true);
+    } else {
+      await onFetchSummariesNextPage();
     }
   }, [onFetchSummariesNextPage, summariesQueueStatus, onFetchDone]);
 
   useEffect(
     function handleFetchInitialBatch() {
-      const hasMore = summariesQueueStatus === "succeeded/hasMore";
-      if (needsFetch && hasMore && isFetchAllowed) {
-        onFetchSummariesNextPage();
-        setNeedsFetch(false);
+      if (summariesQueueStatus === "idle") {
+        if (isEmpty(summariesQueue)) {
+          onUpdateSummariesQueue();
+        } else {
+          onFetchSummariesNextPage();
+        }
       }
     },
-    [needsFetch, summariesQueueStatus, onFetchSummariesNextPage, isFetchAllowed]
+    [
+      summariesQueueStatus,
+      onFetchSummariesNextPage,
+      summariesQueue,
+      onUpdateSummariesQueue,
+    ]
   );
 
   return children({
@@ -52,14 +58,10 @@ TicketvoteSummariesWrapper.propTypes = {
   tokens: PropTypes.arrayOf(PropTypes.string).isRequired,
   children: PropTypes.func.isRequired,
   pageSize: PropTypes.number,
-  isFetchAllowed: PropTypes.bool,
   onFetchDone: PropTypes.func,
-  initialFetch: PropTypes.bool,
 };
 
 TicketvoteSummariesWrapper.defaultProps = {
   pageSize: SUMMARIES_PAGE_SIZE,
   onFetchDone: () => {},
-  isFetchAllowed: false,
-  initialFetch: false,
 };
