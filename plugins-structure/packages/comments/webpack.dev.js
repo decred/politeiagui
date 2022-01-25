@@ -10,7 +10,7 @@ const plugins = [
 
 const dev = {
   mode: "development",
-  entry: "./src/index.js",
+  entry: "./src/dev/index.js",
   devtool: "inline-source-map",
   devServer: {
     port: 3006,
