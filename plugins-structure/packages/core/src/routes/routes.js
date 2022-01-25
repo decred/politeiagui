@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import Home from "../records/pages/Home";
 import Records from "../records/pages/Records";
 import Record from "../records/pages/Record";
 import { store } from "../storeSetup";
@@ -12,7 +13,7 @@ export const routes = [
     view: () =>
       ReactDOM.render(
         <Provider store={store}>
-          <Records />
+          <Home />
         </Provider>,
         document.querySelector("#root")
       ),

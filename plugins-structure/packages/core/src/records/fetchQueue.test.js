@@ -4,11 +4,17 @@
  */
 import recordsInventoryReducer, {
   fetchRecordsInventory,
+  initialState as recordsInventoryInitialState,
 } from "./inventory/recordsInventorySlice";
-import apiReducer, { fetchApi } from "../api/apiSlice";
+import apiReducer, {
+  fetchApi,
+  initialState as apiInitialState,
+} from "../api/apiSlice";
+import recordsPolicyReducer from "./policy/policySlice";
 import recordsReducer, {
   fetchRecordsNextPage,
   pushFetchQueue,
+  initialState as recordsInitialState,
 } from "./records/recordsSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { client } from "../client";
@@ -63,11 +69,23 @@ describe("Given the recordsInventory slice and the records slice", () => {
     fetch.mockClear();
     const staticReducers = {
       api: apiReducer,
+      recordsPolicy: recordsPolicyReducer,
       recordsInventory: recordsInventoryReducer,
       records: recordsReducer,
     };
     store = configureStore({
       reducer: staticReducers,
+      preloadedState: {
+        recordsInventory: recordsInventoryInitialState,
+        api: apiInitialState,
+        records: recordsInitialState,
+        recordsPolicy: {
+          policy: {
+            recordspagesize: 5,
+            inventorypagesize: 20,
+          },
+        },
+      },
       middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
           // This will make the client available in the 'extra' argument

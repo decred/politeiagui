@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { RECORDS_PAGE_SIZE } from "../constants";
 import {
   getHumanReadableRecordState,
   getHumanReadableRecordStatus,
   getRecordStatusCode,
   getRecordStateCode,
 } from "../utils";
-import { validateRecordStateAndStatus } from "../validation";
+import {
+  validateRecordStateAndStatus,
+  validateRecordsPageSize,
+} from "../validation";
 import take from "lodash/fp/take";
 import isArray from "lodash/fp/isArray";
 import isEmpty from "lodash/fp/isEmpty";
@@ -50,18 +52,18 @@ export const fetchRecordsNextPage = createAsyncThunk(
   "records/fetchNextPage",
   async (body, { dispatch, getState }) => {
     const { recordsState, status } = body;
-    let { pageSize } = body;
-    if (!pageSize) pageSize = RECORDS_PAGE_SIZE;
+    const state = getState();
+    const recordsPageSize = state.recordsPolicy.policy.recordspagesize;
     const stringState = getHumanReadableRecordState(recordsState);
     const stringStatus = getHumanReadableRecordStatus(status);
-    const queue =
-      getState().records.recordsFetchQueue[stringState][stringStatus];
-    const nextTokens = take(pageSize, queue);
+    const queue = state.records.recordsFetchQueue[stringState][stringStatus];
+    const nextTokens = take(recordsPageSize, queue);
     return await dispatch(fetchRecords(nextTokens));
   },
   {
-    condition: ({ recordsState, status }) =>
-      validateRecordStateAndStatus(recordsState, status),
+    condition: ({ recordsState, status }, { getState }) =>
+      validateRecordStateAndStatus(recordsState, status) &&
+      validateRecordsPageSize(getState()),
   }
 );
 

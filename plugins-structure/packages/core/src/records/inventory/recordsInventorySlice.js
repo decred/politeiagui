@@ -8,7 +8,10 @@ import {
   getRecordStateCode,
   getHumanReadableRecordStatus,
 } from "../utils";
-import { validateRecordStateAndStatus } from "../validation";
+import {
+  validateRecordStateAndStatus,
+  validateInventoryPageSize,
+} from "../validation";
 import { setFetchQueue, fetchRecordsNextPage } from "../records/recordsSlice";
 
 const initialObj = {
@@ -35,12 +38,12 @@ export const fetchRecordsInventory = createAsyncThunk(
   "recordsInventory/fetch",
   async (
     { recordsState, status, page = 1 },
-    { dispatch, extra, rejectWithValue }
+    { dispatch, extra, rejectWithValue, getState }
   ) => {
     const requestState = getRecordStateCode(recordsState);
     const requestStatus = getRecordStatusCode(status);
     try {
-      const res = await extra.fetchRecordsInventory({
+      const recordsInventory = await extra.fetchRecordsInventory({
         state: requestState,
         status: requestStatus,
         page,
@@ -49,13 +52,14 @@ export const fetchRecordsInventory = createAsyncThunk(
       // Dispatching these actions here because they are necessary to populate the view and should run synchronously.
       // setFetchQueue should always be dispatched here unless you have a really good reason to do it anywhere else.
       // fetchRecordsNextPage should be called everytime the user wants to fetch a new batch.
+      const state = getState();
       const stringState = getHumanReadableRecordState(recordsState);
       const stringStatus = getHumanReadableRecordStatus(status);
       dispatch(
         setFetchQueue({
           recordsState: stringState,
           status: stringStatus,
-          records: res[stringState][stringStatus],
+          records: recordsInventory[stringState][stringStatus],
         })
       );
       dispatch(
@@ -64,14 +68,19 @@ export const fetchRecordsInventory = createAsyncThunk(
           status: stringStatus,
         })
       );
-      return res;
+      const inventoryPageSize = state.recordsPolicy.policy.inventorypagesize;
+      return {
+        recordsInventory,
+        inventoryPageSize,
+      };
     } catch (e) {
       return rejectWithValue(e.message);
     }
   },
   {
-    condition: ({ recordsState, status }) =>
-      validateRecordStateAndStatus(recordsState, status),
+    condition: ({ recordsState, status }, { getState }) =>
+      validateRecordStateAndStatus(recordsState, status) &&
+      validateInventoryPageSize(getState()),
   }
 );
 
@@ -89,11 +98,14 @@ const recordsInventorySlice = createSlice({
         state[stringState][stringStatus].status = "loading";
       })
       .addCase(fetchRecordsInventory.fulfilled, (state, action) => {
-        const recordsInventory = action.payload;
+        const { recordsInventory, inventoryPageSize } = action.payload;
         const { recordsState, status, page } = action.meta.arg;
         const stringState = getHumanReadableRecordState(recordsState);
         const stringStatus = getHumanReadableRecordStatus(status);
-        if (recordsInventory[stringState][stringStatus].length === 20) {
+        if (
+          recordsInventory[stringState][stringStatus].length ===
+          inventoryPageSize
+        ) {
           state[stringState][stringStatus].status = "succeeded/hasMore";
         } else {
           state[stringState][stringStatus].status = "succeeded/isDone";

@@ -8,7 +8,6 @@ import UnderReview from "./UnderReview/UnderReview";
 import Approved from "./Approved/Approved";
 import Rejected from "./Rejected/Rejected";
 import Abandoned from "./Abandoned/Abandoned";
-import { useDispatch, useSelector } from "react-redux";
 
 /**
  * Returns the appropriate component to render according to the search param.
@@ -26,11 +25,10 @@ function renderChild(props) {
 }
 
 function Home() {
-  // fetch ticketvote policy
   // fetch records policy
   recordsPolicy.useFetch();
-  const dispatch = useDispatch();
-  const policy = ticketvotePolicy.useFetch();
+  // fetch ticketvote policy
+  ticketvotePolicy.useFetch();
   return (
     <div>
       <H1>Proposals</H1>

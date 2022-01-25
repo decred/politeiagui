@@ -1,4 +1,9 @@
-import { validateRecordState, validateRecordStatus } from "./validation";
+import {
+  validateRecordState,
+  validateRecordStatus,
+  validateRecordsPageSize,
+  validateInventoryPageSize,
+} from "./validation";
 import { validRecordStatuses, validRecordStates } from "./utils";
 
 const invalidStates = [3, -1, 0, "some_string"];
@@ -107,6 +112,84 @@ describe("State and Status validation", () => {
       expect(validateRecordStatus("2")).toBeTruthy();
       expect(validateRecordStatus("3")).toBeTruthy();
       expect(validateRecordStatus("4")).toBeTruthy();
+    });
+  });
+});
+
+describe("Records policy validation", () => {
+  it("should validate recordspagesize correctly", () => {
+    const validMockState = {
+      recordsPolicy: {
+        policy: {
+          recordspagesize: 5,
+          inventorypagesize: 20,
+        },
+      },
+    };
+    expect(validateRecordsPageSize(validMockState)).toBeTruthy();
+  });
+  describe("given validateRecordsPageSize", () => {
+    it("should return true if there is a recordspagesize", () => {
+      const validMockState = {
+        recordsPolicy: {
+          policy: {
+            recordspagesize: 5,
+          },
+        },
+      };
+      expect(validateRecordsPageSize(validMockState)).toBeTruthy();
+    });
+    it("should return false if there is not a recordspagesize", () => {
+      const validMockState = {
+        recordsPolicy: {
+          policy: {},
+        },
+      };
+      const consoleErrorMock = jest
+        .spyOn(console, "error")
+        .mockImplementation();
+      expect(() => validateRecordsPageSize(validMockState)).toThrowWithMessage(
+        Error,
+        "Records policy should be loaded before fetching records or records inventory. See `usePolicy` hook"
+      );
+      expect(consoleErrorMock).toBeCalledWith(
+        Error(
+          "Records policy should be loaded before fetching records or records inventory. See `usePolicy` hook"
+        )
+      );
+    });
+  });
+  describe("given validateInventoryPageSize", () => {
+    it("should return true if there is a inventorypagesize", () => {
+      const validMockState = {
+        recordsPolicy: {
+          policy: {
+            inventorypagesize: 20,
+          },
+        },
+      };
+      expect(validateInventoryPageSize(validMockState)).toBeTruthy();
+    });
+    it("should return false if there is not a inventorypagesize", () => {
+      const validMockState = {
+        recordsPolicy: {
+          policy: {},
+        },
+      };
+      const consoleErrorMock = jest
+        .spyOn(console, "error")
+        .mockImplementation();
+      expect(() =>
+        validateInventoryPageSize(validMockState)
+      ).toThrowWithMessage(
+        Error,
+        "Records policy should be loaded before fetching records or records inventory. See `usePolicy` hook"
+      );
+      expect(consoleErrorMock).toBeCalledWith(
+        Error(
+          "Records policy should be loaded before fetching records or records inventory. See `usePolicy` hook"
+        )
+      );
     });
   });
 });

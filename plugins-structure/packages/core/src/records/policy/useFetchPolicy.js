@@ -10,8 +10,6 @@ export function useFetchPolicy() {
   const policyStatus = useSelector(recordsPolicy.selectStatus);
   const policyError = useSelector(recordsPolicy.selectError);
 
-  console.log(policyStatus);
-
   // Effects
   useEffect(() => {
     if (policyStatus === "idle") {
