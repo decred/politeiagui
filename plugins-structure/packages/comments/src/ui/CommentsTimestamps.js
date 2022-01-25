@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { commentsHooks } from "../comments";
+import { commentsCount } from "../comments/count";
+import { commentsTimestamps } from "../comments/timestamps";
 import { Button, Link } from "pi-ui";
 import isEmpty from "lodash/fp/isEmpty";
 import range from "lodash/range";
@@ -21,18 +22,18 @@ const DownloadCommentsTimestamps = ({
   commentids,
   pageSize,
 }) => {
-  const { count, countStatus } = commentsHooks.useCount({
+  const { count, countStatus } = commentsCount.useFetch({
     tokens: [token],
     initialFetch,
   });
-  const commentsCount = count[token];
+  const commentsCounter = count[token];
   const { onFetchTimestamps, timestamps, timestampsStatus } =
-    commentsHooks.useTimestamps({
+    commentsTimestamps.useFetch({
       token,
       initialFetch,
       commentids: !isEmpty(commentids)
         ? commentids
-        : range(1, commentsCount + 1),
+        : range(1, commentsCounter + 1),
       pageSize,
     });
 

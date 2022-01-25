@@ -1,10 +1,10 @@
 import React, { createContext } from "react";
-import { commentsHooks } from "../comments";
+import { commentsPolicy } from "../comments/policy";
 
 export const commentsPolicyContext = createContext();
 
 const CommentsPolicyProvider = ({ children }) => {
-  const { policy } = commentsHooks.usePolicy({ initialFetch: true });
+  const { policy } = commentsPolicy.useFetch({ initialFetch: true });
 
   return (
     <commentsPolicyContext.Provider value={{ commentsPolicy: policy }}>

@@ -1,8 +1,8 @@
 import React from "react";
-import { commentsHooks } from "../comments";
+import { commentsVotes } from "../comments/votes";
 
 const CommentsVotes = ({ token, userId }) => {
-  const { votes } = commentsHooks.useVotes({
+  const { votes } = commentsVotes.useFetch({
     token,
     userId,
     initialFetch: true,

@@ -1,8 +1,8 @@
 import React from "react";
-import { commentsHooks } from "../comments";
+import { commentsCount } from "../comments/count";
 
 const CommentsCount = ({ tokens }) => {
-  const { count } = commentsHooks.useCount({
+  const { count } = commentsCount.useFetch({
     tokens,
     initialFetch: true,
   });

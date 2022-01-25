@@ -5,6 +5,7 @@ import {
   selectCommentsPolicyStatus,
   selectCommentsPolicyError,
 } from "./policySlice";
+import { useCommentsPolicy } from "./usePolicy";
 
 export const commentsPolicy = {
   fetch: fetchCommentsPolicy,
@@ -12,4 +13,5 @@ export const commentsPolicy = {
   selectStatus: selectCommentsPolicyStatus,
   selectRule: selectCommentsPolicyRule,
   selectError: selectCommentsPolicyError,
+  useFetch: useCommentsPolicy,
 };

@@ -5,6 +5,7 @@ import {
   selectCommentsStatus,
   selectRecordCommentsById,
 } from "./commentsSlice";
+import { useRecordComments } from "./useComments";
 
 export const recordComments = {
   fetch: fetchComments,
@@ -12,4 +13,5 @@ export const recordComments = {
   selectById: selectRecordCommentsById,
   selectError: selectCommentsError,
   selectStatus: selectCommentsStatus,
+  useFetch: useRecordComments,
 };
