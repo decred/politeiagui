@@ -1,13 +1,11 @@
 import PropTypes from "prop-types";
 import { useEffect, useCallback } from "react";
 import { ticketvoteSummaries } from "../../ticketvote/summaries";
-import { SUMMARIES_PAGE_SIZE } from "../../lib/constants";
 import isEmpty from "lodash/fp/isEmpty";
 
 export const TicketvoteSummariesWrapper = ({
   children,
   tokens,
-  pageSize,
   onFetchDone,
 }) => {
   const {
@@ -18,7 +16,7 @@ export const TicketvoteSummariesWrapper = ({
     summariesStatus,
     allSummaries,
     onUpdateSummariesQueue,
-  } = ticketvoteSummaries.useFetch({ tokens, pageSize });
+  } = ticketvoteSummaries.useFetch({ tokens });
 
   const handleFetchSummariesNextPage = useCallback(async () => {
     if (summariesQueueStatus === "succeeded/isDone") {
@@ -57,11 +55,9 @@ export const TicketvoteSummariesWrapper = ({
 TicketvoteSummariesWrapper.propTypes = {
   tokens: PropTypes.arrayOf(PropTypes.string).isRequired,
   children: PropTypes.func.isRequired,
-  pageSize: PropTypes.number,
   onFetchDone: PropTypes.func,
 };
 
 TicketvoteSummariesWrapper.defaultProps = {
-  pageSize: SUMMARIES_PAGE_SIZE,
   onFetchDone: () => {},
 };

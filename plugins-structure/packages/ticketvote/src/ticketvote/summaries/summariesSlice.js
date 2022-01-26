@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
-import { SUMMARIES_PAGE_SIZE } from "../../lib/constants";
 import { getTicketvoteStatusCode } from "../../lib/utils";
-import { validateTicketvoteStatus } from "../../lib/validation";
+import {
+  validateTicketvoteStatus,
+  validateTicketvoteSummariesPageSize,
+} from "../../lib/validation";
 import isArray from "lodash/fp/isArray";
 import take from "lodash/fp/take";
 import pick from "lodash/fp/pick";
@@ -24,33 +26,37 @@ export const initialState = {
 // Thunks
 export const fetchTicketvoteSummaries = createAsyncThunk(
   "ticketvoteSummaries/fetch",
-  async (body, { getState, rejectWithValue }) => {
+  async ({ tokens }, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchSummaries(getState(), body);
+      return await api.fetchSummaries(getState(), { tokens });
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
   {
-    condition: ({ tokens, pageSize = SUMMARIES_PAGE_SIZE }) => {
-      return isArray(tokens) && !isEmpty(tokens) && tokens.length <= pageSize;
+    condition: ({ tokens }, { getState }) => {
+      return (
+        isArray(tokens) &&
+        !isEmpty(tokens) &&
+        validateTicketvoteSummariesPageSize(getState())
+      );
     },
   }
 );
 
 export const fetchTicketvoteSummariesNextPage = createAsyncThunk(
   "ticketvoteSummaries/fetchNextPage",
-  async (body, { dispatch, getState }) => {
-    let { pageSize } = body;
-    if (!pageSize) pageSize = SUMMARIES_PAGE_SIZE;
-    const queue = getState().ticketvoteSummaries.summariesFetchQueue.tokens;
+  async (_, { dispatch, getState }) => {
+    const state = getState();
+    const pageSize = state.ticketvotePolicy.policy.summariespagesize;
+    const queue = state.ticketvoteSummaries.summariesFetchQueue.tokens;
     const nextTokens = take(pageSize, queue);
     return await dispatch(fetchTicketvoteSummaries({ tokens: nextTokens }));
   },
   {
     condition: (_, { getState }) => {
       const queue = getState().ticketvoteSummaries.summariesFetchQueue.tokens;
-      return !isEmpty(queue);
+      return !isEmpty(queue) && validateTicketvoteSummariesPageSize(getState());
     },
   }
 );

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { validateTicketvoteTimestampsPageSize } from "../../lib/validation";
 
 export const initialState = {
   byToken: {},
@@ -9,18 +10,26 @@ export const initialState = {
 
 export const fetchTicketvoteTimestamps = createAsyncThunk(
   "ticketvoteTimestamps/fetch",
-  async (body, { getState, rejectWithValue }) => {
+  async ({ token, votespage }, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchTimestamps(getState(), body);
+      const state = getState();
+      const response = await api.fetchTimestamps(state, { token, votespage });
+      const timestampsPageSize =
+        getState().ticketvotePolicy.policy.timestampspagesize;
+      return { ...response, timestampsPageSize };
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
   {
-    condition: (body) => {
+    condition: (body, { getState }) => {
       const hasToken = body && body.token;
       const hasValidVotespage = body && (!body.votespage || body.votespage > 0);
-      return !!hasToken && !!hasValidVotespage;
+      return (
+        !!hasToken &&
+        !!hasValidVotespage &&
+        validateTicketvoteTimestampsPageSize(getState())
+      );
     },
   }
 );
@@ -36,7 +45,8 @@ const ticketvoteTimestampsSlice = createSlice({
       })
       .addCase(fetchTicketvoteTimestamps.fulfilled, (state, action) => {
         const { token } = action.meta.arg;
-        state.byToken[token] = action.payload;
+        const { timestampsPageSize, ...timestamps } = action.payload;
+        state.byToken[token] = timestamps;
         state.status = "succeeded";
       })
       .addCase(fetchTicketvoteTimestamps.rejected, (state, action) => {

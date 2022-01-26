@@ -9,8 +9,6 @@ export const ROUTE_SUBMISSIONS = "/submissions";
 export const ROUTE_SUMMARIES = "/summaries";
 export const ROUTE_TIMESTAMPS = "/timestamps";
 
-export const SUMMARIES_PAGE_SIZE = 5;
-
 export const TICKETVOTE_STATUS_UNAUTHORIZED = 1;
 export const TICKETVOTE_STATUS_AUTHORIZED = 2;
 export const TICKETVOTE_STATUS_STARTED = 3;

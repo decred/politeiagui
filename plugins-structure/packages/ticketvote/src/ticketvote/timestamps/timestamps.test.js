@@ -4,6 +4,7 @@ import reducer, {
   fetchTicketvoteTimestamps,
   initialState,
 } from "./timestampsSlice";
+import policyReducer from "../policy/policySlice";
 
 describe("Given the timestampsSlice", () => {
   let store;
@@ -15,7 +16,19 @@ describe("Given the timestampsSlice", () => {
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
-    store = configureStore({ reducer: { ticketvoteTimestamps: reducer } });
+    store = configureStore({
+      reducer: {
+        ticketvoteTimestamps: reducer,
+        ticketvotePolicy: policyReducer,
+      },
+      preloadedState: {
+        ticketvotePolicy: {
+          policy: {
+            timestampspagesize: 100,
+          },
+        },
+      },
+    });
     fetchTimestampsSpy = jest.spyOn(api, "fetchTimestamps");
   });
   afterEach(() => {
@@ -35,6 +48,19 @@ describe("Given the timestampsSlice", () => {
       const state = store.getState();
       expect(state.ticketvoteTimestamps.byToken).toEqual({});
       expect(state.ticketvoteTimestamps.status).toEqual("idle");
+    });
+  });
+  describe("when fetchTicketvoteTimestamps dispatches without policy", () => {
+    it("should update the status to failed and log error", async () => {
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+      store = configureStore({ reducer: { ticketvoteTimestamps: reducer } });
+
+      await store.dispatch(fetchTicketvoteTimestamps(params));
+      expect(fetchTimestampsSpy).not.toBeCalled();
+      expect(consoleErrorSpy).toBeCalled();
+      const state = store.getState();
+      expect(state.ticketvoteTimestamps.byToken).toEqual({});
+      expect(state.ticketvoteTimestamps.status).toEqual("failed");
     });
   });
   describe("when fetchTicketvoteTimestamps dispatches with valid params", () => {

@@ -10,9 +10,9 @@ export const initialState = {
 // Thunks
 export const fetchTicketvoteSubmissions = createAsyncThunk(
   "ticketvoteSubmissions/fetch",
-  async (body, { getState, rejectWithValue }) => {
+  async ({ token }, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchSubmissions(getState(), body);
+      return await api.fetchSubmissions(getState(), { token });
     } catch (error) {
       return rejectWithValue(error.message);
     }
