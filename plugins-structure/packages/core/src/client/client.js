@@ -11,14 +11,9 @@ const VERSION = "v1";
 // export client object with functions to interact with the API
 export const client = {
   async fetchRecordsInventory(obj) {
-    const body = {
-      state: obj.requestState,
-      status: obj.requestStatus,
-      page: obj.page,
-    };
     const response = await fetch(
       `${RECORDS_API_ROUTE}${VERSION}${ROUTE_INVENTORY}`,
-      fetchOptions(null, body, "POST")
+      fetchOptions(null, obj, "POST")
     );
     const inventory = await parseResponse(response);
     return inventory;
