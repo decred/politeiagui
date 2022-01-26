@@ -179,6 +179,7 @@ Cypress.Commands.add("typeCreateProposal", (proposal) => {
     .contains(domainTxt)
     .click({ force: true });
   cy.findByTestId("text-area").type(proposal.description);
+  cy.wait(200);
 });
 
 Cypress.Commands.add("assertListLengthByTestId", (testid, expectedLength) =>
