@@ -440,9 +440,9 @@ describe("Given an empty proposals list", () => {
     cy.ticketvoteMiddleware("inventory", {});
     cy.visit("/");
     cy.get("[data-testid='loading-placeholders'] > div", {
-      timeout: 100
+      timeout: 500
     }).should("have.length", 5);
-    cy.findByTestId("help-message", { timeout: 1250 })
+    cy.findByTestId("help-message", { timeout: 1750 }) // 1750 = 1250 + 500
       .should("be.visible")
       .then(() => {
         cy.get("[data-testid='loading-placeholders'] > div", {

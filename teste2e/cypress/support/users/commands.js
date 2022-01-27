@@ -2,7 +2,6 @@ import "@testing-library/cypress/add-commands";
 import "../www/commands";
 import {
   API_BASE_URL,
-  API_USERS_BASE_URL,
   repliers,
   usersRepliers
 } from "./api";
@@ -23,7 +22,7 @@ Cypress.Commands.add(
   createMiddleware({
     packageName: "users",
     repliers: usersRepliers,
-    baseUrl: API_USERS_BASE_URL
+    baseUrl: "/api/v1"
   })
 );
 

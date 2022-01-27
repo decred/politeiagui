@@ -29,7 +29,7 @@ Cypress.Commands.add("useProposalDetailSuite", ({ token, status, user }) => {
     amountByStatus: { [status]: 1 }
   });
   cy.piMiddleware("summaries", { amountByStatus: { [status]: 1 } });
-  cy.usersMiddleware(null, { amount: 1 }, {}, ["publickey"]);
+  cy.usersMiddleware("users", { amount: 1 }, {}, ["publickey"]);
   cy.recordsMiddleware("setstatus", {
     user
   });

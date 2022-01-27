@@ -19,27 +19,34 @@ beforeEach(function mockApiCalls() {
   cy.usePiApi();
   cy.useWwwApi();
   cy.useCommentsApi();
-  cy.usersMiddleware(null, { amount: 1 }, {}, ["publickey"]);
+  cy.usersMiddleware("users", { amount: 1 }, {}, ["publickey"]);
   cy.server();
 });
 
 describe("User comments", () => {
-  it("Shouldn't allow submitting new comments if paywall not paid", () => {
-    const { token, shortToken } = generateTokenPair();
-    const { files } = makeProposal({});
-    cy.userEnvironment(USER_TYPE_UNPAID);
-    cy.recordsMiddleware("details", {
-      status: 2,
-      state: 2,
-      files,
-      token
-    });
+  const count = 2;
+  beforeEach(() => {
+    //cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    const count = 2;
+    cy.commentsMiddleware("count", { count });
+    cy.commentsMiddleware("comments", { count });
     cy.ticketvoteMiddleware("summaries", {
       amountByStatus: { unauthorized: 1 }
     });
     cy.piMiddleware("summaries", {
       amountByStatus: { [PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED]: 1 }
     });
+  });
+  it("Shouldn't allow submitting new comments if paywall not paid", () => {
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
+    cy.userEnvironment(USER_TYPE_UNPAID);
     cy.visit(`record/${shortToken}`);
     cy.wait("@records.details");
     cy.wait("@pi.summaries");
@@ -52,10 +59,7 @@ describe("User comments", () => {
   it("Should allow user who paid the paywall to add new comments & vote or reply on others' comments", () => {
     const user = userByType(USER_TYPE_USER);
     cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
-    const count = 4;
-    cy.commentsMiddleware("count", { count });
-    cy.commentsMiddleware("comments", { count });
-    cy.commentsMiddleware("new", { commentid: count + 1, user });
+    cy.commentsMiddleware("new", { commentid: 3, user });
     const { token, shortToken } = generateTokenPair();
     const { files } = makeProposal({});
     cy.recordsMiddleware("details", {
@@ -63,12 +67,6 @@ describe("User comments", () => {
       state: 2,
       files,
       token
-    });
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { unauthorized: 1 }
-    });
-    cy.piMiddleware("summaries", {
-      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED]: 1 }
     });
     cy.visit(`record/${shortToken}`);
     cy.wait("@records.details");
@@ -83,10 +81,64 @@ describe("User comments", () => {
     cy.wait("@comments.new");
     cy.get("#commentArea").contains(text).should("be.visible");
   });
+  it("Should allow users edit their comment if comment edits feature is on and the comment edit period is not expired yet", () => {
+    const user = userByType(USER_TYPE_USER);
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
+    const commentid = count + 1;
+    cy.commentsMiddleware("new", { user, commentid });
+    cy.commentsMiddleware("edit", { user });
+    cy.visit(`record/${shortToken}`);
+    cy.wait("@comments.comments");
+    const { text } = buildComment();
+    cy.findByTestId(/text-area/i).type(text);
+    cy.findByText(/add comment/i).click();
+    cy.wait("@comments.new");
+    // Click edit comment icon
+    cy.findByTestId(`edit-comment-${commentid}`).click();
+    const { text: editText } = buildComment();
+    // Edit comment
+    cy.findAllByTestId(/text-area/i)
+        .eq(1)
+        .type(editText);
+    cy.findByText(/edit comment/i).click();
+    cy.wait("@comments.edit");
+    cy.findByText(text + editText).should("be.visible");
+  });
+  it("Shouldn't allow comment edits if the comment edits feature is switched off", () => {
+    const user = userByType(USER_TYPE_USER);
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
+    const commentid = count + 1;
+    cy.commentsMiddleware("policy", { allowedits: false });
+    cy.commentsMiddleware("new", { user, commentid });
+    cy.commentsMiddleware("count", { user, commentid });
+    cy.visit(`record/${shortToken}`);
+    cy.wait("@comments.comments");
+    const { text } = buildComment();
+    cy.findByTestId(/text-area/i).type(text);
+    cy.findByText(/add comment/i).click();
+    cy.wait("@comments.new");
+    cy.findByTestId(/edit-comment-3/i).should("not.exist");
+  });
   it("Should allow user who paid the paywall to reply on others' comments", () => {
     const user = userByType(USER_TYPE_USER);
     cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
-    const count = 4;
+    const count = 2;
     cy.commentsMiddleware("count", { count });
     cy.commentsMiddleware("comments", { count });
     cy.commentsMiddleware("new", { commentid: count + 1, user });
@@ -97,12 +149,6 @@ describe("User comments", () => {
       state: 2,
       files,
       token
-    });
-    cy.ticketvoteMiddleware("summaries", {
-      amountByStatus: { unauthorized: 1 }
-    });
-    cy.piMiddleware("summaries", {
-      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED]: 1 }
     });
     cy.visit(`record/${shortToken}`);
     cy.wait("@records.details");
@@ -122,20 +168,12 @@ describe("User comments", () => {
 });
 
 describe("Comments downloads", () => {
-  const { token, shortToken } = generateTokenPair();
   const user = userByType(USER_TYPE_USER);
   beforeEach(() => {
     cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
     const count = 4;
     cy.commentsMiddleware("count", { count });
     cy.commentsMiddleware("comments", { count });
-    const { files } = makeProposal({});
-    cy.recordsMiddleware("details", {
-      status: 2,
-      state: 2,
-      files,
-      token
-    });
     cy.ticketvoteMiddleware("summaries", {
       amountByStatus: { unauthorized: 1 }
     });
@@ -144,6 +182,14 @@ describe("Comments downloads", () => {
     });
   });
   it("should publicly allow users to download comments bundle", () => {
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
     cy.visit(`/record/${shortToken}`);
     cy.wait("@records.details");
     cy.wait("@comments.comments");
@@ -157,6 +203,14 @@ describe("Comments downloads", () => {
     ).should("exist");
   });
   it("should publicly allow users to download comments timestamps", () => {
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
     cy.visit(`/record/${shortToken}`);
     cy.wait("@records.details");
     cy.wait("@comments.comments");
@@ -171,21 +225,14 @@ describe("Comments downloads", () => {
     ).should("exist");
   });
 });
+
 describe("Comments error handling", () => {
-  const { token, shortToken } = generateTokenPair();
   const user = userByType(USER_TYPE_USER);
-  const count = 4;
+  const count = 2;
   beforeEach(() => {
     cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
     cy.commentsMiddleware("count", { count });
     cy.commentsMiddleware("comments", { count });
-    const { files } = makeProposal({});
-    cy.recordsMiddleware("details", {
-      status: 2,
-      state: 2,
-      files,
-      token
-    });
     cy.ticketvoteMiddleware("summaries", {
       amountByStatus: { unauthorized: 1 }
     });
@@ -194,6 +241,14 @@ describe("Comments error handling", () => {
     });
   });
   it("should display login modal when commenting with an expired user session", () => {
+    const { token, shortToken } = generateTokenPair();
+    const { files } = makeProposal({});
+    cy.recordsMiddleware("details", {
+      status: 2,
+      state: 2,
+      files,
+      token
+    });
     cy.middleware("comments.new", { errorCode: 403 });
     cy.visit(`/record/${shortToken}`);
     cy.wait("@records.details");

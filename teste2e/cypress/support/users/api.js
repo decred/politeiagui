@@ -127,5 +127,5 @@ function usersReply({
 }
 
 export const usersRepliers = {
-  index: usersReply
+  users: usersReply
 };

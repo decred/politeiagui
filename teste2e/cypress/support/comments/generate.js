@@ -2,6 +2,7 @@ import faker from "faker";
 import { User } from "../users/generate";
 export function Comment({
   user,
+  userid,
   commentid,
   token,
   parentid = 0,
@@ -10,10 +11,11 @@ export function Comment({
   signature,
   state = 2,
   maxUpvote = 0,
-  maxDownVote = 0
+  maxDownVote = 0,
+  createdat
 } = {}) {
   if (!user) {
-    user = new User();
+    user = new User({ userid });
   }
   this.commentid = commentid;
   this.comment = comment || faker.lorem.sentence();
@@ -30,6 +32,7 @@ export function Comment({
   this.upvotes = faker.datatype.number({ min: 0, max: maxUpvote });
   this.userid = user.userid;
   this.username = user.username;
+  this.createdat = createdat;
 }
 
 export function Vote({ token, userid, user, maxCommentID }) {

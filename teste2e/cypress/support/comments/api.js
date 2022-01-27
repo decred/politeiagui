@@ -9,12 +9,23 @@ export const API_BASE_URL = "/api/comments/v1";
  *
  * @returns {Object} Policy
  */
-export function policyReply() {
+export function policyReply({
+  testParams: {
+    lengthmax = 8000,
+    votechangesmax = 5,
+    countpagesize = 10,
+    timestampspagesize = 100,
+    allowedits = true,
+    editperiod = 300
+  }
+}) {
   return {
-    lengthmax: 8000,
-    votechangesmax: 5,
-    countpagesize: 10,
-    timestampspagesize: 100
+    lengthmax,
+    votechangesmax,
+    countpagesize,
+    timestampspagesize,
+    allowedits,
+    editperiod
   };
 }
 
@@ -76,7 +87,36 @@ export function newCommentReply({
       publickey,
       signature,
       state,
-      token
+      token,
+      createdat: new Date().getTime() / 1000
+    })
+  };
+}
+
+/**
+ * editCommentReply represents '/api/comments/v1/edit' endpoint.
+ * it is called when the user is editing a just created comment.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns {Object} { comment }
+ */
+export function editCommentReply({
+  testParams: { user },
+  requestParams: { comment, commentid, extradata, extradatahint, parentid, publickey, signature, state, token, userid }
+}) {
+  return {
+    comment: new Comment({
+      user,
+      commentid,
+      comment,
+      parentid,
+      publickey,
+      signature,
+      state,
+      token,
+      extradata,
+      extradatahint,
+      userid
     })
   };
 }
@@ -139,6 +179,7 @@ export const repliers = {
   comments: commentsReply,
   votes: votesReply,
   new: newCommentReply,
+  edit: editCommentReply,
   vote: voteReply,
   timestamps: timestampsReply
 };

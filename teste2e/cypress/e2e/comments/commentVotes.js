@@ -1,5 +1,9 @@
 import { shortRecordToken } from "../../utils";
 
+beforeEach(() => {
+  cy.usersMiddleware("users", { amount: 1 }, {}, ["publickey"]);
+});
+
 describe("Comments Votes", () => {
   beforeEach(() => {
     const user = {
@@ -13,7 +17,7 @@ describe("Comments Votes", () => {
   describe("succeeded votes", () => {
     let token;
     beforeEach(() => {
-      cy.middleware("comments.comments", 10);
+      cy.middleware("comments.comments", 5);
       cy.middleware("comments.vote");
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
@@ -82,7 +86,7 @@ describe("Comments Votes", () => {
   describe("failed votes", () => {
     let token;
     beforeEach(() => {
-      cy.middleware("comments.comments", 10);
+      cy.middleware("comments.comments", 5);
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
       cy.wait("@inventory").then(
@@ -97,7 +101,9 @@ describe("Comments Votes", () => {
       });
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.findByText(/Error/).should("not.exist");
+      cy.wait("@comments.comments");
       cy.findAllByTestId("dislike-btn").first().click();
+      cy.wait("@comments.vote");
       cy.findByText(/Error/).should("exist");
     });
     it("should reset votes count on error", () => {
