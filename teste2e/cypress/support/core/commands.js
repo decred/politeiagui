@@ -14,16 +14,15 @@ export function createMiddleware({ packageName, repliers, baseUrl }) {
     endpoint,
     { error, delay, ...testParams } = {},
     responseParams = {},
-    getParams = []
+    searchParams = []
   ) {
-    // if the endpoint is empty. It should use "index" as the default of repliers
-    const replyIndex = endpoint ? endpoint : "index";
-    // search is built from getParams. Support for GET request.
-    const search = getParams.length > 0 ? `?${getParams.join("=*&")}=*` : "";
+    // search is built from searchParams. Support for GET request.
+    const search =
+      searchParams.length > 0 ? `?${searchParams.join("=*&")}=*` : "";
     const path = endpoint ? `${baseUrl}/${endpoint}` : baseUrl;
     return cy
       .intercept(`${path}${search}`, (req) => {
-        const replyfn = repliers[replyIndex];
+        const replyfn = repliers[endpoint];
         if (!replyfn)
           throw new Error(`no ${packageName} replier found for ${endpoint}`);
         const requestParams = req.body || {};
@@ -41,7 +40,7 @@ export function createMiddleware({ packageName, repliers, baseUrl }) {
           });
         }
       })
-      .as(endpoint ? `${packageName}.${endpoint}` : packageName);
+      .as(`${packageName}.${endpoint}`);
   };
 }
 

@@ -105,8 +105,8 @@ describe("User comments", () => {
     const { text: editText } = buildComment();
     // Edit comment
     cy.findAllByTestId(/text-area/i)
-        .eq(1)
-        .type(editText);
+      .eq(1)
+      .type(editText);
     cy.findByText(/edit comment/i).click();
     cy.wait("@comments.edit");
     cy.findByText(text + editText).should("be.visible");

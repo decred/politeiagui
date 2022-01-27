@@ -10,7 +10,6 @@ import {
 import faker from "faker";
 
 export const API_BASE_URL = "/api/v1/user";
-export const API_USERS_BASE_URL = "/api/v1/users";
 
 /**
  * loginReply is the replier to the Login command.
