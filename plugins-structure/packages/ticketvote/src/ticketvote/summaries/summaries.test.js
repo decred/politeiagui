@@ -5,6 +5,7 @@ import reducer, {
   fetchTicketvoteSummariesNextPage,
   initialState,
 } from "./summariesSlice";
+import policyReducer from "../policy/policySlice";
 
 const mockSummaryResponse = {
   type: 0,
@@ -30,7 +31,19 @@ describe("Given the summariesSlice", () => {
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
-    store = configureStore({ reducer: { ticketvoteSummaries: reducer } });
+    store = configureStore({
+      reducer: {
+        ticketvoteSummaries: reducer,
+        ticketvotePolicy: policyReducer,
+      },
+      preloadedState: {
+        ticketvotePolicy: {
+          policy: {
+            summariespagesize: 5,
+          },
+        },
+      },
+    });
     fetchSummariesSpy = jest.spyOn(api, "fetchSummaries");
   });
   afterEach(() => {
@@ -50,6 +63,21 @@ describe("Given the summariesSlice", () => {
       const state = store.getState();
       expect(state.ticketvoteSummaries.byToken).toEqual({});
       expect(state.ticketvoteSummaries.status).toEqual("idle");
+    });
+  });
+  describe("when policy isn't loaded before dispatching fetchTicketvoteSummaries", () => {
+    it("should update the status to failed and log error", async () => {
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+
+      store = configureStore({ reducer: { ticketvoteSummaries: reducer } });
+      await store.dispatch(fetchTicketvoteSummaries(params));
+      expect(fetchSummariesSpy).not.toBeCalled();
+      expect(consoleErrorSpy).toBeCalled();
+      const state = store.getState();
+      expect(state.ticketvoteSummaries.byToken).toEqual({});
+      expect(state.ticketvoteSummaries.status).toEqual("failed");
+
+      consoleErrorSpy.mockRestore();
     });
   });
   describe("when fetchTicketvoteSummaries dispatches with valid params", () => {
