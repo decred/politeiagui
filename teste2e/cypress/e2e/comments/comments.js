@@ -26,7 +26,6 @@ beforeEach(function mockApiCalls() {
 describe("User comments", () => {
   const count = 2;
   beforeEach(() => {
-    //cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
     const count = 2;
     cy.commentsMiddleware("count", { count });
     cy.commentsMiddleware("comments", { count });

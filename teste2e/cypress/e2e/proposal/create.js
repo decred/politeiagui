@@ -11,7 +11,6 @@ beforeEach(function mockApiCalls() {
 });
 
 describe("Proposal Create", () => {
-
   it("should allow paid user to create proposals", () => {
     // paid user with proposal credits
     cy.userEnvironment("user", { verifyIdentity: true });

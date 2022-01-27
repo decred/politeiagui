@@ -102,7 +102,18 @@ export function newCommentReply({
  */
 export function editCommentReply({
   testParams: { user },
-  requestParams: { comment, commentid, extradata, extradatahint, parentid, publickey, signature, state, token, userid }
+  requestParams: {
+    comment,
+    commentid,
+    extradata,
+    extradatahint,
+    parentid,
+    publickey,
+    signature,
+    state,
+    token,
+    userid
+  }
 }) {
   return {
     comment: new Comment({

@@ -22,7 +22,7 @@ describe("Comments Votes", () => {
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
       cy.wait("@inventory").then(
-          ({ response: { body } }) => (token = body.vetted.unauthorized[0])
+        ({ response: { body } }) => (token = body.vetted.unauthorized[0])
       );
     });
     it("should submit comments votes successfully", () => {
@@ -31,56 +31,56 @@ describe("Comments Votes", () => {
       cy.wait("@comments.comments");
       // like action
       cy.findAllByTestId("score-like")
-          .first()
-          .then((score) => (upvotes = score[0].innerText));
+        .first()
+        .then((score) => (upvotes = score[0].innerText));
       cy.findAllByTestId("like-btn").first().click();
       cy.wait("@comments.vote");
       cy.findAllByTestId("score-like")
-          .first()
-          .then((score) => {
-            const newup = score[0].innerText;
-            expect(Number(newup)).to.equal(Number(upvotes) + 1);
-            upvotes = newup;
-          });
+        .first()
+        .then((score) => {
+          const newup = score[0].innerText;
+          expect(Number(newup)).to.equal(Number(upvotes) + 1);
+          upvotes = newup;
+        });
       // dislike action
       cy.findAllByTestId("score-dislike")
-          .first()
-          .then((score) => (downvotes = score[0].innerText));
+        .first()
+        .then((score) => (downvotes = score[0].innerText));
       cy.findAllByTestId("dislike-btn").first().click();
       cy.wait("@comments.vote");
       // check if downvotes count has increased
       cy.findAllByTestId("score-dislike")
-          .first()
-          .then((score) => {
-            const newdown = score[0].innerText;
-            expect(Number(newdown)).to.equal(Number(downvotes) + 1);
-            downvotes = newdown;
-          });
+        .first()
+        .then((score) => {
+          const newdown = score[0].innerText;
+          expect(Number(newdown)).to.equal(Number(downvotes) + 1);
+          downvotes = newdown;
+        });
       // check if upvotes count has decreased
       cy.findAllByTestId("score-like")
-          .first()
-          .then((score) => {
-            const newup = score[0].innerText;
-            expect(Number(newup)).to.equal(Number(upvotes) - 1);
-          });
+        .first()
+        .then((score) => {
+          const newup = score[0].innerText;
+          expect(Number(newup)).to.equal(Number(upvotes) - 1);
+        });
     });
     it("should prevent multi-clicking", () => {
       let upvotes;
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.wait("@comments.comments");
       cy.findAllByTestId("score-like")
-          .first()
-          .then((score) => (upvotes = score[0].innerText));
+        .first()
+        .then((score) => (upvotes = score[0].innerText));
       cy.route("POST", "api/comments/v1/vote").as("vote");
       cy.findAllByTestId("like-btn").first().dblclick();
       cy.wait("@vote");
       cy.shouldBeCalled("vote", 1);
       cy.findAllByTestId("score-like")
-          .first()
-          .then((score) => {
-            const newup = score[0].innerText;
-            expect(Number(newup)).to.equal(Number(upvotes) + 1);
-          });
+        .first()
+        .then((score) => {
+          const newup = score[0].innerText;
+          expect(Number(newup)).to.equal(Number(upvotes) + 1);
+        });
     });
   });
   describe("failed votes", () => {
@@ -90,7 +90,7 @@ describe("Comments Votes", () => {
       cy.intercept("/api/ticketvote/v1/inventory").as("inventory");
       cy.visit("/");
       cy.wait("@inventory").then(
-          ({ response: { body } }) => (token = body.vetted.unauthorized[0])
+        ({ response: { body } }) => (token = body.vetted.unauthorized[0])
       );
     });
     it("should display error message", () => {
@@ -115,25 +115,25 @@ describe("Comments Votes", () => {
       let upvotes;
       cy.visit(`/record/${shortRecordToken(token)}`);
       cy.findAllByTestId("score-like")
-          .first()
-          .then((score) => (upvotes = score[0].innerText));
+        .first()
+        .then((score) => (upvotes = score[0].innerText));
       cy.wait(1000);
       cy.findAllByTestId("like-btn").first().click();
       cy.wait(1000);
       cy.findAllByTestId("score-like")
-          .first()
-          .then((score) => {
-            const newup = score[0].innerText;
-            expect(Number(newup)).to.equal(Number(upvotes) + 1);
-          });
+        .first()
+        .then((score) => {
+          const newup = score[0].innerText;
+          expect(Number(newup)).to.equal(Number(upvotes) + 1);
+        });
       cy.wait("@comments.vote");
       // assert votes count after delayed vote response
       cy.findAllByTestId("score-like")
-          .first()
-          .then((score) => {
-            const newup = score[0].innerText;
-            expect(Number(newup)).to.equal(Number(upvotes));
-          });
+        .first()
+        .then((score) => {
+          const newup = score[0].innerText;
+          expect(Number(newup)).to.equal(Number(upvotes));
+        });
     });
     it("should display login modal when voting with an expired user session", () => {
       cy.middleware("comments.vote", { statusCode: 403 });

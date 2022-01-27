@@ -1,10 +1,6 @@
 import "@testing-library/cypress/add-commands";
 import "../www/commands";
-import {
-  API_BASE_URL,
-  repliers,
-  usersRepliers
-} from "./api";
+import { API_BASE_URL, repliers, usersRepliers } from "./api";
 import { createMiddleware } from "../core/commands";
 import {
   USER_TYPE_UNPAID,
