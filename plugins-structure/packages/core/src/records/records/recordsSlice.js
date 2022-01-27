@@ -183,13 +183,16 @@ export const selectRecordsByStateAndStatus = (
   { recordsState, status }
 ) => {
   if (validateRecordStateAndStatus(recordsState, status)) {
-    // We have valids record state and status.
-    return Object.values(state.records.records).filter((record) => {
-      return (
-        record.state === getRecordStateCode(recordsState) &&
-        record.status === getRecordStatusCode(status)
-      );
-    });
+    // We have valid record state and status.
+    const records = state.records.records;
+    const res = {}
+    for (const token in records) {
+      if (records[token].state === getRecordStateCode(recordsState) &&
+      records[token].status === getRecordStatusCode(status)) {
+        res[token] = records[token];
+      }
+    }
+    return res;
   }
 };
 
@@ -198,7 +201,7 @@ export const selectRecordsByTokensBatch = (state, tokens) =>
 
 export const selectRecordsFetchQueue = (state, { recordsState, status }) => {
   if (validateRecordStateAndStatus(recordsState, status)) {
-    // We have valids record state and status.
+    // We have valid record state and status.
     // Convert them to strings if they are not.
     const stringRecordsState = getHumanReadableRecordState(recordsState);
     const stringStatus = getHumanReadableRecordStatus(status);
@@ -213,7 +216,7 @@ export const selectHasMoreRecordsToFetch = (
   { recordsState, status }
 ) => {
   if (validateRecordStateAndStatus(recordsState, status)) {
-    // We have valids record state and status.
+    // We have valid record state and status.
     // Convert them to strings if they are not.
     const stringRecordsState = getHumanReadableRecordState(recordsState);
     const stringStatus = getHumanReadableRecordStatus(status);

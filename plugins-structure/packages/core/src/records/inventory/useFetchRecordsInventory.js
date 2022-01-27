@@ -19,8 +19,8 @@ export function useFetchRecordsInventory({ recordsState, status, page = 1 }) {
     if (fetchFirstPage || fetchLaterPages) {
       dispatch(fetchRecordsInventory({ recordsState, status, page }));
     }
-  // Disable rules of hooks because we don't want recordsInvStatus in our dependency list
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Disable rules of hooks because we don't want recordsInvStatus in our dependency list
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, page, recordsState, status]);
   const recordsInv = useSelector((state) =>
     selectRecordsInventoryByStateAndStatus(state, { recordsState, status })
