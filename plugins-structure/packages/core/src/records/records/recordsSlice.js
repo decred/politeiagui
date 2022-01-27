@@ -185,10 +185,12 @@ export const selectRecordsByStateAndStatus = (
   if (validateRecordStateAndStatus(recordsState, status)) {
     // We have valid record state and status.
     const records = state.records.records;
-    const res = {}
+    const res = {};
     for (const token in records) {
-      if (records[token].state === getRecordStateCode(recordsState) &&
-      records[token].status === getRecordStatusCode(status)) {
+      if (
+        records[token].state === getRecordStateCode(recordsState) &&
+        records[token].status === getRecordStatusCode(status)
+      ) {
         res[token] = records[token];
       }
     }

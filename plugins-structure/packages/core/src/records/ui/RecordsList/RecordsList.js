@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import { useFetchRecordsInventory } from "../../inventory/useFetchRecordsInventory";
-import {
-  fetchRecordsNextPage,
-  selectRecordsByStateAndStatus,
-  selectHasMoreRecordsToFetch,
-} from "../../records/recordsSlice";
+import { recordsInventory } from "../../inventory";
+import { records } from "../../records";
 import { useDispatch, useSelector } from "react-redux";
 import RecordCard from "../RecordCard";
 import styles from "./styles.module.css";
@@ -12,7 +8,7 @@ import styles from "./styles.module.css";
 // fetch inventory and pass it down
 export function RecordsList({ recordsState, status }) {
   const [page, setPage] = useState(1);
-  const { status: inventoryStatus, inventory } = useFetchRecordsInventory({
+  const { status: inventoryStatus, inventory } = recordsInventory.useFetch({
     recordsState,
     status,
     page,
@@ -42,19 +38,23 @@ function RecordsListAux({
   fetchOneMoreInventoryPage,
 }) {
   const dispatch = useDispatch();
-  const records = useSelector((state) =>
-    selectRecordsByStateAndStatus(state, { recordsState, status })
+  const recordsObj = useSelector((state) =>
+    records.selectByStateAndStatus(state, { recordsState, status })
   );
   // Guarantee that we show records the same order they show on inventory
-  const recordsInOrder = inventory.reduce((acc, token) => records[token] ? [...acc, records[token]] : acc, []);
+  const recordsInOrder = inventory.reduce(
+    (acc, token) => (recordsObj[token] ? [...acc, recordsObj[token]] : acc),
+    []
+  );
   const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
   const hasMoreRecords = useSelector((state) =>
-    selectHasMoreRecordsToFetch(state, { recordsState, status })
+    records.selectHasMoreToFetch(state, { recordsState, status })
   );
 
   function handleFetchMore() {
+    console.log(hasMoreRecords);
     if (hasMoreRecords) {
-      dispatch(fetchRecordsNextPage({ recordsState, status }));
+      dispatch(records.fetchNextPage({ recordsState, status }));
     } else if (hasMoreInventory) {
       fetchOneMoreInventoryPage();
     }

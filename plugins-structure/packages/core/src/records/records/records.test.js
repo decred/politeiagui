@@ -373,7 +373,7 @@ describe("Given the selectRecordsByStateAndStatus selector", () => {
           username: "adminuser",
           token: "99bd3e32a4902045",
         },
-        "cae588e536163306": {
+        cae588e536163306: {
           state: 2,
           status: 2,
           version: 1,
@@ -381,7 +381,7 @@ describe("Given the selectRecordsByStateAndStatus selector", () => {
           username: "adminuser",
           token: "cae588e536163306",
         },
-        "ec75681c4481e72a": {
+        ec75681c4481e72a: {
           state: 2,
           status: 2,
           version: 1,
@@ -424,48 +424,47 @@ describe("Given the selectRecordsByStateAndStatus selector", () => {
     status: "public",
   });
   expect(res).toMatchObject({
-    '15b380b22dc1b072': {
+    "15b380b22dc1b072": {
       state: 2,
       status: 2,
       version: 1,
       timestamp: 1643054779,
-      username: 'adminuser',
-      token: '15b380b22dc1b072'
+      username: "adminuser",
+      token: "15b380b22dc1b072",
     },
-    '7a3b96e8f439b17a': {
+    "7a3b96e8f439b17a": {
       state: 2,
       status: 2,
       version: 1,
       timestamp: 1643054771,
-      username: 'adminuser',
-      token: '7a3b96e8f439b17a'
+      username: "adminuser",
+      token: "7a3b96e8f439b17a",
     },
-    '99bd3e32a4902045': {
+    "99bd3e32a4902045": {
       state: 2,
       status: 2,
       version: 1,
       timestamp: 1643054758,
-      username: 'adminuser',
-      token: '99bd3e32a4902045'
+      username: "adminuser",
+      token: "99bd3e32a4902045",
     },
     cae588e536163306: {
       state: 2,
       status: 2,
       version: 1,
       timestamp: 1643054752,
-      username: 'adminuser',
-      token: 'cae588e536163306'
+      username: "adminuser",
+      token: "cae588e536163306",
     },
-    "ec75681c4481e72a": {
+    ec75681c4481e72a: {
       state: 2,
       status: 2,
       version: 1,
       timestamp: 1643054788,
-      username: 'adminuser',
-      token: 'ec75681c4481e72a'
-    }
-  }
-);
+      username: "adminuser",
+      token: "ec75681c4481e72a",
+    },
+  });
 });
 
 // TODO: add tests for fetchRecordsNextPage

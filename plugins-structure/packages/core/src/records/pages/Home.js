@@ -1,6 +1,6 @@
 import React from "react";
 import Records from "./Records";
-import { recordsPolicy } from "@politeiagui/core/records/policy";
+import { recordsPolicy } from "../policy";
 
 function Home() {
   const { policyStatus } = recordsPolicy.useFetch();
