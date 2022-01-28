@@ -12,7 +12,7 @@ import { repliers, errorReply, API_BASE_URL } from "./api";
 export function createMiddleware({ packageName, repliers, baseUrl }) {
   return function middleware(
     endpoint,
-    { error, delay, ...testParams } = {},
+    { error, ...testParams } = {},
     responseParams = {},
     searchParams = []
   ) {
@@ -28,13 +28,11 @@ export function createMiddleware({ packageName, repliers, baseUrl }) {
         const requestParams = req.body || {};
         if (error) {
           req.reply({
-            delay,
             ...errorReply(error),
             ...responseParams
           });
         } else {
           req.reply({
-            delay,
             body: replyfn({ testParams, requestParams }),
             ...responseParams
           });
