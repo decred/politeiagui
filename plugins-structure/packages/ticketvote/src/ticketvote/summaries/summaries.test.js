@@ -119,16 +119,89 @@ describe("Given the summariesSlice", () => {
       expect(state.ticketvoteSummaries.error).toEqual("ERROR");
     });
   });
-  describe("when fetchTicketvoteSummariesNextPage is called with invalid params", () => {
+  describe("when fetchTicketvoteSummariesNextPage is called with an empty queue", () => {
     it("should not fetch nor fire actions", async () => {
-      const invalidParams = {};
-
-      await store.dispatch(fetchTicketvoteSummariesNextPage(invalidParams));
+      await store.dispatch(fetchTicketvoteSummariesNextPage());
 
       expect(fetchSummariesSpy).not.toBeCalled();
       const state = store.getState();
       expect(state.ticketvoteSummaries.byToken).toEqual({});
       expect(state.ticketvoteSummaries.status).toEqual("idle");
+    });
+  });
+  describe("when fetchTicketvoteSummariesNextPage dispatches with valid queue", () => {
+    const tokens = ["abc", "def", "ghi", "jkl", "mno"];
+    it("should update status to loading", () => {
+      store = configureStore({
+        reducer: {
+          ticketvoteSummaries: reducer,
+          ticketvotePolicy: policyReducer,
+        },
+        preloadedState: {
+          ticketvotePolicy: {
+            policy: { summariespagesize: 5 },
+          },
+          ticketvoteSummaries: {
+            summariesFetchQueue: { tokens, status: "idle" },
+          },
+        },
+      });
+      store.dispatch(fetchTicketvoteSummariesNextPage());
+
+      expect(fetchSummariesSpy).toBeCalled();
+      const state = store.getState().ticketvoteSummaries;
+      expect(state.summariesFetchQueue.tokens).toEqual(tokens);
+      expect(state.summariesFetchQueue.status).toEqual("loading");
+    });
+  });
+  describe("when fetchTicketvoteSummariesNextPage succeeds and all tokens are fetched", () => {
+    const tokens = ["abc", "def", "ghi", "jkl", "mno"];
+    it("should update status to succeeded/isDone", async () => {
+      store = configureStore({
+        reducer: {
+          ticketvoteSummaries: reducer,
+          ticketvotePolicy: policyReducer,
+        },
+        preloadedState: {
+          ticketvotePolicy: {
+            policy: { summariespagesize: 5 },
+          },
+          ticketvoteSummaries: {
+            summariesFetchQueue: { tokens, status: "idle" },
+          },
+        },
+      });
+      await store.dispatch(fetchTicketvoteSummariesNextPage());
+
+      expect(fetchSummariesSpy).toBeCalled();
+      const state = store.getState().ticketvoteSummaries;
+      expect(state.summariesFetchQueue.tokens).toEqual([]);
+      expect(state.summariesFetchQueue.status).toEqual("succeeded/isDone");
+    });
+  });
+  describe("when fetchTicketvoteSummariesNextPage succeeds and queue.length > summariespagesize", () => {
+    const tokens = ["abc", "def", "ghi", "jkl", "mno", "pqr", "tuv"];
+    it("should update status to succeeded/hasMore", async () => {
+      store = configureStore({
+        reducer: {
+          ticketvoteSummaries: reducer,
+          ticketvotePolicy: policyReducer,
+        },
+        preloadedState: {
+          ticketvotePolicy: {
+            policy: { summariespagesize: 5 },
+          },
+          ticketvoteSummaries: {
+            summariesFetchQueue: { tokens, status: "idle" },
+          },
+        },
+      });
+      await store.dispatch(fetchTicketvoteSummariesNextPage());
+
+      expect(fetchSummariesSpy).toBeCalled();
+      const state = store.getState().ticketvoteSummaries;
+      expect(state.summariesFetchQueue.tokens).toEqual(["pqr", "tuv"]);
+      expect(state.summariesFetchQueue.status).toEqual("succeeded/hasMore");
     });
   });
 });

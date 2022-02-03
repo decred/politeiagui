@@ -1,8 +1,8 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ticketvoteInventory } from "./";
 
-export function useTicketvoteInventory({ status, page = 1, pageSize = 20 }) {
+export function useTicketvoteInventory({ status, page = 1 }) {
   const dispatch = useDispatch();
   // Selectors
   const inventoryStatus = useSelector((state) =>
@@ -15,25 +15,21 @@ export function useTicketvoteInventory({ status, page = 1, pageSize = 20 }) {
     ticketvoteInventory.selectError(state)
   );
 
-  // Actions
-  const onFetchMore = useCallback(
-    (status, page) =>
-      dispatch(ticketvoteInventory.fetch({ status, page, pageSize })),
-    [dispatch, pageSize]
-  );
-
   // Effects
   useEffect(() => {
     const fetchFirstPage = inventoryStatus === "idle" && page === 1;
-    if (fetchFirstPage) {
-      onFetchMore(status, page);
+    const fetchLaterPages = inventoryStatus === "succeeded/hasMore" && page > 1;
+    if (fetchFirstPage || fetchLaterPages) {
+      dispatch(ticketvoteInventory.fetch({ status, page }));
     }
-  }, [page, status, inventoryStatus, onFetchMore]);
+    // Disable rules of hooks because we don't want inventoryStatus in our
+    // dependency list
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, page, status]);
 
   return {
     inventory,
     inventoryError,
     inventoryStatus,
-    onFetchMore,
   };
 }

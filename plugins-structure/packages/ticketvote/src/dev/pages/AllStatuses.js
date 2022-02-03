@@ -19,15 +19,16 @@ const AllStatusPage = async () => {
     "approved",
     "started",
     "rejected",
+    "ineligible",
   ];
   ReactDOM.render(
     <Provider store={store}>
       <PiThemeWrapper>
         <TicketvoteRecordsList statuses={statuses}>
-          {({ inventory, summaries }) => {
+          {({ inventory, summaries, status }) => {
             return (
               <div>
-                <H1>{inventory.status}</H1>
+                <H1>{status}</H1>
                 {inventory.inventory.map((token, key) => {
                   const summary = summaries.allSummaries[token];
                   return (

@@ -8,7 +8,6 @@ import {
   validateTicketvoteStatus,
   validateTicketvoteInventoryPageSize,
 } from "../../lib/validation";
-import { setFetchQueue } from "../summaries/summariesSlice";
 import { records } from "@politeiagui/core/records";
 import isEmpty from "lodash/fp/isEmpty";
 import isArray from "lodash/fp/isArray";
@@ -51,7 +50,6 @@ export const fetchTicketvoteInventory = createAsyncThunk(
       });
       const readableStatus = getHumanReadableTicketvoteStatus(status);
       const tokens = res.vetted[readableStatus];
-      dispatch(setFetchQueue({ tokens }));
       dispatch(pushRecordsFetchQueue({ tokens }));
       const inventoryPageSize =
         getState().ticketvotePolicy.policy.inventorypagesize;

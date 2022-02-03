@@ -10,6 +10,7 @@ import take from "lodash/fp/take";
 import pick from "lodash/fp/pick";
 import isEmpty from "lodash/fp/isEmpty";
 import without from "lodash/fp/without";
+import difference from "lodash/fp/difference";
 
 const initialQueueState = {
   tokens: [],
@@ -69,18 +70,8 @@ const ticketvoteSummariesSlice = createSlice({
     setFetchQueue(state, action) {
       const { tokens } = action.payload;
       if (!isArray(tokens)) throw TypeError("tokens must be an array");
-      state.summariesFetchQueue.tokens = tokens;
-      state.summariesFetchQueue.status = "idle";
-    },
-    pushFetchQueue(state, action) {
-      const { tokens } = action.payload;
-      if (!isArray(tokens)) throw TypeError("tokens must be an array");
-      state.summariesFetchQueue.tokens.push(...tokens);
-    },
-    popFetchQueue(state, action) {
-      const { tokens } = action.payload;
-      if (!isArray(tokens)) throw TypeError("tokens must be an array");
-      return state.summariesFetchQueue.tokens.shift();
+      const newTokens = difference(tokens)(Object.keys(state.byToken));
+      state.summariesFetchQueue.tokens = newTokens;
     },
   },
   extraReducers(builder) {
@@ -127,8 +118,7 @@ const ticketvoteSummariesSlice = createSlice({
 });
 
 // Actions
-export const { setFetchQueue, popFetchQueue, pushFetchQueue } =
-  ticketvoteSummariesSlice.actions;
+export const { setFetchQueue } = ticketvoteSummariesSlice.actions;
 
 // Selectors
 export const selectTicketvoteSummariesStatus = (state) =>

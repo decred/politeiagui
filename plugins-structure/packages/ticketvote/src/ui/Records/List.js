@@ -34,6 +34,7 @@ export function TicketvoteRecordsList({ statuses, children }) {
                     children({
                       inventory: inventoryProps,
                       summaries: summariesProps,
+                      status,
                     })
                   }
                 </TicketvoteSummariesWrapper>

@@ -1,8 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ticketvoteSummaries } from "./";
 
-export function useTicketvoteSummaries({ tokens, pageSize = 5 }) {
+export function useTicketvoteSummaries({ tokens }) {
   const dispatch = useDispatch();
 
   // Selectors
@@ -19,21 +19,18 @@ export function useTicketvoteSummaries({ tokens, pageSize = 5 }) {
 
   // Actions
   const onFetchSummaries = useCallback(
-    (tokens) => dispatch(ticketvoteSummaries.fetch({ tokens, pageSize })),
-    [dispatch, pageSize]
-  );
-  const onFetchSummariesNextPage = useCallback(
-    () => dispatch(ticketvoteSummaries.fetchNextPage({ pageSize })),
-    [dispatch, pageSize]
-  );
-  const onUpdateSummariesQueue = useCallback(
-    () => dispatch(ticketvoteSummaries.setFetchQueue({ tokens })),
-    [dispatch, tokens]
-  );
-  const pushSummariesFetchQueue = useCallback(
-    (tokens) => dispatch(ticketvoteSummaries.pushFetchQueue({ tokens })),
+    (tokens) => dispatch(ticketvoteSummaries.fetch({ tokens })),
     [dispatch]
   );
+  const onFetchSummariesNextPage = useCallback(
+    () => dispatch(ticketvoteSummaries.fetchNextPage()),
+    [dispatch]
+  );
+
+  useEffect(() => {
+    dispatch(ticketvoteSummaries.setQueue({ tokens }));
+    dispatch(ticketvoteSummaries.fetchNextPage());
+  }, [tokens, dispatch]);
 
   return {
     summaries,
@@ -44,7 +41,5 @@ export function useTicketvoteSummaries({ tokens, pageSize = 5 }) {
     summariesQueueStatus,
     onFetchSummaries,
     onFetchSummariesNextPage,
-    onUpdateSummariesQueue,
-    pushSummariesFetchQueue,
   };
 }

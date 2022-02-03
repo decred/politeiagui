@@ -1,8 +1,6 @@
 import {
   fetchTicketvoteSummaries,
   fetchTicketvoteSummariesNextPage,
-  popFetchQueue,
-  pushFetchQueue,
   setFetchQueue,
   selectTicketvoteSummariesStatus,
   selectHasMoreTicketvoteSummariesToFetch,
@@ -21,9 +19,7 @@ import { useTicketvoteSummaries } from "./useSummaries";
 export const ticketvoteSummaries = {
   fetch: fetchTicketvoteSummaries,
   fetchNextPage: fetchTicketvoteSummariesNextPage,
-  popFetchQueue,
-  pushFetchQueue,
-  setFetchQueue,
+  setQueue: setFetchQueue,
   selectStatus: selectTicketvoteSummariesStatus,
   selectAll: selectTicketvoteSummaries,
   selectByToken: selectTicketvoteSummariesByRecordToken,
