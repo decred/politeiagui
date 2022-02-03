@@ -1,4 +1,6 @@
 import invert from "lodash/fp/invert";
+import without from "lodash/fp/without";
+import take from "lodash/fp/take";
 import {
   RECORD_STATUS_UNREVIEWED,
   RECORD_STATUS_PUBLIC,
@@ -114,3 +116,57 @@ export const validRecordStates = [
   ...validStringRecordStates,
   ...validNumberRecordStates,
 ];
+
+export function getTokensToFetch({ records, pageSize, inventory }) {
+  let { lastTokenPos, tokens } = inventory;
+  let tokensToFetch = [];
+  if (lastTokenPos === null) {
+    // means it's the first fetch
+    tokensToFetch = take(pageSize, tokens);
+    lastTokenPos = tokensToFetch.length - 1;
+  } else {
+    // not the first fetch
+    tokensToFetch = take(pageSize, tokens.slice(lastTokenPos + 1));
+    lastTokenPos += tokensToFetch.length;
+  }
+  // skip tokens if already lodaded
+  return skipTokensAlreadyLoaded({
+    tokens: tokensToFetch,
+    records: records.records,
+    lastTokenPos,
+    inventory: tokens,
+  });
+}
+
+export function skipTokensAlreadyLoaded({
+  tokens,
+  records,
+  lastTokenPos,
+  inventory,
+}) {
+  const alreadyLoaded = [];
+  for (const token of tokens) {
+    if (records[token]) alreadyLoaded.push(token);
+  }
+  if (alreadyLoaded.length === 0) {
+    return {
+      tokens,
+      last: lastTokenPos,
+    };
+  }
+  const newTokens = without(alreadyLoaded, tokens);
+  for (let i = 0; i < alreadyLoaded.length; i++) {
+    if (lastTokenPos < inventory.length - 2) {
+      newTokens.push(inventory[lastTokenPos + 1]);
+      lastTokenPos++;
+    } else {
+      break;
+    }
+  }
+  return skipTokensAlreadyLoaded({
+    tokens: newTokens,
+    records,
+    lastTokenPos,
+    inventory,
+  });
+}

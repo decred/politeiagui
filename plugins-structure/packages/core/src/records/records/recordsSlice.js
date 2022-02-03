@@ -1,18 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  getHumanReadableRecordState,
-  getHumanReadableRecordStatus,
-  getRecordStatusCode,
-  getRecordStateCode,
-} from "../utils";
-import {
-  validateRecordStateAndStatus,
-  validateRecordsPageSize,
-} from "../validation";
-import take from "lodash/fp/take";
+import { getRecordStatusCode, getRecordStateCode } from "../utils";
+import { validateRecordStateAndStatus } from "../validation";
 import isArray from "lodash/fp/isArray";
-import isEmpty from "lodash/fp/isEmpty";
-import without from "lodash/fp/without";
 import pick from "lodash/fp/pick";
 import compose from "lodash/fp/compose";
 import values from "lodash/fp/values";
@@ -20,15 +9,6 @@ import values from "lodash/fp/values";
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
 export const initialState = {
   records: {},
-  /**
-   * recordsFetchQueue:
-   * {
-   * [state]: {
-   *     [status]: [...tokens]
-   *   }
-   * }
-   */
-  recordsFetchQueue: {},
   status: "idle",
   error: null,
 };
@@ -48,87 +28,10 @@ export const fetchRecords = createAsyncThunk(
   }
 );
 
-export const fetchRecordsNextPage = createAsyncThunk(
-  "records/fetchNextPage",
-  async (body, { dispatch, getState }) => {
-    const { recordsState, status } = body;
-    const state = getState();
-    const recordsPageSize = state.recordsPolicy.policy.recordspagesize;
-    const stringState = getHumanReadableRecordState(recordsState);
-    const stringStatus = getHumanReadableRecordStatus(status);
-    const queue = state.records.recordsFetchQueue[stringState][stringStatus];
-    const nextTokens = take(recordsPageSize, queue);
-    return await dispatch(fetchRecords(nextTokens));
-  },
-  {
-    condition: ({ recordsState, status }, { getState }) =>
-      validateRecordStateAndStatus(recordsState, status) &&
-      validateRecordsPageSize(getState()),
-  }
-);
-
-function setQueue(state, { recordsState, status, records }) {
-  const newObj = {
-    [recordsState]: {
-      ...state.recordsFetchQueue[recordsState],
-      [status]: records,
-    },
-  };
-  state.recordsFetchQueue = {
-    ...state.recordsFetchQueue,
-    ...newObj,
-  };
-}
-
 // Reducer
 const recordsSlice = createSlice({
   name: "records",
   initialState,
-  reducers: {
-    // set the recordsFetchQueue object per state and status
-    setFetchQueue(state, action) {
-      const { recordsState, status, records } = action.payload;
-      if (!isArray(records)) throw TypeError("records must be an array");
-      const stringState = getHumanReadableRecordState(recordsState);
-      const stringStatus = getHumanReadableRecordStatus(status);
-      setQueue(state, {
-        recordsState: stringState,
-        status: stringStatus,
-        records,
-      });
-    },
-    // push values into an already initialzed recordsFetchQueue
-    pushFetchQueue(state, action) {
-      const { recordsState, status, records } = action.payload;
-      if (!isArray(records)) throw TypeError("records must be an array");
-      const stringState = getHumanReadableRecordState(recordsState);
-      const stringStatus = getHumanReadableRecordStatus(status);
-      if (
-        state.recordsFetchQueue[stringState] &&
-        state.recordsFetchQueue[stringState][stringStatus]
-      ) {
-        state.recordsFetchQueue[stringState][stringStatus].push(...records);
-      } else {
-        setQueue(state, {
-          recordsState: stringState,
-          status: stringStatus,
-          records,
-        });
-      }
-    },
-    // pop values from the recordsFetchQueue
-    popFetchQueue(state, action) {
-      const { recordsState, status } = action.payload;
-      const stringState = getHumanReadableRecordState(recordsState);
-      const stringStatus = getHumanReadableRecordStatus(status);
-      if (
-        isEmpty(state.recordsFetchQueue) ||
-        !state.recordsFetchQueue[stringState]
-      )
-        return;
-      state.recordsFetchQueue[stringState][stringStatus].shift();
-    },
-  },
   extraReducers(builder) {
     builder
       .addCase(fetchRecords.pending, (state) => {
@@ -141,28 +44,6 @@ const recordsSlice = createSlice({
       .addCase(fetchRecords.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-      })
-      .addCase(fetchRecordsNextPage.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchRecordsNextPage.fulfilled, (state, action) => {
-        const { recordsState, status } = action.meta.arg;
-        const recordsFetched = action.payload.meta.arg;
-        const stringState = getHumanReadableRecordState(recordsState);
-        const stringStatus = getHumanReadableRecordStatus(status);
-        const newQueue = without(
-          recordsFetched,
-          state.recordsFetchQueue[stringState][stringStatus]
-        );
-        setQueue(state, {
-          recordsState: stringState,
-          status: stringStatus,
-          records: newQueue,
-        });
-      })
-      .addCase(fetchRecordsNextPage.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
       });
   },
 });
@@ -173,7 +54,6 @@ export const { pushFetchQueue, setFetchQueue, popFetchQueue } =
   recordsSlice.actions;
 
 // Selectors
-// export const selectRecordsInventory = state => state.recordsInventory.recordsInventory;
 export const selectRecordsStatus = (state) => state.records.status;
 export const selectRecordByToken = (state, token) =>
   state.records.records[token];
@@ -200,37 +80,6 @@ export const selectRecordsByStateAndStatus = (
 
 export const selectRecordsByTokensBatch = (state, tokens) =>
   compose(values, pick(tokens))(state.records.records);
-
-export const selectRecordsFetchQueue = (state, { recordsState, status }) => {
-  if (validateRecordStateAndStatus(recordsState, status)) {
-    // We have valid record state and status.
-    // Convert them to strings if they are not.
-    const stringRecordsState = getHumanReadableRecordState(recordsState);
-    const stringStatus = getHumanReadableRecordStatus(status);
-    return state.records.recordsFetchQueue[stringRecordsState]
-      ? state.records.recordsFetchQueue[stringRecordsState][stringStatus]
-      : [];
-  }
-};
-
-export const selectHasMoreRecordsToFetch = (
-  state,
-  { recordsState, status }
-) => {
-  if (validateRecordStateAndStatus(recordsState, status)) {
-    // We have valid record state and status.
-    // Convert them to strings if they are not.
-    const stringRecordsState = getHumanReadableRecordState(recordsState);
-    const stringStatus = getHumanReadableRecordStatus(status);
-    return (
-      state.records.status === "idle" ||
-      (state.records.recordsFetchQueue[stringRecordsState] &&
-        state.records.recordsFetchQueue[stringRecordsState][stringStatus] &&
-        state.records.recordsFetchQueue[stringRecordsState][stringStatus]
-          .length > 0)
-    );
-  }
-};
 
 // Export default reducer
 export default recordsSlice.reducer;

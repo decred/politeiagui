@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { recordsInventory } from "../../inventory";
 import { records } from "../../records";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,7 @@ export function RecordsList({ recordsState, status }) {
     status,
     page,
   });
+
   function fetchOneMoreInventoryPage() {
     setPage(page + 1);
   }
@@ -38,6 +39,15 @@ function RecordsListAux({
   fetchOneMoreInventoryPage,
 }) {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (inventory.length > 0) {
+      dispatch(
+        recordsInventory.fetchNextRecordsBatch({ recordsState, status })
+      );
+    }
+  }, [dispatch, inventory, recordsState, status]);
+
   const recordsObj = useSelector((state) =>
     records.selectByStateAndStatus(state, { recordsState, status })
   );
@@ -48,13 +58,17 @@ function RecordsListAux({
   );
   const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
   const hasMoreRecords = useSelector((state) =>
-    records.selectHasMoreToFetch(state, { recordsState, status })
+    recordsInventory.selectHasMoreRecordsToFetch(state, {
+      recordsState,
+      status,
+    })
   );
 
   function handleFetchMore() {
-    console.log(hasMoreRecords);
     if (hasMoreRecords) {
-      dispatch(records.fetchNextPage({ recordsState, status }));
+      dispatch(
+        recordsInventory.fetchNextRecordsBatch({ recordsState, status })
+      );
     } else if (hasMoreInventory) {
       fetchOneMoreInventoryPage();
     }

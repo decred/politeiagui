@@ -5,6 +5,7 @@ import {
   getRecordStateCode,
   validRecordStatuses,
   validRecordStates,
+  skipTokensAlreadyLoaded,
 } from "./utils";
 
 const invalidStates = [3, -1, 0, "some_string"];
@@ -93,6 +94,75 @@ describe("Given utils", () => {
       expect(getRecordStateCode(2)).toBe(2);
       expect(getRecordStateCode("2")).toBe(2);
       expect(getRecordStateCode("vetted")).toBe(2);
+    });
+  });
+
+  describe("Given the skipTokensAlreadyLoaded helper", () => {
+    it("should return tokens and lastTokenPos when there's no loaded records", () => {
+      const tokensToFetch = [1, 2, 3, 4, 5];
+      const lastTokenPos = 4;
+      const records = {};
+      const inventory = [1, 2, 3, 4, 5];
+      const { tokens, last } = skipTokensAlreadyLoaded({
+        tokens: tokensToFetch,
+        records,
+        lastTokenPos,
+        inventory,
+      });
+      expect(tokens).toEqual(tokensToFetch);
+      expect(last).toEqual(lastTokenPos);
+    });
+    it("should return corectly when there are loaded records and no more inventory", () => {
+      const tokensToFetch = [1, 2, 3, 4, 5];
+      const lastTokenPos = 4;
+      const records = {
+        2: true,
+        4: true,
+      };
+      const inventory = [1, 2, 3, 4, 5];
+      const { tokens, last } = skipTokensAlreadyLoaded({
+        tokens: tokensToFetch,
+        records,
+        lastTokenPos,
+        inventory,
+      });
+      expect(tokens).toEqual([1, 3, 5]);
+      expect(last).toEqual(4);
+    });
+    it("should return corectly when there are loaded records and still not visited inventory tokens", () => {
+      const tokensToFetch = [1, 2, 3, 4, 5];
+      const lastTokenPos = 4;
+      const records = {
+        2: true,
+        4: true,
+      };
+      const inventory = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const { tokens, last } = skipTokensAlreadyLoaded({
+        tokens: tokensToFetch,
+        records,
+        lastTokenPos,
+        inventory,
+      });
+      expect(tokens).toEqual([1, 3, 5, 6, 7]);
+      expect(last).toEqual(6);
+    });
+    it("should return corectly when there are loaded records, still not visited inventory tokens and some of these tokens are visited", () => {
+      const tokensToFetch = [1, 2, 3, 4, 5];
+      const lastTokenPos = 4;
+      const records = {
+        2: true,
+        4: true,
+        7: true,
+      };
+      const inventory = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const { tokens, last } = skipTokensAlreadyLoaded({
+        tokens: tokensToFetch,
+        records,
+        lastTokenPos,
+        inventory,
+      });
+      expect(tokens).toEqual([1, 3, 5, 6, 8]);
+      expect(last).toEqual(7);
     });
   });
 });
