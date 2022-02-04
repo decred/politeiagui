@@ -1,0 +1,73 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@politeiagui/core": ["./packages/core/src/index.js"],
+      "@politeiagui/core/api": ["./packages/core/src/api/index.js"],
+      "@politeiagui/core/router": ["./packages/core/src/router/index.js"],
+      "@politeiagui/core/client": ["./packages/core/src/client/index.js"],
+      "@politeiagui/core/routes": ["./packages/core/src/routes/index.js"],
+      "@politeiagui/core/records": [
+        "./packages/core/src/records/records/index.js"
+      ],
+      "@politeiagui/core/records/utils": [
+        "./packages/core/src/records/utils.js"
+      ],
+      "@politeiagui/core/records/constants": [
+        "./packages/core/src/records/constants.js"
+      ],
+      "@politeiagui/core/records/validation": [
+        "./packages/core/src/records/validation.js"
+      ],
+      "@politeiagui/core/records/inventory": [
+        "./packages/core/src/records/inventory/index.js"
+      ],
+      "@politeiagui/core/records/policy": [
+        "./packages/core/src/records/policy/index.js"
+      ],
+      "@politeiagui/core/records/ui": [
+        "./packages/core/src/records/ui/index.js"
+      ],
+      "@politeiagui/ticketvote": ["./packages/ticketvote/src/index.js"],
+      "@politeiagui/ticketvote/api": ["./packages/ticketvote/src/lib/api.js"],
+      "@politeiagui/ticketvote/routes": [
+        "./packages/ticketvote/src/routes/index.js"
+      ],
+      "@politeiagui/ticketvote/details": [
+        "./packages/ticketvote/src/ticketvote/details/index.js"
+      ],
+      "@politeiagui/ticketvote/inventory": [
+        "./packages/ticketvote/src/ticketvote/inventory/index.js"
+      ],
+      "@politeiagui/ticketvote/policy": [
+        "./packages/ticketvote/src/ticketvote/policy/index.js"
+      ],
+      "@politeiagui/ticketvote/results": [
+        "./packages/ticketvote/src/ticketvote/results/index.js"
+      ],
+      "@politeiagui/ticketvote/submissions": [
+        "./packages/ticketvote/src/ticketvote/submissions/index.js"
+      ],
+      "@politeiagui/ticketvote/summaries": [
+        "./packages/ticketvote/src/ticketvote/summaries/index.js"
+      ],
+      "@politeiagui/ticketvote/timestamps": [
+        "./packages/ticketvote/src/ticketvote/timestamps/index.js"
+      ],
+      "@politeiagui/ticketvote/ui": ["./packages/ticketvote/src/ui/index.js"],
+      "@politeiagui/ticketvote/helpers": [
+        "./packages/ticketvote/src/ticketvote/helpers.js"
+      ],
+      "@politeiagui/ticketvote/utils": [
+        "./packages/ticketvote/src/lib/utils.js"
+      ],
+      "@politeiagui/ticketvote/constants": [
+        "./packages/ticketvote/src/lib/constants.js"
+      ],
+      "@politeiagui/ticketvote/validation": [
+        "./packages/ticketvote/src/lib/validation.js"
+      ],
+      "@politeiagui/common-ui": ["./packages/common-ui/src/index.js"]
+    }
+  }
+}
