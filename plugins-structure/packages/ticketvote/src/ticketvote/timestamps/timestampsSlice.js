@@ -10,12 +10,15 @@ export const initialState = {
 
 export const fetchTicketvoteTimestamps = createAsyncThunk(
   "ticketvoteTimestamps/fetch",
-  async ({ token, votespage }, { getState, rejectWithValue }) => {
+  async ({ token, votesPage }, { getState, rejectWithValue }) => {
     try {
       const state = getState();
-      const response = await api.fetchTimestamps(state, { token, votespage });
+      const response = await api.fetchTimestamps(state, {
+        token,
+        votespage: votesPage,
+      });
       const timestampsPageSize =
-        getState().ticketvotePolicy.policy.timestampspagesize;
+        state.ticketvotePolicy.policy.timestampspagesize;
       return { ...response, timestampsPageSize };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -24,13 +27,30 @@ export const fetchTicketvoteTimestamps = createAsyncThunk(
   {
     condition: (body, { getState }) => {
       const hasToken = body && body.token;
-      const hasValidVotespage = body && (!body.votespage || body.votespage > 0);
-      return (
-        !!hasToken &&
-        !!hasValidVotespage &&
-        validateTicketvoteTimestampsPageSize(getState())
-      );
+      if (!hasToken || !body) return false;
+      const state = getState();
+      const currentData = state.ticketvoteTimestamps.byToken[body.token];
+      const hasAuthsAndDetails =
+        currentData && currentData.auths && currentData.details;
+      const isFetchingVotes = body.votesPage > 0 && hasAuthsAndDetails;
+      const hasValidVotesPage = !body.votesPage || isFetchingVotes;
+      if (body.votesPage > 0 && !hasAuthsAndDetails) {
+        const err = Error(
+          "Timestamps votes fetch is only allowed if auths and details were loaded"
+        );
+        console.error(err);
+        throw err;
+      }
+      return !!hasValidVotesPage && validateTicketvoteTimestampsPageSize(state);
     },
+  }
+);
+
+export const fetchTicketvoteTimestampsFirstPage = createAsyncThunk(
+  "ticketvoteTimestamps/fetchFirstPage",
+  async ({ token }, { dispatch }) => {
+    await dispatch(fetchTicketvoteTimestamps({ token }));
+    await dispatch(fetchTicketvoteTimestamps({ token, votesPage: 1 }));
   }
 );
 
@@ -44,10 +64,22 @@ const ticketvoteTimestampsSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchTicketvoteTimestamps.fulfilled, (state, action) => {
-        const { token } = action.meta.arg;
+        const { token, votesPage } = action.meta.arg;
         const { timestampsPageSize, ...timestamps } = action.payload;
-        state.byToken[token] = timestamps;
-        state.status = "succeeded";
+        if (votesPage === undefined) {
+          state.byToken[token] = timestamps;
+          state.status = "succeeded/needsVotes";
+        } else if (timestamps.votes.length === timestampsPageSize) {
+          state.status = "succeeded/hasMore";
+        } else {
+          state.status = "succeeded/isDone";
+        }
+        if (votesPage && timestamps.votes) {
+          state.byToken[token].votes = [
+            ...(state.byToken[token].votes || []),
+            ...timestamps.votes,
+          ];
+        }
       })
       .addCase(fetchTicketvoteTimestamps.rejected, (state, action) => {
         state.status = "failed";

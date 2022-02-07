@@ -15,7 +15,7 @@ export function useTicketvoteTimestamps({ token }) {
   // Actions
   const onFetchTimestamps = useCallback(
     (page = 0) =>
-      dispatch(ticketvoteTimestamps.fetch({ token, votespage: page })),
+      dispatch(ticketvoteTimestamps.fetch({ token, votesPage: page })),
     [dispatch, token]
   );
 
