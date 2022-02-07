@@ -1,91 +1,91 @@
 import { buildProposal } from "../../support/generate";
-import { APIPluginError } from "../../errors";
+import { USER_TYPE_ADMIN } from "../../support/users/generate";
+
+beforeEach(function mockApiCalls() {
+  cy.useTicketvoteApi();
+  cy.useRecordsApi();
+  cy.usePiApi();
+  cy.useWwwApi();
+});
 
 describe("Proposal Form Error Codes Mapping", () => {
-  const user = {
-    email: "adminuser@example.com",
-    username: "adminuser",
-    password: "password"
-  };
-
   beforeEach(() => {
     cy.server();
-    cy.login(user);
-    cy.identity();
+    cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true });
   });
 
   it("Should map invalid name error code to a readable error message", () => {
     const proposal = buildProposal();
-    // Set invalid name.
-    proposal.name = "grrrr";
-    cy.createProposal(proposal).then(
-      ({ pluginid, errorcode, errorcontext }) => {
-        try {
-          APIPluginError(pluginid, errorcode, errorcontext);
-        } catch ({ message, errorcode }) {
-          expect(message).to.have.string("Proposal name is invalid");
-        }
-      }
-    );
+    cy.recordsMiddleware("new", {
+      error: { statuscode: 400, errorcode: 6, pluginid: "pi", errorcontext: "" }
+    });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.visit("/record/new");
+    cy.typeCreateProposal(proposal);
+    cy.findByRole("button", { name: /submit/i }).click();
+    cy.wait("@records.new");
+    cy.contains(/Error: Proposal name is invalid/i).should("be.visible");
   });
 
   it("Should map invalid start date error code to a readable error message", () => {
     const proposal = buildProposal();
-    // Set invalid start date.
-    proposal.startDate = Math.round(new Date().getTime() / 1000);
-    cy.createProposal(proposal).then(
-      ({ pluginid, errorcode, errorcontext }) => {
-        try {
-          APIPluginError(pluginid, errorcode, errorcontext);
-        } catch ({ message, errorcode }) {
-          expect(message).to.have.string("Proposal start date is invalid");
-        }
-      }
-    );
+    cy.recordsMiddleware("new", {
+      error: { statuscode: 400, errorcode: 8, pluginid: "pi", errorcontext: "" }
+    });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.visit("/record/new");
+    cy.typeCreateProposal(proposal);
+    cy.findByRole("button", { name: /submit/i }).click();
+    cy.wait("@records.new");
+    cy.contains(/Error: Proposal start date is invalid/i).should("be.visible");
   });
 
   it("Should map invalid end date error code to a readable error message", () => {
     const proposal = buildProposal();
-    // Set invalid end date.
-    proposal.endDate = Math.round(new Date().getTime() / 1000);
-    cy.createProposal(proposal).then(
-      ({ pluginid, errorcode, errorcontext }) => {
-        try {
-          APIPluginError(pluginid, errorcode, errorcontext);
-        } catch ({ message, errorcode }) {
-          expect(message).to.have.string("Proposal end date is invalid");
-        }
-      }
-    );
+    cy.recordsMiddleware("new", {
+      error: { statuscode: 400, errorcode: 9, pluginid: "pi", errorcontext: "" }
+    });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.visit("/record/new");
+    cy.typeCreateProposal(proposal);
+    cy.findByRole("button", { name: /submit/i }).click();
+    cy.wait("@records.new");
+    cy.contains(/Error: Proposal end date is invalid/i).should("be.visible");
   });
 
   it("Should map invalid amount error code to a readable error message", () => {
     const proposal = buildProposal();
-    // Set invalid amount.
-    proposal.amount = 0;
-    cy.createProposal(proposal).then(
-      ({ pluginid, errorcode, errorcontext }) => {
-        try {
-          APIPluginError(pluginid, errorcode, errorcontext);
-        } catch ({ message, errorcode }) {
-          expect(message).to.have.string("Proposal amount is invalid");
-        }
+    cy.recordsMiddleware("new", {
+      error: {
+        statuscode: 400,
+        errorcode: 10,
+        pluginid: "pi",
+        errorcontext: ""
       }
-    );
+    });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.visit("/record/new");
+    cy.typeCreateProposal(proposal);
+    cy.findByRole("button", { name: /submit/i }).click();
+    cy.wait("@records.new");
+    cy.contains(/Error: Proposal amount is invalid/i).should("be.visible");
   });
 
   it("Should map invalid domain error code to a readable error message", () => {
     const proposal = buildProposal();
-    // Set invalid domain.
-    proposal.domain = "grrr";
-    cy.createProposal(proposal).then(
-      ({ pluginid, errorcode, errorcontext }) => {
-        try {
-          APIPluginError(pluginid, errorcode, errorcontext);
-        } catch ({ message, errorcode }) {
-          expect(message).to.have.string("Proposal domain is invalid");
-        }
+    cy.recordsMiddleware("new", {
+      error: {
+        statuscode: 400,
+        errorcode: 11,
+        pluginid: "pi",
+        errorcontext: ""
       }
-    );
+    });
+    cy.piMiddleware("summaries", { amountByStatus: { unvetted: 1 } });
+    cy.visit("/record/new");
+    cy.typeCreateProposal(proposal);
+    cy.findByRole("button", { name: /submit/i }).click();
+    cy.wait("@records.new");
+    cy.contains(/Error: Proposal domain is invalid/i).should("be.visible");
   });
 });
