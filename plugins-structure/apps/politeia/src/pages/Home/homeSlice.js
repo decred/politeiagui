@@ -54,10 +54,10 @@ export const fetchNextBatch = createAsyncThunk(
         lastTokenPos: home[readableStatus].lastTokenPos,
       });
 
-      await Promise.all(
+      await Promise.all([
         dispatch(records.fetch({ tokens, filenames: piFilenames })),
-        dispatch(ticketvoteSummaries.fetch({ tokens }))
-      )
+        dispatch(ticketvoteSummaries.fetch({ tokens })),
+      ]);
       return last;
     } catch (e) {
       return rejectWithValue(e.message);
