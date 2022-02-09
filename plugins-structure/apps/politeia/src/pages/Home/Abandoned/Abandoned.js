@@ -1,7 +1,8 @@
 import React from "react";
+import RecordsStatusList from "../common/RecordsStatusList";
 
 function Abandoned() {
-  return <div>opa tio abandoned</div>;
+  return <RecordsStatusList status={"ineligible"} />;
 }
 
 export default Abandoned;

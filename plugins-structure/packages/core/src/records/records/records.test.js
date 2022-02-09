@@ -37,7 +37,7 @@ describe("Given the recordsSlice", () => {
     it("should not fetch nor fire actions", async () => {
       const badArgs = ["bad", 123, {}, null, undefined];
       for (const arg of badArgs) {
-        await store.dispatch(fetchRecords(arg));
+        await store.dispatch(fetchRecords({ tokens: arg }));
         expect(fetchRecordsSpy).not.toBeCalled();
         const state = store.getState();
         expect(state.records).toEqual({});
@@ -47,9 +47,9 @@ describe("Given the recordsSlice", () => {
   });
   describe("when fetchRecords dispatches", () => {
     it("should update the status to loading", () => {
-      store.dispatch(fetchRecords(params));
+      store.dispatch(fetchRecords({ tokens: params }));
       let state = store.getState();
-      expect(fetchRecordsSpy).toBeCalledWith(state, params);
+      expect(fetchRecordsSpy).toBeCalledWith(state, params, []);
       state = store.getState();
       expect(state.status).toEqual("loading");
     });
@@ -74,10 +74,11 @@ describe("Given the recordsSlice", () => {
         },
       };
       fetchRecordsSpy.mockResolvedValueOnce(fakeRecordsRes);
-      await store.dispatch(fetchRecords(params));
+      await store.dispatch(fetchRecords({ tokens: params }));
       expect(fetchRecordsSpy).toBeCalledWith(
         { ...state, status: "loading" },
-        params
+        params,
+        []
       );
       state = store.getState();
       expect(state.records).toEqual(fakeRecordsRes);
@@ -119,7 +120,7 @@ describe("Given the recordsSlice", () => {
         },
       };
       fetchRecordsSpy.mockResolvedValue(fakeRecordsRes);
-      await store.dispatch(fetchRecords(["fake_token01"]));
+      await store.dispatch(fetchRecords({ tokens: ["fake_token01"] }));
 
       state = store.getState();
       expect(state.records).toEqual(fakeRecordsRes);
@@ -127,7 +128,7 @@ describe("Given the recordsSlice", () => {
       expect(state.error).toBe(null);
 
       fetchRecordsSpy.mockResolvedValue(fakeRecordsRes2);
-      await store.dispatch(fetchRecords(["fake_token02"]));
+      await store.dispatch(fetchRecords({ tokens: ["fake_token02"] }));
       state = store.getState();
       expect(state.records).toEqual({ ...fakeRecordsRes, ...fakeRecordsRes2 });
       expect(state.status).toBe("succeeded");
@@ -139,10 +140,11 @@ describe("Given the recordsSlice", () => {
       let state = store.getState();
       const error = new Error("FAIL!");
       fetchRecordsSpy.mockRejectedValue(error);
-      await store.dispatch(fetchRecords(params));
+      await store.dispatch(fetchRecords({ tokens: params }));
       expect(fetchRecordsSpy).toBeCalledWith(
         { ...state, status: "loading" },
-        params
+        params,
+        []
       );
       state = store.getState();
       expect(state.records).toEqual({});

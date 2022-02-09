@@ -1,6 +1,9 @@
 import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
+import { api } from "@politeiagui/core/api";
 import { recordsInventory } from "@politeiagui/core/records/inventory";
+import { recordsPolicy } from "@politeiagui/core/records/policy";
+import { router } from "@politeiagui/core/router";
 
 const publicRecord = {
   recordsState: "vetted",
@@ -75,15 +78,22 @@ async function fetchInventory() {
 async function fetchRecords(status, opt) {
   if (status) {
     recordsInventory.selectByStateAndStatus(store.getState(), opt);
-    let hasMoreRecords = records.selectHasMoreToFetch(store.getState(), opt);
+    let hasMoreRecords = recordsInventory.selectHasMoreRecordsToFetch(
+      store.getState(),
+      opt
+    );
     while (hasMoreRecords) {
-      await store.dispatch(records.fetchNextPage(opt));
-      hasMoreRecords = records.selectHasMoreToFetch(store.getState(), opt);
+      await store.dispatch(recordsInventory.fetchNextRecordsBatch(opt));
+      hasMoreRecords = recordsInventory.selectHasMoreRecordsToFetch(
+        store.getState(),
+        opt
+      );
     }
   }
 }
 
 async function statisticsPage() {
+  await store.dispatch(recordsPolicy.fetch());
   await fetchInventory();
   const {
     inventoryVettedPublicStatus,
@@ -106,15 +116,15 @@ async function statisticsPage() {
     archivedRecord
   );
   const userWithMostRecords = calcStatistics(
-    publicRecords,
-    censoredRecords,
-    archivedRecords
+    Object.values(publicRecords),
+    Object.values(censoredRecords),
+    Object.values(archivedRecords)
   );
   return `<div>
     <h1>Nice Statistics</h1>
-    ${renderNumOfRecords("public", publicRecords)}
-    ${renderNumOfRecords("censored", censoredRecords)}
-    ${renderNumOfRecords("archived", archivedRecords)}
+    ${renderNumOfRecords("public", Object.values(publicRecords))}
+    ${renderNumOfRecords("censored", Object.values(censoredRecords))}
+    ${renderNumOfRecords("archived", Object.values(archivedRecords))}
     ${renderUserWithMostRecords(userWithMostRecords)}
   </div>`;
 }
@@ -173,3 +183,37 @@ export const routes = [
     },
   },
 ];
+
+// let routerInitialized = false;
+
+// function initializeApp() {
+//   const unsubscribe = initializeApi();
+//   const apiStatus = api.selectStatus(store.getState());
+//   if (apiStatus === "succeeded") {
+//     unsubscribe();
+//   }
+// }
+
+// function initializeApi() {
+//   const apiStatus = api.selectStatus(store.getState());
+//   let unsubscribe;
+//   if (apiStatus === "idle") {
+//     unsubscribe = store.subscribe(handleApi);
+//     store.dispatch(api.fetch());
+//   }
+//   return unsubscribe;
+// }
+
+// function handleApi() {
+//   const state = store.getState();
+//   const status = api.selectStatus(state);
+//   if (status === "loading") {
+//     document.querySelector("#root").innerHTML = "<h1>Loading api...</h1>";
+//   }
+//   if (status === "succeeded" && !routerInitialized) {
+//     routerInitialized = true;
+//     router.init({ routes });
+//   }
+// }
+
+// initializeApp();

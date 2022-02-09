@@ -16,15 +16,15 @@ export const initialState = {
 // Thunks
 export const fetchRecords = createAsyncThunk(
   "records/fetch",
-  async (body, { getState, extra, rejectWithValue }) => {
+  async ({ tokens, filenames = [] }, { getState, extra, rejectWithValue }) => {
     try {
-      return await extra.fetchRecords(getState(), body);
+      return await extra.fetchRecords(getState(), tokens, filenames);
     } catch (e) {
       return rejectWithValue(e.message);
     }
   },
   {
-    condition: (records) => isArray(records),
+    condition: ({ tokens }) => isArray(tokens),
   }
 );
 
@@ -47,11 +47,6 @@ const recordsSlice = createSlice({
       });
   },
 });
-
-// Actions - notice they have the same name than the properties on reducers
-// that's because createSlice automatically generate action creators for us
-export const { pushFetchQueue, setFetchQueue, popFetchQueue } =
-  recordsSlice.actions;
 
 // Selectors
 export const selectRecordsStatus = (state) => state.records.status;

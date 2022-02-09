@@ -23,8 +23,19 @@
   margin-top: var(--spacing-medium);
 }
 
+.fullRow {
+  width: 100%;
+}
+
 .subtitle {
   margin-top: var(--spacing-small);
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  margin-top: var(--spacing-medium);
+  justify-content: space-between;
 }
 
 @media screen and (max-width: 560px) {

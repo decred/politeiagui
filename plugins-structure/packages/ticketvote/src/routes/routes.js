@@ -2,7 +2,6 @@
 import ReactDOM from "react-dom";
 // Dev Pages
 import AllStatusesPage from "../dev/pages/AllStatuses";
-import DetailsPage from "../dev/pages/Details";
 
 // Routes for ticketvote plugin
 export const routes = [
@@ -11,11 +10,5 @@ export const routes = [
     view: AllStatusesPage,
     cleanup: () =>
       ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
-  },
-  {
-    path: "/ticketvote/:token",
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
-    view: DetailsPage,
   },
 ];

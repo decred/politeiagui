@@ -6,7 +6,6 @@ import {
   selectRecordsByStateAndStatus,
   selectRecordsByTokensBatch,
 } from "./recordsSlice";
-import { useFetchRecords } from "./useFetchRecords";
 
 export const records = {
   fetch: fetchRecords,
@@ -15,5 +14,4 @@ export const records = {
   selectByTokensBatch: selectRecordsByTokensBatch,
   selectAll: selectRecords,
   selectByStateAndStatus: selectRecordsByStateAndStatus,
-  useFetch: useFetchRecords,
 };

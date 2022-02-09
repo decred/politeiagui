@@ -4,6 +4,15 @@
   "main": "dist/main.js",
   "module": "src/index.js",
   "license": "MIT",
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs"
+        ]
+      }
+    }
+  },
   "scripts": {
     "prettier": "prettier \"src/**/*.js\"",
     "format": "yarn prettier --write",
@@ -20,9 +29,13 @@
   "dependencies": {
     "@politeiagui/core": "1.0.0",
     "@politeiagui/statistics": "1.0.0",
-    "@politeiagui/ticketvote": "1.0.0"
+    "@politeiagui/ticketvote": "1.0.0",
+    "@politeiagui/common-ui": "1.0.0"
   },
   "devDependencies": {
-    "webpack-bundle-analyzer": "^4.4.2"
+    "webpack-bundle-analyzer": "^4.4.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
+    "@testing-library/jest-dom": "^5.14.1",
+    "jest-extended": "^1.0.0"
   }
 }

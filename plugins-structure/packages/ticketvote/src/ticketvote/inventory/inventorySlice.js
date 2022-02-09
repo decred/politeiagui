@@ -9,19 +9,16 @@ import {
   validateTicketvoteInventoryPageSize,
 } from "../../lib/validation";
 import { records } from "@politeiagui/core/records";
-import isEmpty from "lodash/fp/isEmpty";
+import { getTokensToFetch } from "@politeiagui/core/records/utils";
+import { validateRecordsPageSize } from "@politeiagui/core/records/validation";
 import isArray from "lodash/fp/isArray";
-import without from "lodash/fp/without";
+import isEmpty from "lodash/fp/isEmpty";
 
 const initialStatusInventory = {
   tokens: [],
   lastPage: 0,
+  lastTokenPos: null,
   status: "idle",
-};
-
-const initialQueue = {
-  status: "idle",
-  tokens: [],
 };
 
 export const initialState = {
@@ -32,7 +29,6 @@ export const initialState = {
   approved: initialStatusInventory,
   rejected: initialStatusInventory,
   ineligible: initialStatusInventory,
-  recordsFetchQueue: initialQueue,
   error: null,
   bestBlock: 0,
   status: "idle",
@@ -41,16 +37,13 @@ export const initialState = {
 // Thunks
 export const fetchTicketvoteInventory = createAsyncThunk(
   "ticketvoteInventory/fetch",
-  async ({ status, page = 1 }, { getState, dispatch, rejectWithValue }) => {
+  async ({ status, page = 1 }, { getState, rejectWithValue }) => {
     const statusCode = getTicketvoteStatusCode(status);
     try {
       const res = await api.fetchInventory(getState(), {
         status: statusCode,
         page,
       });
-      const readableStatus = getHumanReadableTicketvoteStatus(status);
-      const tokens = res.vetted[readableStatus];
-      dispatch(pushRecordsFetchQueue({ tokens }));
       const inventoryPageSize =
         getState().ticketvotePolicy.policy.inventorypagesize;
       return {
@@ -69,22 +62,33 @@ export const fetchTicketvoteInventory = createAsyncThunk(
   }
 );
 
-export const fetchTicketvoteNextRecordsPage = createAsyncThunk(
+export const fetchTicketvoteNextRecordsBatch = createAsyncThunk(
   "ticketvoteInventory/fetchNextRecordsPage",
-  async (_, { dispatch, getState, rejectWithValue }) => {
+  async ({ status }, { dispatch, getState, rejectWithValue }) => {
     try {
       const state = getState();
-      const queue = state.ticketvoteInventory.recordsFetchQueue.tokens;
-      return await dispatch(records.fetch(queue));
+      const recordsFetched = state.records.records;
+      const pageSize = state.recordsPolicy.policy.recordspagesize;
+      const readableStatus = getHumanReadableTicketvoteStatus(status);
+      const { tokens, lastTokenPos } =
+        state.ticketvoteInventory[readableStatus];
+      const { tokens: tokensToFetch, last } = getTokensToFetch({
+        records: recordsFetched,
+        pageSize,
+        inventoryList: tokens,
+        lastTokenPos,
+      });
+      if (!isEmpty(tokensToFetch)) {
+        await dispatch(records.fetch(tokensToFetch));
+      }
+      return last;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
   {
-    condition: (_, { getState }) => {
-      const queue = getState().ticketvoteInventory.recordsFetchQueue.tokens;
-      return !isEmpty(queue);
-    },
+    condition: ({ status }, { getState }) =>
+      validateTicketvoteStatus(status) && validateRecordsPageSize(getState()),
   }
 );
 
@@ -92,19 +96,7 @@ export const fetchTicketvoteNextRecordsPage = createAsyncThunk(
 const ticketvoteInventorySlice = createSlice({
   name: "ticketvoteInventory",
   initialState,
-  reducers: {
-    pushRecordsFetchQueue(state, action) {
-      const { tokens } = action.payload;
-      state.recordsFetchQueue.tokens = [
-        ...state.recordsFetchQueue.tokens,
-        ...tokens,
-      ];
-    },
-    popRecordsFetchQueue(state) {
-      if (isEmpty(state.recordsFetchQueue)) return;
-      state.recordsFetchQueue.tokens.shift();
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchTicketvoteInventory.pending, (state, action) => {
@@ -128,35 +120,18 @@ const ticketvoteInventorySlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(fetchTicketvoteNextRecordsPage.pending, (state) => {
-        state.recordsFetchQueue.status = "loading";
+      .addCase(fetchTicketvoteNextRecordsBatch.pending, (state) => state)
+      .addCase(fetchTicketvoteNextRecordsBatch.fulfilled, (state, action) => {
+        const { status } = action.meta.arg;
+        const readableStatus = getHumanReadableTicketvoteStatus(status);
+        state[readableStatus].lastTokenPos = action.payload;
       })
-      .addCase(fetchTicketvoteNextRecordsPage.fulfilled, (state, action) => {
-        if (!action.payload) {
-          state.recordsFetchQueue.status = "succeeded/isDone";
-          return;
-        }
-        const recordsFetched = action.payload.meta.arg;
-        const newQueue = without(
-          recordsFetched,
-          state.recordsFetchQueue.tokens
-        );
-        state.recordsFetchQueue.tokens = newQueue;
-        state.recordsFetchQueue.status = isEmpty(newQueue)
-          ? "succeeded/isDone"
-          : "succeeded/hasMore";
-      })
-      .addCase(fetchTicketvoteNextRecordsPage.rejected, (state, action) => {
+      .addCase(fetchTicketvoteNextRecordsBatch.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
   },
 });
-
-// Actions - notice they have the same name than the properties on reducers
-// that's because createSlice automatically generate action creators for us
-export const { pushRecordsFetchQueue, popRecordsFetchQueue } =
-  ticketvoteInventorySlice.actions;
 
 // Selectors
 export const selectTicketvoteInventoryByStatus = (state, status) => {
@@ -181,9 +156,6 @@ export const selectTicketvoteInventoryLastPage = (state, { status }) => {
     return state.ticketvoteInventory[readableStatus].lastPage;
   }
 };
-
-export const selectTicketvoteRecordsQueueStatus = (state) =>
-  state.ticketvoteInventory.recordsFetchQueue.status;
 
 export const selectRecordsByTicketvoteStatus = (state, status) => {
   if (validateTicketvoteStatus(status)) {

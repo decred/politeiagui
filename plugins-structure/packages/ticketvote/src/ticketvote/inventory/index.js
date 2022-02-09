@@ -1,25 +1,23 @@
 import {
   fetchTicketvoteInventory,
-  fetchTicketvoteNextRecordsPage,
+  fetchTicketvoteNextRecordsBatch,
   selectRecordsByTicketvoteStatus,
   selectRecordsByTicketvoteStatuses,
   selectTicketvoteInventoryByStatus,
   selectTicketvoteInventoryError,
   selectTicketvoteInventoryLastPage,
   selectTicketvoteInventoryStatus,
-  selectTicketvoteRecordsQueueStatus,
 } from "./inventorySlice";
 import { useTicketvoteInventory } from "./useInventory";
 
 export const ticketvoteInventory = {
   fetch: fetchTicketvoteInventory,
-  fetchNextRecordsPage: fetchTicketvoteNextRecordsPage,
+  fetchNextRecordsBatch: fetchTicketvoteNextRecordsBatch,
   selectByStatus: selectTicketvoteInventoryByStatus,
   selectError: selectTicketvoteInventoryError,
   selectLastPage: selectTicketvoteInventoryLastPage,
   selectRecordsByStatus: selectRecordsByTicketvoteStatus,
   selectRecordsByStatuses: selectRecordsByTicketvoteStatuses,
-  selectRecordsQueueStatus: selectTicketvoteRecordsQueueStatus,
   selectStatus: selectTicketvoteInventoryStatus,
   useFetch: useTicketvoteInventory,
 };

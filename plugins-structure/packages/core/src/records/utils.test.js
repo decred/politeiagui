@@ -102,51 +102,51 @@ describe("Given utils", () => {
       const tokensToFetch = [1, 2, 3, 4, 5];
       const lastTokenPos = 4;
       const records = {};
-      const inventory = [1, 2, 3, 4, 5];
+      const inventoryListList = [1, 2, 3, 4, 5];
       const { tokens, last } = skipTokensAlreadyLoaded({
         tokens: tokensToFetch,
         records,
         lastTokenPos,
-        inventory,
+        inventoryListList,
       });
       expect(tokens).toEqual(tokensToFetch);
       expect(last).toEqual(lastTokenPos);
     });
-    it("should return corectly when there are loaded records and no more inventory", () => {
+    it("should return corectly when there are loaded records and no more inventoryList", () => {
       const tokensToFetch = [1, 2, 3, 4, 5];
       const lastTokenPos = 4;
       const records = {
         2: true,
         4: true,
       };
-      const inventory = [1, 2, 3, 4, 5];
+      const inventoryList = [1, 2, 3, 4, 5];
       const { tokens, last } = skipTokensAlreadyLoaded({
         tokens: tokensToFetch,
         records,
         lastTokenPos,
-        inventory,
+        inventoryList,
       });
       expect(tokens).toEqual([1, 3, 5]);
       expect(last).toEqual(4);
     });
-    it("should return corectly when there are loaded records and still not visited inventory tokens", () => {
+    it("should return corectly when there are loaded records and still not visited inventoryList tokens", () => {
       const tokensToFetch = [1, 2, 3, 4, 5];
       const lastTokenPos = 4;
       const records = {
         2: true,
         4: true,
       };
-      const inventory = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const inventoryList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       const { tokens, last } = skipTokensAlreadyLoaded({
         tokens: tokensToFetch,
         records,
         lastTokenPos,
-        inventory,
+        inventoryList,
       });
       expect(tokens).toEqual([1, 3, 5, 6, 7]);
       expect(last).toEqual(6);
     });
-    it("should return corectly when there are loaded records, still not visited inventory tokens and some of these tokens are visited", () => {
+    it("should return corectly when there are loaded records, still not visited inventoryList tokens and some of these tokens are visited", () => {
       const tokensToFetch = [1, 2, 3, 4, 5];
       const lastTokenPos = 4;
       const records = {
@@ -154,12 +154,12 @@ describe("Given utils", () => {
         4: true,
         7: true,
       };
-      const inventory = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const inventoryList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
       const { tokens, last } = skipTokensAlreadyLoaded({
         tokens: tokensToFetch,
         records,
         lastTokenPos,
-        inventory,
+        inventoryList,
       });
       expect(tokens).toEqual([1, 3, 5, 6, 8]);
       expect(last).toEqual(7);

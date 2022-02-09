@@ -5,7 +5,6 @@ import {
   ROUTE_POLICY,
 } from "./constants";
 
-const filenames = ["proposalmetadata.json", "votemetadata.json"];
 const VERSION = "v1";
 
 // export client object with functions to interact with the API
@@ -18,7 +17,7 @@ export const client = {
     const inventory = await parseResponse(response);
     return inventory;
   },
-  async fetchRecords(state, records) {
+  async fetchRecords(state, records, filenames) {
     if (!state) {
       const error = Error("state is a required parameter");
       console.error(error);

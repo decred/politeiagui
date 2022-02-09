@@ -1,7 +1,8 @@
 import React from "react";
+import RecordsStatusList from "../common/RecordsStatusList";
 
 function Rejected() {
-  return <div>opa tio rejected</div>;
+  return <RecordsStatusList status={"rejected"} />;
 }
 
 export default Rejected;

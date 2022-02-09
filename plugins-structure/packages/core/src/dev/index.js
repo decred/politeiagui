@@ -13,7 +13,6 @@ import {
   DEFAULT_DARK_THEME_NAME,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
-import "../styles/index.css";
 
 const appRoot = document.querySelector("#app-root");
 

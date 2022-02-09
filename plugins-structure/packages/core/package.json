@@ -12,7 +12,6 @@
     "./records/validation": "./src/records/validation.js",
     "./records/inventory": "./src/records/inventory/index.js",
     "./records/policy": "./src/records/policy/index.js",
-    "./records/ui": "./src/records/ui/index.js",
     "./router": "./src/router/index.js",
     "./routes": "./src/routes/index.js"
   },

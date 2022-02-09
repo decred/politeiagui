@@ -1,6 +1,7 @@
 import invert from "lodash/fp/invert";
 import without from "lodash/fp/without";
 import take from "lodash/fp/take";
+import isEmpty from "lodash/fp/isEmpty";
 import {
   RECORD_STATUS_UNREVIEWED,
   RECORD_STATUS_PUBLIC,
@@ -9,6 +10,7 @@ import {
   RECORD_STATE_UNVETTED,
   RECORD_STATE_VETTED,
 } from "./constants.js";
+import { Buffer } from "buffer";
 
 const statusToString = {
   [RECORD_STATUS_UNREVIEWED]: "unreviewed",
@@ -117,24 +119,33 @@ export const validRecordStates = [
   ...validNumberRecordStates,
 ];
 
-export function getTokensToFetch({ records, pageSize, inventory }) {
-  let { lastTokenPos, tokens } = inventory;
+export function getTokensToFetch({
+  records,
+  pageSize,
+  inventoryList,
+  lastTokenPos,
+}) {
+  if (inventoryList.length === 0)
+    return {
+      tokens: [],
+      last: null,
+    };
   let tokensToFetch = [];
   if (lastTokenPos === null) {
     // means it's the first fetch
-    tokensToFetch = take(pageSize, tokens);
+    tokensToFetch = take(pageSize, inventoryList);
     lastTokenPos = tokensToFetch.length - 1;
   } else {
     // not the first fetch
-    tokensToFetch = take(pageSize, tokens.slice(lastTokenPos + 1));
+    tokensToFetch = take(pageSize, inventoryList.slice(lastTokenPos + 1));
     lastTokenPos += tokensToFetch.length;
   }
   // skip tokens if already lodaded
   return skipTokensAlreadyLoaded({
     tokens: tokensToFetch,
-    records: records.records,
+    records,
     lastTokenPos,
-    inventory: tokens,
+    inventoryList,
   });
 }
 
@@ -142,7 +153,7 @@ export function skipTokensAlreadyLoaded({
   tokens,
   records,
   lastTokenPos,
-  inventory,
+  inventoryList,
 }) {
   const alreadyLoaded = [];
   for (const token of tokens) {
@@ -156,8 +167,8 @@ export function skipTokensAlreadyLoaded({
   }
   const newTokens = without(alreadyLoaded, tokens);
   for (let i = 0; i < alreadyLoaded.length; i++) {
-    if (lastTokenPos < inventory.length - 2) {
-      newTokens.push(inventory[lastTokenPos + 1]);
+    if (lastTokenPos < inventoryList.length - 2) {
+      newTokens.push(inventoryList[lastTokenPos + 1]);
       lastTokenPos++;
     } else {
       break;
@@ -167,6 +178,30 @@ export function skipTokensAlreadyLoaded({
     tokens: newTokens,
     records,
     lastTokenPos,
-    inventory,
+    inventoryList,
   });
+}
+
+export function decodeRecordFile(file) {
+  return file ? JSON.parse(Buffer.from(file.payload, "base64")) : {};
+}
+
+export function decodeRecordMetadata(metadataStream) {
+  if (!metadataStream || !metadataStream.payload) return metadataStream;
+  let parsedPayload;
+  const { payload } = metadataStream;
+  try {
+    parsedPayload = JSON.parse(payload);
+  } catch (e) {
+    // parses metadata payload manually
+    parsedPayload = payload
+      .split(/\{(.*?)\}/)
+      .map((parsed) => JSON.parse(`{${parsed}}`))
+      .reduce((acc, curr) => (isEmpty(curr) ? acc : [...acc, curr]), []);
+  }
+  return { ...metadataStream, payload: parsedPayload };
+}
+
+export function getShortToken(token) {
+  return token?.slice(0, 7);
 }

@@ -1,14 +1,12 @@
 // createSlice is the main API function to define redux logic
 // createAsyncThunk gnerate thunks that automatically dispatch
 // start/success/failure actions
-import take from "lodash/fp/take";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   getHumanReadableRecordState,
   getRecordStatusCode,
   getRecordStateCode,
   getHumanReadableRecordStatus,
-  skipTokensAlreadyLoaded,
   getTokensToFetch,
 } from "../utils";
 import {
@@ -43,17 +41,20 @@ export const fetchNextRecordsBatch = createAsyncThunk(
   "recordsInventry/fetchNextRecordsBatch",
   async ({ recordsState, status }, { dispatch, rejectWithValue, getState }) => {
     try {
-      const stringRecordsState = getHumanReadableRecordState(recordsState);
-      const stringStatus = getHumanReadableRecordStatus(status);
+      const readableRecordsState = getHumanReadableRecordState(recordsState);
+      const readableStatus = getHumanReadableRecordStatus(status);
       const { recordsInventory, records, recordsPolicy } = getState();
+      const { tokens: invTokens, lastTokenPos } =
+        recordsInventory[readableRecordsState][readableStatus];
 
       const { tokens, last } = getTokensToFetch({
-        records,
+        records: records.records,
         pageSize: recordsPolicy.policy.recordspagesize,
-        inventory: recordsInventory[stringRecordsState][stringStatus],
+        inventoryList: invTokens,
+        lastTokenPos,
       });
 
-      await dispatch(fetchRecords(tokens));
+      await dispatch(fetchRecords({ tokens }));
       return last;
     } catch (e) {
       return rejectWithValue(e.message);
@@ -70,7 +71,7 @@ export const fetchRecordsInventory = createAsyncThunk(
   "recordsInventory/fetch",
   async (
     { recordsState, status, page = 1 },
-    { dispatch, extra, rejectWithValue, getState }
+    { extra, rejectWithValue, getState }
   ) => {
     const state = getState();
     const requestRecordsState = getRecordStateCode(recordsState);
@@ -107,25 +108,25 @@ const recordsInventorySlice = createSlice({
       .addCase(fetchRecordsInventory.pending, (state, action) => {
         const { recordsState, status } = action.meta.arg;
         const stringState = getHumanReadableRecordState(recordsState);
-        const stringStatus = getHumanReadableRecordStatus(status);
-        state[stringState][stringStatus].status = "loading";
+        const readableStatus = getHumanReadableRecordStatus(status);
+        state[stringState][readableStatus].status = "loading";
       })
       .addCase(fetchRecordsInventory.fulfilled, (state, action) => {
         const { recordsInventory, inventoryPageSize } = action.payload;
         const { recordsState, status, page } = action.meta.arg;
         const stringState = getHumanReadableRecordState(recordsState);
-        const stringStatus = getHumanReadableRecordStatus(status);
+        const readableStatus = getHumanReadableRecordStatus(status);
         if (
-          recordsInventory[stringState][stringStatus].length ===
+          recordsInventory[stringState][readableStatus].length ===
           inventoryPageSize
         ) {
-          state[stringState][stringStatus].status = "succeeded/hasMore";
+          state[stringState][readableStatus].status = "succeeded/hasMore";
         } else {
-          state[stringState][stringStatus].status = "succeeded/isDone";
+          state[stringState][readableStatus].status = "succeeded/isDone";
         }
-        state[stringState][stringStatus].lastPage = page;
-        state[stringState][stringStatus].tokens.push(
-          ...recordsInventory[stringState][stringStatus]
+        state[stringState][readableStatus].lastPage = page;
+        state[stringState][readableStatus].tokens.push(
+          ...recordsInventory[stringState][readableStatus]
         );
       })
       .addCase(fetchRecordsInventory.rejected, (state, action) => {
@@ -136,8 +137,8 @@ const recordsInventorySlice = createSlice({
       .addCase(fetchNextRecordsBatch.fulfilled, (state, action) => {
         const { recordsState, status } = action.meta.arg;
         const stringState = getHumanReadableRecordState(recordsState);
-        const stringStatus = getHumanReadableRecordStatus(status);
-        state[stringState][stringStatus].lastTokenPos = action.payload;
+        const readableStatus = getHumanReadableRecordStatus(status);
+        state[stringState][readableStatus].lastTokenPos = action.payload;
       })
       .addCase(fetchNextRecordsBatch.rejected, (state, action) => {
         state.status = "failed";
@@ -154,9 +155,9 @@ export const selectRecordsInventoryByStateAndStatus = (
   if (validateRecordStateAndStatus(recordsState, status)) {
     // We have valids record state and status.
     // Convert them to strings if they are not.
-    const stringRecordsState = getHumanReadableRecordState(recordsState);
-    const stringStatus = getHumanReadableRecordStatus(status);
-    return state.recordsInventory[stringRecordsState][stringStatus].tokens;
+    const readableRecordsState = getHumanReadableRecordState(recordsState);
+    const readableStatus = getHumanReadableRecordStatus(status);
+    return state.recordsInventory[readableRecordsState][readableStatus].tokens;
   }
 };
 export const selectRecordsInventoryStatus = (
@@ -166,9 +167,9 @@ export const selectRecordsInventoryStatus = (
   if (validateRecordStateAndStatus(recordsState, status)) {
     // We have valids record state and status.
     // Convert them to strings if they are not.
-    const stringRecordsState = getHumanReadableRecordState(recordsState);
-    const stringStatus = getHumanReadableRecordStatus(status);
-    return state.recordsInventory[stringRecordsState][stringStatus].status;
+    const readableRecordsState = getHumanReadableRecordState(recordsState);
+    const readableStatus = getHumanReadableRecordStatus(status);
+    return state.recordsInventory[readableRecordsState][readableStatus].status;
   }
 };
 
@@ -179,10 +180,10 @@ export const selectHasMoreRecordsToFetch = (
   if (validateRecordStateAndStatus(recordsState, status)) {
     // We have valids record state and status.
     // Convert them to strings if they are not.
-    const stringRecordsState = getHumanReadableRecordState(recordsState);
-    const stringStatus = getHumanReadableRecordStatus(status);
+    const readableRecordsState = getHumanReadableRecordState(recordsState);
+    const readableStatus = getHumanReadableRecordStatus(status);
     const statusInventory =
-      state.recordsInventory[stringRecordsState][stringStatus];
+      state.recordsInventory[readableRecordsState][readableStatus];
     return statusInventory.lastTokenPos < statusInventory.tokens.length - 1;
   }
 };
@@ -194,9 +195,9 @@ export const selectRecordsInventoryLastPage = (
   if (validateRecordStateAndStatus(recordsState, status)) {
     // We have valids record state and status.
     // Convert them to strings if they are not.
-    const stringRecordsState = getHumanReadableRecordState(recordsState);
-    const stringStatus = getHumanReadableRecordStatus(status);
-    return state.recordsInventory[stringRecordsState][stringStatus].lastPage;
+    const readableRecordsState = getHumanReadableRecordState(recordsState);
+    const readableStatus = getHumanReadableRecordStatus(status);
+    return state.recordsInventory[readableRecordsState][readableStatus].lastPage;
   }
 };
 

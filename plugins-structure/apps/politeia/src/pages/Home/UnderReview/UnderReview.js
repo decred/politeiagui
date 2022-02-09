@@ -1,7 +1,9 @@
 import React from "react";
+import MultipleStatusesRecordsList from "../common/MultipleStatusesRecordsList";
 
-function UnderReview() {
-  return <div>opa tio</div>;
+function UnderReviewPage() {
+  const statuses = ["started", "authorized", "unauthorized"];
+  return <MultipleStatusesRecordsList statuses={statuses} />;
 }
 
-export default UnderReview;
+export default UnderReviewPage;

@@ -1,7 +1,8 @@
 import React from "react";
+import RecordsStatusList from "../common/RecordsStatusList";
 
 function Approved() {
-  return <div>opa tio approved</div>;
+  return <RecordsStatusList status={"approved"} />;
 }
 
 export default Approved;

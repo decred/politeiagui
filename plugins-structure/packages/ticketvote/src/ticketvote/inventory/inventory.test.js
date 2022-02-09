@@ -1,23 +1,37 @@
 import reducer, {
   fetchTicketvoteInventory,
-  fetchTicketvoteNextRecordsPage,
+  fetchTicketvoteNextRecordsBatch,
   initialState,
 } from "./inventorySlice";
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import { records } from "@politeiagui/core/records";
 import policyReducer from "../policy/policySlice";
 
+const mockRecordsReducer = createSlice({
+  name: "records",
+  initialState: {
+    records: {},
+  },
+}).reducer;
+
+const mockRecordsPolicyReducer = createSlice({
+  name: "recordsPolicy",
+  initialState: {
+    policy: { recordspagesize: 5 },
+  },
+}).reducer;
+
 describe("Given the recordsInventorySlice", () => {
   let store;
   // spy on the method used to fetch
+
   let fetchInventorySpy;
   let fetchRecordsSpy;
   const params = {
     status: 1,
     page: 1,
   };
-  const unauthorized = Array(10).fill("fakeToken");
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
@@ -150,54 +164,67 @@ describe("Given the recordsInventorySlice", () => {
       expect(state.error).toEqual("ERROR");
     });
   });
-  describe("when fetchTicketvoteNextRecordsPage is called with empty tokens", () => {
+  describe("when fetchTicketvoteNextRecordsBatch is called with empty tokens", () => {
     store = configureStore({
       reducer: { ticketvoteInventory: reducer },
-      preloadedState: {
-        ticketvoteInventory: {
-          recordsFetchQueue: { tokens: [], status: "idle" },
-        },
-      },
     });
     it("should not fetch records nor fire records actions", async () => {
-      await store.dispatch(fetchTicketvoteNextRecordsPage());
+      await store.dispatch(
+        fetchTicketvoteNextRecordsBatch({ status: "unauthorized" })
+      );
       expect(fetchRecordsSpy).not.toBeCalled();
       const state = store.getState().ticketvoteInventory;
-      expect(state.recordsFetchQueue.tokens).toEqual([]);
-      expect(state.recordsFetchQueue.status).toEqual("idle");
+      expect(state.unauthorized.tokens).toEqual([]);
+      expect(state.unauthorized.lastTokenPos).toEqual(null);
+      expect(state.unauthorized.status).toEqual("idle");
     });
   });
-  describe("when fetchTicketvoteNextRecordsPage dispatches with valid tokens", () => {
-    it("should update the status to loading", async () => {
+  describe("when fetchTicketvoteNextRecordsBatch succeeds", () => {
+    const unauthorizedTokens = [
+      "token1",
+      "token2",
+      "token3",
+      "token4",
+      "token5",
+    ];
+    it("should have fetched records, and updated the lastTokenPos", async () => {
       store = configureStore({
-        reducer: { ticketvoteInventory: reducer },
+        reducer: {
+          ticketvoteInventory: reducer,
+          ticketvotePolicy: policyReducer,
+          records: mockRecordsReducer,
+          recordsPolicy: mockRecordsPolicyReducer,
+        },
         preloadedState: {
           ticketvoteInventory: {
-            recordsFetchQueue: { tokens: unauthorized, status: "idle" },
+            unauthorized: {
+              ...initialState.unauthorized,
+              tokens: unauthorizedTokens,
+              status: "succeeded/isDone",
+            },
+          },
+          ticketvotePolicy: {
+            policy: { inventorypagesize: 20 },
+          },
+          records: {
+            records: { token1: true },
           },
         },
       });
 
-      store.dispatch(fetchTicketvoteNextRecordsPage());
-      const state = store.getState().ticketvoteInventory;
-      expect(state.recordsFetchQueue.status).toEqual("loading");
-    });
-  });
-  describe("when fetchTicketvoteNextRecordsPage succeeds", () => {
-    it("should have fetched records", async () => {
-      store = configureStore({
-        reducer: { ticketvoteInventory: reducer },
-        preloadedState: {
-          ticketvoteInventory: {
-            recordsFetchQueue: { tokens: unauthorized, status: "idle" },
-          },
-        },
-      });
-      await store.dispatch(fetchTicketvoteNextRecordsPage());
+      expect(
+        store.getState().ticketvoteInventory.unauthorized.lastTokenPos
+      ).toEqual(null);
 
-      expect(fetchRecordsSpy).toBeCalled();
+      await store.dispatch(
+        fetchTicketvoteNextRecordsBatch({ status: "unauthorized" })
+      );
+
+      expect(fetchRecordsSpy).toBeCalledWith(unauthorizedTokens);
       const state = store.getState().ticketvoteInventory;
-      expect(state.recordsFetchQueue.tokens).toEqual(unauthorized);
+      expect(state.unauthorized.tokens).toEqual(unauthorizedTokens);
+      expect(state.unauthorized.status).toEqual("succeeded/isDone");
+      expect(state.unauthorized.lastTokenPos).toEqual("token5");
     });
   });
 });

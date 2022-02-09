@@ -25,11 +25,10 @@ function renderChild(props) {
 }
 
 function Home() {
-  // fetch records policy
-  recordsPolicy.useFetch();
-  // fetch ticketvote policy
-  ticketvotePolicy.useFetch();
-  return (
+  const { policyStatus: recordsPolicyStatus } = recordsPolicy.useFetch();
+  const { policyStatus: ticketvotePolicyStatus } = ticketvotePolicy.useFetch();
+  return recordsPolicyStatus === "succeeded" &&
+    ticketvotePolicyStatus === "succeeded" ? (
     <div>
       <H1>Proposals</H1>
       <div className={styles.tabs}>
@@ -48,6 +47,8 @@ function Home() {
       </div>
       <div>{renderChild()}</div>
     </div>
+  ) : (
+    "Loading ..."
   );
 }
 

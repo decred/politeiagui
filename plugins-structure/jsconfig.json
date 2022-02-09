@@ -25,9 +25,6 @@
       "@politeiagui/core/records/policy": [
         "./packages/core/src/records/policy/index.js"
       ],
-      "@politeiagui/core/records/ui": [
-        "./packages/core/src/records/ui/index.js"
-      ],
       "@politeiagui/ticketvote": ["./packages/ticketvote/src/index.js"],
       "@politeiagui/ticketvote/api": ["./packages/ticketvote/src/lib/api.js"],
       "@politeiagui/ticketvote/routes": [

@@ -1,48 +1,54 @@
 import React, { useState } from "react";
-import {
-  TicketvoteInventoryWrapper,
-  TicketvoteSummariesWrapper,
-} from "../Wrappers";
+import { Card } from "pi-ui";
+import { useSelector } from "react-redux";
+import { ticketvoteInventory } from "../../ticketvote/inventory";
+import { ticketvoteSummaries } from "../../ticketvote/summaries";
+import { records } from "@politeiagui/core/records";
+import { TicketvoteRecordVoteStatusBar } from "../Vote";
 
-export function TicketvoteRecordsList({ statuses, children }) {
-  const [firstStatus, ...rest] = statuses;
-  const [statusesNotFetched, setNotFetched] = useState(rest);
-  const [statusesFetched, setFetched] = useState([firstStatus]);
+export function TicketvoteRecordsList({ status }) {
+  const [page, setPage] = useState(1);
+  const { inventory, onFetchNextRecordsBatch, inventoryStatus } =
+    ticketvoteInventory.useFetch({
+      status,
+      page,
+    });
 
-  function fetchNextStatusInventory() {
-    const [current, ...newNotFetched] = statusesNotFetched;
-    setNotFetched(newNotFetched);
-    setFetched([...statusesFetched, current]);
+  const { summaries, onFetchSummariesNextPage } = ticketvoteSummaries.useFetch({
+    tokens: inventory,
+  });
+  const recordsFetched = useSelector((state) =>
+    records.selectByTokensBatch(state, inventory)
+  );
+
+  function handleFetchNextPage() {
+    onFetchNextRecordsBatch();
+    onFetchSummariesNextPage();
   }
 
-  return statuses.map((status, key) => (
-    <div key={key}>
-      {!statusesNotFetched.includes(status) && (
-        <TicketvoteInventoryWrapper
-          status={status}
-          onFetchDone={fetchNextStatusInventory}
-        >
-          {(inventoryProps) => {
-            const isFetchAllowed = inventoryProps.inventory.length > 0;
+  return (
+    <div>
+      {recordsFetched &&
+        recordsFetched.map((rec, i) => {
+          if (
+            i === inventory.length - 1 &&
+            inventoryStatus === "succeeded/hasMore"
+          )
             return (
-              isFetchAllowed && (
-                <TicketvoteSummariesWrapper
-                  tokens={inventoryProps.inventory}
-                  onFetchDone={inventoryProps.onFetchInventoryNextPage}
-                >
-                  {(summariesProps) =>
-                    children({
-                      inventory: inventoryProps,
-                      summaries: summariesProps,
-                      status,
-                    })
-                  }
-                </TicketvoteSummariesWrapper>
-              )
+              <button onClick={() => setPage(page + 1)}>
+                Fetch Next Inventory Page
+              </button>
             );
-          }}
-        </TicketvoteInventoryWrapper>
-      )}
+          return (
+            <Card key={i} paddingSize="small">
+              <div>Record: {rec.censorshiprecord.token}</div>
+              <TicketvoteRecordVoteStatusBar
+                ticketvoteSummary={summaries[rec.censorshiprecord.token]}
+              />
+            </Card>
+          );
+        })}
+      <button onClick={handleFetchNextPage}>Fetch Next Batch</button>
     </div>
-  ));
+  );
 }
