@@ -1,4 +1,4 @@
-import { router, generatePath } from "./router";
+import { generatePath, router } from "./router";
 
 const mockRoutes = [
   {

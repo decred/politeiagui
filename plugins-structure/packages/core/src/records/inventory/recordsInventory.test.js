@@ -1,6 +1,6 @@
 import recordsInventoryReducer, {
-  fetchRecordsInventory,
   fetchNextRecordsBatch,
+  fetchRecordsInventory,
   initialState,
 } from "./recordsInventorySlice";
 import recordsReducer from "../records/recordsSlice";

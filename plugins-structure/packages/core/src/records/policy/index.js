@@ -1,9 +1,9 @@
 import {
+  fetchRecordsPolicy,
   selectRecordsPolicy,
+  selectRecordsPolicyError,
   selectRecordsPolicyRule,
   selectRecordsPolicyStatus,
-  selectRecordsPolicyError,
-  fetchRecordsPolicy,
 } from "./policySlice";
 import { useFetchPolicy } from "./useFetchPolicy";
 

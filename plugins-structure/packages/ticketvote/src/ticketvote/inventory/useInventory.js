@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ticketvoteInventory } from "./";
 
 export function useTicketvoteInventory({ status, page = 1 }) {

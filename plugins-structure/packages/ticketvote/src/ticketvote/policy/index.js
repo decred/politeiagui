@@ -1,9 +1,9 @@
 import {
   fetchTicketvotePolicy,
   selectTicketvotePolicy,
+  selectTicketvotePolicyError,
   selectTicketvotePolicyRule,
   selectTicketvotePolicyStatus,
-  selectTicketvotePolicyError,
 } from "./policySlice";
 
 import { useTicketvotePolicy } from "./usePolicy";

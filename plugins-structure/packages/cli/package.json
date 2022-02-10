@@ -27,6 +27,7 @@
     "format": "yarn prettier --write",
     "test:format": "yarn prettier --check",
     "test:eslint": "eslint --ext .js ./lib",
+    "fix:eslint": "eslint --ext .js ./lib",
     "test:ci": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --no-cache",
     "test:dev": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll --no-cache",
     "test": "is-ci \"test:ci\" \"test:dev\"",

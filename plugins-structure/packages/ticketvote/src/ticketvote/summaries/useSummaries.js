@@ -1,6 +1,6 @@
 import { getTokensToFetch } from "@politeiagui/core";
 import { useCallback, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ticketvoteSummaries } from "./";
 import { ticketvotePolicy } from "../policy";
 

@@ -1,12 +1,12 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import {
   getHumanReadableTicketvoteStatus,
   getTicketvoteStatusCode,
 } from "../../lib/utils";
 import {
-  validateTicketvoteStatus,
   validateTicketvoteInventoryPageSize,
+  validateTicketvoteStatus,
 } from "../../lib/validation";
 import { records } from "@politeiagui/core/records";
 import { getTokensToFetch } from "@politeiagui/core/records/utils";

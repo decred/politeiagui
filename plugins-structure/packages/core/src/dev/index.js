@@ -6,11 +6,11 @@ import { routes } from "../routes/routes";
 import { router } from "../router/router";
 import { api } from "../api";
 import {
-  defaultLightTheme,
+  DEFAULT_DARK_THEME_NAME,
+  DEFAULT_LIGHT_THEME_NAME,
   ThemeProvider,
   defaultDarkTheme,
-  DEFAULT_LIGHT_THEME_NAME,
-  DEFAULT_DARK_THEME_NAME,
+  defaultLightTheme,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
 

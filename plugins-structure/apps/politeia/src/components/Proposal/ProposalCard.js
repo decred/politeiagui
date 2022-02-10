@@ -1,6 +1,6 @@
 import React from "react";
-import { Link, Text, StatusTag, Button } from "pi-ui";
-import { Join, Event, RecordCard } from "@politeiagui/common-ui";
+import { Button, Link, StatusTag, Text } from "pi-ui";
+import { Event, Join, RecordCard } from "@politeiagui/common-ui";
 import { TicketvoteRecordVoteStatusBar } from "@politeiagui/ticketvote/ui";
 import {
   decodeProposalRecord,

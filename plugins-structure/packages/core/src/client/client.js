@@ -1,8 +1,8 @@
 import {
   RECORDS_API_ROUTE,
   ROUTE_INVENTORY,
-  ROUTE_RECORDS,
   ROUTE_POLICY,
+  ROUTE_RECORDS,
 } from "./constants";
 
 const VERSION = "v1";

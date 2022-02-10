@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getTokensToFetch } from "@politeiagui/core/records/utils";
 import { validateRecordsPageSize } from "@politeiagui/core/records/validation";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";

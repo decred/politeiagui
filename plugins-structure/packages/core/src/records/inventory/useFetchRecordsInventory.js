@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { recordsInventory } from "./";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export function useFetchRecordsInventory({ recordsState, status, page = 1 }) {
   const dispatch = useDispatch();

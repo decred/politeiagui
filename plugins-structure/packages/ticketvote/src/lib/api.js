@@ -1,6 +1,4 @@
 import {
-  TICKETVOTE_API_ROUTE,
-  VERSION,
   ROUTE_DETAILS,
   ROUTE_INVENTORY,
   ROUTE_POLICY,
@@ -8,8 +6,10 @@ import {
   ROUTE_SUBMISSIONS,
   ROUTE_SUMMARIES,
   ROUTE_TIMESTAMPS,
+  TICKETVOTE_API_ROUTE,
+  VERSION,
 } from "./constants";
-import { getCsrf, parseResponse, fetchOptions } from "@politeiagui/core/client";
+import { fetchOptions, getCsrf, parseResponse } from "@politeiagui/core/client";
 
 function getTicketvoteRoute(route) {
   return `${TICKETVOTE_API_ROUTE}${VERSION}${route}`;

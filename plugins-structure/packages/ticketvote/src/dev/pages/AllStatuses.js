@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
-import { store, connectReducers } from "@politeiagui/core";
+import { connectReducers, store } from "@politeiagui/core";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
 import { ticketvoteConstants } from "../../ticketvote";
 import { ticketvotePolicy } from "../../ticketvote/policy";

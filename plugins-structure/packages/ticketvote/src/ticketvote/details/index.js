@@ -1,8 +1,8 @@
 import {
   fetchTicketvoteDetails,
+  selectTicketvoteDetailsByToken,
   selectTicketvoteDetailsError,
   selectTicketvoteDetailsStatus,
-  selectTicketvoteDetailsByToken,
 } from "./detailsSlice";
 import { useTicketvoteDetails } from "./useDetails";
 

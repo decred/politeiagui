@@ -1,10 +1,10 @@
 import {
+  validateInventoryPageSize,
   validateRecordState,
   validateRecordStatus,
   validateRecordsPageSize,
-  validateInventoryPageSize,
 } from "./validation";
-import { validRecordStatuses, validRecordStates } from "./utils";
+import { validRecordStates, validRecordStatuses } from "./utils";
 
 const invalidStates = [3, -1, 0, "some_string"];
 const invalidStatus = [5, -1, 0, "some_string"];

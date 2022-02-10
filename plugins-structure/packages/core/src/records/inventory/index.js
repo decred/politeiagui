@@ -1,10 +1,10 @@
 import {
-  fetchRecordsInventory,
   fetchNextRecordsBatch,
-  selectRecordsInventoryByStateAndStatus,
-  selectRecordsInventoryStatus,
-  selectRecordsInventoryLastPage,
+  fetchRecordsInventory,
   selectHasMoreRecordsToFetch,
+  selectRecordsInventoryByStateAndStatus,
+  selectRecordsInventoryLastPage,
+  selectRecordsInventoryStatus,
 } from "./recordsInventorySlice";
 import { useFetchRecordsInventory } from "./useFetchRecordsInventory";
 

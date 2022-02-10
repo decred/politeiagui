@@ -3,12 +3,12 @@ import without from "lodash/fp/without";
 import take from "lodash/fp/take";
 import isEmpty from "lodash/fp/isEmpty";
 import {
-  RECORD_STATUS_UNREVIEWED,
-  RECORD_STATUS_PUBLIC,
-  RECORD_STATUS_CENSORED,
-  RECORD_STATUS_ARCHIVED,
   RECORD_STATE_UNVETTED,
   RECORD_STATE_VETTED,
+  RECORD_STATUS_ARCHIVED,
+  RECORD_STATUS_CENSORED,
+  RECORD_STATUS_PUBLIC,
+  RECORD_STATUS_UNREVIEWED,
 } from "./constants.js";
 import { Buffer } from "buffer";
 

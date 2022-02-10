@@ -1,10 +1,10 @@
 import React from "react";
 import {
-  defaultLightTheme,
+  DEFAULT_DARK_THEME_NAME,
+  DEFAULT_LIGHT_THEME_NAME,
   ThemeProvider,
   defaultDarkTheme,
-  DEFAULT_LIGHT_THEME_NAME,
-  DEFAULT_DARK_THEME_NAME,
+  defaultLightTheme,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
 

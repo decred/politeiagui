@@ -1,4 +1,4 @@
-import reducer, { initialState, fetchApi } from "./apiSlice";
+import reducer, { fetchApi, initialState } from "./apiSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { client } from "../client";
 

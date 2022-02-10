@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getRecordStatusCode, getRecordStateCode } from "../utils";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getRecordStateCode, getRecordStatusCode } from "../utils";
 import { validateRecordStateAndStatus } from "../validation";
 import isArray from "lodash/fp/isArray";
 import pick from "lodash/fp/pick";

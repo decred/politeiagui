@@ -7,8 +7,8 @@ import { ticketvoteTimestamps } from "./timestamps";
 
 import {
   ticketvoteGetQuorumInVotes,
-  ticketvoteGetVotesReceived,
   ticketvoteGetVoteStatusBarData,
+  ticketvoteGetVotesReceived,
 } from "./helpers";
 
 import { reducersArray } from "./constants";

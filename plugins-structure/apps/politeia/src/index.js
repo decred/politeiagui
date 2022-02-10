@@ -10,14 +10,13 @@ import { routes as statisticsRoutes } from "@politeiagui/statistics";
 import { routes as ticketvoteRoutes } from "@politeiagui/ticketvote";
 import { routes as proposalsRoutes } from "./routes";
 import { mergeRoutes } from "./utils/mergeRoutes";
-import { recordsInventory } from "@politeiagui/core/records/inventory";
 
 import {
-  defaultLightTheme,
+  DEFAULT_DARK_THEME_NAME,
+  DEFAULT_LIGHT_THEME_NAME,
   ThemeProvider,
   defaultDarkTheme,
-  DEFAULT_LIGHT_THEME_NAME,
-  DEFAULT_DARK_THEME_NAME,
+  defaultLightTheme,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
 

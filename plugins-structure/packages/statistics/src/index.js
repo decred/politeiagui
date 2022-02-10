@@ -1,9 +1,7 @@
 import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
-import { api } from "@politeiagui/core/api";
 import { recordsInventory } from "@politeiagui/core/records/inventory";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
-import { router } from "@politeiagui/core/router";
 
 const publicRecord = {
   recordsState: "vetted",

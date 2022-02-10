@@ -1,7 +1,7 @@
 // createSlice is the main API function to define redux logic
 // createAsyncThunk gnerate thunks that automatically dispatch
 // start/success/failure actions
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
 // Possible error types: string | null

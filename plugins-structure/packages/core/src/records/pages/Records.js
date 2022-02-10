@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { recordsInventory } from "../inventory";
 import { records } from "../records";
 import { useDispatch, useSelector } from "react-redux";

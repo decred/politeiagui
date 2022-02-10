@@ -1,14 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, Icon, Tooltip } from "pi-ui";
+import { Text, Tooltip } from "pi-ui";
 import styles from "./styles.module.css";
 
 export const TicketvoteRecordVotesCount = ({
   quorumVotes,
   votesReceived,
-  onSearchVotes,
   isVoteActive,
-  searchIconColor,
   tooltipClassName,
 }) => {
   const votesLeft = quorumVotes - votesReceived;

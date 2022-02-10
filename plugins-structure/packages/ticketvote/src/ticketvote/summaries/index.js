@@ -1,12 +1,12 @@
 import {
   fetchTicketvoteSummaries,
-  selectTicketvoteSummariesStatus,
   selectTicketvoteSummaries,
   selectTicketvoteSummariesByRecordToken,
-  selectTicketvoteSummariesByTokensBatch,
   selectTicketvoteSummariesByStatus,
+  selectTicketvoteSummariesByTokensBatch,
   selectTicketvoteSummariesError,
   selectTicketvoteSummariesFetchedTokens,
+  selectTicketvoteSummariesStatus,
 } from "./summariesSlice";
 
 import { useTicketvoteSummaries } from "./useSummaries";
