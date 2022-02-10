@@ -79,7 +79,7 @@ export const fetchTicketvoteNextRecordsBatch = createAsyncThunk(
         lastTokenPos,
       });
       if (!isEmpty(tokensToFetch)) {
-        await dispatch(records.fetch(tokensToFetch));
+        await dispatch(records.fetch({ tokens: tokensToFetch }));
       }
       return last;
     } catch (error) {

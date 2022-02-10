@@ -1,6 +1,7 @@
 # Ticketvote
 
-Ticketvote package describes the ticketvote plugin from politeia.
+Ticketvote package describes the ticketvote plugin from politeia, including
+methods and components to interact with it.
 
 ## Files Structure
 
@@ -93,7 +94,55 @@ $ yarn && yarn test
 
 ## Connect Reducers
 
-<!-- TODO: Link "Connect Reducers" from Core -->
+You can connect ticketvote reducers into the Core Store using the
+`connectReducers` method from `@politeiagui/core`:
+
+```javascript
+import { connectReducers } from "@politeiagui/core";
+import { ticketvoteConstants } from "@politeiagui/ticketvote";
+
+await connectReducers(ticketvoteConstants.reducersArray);
+```
+
+This will use the `reducersArray` from ticketvote constants to connect each
+reducer using the `{ key, reducer }` array described below:
+
+```javascript
+// ticketvote constants
+import details from "./details/detailsSlice";
+import inventory from "./inventory/inventorySlice";
+import policy from "./policy/policySlice";
+import results from "./results/resultsSlice";
+import summaries from "./summaries/summariesSlice";
+import timestamps from "./timestamps/timestampsSlice";
+
+export const reducersArray = [
+  {
+    key: "ticketvoteDetails",
+    reducer: details,
+  },
+  {
+    key: "ticketvoteInventory",
+    reducer: inventory,
+  },
+  {
+    key: "ticketvotePolicy",
+    reducer: policy,
+  },
+  {
+    key: "ticketvoteResults",
+    reducer: results,
+  },
+  {
+    key: "ticketvoteSummaries",
+    reducer: summaries,
+  },
+  {
+    key: "ticketvoteTimestamps",
+    reducer: timestamps,
+  },
+];
+```
 
 ## Inventory Slice
 
@@ -856,3 +905,128 @@ ticketvote API.
   const policy = ticketvotePolicy.selectStatus(store.getState());
   // "succeeded"
   ```
+
+## Example
+
+Let's build a custom page for fetching `unauthorized` records + summaries:
+
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+
+import { store, connectReducers } from "@politeiagui/core";
+import { recordsPolicy } from "@politeiagui/core/records/policy";
+import { ticketvoteConstants } from "../../ticketvote";
+import { ticketvotePolicy } from "../../ticketvote/policy";
+import { TicketvoteRecordsList } from "../../ui";
+// Improve visual theming
+import { PiThemeWrapper } from "../theme";
+
+const AllStatusPage = async () => {
+  // Before dispatching any actions, we need to connect the ticketvote reducers
+  // into the core store.
+  await connectReducers(ticketvoteConstants.reducersArray);
+  // We can only perform fetch actions with all policies loaded, because the
+  // async thunks will require some extra parameters defined by each plugin's
+  // policy rules
+  await store.dispatch(ticketvotePolicy.fetch());
+  await store.dispatch(recordsPolicy.fetch());
+  // Render AllStatusPage component
+  ReactDOM.render(
+    <Provider store={store}>
+      <PiThemeWrapper>
+        <TicketvoteRecordsList status={"unauthorized"} />
+      </PiThemeWrapper>
+    </Provider>,
+    document.querySelector("#root")
+  );
+};
+
+export default AllStatusPage;
+```
+
+Here is our `TicketvoteRecordsList` component:
+
+```javascript
+import React, { useState } from "react";
+import { Card } from "pi-ui";
+import { useSelector } from "react-redux";
+import { ticketvoteInventory } from "../../ticketvote/inventory";
+import { ticketvoteSummaries } from "../../ticketvote/summaries";
+import { records } from "@politeiagui/core/records";
+import { TicketvoteRecordVoteStatusBar } from "../Vote";
+
+export function TicketvoteRecordsList({ status }) {
+  const [page, setPage] = useState(1);
+  // Fetch inventory first, to load the required record tokens
+  const { inventory, onFetchNextRecordsBatch, inventoryStatus } =
+    ticketvoteInventory.useFetch({
+      status,
+      page,
+    });
+
+  // Get all summaries from given inventory
+  const { summaries, onFetchSummariesNextPage } = ticketvoteSummaries.useFetch({
+    tokens: inventory,
+  });
+  // Get all records from given inventory
+  const recordsFetched = useSelector((state) =>
+    records.selectByTokensBatch(state, inventory)
+  );
+
+  // pagination methods
+  function handleFetchNextPage() {
+    onFetchNextRecordsBatch();
+    onFetchSummariesNextPage();
+  }
+
+  return (
+    <div>
+      {recordsFetched &&
+        recordsFetched.map((rec, i) => {
+          if (
+            i === inventory.length - 1 &&
+            inventoryStatus === "succeeded/hasMore"
+          )
+            // only allow next inventory page fetching if inventory has been
+            // loaded successfully
+            return (
+              <button onClick={() => setPage(page + 1)}>
+                Fetch Next Inventory Page
+              </button>
+            );
+          return (
+            <Card key={i} paddingSize="small">
+              <div>Record: {rec.censorshiprecord.token}</div>
+              <TicketvoteRecordVoteStatusBar
+                ticketvoteSummary={summaries[rec.censorshiprecord.token]}
+              />
+            </Card>
+          );
+        })}
+      <button onClick={handleFetchNextPage}>Fetch Next Batch</button>
+    </div>
+  );
+}
+```
+
+Here's the result:
+
+<img src="./public/assets/ticketvote-records-page.gif"/>
+
+## References
+
+<a id="ref-1">1</a>. lukebp, alexlyp, marcopeereboom, dajohi, amass01, thi4go,
+victorgcramos, tiagoalvesdulce, vibros68 . . . (2021). _Politeia_ (1.2.0)
+[Politeia is a system for storing off-chain data that is both versioned and
+timestamped]. Decred. https://github.com/decred/politeia
+
+<a id="ref-2">2</a>. lukebp. (2021, May 6). _Politeia: Pi 2021 Q3 (Proposal
+System)_. Politeia Proposal. https://proposals.decred.org/record/91cfcc8
+
+<a id="ref-3">3</a>. Redux Toolkit v1.6.1. _Redux Toolkit_.
+https://redux-toolkit.js.org
+
+<a id="ref-4">4</a>. Redux - A predictable state container for JavaScript apps.
+_Redux_. https://redux.js.org.
