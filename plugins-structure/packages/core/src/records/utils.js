@@ -12,6 +12,42 @@ import {
 } from "./constants.js";
 import { Buffer } from "buffer";
 
+/**
+ * Record File
+ * @typedef {{
+ *   name: String,
+ *   mime: String,
+ *   digest: String,
+ *   payload: String
+ * }} RecordFile
+ */
+/**
+ * Record Metadata Stream
+ * @typedef {{
+ *   pluginid: String,
+ *   streamid: Number,
+ *   payload: String
+ * }} MetadataStream
+ */
+/**
+ * Record object
+ * @typedef {{
+ *   censorshiprecord: { token: String, merkle: String, signature: String },
+ *   files: RecordFile[],
+ *   metadata: MetadataStream[],
+ *   state: Number,
+ *   status: Number,
+ *   timestamp: Number,
+ *   username: String,
+ *   version: Number
+ * }} Record
+ */
+
+/**
+ * Record token: record.censorshiprecord.token
+ * @typedef {String} RecordToken
+ */
+
 const statusToString = {
   [RECORD_STATUS_UNREVIEWED]: "unreviewed",
   [RECORD_STATUS_PUBLIC]: "public",
@@ -24,6 +60,12 @@ const stateToString = {
   [RECORD_STATE_VETTED]: "vetted",
 };
 
+/**
+ * getHumanReadableRecordStatus returns the readable record status and throws
+ * an error if status is invalid or does not exist.
+ * @param {Number | String} status record status
+ * @returns {String} readable record status
+ */
 export function getHumanReadableRecordStatus(status) {
   if (typeof status === "string" && isNaN(status)) {
     if (validStringRecordStatuses.find((st) => st === status)) {
@@ -42,50 +84,71 @@ export function getHumanReadableRecordStatus(status) {
   } else return statusToString[status];
 }
 
-export function getRecordStatusCode(statusString) {
-  if (typeof statusString === "number" || !isNaN(statusString)) {
-    if (validNumberRecordStatuses.find((st) => st == statusString)) {
-      return Number(statusString);
+/**
+ * getRecordStatusCode returns the valid status code for given status. If status
+ * is invalid, an error is thrown.
+ * @param {String | Number} status record status
+ * @returns {Number} record status code
+ */
+export function getRecordStatusCode(status) {
+  if (typeof status === "number" || !isNaN(status)) {
+    if (validNumberRecordStatuses.find((st) => st == status)) {
+      return Number(status);
     }
   }
   const stringToStatus = invert(statusToString);
-  if (stringToStatus[statusString] === undefined) {
+  if (stringToStatus[status] === undefined) {
     throw TypeError(
       `Invalid status. You are trying to get the status code of an invalid status. Valid ones are: ${validRecordStatuses}`
     );
-  } else return Number(stringToStatus[statusString]);
+  } else return Number(stringToStatus[status]);
 }
 
-export function getHumanReadableRecordState(state) {
-  if (typeof state === "string" && isNaN(state)) {
-    if (validStringRecordStates.find((st) => st === state)) {
-      return state;
+/**
+ * getHumanReadableRecordState returns the readable record state and throws
+ * an error if state is invalid or does not exist.
+ * @param {Number | String} recordState record state
+ * @returns {String} readable record state
+ */
+export function getHumanReadableRecordState(recordState) {
+  if (typeof recordState === "string" && isNaN(recordState)) {
+    if (validStringRecordStates.find((st) => st === recordState)) {
+      return recordState;
     }
   }
-  if (isNaN(state)) {
+  if (isNaN(recordState)) {
     throw TypeError(
       `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`
     );
   }
-  if (state < RECORD_STATE_UNVETTED || state > RECORD_STATE_VETTED) {
+  if (
+    recordState < RECORD_STATE_UNVETTED ||
+    recordState > RECORD_STATE_VETTED
+  ) {
     throw TypeError(
       `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`
     );
-  } else return stateToString[state];
+  } else return stateToString[recordState];
 }
 
-export function getRecordStateCode(stateString) {
-  if (typeof stateString === "number" || !isNaN(stateString)) {
-    if (validNumberRecordStates.find((st) => st == stateString)) {
-      return Number(stateString);
+/**
+ * getRecordStatusCode returns the valid state code for given recordState.
+ * If recordState is invalid, an error is thrown.
+ * @param {Number | String} recordState record state
+ * @returns {Number} record state code
+ */
+export function getRecordStateCode(recordState) {
+  if (typeof recordState === "number" || !isNaN(recordState)) {
+    if (validNumberRecordStates.find((st) => st == recordState)) {
+      return Number(recordState);
     }
   }
   const stringToState = invert(stateToString);
-  if (stringToState[stateString] === undefined) {
+  if (stringToState[recordState] === undefined) {
     throw TypeError(
       `Invalid state. You are trying to get the state code of an invalid state. Valid ones are: ${validRecordStates}`
     );
-  } else return Number(stringToState[stateString]);
+  } else return Number(stringToState[recordState]);
 }
 
 export const validStringRecordStatuses = [
@@ -119,6 +182,18 @@ export const validRecordStates = [
   ...validNumberRecordStates,
 ];
 
+/**
+ * getTokensToFetch returns the tokens batch and last position pointer for given
+ * `inventory` and `pageSize`, indexed by `lastTokenPos` skipping `records`
+ * already loaded.
+ * @param {{
+ *   records: Record[],
+ *   pageSize: Number,
+ *   inventoryList: RecordToken[],
+ *   lastTokenPos: Number
+ * }} fetchParams
+ * @returns {Object} { tokens: RecordToken[], last: Number }
+ */
 export function getTokensToFetch({
   records,
   pageSize,
@@ -182,10 +257,21 @@ export function skipTokensAlreadyLoaded({
   });
 }
 
+/**
+ * decodeRecordFile returns the JSON decoded file payload.
+ * @param {RecordFile} file record file
+ * @returns {Object} JSON decoded file payload
+ */
 export function decodeRecordFile(file) {
   return file ? JSON.parse(Buffer.from(file.payload, "base64")) : {};
 }
 
+/**
+ * decodeRecordMetadata returns the metadata stream with its JSON decoded
+ * payload.
+ * @param {MetadataStream} metadataStream record's metadata stream
+ * @returns {Object} JSON decoded file payload
+ */
 export function decodeRecordMetadata(metadataStream) {
   if (!metadataStream || !metadataStream.payload) return metadataStream;
   let parsedPayload;
@@ -202,6 +288,11 @@ export function decodeRecordMetadata(metadataStream) {
   return { ...metadataStream, payload: parsedPayload };
 }
 
+/**
+ * getShortToken returns a 7-character substring for given token param.
+ * @param {String} token record token
+ * @returns {String} short token with 7 characters
+ */
 export function getShortToken(token) {
   return token?.slice(0, 7);
 }

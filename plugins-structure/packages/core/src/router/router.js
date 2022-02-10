@@ -99,6 +99,14 @@ export const router = (function () {
   }
 
   return {
+    /**
+     * navigateTo is used to perform navigation using the `pushState` window
+     * history method. It navigates to the given valid URL that matches the
+     * `Match` Object.  If the given URL does not match one of the defined
+     * routes, it redirects to default `/404` Match.
+     *
+     * @param {String} url
+     */
     navigateTo(url) {
       if (!this.getIsInitialized()) {
         throw Error("router is not initialized. Use the init method");
@@ -110,32 +118,59 @@ export const router = (function () {
       verifyMatch();
     },
 
+    /**
+     * matchPath returns if given path matches some existing route.
+     *
+     * @param {String} path
+     */
     matchPath(path) {
       return settings.routes.some((route) =>
         path.match(pathToRegex(route.path))
       );
     },
 
+    /**
+     * getRoutes returns the possible configured routes.
+     *
+     * @returns {Array} routes
+     */
     getRoutes() {
       return settings.routes;
     },
 
+    /**
+     * getIsInitialized returns if the router was initialized properly.
+     *
+     * @returns {Boolean} isInitialized
+     */
     getIsInitialized() {
       // if we have the routes set, we know the router
       // has been initialized
       return !!settings.routes;
     },
 
+    /**
+     * getHistory returns current History object
+     */
     getHistory() {
       return window.history;
     },
 
+    /**
+     * reset is used for resetting the router to default settings. Restores the
+     * router state, `click` and `popstate` handlers.
+     */
     reset() {
       settings = { ...routerInitialSettings };
       document.body.removeEventListener("click", onClickHandler);
       window.removeEventListener("popstate", onPopStateHandler);
     },
 
+    /**
+     * init Initializes the router using the given `Config` object.
+     *
+     * @param {Object} config `Config` object.
+     */
     async init({
       routes,
       options,

@@ -67,6 +67,11 @@ export const fetchNextRecordsBatch = createAsyncThunk(
   }
 );
 
+/**
+ * fetchRecordsInventory is an Async thunk responsible for fetching a
+ * paginated inventory for given `recordsState`, `status` and `page`
+ * parameters. `recordsState` and `status` must be valid.
+ */
 export const fetchRecordsInventory = createAsyncThunk(
   "recordsInventory/fetch",
   async (
@@ -197,7 +202,8 @@ export const selectRecordsInventoryLastPage = (
     // Convert them to strings if they are not.
     const readableRecordsState = getHumanReadableRecordState(recordsState);
     const readableStatus = getHumanReadableRecordStatus(status);
-    return state.recordsInventory[readableRecordsState][readableStatus].lastPage;
+    return state.recordsInventory[readableRecordsState][readableStatus]
+      .lastPage;
   }
 };
 

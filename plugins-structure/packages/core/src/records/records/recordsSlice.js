@@ -14,6 +14,13 @@ export const initialState = {
 };
 
 // Thunks
+
+/**
+ * fetchRecords async thunk responsible for fetching records for given
+ * { token, filename } array.
+ *
+ * @returns {Array} Records
+ */
 export const fetchRecords = createAsyncThunk(
   "records/fetch",
   async ({ tokens, filenames = [] }, { getState, extra, rejectWithValue }) => {

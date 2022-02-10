@@ -36,6 +36,7 @@ export const fetchNextBatch = createAsyncThunk(
   "home/fetchNextBatch",
   async (status, { dispatch, rejectWithValue, getState }) => {
     try {
+      // Get all required states from packages slices
       const {
         ticketvoteInventory,
         records: recordsObject,
@@ -43,21 +44,30 @@ export const fetchNextBatch = createAsyncThunk(
         ticketvotePolicy,
         home,
       } = getState();
-
+      // Get all pages sizes allowed
       const summariesPageSize = ticketvotePolicy.policy.summariespagesize;
       const recordsPageSize = recordsPolicy.policy.recordspagesize;
       const readableStatus = getHumanReadableTicketvoteStatus(status);
+      // get tokens batch to perform the dispatches
       const { tokens, last } = getTokensToFetch({
         records: recordsObject.records,
+        // pageSize is the minimum value between all pages sizes, so we can
+        // sync all requests with the same tokens batch
         pageSize: Math.min(summariesPageSize, recordsPageSize),
+        // inventoryList corresponds to all tokens from given ticketvote
+        // inventory
         inventoryList: ticketvoteInventory[readableStatus].tokens,
+        // lastTokenPos is the pointer that indicates the tokens batch index on
+        // homeSlice
         lastTokenPos: home[readableStatus].lastTokenPos,
       });
-
+      // dispatches
       await Promise.all([
         dispatch(records.fetch({ tokens, filenames: piFilenames })),
         dispatch(ticketvoteSummaries.fetch({ tokens })),
       ]);
+      // returns the last token index so we can update our `lastTokenPos`
+      // pointer
       return last;
     } catch (e) {
       return rejectWithValue(e.message);

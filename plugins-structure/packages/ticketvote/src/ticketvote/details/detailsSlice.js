@@ -4,7 +4,7 @@ import * as api from "../../lib/api";
 export const initialState = {
   byToken: {},
   status: "idle",
-  error: false,
+  error: null,
 };
 
 export const fetchTicketvoteDetails = createAsyncThunk(
