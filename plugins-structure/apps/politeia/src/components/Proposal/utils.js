@@ -18,6 +18,22 @@ import {
   TICKETVOTE_STATUS_UNAUTHORIZED,
 } from "@politeiagui/ticketvote/constants";
 import isArray from "lodash/fp/isArray";
+
+const MONTHS_LABELS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 /**
  * Record object
  * @typedef {{
@@ -50,6 +66,33 @@ import isArray from "lodash/fp/isArray";
  */
 
 /**
+ * Proposal object
+ * @typedef {{
+ *   name: String,
+ *   token: String,
+ *   recordState: Number,
+ *   recordStatus: Number,
+ *   version: Number,
+ *   timestamps: {
+ *     publishedat: Number,
+ *     editedat: Number,
+ *     censoredat: Number,
+ *     abandonedat: Number,
+ *   },
+ *   voteMetadata: {
+ *     linkto: Number,
+ *     linkby: Number,
+ *   },
+ *   author: {
+ *     username: String,
+ *     userid: String,
+ *   },
+ *   body: String,
+ *   proposalMetadata: Object,
+ * }} Proposal
+ */
+
+/**
  * decodeProposalMetadataFile returns the decoded "proposalmetadata.json" file
  * for given record's files array.
  * @param {Array} files record's files
@@ -58,6 +101,17 @@ import isArray from "lodash/fp/isArray";
 export function decodeProposalMetadataFile(files) {
   const metadata = files.find((f) => f.name === "proposalmetadata.json");
   return decodeRecordFile(metadata);
+}
+
+/**
+ * decodeProposalMetadataFile returns the decoded "proposalmetadata.json" file
+ * for given record's files array.
+ * @param {Array} files record's files
+ * @returns {Object} Proposal metadata object
+ */
+export function decodeProposalBodyFile(files) {
+  const body = files.find((f) => f.name === "index.md");
+  return body && decodeURIComponent(escape(window.atob(body.payload)));
 }
 
 /**
@@ -91,12 +145,15 @@ export function decodeProposalUserMetadata(metadataStreams) {
  * It decodes all proposal-related data from records and converts it into a
  * readable proposal object.
  * @param {Record} record record object
- * @returns {Object} formatted proposal object
+ * @returns {Proposal} formatted proposal object
  */
 export function decodeProposalRecord(record) {
-  const { name } = decodeProposalMetadataFile(record.files);
+  const { name, ...proposalMetadata } = decodeProposalMetadataFile(
+    record.files
+  );
   const userMetadata = decodeProposalUserMetadata(record.metadata);
   const voteMetadata = decodeVoteMetadataFile(record.files);
+  const body = decodeProposalBodyFile(record.files);
   const { userid } = userMetadata.find((md) => md && md.payload.userid);
   const { token } = record.censorshiprecord;
   return {
@@ -111,6 +168,8 @@ export function decodeProposalRecord(record) {
       username: record.username,
       userid,
     },
+    body,
+    proposalMetadata,
   };
 }
 
@@ -123,6 +182,23 @@ function findPublicStatusMetadataFromPayloads(mdPayloads) {
     return findPublicStatusMetadataFromPayloads(arrayPayloads);
   }
   return publicMd;
+}
+
+/**
+ * formatDateToInternationalString accepts an object of day, month and year.
+ * It returns a string of human viewable international date from the result
+ * of DatePicker or BackEnd and supposes they are correct.
+ * String format: 08 Sep 2021
+ * @param {object} { day, month, year }
+ * @returns {string}
+ */
+export function formatDateToInternationalString({ day, month, year }) {
+  const monthLabel = MONTHS_LABELS[month - 1];
+  if (monthLabel === undefined) {
+    return "Invalid Date";
+  }
+  const dayView = `0${day}`.slice(-2);
+  return `${dayView} ${MONTHS_LABELS[month - 1]} ${year}`;
 }
 
 /**

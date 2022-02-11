@@ -1,47 +1,34 @@
 import React from "react";
-import { Button, Link, StatusTag, Text } from "pi-ui";
-import { Event, Join, RecordCard } from "@politeiagui/common-ui";
-import { TicketvoteRecordVoteStatusBar } from "@politeiagui/ticketvote/ui";
+import { Button } from "pi-ui";
+import { RecordCard } from "@politeiagui/common-ui";
+import { decodeProposalRecord } from "./utils";
 import {
-  decodeProposalRecord,
-  getProposalStatusTagProps,
-  showVoteStatusBar,
-} from "./utils";
+  ProposalStatusBar,
+  ProposalStatusTag,
+  ProposalSubtitle,
+} from "./common";
 
 const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
   const proposal = decodeProposalRecord(record);
-  const statusTagProps = getProposalStatusTagProps(record, voteSummary);
   return (
     <div>
       <RecordCard
         token={proposal.token}
         title={proposal.name}
         subtitle={
-          <Join>
-            <Link href={`user/${proposal.author.userid}`}>
-              {proposal.author.username}
-            </Link>
-            {proposal.timestamps.publishedat && (
-              <Event
-                event="published"
-                timestamp={proposal.timestamps.publishedat}
-              />
-            )}
-            {proposal.timestamps.editedat && (
-              <Event event="edited" timestamp={proposal.timestamps.editedat} />
-            )}
-            <Text
-              id={`proposal-${proposal.token}-version`}
-              truncate
-            >{`version ${proposal.version}`}</Text>
-          </Join>
+          <ProposalSubtitle
+            userid={proposal.author.userid}
+            username={proposal.author.username}
+            publishedat={proposal.timestamps.publishedat}
+            editedat={proposal.timestamps.editedat}
+            token={proposal.token}
+            version={proposal.version}
+          />
         }
-        rightHeader={<StatusTag {...statusTagProps} />}
-        secondRow={
-          showVoteStatusBar(voteSummary) && (
-            <TicketvoteRecordVoteStatusBar ticketvoteSummary={voteSummary} />
-          )
+        rightHeader={
+          <ProposalStatusTag record={record} voteSummary={voteSummary} />
         }
+        secondRow={<ProposalStatusBar voteSummary={voteSummary} />}
         footer={
           <>
             <span>{commentsCount} Comments</span>

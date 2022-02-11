@@ -35,6 +35,13 @@ export const fetchRecords = createAsyncThunk(
   }
 );
 
+/**
+ * fetchRecordDetails async thunk responsible for fetching record details for
+ * given { token }.
+ *
+ * @params {Object} { token: String }
+ * @returns {Object} Record Details
+ */
 export const fetchRecordDetails = createAsyncThunk(
   "records/fetchDetails",
   async ({ token }, { getState, extra, rejectWithValue }) => {
