@@ -2,3 +2,11 @@
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
+
+.secondRow > * {
+  margin-top: var(--spacing-medium);
+}
+
+.secondRow > *:first-child {
+  margin-top: 0;
+}

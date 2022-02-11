@@ -1,5 +1,5 @@
 import React from "react";
-import { RecordCard } from "@politeiagui/common-ui";
+import { RecordCard, RecordToken } from "@politeiagui/common-ui";
 import { decodeProposalRecord } from "./utils";
 import {
   ProposalMetadata,
@@ -7,10 +7,10 @@ import {
   ProposalStatusTag,
   ProposalSubtitle,
 } from "./common";
+import styles from "./styles.module.css";
 
 const ProposalDetails = ({ record, voteSummary }) => {
   const proposalDetails = decodeProposalRecord(record);
-  console.log(proposalDetails);
   return (
     <div>
       <RecordCard
@@ -30,10 +30,11 @@ const ProposalDetails = ({ record, voteSummary }) => {
           <ProposalStatusTag record={record} voteSummary={voteSummary} />
         }
         secondRow={
-          <>
+          <div className={styles.secondRow}>
+            <RecordToken token={proposalDetails.token} isCopyable={true} />
             <ProposalStatusBar voteSummary={voteSummary} />
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
-          </>
+          </div>
         }
         thirdRow={<div>{proposalDetails.body}</div>}
         footer={
