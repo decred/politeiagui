@@ -1,5 +1,6 @@
 import {
   RECORDS_API_ROUTE,
+  ROUTE_DETAILS,
   ROUTE_INVENTORY,
   ROUTE_POLICY,
   ROUTE_RECORDS,
@@ -36,6 +37,15 @@ export const client = {
     );
     const recordsInfo = await parseResponse(response);
     return recordsInfo.records;
+  },
+  async fetchRecordDetails(state, token) {
+    const csrf = await getCsrf(state);
+    const response = await fetch(
+      `${RECORDS_API_ROUTE}${VERSION}${ROUTE_DETAILS}`,
+      fetchOptions(csrf, { token }, "POST")
+    );
+    const recordResponse = await parseResponse(response);
+    return recordResponse.record;
   },
   async fetchApi() {
     const response = await fetch("/api");

@@ -35,6 +35,20 @@ export const fetchRecords = createAsyncThunk(
   }
 );
 
+export const fetchRecordDetails = createAsyncThunk(
+  "records/fetchDetails",
+  async ({ token }, { getState, extra, rejectWithValue }) => {
+    try {
+      return await extra.fetchRecordDetails(getState(), token);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+  {
+    condition: ({ token }) => !!token && typeof token === "string",
+  }
+);
+
 // Reducer
 const recordsSlice = createSlice({
   name: "records",
@@ -49,6 +63,19 @@ const recordsSlice = createSlice({
         state.records = { ...state.records, ...action.payload };
       })
       .addCase(fetchRecords.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(fetchRecordDetails.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchRecordDetails.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const record = action.payload;
+        const { token } = record.censorshiprecord;
+        state.records[token] = record;
+      })
+      .addCase(fetchRecordDetails.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
