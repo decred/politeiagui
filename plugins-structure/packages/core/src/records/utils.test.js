@@ -3,6 +3,7 @@ import {
   getHumanReadableRecordStatus,
   getRecordStateCode,
   getRecordStatusCode,
+  getShortToken,
   skipTokensAlreadyLoaded,
   validRecordStates,
   validRecordStatuses,
@@ -163,6 +164,18 @@ describe("Given utils", () => {
       });
       expect(tokens).toEqual([1, 3, 5, 6, 8]);
       expect(last).toEqual(7);
+    });
+  });
+  describe("Given getShortToken", () => {
+    it("should return 7-char token for given full token", () => {
+      const shortToken = getShortToken("abcdefghijklmno");
+      expect(shortToken).toEqual("abcdefg");
+    });
+    it("should return falsy for given undefined token", () => {
+      let shortToken = getShortToken(undefined);
+      expect(shortToken).toBeFalsy();
+      shortToken = getShortToken();
+      expect(shortToken).toBeFalsy();
     });
   });
 });

@@ -220,7 +220,7 @@ describe("Given the recordsInventorySlice", () => {
         fetchTicketvoteNextRecordsBatch({ status: "unauthorized" })
       );
 
-      expect(fetchRecordsSpy).toBeCalledWith(unauthorizedTokens);
+      expect(fetchRecordsSpy).toBeCalledWith({ tokens: unauthorizedTokens });
       const state = store.getState().ticketvoteInventory;
       expect(state.unauthorized.tokens).toEqual(unauthorizedTokens);
       expect(state.unauthorized.status).toEqual("succeeded/isDone");
