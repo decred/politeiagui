@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "pi-ui";
 import { RecordCard } from "@politeiagui/common-ui";
+import { getShortToken } from "@politeiagui/core/records/utils";
 import { decodeProposalRecord } from "./utils";
 import {
   ProposalStatusBar,
@@ -13,7 +14,7 @@ const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
   return (
     <div>
       <RecordCard
-        token={proposal.token}
+        token={getShortToken(proposal.token)}
         title={proposal.name}
         subtitle={
           <ProposalSubtitle

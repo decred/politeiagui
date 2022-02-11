@@ -5,6 +5,7 @@ import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
 
 const initialState = {
   status: "idle",
+  fullToken: null,
   submissionsLastPos: null,
   error: null,
 };
@@ -13,12 +14,28 @@ export const fetchProposalDetails = createAsyncThunk(
   "details/fetchProposalDetails",
   async (token, { dispatch, rejectWithValue }) => {
     try {
+      let fullToken = token;
+
       // fetch ticketvote policy required for fetching ticketvote summaries
       await dispatch(ticketvotePolicy.fetch());
-      return await Promise.all([
-        dispatch(records.fetchDetails({ token })),
-        dispatch(ticketvoteSummaries.fetch({ tokens: [token] })),
-      ]);
+
+      // If token is short, fetch details first to get the full token, and then
+      // dispatch other actions with full token. Otherwise, dispatch all actions
+      // simultaneously.
+      if (token.length === 7) {
+        const fetchedRecord = await dispatch(records.fetchDetails({ token }));
+        fullToken = fetchedRecord.payload.censorshiprecord.token;
+        await Promise.all([
+          dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
+        ]);
+      } else {
+        await Promise.all([
+          dispatch(records.fetchDetails({ token: fullToken })),
+          dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
+        ]);
+      }
+
+      return fullToken;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -33,8 +50,9 @@ const detailsSlice = createSlice({
       .addCase(fetchProposalDetails.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchProposalDetails.fulfilled, (state) => {
+      .addCase(fetchProposalDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.fullToken = action.payload;
       })
       .addCase(fetchProposalDetails.rejected, (state, action) => {
         state.status = "failed";
@@ -44,5 +62,6 @@ const detailsSlice = createSlice({
 });
 
 export const selectDetailsStatus = (state) => state.details.status;
+export const selectFullToken = (state) => state.details.fullToken;
 
 export default detailsSlice.reducer;
