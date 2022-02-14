@@ -1,5 +1,9 @@
 import React from "react";
-import { RecordCard, RecordToken } from "@politeiagui/common-ui";
+import {
+  MarkdownRenderer,
+  RecordCard,
+  RecordToken,
+} from "@politeiagui/common-ui";
 import { decodeProposalRecord } from "./utils";
 import {
   ProposalMetadata,
@@ -36,7 +40,7 @@ const ProposalDetails = ({ record, voteSummary }) => {
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
           </div>
         }
-        thirdRow={<div>{proposalDetails.body}</div>}
+        thirdRow={<MarkdownRenderer body={proposalDetails.body} />}
         footer={
           <>
             <span>Downloads</span>
