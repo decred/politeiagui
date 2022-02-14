@@ -33,37 +33,6 @@ export function UserMetadata({ userid, publickey, signature }) {
   });
 }
 
-export function CensorRecordMetadata({
-  oldStatus,
-  publickey,
-  reason,
-  signature,
-  status,
-  token,
-  version,
-  timestamp
-}) {
-  const payload =
-    JSON.stringify({
-      publickey,
-      signature,
-      status: oldStatus,
-      token,
-      version,
-      timestamp
-    }) +
-    JSON.stringify({
-      publickey,
-      reason,
-      signature,
-      status,
-      token,
-      version,
-      timestamp
-    });
-  return new Metadata("usermd", 2, payload);
-}
-
 export function RecordMetadata({
   token,
   version,

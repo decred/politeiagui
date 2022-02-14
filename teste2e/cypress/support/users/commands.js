@@ -1,17 +1,25 @@
 import "@testing-library/cypress/add-commands";
 import "../www/commands";
-import { API_BASE_URL, repliers } from "./api";
+import { API_BASE_URL, repliers, usersRepliers } from "./api";
 import { createMiddleware } from "../core/commands";
 import {
   USER_TYPE_UNPAID,
   USER_TYPE_NO_CREDITS,
-  USER_TYPE_NO_LOGIN,
-  User
+  USER_TYPE_NO_LOGIN
 } from "./generate";
 
 Cypress.Commands.add(
   "userMiddleware",
   createMiddleware({ packageName: "user", repliers, baseUrl: API_BASE_URL })
+);
+
+Cypress.Commands.add(
+  "usersMiddleware",
+  createMiddleware({
+    packageName: "users",
+    repliers: usersRepliers,
+    baseUrl: "/api/v1"
+  })
 );
 
 Cypress.Commands.add(

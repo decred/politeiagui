@@ -18,7 +18,6 @@ import {
   generateTokenPair
 } from "../../utils";
 import path from "path";
-import faker from "faker";
 import {
   USER_TYPE_ADMIN,
   USER_TYPE_NO_LOGIN,
@@ -33,6 +32,7 @@ beforeEach(function mockApiCalls() {
   cy.usePiApi();
   cy.useWwwApi();
   cy.useCommentsApi();
+  cy.usersMiddleware("users", { amount: 1 }, {}, ["publickey"]);
   cy.intercept("POST", "/api/v1/logout", {
     statusCode: 200,
     body: {}
@@ -199,6 +199,7 @@ describe("Proposal details", () => {
     const fullToken = fullRecordToken();
     const shortToken = shortRecordToken(fullToken);
     beforeEach(() => {
+      cy.usersMiddleware("users", { amount: 1 }, {}, ["publickey"]);
       cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true, user });
       const { files } = makeProposal({});
       cy.recordsMiddleware("details", {
@@ -217,7 +218,7 @@ describe("Proposal details", () => {
       });
     });
     it("should be able to logout from unvetted proposal details page", () => {
-      cy.middleware("comments.comments", 10, 1);
+      cy.middleware("comments.comments", 4, 1);
       cy.visit(`/record/${shortToken}`);
       cy.wait("@records.details");
       cy.findByTestId("record-header").should("be.visible");
@@ -403,19 +404,7 @@ describe("Proposal details", () => {
     beforeEach(() => {
       cy.server();
       cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true, user });
-      cy.middleware("users.users", {
-        body: {
-          totalmatches: 1,
-          totalusers: 10,
-          users: [
-            {
-              id: faker.random.uuid(),
-              username: faker.internet.userName(),
-              email: faker.internet.email()
-            }
-          ]
-        }
-      });
+      cy.usersMiddleware("users", { amount: 1 }, {}, ["publickey"]);
     });
     it("should able to report a proposal", () => {
       const { token, shortToken } = generateTokenPair();
@@ -494,19 +483,6 @@ describe("Proposal details", () => {
     beforeEach(() => {
       cy.server();
       cy.userEnvironment(USER_TYPE_ADMIN, { verifyIdentity: true, user });
-      cy.middleware("users.users", {
-        body: {
-          totalmatches: 1,
-          totalusers: 10,
-          users: [
-            {
-              id: faker.random.uuid(),
-              username: faker.internet.userName(),
-              email: faker.internet.email()
-            }
-          ]
-        }
-      });
     });
     it("should display proposal status metadata on censored proposal", () => {
       const { token, shortToken } = generateTokenPair();
@@ -583,7 +559,6 @@ describe("Proposal details", () => {
       cy.visit(`record/${shortToken}`);
       cy.wait("@pi.summaries");
       cy.wait("@pi.billingstatuschanges");
-      cy.wait("@users.users");
       cy.findByText(/This proposal has been closed by/i).should("be.visible");
     });
   });
