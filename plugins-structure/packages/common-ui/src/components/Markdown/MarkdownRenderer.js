@@ -6,7 +6,7 @@ import "./styles.css";
 
 export const MarkdownRenderer = React.memo(
   ({ body, className, renderImages = true, filterUrl = false, ...props }) => (
-    <div className={className} {...props}>
+    <div className={className} {...props} data-testid="markdown-renderer">
       <ReactMarkdown
         className="markdown-body"
         components={customRenderers(renderImages, filterUrl)}
