@@ -1,9 +1,9 @@
 import {
   fetchCommentsPolicy,
   selectCommentsPolicy,
+  selectCommentsPolicyError,
   selectCommentsPolicyRule,
   selectCommentsPolicyStatus,
-  selectCommentsPolicyError,
 } from "./policySlice";
 import { useCommentsPolicy } from "./usePolicy";
 

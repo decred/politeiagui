@@ -1,8 +1,8 @@
 import {
   fetchCommentsCount,
-  selectCommentsCounts,
   selectCommentsCountError,
   selectCommentsCountStatus,
+  selectCommentsCounts,
 } from "./countSlice";
 import { useCommentsCount } from "./useCount";
 

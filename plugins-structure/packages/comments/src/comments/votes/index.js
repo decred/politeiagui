@@ -1,8 +1,8 @@
 import {
   fetchCommentsVotes,
-  selectUserCommentsVotesByToken,
   selectCommentsVotesError,
   selectCommentsVotesStatus,
+  selectUserCommentsVotesByToken,
 } from "./votesSlice";
 import { useCommentsVotes } from "./useVotes";
 
