@@ -1,11 +1,9 @@
-import { useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { commentsCount } from "./";
-import { checkReducersDeps } from "../helpers";
 
 export function useCommentsCount({ tokens }) {
   const dispatch = useDispatch();
-  checkReducersDeps(["commentsCount"]);
 
   // Selectors
   const count = useSelector(commentsCount.selectAll);

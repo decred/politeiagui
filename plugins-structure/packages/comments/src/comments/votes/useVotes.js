@@ -1,11 +1,9 @@
-import { useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { commentsVotes } from "./";
-import { checkReducersDeps } from "../helpers";
 
 export function useCommentsVotes({ token, userId }) {
   const dispatch = useDispatch();
-  checkReducersDeps(["commentsVotes"]);
 
   // Selectors
   const votes = useSelector((state) =>

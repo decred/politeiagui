@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { commentsTimestamps } from "./";
-import { checkReducersDeps } from "../helpers";
 import chunk from "lodash/fp/chunk";
 import difference from "lodash/fp/difference";
 
 export function useCommentsTimestamps({ token, commentids = [], pageSize }) {
   const dispatch = useDispatch();
-  checkReducersDeps(["commentsTimestamps"]);
 
   const [fetchedTimestamps, setFetchedTimestamps] = useState([]);
   const timestamps = useSelector((state) =>

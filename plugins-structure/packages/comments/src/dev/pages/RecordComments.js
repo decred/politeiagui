@@ -1,18 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { store } from "@politeiagui/core";
+import { connectReducers, store } from "@politeiagui/core";
 import { api } from "@politeiagui/core/api";
 import { Provider } from "react-redux";
-import commentsReducer from "../../comments/comments/commentsSlice";
-import countReducer from "../../comments/count/countSlice";
-import policyReducer from "../../comments/policy/policySlice";
-import timestampsReducer from "../../comments/timestamps/timestampsSlice";
-import votesReducer from "../../comments/votes/votesSlice";
+import { commentsConstants } from "../../comments";
 import {
-  RecordComments,
   CommentsCount,
-  DownloadCommentsTimestamps,
   CommentsVotes,
+  DownloadCommentsTimestamps,
+  RecordComments,
 } from "../../ui";
 
 const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
@@ -21,11 +17,7 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
   if (apiStatus === "idle") {
     await store.dispatch(api.fetch());
   }
-  await store.injectReducer("comments", commentsReducer);
-  await store.injectReducer("commentsCount", countReducer);
-  await store.injectReducer("commentsPolicy", policyReducer);
-  await store.injectReducer("commentsTimestamps", timestampsReducer);
-  await store.injectReducer("commentsVotes", votesReducer);
+  await connectReducers(commentsConstants.reducersArray);
   return ReactDOM.render(
     <Provider store={store}>
       <h1>Votes for {token}:</h1>
