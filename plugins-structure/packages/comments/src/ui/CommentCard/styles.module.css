@@ -1,11 +1,3 @@
-.header {
-  display: flex;
-  justify-content: space-between;
-}
-.summary {
-  display: flex;
-}
-
 .actions {
   display: flex;
 }
@@ -18,6 +10,14 @@
   margin-left: 0px;
 }
 
+.censor {
+  color: var(--color-orange);
+}
+.censor:hover {
+  color: var(--color-orange-alt);
+  cursor: pointer;
+}
+
 .body {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -26,4 +26,12 @@
 .footer {
   display: flex;
   justify-content: space-between;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.summary {
+  display: flex;
 }

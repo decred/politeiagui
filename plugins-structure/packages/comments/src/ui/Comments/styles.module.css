@@ -1,0 +1,18 @@
+.count {
+  color: var(--color-gray);
+}
+
+.filters {
+  display: flex;
+}
+.filters > * {
+  margin-right: 2rem;
+}
+.filters > *:last-child {
+  margin-right: 0px;
+}
+
+.title {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
