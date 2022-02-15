@@ -1,0 +1,17 @@
+:root {
+  --spacing-extra-small: 0.5rem;
+  --spacing-small: 1rem;
+  --spacing-medium: 2rem;
+  --spacing-large: 3rem;
+
+  --container-padding-left: 4rem;
+  --container-padding-right: 4rem;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
