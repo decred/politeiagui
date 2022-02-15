@@ -37,7 +37,7 @@ export const routes = [
       ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   {
-    path: "/records/:token",
+    path: "/record/:token",
     view: async (params) => {
       await connectReducers([
         ...ticketvoteConstants.reducersArray,

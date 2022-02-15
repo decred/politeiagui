@@ -14,7 +14,7 @@ const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
   return (
     <div>
       <RecordCard
-        token={getShortToken(proposal.token)}
+        titleLink={`/record/${getShortToken(proposal.token)}`}
         title={proposal.name}
         subtitle={
           <ProposalSubtitle
