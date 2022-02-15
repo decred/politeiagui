@@ -3,13 +3,26 @@ import ReactDOM from "react-dom";
 import { connectReducers, store } from "@politeiagui/core";
 import { api } from "@politeiagui/core/api";
 import { Provider } from "react-redux";
-import { commentsConstants } from "../../comments";
+import { comments, commentsConstants } from "../../comments";
 import {
-  CommentsCount,
-  CommentsVotes,
-  DownloadCommentsTimestamps,
-  RecordComments,
+  Comments,
+  // CommentsCount,
+  // CommentsVotes,
+  // DownloadCommentsTimestamps,
 } from "../../ui";
+import {
+  DEFAULT_DARK_THEME_NAME,
+  DEFAULT_LIGHT_THEME_NAME,
+  ThemeProvider,
+  defaultDarkTheme,
+  defaultLightTheme,
+} from "pi-ui";
+import "pi-ui/dist/index.css";
+
+const themes = {
+  [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
+  [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme },
+};
 
 const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
   const apiStatus = api.selectStatus(store.getState());
@@ -18,16 +31,21 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
     await store.dispatch(api.fetch());
   }
   await connectReducers(commentsConstants.reducersArray);
+  await store.dispatch(comments.comments.fetch({ token }));
+  const recordComments = comments.comments.selectByToken(
+    store.getState(),
+    token
+  );
   return ReactDOM.render(
-    <Provider store={store}>
-      <h1>Votes for {token}:</h1>
+    <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
+      <Provider store={store}>
+        {/* <h1>Votes for {token}:</h1>
       <CommentsVotes
         token={token}
         userId="225a7543-63e3-4d4d-bffe-98d2fad3d1dc"
-      />
-      <h1>Comments for {token}:</h1>
-      <RecordComments token={token} />
-      <h1>Comments Count:</h1>
+      /> */}
+        <Comments comments={recordComments} />
+        {/* <h1>Comments Count:</h1>
       <CommentsCount
         tokens={[
           "fb74b286585c4219",
@@ -42,8 +60,9 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
         onFetchDone={(timestamps) => {
           console.log(timestamps);
         }}
-      />
-    </Provider>,
+      /> */}
+      </Provider>
+    </ThemeProvider>,
     document.querySelector("#root")
   );
 };

@@ -19,10 +19,12 @@ export function useCommentsCount({ tokens }) {
   // Effects
   useEffect(() => {
     if (countStatus === "idle") {
+      console.log("chamou", countStatus);
       onFetchCount();
     }
   }, [countStatus, onFetchCount]);
 
+  console.log(tokens);
   return {
     count,
     countStatus,

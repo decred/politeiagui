@@ -1,13 +1,13 @@
 import {
   COMMENTS_API_ROUTE,
-  VERSION,
   ROUTE_COMMENTS,
-  ROUTE_VOTES,
-  ROUTE_POLICY,
   ROUTE_COUNT,
+  ROUTE_POLICY,
   ROUTE_TIMESTAMPS,
+  ROUTE_VOTES,
+  VERSION,
 } from "./constants";
-import { getCsrf, parseResponse, fetchOptions } from "@politeiagui/core/client";
+import { fetchOptions, getCsrf, parseResponse } from "@politeiagui/core/client";
 
 function getCommentsRoute(route) {
   return `${COMMENTS_API_ROUTE}${VERSION}${route}`;

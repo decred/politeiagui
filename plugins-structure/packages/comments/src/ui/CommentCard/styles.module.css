@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.summary {
+  display: flex;
+}
+
+.actions {
+  display: flex;
+}
+
+.actions > * {
+  margin-left: 1rem;
+}
+
+.actions > *:first-child {
+  margin-left: 0px;
+}
+
+.body {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+}

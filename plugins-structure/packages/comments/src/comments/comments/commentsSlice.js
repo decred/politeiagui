@@ -9,9 +9,9 @@ export const initialState = {
 
 export const fetchComments = createAsyncThunk(
   "comments/fetch",
-  async (body, { getState, rejectWithValue }) => {
+  async ({ token }, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchComments(getState(), body);
+      return await api.fetchComments(getState(), { token });
     } catch (error) {
       return rejectWithValue(error.message);
     }
