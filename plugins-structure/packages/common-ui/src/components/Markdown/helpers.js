@@ -1,12 +1,8 @@
 import React from "react";
-import htmlParser from "react-markdown/plugins/html-parser";
 import xssFilters from "xss-filters";
 
-export const htmlParserRules = htmlParser({
-  isValidNode: (node) => {
-    return node.type !== "script";
-  },
-});
+export const XSS_ALERT =
+  "You tried to render a malicious URL. The URL is being converted in order to avoid XSS attacks";
 
 export const traverseChildren = (el, cb) => {
   const filterChildren = (c) =>
@@ -31,8 +27,6 @@ export const traverseChildren = (el, cb) => {
 };
 
 const isExternalLink = (link) => {
-  // e.preventDefault();
-  // Does this to prevent xss attacks
   const tmpLink = document.createElement("a");
   tmpLink.href = link;
   const externalLink =
@@ -42,16 +36,10 @@ const isExternalLink = (link) => {
 };
 
 const LinkRenderer = ({ url, children }) => {
-  // const [handleOpenModal, handleCloseModal] = useModalContext();
-
   function onLinkClick(e) {
     if (isExternalLink(url)) {
       e.preventDefault();
       console.log("clicked URL:", url);
-      // handleOpenModal(ModalExternalLink, {
-      //   onClose: handleCloseModal,
-      //   link: url
-      // });
     }
   }
   return (
@@ -64,49 +52,29 @@ const LinkRenderer = ({ url, children }) => {
 // Use external link renderer when images are not allowed
 const imageHandler =
   (renderImages) =>
-  ({ src, alt }) =>
-    renderImages ? (
-      <img src={src} alt={alt} />
+  ({ src, alt }) => {
+    const filteredSrc = xssFilters.uriInDoubleQuotedAttr(src);
+    if (filteredSrc !== src) {
+      console.warn(XSS_ALERT);
+    }
+    return renderImages ? (
+      <img src={filteredSrc} alt={alt} />
     ) : (
-      <LinkRenderer url={src}>{alt}</LinkRenderer>
+      <LinkRenderer url={filteredSrc}>{alt}</LinkRenderer>
     );
+  };
 
 const linkHandler = ({ href, children }) => {
-  return <LinkRenderer url={href}>{children}</LinkRenderer>;
+  const newHref = xssFilters.uriInDoubleQuotedAttr(href);
+  if (newHref !== href) {
+    console.warn(XSS_ALERT);
+  }
+  return <LinkRenderer url={newHref}>{children}</LinkRenderer>;
 };
 
-const handleFilterXss = (el) => {
-  if (typeof el === "string") return el;
-  const props = el.props;
-  if (!props) {
-    return el;
-  }
-  const newProps = {
-    ...props,
-  };
-  if (newProps.src) {
-    newProps.src = xssFilters.uriInDoubleQuotedAttr(props.src);
-  }
+export const customRenderers = (renderImages) => {
   return {
-    ...el,
-    props: newProps,
-  };
-};
-
-const rootHandler = (filterUrl) => (el) => {
-  if (filterUrl) {
-    el = traverseChildren(el, handleFilterXss);
-  }
-  const { children, ...props } = el;
-  return <div {...props}>{children}</div>;
-};
-
-export const customRenderers = (renderImages, filterUrl) => {
-  return {
-    image: imageHandler(renderImages),
-    imageReference: imageHandler(renderImages),
-    link: linkHandler,
-    linkReference: linkHandler,
-    root: rootHandler(filterUrl),
+    img: imageHandler(renderImages),
+    a: linkHandler,
   };
 };
