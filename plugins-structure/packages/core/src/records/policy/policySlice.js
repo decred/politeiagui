@@ -10,7 +10,7 @@ export const fetchRecordsPolicy = createAsyncThunk(
   "recordsPolicy/fetch",
   async (_, { getState, rejectWithValue, extra }) => {
     try {
-      return await extra.fetchPolicy(getState());
+      return await extra.fetchRecordsPolicy(getState());
     } catch (error) {
       return rejectWithValue(error.message);
     }

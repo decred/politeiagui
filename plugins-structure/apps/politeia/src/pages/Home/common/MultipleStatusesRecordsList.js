@@ -6,7 +6,7 @@ function MultipleStatusesRecordsList({ statuses }) {
 
   const statusesToRender = statuses.slice(0, statusIndex + 1);
 
-  function goToNextStatus() {
+  function handleRenderNextStatus() {
     if (statusIndex > statuses.length - 1) {
       return;
     }
@@ -15,7 +15,10 @@ function MultipleStatusesRecordsList({ statuses }) {
 
   return statusesToRender.map((status, key) => (
     <ul key={key}>
-      <RecordsStatusList status={status} goToNextStatus={goToNextStatus} />
+      <RecordsStatusList
+        status={status}
+        onRenderNextStatus={handleRenderNextStatus}
+      />
     </ul>
   ));
 }

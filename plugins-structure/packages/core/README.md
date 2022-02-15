@@ -256,7 +256,7 @@ export const client = {
   async fetchApi() {
     // calls /api
   },
-  async fetchPolicy(state) {
+  async fetchRecordsPolicy(state) {
     // calls /api/records/v1/policy
   },
 };

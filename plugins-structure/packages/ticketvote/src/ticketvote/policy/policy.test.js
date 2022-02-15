@@ -15,15 +15,15 @@ const mockPolicy = {
 describe("Given the policySlice", () => {
   let store;
   // spy on the method used to fetch
-  let fetchPolicySpy;
+  let fetchTicketvotePolicySpy;
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
     store = configureStore({ reducer: { ticketvotePolicy: reducer } });
-    fetchPolicySpy = jest.spyOn(api, "fetchPolicy");
+    fetchTicketvotePolicySpy = jest.spyOn(api, "fetchTicketvotePolicy");
   });
   afterEach(() => {
-    fetchPolicySpy.mockRestore();
+    fetchTicketvotePolicySpy.mockRestore();
   });
   describe("when given parameters are empty", () => {
     it("should return the initial state", () => {
@@ -34,7 +34,7 @@ describe("Given the policySlice", () => {
     it("should update the status to loading", () => {
       store.dispatch(fetchTicketvotePolicy());
 
-      expect(fetchPolicySpy).toBeCalled();
+      expect(fetchTicketvotePolicySpy).toBeCalled();
       const state = store.getState();
       expect(state.ticketvotePolicy.policy).toEqual({});
       expect(state.ticketvotePolicy.status).toEqual("loading");
@@ -42,11 +42,11 @@ describe("Given the policySlice", () => {
   });
   describe("when fetchTicketvotePolicy succeeds", () => {
     it("should update policy and status", async () => {
-      fetchPolicySpy.mockResolvedValueOnce(mockPolicy);
+      fetchTicketvotePolicySpy.mockResolvedValueOnce(mockPolicy);
 
       await store.dispatch(fetchTicketvotePolicy());
 
-      expect(fetchPolicySpy).toBeCalled();
+      expect(fetchTicketvotePolicySpy).toBeCalled();
       const state = store.getState();
       expect(state.ticketvotePolicy.policy).toEqual(mockPolicy);
       expect(state.ticketvotePolicy.status).toEqual("succeeded");
@@ -55,11 +55,11 @@ describe("Given the policySlice", () => {
   describe("when fetchTicketvotePolicy fails", () => {
     it("should dispatch failure and update the error", async () => {
       const error = new Error("ERROR");
-      fetchPolicySpy.mockRejectedValueOnce(error);
+      fetchTicketvotePolicySpy.mockRejectedValueOnce(error);
 
       await store.dispatch(fetchTicketvotePolicy());
 
-      expect(fetchPolicySpy).toBeCalled();
+      expect(fetchTicketvotePolicySpy).toBeCalled();
       const state = store.getState();
       expect(state.ticketvotePolicy.status).toEqual("failed");
       expect(state.ticketvotePolicy.error).toEqual("ERROR");

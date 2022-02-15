@@ -43,7 +43,7 @@ export const client = {
     const api = await parseResponse(response);
     return { api, csrf };
   },
-  async fetchPolicy(state) {
+  async fetchRecordsPolicy(state) {
     const csrf = await getCsrf(state);
     const response = await fetch(
       `${RECORDS_API_ROUTE}${VERSION}${ROUTE_POLICY}`,

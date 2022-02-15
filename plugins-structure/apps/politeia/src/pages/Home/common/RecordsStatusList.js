@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { ticketvoteInventory } from "@politeiagui/ticketvote/inventory";
 import StatusList from "./StatusList";
 
-function RecordsStatusList({ status, goToNextStatus }) {
+function RecordsStatusList({ status, onRenderNextStatus }) {
   const [page, setPage] = useState(1);
-  function fetchNextInventoryPage() {
+  function handleFetchNextInventoryPage() {
     setPage(page + 1);
   }
   const { inventoryStatus, inventory } = ticketvoteInventory.useFetch({
@@ -15,10 +15,10 @@ function RecordsStatusList({ status, goToNextStatus }) {
   return inventoryStatus !== "idle" && inventoryStatus !== "loading" ? (
     <StatusList
       status={status}
-      fetchNextInventoryPage={fetchNextInventoryPage}
+      onFetchNextInventoryPage={handleFetchNextInventoryPage}
       inventoryStatus={inventoryStatus}
       inventory={inventory}
-      goToNextStatus={goToNextStatus}
+      onRenderNextStatus={onRenderNextStatus}
     />
   ) : (
     "Loading ..."

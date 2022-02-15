@@ -11,8 +11,8 @@ function StatusList({
   status,
   inventory,
   inventoryStatus,
-  fetchNextInventoryPage,
-  goToNextStatus,
+  onFetchNextInventoryPage,
+  onRenderNextStatus,
 }) {
   const dispatch = useDispatch();
 
@@ -33,13 +33,13 @@ function StatusList({
     if (hasMoreRecords) {
       dispatch(fetchNextBatch(status));
     } else if (hasMoreInventory) {
-      fetchNextInventoryPage();
+      onFetchNextInventoryPage();
     }
   }
 
   useEffect(() => {
-    if (!hasMoreInventory && goToNextStatus) goToNextStatus();
-  }, [hasMoreInventory, goToNextStatus]);
+    if (!hasMoreInventory && onRenderNextStatus) onRenderNextStatus();
+  }, [hasMoreInventory, onRenderNextStatus]);
 
   const recordsInOrder = useSelector((state) =>
     records.selectByTokensBatch(state, inventory)

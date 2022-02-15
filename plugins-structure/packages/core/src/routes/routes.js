@@ -34,7 +34,7 @@ export const routes = [
       ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
   {
-    path: "/records/:id",
+    path: "/record/:id",
     title: "Record",
     view: (params) =>
       ReactDOM.render(<Record {...params} />, document.querySelector("#root")),

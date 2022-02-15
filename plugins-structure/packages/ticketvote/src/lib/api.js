@@ -33,7 +33,7 @@ export async function fetchInventory(state, { status, page }) {
   return await parseResponse(response);
 }
 
-export async function fetchPolicy(state) {
+export async function fetchTicketvotePolicy(state) {
   const csrf = await getCsrf(state);
   const response = await fetch(
     getTicketvoteRoute(ROUTE_POLICY),

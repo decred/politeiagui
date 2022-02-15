@@ -10,7 +10,7 @@ const mockPolicy = {
 describe("Given the policySlice", () => {
   let store;
   // spy on the method used to fetch
-  let fetchPolicySpy;
+  let fetchRecordsPolicySpy;
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
@@ -27,10 +27,10 @@ describe("Given the policySlice", () => {
           },
         }),
     });
-    fetchPolicySpy = jest.spyOn(client, "fetchPolicy");
+    fetchRecordsPolicySpy = jest.spyOn(client, "fetchRecordsPolicy");
   });
   afterEach(() => {
-    fetchPolicySpy.mockRestore();
+    fetchRecordsPolicySpy.mockRestore();
   });
   describe("when given parameters are empty", () => {
     it("should return the initial state", () => {
@@ -41,7 +41,7 @@ describe("Given the policySlice", () => {
     it("should update the status to loading", () => {
       store.dispatch(fetchRecordsPolicy());
 
-      expect(fetchPolicySpy).toBeCalled();
+      expect(fetchRecordsPolicySpy).toBeCalled();
       const state = store.getState();
       expect(state.policy).toEqual({});
       expect(state.status).toEqual("loading");
@@ -49,11 +49,11 @@ describe("Given the policySlice", () => {
   });
   describe("when fetchRecordsPolicy succeeds", () => {
     it("should update policy and status", async () => {
-      fetchPolicySpy.mockResolvedValueOnce(mockPolicy);
+      fetchRecordsPolicySpy.mockResolvedValueOnce(mockPolicy);
 
       await store.dispatch(fetchRecordsPolicy());
 
-      expect(fetchPolicySpy).toBeCalled();
+      expect(fetchRecordsPolicySpy).toBeCalled();
       const state = store.getState();
       expect(state.policy).toEqual(mockPolicy);
       expect(state.status).toEqual("succeeded");
@@ -62,11 +62,11 @@ describe("Given the policySlice", () => {
   describe("when fetchRecordsPolicy fails", () => {
     it("should dispatch failure and update the error", async () => {
       const error = new Error("ERROR");
-      fetchPolicySpy.mockRejectedValueOnce(error);
+      fetchRecordsPolicySpy.mockRejectedValueOnce(error);
 
       await store.dispatch(fetchRecordsPolicy());
 
-      expect(fetchPolicySpy).toBeCalled();
+      expect(fetchRecordsPolicySpy).toBeCalled();
       const state = store.getState();
       expect(state.status).toEqual("failed");
       expect(state.error).toEqual("ERROR");

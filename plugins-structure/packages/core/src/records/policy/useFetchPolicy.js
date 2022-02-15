@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordsPolicy } from "./";
 
-export function useFetchPolicy() {
+export function useFetchRecordsPolicy() {
   const dispatch = useDispatch();
 
   // Selectors

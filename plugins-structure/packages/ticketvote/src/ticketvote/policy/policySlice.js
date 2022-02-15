@@ -11,7 +11,7 @@ export const fetchTicketvotePolicy = createAsyncThunk(
   "ticketvotePolicy/fetch",
   async (_, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchPolicy(getState());
+      return await api.fetchTicketvotePolicy(getState());
     } catch (error) {
       return rejectWithValue(error.message);
     }
