@@ -9,7 +9,7 @@ import {
 function getMetadataItems({ domain, amount, endDate, startDate }) {
   return [
     { label: "Domain", value: domain },
-    { label: "Amount", value: usdFormatter.format(amount) },
+    { label: "Amount", value: usdFormatter.format(amount / 100) },
     { label: "Start Date", value: startDate },
     { label: "End Date", value: endDate },
   ];
