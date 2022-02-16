@@ -3,7 +3,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ModalChangeUsername from "src/components/ModalChangeUsername";
 import { PUB_KEY_STATUS_LOADED, PUB_KEY_STATUS_LOADING } from "src/constants";
-import UserProposals from "src/containers/Proposal/User";
+import DraftProposals from "src/containers/Proposal/User/Drafts";
+import SubmittedProposals from "src/containers/Proposal/User/Submitted";
 import AllInvoices from "src/containers/Invoice/List";
 import useUserIdentity from "src/hooks/api/useUserIdentity";
 import useQueryStringWithIndexValue from "src/hooks/utils/useQueryStringWithIndexValue";
@@ -31,13 +32,10 @@ const getTabComponents = ({ user, ...rest }) => {
       <Preferences user={user} key="tab-preferences" {...rest} />
     ),
     [tabValues.CREDITS]: <Credits key="tab-credits" user={user} {...rest} />,
-    [tabValues.PROPOSALS]: (
-      <UserProposals
-        key="tab-proposals"
-        userID={user.userid}
-        withDrafts={rest.isUserPageOwner}
-      />
+    [tabValues.SUBMITTED_PROPOSALS]: (
+      <SubmittedProposals key="tab-submitted-proposals" userID={user.userid} />
     ),
+    [tabValues.DRAFT_PROPOSALS]: <DraftProposals key="tab-draft-proposals" />,
     [tabValues.INVOICES]: <AllInvoices userID={user.userid} />,
     [tabValues.DRAFTS]: <Drafts key="tab-invoices" />,
     [tabValues.MANAGE_DCC]: <ManageContractor userID={user.userid} {...rest} />,
@@ -83,6 +81,8 @@ const UserDetail = ({
         return true;
       if (tabLabel === tabValues.MANAGE_DCC && !isAdminOrTheUser) return true;
       if (tabLabel === tabValues.INVOICES && !isAdmin) return true;
+      if (tabLabel === tabValues.DRAFT_PROPOSALS && !isUserPageOwner)
+        return true;
       if (tabLabel === tabValues.DRAFTS && !isUserPageOwner) return true;
       if (
         tabLabel === tabValues.PROPOSALS_OWNED &&
@@ -95,7 +95,8 @@ const UserDetail = ({
     const filterByRecordType = (tabLabel) => {
       if (recordType === RECORD_TYPE_INVOICE) {
         return (
-          tabLabel !== tabValues.PROPOSALS &&
+          tabLabel !== tabValues.SUBMITTED_PROPOSALS &&
+          tabLabel !== tabValues.DRAFT_PROPOSALS &&
           tabLabel !== tabValues.PREFERENCES &&
           tabLabel !== tabValues.CREDITS
         );
@@ -115,7 +116,8 @@ const UserDetail = ({
       tabValues.ACCOUNT,
       tabValues.PREFERENCES,
       tabValues.CREDITS,
-      tabValues.PROPOSALS,
+      tabValues.SUBMITTED_PROPOSALS,
+      tabValues.DRAFT_PROPOSALS,
       tabValues.INVOICES,
       tabValues.DRAFTS,
       tabValues.MANAGE_DCC,
