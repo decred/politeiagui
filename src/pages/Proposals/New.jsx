@@ -24,7 +24,10 @@ const DraftsButton = () => {
 
   return (
     drafts.length > 0 && (
-      <Button kind="secondary" onClick={openDraftsModal}>
+      <Button
+        kind="secondary"
+        onClick={openDraftsModal}
+        data-testid="proposal-new-draft-button">
         Drafts
       </Button>
     )

@@ -86,6 +86,7 @@
     "connect-api-mocker": "^1.7.0",
     "cypress": "^7.0.0",
     "cypress-failed-log": "^2.9.2",
+    "cypress-localstorage-commands": "^1.6.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "enzyme-to-json": "^3.6.1",

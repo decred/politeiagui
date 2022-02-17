@@ -1,4 +1,5 @@
 import { buildProposal } from "../../support/generate";
+import { userByType, USER_TYPE_USER } from "../../support/users/generate";
 
 beforeEach(function mockApiCalls() {
   // currently mocking pi and ticketvote summaries calls with any status, since
@@ -50,5 +51,44 @@ describe("Proposal Create", () => {
       /you won't be able to submit comments or proposals before paying the paywall/i
     ).should("be.visible");
     cy.findByRole("button", { name: /submit/i }).should("be.disabled");
+  });
+  describe("Given some pre loaded drafts list", () => {
+    const user = userByType(USER_TYPE_USER);
+    const state = {
+      app: {
+        draftProposals: {
+          newDraft: true,
+          lastSubmitted: "SUMIFSN",
+          draft_epv5gj2bi: {
+            name: "Test Draft",
+            description: "Draft Description",
+            files: [],
+            rfpDeadline: null,
+            type: 1,
+            rfpLink: "",
+            timestamp: 1645039299,
+            id: "draft_epv5gj2bi",
+            draftId: "draft_epv5gj2bi"
+          }
+        }
+      }
+    };
+    it("should be able to restore proposal data from drafts", () => {
+      cy.userEnvironment("user", { verifyIdentity: true, user });
+      cy.setLocalStorage(`state-${user.userid}`, JSON.stringify(state));
+      cy.visit("/record/new");
+      cy.findByTestId("proposal-new-draft-button").click();
+      cy.findByText("Test Draft").should("be.visible").click();
+      cy.findByTestId("proposal-name").should("have.value", "Test Draft");
+      cy.findByTestId("text-area").should("have.value", "Draft Description");
+    });
+  });
+
+  describe("Given an empty drafts list", () => {
+    it("should not display drafts button", () => {
+      cy.userEnvironment("user", { verifyIdentity: true });
+      cy.visit("/record/new");
+      cy.get("[data-testid=proposal-new-draft-button]").should("not.exist");
+    });
   });
 });

@@ -16,6 +16,7 @@
 // Import @testing-library/cypress commands:
 import "@testing-library/cypress/add-commands";
 import "cypress-failed-log";
+import "cypress-localstorage-commands";
 // Import commands.js using ES2015 syntax:
 import "./commands";
 import "./core/commands";
