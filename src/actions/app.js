@@ -225,7 +225,19 @@ export const onEditInvoice =
   };
 
 export const onSaveDraftProposal =
-  ({ name, description, rfpDeadline, type, rfpLink, files, draftId }) =>
+  ({
+    name,
+    description,
+    rfpDeadline,
+    type,
+    rfpLink,
+    files,
+    draftId,
+    startDate,
+    endDate,
+    amount,
+    domain
+  }) =>
   (dispatch) => {
     resetNewProposalData();
     const id = draftId || uniqueID("draft");
@@ -238,7 +250,11 @@ export const onSaveDraftProposal =
         type,
         rfpLink,
         timestamp: Math.floor(Date.now() / 1000),
-        id
+        id,
+        startDate,
+        endDate,
+        amount,
+        domain
       })
     );
     return id;

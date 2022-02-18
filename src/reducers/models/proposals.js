@@ -296,7 +296,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
               ),
               update(
                 ["allProposalsByUserId", action.payload.userid],
-                (userProposals = []) => [action.payload, ...userProposals]
+                (userProposals = {}) => {
+                  const token = shortRecordToken(proposalToken(action.payload));
+                  return { [token]: action.payload, ...userProposals };
+                }
               ),
               update(
                 ["numOfProposalsByUserId", action.payload.userid],
