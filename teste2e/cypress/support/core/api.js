@@ -175,7 +175,7 @@ export function timestampsReply({
   };
 }
 
-export function setstatusReply({
+export function setStatusReply({
   testParams: { user, oldStatus, state, files },
   requestParams: { publickey, reason, signature, status, token, version }
 }) {
@@ -207,5 +207,5 @@ export const repliers = {
   policy: policyReply,
   details: detailsReply,
   timestamps: timestampsReply,
-  setstatus: setstatusReply
+  setstatus: setStatusReply
 };

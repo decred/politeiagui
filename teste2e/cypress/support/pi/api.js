@@ -108,8 +108,16 @@ export function billingStatusChangesReply({
   return { billingstatuschanges };
 }
 
+export function setBillingStatusReply() {
+  return {
+    receipt: "set-billing-status-receipt",
+    timestamp: Date.now() / 1000
+  };
+}
+
 export const repliers = {
   summaries: summariesReply,
   policy: policyReply,
-  billingstatuschanges: billingStatusChangesReply
+  billingstatuschanges: billingStatusChangesReply,
+  setbillingstatus: setBillingStatusReply
 };
