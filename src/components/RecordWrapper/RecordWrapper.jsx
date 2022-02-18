@@ -81,7 +81,9 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
   return !isLegacy ? (
-    <Wrapper to={url} className={styles.title}>
+    <Wrapper
+      to={url}
+      className={classNames(styles.baseTitle, url && styles.underlineTitle)}>
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>
@@ -93,7 +95,13 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
         placement="right">
         <Icon type="info" />
       </Tooltip>
-      <a href={url} className={classNames(styles.title, "margin-left-s")}>
+      <a
+        href={url}
+        className={classNames(
+          styles.baseTitle,
+          styles.underlineTitle,
+          "margin-left-s"
+        )}>
         <H2 {...props} data-testid="record-title-legacy">
           {children}
         </H2>
@@ -152,7 +160,7 @@ const MobileHeader = ({ title, status, edit, isRfp }) => (
   </div>
 );
 
-const RfpTag = React.memo(({ className }) => (
+export const RfpTag = React.memo(({ className }) => (
   <img
     alt="rfp"
     className={classNames("margin-right-s", styles.rfptag, className)}
