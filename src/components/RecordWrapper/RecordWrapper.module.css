@@ -1,15 +1,9 @@
-.title,
-.title > h2 {
-  color: var(--tab-text-active-color) !important;
-  max-width: 100%;
-}
-.staticTitle,
-.staticTitle > h2 {
+.baseTitle {
   color: var(--tab-text-active-color) !important;
   max-width: 100%;
 }
 
-.title:hover {
+.underlineTitle:hover {
   text-decoration: underline;
 }
 
