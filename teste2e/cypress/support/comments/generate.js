@@ -12,6 +12,8 @@ export function Comment({
   state = 2,
   maxUpvote = 0,
   maxDownVote = 0,
+  extradata,
+  extradatahint,
   createdat
 } = {}) {
   if (!user) {
@@ -33,6 +35,8 @@ export function Comment({
   this.userid = user.userid;
   this.username = user.username;
   this.createdat = createdat;
+  this.extradata = extradata;
+  this.extradatahint = extradatahint;
 }
 
 export function Vote({ token, userid, user, maxCommentID }) {

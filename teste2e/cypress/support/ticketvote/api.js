@@ -139,11 +139,22 @@ export function resultsReply({ requestParams: { token } }) {
   return {};
 }
 
+/**
+ * authorizeReply returns the data of "/api/ticketvote/v1/authorize" endpoint
+ */
+export function authorizeReply() {
+  return {
+    receipt: "authorize-receipt",
+    timestamp: Date.now() / 1000
+  };
+}
+
 export const repliers = {
   inventory: inventoryReply,
   policy: policyReply,
   summaries: summariesReply,
   timestamps: timestampsReply,
   details: detailsReply,
-  results: resultsReply
+  results: resultsReply,
+  authorize: authorizeReply
 };

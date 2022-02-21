@@ -76,7 +76,16 @@ export function commentsReply({
  */
 export function newCommentReply({
   testParams: { user, commentid },
-  requestParams: { comment, parentid, publickey, signature, state, token }
+  requestParams: {
+    comment,
+    parentid,
+    publickey,
+    signature,
+    state,
+    token,
+    extradata,
+    extradatahint
+  }
 }) {
   return {
     comment: new Comment({
@@ -88,6 +97,8 @@ export function newCommentReply({
       signature,
       state,
       token,
+      extradata,
+      extradatahint,
       createdat: new Date().getTime() / 1000
     })
   };
