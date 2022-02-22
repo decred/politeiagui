@@ -1,170 +1,103 @@
 import {
-  buildProposal,
-  buildComment,
-  buildAuthorUpdate
-} from "../../support/generate";
-import {
-  shortRecordToken,
+  makeProposal,
   PROPOSAL_SUMMARY_STATUS_ACTIVE,
   PROPOSAL_SUMMARY_STATUS_CLOSED,
   PROPOSAL_SUMMARY_STATUS_COMPLETED
 } from "../../utils";
+import { userByType, USER_TYPE_USER } from "../../support/users/generate";
 
 describe("Proposal author updates", () => {
-  it("Should allow proposal author to submit updates on active proposals & allow normal users to reply only on the latest author update", () => {
-    // paid admin user with proposal credits
-    cy.server();
-    // create proposal
-    const admin = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    const user1 = {
-      email: "user1@example.com",
-      username: "user1",
-      password: "password"
-    };
-    const proposal = buildProposal();
-    cy.login(admin);
-    cy.identity();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: {
-            censorshiprecord: { token }
-          }
-        }
-      }) => {
-        cy.visit(`record/${shortRecordToken(token)}`);
-        // Manually approve proposal
-        cy.findByText(/approve/i).click();
-        cy.route("POST", "/api/records/v1/setstatus").as("setstatus");
-        cy.findByText(/confirm/i).click();
-        cy.wait("@setstatus");
-        // Mock propsoal summary reply to set proposal status to
-        // approved to test author updates.
-        cy.middleware("pi.summaries", {
-          token,
-          status: PROPOSAL_SUMMARY_STATUS_ACTIVE
-        });
-        cy.visit(`record/${shortRecordToken(token)}`);
-        cy.wait("@pi.summaries");
-        const { title, text } = buildAuthorUpdate();
-        cy.findByTestId(/update-title/i).type(title);
-        cy.findByTestId(/text-area/i).type(text);
-        cy.route("POST", "/api/comments/v1/new").as("newComment");
-        cy.findByText(/add comment/i).click();
-        cy.wait("@newComment").its("status").should("eq", 200);
-        // Ensure new comments section title is the author update title.
-        cy.findByText(title).should("be.visible");
-
-        // Normal users shouldn't be able to post normal comments at this level
-        // and only reply on latest author update thread.
-        cy.logout(admin);
-        cy.login(user1);
-        cy.identity();
-        cy.visit(`record/${shortRecordToken(token)}`);
-        cy.wait("@pi.summaries");
-        cy.findByTestId(/text-area/i).should("not.exist");
-        const { text: replyText } = buildComment();
-        cy.findByText(/reply/i).click();
-        cy.findByTestId(/text-area/i).type(replyText);
-        cy.route("POST", "/api/comments/v1/new").as("newComment");
-        cy.findByText(/add comment/i).click();
-        cy.wait("@newComment").its("status").should("eq", 200);
-        // Ensure new reply is displayed in the author update thread.
-        cy.wait(1000);
-        cy.findByText(replyText).should("be.visible");
-      }
-    );
+  const { files } = makeProposal({});
+  const user = userByType(USER_TYPE_USER);
+  const user2 = userByType(USER_TYPE_USER);
+  beforeEach(() => {
+    cy.useTicketvoteApi();
+    cy.useRecordsApi();
+    cy.usePiApi();
+    cy.useWwwApi();
+    cy.useCommentsApi();
+  });
+  it("Should allow proposal author to submit updates on active proposals ", () => {
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    cy.recordsMiddleware("details", { state: 2, status: 2, files, user });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_ACTIVE]: 1 }
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { approved: 1 }
+    });
+    cy.visit("record/testtoken");
+    cy.wait("@records.details");
+    cy.findByTestId(/update-title/i)
+      .clear()
+      .type("update title");
+    cy.findByTestId(/text-area/i)
+      .clear()
+      .type("author update body");
+    cy.commentsMiddleware("new", { user, commentid: 1 });
+    cy.findByText(/add comment/i).click();
+    cy.findByText("update title").should("be.visible");
   });
 
   it("Shouldn't allow proposal author to submit updates on closed proposals", () => {
-    // paid admin user with proposal credits
-    cy.server();
-    // create proposal
-    const admin = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    const user1 = {
-      email: "user1@example.com",
-      username: "user1",
-      password: "password"
-    };
-    const proposal = buildProposal();
-    cy.login(admin);
-    cy.identity();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: {
-            censorshiprecord: { token }
-          }
-        }
-      }) => {
-        cy.visit(`record/${shortRecordToken(token)}`);
-        // Manually approve proposal
-        cy.findByText(/approve/i).click();
-        cy.route("POST", "/api/records/v1/setstatus").as("setstatus");
-        cy.findByText(/confirm/i).click();
-        cy.wait("@setstatus");
-        // Mock propsoal summary reply to set proposal status to
-        // closed.
-        cy.middleware("pi.summaries", {
-          token,
-          status: PROPOSAL_SUMMARY_STATUS_CLOSED
-        });
-        cy.visit(`record/${shortRecordToken(token)}`);
-        cy.wait("@pi.summaries");
-        cy.findByTestId(/update-title/i).should("not.exist");
-      }
-    );
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    cy.recordsMiddleware("details", { state: 2, status: 2, files, user });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_CLOSED]: 1 }
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { approved: 1 }
+    });
+    cy.visit("record/testtoken");
+    cy.wait("@records.details");
+    cy.findByTestId(/update-title/i).should("not.exist");
+    cy.findByText(/comments are not allowed/i).should("be.visible");
   });
 
   it("Shouldn't allow proposal author to submit updates on completed proposals", () => {
-    // paid admin user with proposal credits
-    cy.server();
-    // create proposal
-    const admin = {
-      email: "adminuser@example.com",
-      username: "adminuser",
-      password: "password"
-    };
-    const user1 = {
-      email: "user1@example.com",
-      username: "user1",
-      password: "password"
-    };
-    const proposal = buildProposal();
-    cy.login(admin);
-    cy.identity();
-    cy.createProposal(proposal).then(
-      ({
-        body: {
-          record: {
-            censorshiprecord: { token }
-          }
-        }
-      }) => {
-        cy.visit(`record/${shortRecordToken(token)}`);
-        // Manually approve proposal
-        cy.findByText(/approve/i).click();
-        cy.route("POST", "/api/records/v1/setstatus").as("setstatus");
-        cy.findByText(/confirm/i).click();
-        cy.wait("@setstatus");
-        // Mock propsoal summary reply to set proposal status to
-        // completed.
-        cy.middleware("pi.summaries", {
-          token,
-          status: PROPOSAL_SUMMARY_STATUS_COMPLETED
-        });
-        cy.visit(`record/${shortRecordToken(token)}`);
-        cy.wait("@pi.summaries");
-        cy.findByTestId(/update-title/i).should("not.exist");
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user });
+    cy.recordsMiddleware("details", { state: 2, status: 2, files, user });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_COMPLETED]: 1 }
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { approved: 1 }
+    });
+    cy.visit("record/testtoken");
+    cy.wait("@records.details");
+    cy.findByTestId(/update-title/i).should("not.exist");
+    cy.findByText(/comments are not allowed/i).should("be.visible");
+  });
+
+  it("should allow normal users to reply only on the latest author update", () => {
+    cy.userEnvironment(USER_TYPE_USER, { verifyIdentity: true, user: user2 });
+    cy.recordsMiddleware("details", { state: 2, status: 2, files, user });
+    cy.piMiddleware("summaries", {
+      amountByStatus: { [PROPOSAL_SUMMARY_STATUS_ACTIVE]: 1 }
+    });
+    cy.ticketvoteMiddleware("summaries", {
+      amountByStatus: { approved: 1 }
+    });
+    cy.commentsMiddleware("comments", {
+      count: 1,
+      extra: {
+        extradata: JSON.stringify({ title: "update 1" }),
+        extradatahint: "proposalupdate"
       }
-    );
+    });
+    // Normal users shouldn't be able to post normal comments at this level
+    // and only reply on latest author update thread.
+    cy.visit("record/testtoken");
+    cy.wait("@records.details");
+    cy.wait("@comments.comments");
+    cy.findByTestId(/text-area/i).should("not.exist");
+    cy.findByText(/reply/i).click();
+    cy.findByTestId(/text-area/i)
+      .clear()
+      .type("reply update");
+    cy.commentsMiddleware("new", { user: user2, commentid: 2 });
+    cy.findByText(/add comment/i).click();
+    cy.wait("@comments.new");
+    cy.findByText("reply update").should("be.visible");
   });
 });

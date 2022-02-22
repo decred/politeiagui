@@ -210,10 +210,10 @@ describe("General pagination", () => {
 describe("Given 1 under-review proposal", () => {
   it("should render loading placeholders only once", () => {
     cy.ticketvoteMiddleware("inventory", { amountByStatus: { started: 1 } });
-    cy.recordsMiddleware("records", { status: 2, state: 2 });
+    cy.recordsMiddleware("records", { status: 2, state: 2 }, { delay: 2000 });
     cy.visit("/?tab=under-review");
     cy.get("[data-testid='loading-placeholders'] > div", {
-      timeout: 1200
+      timeout: 5000
     }).should("have.length", 5);
     cy.wait("@records.records");
     cy.get("[data-testid='record-title']").then(() => {

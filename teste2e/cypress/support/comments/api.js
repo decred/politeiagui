@@ -55,13 +55,23 @@ export function countReply({
  * @returns {Object} { comments }
  */
 export function commentsReply({
-  testParams: { count = 0, maxUpvote = 0, maxDownVote = 0 },
+  testParams: { count = 0, maxUpvote = 0, maxDownVote = 0, extra = {} },
   requestParams: { token }
 }) {
   const comments = [];
+  const { extradata, extradatahint } = extra;
   if (count > 0) {
     for (let commentid = 1; commentid <= count; commentid++) {
-      comments.push(new Comment({ commentid, token, maxUpvote, maxDownVote }));
+      comments.push(
+        new Comment({
+          commentid,
+          token,
+          maxUpvote,
+          maxDownVote,
+          extradata,
+          extradatahint
+        })
+      );
     }
   }
   return { comments };
