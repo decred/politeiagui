@@ -168,9 +168,7 @@ export function votesReply({
  * @param {Object} { testParams, requestParams }
  * @returns {Object} { downvotes, upvotes, timestamp, receipt }
  */
-export function voteReply({
-  requestParams: { commentid, publickey, signature, state, token, vote }
-}) {
+export function voteReply({ requestParams: { vote } }) {
   const upvotes = vote === 1 ? 1 : 0;
   const downvotes = vote === 1 ? 0 : 1;
   return {
@@ -189,9 +187,32 @@ export function voteReply({
  * @param {Object} { requestParams }
  * @returns {Object} { comments }
  */
-export function timestampsReply({ requestParams: { token, commentids = [] } }) {
+export function timestampsReply() {
   return {
     comments: {}
+  };
+}
+
+/**
+ * delReply represents the replier for /api/comments/v1/del endpoint. It returns
+ * a deleted comment including the censorship reason.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object} { comment }
+ */
+export function delReply({
+  testParams: { userid },
+  requestParams: { reason, commentid, token }
+}) {
+  return {
+    comment: new Comment({
+      commentid,
+      userid,
+      comment: "",
+      reason,
+      token,
+      deleted: true
+    })
   };
 }
 
@@ -203,5 +224,6 @@ export const repliers = {
   new: newCommentReply,
   edit: editCommentReply,
   vote: voteReply,
-  timestamps: timestampsReply
+  timestamps: timestampsReply,
+  del: delReply
 };

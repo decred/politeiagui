@@ -100,7 +100,11 @@ const Comment = ({
   }, [isEditable, remaining]);
 
   const censorButton = !censored && censorable && (
-    <Text weight="semibold" className={styles.censor} onClick={onClickCensor}>
+    <Text
+      weight="semibold"
+      className={styles.censor}
+      data-testid="comment-censor"
+      onClick={onClickCensor}>
       Censor
     </Text>
   );
