@@ -60,4 +60,5 @@ export const Comments = ({ comments, isFlatMode }) => {
 
 Comments.propTypes = {
   comments: PropTypes.object.isRequired,
+  isFlatMode: PropTypes.bool,
 };

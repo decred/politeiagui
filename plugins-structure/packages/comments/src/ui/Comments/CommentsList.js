@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { CommentCard } from "../CommentCard";
 
 export const CommentsList = ({
@@ -27,4 +28,12 @@ export const CommentsList = ({
       </CommentCard>
     );
   });
+};
+
+CommentsList.propTypes = {
+  comments: PropTypes.object.isRequired,
+  parentId: PropTypes.number,
+  showCensor: PropTypes.bool,
+  onCensor: PropTypes.func,
+  threadSchema: PropTypes.object,
 };
