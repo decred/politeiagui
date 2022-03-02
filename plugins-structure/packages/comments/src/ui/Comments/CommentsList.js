@@ -8,12 +8,13 @@ export const CommentsList = ({
   onCensor,
   threadSchema,
 }) => {
-  if (!threadSchema[parentId]) {
+  if (!threadSchema || !threadSchema[parentId]) {
     return null;
   }
   return threadSchema[parentId].map((childId) => {
     return (
       <CommentCard
+        key={childId}
         comment={comments[childId]}
         onCensor={onCensor}
         showCensor={showCensor}

@@ -1,37 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { CommentsFilter, CommentsList } from "./";
 import { Card, H2 } from "pi-ui";
 import styles from "./styles.module.css";
-
-function getThreadSchema(commentsById, isFlatMode) {
-  const threadSchema = Object.entries(commentsById).reduce(
-    (acc, [id, comment]) => {
-      if (isFlatMode) {
-        return { 0: [...(acc[0] || []), id] };
-      } else {
-        return {
-          ...acc,
-          [comment.parentid]: [...(acc[comment.parentid] || []), id],
-        };
-      }
-    },
-    {}
-  );
-  return threadSchema;
-}
+import { getThreadSchema, sortByNew, sortByOld, sortByTop } from "./utils";
 
 export const Comments = ({ comments, isFlatMode }) => {
-  const [threadSchema, setThreadSchema] = useState(
-    getThreadSchema(comments, isFlatMode)
-  );
+  const [sortedComments, setSortedComments] = useState(Object.values(comments));
+  const [threadSchema, setThreadSchema] = useState();
   const [isFlat, setFlat] = useState(isFlatMode);
   // flat mode handler
   function handleToggleFlatMode() {
-    const newSchema = getThreadSchema(comments, !isFlat);
     setFlat(!isFlat);
-    setThreadSchema(newSchema);
   }
+  // sort handler
+  function handleSortComments(op) {
+    let newCommentsList;
+    switch (op) {
+      case "new":
+        newCommentsList = sortByNew(comments);
+        break;
+      case "old":
+        newCommentsList = sortByOld(comments);
+        break;
+      default:
+        newCommentsList = sortByTop(comments);
+        break;
+    }
+    setSortedComments(newCommentsList);
+  }
+
+  // Update schema for every filter change
+  useEffect(() => {
+    const schema = getThreadSchema(sortedComments, isFlat);
+    setThreadSchema(schema);
+  }, [sortedComments, isFlat]);
+
   return (
     <div>
       <Card paddingSize="small" className={styles.header}>
@@ -41,6 +45,7 @@ export const Comments = ({ comments, isFlatMode }) => {
         </H2>
         <CommentsFilter
           isFlat={isFlat}
+          onSort={handleSortComments}
           onToggleFlatMode={handleToggleFlatMode}
         />
       </Card>
