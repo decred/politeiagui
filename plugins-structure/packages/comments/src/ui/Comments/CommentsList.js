@@ -18,6 +18,7 @@ export const CommentsList = ({
         key={childId}
         comment={comments[childId]}
         onCensor={onCensor}
+        threadLength={threadSchema[childId]?.length}
         showCensor={showCensor}
       >
         <CommentsList

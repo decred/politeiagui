@@ -18,6 +18,21 @@
   cursor: pointer;
 }
 
+.collapse {
+  cursor: pointer;
+  background: var(--tab-count-background);
+  color: var(--comment-like-color-active);
+  width: 2.8rem;
+  text-align: center;
+  margin-right: 1rem;
+  padding: 0.3rem 1rem;
+}
+
+.commentCard {
+  margin-bottom: 2rem;
+  padding: 1rem 1.4rem;
+}
+
 .body {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -32,6 +47,19 @@
   display: flex;
   justify-content: space-between;
 }
+
 .summary {
   display: flex;
+}
+
+.reply {
+  cursor: pointer;
+  margin-right: 1rem;
+  color: var(--tab-text-color) !important;
+}
+
+.thread {
+  margin-top: 2rem;
+  margin-left: 1.5rem;
+  border-left: 1px solid var(--separator-color);
 }

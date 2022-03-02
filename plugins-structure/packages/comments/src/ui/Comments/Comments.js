@@ -37,7 +37,7 @@ export const Comments = ({ comments, isFlatMode }) => {
   }, [sortedComments, isFlat]);
 
   return (
-    <div>
+    <div className={styles.commentsWrapper}>
       <Card paddingSize="small" className={styles.header}>
         <H2 className={styles.title}>
           Comments{" "}

@@ -12,6 +12,10 @@
   margin-right: 0px;
 }
 
+.commentsWrapper {
+  background: var(--card-background);
+}
+
 span.flatButtonText {
   cursor: pointer;
   color: var(--color-primary);
