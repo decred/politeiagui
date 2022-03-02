@@ -4,8 +4,10 @@ import { Card, Link } from "pi-ui";
 import { Event, Join } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 
-export const CommentCard = ({ comment, showCensor, onCensor }) => {
-  console.log("comment", comment);
+export const CommentCard = ({ comment, showCensor, onCensor, children }) => {
+  function handleCensorComment() {
+    onCensor(comment);
+  }
 
   return (
     <Card paddingSize="small">
@@ -15,7 +17,7 @@ export const CommentCard = ({ comment, showCensor, onCensor }) => {
             <Link href="#comment">{comment.username}</Link>
             <Event event="" timestamp={comment.timestamp} />
             {showCensor && (
-              <span className={styles.censor} onClick={onCensor}>
+              <span className={styles.censor} onClick={handleCensorComment}>
                 Censor
               </span>
             )}
@@ -30,6 +32,7 @@ export const CommentCard = ({ comment, showCensor, onCensor }) => {
       <div className={styles.footer}>
         <span>Reply</span>
       </div>
+      {children}
     </Card>
   );
 };

@@ -1,12 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { CommentCard } from "../CommentCard";
-import { Button, Card, H2 } from "pi-ui";
+import { CommentsFilter, CommentsList } from "./";
+import { Card, H2 } from "pi-ui";
 import styles from "./styles.module.css";
 
-export const Comments = ({ comments }) => {
-  console.log("comments", comments);
+function getThreadSchema(commentsById, isFlatMode) {
+  const threadSchema = Object.entries(commentsById).reduce(
+    (acc, [id, comment]) => {
+      if (isFlatMode) {
+        return { 0: [...(acc[0] || []), id] };
+      } else {
+        return {
+          ...acc,
+          [comment.parentid]: [...(acc[comment.parentid] || []), id],
+        };
+      }
+    },
+    {}
+  );
+  return threadSchema;
+}
 
+export const Comments = ({ comments, isFlatMode }) => {
+  const [threadSchema, setThreadSchema] = useState(
+    getThreadSchema(comments, isFlatMode)
+  );
+  const [isFlat, setFlat] = useState(isFlatMode);
+  // flat mode handler
+  function handleToggleFlatMode() {
+    const newSchema = getThreadSchema(comments, !isFlat);
+    setFlat(!isFlat);
+    setThreadSchema(newSchema);
+  }
   return (
     <div>
       <Card paddingSize="small" className={styles.header}>
@@ -14,18 +39,16 @@ export const Comments = ({ comments }) => {
           Comments{" "}
           <span className={styles.count}>({Object.keys(comments).length})</span>
         </H2>
-        <div className={styles.filters}>
-          <div>
-            Sort by: <select></select>
-          </div>
-          <Button size="sm" kind="secondary">
-            Flat Mode
-          </Button>
-        </div>
+        <CommentsFilter
+          isFlat={isFlat}
+          onToggleFlatMode={handleToggleFlatMode}
+        />
       </Card>
-      {Object.values(comments).map((c) => (
-        <CommentCard comment={c} showCensor={true} />
-      ))}
+      <CommentsList
+        comments={comments}
+        threadSchema={threadSchema}
+        parentid={0}
+      />
     </div>
   );
 };
