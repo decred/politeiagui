@@ -18,4 +18,5 @@ Cypress.Commands.add("useCommentsApi", (config = {}) => {
   cy.commentsMiddleware("votes", config.votes);
   cy.commentsMiddleware("vote", config.vote);
   cy.commentsMiddleware("timestamps", config.timestamps);
+  cy.commentsMiddleware("del", config.del);
 });
