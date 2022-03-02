@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Select } from "pi-ui";
+import { Select, Text, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import styles from "./styles.module.css";
 
@@ -26,21 +26,27 @@ export const CommentsFilter = ({ onSort, onToggleFlatMode, isFlat }) => {
   }
   return (
     <div className={styles.filters}>
-      <div>
-        Sort by:{" "}
-        <Select
-          options={options}
-          value={selected}
-          onChange={handleFilterChanges}
-        />
-      </div>
-      <Button
-        size="sm"
-        kind={isFlat ? "primary" : "secondary"}
+      <Select
+        options={options}
+        value={selected}
+        onChange={handleFilterChanges}
+      />
+      <div
+        className={classNames(
+          styles.flatButtonWrapper,
+          isFlat && styles.flatModeActive
+        )}
         onClick={onToggleFlatMode}
       >
-        Flat Mode
-      </Button>
+        <Text
+          className={classNames(
+            styles.flatButtonText,
+            isFlat && styles.flatModeActive
+          )}
+        >
+          Flat mode
+        </Text>
+      </div>
     </div>
   );
 };
