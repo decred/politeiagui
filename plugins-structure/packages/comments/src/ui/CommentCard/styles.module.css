@@ -13,7 +13,7 @@
   width: 2.8rem;
   text-align: center;
   margin-right: 1rem;
-  padding: 0.3rem 1rem;
+  padding: 0.3rem 0rem;
 }
 
 .commentCard {
@@ -28,7 +28,7 @@
 
 .footer {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
 }
 
 .header {

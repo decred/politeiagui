@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Card, Link, classNames } from "pi-ui";
 import { Event, Join } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
-import { CommentLikes } from "./CommentLikes";
+import { CommentVotes } from "./CommentVotes";
 
 export const CommentCard = ({
   comment,
@@ -12,6 +12,7 @@ export const CommentCard = ({
   children,
   threadLength,
   userLink,
+  userVote,
 }) => {
   const [showThread, setShowThread] = useState(true);
   function handleCensorComment() {
@@ -41,9 +42,10 @@ export const CommentCard = ({
               )}
             </Join>
           </div>
-          <CommentLikes
+          <CommentVotes
             hide={comment.deleted}
             upvotes={comment.upvotes}
+            userVote={userVote?.vote}
             downvotes={comment.downvotes}
           />
         </div>
@@ -54,14 +56,12 @@ export const CommentCard = ({
             : comment.comment}
         </div>
         <div className={styles.footer}>
-          <div>
-            <span className={styles.reply}>Reply</span>
-            {threadLength && (
-              <span className={styles.collapse} onClick={toggleDisplayThread}>
-                {showThread ? "-" : `+${threadLength}`}
-              </span>
-            )}
-          </div>
+          <span className={styles.reply}>Reply</span>
+          {threadLength && (
+            <span className={styles.collapse} onClick={toggleDisplayThread}>
+              {showThread ? "-" : `+${threadLength}`}
+            </span>
+          )}
         </div>
       </Card>
       {showThread && <div className={styles.thread}>{children}</div>}

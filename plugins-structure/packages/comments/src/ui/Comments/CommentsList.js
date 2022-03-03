@@ -8,6 +8,7 @@ export const CommentsList = ({
   showCensor,
   onCensor,
   threadSchema,
+  userVotes,
 }) => {
   if (!threadSchema || !threadSchema[parentId]) {
     return null;
@@ -19,6 +20,7 @@ export const CommentsList = ({
       onCensor={onCensor}
       threadLength={threadSchema[childId]?.length}
       showCensor={showCensor}
+      userVote={userVotes[childId]}
     >
       <CommentsList
         comments={comments}
@@ -26,6 +28,7 @@ export const CommentsList = ({
         onCensor={onCensor}
         parentId={childId}
         threadSchema={threadSchema}
+        userVotes={userVotes}
       />
     </CommentCard>
   ));

@@ -4,14 +4,18 @@ import { Icon, Text, classNames } from "pi-ui";
 import debounce from "lodash/debounce";
 import styles from "./styles.module.css";
 
-export const CommentLikes = ({
+export const CommentVotes = ({
   upvotes,
   downvotes,
   hide,
   disabled,
   voteIconColor,
   onVote,
+  userVote,
 }) => {
+  const userUpvote = userVote === 1;
+  const userDownvote = userVote === -1;
+
   // Avoid multi-clicking actions
   async function handleLike() {
     await onVote(1);
@@ -31,7 +35,7 @@ export const CommentLikes = ({
       <Text
         data-testid={`score-${isLike ? "like" : "dislike"}`}
         size="small"
-        className={classNames(styles.likesResult, "unselectable")}
+        className={styles.likesResult}
       >
         {count}
       </Text>
@@ -45,7 +49,8 @@ export const CommentLikes = ({
           <button
             className={classNames(
               styles.likeBtn,
-              disabled && styles.likeDisabled
+              disabled && styles.likeDisabled,
+              userUpvote && styles.hasVoted
             )}
             data-testid="like-btn"
             onClick={handleDebounceVote(handleLike)}
@@ -62,7 +67,8 @@ export const CommentLikes = ({
           <button
             className={classNames(
               styles.likeBtn,
-              disabled && styles.likeDisabled
+              disabled && styles.likeDisabled,
+              userDownvote && styles.hasVoted
             )}
             data-testid="dislike-btn"
             onClick={handleDebounceVote(handleDislike)}
@@ -80,7 +86,7 @@ export const CommentLikes = ({
   );
 };
 
-CommentLikes.propTypes = {
+CommentVotes.propTypes = {
   upvotes: PropTypes.number.isRequired,
   downvotes: PropTypes.number.isRequired,
   hide: PropTypes.bool,
@@ -89,7 +95,7 @@ CommentLikes.propTypes = {
   onVote: PropTypes.func,
 };
 
-CommentLikes.defaultProps = {
+CommentVotes.defaultProps = {
   upvotes: 0,
   downvotes: 0,
   onVote: () => {},

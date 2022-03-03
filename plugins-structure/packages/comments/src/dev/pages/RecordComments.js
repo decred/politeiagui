@@ -24,6 +24,8 @@ const themes = {
   [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme },
 };
 
+const userid = "0612f387-3777-4003-8f40-87b183f89032";
+
 const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
   const apiStatus = api.selectStatus(store.getState());
 
@@ -32,9 +34,14 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
   }
   await connectReducers(commentsConstants.reducersArray);
   await store.dispatch(comments.comments.fetch({ token }));
+  await store.dispatch(comments.votes.fetch({ token, userid }));
   const recordComments = comments.comments.selectByToken(
     store.getState(),
     token
+  );
+  const userCommentsVotes = comments.votes.selectUserVotesByToken(
+    store.getState(),
+    { token, userid }
   );
   return ReactDOM.render(
     <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
@@ -44,7 +51,7 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
         token={token}
         userId="225a7543-63e3-4d4d-bffe-98d2fad3d1dc"
       /> */}
-        <Comments comments={recordComments} />
+        <Comments comments={recordComments} userVotes={userCommentsVotes} />
         {/* <h1>Comments Count:</h1>
       <CommentsCount
         tokens={[
