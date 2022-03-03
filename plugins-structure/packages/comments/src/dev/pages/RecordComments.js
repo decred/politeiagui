@@ -4,12 +4,7 @@ import { connectReducers, store } from "@politeiagui/core";
 import { api } from "@politeiagui/core/api";
 import { Provider } from "react-redux";
 import { comments, commentsConstants } from "../../comments";
-import {
-  Comments,
-  // CommentsCount,
-  // CommentsVotes,
-  // DownloadCommentsTimestamps,
-} from "../../ui";
+import { Comments } from "../../ui";
 import {
   DEFAULT_DARK_THEME_NAME,
   DEFAULT_LIGHT_THEME_NAME,
