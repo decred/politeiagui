@@ -1,10 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  Text,
-  ButtonIcon,
-  classNames
-} from "pi-ui";
+import { Text, ButtonIcon, classNames } from "pi-ui";
 import styles from "./Proposal.module.css";
 
 const VotesCount = ({
