@@ -46,28 +46,11 @@ const RecordCommentsPage = async ({ token = "fb73b6ebb6823517" }) => {
   return ReactDOM.render(
     <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
       <Provider store={store}>
-        {/* <h1>Votes for {token}:</h1>
-      <CommentsVotes
-        token={token}
-        userId="225a7543-63e3-4d4d-bffe-98d2fad3d1dc"
-      /> */}
-        <Comments comments={recordComments} userVotes={userCommentsVotes} />
-        {/* <h1>Comments Count:</h1>
-      <CommentsCount
-        tokens={[
-          "fb74b286585c4219",
-          "8a0630254c628734",
-          "e1897786fe08d31f",
-          "1fe2586a6f744e09",
-        ]}
-      />
-      <h1>Comment Timestamps for {token}:</h1>
-      <DownloadCommentsTimestamps
-        token={token}
-        onFetchDone={(timestamps) => {
-          console.log(timestamps);
-        }}
-      /> */}
+        <Comments
+          comments={recordComments}
+          userVotes={userCommentsVotes}
+          showCensor={true}
+        />
       </Provider>
     </ThemeProvider>,
     document.querySelector("#root")

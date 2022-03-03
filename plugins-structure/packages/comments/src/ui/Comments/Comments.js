@@ -5,7 +5,13 @@ import { Card, H2 } from "pi-ui";
 import styles from "./styles.module.css";
 import { getThreadSchema, sortByNew, sortByOld, sortByTop } from "./utils";
 
-export const Comments = ({ comments, isFlatMode, userVotes }) => {
+export const Comments = ({
+  comments,
+  isFlatMode,
+  userVotes,
+  onCensor,
+  showCensor,
+}) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [threadSchema, setThreadSchema] = useState();
   const [isFlat, setFlat] = useState(isFlatMode);
@@ -53,9 +59,10 @@ export const Comments = ({ comments, isFlatMode, userVotes }) => {
         <CommentsList
           comments={comments}
           userVotes={userVotes}
-          showCensor={true}
+          showCensor={showCensor}
           threadSchema={threadSchema}
           parentid={0}
+          onCensor={onCensor}
         />
       </div>
     </div>
@@ -65,4 +72,7 @@ export const Comments = ({ comments, isFlatMode, userVotes }) => {
 Comments.propTypes = {
   comments: PropTypes.object.isRequired,
   isFlatMode: PropTypes.bool,
+  userVotes: PropTypes.object,
+  onCensor: PropTypes.func,
+  showCensor: PropTypes.bool,
 };

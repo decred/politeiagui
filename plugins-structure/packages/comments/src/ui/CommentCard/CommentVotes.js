@@ -9,7 +9,6 @@ export const CommentVotes = ({
   downvotes,
   hide,
   disabled,
-  voteIconColor,
   onVote,
   userVote,
 }) => {
@@ -55,11 +54,7 @@ export const CommentVotes = ({
             data-testid="like-btn"
             onClick={handleDebounceVote(handleLike)}
           >
-            <Icon
-              iconColor={voteIconColor}
-              backgroundColor={voteIconColor}
-              type="like"
-            />
+            <Icon type="like" />
           </button>
           {renderCount(upvotes, true)}
         </div>
@@ -73,11 +68,7 @@ export const CommentVotes = ({
             data-testid="dislike-btn"
             onClick={handleDebounceVote(handleDislike)}
           >
-            <Icon
-              iconColor={voteIconColor}
-              backgroundColor={voteIconColor}
-              type="dislike"
-            />
+            <Icon type="dislike" />
           </button>
           {renderCount(downvotes)}
         </div>
@@ -91,7 +82,6 @@ CommentVotes.propTypes = {
   downvotes: PropTypes.number.isRequired,
   hide: PropTypes.bool,
   disabled: PropTypes.bool,
-  voteIconColor: PropTypes.string,
   onVote: PropTypes.func,
 };
 

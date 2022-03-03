@@ -74,6 +74,8 @@
   background: none !important;
   outline: none;
   cursor: pointer;
+  top: 3px;
+  position: relative;
 }
 
 .likeDisabled {
@@ -90,4 +92,12 @@
 .votes {
   display: flex;
   align-items: center;
+}
+
+.likeBtn > svg > g > path {
+  fill: var(--color-gray);
+}
+
+.hasVoted > svg > g > path {
+  fill: var(--color-primary-dark) !important;
 }

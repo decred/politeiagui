@@ -5,6 +5,12 @@ import { Event, Join } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 import { CommentVotes } from "./CommentVotes";
 
+const CensorButton = ({ onCensor }) => (
+  <span className={styles.censor} onClick={onCensor}>
+    Censor
+  </span>
+);
+
 export const CommentCard = ({
   comment,
   showCensor,
@@ -36,9 +42,7 @@ export const CommentCard = ({
               <Link href={userLink}>{comment.username}</Link>
               <Event event="" timestamp={comment.timestamp} />
               {showCensor && !comment.deleted && (
-                <span className={styles.censor} onClick={handleCensorComment}>
-                  Censor
-                </span>
+                <CensorButton onCensor={handleCensorComment} />
               )}
             </Join>
           </div>
@@ -57,7 +61,7 @@ export const CommentCard = ({
         </div>
         <div className={styles.footer}>
           <span className={styles.reply}>Reply</span>
-          {threadLength && (
+          {threadLength > 0 && (
             <span className={styles.collapse} onClick={toggleDisplayThread}>
               {showThread ? "-" : `+${threadLength}`}
             </span>
