@@ -6,8 +6,6 @@ import styles from "./styles.module.css";
 import { getThreadSchema, sortByNew, sortByOld, sortByTop } from "./utils";
 
 export const Comments = ({ comments, isFlatMode, userVotes }) => {
-  console.log(userVotes);
-
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [threadSchema, setThreadSchema] = useState();
   const [isFlat, setFlat] = useState(isFlatMode);
