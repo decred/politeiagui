@@ -40,7 +40,6 @@ const DraftSaver = ({
       mapBlobToFile
     );
     const newFiles = [...values.files, ...files];
-
     const id = onSave({ draftId, ...values, files: newFiles, description });
     // first time saving this draft
     if (!draftId) {
@@ -79,8 +78,18 @@ const DraftSaver = ({
       const foundDraftProposal =
         !!draftProposals && draftId && draftProposals[draftId];
       if (foundDraftProposal && !dirty) {
-        const { name, files, type, description, rfpDeadline, rfpLink } =
-          foundDraftProposal;
+        const {
+          name,
+          files,
+          type,
+          description,
+          rfpDeadline,
+          rfpLink,
+          startDate,
+          endDate,
+          amount,
+          domain
+        } = foundDraftProposal;
         const { text, markdownFiles } = replaceImgDigestByBlob(
           { description, files },
           mapBlobToFile
@@ -94,7 +103,11 @@ const DraftSaver = ({
           files: filteredFiles,
           type,
           rfpDeadline,
-          rfpLink
+          rfpLink,
+          startDate,
+          endDate,
+          amount,
+          domain
         });
       }
     },

@@ -7,7 +7,7 @@ import keys from "lodash/fp/keys";
 import first from "lodash/fp/first";
 import get from "lodash/fp/get";
 import find from "lodash/fp/find";
-import path from "path";
+import faker from "faker";
 
 // TODO: move record related utils to core package
 export const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
@@ -23,7 +23,7 @@ const ARCHIVED = "archived";
 const PUBLIC = "public";
 const CENSORED = "censored";
 const PROPOSAL_VOTING_NOT_AUTHORIZED = 1;
-const PROPOSAL_VOTING_AUTHORIZED = 2;
+export const PROPOSAL_VOTING_AUTHORIZED = 2;
 const PROPOSAL_VOTING_ACTIVE = 3;
 export const PROPOSAL_VOTING_APPROVED = 5;
 const PROPOSAL_VOTING_REJECTED = 6;
@@ -48,6 +48,33 @@ export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
 export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
 const PROPOSAL_STATE_UNVETTED = 1;
 const PROPOSAL_STATE_VETTED = 2;
+const monthLabels = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+];
+
+export const RECORD_DOMAINS = {
+  development: "Development",
+  marketing: "Marketing",
+  research: "Research",
+  design: "Design"
+};
+
+const randomDomain = () => {
+  const domains = ["development", "marketing", "research", "design"];
+  const random = Math.floor(Math.random() * domains.length);
+  return domains[random];
+};
 
 const findRecordFileByName = (record, name) =>
   compose(
@@ -166,7 +193,7 @@ export const signRegister = (userid, record) => {
 
 export const makeProposal = ({
   name,
-  amount,
+  amount = 2000000,
   startdate,
   enddate,
   domain,
@@ -174,28 +201,43 @@ export const makeProposal = ({
   rfpDeadline,
   rfpLink,
   attachments = []
-}) => ({
-  files: [
-    convertMarkdownToFile(name + "\n\n" + markdown),
-    {
-      //proposal metadata file
-      name: PROPOSAL_METADATA_FILENAME,
-      mime: "text/plain; charset=utf-8",
-      digest: objectToSHA256({ name, amount, startdate, enddate, domain }),
-      payload: bufferToBase64String(
-        objectToBuffer({ name, amount, startdate, enddate, domain })
-      )
-    },
-    ...(attachments || [])
-  ].map(({ name, mime, payload }) => ({
-    name,
-    mime,
-    payload,
-    digest: digestPayload(payload)
-  }))
-});
+}) => {
+  name = name || faker.name.title();
+  startdate = startdate || Math.round(new Date().getTime() / 1000) + 1209600;
+  enddate = enddate || Math.round(new Date().getTime() / 1000) + 2629746;
+  domain = domain || randomDomain();
+  markdown = markdown || faker.lorem.sentence();
+  return {
+    files: [
+      convertMarkdownToFile(name + "\n\n" + markdown),
+      {
+        //proposal metadata file
+        name: PROPOSAL_METADATA_FILENAME,
+        mime: "text/plain; charset=utf-8",
+        digest: objectToSHA256({ name, amount, startdate, enddate, domain }),
+        payload: bufferToBase64String(
+          objectToBuffer({ name, amount, startdate, enddate, domain })
+        )
+      },
+      ...(attachments || [])
+    ].map(({ name, mime, payload }) => ({
+      name,
+      mime,
+      payload,
+      digest: digestPayload(payload)
+    }))
+  };
+};
 
 export const shortRecordToken = (token) => token.substring(0, 7);
+
+export const fullRecordToken = () => faker.git.commitSha().slice(0, 16);
+
+export const generateTokenPair = () => {
+  const token = faker.git.commitSha().slice(0, 16);
+  const shortToken = shortRecordToken(token);
+  return { token, shortToken };
+};
 
 export const getProposalStatusLabel = (status, isByRecordStatus) =>
   get(status)(

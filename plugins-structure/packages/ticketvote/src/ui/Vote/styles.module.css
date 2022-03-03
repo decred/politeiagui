@@ -1,0 +1,26 @@
+.votesCountSearch {
+  cursor: pointer;
+  margin-right: var(--spacing-small);
+  width: 14px;
+  height: 21px;
+}
+
+.votesCountLeft {
+  color: var(--text-secondary-color) !important;
+}
+
+.votesCountQuorumTooltip {
+  white-space: nowrap;
+  font-size: var(--font-size-small);
+  color: var(--color-gray);
+}
+
+.statusBarTooltip {
+  width: 22.5rem;
+}
+
+@media screen and (min-width: 560px) {
+  .mobileOnly {
+    display: none;
+  }
+}

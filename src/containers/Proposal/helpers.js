@@ -65,6 +65,12 @@ export const getQuorumInVotes = (voteSummary) =>
   );
 
 /**
+ * Return the votes quorum of a given proposal vote status
+ * @param {Object} voteSummary
+ */
+export const getEligibleTickets = (voteSummary) => voteSummary.eligibletickets;
+
+/**
  * Returns true if the given proposal is public
  * @param {Object} proposal
  * @returns {Boolean} isPublic
@@ -376,9 +382,8 @@ export const getRfpLinkedProposals = (
       return set([shortProposalToken, "proposedFor"], linkedProposal.name)(acc);
     }
     if (isRfp) {
-      const linkedFrom = proposal.linkedfrom.map((val) =>
-        shortRecordToken(val)
-      );
+      const linkedFrom =
+        proposal.linkedfrom?.map((val) => shortRecordToken(val)) || [];
       const rfpSubmissions = linkedFrom && {
         proposals: values(pick(proposalsByToken, linkedFrom)),
         voteSummaries: pick(voteSummaries, linkedFrom),

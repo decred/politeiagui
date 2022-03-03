@@ -54,6 +54,13 @@
 .voteCount {
   display: flex;
   user-select: none;
+  align-items: flex-end;
+}
+
+.quorumAndVotes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .voteCountSearch {
@@ -147,5 +154,13 @@ span.statusTag > span {
 
   .proposalActions {
     margin-top: 2rem;
+  }
+
+  .voteCount {
+    margin-bottom: 1rem;
+  }
+
+  .quorumAndVotes {
+    align-items: flex-start;
   }
 }

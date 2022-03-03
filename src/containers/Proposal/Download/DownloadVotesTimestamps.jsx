@@ -28,9 +28,7 @@ const DownloadVotesTimestampsWrapper = ({ label, recordToken, votesCount }) => {
 
 const DownloadVotesTimestamps = ({ recordToken, votesCount }) => {
   const {
-    policy: {
-      policyTicketVote: { timestampspagesize: timestampsPageSize }
-    }
+    policyTicketVote: { timestampspagesize: timestampsPageSize }
   } = usePolicy();
   const { timestamps, progress, loading, error, multiPage } =
     useDownloadVoteTimestamps(recordToken, votesCount, timestampsPageSize);

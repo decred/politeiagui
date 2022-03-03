@@ -10,7 +10,7 @@ const saveData = debounce((key, data) => {
 
 const getData = (key) => {
   const data = window.sessionStorage.getItem(key);
-  return data ? JSON.parse(data) : undefined;
+  return data && JSON.parse(data);
 };
 
 const Persist = ({ name, values, setValues }) => {
@@ -28,14 +28,10 @@ const Persist = ({ name, values, setValues }) => {
   return null;
 };
 
-const FormikPersist = ({ name }) => {
-  return (
-    <FormikConsumer>
-      {(formikProps) => {
-        return <Persist name={name} {...formikProps} />;
-      }}
-    </FormikConsumer>
-  );
-};
+const FormikPersist = ({ name }) => (
+  <FormikConsumer>
+    {(formikProps) => <Persist name={name} {...formikProps} />}
+  </FormikConsumer>
+);
 
 export default FormikPersist;

@@ -1,10 +1,9 @@
-.title,
-.title > h2 {
+.baseTitle {
   color: var(--tab-text-active-color) !important;
   max-width: 100%;
 }
 
-.title:hover {
+.underlineTitle:hover {
   text-decoration: underline;
 }
 
@@ -17,6 +16,12 @@
 .subtitleWrapper {
   max-width: calc(100% - 15rem);
   flex-wrap: wrap;
+}
+
+.subtitleSeparator {
+  margin-right: var(--spacing-small);
+  margin-left: var(--spacing-small);
+  color: var(--text-secondary-color);
 }
 
 .flexWrap {
@@ -148,5 +153,18 @@ div.darkActionsTooltip {
 
   .title {
     max-width: 100%;
+  }
+
+  .subtitleWrapper {
+    flex-flow: column;
+    max-width: 100%;
+  }
+
+  .subtitleWrapper > .subtitleSeparator {
+    display: none;
+  }
+
+  .subtitleWrapper > *:not(:first-child) {
+    padding-top: 1rem;
   }
 }

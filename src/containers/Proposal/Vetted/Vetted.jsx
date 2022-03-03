@@ -16,9 +16,12 @@ import RecordsView from "src/components/RecordsView";
 import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
 import usePolicy from "src/hooks/api/usePolicy";
 
-const renderProposal = (record) => (
-  <Proposal key={record.censorshiprecord.token} proposal={record} />
-);
+const renderProposal = (record) =>
+  record?.forceLoad ? (
+    <ProposalLoader />
+  ) : (
+    <Proposal key={record.censorshiprecord.token} proposal={record} />
+  );
 
 const tabLabels = [
   tabValues.UNDER_REVIEW,

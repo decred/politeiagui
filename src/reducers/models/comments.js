@@ -5,6 +5,7 @@ import compose from "lodash/fp/compose";
 import set from "lodash/fp/set";
 import get from "lodash/fp/get";
 import find from "lodash/fp/find";
+import findIndex from "lodash/fp/findIndex";
 import update from "lodash/fp/update";
 import { shortRecordToken, calculateAuthorUpdateTree } from "src/helpers";
 import {
@@ -172,6 +173,32 @@ const comments = (state = DEFAULT_STATE, action) =>
                 : (state) => state
             )(state);
           },
+          [act.RECEIVE_EDIT_COMMENT]: () => {
+            const { sectionId, commentid, ...comment } = action.payload;
+            const shortToken = shortRecordToken(comment.token);
+
+            // Find old comment index
+            const oldCommentIdx = compose(
+              findIndex((c) => c.commentid === commentid),
+              get(["comments", "byToken", shortToken, "comments", sectionId])
+            )(state);
+
+            // Overwrite old comment
+            return set(
+              [
+                "comments",
+                "byToken",
+                shortToken,
+                "comments",
+                sectionId,
+                oldCommentIdx
+              ],
+              {
+                commentid,
+                ...comment
+              }
+            )(state);
+          },
           [act.RECEIVE_LIKED_COMMENTS]: () => {
             const { token, votes } = action.payload;
             const commentsUserVote = calcScoreByComment(votes);
@@ -252,13 +279,16 @@ const comments = (state = DEFAULT_STATE, action) =>
             )(state);
           },
           [act.RECEIVE_CENSOR_COMMENT]: () => {
-            const { commentid, token, sectionId } = action.payload;
+            const { commentid, token, sectionId, reason, publickey } =
+              action.payload;
             const censorTargetComment = (comment) => {
               if (comment.commentid !== commentid) return comment;
               return {
                 ...comment,
+                publickey,
                 deleted: true,
-                comment: ""
+                comment: "",
+                reason
               };
             };
             return compose(

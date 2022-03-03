@@ -2,7 +2,6 @@ import React from "react";
 import { ReactComponent as BoldSVG } from "./assets/bold.svg";
 import { ReactComponent as ItalicSVG } from "./assets/italic.svg";
 import { ReactComponent as QuoteSVG } from "./assets/quote.svg";
-import { ReactComponent as LinkSVG } from "./assets/link.svg";
 import { ReactComponent as CodeSVG } from "./assets/code.svg";
 import { ReactComponent as BulletListSVG } from "./assets/bulletList.svg";
 import { ReactComponent as ImageSVG } from "./assets/image.svg";
@@ -13,7 +12,6 @@ const commandTypes = {
   bulletList: "unordered-list",
   bold: "bold",
   italic: "italic",
-  link: "link",
   quote: "quote",
   code: "code",
   image: "image",
@@ -28,7 +26,6 @@ export const toolbarCommands = (allowImgs) =>
         [
           "bold",
           "italic",
-          "link",
           "quote",
           "code",
           "ordered-list",
@@ -43,7 +40,6 @@ export const toolbarCommands = (allowImgs) =>
         [
           "bold",
           "italic",
-          "link",
           "quote",
           "code",
           "ordered-list",
@@ -62,11 +58,6 @@ export const commands = [
     command: commandTypes.italic,
     tooltipText: "Add italic text",
     Icon: ItalicSVG
-  },
-  {
-    command: commandTypes.link,
-    tooltipText: "Insert a link",
-    Icon: LinkSVG
   },
   {
     command: commandTypes.quote,

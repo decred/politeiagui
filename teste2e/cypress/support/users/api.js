@@ -1,6 +1,13 @@
 import pick from "lodash/fp/pick";
 
-import { PaymentCredits, User, userByType } from "./generate";
+import {
+  PaymentCredits,
+  User,
+  userByType,
+  Identity,
+  USER_TYPE_UNPAID
+} from "./generate";
+import faker from "faker";
 
 export const API_BASE_URL = "/api/v1/user";
 
@@ -11,10 +18,15 @@ export const API_BASE_URL = "/api/v1/user";
  * @returns User
  */
 export function loginReply({
-  testParams: { userType, ...userProps },
+  testParams: { userType, verifyIdentity, ...userProps },
   requestParams: { email }
 }) {
-  return userByType(userType, { ...userProps, email });
+  const user = userByType(userType, { ...userProps, email });
+  if (verifyIdentity) {
+    const { userid, publickey } = user;
+    Identity({ userid, publickey });
+  }
+  return user;
 }
 
 /**
@@ -23,8 +35,15 @@ export function loginReply({
  * @param {Object} { testParams }
  * @returns User
  */
-export function meReply({ testParams: { userType } }) {
-  return userByType(userType);
+export function meReply({ testParams: { userType, verifyIdentity, user } }) {
+  if (!user) {
+    user = userByType(userType);
+  }
+  if (verifyIdentity) {
+    const { userid, publickey } = user;
+    Identity({ userid, publickey });
+  }
+  return user;
 }
 
 /**
@@ -34,7 +53,7 @@ export function meReply({ testParams: { userType } }) {
  * @returns Payment registration object
  */
 export function paymentsRegistrationReply({ testParams: { haspaid = true } }) {
-  const user = haspaid ? new User() : userByType("unpaid");
+  const user = haspaid ? new User() : userByType(USER_TYPE_UNPAID);
   const userRegistrationPayment = pick([
     "paywalladdress",
     "paywallamount",
@@ -52,7 +71,7 @@ export function paymentsRegistrationReply({ testParams: { haspaid = true } }) {
 export function paymentsPaywallReply({
   testParams: { haspaid = true, creditprice = 10000000 }
 }) {
-  const user = haspaid ? new User() : userByType("unpaid");
+  const user = haspaid ? new User() : userByType(USER_TYPE_UNPAID);
   const userPaywallPayment = pick(["paywalltxnotbefore", "paywalladdress"])(
     user
   );
@@ -77,4 +96,35 @@ export const repliers = {
   "payments/registration": paymentsRegistrationReply,
   "payments/paywall": paymentsPaywallReply,
   "payments/credits": paymentsCreditsReply
+};
+
+/**
+ * usersReply represents the data of /api/v1/users endpoint
+ * It currently returns empty data since it is serving the data for downloading
+ * and we just check the existence of the downloaded file.
+ *
+ * @param {Object} { requestParams, testParams }
+ * @returns {Object}
+ */
+function usersReply({
+  requestParams: { publickey },
+  testParams: { amount = 0 }
+}) {
+  const users = [];
+  for (let i = 0; i < amount; i++) {
+    users.push({
+      id: faker.datatype.uuid(),
+      username: faker.internet.userName(),
+      email: faker.internet.email()
+    });
+  }
+  return {
+    totalmatches: amount,
+    totalusers: amount + 10,
+    users
+  };
+}
+
+export const usersRepliers = {
+  users: usersReply
 };

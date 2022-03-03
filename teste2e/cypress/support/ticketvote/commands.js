@@ -15,4 +15,7 @@ Cypress.Commands.add("useTicketvoteApi", (config = {}) => {
   cy.ticketvoteMiddleware("summaries", config.summaries);
   cy.ticketvoteMiddleware("inventory", config.inventory);
   cy.ticketvoteMiddleware("policy", config.policy);
+  cy.ticketvoteMiddleware("timestamps", config.timestamps);
+  cy.ticketvoteMiddleware("results", config.results);
+  cy.ticketvoteMiddleware("details", config.details);
 });

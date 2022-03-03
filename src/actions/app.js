@@ -9,6 +9,7 @@ import {
   onSubmitNewDcc
 } from "./api";
 import {
+  onEditComment as onEditCommentApi,
   onSubmitComment as onSubmitCommentApi,
   onSubmitDccComment as onSubmitDccCommentApi
 } from "./api";
@@ -142,6 +143,34 @@ export const onEditProposal =
     );
   };
 
+export const onEditComment =
+  ({
+    commentID,
+    comment,
+    token,
+    parentID,
+    state,
+    extraData,
+    extraDataHint,
+    sectionId
+  }) =>
+  (dispatch, getState) => {
+    const userid = sel.currentUserID(getState());
+    return dispatch(
+      onEditCommentApi({
+        userid,
+        token,
+        commentID,
+        comment,
+        parentID,
+        state,
+        extraData,
+        extraDataHint,
+        sectionId
+      })
+    );
+  };
+
 export const onSaveNewComment =
   ({ comment, token, parentID, state, extraData, extraDataHint, sectionId }) =>
   (dispatch, getState) => {
@@ -196,7 +225,19 @@ export const onEditInvoice =
   };
 
 export const onSaveDraftProposal =
-  ({ name, description, rfpDeadline, type, rfpLink, files, draftId }) =>
+  ({
+    name,
+    description,
+    rfpDeadline,
+    type,
+    rfpLink,
+    files,
+    draftId,
+    startDate,
+    endDate,
+    amount,
+    domain
+  }) =>
   (dispatch) => {
     resetNewProposalData();
     const id = draftId || uniqueID("draft");
@@ -209,7 +250,11 @@ export const onSaveDraftProposal =
         type,
         rfpLink,
         timestamp: Math.floor(Date.now() / 1000),
-        id
+        id,
+        startDate,
+        endDate,
+        amount,
+        domain
       })
     );
     return id;

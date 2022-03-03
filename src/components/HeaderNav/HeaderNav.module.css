@@ -74,9 +74,21 @@ ul.dropdownList {
 }
 
 @media screen and (max-width: 768px) {
+  .loggedInContainer {
+    width: 100%;
+    padding: 0 var(--container-padding-right) 0 var(--container-padding-left);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  ul.dropdownList {
+    left: 0;
+  }
+
   .themeToggleWrapper {
     border-right: 0;
   }
+
   .navContainer {
     width: 100%;
     justify-content: space-between;
@@ -86,7 +98,7 @@ ul.dropdownList {
 @media screen and (max-width: 560px) {
   div.dropdown {
     position: relative;
-    right: 2.4rem;
+    right: 0;
   }
 
   div.noCreditsDropdown {

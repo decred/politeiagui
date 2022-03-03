@@ -2,7 +2,14 @@ import faker from "faker";
 import compose from "lodash/fp/compose";
 import map from "lodash/fp/map";
 import times from "lodash/fp/times";
+import * as pki from "../../pki";
 
+export const USER_TYPE_ADMIN = "admin";
+export const USER_TYPE_NO_CREDITS = "noCredits";
+export const USER_TYPE_UNPAID = "unpaid";
+export const USER_TYPE_USER = "user";
+export const USER_TYPE_TOTP = "totp";
+export const USER_TYPE_NO_LOGIN = "noLogin";
 export function User({
   isadmin = false,
   userid,
@@ -22,7 +29,7 @@ export function User({
   this.paywalladdress = paywalladdress || `Ts${faker.datatype.hexaDecimal(33)}`;
   this.paywalltxid =
     paywalltxid || faker.datatype.hexaDecimal(64, false, /[0-9a-z]/);
-  this.publickey = publickey || faker.datatype.hexaDecimal(64);
+  this.publickey = publickey || pki.toHex(faker.datatype.hexaDecimal(64));
   this.paywallamount = 10000000;
   this.paywalltxnotbefore = Date.now() / 1000 - 3600;
   this.lastlogintime = faker.time.recent() / 1000;
@@ -53,20 +60,20 @@ export function UserTotp(props = {}) {
 
 export function userByType(userType, props) {
   switch (userType) {
-    case "admin":
+    case USER_TYPE_ADMIN:
       return UserAdmin(props);
-    case "noCredits":
+    case USER_TYPE_NO_CREDITS:
       return UserNoCredits(props);
-    case "unpaid":
+    case USER_TYPE_UNPAID:
       return UserUnpaid(props);
-    case "user":
-      return User(props);
-    case "totp":
+    case USER_TYPE_USER:
+      return new User(props);
+    case USER_TYPE_TOTP:
       return UserTotp(props);
-    case "noLogin":
+    case USER_TYPE_NO_LOGIN:
       return {};
     default:
-      return User(props);
+      return new User(props);
   }
 }
 
@@ -82,4 +89,14 @@ export function PaymentCredits({ spent = 0, unspent = 0 } = {}) {
   );
   this.spentcredits = makeCredits(spent);
   this.unspentcredits = makeCredits(unspent);
+}
+
+export function Identity({ userid, publickey }) {
+  return pki.generateKeys().then((keys) => {
+    const stringKeys = {
+      secretKey: pki.toHex(keys.secretKey),
+      publicKey: publickey
+    };
+    pki.importKeys(userid, stringKeys);
+  });
 }

@@ -33,8 +33,11 @@ import { formatDateToInternationalString } from "src/helpers";
 export const Author = ({ username, url, isLegacy }) =>
   isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
 
-export const Event = ({ event, timestamp, className, size }) => (
-  <DateTooltip timestamp={timestamp} placement="bottom">
+export const Event = ({ event, timestamp, className, size, additionInfo }) => (
+  <DateTooltip
+    timestamp={timestamp}
+    placement="bottom"
+    additionInfo={additionInfo}>
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
@@ -77,7 +80,9 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
   return !isLegacy ? (
-    <Wrapper to={url} className={styles.title}>
+    <Wrapper
+      to={url}
+      className={classNames(styles.baseTitle, url && styles.underlineTitle)}>
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>
@@ -89,7 +94,13 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
         placement="right">
         <Icon type="info" />
       </Tooltip>
-      <a href={url} className={classNames(styles.title, "margin-left-s")}>
+      <a
+        href={url}
+        className={classNames(
+          styles.baseTitle,
+          styles.underlineTitle,
+          "margin-left-s"
+        )}>
         <H2 {...props} data-testid="record-title-legacy">
           {children}
         </H2>
@@ -102,9 +113,7 @@ export const Subtitle = ({ children, separatorSymbol = "•" }) => (
   <Join
     className={classNames("margin-top-s", styles.subtitleWrapper)}
     SeparatorComponent={() => (
-      <span className="text-secondary-color margin-left-s margin-right-s">
-        {separatorSymbol}
-      </span>
+      <span className={styles.subtitleSeparator}>{separatorSymbol}</span>
     )}>
     {children}
   </Join>
@@ -114,9 +123,7 @@ export const JoinTitle = ({ children, className, separatorSymbol = "•" }) => (
   <Join
     className={classNames(className, styles.flexWrap)}
     SeparatorComponent={() => (
-      <span className="text-secondary-color margin-left-s margin-right-s">
-        {separatorSymbol}
-      </span>
+      <span className={styles.subtitleSeparator}>{separatorSymbol}</span>
     )}>
     {children}
   </Join>
@@ -156,7 +163,7 @@ const MobileHeader = ({ title, status, edit, isRfp }) => (
   </div>
 );
 
-const RfpTag = React.memo(({ className }) => (
+export const RfpTag = React.memo(({ className }) => (
   <img
     alt="rfp"
     className={classNames("margin-right-s", styles.rfptag, className)}

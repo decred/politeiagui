@@ -34,6 +34,12 @@ const HeaderNav = ({ history }) => {
         if (path === "/user") {
           path += "/" + userid;
         }
+        if (path === "/user-proposals") {
+          path = `/user/${userid}?tab=submitted proposals`;
+        }
+        if (path === "/drafts") {
+          path = `/user/${userid}?tab=draft proposals`;
+        }
         if (path === "/invoices") {
           if (userIsAdmin) {
             label = "All Invoices";

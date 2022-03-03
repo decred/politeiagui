@@ -1,7 +1,8 @@
 import { inventoryReply as recordsInventoryReply } from "../core/api";
-import { Summary } from "./generate";
+import { Summary, Timestamp } from "./generate";
 import { statusToString, stringToStatus, typeFromStatus } from "./utils";
 import { chunkByStatusAmount } from "../core/utils";
+import times from "lodash/fp/times";
 
 export const API_BASE_URL = "/api/ticketvote/v1";
 
@@ -85,8 +86,75 @@ export function policyReply() {
   };
 }
 
+/**
+ * timestampsReply represents the data of /api/ticketvote/v1/timestamps endpoint
+ * It currently returns empty data since it is serving the data for downloading
+ * and we just check the existence of the downloaded file.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object} { auths, details, votes }
+ */
+export function timestampsReply({
+  testParams: { votesAmount = 0, authsAmount = 0 }
+}) {
+  const timestamp = new Timestamp();
+  const votes = times(() => timestamp)(votesAmount);
+  const auths = times(() => timestamp)(authsAmount);
+  return { auths, details: timestamp, votes };
+}
+
+/**
+ * detailsReply represents the data of /api/ticketvote/v1/details endpoint
+ * It currently returns empty data since it is serving the data for downloading
+ * and we just check the existence of the downloaded file.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object} { auths, vote }
+ */
+export function detailsReply({ requestParams: { token } }) {
+  return {
+    auths: [],
+    vote: {
+      eligibletickets: [],
+      endblockheight: 9999,
+      params: {},
+      publickey: "",
+      receipt: "",
+      signature: "",
+      startblockhash: "",
+      startblockheight: 8888
+    }
+  };
+}
+
+/**
+ * resultsReply represents the data of /api/ticketvote/v1/results endpoint
+ * It currently returns empty data since it is serving the data for downloading
+ * and we just check the existence of the downloaded file.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object}
+ */
+export function resultsReply({ requestParams: { token } }) {
+  return {};
+}
+
+/**
+ * authorizeReply returns the data of "/api/ticketvote/v1/authorize" endpoint
+ */
+export function authorizeReply() {
+  return {
+    receipt: "authorize-receipt",
+    timestamp: Date.now() / 1000
+  };
+}
+
 export const repliers = {
   inventory: inventoryReply,
+  policy: policyReply,
   summaries: summariesReply,
-  policy: policyReply
+  timestamps: timestampsReply,
+  details: detailsReply,
+  results: resultsReply,
+  authorize: authorizeReply
 };

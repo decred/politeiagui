@@ -13,10 +13,15 @@ export function createMiddleware({ packageName, repliers, baseUrl }) {
   return function middleware(
     endpoint,
     { error, ...testParams } = {},
-    responseParams = {}
+    responseParams = {},
+    searchParams = []
   ) {
+    // search is built from searchParams. Support for GET request.
+    const search =
+      searchParams.length > 0 ? `?${searchParams.join("=*&")}=*` : "";
+    const path = endpoint ? `${baseUrl}/${endpoint}` : baseUrl;
     return cy
-      .intercept(`${baseUrl}/${endpoint}`, (req) => {
+      .intercept(`${path}${search}`, (req) => {
         const replyfn = repliers[endpoint];
         if (!replyfn)
           throw new Error(`no ${packageName} replier found for ${endpoint}`);
@@ -43,6 +48,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("useRecordsApi", (config = {}) => {
+  cy.recordsMiddleware("edit", config.edit);
   cy.recordsMiddleware("records", config.records);
   cy.recordsMiddleware("inventory", config.inventory);
   cy.recordsMiddleware("policy", config.policy);

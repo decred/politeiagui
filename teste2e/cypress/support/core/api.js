@@ -1,5 +1,6 @@
 import { Record, File, Inventory } from "./generate";
 import { stateToString } from "./utils";
+import { USER_TYPE_ADMIN, userByType } from "../users/generate";
 
 export const API_BASE_URL = "/api/records/v1";
 
@@ -19,7 +20,7 @@ export function errorReply({
 }) {
   return {
     statusCode: statuscode,
-    body: omitBody ? null : { errorcode, errorcontext, pluginid }
+    body: omitBody ? "" : { errorcode, errorcontext, pluginid }
   };
 }
 
@@ -95,16 +96,116 @@ export function inventoryReply({
  * @returns Record
  */
 export function detailsReply({
-  testParams: { state, status, username },
+  testParams: {
+    state,
+    status,
+    user,
+    files,
+    fullToken,
+    version,
+    oldStatus,
+    reason
+  },
   requestParams: { token }
 }) {
-  const record = new Record({ author: username, status, state, token });
+  const record = new Record({
+    author: user,
+    status,
+    state,
+    version,
+    token: fullToken || token,
+    files,
+    oldStatus,
+    reason
+  });
   return { record };
 }
 
+/**
+ * newRecordReply is the reply to the new command. It returns a new record for the
+ * request data with given `files`, `publickey`, `signature` and `username` testParams.
+ *
+ * @param {Object} { testParams, requestParams }
+ * @returns Proposal
+ */
+export function newRecordReply({
+  testParams: { user },
+  requestParams: { files = [], publickey, signature, token }
+}) {
+  const record = new Record({
+    status: 1,
+    state: 1,
+    version: 1,
+    files,
+    author: user,
+    publickey,
+    signature,
+    token
+  });
+  return { record };
+}
+
+export function editRecordReply({
+  testParams: { user },
+  requestParams: { status, state, version, files = [], publickey, signature }
+}) {
+  const record = new Record({
+    status: status,
+    state: state,
+    version: version,
+    files,
+    author: user,
+    publickey,
+    signature
+  });
+  return { record };
+}
+
+// timestampsReply represents the data of /api/records/v1/timestamps endpoint
+// It currently returns empty data since it is serving the data for downloading
+// and we just check the existence of the downloaded file.
+export function timestampsReply({
+  testParams: { files = [] },
+  requestParams: { token, version }
+}) {
+  return {
+    files: files,
+    metadata: {},
+    recordmetadata: {}
+  };
+}
+
+export function setStatusReply({
+  testParams: { user, oldStatus, state, files },
+  requestParams: { publickey, reason, signature, status, token, version }
+}) {
+  if (!user) {
+    user = userByType(USER_TYPE_ADMIN);
+  }
+  const record = new Record({
+    author: user,
+    publickey,
+    signature,
+    status,
+    token,
+    version,
+    state,
+    files,
+    oldStatus,
+    reason
+  });
+  return {
+    record
+  };
+}
+
 export const repliers = {
+  new: newRecordReply,
+  edit: editRecordReply,
   records: recordsReply,
   inventory: inventoryReply,
   policy: policyReply,
-  details: detailsReply
+  details: detailsReply,
+  timestamps: timestampsReply,
+  setstatus: setStatusReply
 };

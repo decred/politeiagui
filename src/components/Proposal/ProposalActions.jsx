@@ -88,11 +88,10 @@ const PublicActions = ({
   const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
   const isApproved = isApprovedProposal(proposal, voteSummary);
   const { numbillingstatuschanges } = billingStatusChangeMetadata || {};
+  const needsBillingStatus =
+    !isLegacy && !isRfp && isApproved && currentUser?.isadmin;
   const isSetBillingStatusAllowed =
-    !isLegacy &&
-    !isRfp &&
-    isApproved &&
-    numbillingstatuschanges < billingstatuschangesmax;
+    needsBillingStatus && numbillingstatuschanges < billingstatuschangesmax;
 
   const withProposal = (fn, cb) => () => {
     fn(proposal, cb);
@@ -133,7 +132,9 @@ const PublicActions = ({
       )}
       {isSetBillingStatusAllowed && (
         <AdminContent>
-          <div className="justify-right margin-top-m">
+          <div
+            className="justify-right margin-top-m"
+            data-testid="proposal-set-billing-button">
             <Button onClick={withProposal(onSetBillingStatus)}>
               Set Billing Status
             </Button>

@@ -31,8 +31,10 @@ const CommentForm = ({
   persistKey,
   className,
   isAuthorUpdate,
-  hasAuthorUpdates
+  hasAuthorUpdates,
+  values
 }) => {
+  const isEditing = !!values;
   const [handleOpenModal, handleCloseModal] = useModalContext();
 
   const openLoginModal = useCallback(() => {
@@ -47,6 +49,7 @@ const CommentForm = ({
     policyPi: { namesupportedchars, namelengthmax, namelengthmin }
   } = usePolicy();
   const smallTablet = useMediaQuery("(max-width: 685px)");
+
   async function handleSubmit(
     { comment, title },
     { resetForm, setSubmitting, setFieldError }
@@ -87,12 +90,15 @@ const CommentForm = ({
       }
     }
   }
+
+  const initialValues = {
+    title: values?.title !== "" ? values?.title : isAuthorUpdate ? "" : null,
+    comment: values?.comment || ""
+  };
+
   return (
     <Formik
-      initialValues={{
-        title: isAuthorUpdate ? "" : null,
-        comment: ""
-      }}
+      initialValues={initialValues}
       loading={!validationSchema}
       validationSchema={validationSchema({
         namesupportedchars,
@@ -175,7 +181,7 @@ will only be able to reply to your most recent update thread.">
                 data-testid="comment-submit-button"
                 kind={!isValid || disableSubmit ? "disabled" : "primary"}
                 loading={isSubmitting}>
-                Add comment
+                {isEditing ? "Edit " : "Add "} comment
               </Button>
             </Row>
             {!!persistKey && <FormikPersist name={persistKey} />}
@@ -187,6 +193,7 @@ will only be able to reply to your most recent update thread.">
 };
 
 CommentForm.propTypes = {
+  values: PropTypes.object,
   className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func,

@@ -510,40 +510,24 @@ export const onFetchProposalsBatch = ({
       const commentsCount =
         fetchCommentCounts && response.find((res) => res && res.counts).counts;
 
-      const proposalsWithCommentCountsAndSubmissions = await Object.keys(
-        proposals
-      ).reduce(async (acc, curr) => {
-        const { linkby } = parseRawProposal(proposals[curr]);
-        if (linkby) {
-          // proposal is a RFP
-          const { submissions } = await api.proposalSubmissions(curr); // get submissions
-          return {
-            ...(await acc),
-            [curr]: {
-              ...proposals[curr],
-              linkedfrom: submissions,
-              commentsCount: commentsCount[curr]
-            }
-          };
-        } else {
-          // proposal is not a RFP
-          return {
-            ...(await acc),
-            [curr]: {
-              ...proposals[curr],
-              commentsCount: commentsCount[curr]
-            }
-          };
-        }
-      }, {});
+      const proposalsWithCommentCounts = Object.keys(proposals).reduce(
+        (acc, curr) => ({
+          ...acc,
+          [curr]: {
+            ...proposals[curr],
+            commentsCount: commentsCount[curr]
+          }
+        }),
+        {}
+      );
       dispatch(
         act.RECEIVE_PROPOSALS_BATCH({
-          proposals: proposalsWithCommentCountsAndSubmissions,
+          proposals: proposalsWithCommentCounts,
           userid
         })
       );
       return [
-        parseRawProposalsBatch(proposalsWithCommentCountsAndSubmissions),
+        parseRawProposalsBatch(proposalsWithCommentCounts),
         summaries,
         proposalSummaries
       ];
@@ -1112,8 +1096,9 @@ export const onCensorComment = (
   state,
   sectionId,
   reason
-) => {
-  return withCsrf((dispatch, _, csrf) => {
+) =>
+  withCsrf((dispatch, _, csrf) => {
+    let publickey;
     dispatch(
       act.REQUEST_CENSOR_COMMENT({ commentid, token, state, sectionId })
     );
@@ -1121,10 +1106,21 @@ export const onCensorComment = (
       api.makeCensoredComment(state, token, reason, commentid)
     )
       .then((comment) => api.signCensorComment(userid, comment))
-      .then((comment) => api.censorComment(csrf, comment))
+      .then((comment) => {
+        publickey = comment.publickey;
+        return api.censorComment(csrf, comment);
+      })
       .then(({ comment: { receipt, commentid, token } }) => {
         if (receipt) {
-          dispatch(act.RECEIVE_CENSOR_COMMENT({ commentid, token, sectionId }));
+          dispatch(
+            act.RECEIVE_CENSOR_COMMENT({
+              commentid,
+              token,
+              sectionId,
+              reason,
+              publickey
+            })
+          );
         }
       })
       .catch((error) => {
@@ -1132,7 +1128,6 @@ export const onCensorComment = (
         throw error;
       });
   });
-};
 
 export const onSubmitComment = (
   currentUserID,
@@ -1188,6 +1183,46 @@ export const onSubmitComment = (
       })
       .catch((error) => {
         dispatch(act.RECEIVE_NEW_COMMENT(null, error));
+        throw error;
+      });
+  });
+
+export const onEditComment = ({
+  userid,
+  token,
+  commentID,
+  comment,
+  parentID,
+  state,
+  extraData,
+  extraDataHint,
+  sectionId
+}) =>
+  withCsrf((dispatch, getState, csrf) => {
+    const commentEdit = api.makeCommentEdit({
+      userid,
+      token,
+      comment,
+      parentid: parentID || 0,
+      state,
+      commentid: commentID,
+      extradata: extraData,
+      extradatahint: extraDataHint || ""
+    });
+    dispatch(act.REQUEST_EDIT_COMMENT(commentEdit));
+    return Promise.resolve(api.signCommentEdit(commentEdit))
+      .then((commentEdit) => api.editComment(csrf, commentEdit))
+      .then((response) => {
+        const responsecomment = response.comment || {};
+        return dispatch(
+          act.RECEIVE_EDIT_COMMENT({
+            ...responsecomment,
+            sectionId
+          })
+        );
+      })
+      .catch((error) => {
+        dispatch(act.RECEIVE_EDIT_COMMENT(null, error));
         throw error;
       });
   });

@@ -35,6 +35,7 @@ import {
   isActiveRfp,
   isEditableProposal,
   getQuorumInVotes,
+  getEligibleTickets,
   isVoteActiveProposal,
   isVotingFinishedProposal,
   getProposalToken,
@@ -159,6 +160,7 @@ const Proposal = React.memo(function Proposal({
     startDate,
     endDate
   } = proposal;
+  const { startblockheight, endblockheight } = voteSummary || {};
   const isAdmin = useSelector(sel.currentUserIsAdmin);
   const isVetted = state === PROPOSAL_STATE_VETTED;
   const isRfp = !!linkby || type === PROPOSAL_TYPE_RFP;
@@ -207,8 +209,7 @@ const Proposal = React.memo(function Proposal({
     isAuthor && isEditableProposal(proposal, voteSummary) && !isLegacy;
   const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
-  const showEditedDate = version > 1 && timestamp !== publishedat && !mobile;
-  const showPublishedDate = publishedat && !mobile && !showEditedDate;
+  const showEditedDate = version > 1 && timestamp !== publishedat;
   const showExtendedVersionPicker =
     extended && version > 1 && !isCensored && (isVetted || isAuthor || isAdmin);
   const showVersionAsText = !extended && !mobile;
@@ -343,11 +344,21 @@ const Proposal = React.memo(function Proposal({
                       timestamp={linkby}
                     />
                   )}
-                  {showPublishedDate && (
-                    <Event event="published" timestamp={publishedat} />
+                  {isVetted ? (
+                    <span data-testid="proposal-published-timestamp">
+                      <Event event="published" timestamp={publishedat} />
+                    </span>
+                  ) : (
+                    !showEditedDate && (
+                      <span data-testid="proposal-published-timestamp">
+                        <Event event="published" timestamp={timestamp} />
+                      </span>
+                    )
                   )}
                   {showEditedDate && (
-                    <Event event="edited" timestamp={timestamp} />
+                    <span data-testid="proposal-edited-timestamp">
+                      <Event event="edited" timestamp={timestamp} />
+                    </span>
                   )}
                   {showVersionAsText && (
                     <Text
@@ -377,6 +388,10 @@ const Proposal = React.memo(function Proposal({
                       timestamp={voteEndTimestamp}
                       className={styles.subtitleStatusTag}
                       size="small"
+                      additionInfo={
+                        isVotingFinished &&
+                        `block ${startblockheight} to ${endblockheight}`
+                      }
                     />
                   )}
                   {isAbandoned && (
@@ -396,7 +411,10 @@ const Proposal = React.memo(function Proposal({
                     />
                   )}
                   {isVoteActive && (
-                    <>
+                    <Tooltip
+                      placement="bottom"
+                      content={`block ${startblockheight} to ${endblockheight}`}
+                      contentClassName={styles.quorumTooltip}>
                       <Text
                         className={classNames(
                           "hide-on-mobile",
@@ -407,7 +425,7 @@ const Proposal = React.memo(function Proposal({
                           voteBlocksLeft > 1 ? "s" : ""
                         } left`}
                       </Text>
-                    </>
+                    </Tooltip>
                   )}
                 </Status>
               }
@@ -429,6 +447,7 @@ const Proposal = React.memo(function Proposal({
                   renderStatusInfoComponent={
                     <VotesCount
                       isVoteActive={isVoteActive}
+                      eligibleVotes={getEligibleTickets(voteSummary)}
                       quorumVotes={getQuorumInVotes(voteSummary)}
                       votesReceived={getVotesReceived(voteSummary)}
                       onSearchVotes={!isLegacy ? openSearchVotesModal : null}
@@ -530,7 +549,7 @@ const Proposal = React.memo(function Proposal({
                   )}
                   {votesCount > 0 && (
                     <DownloadVotesTimestamps
-                      label="Votes Timestamp"
+                      label="Votes Timestamps"
                       votesCount={votesCount}
                       recordToken={shortToken}
                     />
