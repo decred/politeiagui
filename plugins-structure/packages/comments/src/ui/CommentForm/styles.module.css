@@ -1,0 +1,7 @@
+.commentForm {
+  padding: 1rem 1.4rem;
+}
+.commentButtons {
+  display: flex;
+  justify-content: end;
+}

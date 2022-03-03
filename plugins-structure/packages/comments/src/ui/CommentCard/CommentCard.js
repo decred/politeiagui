@@ -4,6 +4,7 @@ import { Card, Link, classNames } from "pi-ui";
 import { Event, Join } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 import { CommentVotes } from "./CommentVotes";
+import { CommentForm } from "../CommentForm";
 
 const CensorButton = ({ onCensor }) => (
   <span className={styles.censor} onClick={onCensor}>
@@ -19,13 +20,20 @@ export const CommentCard = ({
   threadLength,
   userLink,
   userVote,
+  onComment,
+  parentId,
+  disableReply,
 }) => {
   const [showThread, setShowThread] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   function handleCensorComment() {
     onCensor(comment);
   }
   function toggleDisplayThread() {
     setShowThread(!showThread);
+  }
+  function toggleDisplayForm() {
+    setShowForm(!showForm);
   }
 
   return (
@@ -60,7 +68,11 @@ export const CommentCard = ({
             : comment.comment}
         </div>
         <div className={styles.footer}>
-          <span className={styles.reply}>Reply</span>
+          {!disableReply && (
+            <span className={styles.reply} onClick={toggleDisplayForm}>
+              Reply
+            </span>
+          )}
           {threadLength > 0 && (
             <span className={styles.collapse} onClick={toggleDisplayThread}>
               {showThread ? "-" : `+${threadLength}`}
@@ -68,6 +80,7 @@ export const CommentCard = ({
           )}
         </div>
       </Card>
+      {showForm && <CommentForm onComment={onComment} parentId={parentId} />}
       {showThread && <div className={styles.thread}>{children}</div>}
     </div>
   );
@@ -76,6 +89,14 @@ export const CommentCard = ({
 Comment.propTypes = {
   comment: PropTypes.object.isRequired,
   showCensor: PropTypes.bool,
+  onCensor: PropTypes.func,
+  children: PropTypes.node,
+  threadLength: PropTypes.number,
+  userLink: PropTypes.string,
+  userVote: PropTypes.object,
+  onComment: PropTypes.func,
+  parentId: PropTypes.number,
+  disableReply: PropTypes.bool,
 };
 
 Comment.defaultProps = {

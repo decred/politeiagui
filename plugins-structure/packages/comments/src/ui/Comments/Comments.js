@@ -61,7 +61,7 @@ export const Comments = ({
           userVotes={userVotes}
           showCensor={showCensor}
           threadSchema={threadSchema}
-          parentid={0}
+          parentId={0}
           onCensor={onCensor}
         />
       </div>

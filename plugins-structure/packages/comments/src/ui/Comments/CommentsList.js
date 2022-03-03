@@ -21,6 +21,7 @@ export const CommentsList = ({
       threadLength={threadSchema[childId]?.length}
       showCensor={showCensor}
       userVote={userVotes[childId]}
+      parentId={parentId}
     >
       <CommentsList
         comments={comments}
