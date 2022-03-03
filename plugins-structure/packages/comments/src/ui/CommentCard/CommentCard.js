@@ -10,6 +10,7 @@ export const CommentCard = ({
   onCensor,
   children,
   threadLength,
+  userLink,
 }) => {
   const [showThread, setShowThread] = useState(true);
   function handleCensorComment() {
@@ -23,10 +24,9 @@ export const CommentCard = ({
     <div>
       <Card className={styles.commentCard}>
         <div className={styles.header}>
-          {/* TODO: Thread collapse button */}
           <div className={styles.summary}>
             <Join>
-              <Link href="#comment">{comment.username}</Link>
+              <Link href={userLink}>{comment.username}</Link>
               <Event event="" timestamp={comment.timestamp} />
               {showCensor && (
                 <span className={styles.censor} onClick={handleCensorComment}>
@@ -64,4 +64,5 @@ Comment.propTypes = {
 
 Comment.defaultProps = {
   threadLength: 0,
+  userLink: "/#user",
 };

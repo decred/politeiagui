@@ -16,6 +16,10 @@
   background: var(--card-background);
 }
 
+.commentsList {
+  margin-left: 3rem;
+}
+
 span.flatButtonText {
   cursor: pointer;
   color: var(--color-primary);

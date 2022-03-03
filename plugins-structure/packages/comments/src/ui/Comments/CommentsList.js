@@ -12,23 +12,23 @@ export const CommentsList = ({
   if (!threadSchema || !threadSchema[parentId]) {
     return null;
   }
-  return threadSchema[parentId].map((childId) => {
-    return (
-      <CommentCard
-        key={childId}
-        comment={comments[childId]}
-        onCensor={onCensor}
-        threadLength={threadSchema[childId]?.length}
+  return threadSchema[parentId].map((childId) => (
+    <CommentCard
+      key={childId}
+      comment={comments[childId]}
+      onCensor={onCensor}
+      threadLength={threadSchema[childId]?.length}
+      showCensor={showCensor}
+    >
+      <CommentsList
+        comments={comments}
         showCensor={showCensor}
-      >
-        <CommentsList
-          comments={comments}
-          parentId={childId}
-          threadSchema={threadSchema}
-        />
-      </CommentCard>
-    );
-  });
+        onCensor={onCensor}
+        parentId={childId}
+        threadSchema={threadSchema}
+      />
+    </CommentCard>
+  ));
 };
 
 CommentsList.propTypes = {

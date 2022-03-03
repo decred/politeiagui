@@ -49,11 +49,14 @@ export const Comments = ({ comments, isFlatMode }) => {
           onToggleFlatMode={handleToggleFlatMode}
         />
       </Card>
-      <CommentsList
-        comments={comments}
-        threadSchema={threadSchema}
-        parentid={0}
-      />
+      <div className={styles.commentsList}>
+        <CommentsList
+          comments={comments}
+          showCensor={true}
+          threadSchema={threadSchema}
+          parentid={0}
+        />
+      </div>
     </div>
   );
 };
