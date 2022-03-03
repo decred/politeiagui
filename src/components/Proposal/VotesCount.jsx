@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import {
   Text,
   ButtonIcon,
-  useTheme,
-  classNames,
-  DEFAULT_DARK_THEME_NAME
+  classNames
 } from "pi-ui";
 import styles from "./Proposal.module.css";
 
@@ -17,9 +15,6 @@ const VotesCount = ({
   isVoteActive
 }) => {
   const votesLeft = quorumVotes - votesReceived;
-  const { themeName } = useTheme();
-  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-
   return (
     <div className={styles.voteCount}>
       {isVoteActive && (
