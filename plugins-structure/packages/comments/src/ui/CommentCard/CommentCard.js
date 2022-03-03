@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Card, Link } from "pi-ui";
+import { Card, Link, classNames } from "pi-ui";
 import { Event, Join } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
+import { CommentLikes } from "./CommentLikes";
 
 export const CommentCard = ({
   comment,
@@ -22,25 +23,36 @@ export const CommentCard = ({
 
   return (
     <div>
-      <Card className={styles.commentCard}>
+      <Card
+        className={classNames(
+          styles.commentCard,
+          comment.deleted && styles.censoredComment
+        )}
+      >
         <div className={styles.header}>
           <div className={styles.summary}>
             <Join>
               <Link href={userLink}>{comment.username}</Link>
               <Event event="" timestamp={comment.timestamp} />
-              {showCensor && (
+              {showCensor && !comment.deleted && (
                 <span className={styles.censor} onClick={handleCensorComment}>
                   Censor
                 </span>
               )}
             </Join>
           </div>
-          <div className={styles.actions}>
-            <div>Like</div>
-            <div>Dislike</div>
-          </div>
+          <CommentLikes
+            hide={comment.deleted}
+            upvotes={comment.upvotes}
+            downvotes={comment.downvotes}
+          />
         </div>
-        <div className={styles.body}>{comment.comment}</div>
+        {/* TODO: get comment censorship user */}
+        <div className={styles.body}>
+          {comment.deleted
+            ? `Censored. Reason: ${comment.reason}`
+            : comment.comment}
+        </div>
         <div className={styles.footer}>
           <div>
             <span className={styles.reply}>Reply</span>
