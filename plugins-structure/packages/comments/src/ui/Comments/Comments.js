@@ -11,6 +11,7 @@ export const Comments = ({
   userVotes,
   onCensor,
   showCensor,
+  parentId,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [threadSchema, setThreadSchema] = useState();
@@ -61,7 +62,7 @@ export const Comments = ({
           userVotes={userVotes}
           showCensor={showCensor}
           threadSchema={threadSchema}
-          parentId={0}
+          parentId={parentId}
           onCensor={onCensor}
         />
       </div>
@@ -75,4 +76,9 @@ Comments.propTypes = {
   userVotes: PropTypes.object,
   onCensor: PropTypes.func,
   showCensor: PropTypes.bool,
+  parentId: PropTypes.number,
+};
+
+Comments.defaultProps = {
+  parentId: 0,
 };
