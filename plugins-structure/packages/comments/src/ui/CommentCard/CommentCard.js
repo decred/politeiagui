@@ -7,7 +7,11 @@ import { CommentVotes } from "./CommentVotes";
 import { CommentForm } from "../CommentForm";
 
 const CensorButton = ({ onCensor }) => (
-  <span className={styles.censor} onClick={onCensor}>
+  <span
+    className={styles.censor}
+    onClick={onCensor}
+    data-testid="comment-censor"
+  >
     Censor
   </span>
 );
@@ -47,7 +51,9 @@ export const CommentCard = ({
         <div className={styles.header}>
           <div className={styles.summary}>
             <Join>
-              <Link href={userLink}>{comment.username}</Link>
+              <Link href={userLink} data-testid="comment-author">
+                {comment.username}
+              </Link>
               <Event event="" timestamp={comment.timestamp} />
               {showCensor && !comment.deleted && (
                 <CensorButton onCensor={handleCensorComment} />
@@ -62,14 +68,18 @@ export const CommentCard = ({
           />
         </div>
         {/* TODO: get comment censorship user */}
-        <div className={styles.body}>
+        <div className={styles.body} data-testid="comment-body">
           {comment.deleted
             ? `Censored. Reason: ${comment.reason}`
             : comment.comment}
         </div>
         <div className={styles.footer}>
           {!disableReply && (
-            <span className={styles.reply} onClick={toggleDisplayForm}>
+            <span
+              className={styles.reply}
+              data-testid="comment-reply"
+              onClick={toggleDisplayForm}
+            >
               Reply
             </span>
           )}
@@ -81,7 +91,11 @@ export const CommentCard = ({
         </div>
       </Card>
       {showForm && <CommentForm onComment={onComment} parentId={parentId} />}
-      {showThread && <div className={styles.thread}>{children}</div>}
+      {showThread && (
+        <div className={styles.thread} data-testid="comment-thread">
+          {children}
+        </div>
+      )}
     </div>
   );
 };
