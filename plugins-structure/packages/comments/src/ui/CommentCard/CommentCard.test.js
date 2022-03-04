@@ -24,7 +24,7 @@ const comment = {
 const censoredComment = { ...comment, deleted: true, reason: "fake reason" };
 
 describe("Given CommentCard component", () => {
-  describe("given a regular comment", () => {
+  describe("given some regular comment", () => {
     it("should display the comment body inside the card", () => {
       render(<CommentCard comment={comment} />);
       expect(screen.getByTestId("comment-body")).toHaveTextContent(
@@ -46,7 +46,7 @@ describe("Given CommentCard component", () => {
       expect(screen.getByTestId("comment-censor")).toHaveTextContent("Censor");
     });
   });
-  describe("given a censored comment", () => {
+  describe("given some censored comment", () => {
     it("should display the censored reason instead of comment body", () => {
       render(<CommentCard comment={censoredComment} />);
       expect(screen.getByTestId("comment-body")).toHaveTextContent(
