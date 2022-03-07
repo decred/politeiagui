@@ -4,6 +4,7 @@ import {
   ROUTE_INVENTORY,
   ROUTE_POLICY,
   ROUTE_RECORDS,
+  ROUTE_TIMESTAMPS,
 } from "./constants";
 
 const VERSION = "v1";
@@ -46,6 +47,14 @@ export const client = {
     );
     const recordResponse = await parseResponse(response);
     return recordResponse.record;
+  },
+  async fetchRecordTimestamps(state, { token, version }) {
+    const csrf = await getCsrf(state);
+    const response = await fetch(
+      `${RECORDS_API_ROUTE}${VERSION}${ROUTE_TIMESTAMPS}`,
+      fetchOptions(csrf, { token, version }, "POST")
+    );
+    return await parseResponse(response);
   },
   async fetchApi() {
     const response = await fetch("/api");
