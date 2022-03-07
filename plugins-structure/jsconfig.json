@@ -22,6 +22,9 @@
       "@politeiagui/core/records/inventory": [
         "./packages/core/src/records/inventory/index.js"
       ],
+      "@politeiagui/core/records/timestamps": [
+        "./packages/core/src/records/timestamps/index.js"
+      ],
       "@politeiagui/core/records/policy": [
         "./packages/core/src/records/policy/index.js"
       ],
