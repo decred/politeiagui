@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Select, Text, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import styles from "./styles.module.css";
+import { sortByNew, sortByOld, sortByTop } from "./utils";
 
 const options = [
   {
@@ -20,10 +21,24 @@ const options = [
 
 export const CommentsFilter = ({ onSort, onToggleFlatMode, isFlat }) => {
   const [selected, setSelected] = useState(options[0]);
+
   function handleFilterChanges(option) {
     setSelected(option);
-    onSort(option.value);
+    let sortFn;
+    switch (option.value) {
+      case "new":
+        sortFn = sortByNew;
+        break;
+      case "old":
+        sortFn = sortByOld;
+        break;
+      default:
+        sortFn = sortByTop;
+        break;
+    }
+    onSort(sortFn);
   }
+
   return (
     <div className={styles.filters}>
       <Select

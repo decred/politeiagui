@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { CommentsFilter, CommentsList } from "./";
 import { Card, H2 } from "pi-ui";
 import styles from "./styles.module.css";
-import { getThreadSchema, sortByNew, sortByOld, sortByTop } from "./utils";
+import { getThreadSchema } from "./utils";
 
 export const Comments = ({
   comments,
@@ -20,21 +20,10 @@ export const Comments = ({
   function handleToggleFlatMode() {
     setFlat(!isFlat);
   }
-  // sort handler
-  function handleSortComments(op) {
-    let newCommentsList;
-    switch (op) {
-      case "new":
-        newCommentsList = sortByNew(comments);
-        break;
-      case "old":
-        newCommentsList = sortByOld(comments);
-        break;
-      default:
-        newCommentsList = sortByTop(comments);
-        break;
-    }
-    setSortedComments(newCommentsList);
+
+  function handleSortComments(sortFn) {
+    const newSortedComments = sortFn(comments);
+    setSortedComments(newSortedComments);
   }
 
   // Update schema for every filter change
