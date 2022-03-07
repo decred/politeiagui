@@ -2,12 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
+import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
 
 const initialState = {
   status: "idle",
   fullToken: null,
   submissionsLastPos: null,
   error: null,
+  downloadStatus: "idle",
 };
 
 export const fetchProposalDetails = createAsyncThunk(
@@ -42,6 +44,17 @@ export const fetchProposalDetails = createAsyncThunk(
   }
 );
 
+export const fetchProposalTimestamps = createAsyncThunk(
+  "details/fetchProposalTimestamps",
+  async ({ token, version }, { dispatch, rejectWithValue }) => {
+    try {
+      await dispatch(recordsTimestamps.fetch({ token, version }));
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const detailsSlice = createSlice({
   name: "details",
   initialState,
@@ -56,6 +69,16 @@ const detailsSlice = createSlice({
       })
       .addCase(fetchProposalDetails.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(fetchProposalTimestamps.pending, (state) => {
+        state.downloadStatus = "loading";
+      })
+      .addCase(fetchProposalTimestamps.fulfilled, (state) => {
+        state.downloadStatus = "succeeded";
+      })
+      .addCase(fetchProposalTimestamps.rejected, (state, action) => {
+        state.downloadStatus = "failed";
         state.error = action.payload;
       });
   },

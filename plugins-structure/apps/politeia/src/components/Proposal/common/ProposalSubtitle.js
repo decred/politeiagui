@@ -15,10 +15,12 @@ function ProposalSubtitle({
       <Link href={`user/${userid}`}>{username}</Link>
       {publishedat && <Event event="published" timestamp={publishedat} />}
       {editedat && <Event event="edited" timestamp={editedat} />}
-      <Text
-        id={`proposal-${token}-version`}
-        truncate
-      >{`version ${version}`}</Text>
+      {version > 1 && (
+        <Text
+          id={`proposal-${token}-version`}
+          truncate
+        >{`version ${version}`}</Text>
+      )}
     </Join>
   );
 }

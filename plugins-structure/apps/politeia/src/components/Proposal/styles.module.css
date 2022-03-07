@@ -10,3 +10,9 @@
 .secondRow > *:first-child {
   margin-top: 0;
 }
+
+.footerButtons {
+  display: flex;
+  width: 6rem;
+  justify-content: space-between;
+}

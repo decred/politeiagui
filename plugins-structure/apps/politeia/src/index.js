@@ -82,7 +82,6 @@ function handleApi() {
     router.init({ routes });
   }
 }
-
 ReactDOM.render(
   <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
     <Provider store={store}>
