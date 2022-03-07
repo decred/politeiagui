@@ -9,6 +9,7 @@ export function RecordCard({
   rightHeader,
   secondRow,
   thirdRow,
+  fourthRow,
   footer,
 }) {
   return (
@@ -28,6 +29,7 @@ export function RecordCard({
           <div className={styles.fullRow}>{thirdRow}</div>
         </div>
       )}
+      {fourthRow && <div className={styles.fourthRow}>{fourthRow}</div>}
       <div className={styles.footer}>{footer}</div>
     </Card>
   );
