@@ -1,13 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  Text,
-  Icon,
-  useTheme,
-  classNames,
-  getThemeProperty,
-  DEFAULT_DARK_THEME_NAME
-} from "pi-ui";
+import { Text, ButtonIcon, classNames } from "pi-ui";
 import styles from "./Proposal.module.css";
 
 const VotesCount = ({
@@ -18,20 +11,14 @@ const VotesCount = ({
   isVoteActive
 }) => {
   const votesLeft = quorumVotes - votesReceived;
-  const { theme, themeName } = useTheme();
-  const color = getThemeProperty(theme, "icon-color");
-  const darkColor = getThemeProperty(theme, "color-dark");
-  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-
   return (
     <div className={styles.voteCount}>
       {isVoteActive && (
         <>
           {onSearchVotes && votesReceived > 0 && (
             <div>
-              <Icon
+              <ButtonIcon
                 type="search"
-                iconColor={isDarkTheme ? darkColor : color}
                 onClick={onSearchVotes}
                 className={styles.voteCountSearch}
               />

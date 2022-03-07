@@ -12,7 +12,11 @@ export function Comment({
   state = 2,
   maxUpvote = 0,
   maxDownVote = 0,
-  createdat
+  extradata,
+  extradatahint,
+  createdat,
+  reason,
+  deleted = false
 } = {}) {
   if (!user) {
     user = new User({ userid });
@@ -33,6 +37,10 @@ export function Comment({
   this.userid = user.userid;
   this.username = user.username;
   this.createdat = createdat;
+  this.extradata = extradata;
+  this.extradatahint = extradatahint;
+  this.reason = reason;
+  this.deleted = deleted;
 }
 
 export function Vote({ token, userid, user, maxCommentID }) {

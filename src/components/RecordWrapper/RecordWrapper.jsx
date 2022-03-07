@@ -6,18 +6,17 @@ import DownloadJSON from "../DownloadJSON";
 import {
   Card,
   H2,
-  Icon,
   Link as UILink,
+  Icon,
   Text,
   classNames,
-  useHover,
   useTheme,
-  getThemeProperty,
   Tooltip,
   CopyableText,
   useMediaQuery,
   DEFAULT_DARK_THEME_NAME,
   Dropdown,
+  ButtonIcon,
   DropdownItem
 } from "pi-ui";
 import { Row } from "../layout";
@@ -81,7 +80,9 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
   return !isLegacy ? (
-    <Wrapper to={url} className={styles.title}>
+    <Wrapper
+      to={url}
+      className={classNames(styles.baseTitle, url && styles.underlineTitle)}>
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>
@@ -93,7 +94,13 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
         placement="right">
         <Icon type="info" />
       </Tooltip>
-      <a href={url} className={classNames(styles.title, "margin-left-s")}>
+      <a
+        href={url}
+        className={classNames(
+          styles.baseTitle,
+          styles.underlineTitle,
+          "margin-left-s"
+        )}>
         <H2 {...props} data-testid="record-title-legacy">
           {children}
         </H2>
@@ -122,9 +129,13 @@ export const JoinTitle = ({ children, className, separatorSymbol = "•" }) => (
   </Join>
 );
 
-export const Edit = ({ url, tabIndex }) => (
-  <Link to={url || ""} tabIndex={tabIndex} data-testid="record-edit-button">
-    <Icon type="edit" className={styles.editButton} />
+export const Edit = ({ url, tabIndex, disabled }) => (
+  <Link
+    to={url || ""}
+    tabIndex={tabIndex}
+    data-testid="record-edit-button"
+    className={styles.editButton}>
+    <ButtonIcon type="edit" disabled={disabled} />
   </Link>
 );
 
@@ -152,7 +163,7 @@ const MobileHeader = ({ title, status, edit, isRfp }) => (
   </div>
 );
 
-const RfpTag = React.memo(({ className }) => (
+export const RfpTag = React.memo(({ className }) => (
   <img
     alt="rfp"
     className={classNames("margin-right-s", styles.rfptag, className)}
@@ -197,12 +208,7 @@ export const Header = React.memo(function Header({
 
 export const ChartsLink = ({ token }) => {
   const { apiInfo } = useLoader();
-  const { theme, themeName } = useTheme();
-  const bgColor = getThemeProperty(theme, "icon-color");
-  const color = getThemeProperty(theme, "icon-background-color");
-  const hoverColor = getThemeProperty(theme, "icon-hover-color");
-  const [ref, isHovered] = useHover();
-  const iconColor = isHovered ? hoverColor : color;
+  const { themeName } = useTheme();
   const hostName = apiInfo.testnet
     ? "testnet.decred.org"
     : "dcrdata.decred.org";
@@ -217,28 +223,18 @@ export const ChartsLink = ({ token }) => {
       placement="bottom"
       content="Voting Charts">
       <UILink
-        ref={ref}
         target="_blank"
         rel="nofollow noopener noreferrer"
         href={`https://${hostName}/proposal/${token}`}>
-        <Icon type="chart" iconColor={iconColor} backgroundColor={bgColor} />
+        <ButtonIcon type="chart" />
       </UILink>
     </Tooltip>
   );
 };
 
 export const MarkdownLink = ({ to, active = false, onClick }) => {
-  const { theme, themeName } = useTheme();
-  const color = getThemeProperty(theme, "icon-color");
-  const hoverColor = getThemeProperty(theme, "icon-hover-color");
-  const darkIconColor = getThemeProperty(theme, "text-color");
-  const [ref, isHovered] = useHover();
+  const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
-  const iconColor = isHovered
-    ? hoverColor
-    : isDarkTheme
-    ? darkIconColor
-    : color;
   return (
     <Tooltip
       className={classNames(
@@ -252,12 +248,7 @@ export const MarkdownLink = ({ to, active = false, onClick }) => {
         rel="nofollow noopener noreferrer"
         href={to}
         onClick={onClick}>
-        <Icon
-          ref={ref}
-          type="markdown"
-          viewBox="0 0 208 128"
-          iconColor={iconColor}
-        />
+        <ButtonIcon type="markdown" viewBox="0 0 208 128" />
       </UILink>
     </Tooltip>
   );

@@ -9,7 +9,6 @@ import {
   PROPOSAL_STATUS_PUBLIC,
   PROPOSAL_STATUS_UNREVIEWED,
   UNREVIEWED,
-  PRE_VOTE,
   ACTIVE_VOTE,
   APPROVED,
   AUTHORIZED,
@@ -83,7 +82,7 @@ const mapReviewStatusToTokenInventoryStatus = (status, state) => {
     case PROPOSAL_STATUS_CENSORED:
       return state !== PROPOSAL_STATE_UNVETTED ? INELIGIBLE : CENSORED;
     case PROPOSAL_STATUS_PUBLIC:
-      return PRE_VOTE;
+      return UNAUTHORIZED;
     case PROPOSAL_STATUS_ARCHIVED:
       return state !== PROPOSAL_STATE_UNVETTED ? INELIGIBLE : ARCHIVED;
     default:
@@ -296,7 +295,10 @@ const proposals = (state = DEFAULT_STATE, action) =>
               ),
               update(
                 ["allProposalsByUserId", action.payload.userid],
-                (userProposals = []) => [action.payload, ...userProposals]
+                (userProposals = {}) => {
+                  const token = shortRecordToken(proposalToken(action.payload));
+                  return { [token]: action.payload, ...userProposals };
+                }
               ),
               update(
                 ["numOfProposalsByUserId", action.payload.userid],

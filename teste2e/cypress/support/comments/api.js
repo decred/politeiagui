@@ -55,13 +55,23 @@ export function countReply({
  * @returns {Object} { comments }
  */
 export function commentsReply({
-  testParams: { count = 0, maxUpvote = 0, maxDownVote = 0 },
+  testParams: { count = 0, maxUpvote = 0, maxDownVote = 0, extra = {} },
   requestParams: { token }
 }) {
   const comments = [];
+  const { extradata, extradatahint } = extra;
   if (count > 0) {
     for (let commentid = 1; commentid <= count; commentid++) {
-      comments.push(new Comment({ commentid, token, maxUpvote, maxDownVote }));
+      comments.push(
+        new Comment({
+          commentid,
+          token,
+          maxUpvote,
+          maxDownVote,
+          extradata,
+          extradatahint
+        })
+      );
     }
   }
   return { comments };
@@ -76,7 +86,16 @@ export function commentsReply({
  */
 export function newCommentReply({
   testParams: { user, commentid },
-  requestParams: { comment, parentid, publickey, signature, state, token }
+  requestParams: {
+    comment,
+    parentid,
+    publickey,
+    signature,
+    state,
+    token,
+    extradata,
+    extradatahint
+  }
 }) {
   return {
     comment: new Comment({
@@ -88,6 +107,8 @@ export function newCommentReply({
       signature,
       state,
       token,
+      extradata,
+      extradatahint,
       createdat: new Date().getTime() / 1000
     })
   };
@@ -157,9 +178,7 @@ export function votesReply({
  * @param {Object} { testParams, requestParams }
  * @returns {Object} { downvotes, upvotes, timestamp, receipt }
  */
-export function voteReply({
-  requestParams: { commentid, publickey, signature, state, token, vote }
-}) {
+export function voteReply({ requestParams: { vote } }) {
   const upvotes = vote === 1 ? 1 : 0;
   const downvotes = vote === 1 ? 0 : 1;
   return {
@@ -178,9 +197,32 @@ export function voteReply({
  * @param {Object} { requestParams }
  * @returns {Object} { comments }
  */
-export function timestampsReply({ requestParams: { token, commentids = [] } }) {
+export function timestampsReply() {
   return {
     comments: {}
+  };
+}
+
+/**
+ * delReply represents the replier for /api/comments/v1/del endpoint. It returns
+ * a deleted comment including the censorship reason.
+ *
+ * @param {Object} { requestParams }
+ * @returns {Object} { comment }
+ */
+export function delReply({
+  testParams: { userid },
+  requestParams: { reason, commentid, token }
+}) {
+  return {
+    comment: new Comment({
+      commentid,
+      userid,
+      comment: "",
+      reason,
+      token,
+      deleted: true
+    })
   };
 }
 
@@ -192,5 +234,6 @@ export const repliers = {
   new: newCommentReply,
   edit: editCommentReply,
   vote: voteReply,
-  timestamps: timestampsReply
+  timestamps: timestampsReply,
+  del: delReply
 };

@@ -11,7 +11,9 @@
   "onBoardLink": "https://docs.decred.org/governance/politeia/overview/",
   "privacyPolicyContent": "privacy-policy",
   "navMenuPaths": [
-    { "label": "Proposals", "path": "/", "admin": false },
+    { "label": "All Proposals", "path": "/", "admin": false },
+    { "label": "My Proposals", "path": "/user-proposals", "admin": false },
+    { "label": "My Drafts", "path": "/drafts", "admin": false },
     { "label": "Admin", "path": "/admin/records", "admin": true },
     { "label": "Search for users", "path": "/user/search", "admin": true },
     { "label": "Account", "path": "/user", "admin": false }

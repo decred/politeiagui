@@ -1,9 +1,10 @@
 import React from "react";
 import RecordWrapper from "../RecordWrapper";
 import styles from "./DraftProposal.module.css";
+import { PROPOSAL_TYPE_RFP } from "src/constants";
 
 const DraftProposal = ({ draft, onDelete }) => {
-  const { name, draftId, timestamp } = draft;
+  const { name, draftId, timestamp, type } = draft;
   function handleDeleteDraft() {
     onDelete(draftId);
   }
@@ -32,6 +33,7 @@ const DraftProposal = ({ draft, onDelete }) => {
                   </button>
                 </Status>
               }
+              isRfp={type === PROPOSAL_TYPE_RFP}
               edit={<Edit url={`/record/new?draft=${draftId}`} />}
               subtitle={
                 <Subtitle>
