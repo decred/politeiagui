@@ -8,12 +8,25 @@ const mockRoutes = [
   },
   {
     path: "/test-url/:id/test/:id2",
-    view: () =>
-      (document.querySelector("#root").innerHTML = "hello from test url"),
+    view: ({ id, id2 }) =>
+      (document.querySelector(
+        "#root"
+      ).innerHTML = `hello from test url id1-${id} id2-${id2}`),
   },
   {
     path: "/",
     view: () => (document.querySelector("#root").innerHTML = "hello from home"),
+  },
+];
+
+const mockNestedRoutes = [
+  ...mockRoutes,
+  {
+    path: "/test-url/:id",
+    view: ({ id }) =>
+      (document.querySelector(
+        "#root"
+      ).innerHTML = `hello from test url id-${id}`),
   },
 ];
 
@@ -156,6 +169,14 @@ describe("Given the router", () => {
     expect(router.matchPath("/test-url/5/test")).toBeFalsy();
     expect(router.matchPath("/testrl/5/test/1")).toBeFalsy();
     expect(router.matchPath("/test-url/5/tes/1")).toBeFalsy();
+  });
+
+  it("should return correct params", () => {
+    router.init({ routes: mockNestedRoutes });
+    router.navigateTo("/test-url/5/test/1");
+    expect(document.body.innerHTML).toInclude("id1-5 id2-1");
+    router.navigateTo("/test-url/5");
+    expect(document.body.innerHTML).toInclude("id-5");
   });
 });
 

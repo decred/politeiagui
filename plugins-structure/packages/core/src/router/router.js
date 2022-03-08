@@ -58,9 +58,16 @@ export const router = (function () {
       result: window.location.pathname.match(pathToRegex(route.path)),
     }));
 
-    let match = potentialMatches.find(
-      (potentialMatch) => potentialMatch.result !== null
-    );
+    let match = potentialMatches.find((potentialMatch) => {
+      if (potentialMatch.result === null) {
+        return false;
+      }
+      const [, ...params] = potentialMatch.result;
+      if (!params.length) {
+        return true;
+      }
+      return params.every((p) => p.split("/").length === 1);
+    });
 
     if (!match) {
       // default to 404 route
