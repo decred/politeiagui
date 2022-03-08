@@ -9,7 +9,7 @@ import {
 } from "./detailsSlice";
 import ProposalDetails from "../../components/Proposal/ProposalDetails";
 
-function Details({ token }) {
+function Details({ token, isRaw }) {
   const dispatch = useDispatch();
   const fullToken = useSelector(selectFullToken);
   const record = useSelector((state) =>
@@ -23,6 +23,10 @@ function Details({ token }) {
   useEffect(() => {
     dispatch(fetchProposalDetails(token));
   }, [token, dispatch]);
+
+  if (isRaw) {
+    return JSON.stringify(record, null, 2);
+  }
 
   return detailsStatus === "succeeded" ? (
     <div>

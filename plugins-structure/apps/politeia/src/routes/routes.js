@@ -78,4 +78,18 @@ export const routes = [
     cleanup: () =>
       ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },
+  {
+    path: "/record/:token/raw",
+    view: async ({ token }) => {
+      await connectReducers([detailsReducerObj]);
+      return ReactDOM.render(
+        <Provider store={store}>
+          <Details token={token} isRaw={true} />
+        </Provider>,
+        document.querySelector("#root")
+      );
+    },
+    cleanup: () =>
+      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+  },
 ];

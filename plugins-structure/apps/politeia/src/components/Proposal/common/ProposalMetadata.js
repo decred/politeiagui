@@ -29,4 +29,5 @@ function ProposalMetadata({ metadata }) {
   const items = getMetadataItems({ domain, amount, endDate, startDate });
   return metadataAvailable && <LabelValueList items={items} />;
 }
+
 export default ProposalMetadata;
