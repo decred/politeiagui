@@ -12,14 +12,16 @@ import {
   ProposalSubtitle,
 } from "./common";
 import { Button, ButtonIcon, Dropdown, DropdownItem } from "pi-ui";
+import { getShortToken } from "@politeiagui/core/records/utils";
 import fileDownload from "js-file-download";
 import styles from "./styles.module.css";
 
-const ProposalDownloads = ({ record }) => {
+const ProposalDownloads = ({ record, onFetchRecordTimestamps }) => {
   if (!record) return null;
 
   const { token } = record.censorshiprecord;
   const version = record.version;
+  const shortToken = getShortToken(token);
 
   function handleDownload(data, filename) {
     return function onDownload() {
@@ -28,20 +30,33 @@ const ProposalDownloads = ({ record }) => {
     };
   }
 
+  async function handleFetchTimestamps() {
+    const timestamps = await onFetchRecordTimestamps({ token, version });
+    return handleDownload(timestamps, `${shortToken}-v${version}-timestamps`)();
+  }
+
   return (
     <Dropdown title="Available Downloads">
-      <DropdownItem onClick={handleDownload(record, `${token}-${version}`)}>
+      <DropdownItem
+        onClick={handleDownload(record, `${shortToken}-v${version}`)}
+      >
         Proposal Bundle
       </DropdownItem>
-      {/* <DropdownItem>Proposal Timestamps</DropdownItem> */}
+      <DropdownItem onClick={handleFetchTimestamps}>
+        Proposal Timestamps
+      </DropdownItem>
       {/* TODO: Add comments downloads (bundle & timestamps) */}
     </Dropdown>
   );
 };
 
-const ProposalDetails = ({ record, voteSummary }) => {
+const ProposalDetails = ({ record, voteSummary, onFetchTimestamps }) => {
   const proposalDetails = decodeProposalRecord(record);
-  function handleShowRawMarkdown() {}
+  function handleShowRawMarkdown() {
+    window.location.pathname = `/record/${getShortToken(
+      proposalDetails.token
+    )}/raw`;
+  }
   return (
     <div>
       <RecordCard
@@ -76,7 +91,10 @@ const ProposalDetails = ({ record, voteSummary }) => {
         }
         footer={
           <>
-            <ProposalDownloads record={record} />
+            <ProposalDownloads
+              record={record}
+              onFetchRecordTimestamps={onFetchTimestamps}
+            />
             <div className={styles.footerButtons}>
               <ButtonIcon
                 type="markdown"

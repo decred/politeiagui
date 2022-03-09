@@ -17,8 +17,11 @@ export const fetchProposalDetails = createAsyncThunk(
   async (token, { dispatch, rejectWithValue }) => {
     try {
       let fullToken = token;
+      // create responses array so we can handle errors and details from thunks
+      // responses.
+      const responses = [];
 
-      // fetch ticketvote policy required for fetching ticketvote summaries
+      // fetch ticketvote policy required for fetching ticketvote summaries.
       await dispatch(ticketvotePolicy.fetch());
 
       // If token is short, fetch details first to get the full token, and then
@@ -26,15 +29,23 @@ export const fetchProposalDetails = createAsyncThunk(
       // simultaneously.
       if (token.length === 7) {
         const fetchedRecord = await dispatch(records.fetchDetails({ token }));
-        fullToken = fetchedRecord.payload.censorshiprecord.token;
-        await Promise.all([
+        fullToken = fetchedRecord.payload.record.censorshiprecord.token;
+        const tvSummaries = await Promise.all([
           dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
         ]);
+        responses.push(...[fetchedRecord, tvSummaries]);
       } else {
-        await Promise.all([
+        const res = await Promise.all([
           dispatch(records.fetchDetails({ token: fullToken })),
           dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
         ]);
+        responses.push(...res);
+      }
+
+      // Handle errors from other thunks.
+      const invalidResponse = responses.find((r) => r.error);
+      if (invalidResponse) {
+        throw invalidResponse.error;
       }
 
       return fullToken;
@@ -48,7 +59,10 @@ export const fetchProposalTimestamps = createAsyncThunk(
   "details/fetchProposalTimestamps",
   async ({ token, version }, { dispatch, rejectWithValue }) => {
     try {
-      await dispatch(recordsTimestamps.fetch({ token, version }));
+      const timestamps = await dispatch(
+        recordsTimestamps.fetch({ token, version })
+      );
+      return timestamps.payload;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -85,6 +99,7 @@ const detailsSlice = createSlice({
 });
 
 export const selectDetailsStatus = (state) => state.details.status;
+export const selectDetailsError = (state) => state.details.error;
 export const selectFullToken = (state) => state.details.fullToken;
 
 export default detailsSlice.reducer;

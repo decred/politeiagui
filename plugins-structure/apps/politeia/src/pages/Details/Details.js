@@ -4,10 +4,13 @@ import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import {
   fetchProposalDetails,
+  fetchProposalTimestamps,
+  selectDetailsError,
   selectDetailsStatus,
   selectFullToken,
 } from "./detailsSlice";
 import ProposalDetails from "../../components/Proposal/ProposalDetails";
+import { Message } from "pi-ui";
 
 function Details({ token, isRaw }) {
   const dispatch = useDispatch();
@@ -19,6 +22,9 @@ function Details({ token, isRaw }) {
     ticketvoteSummaries.selectByToken(state, fullToken)
   );
   const detailsStatus = useSelector(selectDetailsStatus);
+  const detailsError = useSelector(selectDetailsError);
+  const onFetchTimestamps = ({ token, version }) =>
+    dispatch(fetchProposalTimestamps({ token, version }));
 
   useEffect(() => {
     dispatch(fetchProposalDetails(token));
@@ -30,8 +36,14 @@ function Details({ token, isRaw }) {
 
   return detailsStatus === "succeeded" ? (
     <div>
-      <ProposalDetails record={record} voteSummary={voteSummary} />
+      <ProposalDetails
+        record={record}
+        voteSummary={voteSummary}
+        onFetchTimestamps={onFetchTimestamps}
+      />
     </div>
+  ) : detailsStatus === "failed" ? (
+    <Message kind="error">{detailsError}</Message>
   ) : (
     "Loading..."
   );
