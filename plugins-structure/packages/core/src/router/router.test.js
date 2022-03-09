@@ -181,17 +181,20 @@ describe("Given the router", () => {
   it("should find correct matches for nested routes", () => {
     let matchNested = findMatch(mockNestedRoutes, "/test-url/5/test/1");
     let [route, arg1, arg2] = matchNested.result;
+    expect(matchNested.route.path).toEqual("/test-url/:id/test/:id2");
     expect(route).toEqual("/test-url/5/test/1");
     expect(arg1).toEqual("5");
     expect(arg2).toEqual("1");
 
     matchNested = findMatch(mockNestedRoutes, "/test-url/4");
     [route, arg1] = matchNested.result;
+    expect(matchNested.route.path).toEqual("/test-url/:id");
     expect(route).toEqual("/test-url/4");
     expect(arg1).toEqual("4");
 
     matchNested = findMatch(mockNestedRoutes, "/test-url/4/test");
     [route, arg1, arg2] = matchNested.result;
+    expect(matchNested.route.path).toEqual("/test-url/:id/test");
     expect(route).toEqual("/test-url/4/test");
     expect(arg1).toEqual("4");
     expect(arg2).not.toBeDefined();
