@@ -1,4 +1,4 @@
-import { generatePath, router } from "./router";
+import { findMatch, generatePath, router } from "./router";
 
 const mockRoutes = [
   {
@@ -23,6 +23,13 @@ const mockNestedRoutes = [
   ...mockRoutes,
   {
     path: "/test-url/:id",
+    view: ({ id }) =>
+      (document.querySelector(
+        "#root"
+      ).innerHTML = `hello from test url id-${id}`),
+  },
+  {
+    path: "/test-url/:id/test",
     view: ({ id }) =>
       (document.querySelector(
         "#root"
@@ -171,12 +178,23 @@ describe("Given the router", () => {
     expect(router.matchPath("/test-url/5/tes/1")).toBeFalsy();
   });
 
-  it("should return correct params", () => {
-    router.init({ routes: mockNestedRoutes });
-    router.navigateTo("/test-url/5/test/1");
-    expect(document.body.innerHTML).toInclude("id1-5 id2-1");
-    router.navigateTo("/test-url/5");
-    expect(document.body.innerHTML).toInclude("id-5");
+  it("should find correct matches for nested routes", () => {
+    let matchNested = findMatch(mockNestedRoutes, "/test-url/5/test/1");
+    let [route, arg1, arg2] = matchNested.result;
+    expect(route).toEqual("/test-url/5/test/1");
+    expect(arg1).toEqual("5");
+    expect(arg2).toEqual("1");
+
+    matchNested = findMatch(mockNestedRoutes, "/test-url/4");
+    [route, arg1] = matchNested.result;
+    expect(route).toEqual("/test-url/4");
+    expect(arg1).toEqual("4");
+
+    matchNested = findMatch(mockNestedRoutes, "/test-url/4/test");
+    [route, arg1, arg2] = matchNested.result;
+    expect(route).toEqual("/test-url/4/test");
+    expect(arg1).toEqual("4");
+    expect(arg2).not.toBeDefined();
   });
 });
 
