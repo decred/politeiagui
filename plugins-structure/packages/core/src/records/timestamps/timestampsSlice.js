@@ -32,7 +32,7 @@ const recordsTimestampsSlice = createSlice({
       })
       .addCase(fetchRecordTimestamps.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const { token, version } = action.meta.arg;
+        const { token, version = 1 } = action.meta.arg;
         state.byToken[token] = {
           ...(state.byToken[token] || {}),
           [version]: action.payload,

@@ -34,7 +34,9 @@ describe("Given the recordsSlice", () => {
     fetchRecordDetailsSpy.mockRestore();
   });
   describe("when empty parameters", () => {
-    expect(reducer(undefined, {})).toEqual(initialState);
+    it("should return the initial state", () => {
+      expect(reducer(undefined, {})).toEqual(initialState);
+    });
   });
 
   // Records
