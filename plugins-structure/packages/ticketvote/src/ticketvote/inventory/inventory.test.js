@@ -5,6 +5,7 @@ import reducer, {
 } from "./inventorySlice";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { getTicketvoteError } from "../../lib/errors";
 import { records } from "@politeiagui/core/records";
 import policyReducer from "../policy/policySlice";
 
@@ -150,8 +151,8 @@ describe("Given the recordsInventorySlice", () => {
     });
   });
   describe("when fetchTicketvoteInventory fails", () => {
-    it("should dispatch failure and update the error", async () => {
-      const error = new Error("ERROR");
+    it("should dispatch failure", async () => {
+      const error = { body: { errorcode: 2 } };
       fetchInventorySpy.mockRejectedValueOnce(error);
 
       await store.dispatch(fetchTicketvoteInventory(params));
@@ -161,7 +162,40 @@ describe("Given the recordsInventorySlice", () => {
       expect(state.unauthorized.tokens).toEqual([]);
       expect(state.unauthorized.lastPage).toEqual(0);
       expect(state.status).toEqual("failed");
-      expect(state.error).toEqual("ERROR");
+    });
+    it("should return correct plugin error messages", async () => {
+      const errorcodes = Array(20)
+        .fill()
+        .map((_, i) => i + 1);
+      for (const errorcode of errorcodes) {
+        const error = { body: { errorcode } };
+        const message = getTicketvoteError(error.body);
+        fetchInventorySpy.mockRejectedValueOnce(error);
+        await store.dispatch(fetchTicketvoteInventory(params));
+        expect(fetchInventorySpy).toBeCalled();
+        const state = store.getState().ticketvoteInventory;
+        expect(state.unauthorized.tokens).toEqual([]);
+        expect(state.unauthorized.lastPage).toEqual(0);
+        expect(state.status).toEqual("failed");
+        expect(state.error).toEqual(message);
+      }
+    });
+    it("should return correct user error messages", async () => {
+      const errorcodes = Array(9)
+        .fill()
+        .map((_, i) => i);
+      for (const errorcode of errorcodes) {
+        const error = { body: { errorcode, pluginid: "ticketvote" } };
+        const message = getTicketvoteError(error.body);
+        fetchInventorySpy.mockRejectedValueOnce(error);
+        await store.dispatch(fetchTicketvoteInventory(params));
+        expect(fetchInventorySpy).toBeCalled();
+        const state = store.getState().ticketvoteInventory;
+        expect(state.unauthorized.tokens).toEqual([]);
+        expect(state.unauthorized.lastPage).toEqual(0);
+        expect(state.status).toEqual("failed");
+        expect(state.error).toEqual(message);
+      }
     });
   });
   describe("when fetchTicketvoteNextRecordsBatch is called with empty tokens", () => {

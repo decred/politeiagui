@@ -4,6 +4,7 @@ import {
   getHumanReadableTicketvoteStatus,
   getTicketvoteStatusCode,
 } from "../../lib/utils";
+import { getTicketvoteError } from "../../lib/errors";
 import {
   validateTicketvoteInventoryPageSize,
   validateTicketvoteStatus,
@@ -52,7 +53,8 @@ export const fetchTicketvoteInventory = createAsyncThunk(
         inventoryPageSize,
       };
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getTicketvoteError(error.body);
+      return rejectWithValue(message);
     }
   },
   {
@@ -83,7 +85,8 @@ export const fetchTicketvoteNextRecordsBatch = createAsyncThunk(
       }
       return last;
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getTicketvoteError(error.body);
+      return rejectWithValue(message);
     }
   },
   {
