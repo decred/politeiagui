@@ -53,7 +53,7 @@ export const fetchTicketvoteInventory = createAsyncThunk(
         inventoryPageSize,
       };
     } catch (error) {
-      const message = getTicketvoteError(error.body);
+      const message = getTicketvoteError(error.body, error.message);
       return rejectWithValue(message);
     }
   },
@@ -85,7 +85,7 @@ export const fetchTicketvoteNextRecordsBatch = createAsyncThunk(
       }
       return last;
     } catch (error) {
-      const message = getTicketvoteError(error.body);
+      const message = getTicketvoteError(error.body, error.message);
       return rejectWithValue(message);
     }
   },

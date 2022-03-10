@@ -152,7 +152,7 @@ describe("Given the recordsInventorySlice", () => {
   });
   describe("when fetchTicketvoteInventory fails", () => {
     it("should dispatch failure", async () => {
-      const error = { body: { errorcode: 2 } };
+      const error = new Error("Error!");
       fetchInventorySpy.mockRejectedValueOnce(error);
 
       await store.dispatch(fetchTicketvoteInventory(params));
@@ -162,6 +162,7 @@ describe("Given the recordsInventorySlice", () => {
       expect(state.unauthorized.tokens).toEqual([]);
       expect(state.unauthorized.lastPage).toEqual(0);
       expect(state.status).toEqual("failed");
+      expect(state.error).toEqual("Error!");
     });
     it("should return correct plugin error messages", async () => {
       const errorcodes = Array(20)

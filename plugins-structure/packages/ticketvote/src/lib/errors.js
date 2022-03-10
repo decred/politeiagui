@@ -41,7 +41,13 @@ function getTicketvoteUserErrorMessage(code, context = "") {
   return errorMap[code];
 }
 
-export function getTicketvoteError({ errorcode, pluginid, errorcontext }) {
+export function getTicketvoteError(
+  { errorcode, pluginid, errorcontext } = {},
+  defaultMessage
+) {
+  if (!errorcode) {
+    return defaultMessage;
+  }
   if (pluginid) {
     return getTicketvotePluginErrorMessage(errorcode, errorcontext);
   } else {
