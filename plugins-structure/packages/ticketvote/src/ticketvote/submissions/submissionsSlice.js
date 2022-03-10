@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { getTicketvoteError } from "../../lib/errors";
 
 export const initialState = {
   byToken: {},
@@ -14,7 +15,8 @@ export const fetchTicketvoteSubmissions = createAsyncThunk(
     try {
       return await api.fetchSubmissions(getState(), { token });
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getTicketvoteError(error.body, error.message);
+      return rejectWithValue(message);
     }
   },
   {
