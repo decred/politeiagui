@@ -5,7 +5,10 @@ import reducer, {
 } from "./inventorySlice";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
-import { getTicketvoteError } from "../../lib/errors";
+import {
+  getTicketvotePluginErrorMessage,
+  getTicketvoteUserErrorMessage,
+} from "../../lib/errors";
 import { records } from "@politeiagui/core/records";
 import policyReducer from "../policy/policySlice";
 
@@ -169,8 +172,8 @@ describe("Given the recordsInventorySlice", () => {
         .fill()
         .map((_, i) => i + 1);
       for (const errorcode of errorcodes) {
-        const error = { body: { errorcode } };
-        const message = getTicketvoteError(error.body);
+        const error = { body: { errorcode, pluginid: "ticketvote" } };
+        const message = getTicketvotePluginErrorMessage(errorcode);
         fetchInventorySpy.mockRejectedValueOnce(error);
         await store.dispatch(fetchTicketvoteInventory(params));
         expect(fetchInventorySpy).toBeCalled();
@@ -186,8 +189,8 @@ describe("Given the recordsInventorySlice", () => {
         .fill()
         .map((_, i) => i);
       for (const errorcode of errorcodes) {
-        const error = { body: { errorcode, pluginid: "ticketvote" } };
-        const message = getTicketvoteError(error.body);
+        const error = { body: { errorcode } };
+        const message = getTicketvoteUserErrorMessage(errorcode);
         fetchInventorySpy.mockRejectedValueOnce(error);
         await store.dispatch(fetchTicketvoteInventory(params));
         expect(fetchInventorySpy).toBeCalled();

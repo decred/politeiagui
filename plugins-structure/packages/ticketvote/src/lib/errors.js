@@ -1,4 +1,4 @@
-function getTicketvotePluginErrorMessage(code, context = "") {
+export function getTicketvotePluginErrorMessage(code, context = "") {
   const errorMap = {
     1: `The provided record token is invalid, ${context}`,
     2: "The provided user public key is invalid",
@@ -25,9 +25,8 @@ function getTicketvotePluginErrorMessage(code, context = "") {
   return errorMap[code];
 }
 
-function getTicketvoteUserErrorMessage(code, context = "") {
+export function getTicketvoteUserErrorMessage(code, context = "") {
   const errorMap = {
-    0: "Invalid vote error.",
     1: "Internal server error.",
     2: "The user public key is not active",
     3: `Unauthorized: ${context}`,
