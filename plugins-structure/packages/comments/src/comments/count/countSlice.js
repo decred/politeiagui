@@ -11,7 +11,6 @@ export const fetchCommentsCount = createAsyncThunk(
   "commentsCount/fetch",
   async (body, { getState, rejectWithValue }) => {
     try {
-      console.log("fetch count");
       return await api.fetchCount(getState(), body);
     } catch (error) {
       return rejectWithValue(error.message);
