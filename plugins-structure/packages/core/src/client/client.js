@@ -73,7 +73,7 @@ export async function getCsrf(state) {
 export async function parseResponse(response) {
   const { status, statusText } = response;
   const json = await response.json();
-  if (status >= 200 && status <= 299) return json;
+  if ([200, 201].includes(status)) return json;
   throw new ApiError(statusText, json);
 }
 

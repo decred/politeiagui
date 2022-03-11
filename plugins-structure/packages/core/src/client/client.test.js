@@ -11,10 +11,13 @@ function MockResponse({ status, statusText, data }) {
 describe("Given parseResponse util", () => {
   describe("when response succeeds", () => {
     it("should return the json", async () => {
-      const res = await parseResponse(
-        MockResponse({ status: 200, data: "result" })
-      );
-      expect(res).toEqual("result");
+      const statusCodes = [200, 201];
+      for (const status of statusCodes) {
+        const res = await parseResponse(
+          MockResponse({ status, data: "result" })
+        );
+        expect(res).toEqual("result");
+      }
     });
   });
   describe("when response fails", () => {
