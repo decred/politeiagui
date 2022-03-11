@@ -15,20 +15,27 @@ export function useCommentsTimestamps({ token, commentids = [], pageSize }) {
   const timestampsError = useSelector(commentsTimestamps.selectError);
 
   // Actions
+  // onFetchTimestamps fetches all timestamps given commentids list hook param.
   const onFetchTimestamps = useCallback(async () => {
+    // get paginated commentids without timestamps fetched
     const timestampsToFetch = difference(commentids)(fetchedTimestamps);
     const [currentPage] = chunk(pageSize)(timestampsToFetch);
+    // avoid fetching repeated timestamps before fetching, in order to avoid
+    // repeated requests once fetch is done.
     setFetchedTimestamps([...fetchedTimestamps, ...currentPage]);
     try {
       await dispatch(
         commentsTimestamps.fetch({ token, commentids: currentPage, pageSize })
       );
     } catch (e) {
+      // in case of error, remove target timestamps page from fetched timestamps
+      // list.
       setFetchedTimestamps(fetchedTimestamps);
     }
   }, [dispatch, token, commentids, pageSize, fetchedTimestamps]);
 
   useEffect(() => {
+    // fetch timestamps if there are remaining timestamps.
     if (timestampsStatus === "succeeded/hasMore") {
       onFetchTimestamps();
     }

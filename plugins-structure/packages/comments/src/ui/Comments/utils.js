@@ -1,29 +1,46 @@
+/**
+ * getThreadSchema returns an object tree with comment ids ordered by parent
+ * ids. If thread is flat, all parent ids are 0.
+ * ****
+ * Example:
+ * ```javascript
+ * const comments = [
+ *   { commentid: 1, parentid: 0, ... },
+ *   { commentid: 2, parentid: 1, ... },
+ *   { commentid: 3, parentid: 1, ... },
+ * ];
+ * const threadSchema = getThreadSchema(comments, false);
+ * // { 0: [1], 1: [2, 3] }
+ * const flatThreadSchema = getThreadSchema(comments, true);
+ * // { 0: [1, 2, 3] }
+ * ```
+ * @param {Array} comments comments array
+ * @param {Boolean} isFlatMode
+ * @returns {Object} thread schema
+ */
 export function getThreadSchema(comments, isFlatMode) {
   const threadSchema = comments.reduce((acc, comment) => {
+    let parentid = comment.parentid;
     if (isFlatMode) {
-      return { 0: [...(acc[0] || []), comment.commentid] };
-    } else {
-      return {
-        ...acc,
-        [comment.parentid]: [
-          ...(acc[comment.parentid] || []),
-          comment.commentid,
-        ],
-      };
+      parentid = 0;
     }
+    return {
+      ...acc,
+      [parentid]: [...(acc[parentid] || []), comment.commentid],
+    };
   }, {});
   return threadSchema;
 }
 
-export function sortByNew(commentsById) {
+export function sortByNewest(commentsById) {
   return Object.values(commentsById).sort((a, b) => b.timestamp - a.timestamp);
 }
 
-export function sortByOld(commentsById) {
+export function sortByOldest(commentsById) {
   return Object.values(commentsById).sort((a, b) => a.timestamp - b.timestamp);
 }
 
-export function sortByTop(commentsById) {
+export function sortByScore(commentsById) {
   return Object.values(commentsById).sort((a, b) => {
     const scoreA = a.upvotes - a.downvotes;
     const scoreB = b.upvotes - b.downvotes;

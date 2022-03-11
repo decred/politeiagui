@@ -35,9 +35,10 @@ const commentsVotesSlice = createSlice({
       .addCase(fetchCommentsVotes.fulfilled, (state, action) => {
         const { token, userid } = action.meta.arg;
         const { votes } = action.payload;
-        // populate votes by comment ids
+        // populate votes by comment ids. Re-order votes by newest so we only
+        // store the last vote action.
         const formattedVotes = votes
-          .sort((a, b) => a.timestamp - b.timestamp) // Order by asc. timestamps
+          .sort((a, b) => a.timestamp - b.timestamp)
           .reduce((acc, curr) => ({ ...acc, [curr.commentid]: curr }), {});
         if (!state.byUser[userid]) {
           state.byUser[userid] = {};
@@ -56,8 +57,7 @@ const commentsVotesSlice = createSlice({
 // Selectors
 export const selectCommentsVotesStatus = (state) => state.commentsVotes.status;
 export const selectUserCommentsVotesByToken = (state, { token, userid }) =>
-  state.commentsVotes.byUser[userid] &&
-  state.commentsVotes.byUser[userid][token];
+  state.commentsVotes.byUser?.[userid][token];
 
 // Errors
 export const selectCommentsVotesError = (state) => state.commentsVotes.error;

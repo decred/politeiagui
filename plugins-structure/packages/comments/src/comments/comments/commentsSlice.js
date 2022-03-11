@@ -53,7 +53,7 @@ export const selectCommentsByToken = (state, token) =>
   state.comments.byToken[token];
 
 export const selectRecordCommentsById = (state, { token, id }) =>
-  state.comments.byToken[token] && state.comments.byToken[token][id];
+  state.comments.byToken?.[token][id];
 
 export const selectCommentsError = (state) => state.comments.error;
 

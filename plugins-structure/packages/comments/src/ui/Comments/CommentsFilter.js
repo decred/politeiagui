@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Select, Text, classNames } from "pi-ui";
 import PropTypes from "prop-types";
 import styles from "./styles.module.css";
-import { sortByNew, sortByOld, sortByTop } from "./utils";
+import { sortByNewest, sortByOldest, sortByScore } from "./utils";
 
 const options = [
   {
@@ -27,13 +27,13 @@ export const CommentsFilter = ({ onSort, onToggleFlatMode, isFlat }) => {
     let sortFn;
     switch (option.value) {
       case "new":
-        sortFn = sortByNew;
+        sortFn = sortByNewest;
         break;
       case "old":
-        sortFn = sortByOld;
+        sortFn = sortByOldest;
         break;
       default:
-        sortFn = sortByTop;
+        sortFn = sortByScore;
         break;
     }
     onSort(sortFn);

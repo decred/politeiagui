@@ -4,6 +4,9 @@ import { Icon, Text, classNames } from "pi-ui";
 import debounce from "lodash/debounce";
 import styles from "./styles.module.css";
 
+const UPVOTE = 1;
+const DOWNVOTE = -1;
+
 export const CommentVotes = ({
   upvotes,
   downvotes,
@@ -12,16 +15,16 @@ export const CommentVotes = ({
   onVote,
   userVote,
 }) => {
-  const userUpvote = userVote === 1;
-  const userDownvote = userVote === -1;
+  const userUpvote = userVote === UPVOTE;
+  const userDownvote = userVote === DOWNVOTE;
 
   // Avoid multi-clicking actions
   async function handleLike() {
-    await onVote(1);
+    await onVote(UPVOTE);
   }
 
   async function handleDislike() {
-    await onVote(-1);
+    await onVote(DOWNVOTE);
   }
   const handleDebounceVote = (voteFn) =>
     debounce(() => {
