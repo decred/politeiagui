@@ -9,6 +9,7 @@ import {
   getRecordStatusCode,
   getTokensToFetch,
 } from "../utils";
+import { getRecordsErrorMessage } from "../errors";
 import {
   validateInventoryPageSize,
   validateRecordStateAndStatus,
@@ -57,7 +58,8 @@ export const fetchNextRecordsBatch = createAsyncThunk(
       await dispatch(fetchRecords({ tokens }));
       return last;
     } catch (e) {
-      return rejectWithValue(e.message);
+      const message = getRecordsErrorMessage(e.body, e.message);
+      return rejectWithValue(message);
     }
   },
   {
@@ -93,7 +95,8 @@ export const fetchRecordsInventory = createAsyncThunk(
         inventoryPageSize,
       };
     } catch (e) {
-      return rejectWithValue(e.message);
+      const message = getRecordsErrorMessage(e.body, e.message);
+      return rejectWithValue(message);
     }
   },
   {
