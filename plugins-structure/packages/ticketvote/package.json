@@ -20,15 +20,6 @@
     "./constants": "./src/lib/constants.js",
     "./validation": "./src/lib/validation.js"
   },
-  "babel": {
-    "env": {
-      "test": {
-        "plugins": [
-          "@babel/plugin-transform-modules-commonjs"
-        ]
-      }
-    }
-  },
   "scripts": {
     "prettier": "prettier \"src/**/*.js\"",
     "format": "yarn prettier --write",
