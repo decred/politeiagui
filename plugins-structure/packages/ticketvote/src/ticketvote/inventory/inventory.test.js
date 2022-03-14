@@ -9,8 +9,27 @@ import {
   getTicketvotePluginErrorMessage,
   getTicketvoteUserErrorMessage,
 } from "../../lib/errors";
-import { records } from "@politeiagui/core/records";
 import policyReducer from "../policy/policySlice";
+
+// Test Mocks
+jest.mock(
+  "@politeiagui/core/records",
+  () => ({
+    records: {
+      fetch: () => jest.fn(),
+    },
+  }),
+  { virtual: true }
+);
+jest.mock(
+  "@politeiagui/core/records/validation",
+  () => ({
+    validateRecordsPageSize: () => true,
+  }),
+  { virtual: true }
+);
+// Import mock records
+const { records } = require("@politeiagui/core/records");
 
 const mockRecordsReducer = createSlice({
   name: "records",
@@ -258,11 +277,13 @@ describe("Given the recordsInventorySlice", () => {
         fetchTicketvoteNextRecordsBatch({ status: "unauthorized" })
       );
 
-      expect(fetchRecordsSpy).toBeCalledWith({ tokens: unauthorizedTokens });
+      expect(fetchRecordsSpy).toBeCalledWith({
+        tokens: ["token2", "token3", "token4", "token5"],
+      });
       const state = store.getState().ticketvoteInventory;
       expect(state.unauthorized.tokens).toEqual(unauthorizedTokens);
       expect(state.unauthorized.status).toEqual("succeeded/isDone");
-      expect(state.unauthorized.lastTokenPos).toEqual("token5");
+      expect(state.unauthorized.lastTokenPos).toEqual(4);
     });
   });
 });
