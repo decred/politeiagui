@@ -82,7 +82,7 @@ describe("Given DiffHTML", () => {
     });
   });
   describe("when links are different", () => {
-    describe("for different link labels", () => {
+    describe("given different link labels", () => {
       const oldLink = "[my link](http://mylink.com)";
       const newLink = "[my new link](http://mylink.com)";
       it("should return correct diff", () => {
@@ -97,7 +97,7 @@ describe("Given DiffHTML", () => {
         expect(newElement.parentNode.parentNode).toHaveClass("added");
       });
     });
-    describe("for different link values", () => {
+    describe("given different link values", () => {
       const oldLink = "[my link](http://mylink.com)";
       const newLink = "[my link](http://mylinknew.com)";
       it("should return correct diff", () => {
@@ -110,6 +110,67 @@ describe("Given DiffHTML", () => {
         const newElement = screen.getAllByText("my link")[1];
         expect(newElement.getAttribute("href")).toEqual("http://mylinknew.com");
         expect(newElement.parentNode.parentNode).toHaveClass("added");
+      });
+    });
+    describe("given different html raw links", () => {
+      const link = "<a href='javascript:void(0)'>my link</a>";
+      it("should render raw html as text, not as element", () => {
+        render(<DiffHTML oldText={link} newText="" />);
+        const removedLines = screen.getAllByTestId("md-line-removed");
+        expect(removedLines).toHaveLength(1);
+        const oldElement = screen.queryByText("my link");
+        expect(oldElement).toBeFalsy();
+        const rawLinkParagraph = removedLines[0].firstChild;
+        expect(rawLinkParagraph.nodeName).toEqual("P");
+        expect(rawLinkParagraph.firstChild.textContent).toEqual(link);
+        expect(rawLinkParagraph.firstChild.nodeName).toEqual("#text");
+      });
+    });
+    describe("given equal html raw links", () => {
+      const link = "<a href='javascript:void(0)'>my link</a>";
+      it("should render raw html as text, not as element", () => {
+        render(<DiffHTML oldText={link} newText={link} />);
+        const removedLines = screen.queryAllByTestId("md-line-removed");
+        const addedLines = screen.queryAllByTestId("md-line-added");
+        expect(removedLines).toHaveLength(0);
+        expect(addedLines).toHaveLength(0);
+        const renderedElement = screen.queryByText("my link");
+        expect(renderedElement).toBeFalsy();
+        const element = screen.getByText(link);
+        expect(element.nodeName).toEqual("P");
+        expect(element).toHaveTextContent(link);
+      });
+    });
+  });
+  describe("when using strong texts", () => {
+    describe("given different strong texts", () => {
+      const oldText = "**old**";
+      const newText = "**new**";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={oldText} newText={newText} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getByText("old");
+        const newElement = screen.getByText("new");
+        expect(oldElement.nodeName).toEqual("STRONG");
+        expect(oldElement.parentElement.parentElement).toHaveClass("removed");
+        expect(newElement.nodeName).toEqual("STRONG");
+        expect(newElement.parentElement.parentElement).toHaveClass("added");
+      });
+    });
+    describe("given same text, but one strong and other regular", () => {
+      const oldText = "**old**";
+      const newText = "old";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={oldText} newText={newText} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getAllByText("old")[0];
+        const newElement = screen.getAllByText("old")[1];
+        expect(oldElement.nodeName).toEqual("STRONG");
+        expect(oldElement.parentElement.parentElement).toHaveClass("removed");
+        expect(newElement.nodeName).toEqual("P");
+        expect(newElement.parentElement).toHaveClass("added");
       });
     });
   });

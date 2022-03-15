@@ -510,11 +510,19 @@
 .markdown-diff > p:last-child {
   display: none;
 }
+.added {
+  color: green;
+  background-color: #e2ffe8;
+}
 .added > * {
   color: green;
   background-color: #e2ffe8;
 }
 .removed > * {
+  color: red;
+  background-color: #ffe2e2;
+}
+.removed {
   color: red;
   background-color: #ffe2e2;
 }

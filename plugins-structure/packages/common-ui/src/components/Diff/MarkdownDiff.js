@@ -3,16 +3,18 @@ import parse from "html-react-parser";
 import { diffTrimmedLines } from "diff";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MarkdownRenderer } from "../Markdown";
+import trim from "lodash/trim";
 
 function joinDiffLines(diff) {
   return diff.reduce((acc, line) => {
+    const value = trim(line.value);
     if (line.added) {
-      return `${acc} <span class="added" data-testid="md-line-added">${line.value}</span>`;
+      return `${acc} <span class="added" data-testid="md-line-added">${value}</span>`;
     }
     if (line.removed) {
-      return `${acc} <span class="removed" data-testid="md-line-removed">${line.value}</span>`;
+      return `${acc} <span class="removed" data-testid="md-line-removed">${value}</span>`;
     }
-    return `${acc} ${line.value}`;
+    return `${acc} ${value}`;
   }, "");
 }
 
