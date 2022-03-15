@@ -16,7 +16,7 @@ function joinDiffLines(diff) {
   }, "");
 }
 
-const escapeStr = "\n\n--- Diff --- \n\n";
+const escapeStr = "\n\n --- Diff --- \n\n";
 
 export function getDiffHTML(oldText, newText) {
   const oldMarkdown = renderToStaticMarkup(
