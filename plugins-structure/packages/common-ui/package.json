@@ -24,7 +24,8 @@
     "@politeiagui/core": "1.0.0",
     "diff": "^5.0.0",
     "html-react-parser": "^1.4.8",
-    "react-markdown": "6.0.3",
+    "react-markdown": "^6.0.3",
+    "remark-gfm": "1.0.0",
     "xss-filters": "^1.2.7"
   },
   "devDependencies": {}
