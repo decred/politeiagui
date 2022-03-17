@@ -114,31 +114,30 @@ describe("Given DiffHTML", () => {
     });
     describe("given different html raw links", () => {
       const link = "<a href='javascript:void(0)'>my link</a>";
-      it("should render raw html as text, not as element", () => {
+      it("should render html content as text, not as element", () => {
         render(<DiffHTML oldText={link} newText="" />);
         const removedLines = screen.getAllByTestId("md-line-removed");
         expect(removedLines).toHaveLength(1);
         const oldElement = screen.queryByText("my link");
-        expect(oldElement).toBeFalsy();
+        expect(oldElement.nodeName).toEqual("P");
         const rawLinkParagraph = removedLines[0].firstChild;
         expect(rawLinkParagraph.nodeName).toEqual("P");
-        expect(rawLinkParagraph.firstChild.textContent).toEqual(link);
+        expect(rawLinkParagraph.firstChild.textContent).toEqual("my link");
         expect(rawLinkParagraph.firstChild.nodeName).toEqual("#text");
       });
     });
     describe("given equal html raw links", () => {
       const link = "<a href='javascript:void(0)'>my link</a>";
-      it("should render raw html as text, not as element", () => {
+      it("should render html content as text, not as element", () => {
         render(<DiffHTML oldText={link} newText={link} />);
         const removedLines = screen.queryAllByTestId("md-line-removed");
         const addedLines = screen.queryAllByTestId("md-line-added");
         expect(removedLines).toHaveLength(0);
         expect(addedLines).toHaveLength(0);
-        const renderedElement = screen.queryByText("my link");
-        expect(renderedElement).toBeFalsy();
-        const element = screen.getByText(link);
-        expect(element.nodeName).toEqual("P");
-        expect(element).toHaveTextContent(link);
+        const renderedElement = screen.getByText("my link");
+        expect(renderedElement.nodeName).toEqual("P");
+        const element = screen.queryByText(link);
+        expect(element).toBeFalsy();
       });
     });
   });
