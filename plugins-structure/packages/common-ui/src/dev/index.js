@@ -1,31 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { DiffHTML } from "../components/Diff";
+import { DiffHTML, MarkdownEditor } from "../components/Markdown";
+import {
+  DEFAULT_DARK_THEME_NAME,
+  DEFAULT_LIGHT_THEME_NAME,
+  ThemeProvider,
+  defaultDarkTheme,
+  defaultLightTheme,
+} from "pi-ui";
+import "pi-ui/dist/index.css";
 
-const newHeaders =
-  "# Header 1\n## Header 2\n### Header 3\n##### common header\n\n";
-const oldHeaders =
-  "# Header 1 ADD\n## Header 2\n#### Header 4\n##### common header\n\n";
-const newParagraph = "Paragraph 1\n\nAnother P";
-const oldParagraph = "Paragraph 2\n\nAnother P";
-const oldLink = "[my link](http://mylink.com)";
-const newLink = "[my link](http://mylinknew.com)";
-const p1 =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.";
-const p2 =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Donec rutrum congue leo eget malesuada.";
+const themes = {
+  [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
+  [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme },
+};
+
+function MdTest() {
+  const [old, setOld] = useState("");
+  const [nw, setNew] = useState("");
+
+  return (
+    <>
+      <MarkdownEditor onChange={(e) => setOld(e)} />
+      <MarkdownEditor onChange={(e) => setNew(e)} />
+      <div
+        style={{ width: "90%", border: "1px solid black", margin: "2rem" }}
+      />
+      <DiffHTML oldText={old} newText={nw} />
+    </>
+  );
+}
 
 ReactDOM.render(
-  <div id="markdown-diff-wrapper">
-    <DiffHTML oldText={oldHeaders} newText={newHeaders} />
-    <div style={{ width: "90%", border: "1px solid black", margin: "2rem" }} />
-    <DiffHTML oldText={oldParagraph} newText={newParagraph} />
-    <div style={{ width: "90%", border: "1px solid black", margin: "2rem" }} />
-    <DiffHTML oldText={oldLink} newText={newLink} />
-    <div style={{ width: "90%", border: "1px solid black", margin: "2rem" }} />
-    <DiffHTML oldText="**old**" newText="old" />
-    <div style={{ width: "90%", border: "1px solid black", margin: "2rem" }} />
-    <DiffHTML oldText={p1} newText={p2} />
-  </div>,
+  <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
+    <h1>Markdown</h1>
+    <br />
+    <div id="markdown-diff-wrapper">
+      <MdTest />
+    </div>
+  </ThemeProvider>,
   document.querySelector("#root")
 );
