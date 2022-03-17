@@ -2,7 +2,7 @@ import React from "react";
 import parse from "html-react-parser";
 import { diffTrimmedLines } from "diff";
 import { renderToStaticMarkup } from "react-dom/server";
-import { MarkdownRenderer } from "../Markdown";
+import { MarkdownRenderer } from ".";
 import trim from "lodash/trim";
 
 function joinDiffLines(diff) {
