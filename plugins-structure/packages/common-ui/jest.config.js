@@ -6,6 +6,6 @@ module.exports = {
   },
   testpathIgnorePatterns: ["/node_modules/(?!react-markdown)(.*)"],
   moduleNameMapper: {
-    "\\.(css|less)$": "<rootDir>/src/__mocks__/styleMock.js",
+    "\\.(css|less|svg)$": "<rootDir>/src/__mocks__/styleMock.js",
   },
 };
