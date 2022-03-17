@@ -1,4 +1,4 @@
-import { getLineContent, getSelectedContent } from "./commands";
+import { commands, getLineContent, getSelectedContent } from "./commands";
 
 const multiLineText = `Vestibulum ac diam sit amet quam vehicula.
 
@@ -88,6 +88,20 @@ describe("Given getSelectedContent util", () => {
       expect(current).toEqual(text);
       expect(previous).toEqual("");
       expect(next).toEqual("");
+    });
+  });
+});
+
+describe("Given commands array", () => {
+  const expected = ["**text**", "*text*", "\n> text\n", "`text`", "\n- text\n"];
+  function getCommand(command) {
+    const selected = getSelectedContent("text", 0, "text".length);
+    const line = getLineContent("text", 0);
+    return command({ line, selected });
+  }
+  it("should return the correct sentence for each command", () => {
+    commands.forEach(({ command }, index) => {
+      expect(expected[index]).toEqual(getCommand(command));
     });
   });
 });
