@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import styles from "./MarkdownEditor.module.css";
 import { MarkdownRenderer } from "../MarkdownRenderer";
@@ -9,6 +10,7 @@ export function MarkdownEditor({
   wrapperClassName,
   initialValue = "",
   isSplitView,
+  customCommands = [],
 }) {
   const editorRef = useRef();
   const [showPreview, setShowPreview] = useState(false);
@@ -42,7 +44,7 @@ export function MarkdownEditor({
           <div onClick={handleShowPreview}>Preview</div>
         </div>
         <div className={styles.actionButtons}>
-          {commands.map(({ command, Icon }, i) => (
+          {[...commands, ...customCommands].map(({ command, Icon }, i) => (
             <span key={i} onClick={handleCommand(command)}>
               <Icon />
             </span>
@@ -71,3 +73,17 @@ export function MarkdownEditor({
     </div>
   );
 }
+
+MarkdownEditor.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  wrapperClassName: PropTypes.string,
+  initialValue: PropTypes.string,
+  isSplitView: PropTypes.bool,
+  customCommands: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      Icon: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+      command: PropTypes.func.isRequired,
+    })
+  ),
+};
