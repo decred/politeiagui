@@ -28,5 +28,7 @@
     "remark-gfm": "1.0.0",
     "xss-filters": "^1.2.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@svgr/webpack": "^6.2.1"
+  }
 }
