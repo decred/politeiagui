@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 import { customRenderers } from "./helpers";
 import "./styles.css";
 
@@ -10,11 +11,16 @@ export const MarkdownRenderer = ({
   className,
   renderImages = true,
   isDiff,
+  disallowedElements,
 }) => (
   <div className={className} data-testid="markdown-renderer">
     <ReactMarkdown
       className={classNames("markdown-body", isDiff && "markdown-diff")}
+      skipHtml={true}
+      unwrapDisallowed={true}
+      remarkPlugins={[gfm]}
       components={customRenderers(renderImages)}
+      disallowedElements={disallowedElements}
     >
       {body}
     </ReactMarkdown>
