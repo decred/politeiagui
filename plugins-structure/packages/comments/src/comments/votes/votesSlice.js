@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { validateCommentsVotesPageSize } from "../../lib/validation";
 
 export const initialState = {
   byUser: {},
@@ -17,8 +18,13 @@ export const fetchCommentsVotes = createAsyncThunk(
     }
   },
   {
-    condition: (body) => {
-      return body && !!body.token && !!body.userid;
+    condition: (body, { getState }) => {
+      return (
+        body &&
+        !!body.token &&
+        !!body.userid &&
+        validateCommentsVotesPageSize(getState())
+      );
     },
   }
 );

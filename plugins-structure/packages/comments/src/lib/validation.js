@@ -32,3 +32,20 @@ export function validateCommentsTimestampsPageSize(state) {
   }
   return true;
 }
+/**
+ * validateCommentsVotesPageSize receives the state and returns if
+ * `votespagesize` policy exists. If no policy is loaded, it will throw and
+ * log an error.
+ * @param {Object} state
+ */
+export function validateCommentsVotesPageSize(state) {
+  const pageSize = state?.commentsPolicy?.policy?.votespagesize;
+  if (!pageSize) {
+    const error = Error(
+      "Comments policy should be loaded before fetching votes. See `usePolicy` hook"
+    );
+    console.error(error);
+    throw error;
+  }
+  return true;
+}

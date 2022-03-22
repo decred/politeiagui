@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import reducer, { fetchCommentsVotes, initialState } from "./votesSlice";
+import policyReducer from "../policy/policySlice";
 
 describe("Given the votesSlice", () => {
   let store;
@@ -11,7 +12,14 @@ describe("Given the votesSlice", () => {
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
-    store = configureStore({ reducer: { commentsVotes: reducer } });
+    store = configureStore({
+      reducer: { commentsVotes: reducer, commentsPolicy: policyReducer },
+      preloadedState: {
+        commentsPolicy: {
+          policy: { votespagesize: 2500 },
+        },
+      },
+    });
     fetchCommentsVotesSpy = jest.spyOn(api, "fetchVotes");
   });
   afterEach(() => {
