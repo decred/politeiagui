@@ -28,6 +28,8 @@ const RecordCommentsPage = async ({ token, userid }) => {
     await store.dispatch(api.fetch());
   }
 
+  await store.dispatch(comments.policy.fetch());
+
   let recordComments = commentsMock;
   let userCommentsVotes = userVotesMock;
   if (token) {
