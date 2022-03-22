@@ -1,4 +1,4 @@
-import { generatePath, router } from "./router";
+import { findMatch, generatePath, router } from "./router";
 
 const mockRoutes = [
   {
@@ -8,12 +8,32 @@ const mockRoutes = [
   },
   {
     path: "/test-url/:id/test/:id2",
-    view: () =>
-      (document.querySelector("#root").innerHTML = "hello from test url"),
+    view: ({ id, id2 }) =>
+      (document.querySelector(
+        "#root"
+      ).innerHTML = `hello from test url id1-${id} id2-${id2}`),
   },
   {
     path: "/",
     view: () => (document.querySelector("#root").innerHTML = "hello from home"),
+  },
+];
+
+const mockNestedRoutes = [
+  ...mockRoutes,
+  {
+    path: "/test-url/:id",
+    view: ({ id }) =>
+      (document.querySelector(
+        "#root"
+      ).innerHTML = `hello from test url id-${id}`),
+  },
+  {
+    path: "/test-url/:id/test",
+    view: ({ id }) =>
+      (document.querySelector(
+        "#root"
+      ).innerHTML = `hello from test url id-${id}`),
   },
 ];
 
@@ -156,6 +176,28 @@ describe("Given the router", () => {
     expect(router.matchPath("/test-url/5/test")).toBeFalsy();
     expect(router.matchPath("/testrl/5/test/1")).toBeFalsy();
     expect(router.matchPath("/test-url/5/tes/1")).toBeFalsy();
+  });
+
+  it("should find correct matches for nested routes", () => {
+    let matchNested = findMatch(mockNestedRoutes, "/test-url/5/test/1");
+    let [route, arg1, arg2] = matchNested.result;
+    expect(matchNested.route.path).toEqual("/test-url/:id/test/:id2");
+    expect(route).toEqual("/test-url/5/test/1");
+    expect(arg1).toEqual("5");
+    expect(arg2).toEqual("1");
+
+    matchNested = findMatch(mockNestedRoutes, "/test-url/4");
+    [route, arg1] = matchNested.result;
+    expect(matchNested.route.path).toEqual("/test-url/:id");
+    expect(route).toEqual("/test-url/4");
+    expect(arg1).toEqual("4");
+
+    matchNested = findMatch(mockNestedRoutes, "/test-url/4/test");
+    [route, arg1, arg2] = matchNested.result;
+    expect(matchNested.route.path).toEqual("/test-url/:id/test");
+    expect(route).toEqual("/test-url/4/test");
+    expect(arg1).toEqual("4");
+    expect(arg2).not.toBeDefined();
   });
 });
 

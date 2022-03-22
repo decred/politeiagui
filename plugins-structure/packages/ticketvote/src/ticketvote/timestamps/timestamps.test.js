@@ -1,5 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import {
+  getTicketvotePluginErrorMessage,
+  getTicketvoteUserErrorMessage,
+} from "../../lib/errors";
 import reducer, {
   fetchTicketvoteTimestamps,
   fetchTicketvoteTimestampsFirstPage,
@@ -172,6 +176,36 @@ describe("Given the timestampsSlice", () => {
       const state = store.getState();
       expect(state.ticketvoteTimestamps.status).toEqual("failed");
       expect(state.ticketvoteTimestamps.error).toEqual("ERROR");
+    });
+    it("should return correct plugin error messages", async () => {
+      const errorcodes = Array(20)
+        .fill()
+        .map((_, i) => i + 1);
+      for (const errorcode of errorcodes) {
+        const error = { body: { errorcode, pluginid: "ticketvote" } };
+        const message = getTicketvotePluginErrorMessage(errorcode);
+        fetchTimestampsSpy.mockRejectedValueOnce(error);
+        await store.dispatch(fetchTicketvoteTimestamps({ token: "fakeToken" }));
+        expect(fetchTimestampsSpy).toBeCalled();
+        const state = store.getState().ticketvoteTimestamps;
+        expect(state.status).toEqual("failed");
+        expect(state.error).toEqual(message);
+      }
+    });
+    it("should return correct user error messages", async () => {
+      const errorcodes = Array(9)
+        .fill()
+        .map((_, i) => i);
+      for (const errorcode of errorcodes) {
+        const error = { body: { errorcode } };
+        const message = getTicketvoteUserErrorMessage(errorcode);
+        fetchTimestampsSpy.mockRejectedValueOnce(error);
+        await store.dispatch(fetchTicketvoteTimestamps({ token: "fakeToken" }));
+        expect(fetchTimestampsSpy).toBeCalled();
+        const state = store.getState().ticketvoteTimestamps;
+        expect(state.status).toEqual("failed");
+        expect(state.error).toEqual(message);
+      }
     });
   });
   describe("when invalid token is passed to fetchTicketvoteTimestampsFirstPage", () => {

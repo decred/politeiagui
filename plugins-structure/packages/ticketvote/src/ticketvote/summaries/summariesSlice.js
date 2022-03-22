@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import { getTicketvoteStatusCode } from "../../lib/utils";
+import { getTicketvoteError } from "../../lib/errors";
 import {
   validateTicketvoteStatus,
   validateTicketvoteSummariesPageSize,
@@ -22,7 +23,8 @@ export const fetchTicketvoteSummaries = createAsyncThunk(
     try {
       return await api.fetchSummaries(getState(), { tokens });
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getTicketvoteError(error.body, error.message);
+      return rejectWithValue(message);
     }
   },
   {

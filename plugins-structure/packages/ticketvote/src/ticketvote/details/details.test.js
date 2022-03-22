@@ -1,5 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import {
+  getTicketvotePluginErrorMessage,
+  getTicketvoteUserErrorMessage,
+} from "../../lib/errors";
 import reducer, { fetchTicketvoteDetails, initialState } from "./detailsSlice";
 
 describe("Given the detailsSlice", () => {
@@ -68,6 +72,36 @@ describe("Given the detailsSlice", () => {
       const state = store.getState();
       expect(state.ticketvoteDetails.status).toEqual("failed");
       expect(state.ticketvoteDetails.error).toEqual("ERROR");
+    });
+    it("should return correct plugin error messages", async () => {
+      const errorcodes = Array(20)
+        .fill()
+        .map((_, i) => i + 1);
+      for (const errorcode of errorcodes) {
+        const error = { body: { errorcode, pluginid: "ticketvote" } };
+        const message = getTicketvotePluginErrorMessage(errorcode);
+        fetchDetailsSpy.mockRejectedValueOnce(error);
+        await store.dispatch(fetchTicketvoteDetails(params));
+        expect(fetchDetailsSpy).toBeCalled();
+        const state = store.getState().ticketvoteDetails;
+        expect(state.status).toEqual("failed");
+        expect(state.error).toEqual(message);
+      }
+    });
+    it("should return correct user error messages", async () => {
+      const errorcodes = Array(9)
+        .fill()
+        .map((_, i) => i);
+      for (const errorcode of errorcodes) {
+        const error = { body: { errorcode } };
+        const message = getTicketvoteUserErrorMessage(errorcode);
+        fetchDetailsSpy.mockRejectedValueOnce(error);
+        await store.dispatch(fetchTicketvoteDetails(params));
+        expect(fetchDetailsSpy).toBeCalled();
+        const state = store.getState().ticketvoteDetails;
+        expect(state.status).toEqual("failed");
+        expect(state.error).toEqual(message);
+      }
     });
   });
 });

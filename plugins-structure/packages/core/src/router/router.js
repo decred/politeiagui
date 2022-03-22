@@ -20,16 +20,34 @@ export function generatePath(path, params) {
     );
 }
 
+function pathToRegex(path) {
+  return new RegExp(
+    "^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$"
+  );
+}
+
+export function findMatch(routes, targetRoute) {
+  const potentialMatches = routes.map((route) => ({
+    route,
+    result: targetRoute.match(pathToRegex(route.path)),
+  }));
+  const match = potentialMatches.find((potentialMatch) => {
+    if (potentialMatch.result === null) {
+      return false;
+    }
+    const [, ...params] = potentialMatch.result;
+    if (!params.length) {
+      return true;
+    }
+    return params.every((p) => p.split("/").length === 1);
+  });
+  return match;
+}
+
 export const router = (function () {
   let settings = routerInitialSettings;
   let cleanup = null;
   let title = null;
-
-  function pathToRegex(path) {
-    return new RegExp(
-      "^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$"
-    );
-  }
 
   function getParams(match) {
     const values = match.result.slice(1);
@@ -53,14 +71,7 @@ export const router = (function () {
 
   async function verifyMatch() {
     // Tests routes for potential match
-    const potentialMatches = settings.routes.map((route) => ({
-      route,
-      result: window.location.pathname.match(pathToRegex(route.path)),
-    }));
-
-    let match = potentialMatches.find(
-      (potentialMatch) => potentialMatch.result !== null
-    );
+    let match = findMatch(settings.routes, window.location.pathname);
 
     if (!match) {
       // default to 404 route
