@@ -4,6 +4,7 @@ import reducer, {
   fetchCommentsTimestamps,
   initialState,
 } from "./timestampsSlice";
+import policyReducer from "../policy/policySlice";
 
 describe("Given the timestampsSlice", () => {
   let store;
@@ -15,7 +16,14 @@ describe("Given the timestampsSlice", () => {
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
-    store = configureStore({ reducer: { commentsTimestamps: reducer } });
+    store = configureStore({
+      reducer: { commentsTimestamps: reducer, commentsPolicy: policyReducer },
+      preloadedState: {
+        commentsPolicy: {
+          policy: { timestampspagesize: 10 },
+        },
+      },
+    });
     fetchTimestampsSpy = jest.spyOn(api, "fetchTimestamps");
   });
   afterEach(() => {

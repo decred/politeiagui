@@ -15,3 +15,20 @@ export function validateCommentsCountsPageSize(state) {
   }
   return true;
 }
+/**
+ * validateCommentsTimestampsPageSize receives the state and returns if
+ * `timestampspagesize` policy exists. If no policy is loaded, it will throw and
+ * log an error.
+ * @param {Object} state
+ */
+export function validateCommentsTimestampsPageSize(state) {
+  const pageSize = state?.commentsPolicy?.policy?.timestampspagesize;
+  if (!pageSize) {
+    const error = Error(
+      "Comments policy should be loaded before fetching timestamps. See `usePolicy` hook"
+    );
+    console.error(error);
+    throw error;
+  }
+  return true;
+}

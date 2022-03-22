@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { validateCommentsTimestampsPageSize } from "../../lib/validation";
 
 export const initialState = {
   byToken: {},
@@ -17,11 +18,15 @@ export const fetchCommentsTimestamps = createAsyncThunk(
     }
   },
   {
-    condition: (body) => {
+    condition: (body, { getState }) => {
       const hasToken = body && body.token;
       const hasValidCommentIds =
         body && (!body.commentids || body.commentids.length > 0);
-      return !!hasToken && !!hasValidCommentIds;
+      return (
+        !!hasToken &&
+        !!hasValidCommentIds &&
+        validateCommentsTimestampsPageSize(getState())
+      );
     },
   }
 );
