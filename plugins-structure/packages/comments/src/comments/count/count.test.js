@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import reducer, { fetchCommentsCount, initialState } from "./countSlice";
+import policyReducer from "../policy/policySlice";
 
 describe("Given the countSlice", () => {
   let store;
@@ -11,7 +12,14 @@ describe("Given the countSlice", () => {
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
-    store = configureStore({ reducer: { commentsCount: reducer } });
+    store = configureStore({
+      reducer: { commentsCount: reducer, commentsPolicy: policyReducer },
+      preloadedState: {
+        commentsPolicy: {
+          policy: { countpagesize: 10 },
+        },
+      },
+    });
     fetchCommentsCountSpy = jest.spyOn(api, "fetchCount");
   });
   afterEach(() => {

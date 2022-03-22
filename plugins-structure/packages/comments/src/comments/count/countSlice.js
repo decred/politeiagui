@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { validateCommentsCountsPageSize } from "../../lib/validation";
 
 export const initialState = {
   byToken: {},
@@ -17,7 +18,8 @@ export const fetchCommentsCount = createAsyncThunk(
     }
   },
   {
-    condition: (body) => !!body?.tokens,
+    condition: (body, { getState }) =>
+      !!body?.tokens && validateCommentsCountsPageSize(getState()),
   }
 );
 
