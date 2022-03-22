@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Button, TextArea } from "pi-ui";
 import { Formik } from "formik";
 import styles from "./styles.module.css";
@@ -11,7 +12,7 @@ export const CommentForm = ({ onComment, onCancel, parentId }) => {
       actions.setSubmitting(false);
     } catch (error) {
       actions.setSubmitting(false);
-      actions.setFieldError("comment", error);
+      actions.setFieldError("comment", error.message);
     }
   }
   return (
@@ -44,4 +45,10 @@ export const CommentForm = ({ onComment, onCancel, parentId }) => {
       )}
     </Formik>
   );
+};
+
+CommentForm.propTypes = {
+  onComment: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
+  parentId: PropTypes.number,
 };

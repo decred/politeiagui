@@ -90,7 +90,9 @@ export const CommentCard = ({
           )}
         </div>
       </Card>
-      {showForm && <CommentForm onComment={onComment} parentId={parentId} />}
+      {showForm && (
+        <CommentForm onComment={onComment || (() => {})} parentId={parentId} />
+      )}
       {showThread && (
         <div className={styles.thread} data-testid="comment-thread">
           {children}
