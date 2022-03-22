@@ -90,9 +90,7 @@ export const CommentCard = ({
           )}
         </div>
       </Card>
-      {showForm && (
-        <CommentForm onComment={onComment || (() => {})} parentId={parentId} />
-      )}
+      {showForm && <CommentForm onComment={onComment} parentId={parentId} />}
       {showThread && (
         <div className={styles.thread} data-testid="comment-thread">
           {children}
@@ -102,7 +100,7 @@ export const CommentCard = ({
   );
 };
 
-Comment.propTypes = {
+CommentCard.propTypes = {
   comment: PropTypes.object.isRequired,
   showCensor: PropTypes.bool,
   onCensor: PropTypes.func,
@@ -115,7 +113,8 @@ Comment.propTypes = {
   disableReply: PropTypes.bool,
 };
 
-Comment.defaultProps = {
+CommentCard.defaultProps = {
   threadLength: 0,
   userLink: "/#user",
+  onComment: () => {},
 };
