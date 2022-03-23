@@ -504,12 +504,6 @@
 }
 
 /* DIFF */
-.markdown-diff > p:first-child {
-  display: none;
-}
-.markdown-diff > p:last-child {
-  display: none;
-}
 .added {
   color: green;
   background-color: #e2ffe8;
@@ -526,6 +520,9 @@
   color: red;
   background-color: #ffe2e2;
 }
-.md-escape-line {
-  display: none;
+.added > blockquote {
+  min-height: 2rem;
+}
+.removed > blockquote {
+  min-height: 2rem;
 }

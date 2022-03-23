@@ -173,4 +173,220 @@ describe("Given DiffHTML", () => {
       });
     });
   });
+  describe("when using italic texts", () => {
+    describe("given different italic texts", () => {
+      const oldText = "*old*";
+      const newText = "*new*";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={oldText} newText={newText} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getByText("old");
+        const newElement = screen.getByText("new");
+        expect(oldElement.nodeName).toEqual("EM");
+        expect(oldElement.parentElement.parentElement).toHaveClass("removed");
+        expect(newElement.nodeName).toEqual("EM");
+        expect(newElement.parentElement.parentElement).toHaveClass("added");
+      });
+    });
+    describe("given same text, but one italic and other regular", () => {
+      const oldText = "*old*";
+      const newText = "old";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={oldText} newText={newText} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getAllByText("old")[0];
+        const newElement = screen.getAllByText("old")[1];
+        expect(oldElement.nodeName).toEqual("EM");
+        expect(oldElement.parentElement.parentElement).toHaveClass("removed");
+        expect(newElement.nodeName).toEqual("P");
+        expect(newElement.parentElement).toHaveClass("added");
+      });
+    });
+  });
+  describe("when using blockcodes", () => {
+    describe("given different blockcodes", () => {
+      const block1 = "```\ncode1\n```";
+      const block2 = "```\ncode2\n```";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={block1} newText={block2} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getByText("code1");
+        const newElement = screen.getByText("code2");
+        expect(oldElement.nodeName).toEqual("CODE");
+        expect(newElement.nodeName).toEqual("CODE");
+      });
+    });
+    describe("given some blockcode replaced by regular text", () => {
+      const block1 = "```\ncode1\n```";
+      const block2 = "code1";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={block1} newText={block2} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getAllByText("code1")[0];
+        const newElement = screen.getAllByText("code1")[1];
+        expect(oldElement.nodeName).toEqual("CODE");
+        expect(newElement.nodeName).toEqual("P");
+      });
+    });
+    describe("given some blockcode text addition", () => {
+      const block1 = "```\ncode1\n```";
+      const block2 = "```\ncode1 and another text\n```";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={block1} newText={block2} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getByText("code1");
+        const newElement = screen.getByText("code1 and another text");
+        expect(oldElement.nodeName).toEqual("CODE");
+        expect(newElement.nodeName).toEqual("CODE");
+      });
+    });
+  });
+  describe("when using inline code", () => {
+    describe("given two different inline codes", () => {
+      const code1 = "`code1`";
+      const code2 = "`code2`";
+      it("should return the correct diff", () => {
+        render(<DiffHTML oldText={code1} newText={code2} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getByText("code1");
+        const newElement = screen.getByText("code2");
+        expect(oldElement.nodeName).toEqual("CODE");
+        expect(newElement.nodeName).toEqual("CODE");
+      });
+    });
+    describe("given some code replaced by regular text", () => {
+      const code1 = "`code1`";
+      const code2 = "code1";
+      it("should return the correct diff", () => {
+        render(<DiffHTML oldText={code1} newText={code2} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getAllByText("code1")[0];
+        const newElement = screen.getAllByText("code1")[1];
+        expect(oldElement.nodeName).toEqual("CODE");
+        expect(newElement.nodeName).toEqual("P");
+      });
+    });
+    describe("given some code text addition", () => {
+      const block1 = "```\ncode1\n```";
+      const block2 = "```\ncode1 and another text\n```";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={block1} newText={block2} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getByText("code1");
+        const newElement = screen.getByText("code1 and another text");
+        expect(oldElement.nodeName).toEqual("CODE");
+        expect(newElement.nodeName).toEqual("CODE");
+      });
+    });
+  });
+  describe("when using multiple tag changes", () => {
+    const content = "Content";
+    const cases = [
+      {
+        name: "h1 by h2",
+        oldText: `# ${content}`,
+        newText: `## ${content}`,
+        removedNode: "H1",
+        addedNode: "H2",
+      },
+      {
+        name: "h2 by h3",
+        oldText: `## ${content}`,
+        newText: `### ${content}`,
+        removedNode: "H2",
+        addedNode: "H3",
+      },
+      {
+        name: "h3 by h4",
+        oldText: `### ${content}`,
+        newText: `#### ${content}`,
+        removedNode: "H3",
+        addedNode: "H4",
+      },
+      {
+        name: "h4 by h5",
+        oldText: `#### ${content}`,
+        newText: `##### ${content}`,
+        removedNode: "H4",
+        addedNode: "H5",
+      },
+      {
+        name: "h5 by h6",
+        oldText: `##### ${content}`,
+        newText: `###### ${content}`,
+        removedNode: "H5",
+        addedNode: "H6",
+      },
+      {
+        name: "code by strong",
+        oldText: `\`${content}\``,
+        newText: `**${content}**`,
+        removedNode: "CODE",
+        addedNode: "STRONG",
+      },
+      {
+        name: "code by em",
+        oldText: `\`${content}\``,
+        newText: `*${content}*`,
+        removedNode: "CODE",
+        addedNode: "EM",
+      },
+      {
+        name: "em by strong",
+        oldText: `*${content}*`,
+        newText: `**${content}**`,
+        removedNode: "EM",
+        addedNode: "STRONG",
+      },
+      {
+        name: "em by code",
+        oldText: `*${content}*`,
+        newText: `\`${content}\``,
+        removedNode: "EM",
+        addedNode: "CODE",
+      },
+      {
+        name: "strong by em",
+        oldText: `**${content}**`,
+        newText: `*${content}*`,
+        removedNode: "STRONG",
+        addedNode: "EM",
+      },
+      {
+        name: "strong by code",
+        oldText: `**${content}**`,
+        newText: `\`${content}\``,
+        removedNode: "STRONG",
+        addedNode: "CODE",
+      },
+      {
+        name: "quote by paragraph",
+        oldText: `> ${content}`,
+        newText: content,
+        removedNode: "BLOCKQUOTE",
+        addedNode: "P",
+      },
+    ];
+    for (const testCase of cases) {
+      it(`should replace ${testCase.name}`, () => {
+        render(
+          <DiffHTML oldText={testCase.oldText} newText={testCase.newText} />
+        );
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getAllByText(content)[0];
+        const newElement = screen.getAllByText(content)[1];
+        expect(oldElement.nodeName).toEqual(testCase.removedNode);
+        expect(newElement.nodeName).toEqual(testCase.addedNode);
+      });
+    }
+  });
 });

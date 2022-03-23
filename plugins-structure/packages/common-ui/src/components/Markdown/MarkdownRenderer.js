@@ -19,7 +19,7 @@ export const MarkdownRenderer = ({
       skipHtml={true}
       unwrapDisallowed={true}
       remarkPlugins={[gfm]}
-      components={customRenderers(renderImages)}
+      components={customRenderers(renderImages, isDiff)}
       disallowedElements={disallowedElements}
     >
       {body}

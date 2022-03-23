@@ -72,9 +72,25 @@ const linkHandler = ({ href, children }) => {
   return <LinkRenderer url={newHref}>{children}</LinkRenderer>;
 };
 
-export const customRenderers = (renderImages) => {
+const quoteHandler =
+  (isDiff) =>
+  ({ children }) => {
+    let newChildren = [...children];
+    if (isDiff) {
+      newChildren = React.Children.map(children, (c) => {
+        if (React.isValidElement(c)) {
+          return <>{c.props.children}</>;
+        }
+        return c;
+      });
+    }
+    return <blockquote>{newChildren}</blockquote>;
+  };
+
+export const customRenderers = (renderImages, isDiff) => {
   return {
     img: imageHandler(renderImages),
     a: linkHandler,
+    blockquote: quoteHandler(isDiff),
   };
 };
