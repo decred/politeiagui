@@ -433,8 +433,15 @@ describe("Given DiffHTML", () => {
         addedNode: "CODE",
       },
       {
-        name: "list by paragraph",
+        name: "ordered list by paragraph",
         oldText: `1. ${content}`,
+        newText: content,
+        removedNode: "LI",
+        addedNode: "P",
+      },
+      {
+        name: "unordered list by paragraph",
+        oldText: `- ${content}`,
         newText: content,
         removedNode: "LI",
         addedNode: "P",
