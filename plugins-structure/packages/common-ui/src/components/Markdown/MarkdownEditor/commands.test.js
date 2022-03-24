@@ -1,67 +1,51 @@
-import { commands, getLineContent, getSelectedContent } from "./commands";
+import { getMultiLineContent, getSelectedContent } from "./commands";
 
-const multiLineText = `Vestibulum ac diam sit amet quam vehicula.
+describe("Given getMultiLineContent util", () => {
+  const line1 = "Cras ultricies ligula sed magna dictum porta.";
+  const line2 = "Nulla porttitor accumsan tincidunt.";
+  const line3 = "Cras ultricies ligula sed magna dictum porta.";
+  const multiLineText = `${line1}\n${line2}\n${line3}`;
 
-Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem.
-
-Pellentesque in ipsum id orci porta dapibus.`;
-
-describe("Given getLineContent util", () => {
-  describe("when cursor is at the beginning of the multiLineText", () => {
-    it("should select the first line", () => {
-      const { previous, current, next } = getLineContent(multiLineText, 0);
-      expect(current).toEqual("Vestibulum ac diam sit amet quam vehicula.");
-      expect(previous).toEqual("");
-      expect(next).toEqual(
-        "\nCurabitur arcu erat, accumsan id imperdiet et, porttitor at sem.\n\nPellentesque in ipsum id orci porta dapibus."
-      );
-    });
-  });
-  describe("when cursor is at the end of the multiLineText", () => {
-    it("should select a new empty line", () => {
-      const { previous, current, next } = getLineContent(
+  describe("when selecting the first line", () => {
+    it("should return the seleted line", () => {
+      const { previous, current, next } = getMultiLineContent(
         multiLineText,
-        multiLineText.length
+        0,
+        1
       );
-      expect(current).toEqual("");
-      expect(previous).toEqual(multiLineText);
-      expect(next).toEqual("");
-    });
-  });
-  describe("when cursor is at a random position on first line", () => {
-    it("should select the first line", () => {
-      const { previous, current, next } = getLineContent(multiLineText, 20);
-      expect(current).toEqual("Vestibulum ac diam sit amet quam vehicula.");
       expect(previous).toEqual("");
-      expect(next).toEqual(
-        "\nCurabitur arcu erat, accumsan id imperdiet et, porttitor at sem.\n\nPellentesque in ipsum id orci porta dapibus."
-      );
+      expect(current).toEqual([line1]);
+      expect(next).toEqual(`${line2}\n${line3}`);
     });
   });
-  describe("when cursor is at a random position on second line", () => {
-    it("should select the second line", () => {
-      const { previous, current, next } = getLineContent(multiLineText, 50);
-      expect(current).toEqual(
-        "Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem."
+  describe("when selecting the second line", () => {
+    it("should return the seleted line", () => {
+      const { previous, current, next } = getMultiLineContent(
+        multiLineText,
+        50,
+        51
       );
-      expect(previous).toEqual("Vestibulum ac diam sit amet quam vehicula.\n");
-      expect(next).toEqual("\nPellentesque in ipsum id orci porta dapibus.");
+      expect(previous).toEqual(`${line1}`);
+      expect(current).toEqual([line2]);
+      expect(next).toEqual(`${line3}`);
     });
   });
-  describe("when cursor is at a random position on third line", () => {
-    it("should select the third line", () => {
-      const { previous, current, next } = getLineContent(multiLineText, 120);
-      expect(current).toEqual("Pellentesque in ipsum id orci porta dapibus.");
-      expect(previous).toEqual(
-        "Vestibulum ac diam sit amet quam vehicula.\n\nCurabitur arcu erat, accumsan id imperdiet et, porttitor at sem.\n"
+  describe("when selecting the third line", () => {
+    it("should return the seleted line", () => {
+      const { previous, current, next } = getMultiLineContent(
+        multiLineText,
+        100,
+        101
       );
+      expect(previous).toEqual(`${line1}\n${line2}`);
+      expect(current).toEqual([line3]);
       expect(next).toEqual("");
     });
   });
 });
 
-const text = "First second third\n\nnew line";
 describe("Given getSelectedContent util", () => {
+  const text = "First second third\n\nnew line";
   describe("when first word is selected", () => {
     it("should return the selected word", () => {
       const { previous, current, next } = getSelectedContent(text, 0, 5);
@@ -88,20 +72,6 @@ describe("Given getSelectedContent util", () => {
       expect(current).toEqual(text);
       expect(previous).toEqual("");
       expect(next).toEqual("");
-    });
-  });
-});
-
-describe("Given commands array", () => {
-  const expected = ["**text**", "*text*", "\n> text\n", "`text`", "\n- text\n"];
-  function getCommand(command) {
-    const selected = getSelectedContent("text", 0, "text".length);
-    const line = getLineContent("text", 0);
-    return command({ line, selected });
-  }
-  it("should return the correct sentence for each command", () => {
-    commands.forEach(({ command }, index) => {
-      expect(expected[index]).toEqual(getCommand(command));
     });
   });
 });

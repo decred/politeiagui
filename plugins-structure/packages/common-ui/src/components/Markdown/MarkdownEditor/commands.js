@@ -4,8 +4,32 @@ import QuoteSVG from "./assets/quote.svg";
 import CodeSVG from "./assets/code.svg";
 import BulletListSVG from "./assets/bulletList.svg";
 // import { ReactComponent as ImageSVG } from "./assets/image.svg";
-// import { ReactComponent as NumberedListSVG } from "./assets/numberedList.svg";
+import NumberedListSVG from "./assets/numberedList.svg";
 
+function formatEachLine(lines, formatFn, { ignoreBlankLines } = {}) {
+  let index = 0;
+  return lines.reduce((acc, curr) => {
+    if (ignoreBlankLines && curr.length === 0) {
+      return `${acc}\n`;
+    }
+    index++;
+    return `${acc}\n${formatFn(curr, index)}`;
+  }, "");
+}
+
+// Multiline command interface
+const multiLineCommand =
+  (execFn, options) =>
+  ({ lines: { previous, current, next } }) => {
+    const formattedLines = formatEachLine(current, execFn, options);
+    let newPrev = `${previous}\n`;
+    if (previous.length === 0) {
+      newPrev = "";
+    }
+    return `${newPrev}${formattedLines}\n${next}`;
+  };
+
+// Available commands
 export const commands = [
   {
     label: "Bold Text",
@@ -22,8 +46,9 @@ export const commands = [
   {
     label: "Quote",
     Icon: QuoteSVG,
-    command: ({ line: { previous, current, next } }) =>
-      `${previous}\n> ${current}\n${next}`,
+    command: multiLineCommand((curr) => `> ${curr}`, {
+      ignoreBlankLines: true,
+    }),
   },
   {
     label: "Code",
@@ -34,29 +59,62 @@ export const commands = [
   {
     label: "List",
     Icon: BulletListSVG,
-    command: ({ line: { previous, current, next } }) =>
-      `${previous}\n- ${current}\n${next}`,
+    command: multiLineCommand((curr) => `- ${curr}`, {
+      ignoreBlankLines: true,
+    }),
+  },
+  {
+    label: "Numbered List",
+    Icon: NumberedListSVG,
+    command: multiLineCommand((curr, i) => `${i}. ${curr}`, {
+      ignoreBlankLines: true,
+    }),
   },
 ];
 
-export function getLineContent(content, startPos) {
-  const lines = content.split("\n");
-  let acc = 0,
-    selectedLine = "",
+function insertAt(text, pos, newText) {
+  return text.substring(0, pos) + newText + text.substring(pos);
+}
+
+function countOccurences(string, term) {
+  const array = string.split(term);
+  return array.length - 1;
+}
+
+export function getMultiLineContent(content, startPos, endPos) {
+  const escapeChar = "&#27;",
+    numberOfEscapes = 2; // Start escape, end escape
+  let newContent = content,
+    escapeCount = 0,
     previousLines = [],
-    nextLines = [...lines];
+    selectedLines = [],
+    nextLines = [];
+  // add escapes on both start and end of text selection
+  newContent = insertAt(newContent, startPos, escapeChar);
+  newContent = insertAt(newContent, endPos + escapeChar.length, escapeChar);
+  const lines = newContent.split("\n");
   for (const line of lines) {
-    acc += line.length;
-    nextLines = nextLines.splice(1, lines.length);
-    if (acc >= startPos - 1) {
-      selectedLine = line;
-      break;
+    const numOfOccurences = countOccurences(line, escapeChar);
+    // remove escape char
+    const escapeRegExp = new RegExp(escapeChar, "g");
+    const lineWithoutEscape = line.replace(escapeRegExp, "");
+    escapeCount += numOfOccurences;
+    if (!escapeCount) {
+      previousLines = [...previousLines, lineWithoutEscape];
     }
-    previousLines = [...previousLines, line];
+    if (escapeCount === 1 || numOfOccurences === numberOfEscapes) {
+      selectedLines = [...selectedLines, lineWithoutEscape];
+    }
+    if (escapeCount === 2 && numOfOccurences === 1) {
+      selectedLines = [...selectedLines, lineWithoutEscape];
+    }
+    if (escapeCount === 2 && numOfOccurences === 0) {
+      nextLines = [...nextLines, lineWithoutEscape];
+    }
   }
   return {
     previous: previousLines.join("\n"),
-    current: selectedLine,
+    current: selectedLines,
     next: nextLines.join("\n"),
   };
 }
@@ -70,4 +128,10 @@ export function getSelectedContent(content, startPos, endPos) {
     current: selectedString,
     next: nextContent,
   };
+}
+
+export function executeCommand(command, content, startPos, endPos) {
+  const selected = getSelectedContent(content, startPos, endPos);
+  const lines = getMultiLineContent(content, startPos, endPos);
+  return command({ selected, lines });
 }

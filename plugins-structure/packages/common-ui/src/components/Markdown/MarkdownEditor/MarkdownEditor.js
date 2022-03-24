@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import styles from "./MarkdownEditor.module.css";
 import { MarkdownRenderer } from "../MarkdownRenderer";
-import { commands, getLineContent, getSelectedContent } from "./commands";
+import { commands, getMultiLineContent, getSelectedContent } from "./commands";
 
 export function MarkdownEditor({
   onChange,
@@ -30,8 +30,8 @@ export function MarkdownEditor({
     const startPos = editorRef.current.selectionStart;
     const endPos = editorRef.current.selectionEnd;
     const selected = getSelectedContent(content, startPos, endPos);
-    const line = getLineContent(content, startPos);
-    const newString = command({ line, selected });
+    const lines = getMultiLineContent(content, startPos, endPos);
+    const newString = command({ selected, lines });
     setValue(newString);
     onChange(newString);
   };
