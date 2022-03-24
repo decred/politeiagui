@@ -512,17 +512,21 @@
   color: green;
   background-color: #e2ffe8;
 }
-.removed > * {
-  color: red;
-  background-color: #ffe2e2;
+.added > pre {
+  color: green;
+  border: green 1px solid;
+  background-color: #bffccc !important;
 }
 .removed {
   color: red;
   background-color: #ffe2e2;
 }
-.added > blockquote {
-  min-height: 2rem;
+.removed > * {
+  color: red;
+  background-color: #ffe2e2;
 }
-.removed > blockquote {
-  min-height: 2rem;
+.removed > pre {
+  color: red;
+  border: red 1px solid;
+  background-color: #ffcccc !important;
 }

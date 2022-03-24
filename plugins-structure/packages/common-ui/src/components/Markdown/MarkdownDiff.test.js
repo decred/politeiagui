@@ -273,7 +273,9 @@ describe("Given DiffHTML", () => {
         expect(newElement.nodeName).toEqual("P");
       });
     });
-    describe("given some code text addition", () => {
+  });
+  describe("when using code blocks", () => {
+    describe("given some code block text addition", () => {
       const block1 = "```\ncode1\n```";
       const block2 = "```\ncode1 and another text\n```";
       it("should return correct diff", () => {
@@ -286,8 +288,21 @@ describe("Given DiffHTML", () => {
         expect(newElement.nodeName).toEqual("CODE");
       });
     });
+    describe("given some code block text changes", () => {
+      const block1 = "```\ncode1\n```";
+      const block2 = "```\ncode2\n```";
+      it("should return correct diff", () => {
+        render(<DiffHTML oldText={block1} newText={block2} />);
+        expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
+        expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
+        const oldElement = screen.getByText("code1");
+        const newElement = screen.getByText("code2");
+        expect(oldElement.nodeName).toEqual("CODE");
+        expect(newElement.nodeName).toEqual("CODE");
+      });
+    });
   });
-  describe("when using multiple tag changes", () => {
+  describe("when using multiple tag changes for same content", () => {
     const content = "Content";
     const cases = [
       {
@@ -368,10 +383,66 @@ describe("Given DiffHTML", () => {
         addedNode: "CODE",
       },
       {
-        name: "quote by paragraph",
+        name: "blockquote by paragraph",
         oldText: `> ${content}`,
         newText: content,
         removedNode: "BLOCKQUOTE",
+        addedNode: "P",
+      },
+      {
+        name: "blockquote by nested blockquote",
+        oldText: `> ${content}`,
+        newText: `> > ${content}`,
+        removedNode: "BLOCKQUOTE",
+        addedNode: "BLOCKQUOTE",
+      },
+      {
+        name: "blockquote by header",
+        oldText: `> ${content}`,
+        newText: `# ${content}`,
+        removedNode: "BLOCKQUOTE",
+        addedNode: "H1",
+      },
+      {
+        name: "link by paragraph",
+        oldText: `[${content}](http://link.com)`,
+        newText: content,
+        removedNode: "A",
+        addedNode: "P",
+      },
+      {
+        name: "link by header",
+        oldText: `[${content}](http://link.com)`,
+        newText: `# ${content}`,
+        removedNode: "A",
+        addedNode: "H1",
+      },
+      {
+        name: "link by header link",
+        oldText: `[${content}](http://link.com)`,
+        newText: `# [${content}](http://link.com)`,
+        removedNode: "A",
+        addedNode: "A",
+      },
+      {
+        name: "link by code",
+        oldText: `[${content}](http://link.com)`,
+        newText: `\`${content}\``,
+        removedNode: "A",
+        addedNode: "CODE",
+      },
+      {
+        name: "list by paragraph",
+        oldText: `1. ${content}`,
+        newText: content,
+        removedNode: "LI",
+        addedNode: "P",
+      },
+      {
+        name: "code block by paragraph",
+        oldText: `\`\`\`\n${content}\n\`\`\``,
+        newText: content,
+        removedNode: "CODE",
         addedNode: "P",
       },
     ];
