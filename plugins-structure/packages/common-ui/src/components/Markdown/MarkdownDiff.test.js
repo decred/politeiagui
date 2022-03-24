@@ -2,6 +2,7 @@ import React from "react";
 import { DiffHTML } from "./MarkdownDiff";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import trim from "lodash/trim";
 
 describe("Given DiffHTML", () => {
   describe("when headers are different", () => {
@@ -451,12 +452,17 @@ describe("Given DiffHTML", () => {
         render(
           <DiffHTML oldText={testCase.oldText} newText={testCase.newText} />
         );
+        // assert rendered diff
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
-        const oldElement = screen.getAllByText(content)[0];
-        const newElement = screen.getAllByText(content)[1];
+        // query by same content. Should return 2 elements: old and new
+        const [oldElement, newElement] = screen.getAllByText(content);
+        // assert node replacement
         expect(oldElement.nodeName).toEqual(testCase.removedNode);
         expect(newElement.nodeName).toEqual(testCase.addedNode);
+        // prevent unexpected additional chars rendering
+        expect(trim(oldElement.textContent, "\n ")).toEqual(content);
+        expect(trim(newElement.textContent, "\n ")).toEqual(content);
       });
     }
   });
