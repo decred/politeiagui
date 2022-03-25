@@ -6,15 +6,15 @@
 .actionButtons {
   cursor: pointer;
 }
-.actionButtons > span {
+.actionButtons > button {
   margin-left: 0.5rem;
-  padding-left: 0.5rem;
-  border-left: 1px solid var(--separator-color);
+  display: inline-flex;
 }
-.actionButtons > span:first-child {
+.actionButtons > button:first-child {
   margin-left: 0rem;
-  padding-left: 0rem;
-  border: 0px;
+}
+.actionButtons > button:not(:hover) {
+  box-shadow: none !important;
 }
 
 .tabs {
@@ -23,6 +23,7 @@
 .headers {
   display: flex;
   padding: 0.5rem;
+  align-items: center;
   justify-content: space-between;
 }
 .tabs > div {
@@ -51,6 +52,7 @@
   width: 100%;
   padding: 1rem;
   background-color: var(--card-background);
+  color: var(--text-color);
 }
 .preview {
   padding: 1rem;

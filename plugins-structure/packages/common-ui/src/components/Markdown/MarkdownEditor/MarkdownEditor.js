@@ -66,10 +66,12 @@ export function MarkdownEditor({
           <div onClick={handleShowPreview}>Preview</div>
         </div>
         <div className={styles.actionButtons}>
-          {availableCommands.map(({ command, Icon, offset }, i) => (
-            <span key={i} onClick={handleCommand(command, { offset })}>
-              <Icon />
-            </span>
+          {availableCommands.map(({ command, Button, offset }, i) => (
+            <Button
+              key={i}
+              className={styles.buttonIcon}
+              onClick={handleCommand(command, { offset })}
+            />
           ))}
         </div>
       </div>
@@ -90,7 +92,6 @@ export function MarkdownEditor({
           value={value}
           onKeyPress={handleKeyPress}
           onChange={handleChange}
-          // onSelect={(e) => console.log("EVENT", e)}
         />
         <MarkdownRenderer body={value} className={styles.preview} />
       </div>

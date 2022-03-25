@@ -1,15 +1,10 @@
-import BoldSVG from "./assets/bold.svg";
-import ItalicSVG from "./assets/italic.svg";
-import QuoteSVG from "./assets/quote.svg";
-import CodeSVG from "./assets/code.svg";
-import BulletListSVG from "./assets/bulletList.svg";
-import NumberedListSVG from "./assets/numberedList.svg";
-// TODO: Add image command
+import React from "react";
+import { ButtonIcon } from "pi-ui";
 
 function formatEachLine(lines, formatFn, { ignoreBlankLines } = {}) {
   let index = 0;
   return lines.reduce((acc, curr, i) => {
-    if (ignoreBlankLines && curr.length === 0) {
+    if (ignoreBlankLines && curr.length === 0 && i) {
       return `${acc}\n`;
     }
     index++;
@@ -35,7 +30,9 @@ export const commands = [
     label: "Bold Text",
     commandKey: "b",
     offset: 2,
-    Icon: BoldSVG,
+    Button: ({ onClick }) => (
+      <ButtonIcon type="bold" onClick={onClick} viewBox="0 0 16 16" />
+    ),
     command: ({ selected: { previous, current, next } }) =>
       `${previous}**${current}**${next}`,
   },
@@ -43,13 +40,17 @@ export const commands = [
     label: "Italic",
     commandKey: "i",
     offset: 1,
-    Icon: ItalicSVG,
+    Button: ({ onClick }) => (
+      <ButtonIcon type="italic" onClick={onClick} viewBox="0 0 16 16" />
+    ),
     command: ({ selected: { previous, current, next } }) =>
       `${previous}_${current}_${next}`,
   },
   {
     label: "Quote",
-    Icon: QuoteSVG,
+    Button: ({ onClick }) => (
+      <ButtonIcon type="quote" onClick={onClick} viewBox="0 0 16 16" />
+    ),
     offset: 2,
     command: multiLineCommand((curr) => `> ${curr}`, {
       ignoreBlankLines: true,
@@ -57,14 +58,18 @@ export const commands = [
   },
   {
     label: "Code",
-    Icon: CodeSVG,
+    Button: ({ onClick }) => (
+      <ButtonIcon type="code" onClick={onClick} viewBox="0 0 16 16" />
+    ),
     offset: 1,
     command: ({ selected: { previous, current, next } }) =>
       `${previous}\`${current}\`${next}`,
   },
   {
     label: "List",
-    Icon: BulletListSVG,
+    Button: ({ onClick }) => (
+      <ButtonIcon type="bulletList" onClick={onClick} viewBox="0 0 16 16" />
+    ),
     offset: 2,
     command: multiLineCommand((curr) => `- ${curr}`, {
       ignoreBlankLines: true,
@@ -72,9 +77,21 @@ export const commands = [
   },
   {
     label: "Numbered List",
-    Icon: NumberedListSVG,
+    Button: ({ onClick }) => (
+      <ButtonIcon type="numberedList" onClick={onClick} viewBox="0 0 16 16" />
+    ),
     offset: 3,
     command: multiLineCommand((curr, i) => `${i}. ${curr}`, {
+      ignoreBlankLines: true,
+    }),
+  },
+  {
+    label: "Task List",
+    Button: ({ onClick }) => (
+      <ButtonIcon type="taskList" onClick={onClick} viewBox="0 0 16 16" />
+    ),
+    offset: 5,
+    command: multiLineCommand((curr) => `- [ ] ${curr}`, {
       ignoreBlankLines: true,
     }),
   },
