@@ -14,13 +14,13 @@ function formatEachLine(lines, formatFn, { ignoreBlankLines } = {}) {
 }
 
 // Multiline command interface
-const multiLineCommand =
-  (execFn, { offset, ignoreBlankLines }) =>
+export const multiLineCommand =
+  (lineFormatterFn, { offset, ignoreBlankLines }) =>
   ({ currentChange, ...stateChanges }) => {
     const savedState = saveStateChanges(stateChanges);
     const { start, end, lines } = currentChange.selection;
     const { previous, current, next } = lines;
-    const formattedLines = formatEachLine(current, execFn, {
+    const formattedLines = formatEachLine(current, lineFormatterFn, {
       ignoreBlankLines,
     });
     let newPrev = `${previous}\n`;
