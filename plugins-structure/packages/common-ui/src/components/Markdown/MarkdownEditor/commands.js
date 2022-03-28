@@ -1,5 +1,6 @@
 import React from "react";
 import { ButtonIcon } from "pi-ui";
+import { redoStateChange, saveStateChanges, undoStateChange } from "./utils";
 
 function formatEachLine(lines, formatFn, { ignoreBlankLines } = {}) {
   let index = 0;
@@ -14,45 +15,89 @@ function formatEachLine(lines, formatFn, { ignoreBlankLines } = {}) {
 
 // Multiline command interface
 const multiLineCommand =
-  (execFn, options) =>
-  ({ lines: { previous, current, next } }) => {
-    const formattedLines = formatEachLine(current, execFn, options);
+  (execFn, { offset, ignoreBlankLines }) =>
+  ({ currentChange, ...stateChanges }) => {
+    const savedState = saveStateChanges(stateChanges);
+    const { start, end, lines } = currentChange.selection;
+    const { previous, current, next } = lines;
+    const formattedLines = formatEachLine(current, execFn, {
+      ignoreBlankLines,
+    });
     let newPrev = `${previous}\n`;
     if (previous.length === 0) {
       newPrev = "";
     }
-    return `${newPrev}${formattedLines}\n${next}`;
+    return {
+      ...savedState,
+      currentState: {
+        content: `${newPrev}${formattedLines}\n${next}`,
+        selectionStart: start + offset,
+        selectionEnd: end + offset,
+      },
+    };
+  };
+
+// cursor selection command interface
+export const cursorSelectionCommand =
+  (cmd, { offset }) =>
+  ({ currentChange, ...stateChanges }) => {
+    const savedState = saveStateChanges(stateChanges);
+    const {
+      selection: { cursor, start, end },
+    } = currentChange;
+    const newContent = cmd(cursor);
+    return {
+      ...savedState,
+      currentState: {
+        content: newContent,
+        selectionStart: start + offset,
+        selectionEnd: end + offset,
+      },
+    };
   };
 
 // Available commands
 export const commands = [
   {
+    label: "Undo",
+    commandKey: "z",
+    command: undoStateChange,
+  },
+  {
+    label: "Redo",
+    commandKey: "z",
+    shift: true,
+    command: redoStateChange,
+  },
+  {
     label: "Bold Text",
     commandKey: "b",
-    offset: 2,
     Button: ({ onClick }) => (
       <ButtonIcon type="bold" onClick={onClick} viewBox="0 0 16 16" />
     ),
-    command: ({ selected: { previous, current, next } }) =>
-      `${previous}**${current}**${next}`,
+    command: cursorSelectionCommand(
+      ({ previous, current, next }) => `${previous}**${current}**${next}`,
+      { offset: 2 }
+    ),
   },
   {
     label: "Italic",
     commandKey: "i",
-    offset: 1,
     Button: ({ onClick }) => (
       <ButtonIcon type="italic" onClick={onClick} viewBox="0 0 16 16" />
     ),
-    command: ({ selected: { previous, current, next } }) =>
-      `${previous}_${current}_${next}`,
+    command: cursorSelectionCommand(
+      ({ previous, current, next }) => `${previous}_${current}_${next}`,
+      { offset: 1 }
+    ),
   },
   {
     label: "Quote",
     Button: ({ onClick }) => (
       <ButtonIcon type="quote" onClick={onClick} viewBox="0 0 16 16" />
     ),
-    offset: 2,
     command: multiLineCommand((curr) => `> ${curr}`, {
+      offset: 2,
       ignoreBlankLines: true,
     }),
   },
@@ -61,17 +106,19 @@ export const commands = [
     Button: ({ onClick }) => (
       <ButtonIcon type="code" onClick={onClick} viewBox="0 0 16 16" />
     ),
-    offset: 1,
-    command: ({ selected: { previous, current, next } }) =>
-      `${previous}\`${current}\`${next}`,
+    command: cursorSelectionCommand(
+      ({ previous, current, next }) => `${previous}\`${current}\`${next}`,
+      { offset: 2 }
+    ),
   },
+
   {
     label: "List",
     Button: ({ onClick }) => (
       <ButtonIcon type="bulletList" onClick={onClick} viewBox="0 0 16 16" />
     ),
-    offset: 2,
     command: multiLineCommand((curr) => `- ${curr}`, {
+      offset: 2,
       ignoreBlankLines: true,
     }),
   },
@@ -80,8 +127,8 @@ export const commands = [
     Button: ({ onClick }) => (
       <ButtonIcon type="numberedList" onClick={onClick} viewBox="0 0 16 16" />
     ),
-    offset: 3,
     command: multiLineCommand((curr, i) => `${i}. ${curr}`, {
+      offset: 3,
       ignoreBlankLines: true,
     }),
   },
@@ -90,73 +137,9 @@ export const commands = [
     Button: ({ onClick }) => (
       <ButtonIcon type="taskList" onClick={onClick} viewBox="0 0 16 16" />
     ),
-    offset: 5,
     command: multiLineCommand((curr) => `- [ ] ${curr}`, {
+      offset: 5,
       ignoreBlankLines: true,
     }),
   },
 ];
-
-function insertAt(text, pos, newText) {
-  return text.substring(0, pos) + newText + text.substring(pos);
-}
-
-function countOccurences(string, term) {
-  const array = string.split(term);
-  return array.length - 1;
-}
-
-export function getMultiLineContent(content, startPos, endPos) {
-  const escapeChar = "&#27;",
-    numberOfEscapes = 2; // Start escape, end escape
-  let newContent = content,
-    escapeCount = 0,
-    previousLines = [],
-    selectedLines = [],
-    nextLines = [];
-  // add escapes on both start and end of text selection
-  newContent = insertAt(newContent, startPos, escapeChar);
-  newContent = insertAt(newContent, endPos + escapeChar.length, escapeChar);
-  const lines = newContent.split("\n");
-  for (const line of lines) {
-    const numOfOccurences = countOccurences(line, escapeChar);
-    // remove escape char
-    const escapeRegExp = new RegExp(escapeChar, "g");
-    const lineWithoutEscape = line.replace(escapeRegExp, "");
-    escapeCount += numOfOccurences;
-    if (!escapeCount) {
-      previousLines = [...previousLines, lineWithoutEscape];
-    }
-    if (escapeCount === 1 || numOfOccurences === numberOfEscapes) {
-      selectedLines = [...selectedLines, lineWithoutEscape];
-    }
-    if (escapeCount === 2 && numOfOccurences === 1) {
-      selectedLines = [...selectedLines, lineWithoutEscape];
-    }
-    if (escapeCount === 2 && numOfOccurences === 0) {
-      nextLines = [...nextLines, lineWithoutEscape];
-    }
-  }
-  return {
-    previous: previousLines.join("\n"),
-    current: selectedLines,
-    next: nextLines.join("\n"),
-  };
-}
-
-export function getSelectedContent(content, startPos, endPos) {
-  const previousContent = content.substring(0, startPos);
-  const nextContent = content.substring(endPos, content.length);
-  const selectedString = content.substring(startPos, endPos);
-  return {
-    previous: previousContent,
-    current: selectedString,
-    next: nextContent,
-  };
-}
-
-export function executeCommand(command, content, startPos, endPos) {
-  const selected = getSelectedContent(content, startPos, endPos);
-  const lines = getMultiLineContent(content, startPos, endPos);
-  return command({ selected, lines });
-}

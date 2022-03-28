@@ -1,9 +1,10 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import styles from "./MarkdownEditor.module.css";
 import { MarkdownRenderer } from "../MarkdownRenderer";
-import { commands, executeCommand } from "./commands";
+import { commands } from "./commands";
+import { useMarkdownEditor } from "./hooks";
 
 export function MarkdownEditor({
   onChange,
@@ -14,49 +15,77 @@ export function MarkdownEditor({
 }) {
   const editorRef = useRef();
   const [showPreview, setShowPreview] = useState(false);
-  const [value, setValue] = useState(initialValue);
   const availableCommands = useMemo(
     () => [...customCommands, ...commands],
     [customCommands]
   );
+  const {
+    value: editorValue,
+    selectionEnd,
+    selectionStart,
+    onChange: onEditorChange,
+    onCommand,
+    onSaveChanges,
+  } = useMarkdownEditor(initialValue);
 
-  function handleChange(e) {
-    setValue(e.target.value);
-    onChange(e.target.value);
+  function handleInputChange(e) {
+    onEditorChange(e.target.value);
   }
+
   function handleShowPreview() {
     setShowPreview(true);
   }
+
   function handleShowWrite() {
     setShowPreview(false);
   }
 
-  const handleCommand =
-    (command, { offset = 0 } = {}) =>
-    () => {
-      const content = editorRef.current.value;
-      const startPos = editorRef.current.selectionStart;
-      const endPos = editorRef.current.selectionEnd;
-      const newString = executeCommand(command, content, startPos, endPos);
-      // prevent sync issues between textarea updates.
-      setTimeout(() => {
-        setValue(newString);
-        onChange(newString);
-        editorRef.current.focus();
-        editorRef.current.selectionStart = startPos + offset;
-        editorRef.current.selectionEnd = endPos + offset;
-      }, 1);
-    };
+  const handleCommand = (command) => () => {
+    const content = editorRef.current.value;
+    const selectionStart = editorRef.current.selectionStart;
+    const selectionEnd = editorRef.current.selectionEnd;
+    onCommand(command, {
+      content,
+      selectionEnd,
+      selectionStart,
+    });
+  };
 
   function handleKeyPress(event) {
+    const keyIsNotDigit = event.key.match(/[^a-zA-Z0-9]/);
+    const isBackspace = event.key === "Backspace";
+    if (keyIsNotDigit || isBackspace) {
+      onSaveChanges();
+    }
     if (event.metaKey || event.ctrlKey) {
-      const cmd = availableCommands.find((c) => c.commandKey === event.key);
+      const cmd = availableCommands.find(
+        (c) => c.commandKey === event.key && !!c.shift === event.shiftKey
+      );
       if (cmd) {
-        const { command, offset } = cmd;
-        handleCommand(command, { offset })();
+        event.preventDefault();
+        const { command } = cmd;
+        handleCommand(command)();
       }
     }
   }
+
+  useEffect(
+    function handleCursorChanges() {
+      if (selectionStart || selectionEnd) {
+        editorRef.current.focus();
+        editorRef.current.selectionStart = selectionStart;
+        editorRef.current.selectionEnd = selectionEnd;
+      }
+    },
+    [selectionEnd, selectionStart]
+  );
+
+  useEffect(
+    function handleEditorChanges() {
+      onChange(editorValue);
+    },
+    [editorValue, onChange]
+  );
 
   return (
     <div className={classNames(styles.editorWrapper, wrapperClassName)}>
@@ -66,13 +95,16 @@ export function MarkdownEditor({
           <div onClick={handleShowPreview}>Preview</div>
         </div>
         <div className={styles.actionButtons}>
-          {availableCommands.map(({ command, Button, offset }, i) => (
-            <Button
-              key={i}
-              className={styles.buttonIcon}
-              onClick={handleCommand(command, { offset })}
-            />
-          ))}
+          {availableCommands.map(
+            ({ command, Button, offset }, i) =>
+              Button && (
+                <Button
+                  key={i}
+                  className={styles.buttonIcon}
+                  onClick={handleCommand(command, { offset })}
+                />
+              )
+          )}
         </div>
       </div>
       <div
@@ -89,11 +121,11 @@ export function MarkdownEditor({
           id="markdown-editor"
           ref={editorRef}
           className={styles.editor}
-          value={value}
-          onKeyPress={handleKeyPress}
-          onChange={handleChange}
+          value={editorValue}
+          onKeyDown={handleKeyPress}
+          onChange={handleInputChange}
         />
-        <MarkdownRenderer body={value} className={styles.preview} />
+        <MarkdownRenderer body={editorValue} className={styles.preview} />
       </div>
     </div>
   );
