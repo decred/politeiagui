@@ -1,4 +1,4 @@
-import { getMultiLineContent, getSelectedContent } from "./commands";
+import { getMultiLineContent, getSelectedContent } from "./utils";
 
 describe("Given getMultiLineContent util", () => {
   const line1 = "Cras ultricies ligula sed magna dictum porta.";
