@@ -25,9 +25,15 @@ export function createCommand({
     label,
     commandKey,
     shift,
-    Button: ({ onClick }) => (
-      <ButtonIcon type={buttonType} onClick={onClick} viewBox={buttonViewBox} />
-    ),
+    Button: buttonType
+      ? ({ onClick }) => (
+          <ButtonIcon
+            type={buttonType}
+            onClick={onClick}
+            viewBox={buttonViewBox}
+          />
+        )
+      : null,
     command: (state) => {
       saveStateChanges(state);
       command(state);
@@ -70,17 +76,17 @@ export const cursorSelectionCommand =
 
 // Available commands
 export const commands = [
-  {
+  createCommand({
     label: "Undo",
     commandKey: "z",
     command: undoStateChange,
-  },
-  {
+  }),
+  createCommand({
     label: "Redo",
     commandKey: "z",
     shift: true,
     command: redoStateChange,
-  },
+  }),
   createCommand({
     label: "Bold Text",
     commandKey: "b",
@@ -101,55 +107,50 @@ export const commands = [
       { offset: 1 }
     ),
   }),
-  {
+  createCommand({
     label: "Quote",
-    Button: ({ onClick }) => (
-      <ButtonIcon type="quote" onClick={onClick} viewBox="0 0 16 16" />
-    ),
+    buttonType: "quote",
+    buttonViewBox: "0 0 16 16",
     command: multiLineCommand((curr) => `> ${curr}`, {
       offset: 2,
       ignoreBlankLines: true,
     }),
-  },
-  {
+  }),
+  createCommand({
     label: "Code",
-    Button: ({ onClick }) => (
-      <ButtonIcon type="code" onClick={onClick} viewBox="0 0 16 16" />
-    ),
+    buttonType: "code",
+    buttonViewBox: "0 0 16 16",
     command: cursorSelectionCommand(
       ({ previous, current, next }) => `${previous}\`${current}\`${next}`,
       { offset: 1 }
     ),
-  },
+  }),
 
-  {
+  createCommand({
     label: "List",
-    Button: ({ onClick }) => (
-      <ButtonIcon type="bulletList" onClick={onClick} viewBox="0 0 16 16" />
-    ),
+    buttonType: "bulletList",
+    buttonViewBox: "0 0 16 16",
     command: multiLineCommand((curr) => `- ${curr}`, {
       offset: 2,
       ignoreBlankLines: true,
     }),
-  },
-  {
+  }),
+  createCommand({
     label: "Numbered List",
-    Button: ({ onClick }) => (
-      <ButtonIcon type="numberedList" onClick={onClick} viewBox="0 0 16 16" />
-    ),
+    buttonType: "numberedList",
+    buttonViewBox: "0 0 16 16",
     command: multiLineCommand((curr, i) => `${i}. ${curr}`, {
       offset: 3,
       ignoreBlankLines: true,
     }),
-  },
-  {
+  }),
+  createCommand({
     label: "Task List",
-    Button: ({ onClick }) => (
-      <ButtonIcon type="taskList" onClick={onClick} viewBox="0 0 16 16" />
-    ),
+    buttonType: "taskList",
+    buttonViewBox: "0 0 16 16",
     command: multiLineCommand((curr) => `- [ ] ${curr}`, {
       offset: 5,
       ignoreBlankLines: true,
     }),
-  },
+  }),
 ];
