@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { DiffHTML, MarkdownEditor } from "../components/Markdown";
 import {
+  MarkdownDiffHTML,
+  MarkdownEditor,
+  MarkdownRenderer,
+  createCommand,
+} from "../components/Markdown";
+import {
+  ButtonIcon,
   DEFAULT_DARK_THEME_NAME,
   DEFAULT_LIGHT_THEME_NAME,
   DarkLightToggle,
+  H3,
   ThemeProvider,
+  Toggle,
   defaultDarkTheme,
   defaultLightTheme,
   useTheme,
@@ -17,18 +25,72 @@ const themes = {
   [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme },
 };
 
+const customCommands = [
+  {
+    label: "Link",
+    shift: true,
+    commandKey: "l",
+    Button: ({ onClick }) => <ButtonIcon type="link" onClick={onClick} />,
+    command: (state) => {
+      const { currentChange } = state;
+      const { cursor, end, start } = currentChange.selection;
+      const { previous, current, next } = cursor;
+      const isCurrentEmpty = !current.length;
+      state.currentState = {
+        content: `${previous}[${current}]()${next}`,
+        selectionStart: isCurrentEmpty ? start + 1 : end + 3,
+        selectionEnd: isCurrentEmpty ? start + 1 : end + 3,
+      };
+    },
+  },
+  createCommand({
+    label: "Copy All",
+    commandKey: "c",
+    shift: true,
+    buttonType: "copyToClipboard",
+    command: (state) => {
+      state.currentState.selectionEnd = state.currentState.content.length;
+      state.currentState.selectionStart = 0;
+    },
+  }),
+];
+
 function MdTest() {
   const [old, setOld] = useState("");
   const [nw, setNew] = useState("");
+  const [diffMode, setDiffMode] = useState(false);
+  const [withCustomCommands, setCustomCommands] = useState(false);
 
   return (
     <>
-      <MarkdownEditor onChange={(e) => setOld(e)} />
-      <MarkdownEditor onChange={(e) => setNew(e)} />
-      <div
-        style={{ width: "90%", border: "1px solid black", margin: "2rem" }}
-      />
-      <DiffHTML oldText={old} newText={nw} />
+      <H3>Diff Mode</H3>
+      <Toggle onToggle={() => setDiffMode(!diffMode)} toggled={diffMode} />
+      {diffMode ? (
+        <div>
+          <MarkdownEditor onChange={(e) => setOld(e)} />
+          <MarkdownEditor onChange={(e) => setNew(e)} />
+          <div
+            style={{ width: "90%", border: "1px solid black", margin: "2rem" }}
+          />
+          <MarkdownDiffHTML oldText={old} newText={nw} />
+        </div>
+      ) : (
+        <div>
+          <H3>Toggle Custom Commands</H3>
+          <Toggle
+            onToggle={() => setCustomCommands(!withCustomCommands)}
+            toggled={withCustomCommands}
+          />
+          <MarkdownEditor
+            onChange={(e) => setNew(e)}
+            customCommands={withCustomCommands ? customCommands : []}
+          />
+          <div
+            style={{ width: "90%", border: "1px solid black", margin: "2rem" }}
+          />
+          <MarkdownRenderer body={nw} />
+        </div>
+      )}
     </>
   );
 }

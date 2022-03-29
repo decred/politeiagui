@@ -55,7 +55,7 @@ export function getDiffHTML(oldText = "", newText = "") {
   return joinDiffArrays(diff);
 }
 
-export function DiffHTML({ oldText, newText }) {
+export function MarkdownDiffHTML({ oldText, newText }) {
   const html = getDiffHTML(oldText, newText);
   return (
     <div>

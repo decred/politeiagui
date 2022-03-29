@@ -11,6 +11,7 @@ export function MarkdownEditor({
   wrapperClassName,
   initialValue = "",
   isSplitView,
+  hideButtonsMenu,
   customCommands = [],
 }) {
   const editorRef = useRef();
@@ -54,7 +55,8 @@ export function MarkdownEditor({
   function handleKeyPress(event) {
     const keyIsNotDigit = event.key.match(/[^a-zA-Z0-9]/);
     const isBackspace = event.key === "Backspace";
-    if (keyIsNotDigit || isBackspace) {
+    const isEnter = event.key === "Enter";
+    if (keyIsNotDigit || isBackspace || isEnter) {
       onSaveChanges();
     }
     if (event.metaKey || event.ctrlKey) {
@@ -94,18 +96,20 @@ export function MarkdownEditor({
           <div onClick={handleShowWrite}>Write</div>
           <div onClick={handleShowPreview}>Preview</div>
         </div>
-        <div className={styles.actionButtons}>
-          {availableCommands.map(
-            ({ command, Button, offset }, i) =>
-              Button && (
-                <Button
-                  key={i}
-                  className={styles.buttonIcon}
-                  onClick={handleCommand(command, { offset })}
-                />
-              )
-          )}
-        </div>
+        {!hideButtonsMenu && (
+          <div className={styles.actionButtons}>
+            {availableCommands.map(
+              ({ command, Button, offset }, i) =>
+                Button && (
+                  <Button
+                    key={i}
+                    className={styles.buttonIcon}
+                    onClick={handleCommand(command, { offset })}
+                  />
+                )
+            )}
+          </div>
+        )}
       </div>
       <div
         className={classNames(
@@ -124,6 +128,7 @@ export function MarkdownEditor({
           value={editorValue}
           onKeyDown={handleKeyPress}
           onChange={handleInputChange}
+          onBlur={() => onSaveChanges()}
         />
         <MarkdownRenderer body={editorValue} className={styles.preview} />
       </div>
@@ -139,7 +144,9 @@ MarkdownEditor.propTypes = {
   customCommands: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
-      Icon: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+      commandKey: PropTypes.string,
+      shift: PropTypes.bool,
+      Button: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
       command: PropTypes.func.isRequired,
     })
   ),

@@ -56,12 +56,13 @@ export function getSelectedContent(content, startPos, endPos) {
   };
 }
 
-export function saveStateChanges({ previousState, currentState }) {
-  return {
-    previousState: [currentState, ...previousState],
-    nextState: [],
-    currentState,
-  };
+export function saveStateChanges(state) {
+  const lastChange = state.previousState[0].content;
+  const currentChange = state.currentState.content;
+  if (lastChange !== currentChange) {
+    state.previousState = [state.currentState, ...state.previousState];
+    state.nextState = [];
+  }
 }
 
 export function undoStateChange({ previousState, currentState, nextState }) {

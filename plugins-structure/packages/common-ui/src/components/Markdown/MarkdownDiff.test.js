@@ -1,17 +1,17 @@
 import React from "react";
-import { DiffHTML } from "./MarkdownDiff";
+import { MarkdownDiffHTML } from "./MarkdownDiff";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import trim from "lodash/trim";
 
-describe("Given DiffHTML", () => {
+describe("Given MarkdownDiffHTML", () => {
   describe("when headers are different", () => {
     const newHeaders =
       "# Header 1\n## Header 2\n### Header 3\n##### common header\n\n";
     const oldHeaders =
       "# Header 1 ADD\n## Header 2\n#### Header 4\n##### common header\n\n";
     it("should return correct diff", () => {
-      render(<DiffHTML oldText={oldHeaders} newText={newHeaders} />);
+      render(<MarkdownDiffHTML oldText={oldHeaders} newText={newHeaders} />);
       const h2 = screen.getAllByText("Header 2");
       expect(h2).toHaveLength(1);
       const h1 = screen.getAllByText("Header 1");
@@ -29,7 +29,9 @@ describe("Given DiffHTML", () => {
     const newParagraph = "Paragraph 1\n\nAnother P";
     const oldParagraph = "Paragraph 2\n\nAnother P";
     it("should return correct diff", () => {
-      render(<DiffHTML oldText={oldParagraph} newText={newParagraph} />);
+      render(
+        <MarkdownDiffHTML oldText={oldParagraph} newText={newParagraph} />
+      );
       const linesAdded = screen.getAllByTestId("md-line-added");
       const linesRemoved = screen.getAllByTestId("md-line-removed");
       expect(linesAdded).toHaveLength(1);
@@ -41,7 +43,7 @@ describe("Given DiffHTML", () => {
     const paragraph = "My Text";
     const header = "# My Text";
     it("should return correct diff", () => {
-      render(<DiffHTML oldText={paragraph} newText={header} />);
+      render(<MarkdownDiffHTML oldText={paragraph} newText={header} />);
       const removedParagraph = screen.getByTestId("md-line-removed");
       const addedHeader = screen.getByTestId("md-line-added");
       // Removed element: <p>My Text</p>
@@ -55,7 +57,7 @@ describe("Given DiffHTML", () => {
   describe("when texts are equal", () => {
     const text = "Sed porttitor lectus nibh.";
     it("should not return any diff", () => {
-      render(<DiffHTML oldText={text} newText={text} />);
+      render(<MarkdownDiffHTML oldText={text} newText={text} />);
       expect(screen.queryAllByTestId("md-line-removed")).toHaveLength(0);
       expect(screen.queryAllByTestId("md-line-added")).toHaveLength(0);
       const textElement = screen.getByText(text);
@@ -65,7 +67,7 @@ describe("Given DiffHTML", () => {
   describe("when old text is empty", () => {
     const text = "Sed porttitor lectus nibh.";
     it("should return all new text marked as added", () => {
-      render(<DiffHTML oldText="" newText={text} />);
+      render(<MarkdownDiffHTML oldText="" newText={text} />);
       expect(screen.queryAllByTestId("md-line-removed")).toHaveLength(0);
       expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
       const textElement = screen.getByText(text);
@@ -75,7 +77,7 @@ describe("Given DiffHTML", () => {
   describe("when new text is empty", () => {
     const text = "Sed porttitor lectus nibh.";
     it("should return all new text marked as removed", () => {
-      render(<DiffHTML oldText={text} newText="" />);
+      render(<MarkdownDiffHTML oldText={text} newText="" />);
       expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
       expect(screen.queryAllByTestId("md-line-added")).toHaveLength(0);
       const textElement = screen.getByText(text);
@@ -87,7 +89,7 @@ describe("Given DiffHTML", () => {
       const oldLink = "[my link](http://mylink.com)";
       const newLink = "[my new link](http://mylink.com)";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={oldLink} newText={newLink} />);
+        render(<MarkdownDiffHTML oldText={oldLink} newText={newLink} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getByText("my link");
@@ -102,7 +104,7 @@ describe("Given DiffHTML", () => {
       const oldLink = "[my link](http://mylink.com)";
       const newLink = "[my link](http://mylinknew.com)";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={oldLink} newText={newLink} />);
+        render(<MarkdownDiffHTML oldText={oldLink} newText={newLink} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getAllByText("my link")[0];
@@ -116,7 +118,7 @@ describe("Given DiffHTML", () => {
     describe("given different html raw links", () => {
       const link = "<a href='javascript:void(0)'>my link</a>";
       it("should render html content as text, not as element", () => {
-        render(<DiffHTML oldText={link} newText="" />);
+        render(<MarkdownDiffHTML oldText={link} newText="" />);
         const removedLines = screen.getAllByTestId("md-line-removed");
         expect(removedLines).toHaveLength(1);
         const oldElement = screen.queryByText("my link");
@@ -130,7 +132,7 @@ describe("Given DiffHTML", () => {
     describe("given equal html raw links", () => {
       const link = "<a href='javascript:void(0)'>my link</a>";
       it("should render html content as text, not as element", () => {
-        render(<DiffHTML oldText={link} newText={link} />);
+        render(<MarkdownDiffHTML oldText={link} newText={link} />);
         const removedLines = screen.queryAllByTestId("md-line-removed");
         const addedLines = screen.queryAllByTestId("md-line-added");
         expect(removedLines).toHaveLength(0);
@@ -147,7 +149,7 @@ describe("Given DiffHTML", () => {
       const oldText = "**old**";
       const newText = "**new**";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={oldText} newText={newText} />);
+        render(<MarkdownDiffHTML oldText={oldText} newText={newText} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getByText("old");
@@ -162,7 +164,7 @@ describe("Given DiffHTML", () => {
       const oldText = "**old**";
       const newText = "old";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={oldText} newText={newText} />);
+        render(<MarkdownDiffHTML oldText={oldText} newText={newText} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getAllByText("old")[0];
@@ -179,7 +181,7 @@ describe("Given DiffHTML", () => {
       const oldText = "*old*";
       const newText = "*new*";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={oldText} newText={newText} />);
+        render(<MarkdownDiffHTML oldText={oldText} newText={newText} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getByText("old");
@@ -194,7 +196,7 @@ describe("Given DiffHTML", () => {
       const oldText = "*old*";
       const newText = "old";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={oldText} newText={newText} />);
+        render(<MarkdownDiffHTML oldText={oldText} newText={newText} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getAllByText("old")[0];
@@ -211,7 +213,7 @@ describe("Given DiffHTML", () => {
       const block1 = "```\ncode1\n```";
       const block2 = "```\ncode2\n```";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={block1} newText={block2} />);
+        render(<MarkdownDiffHTML oldText={block1} newText={block2} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getByText("code1");
@@ -224,7 +226,7 @@ describe("Given DiffHTML", () => {
       const block1 = "```\ncode1\n```";
       const block2 = "code1";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={block1} newText={block2} />);
+        render(<MarkdownDiffHTML oldText={block1} newText={block2} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getAllByText("code1")[0];
@@ -237,7 +239,7 @@ describe("Given DiffHTML", () => {
       const block1 = "```\ncode1\n```";
       const block2 = "```\ncode1 and another text\n```";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={block1} newText={block2} />);
+        render(<MarkdownDiffHTML oldText={block1} newText={block2} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getByText("code1");
@@ -252,7 +254,7 @@ describe("Given DiffHTML", () => {
       const code1 = "`code1`";
       const code2 = "`code2`";
       it("should return the correct diff", () => {
-        render(<DiffHTML oldText={code1} newText={code2} />);
+        render(<MarkdownDiffHTML oldText={code1} newText={code2} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getByText("code1");
@@ -265,7 +267,7 @@ describe("Given DiffHTML", () => {
       const code1 = "`code1`";
       const code2 = "code1";
       it("should return the correct diff", () => {
-        render(<DiffHTML oldText={code1} newText={code2} />);
+        render(<MarkdownDiffHTML oldText={code1} newText={code2} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getAllByText("code1")[0];
@@ -280,7 +282,7 @@ describe("Given DiffHTML", () => {
       const block1 = "```\ncode1\n```";
       const block2 = "```\ncode1 and another text\n```";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={block1} newText={block2} />);
+        render(<MarkdownDiffHTML oldText={block1} newText={block2} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getByText("code1");
@@ -293,7 +295,7 @@ describe("Given DiffHTML", () => {
       const block1 = "```\ncode1\n```";
       const block2 = "```\ncode2\n```";
       it("should return correct diff", () => {
-        render(<DiffHTML oldText={block1} newText={block2} />);
+        render(<MarkdownDiffHTML oldText={block1} newText={block2} />);
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);
         expect(screen.getAllByTestId("md-line-added")).toHaveLength(1);
         const oldElement = screen.getByText("code1");
@@ -457,7 +459,10 @@ describe("Given DiffHTML", () => {
     for (const testCase of cases) {
       it(`should replace ${testCase.name}`, () => {
         render(
-          <DiffHTML oldText={testCase.oldText} newText={testCase.newText} />
+          <MarkdownDiffHTML
+            oldText={testCase.oldText}
+            newText={testCase.newText}
+          />
         );
         // assert rendered diff
         expect(screen.getAllByTestId("md-line-removed")).toHaveLength(1);

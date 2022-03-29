@@ -13,11 +13,33 @@ function formatEachLine(lines, formatFn, { ignoreBlankLines } = {}) {
   }, "");
 }
 
+export function createCommand({
+  label,
+  commandKey,
+  command,
+  shift,
+  buttonType,
+  buttonViewBox,
+} = {}) {
+  return {
+    label,
+    commandKey,
+    shift,
+    Button: ({ onClick }) => (
+      <ButtonIcon type={buttonType} onClick={onClick} viewBox={buttonViewBox} />
+    ),
+    command: (state) => {
+      saveStateChanges(state);
+      command(state);
+    },
+  };
+}
+
 // Multiline command interface
 export const multiLineCommand =
   (lineFormatterFn, { offset, ignoreBlankLines }) =>
-  ({ currentChange, ...stateChanges }) => {
-    const savedState = saveStateChanges(stateChanges);
+  (state) => {
+    const { currentChange } = state;
     const { start, end, lines } = currentChange.selection;
     const { previous, current, next } = lines;
     const formattedLines = formatEachLine(current, lineFormatterFn, {
@@ -27,33 +49,23 @@ export const multiLineCommand =
     if (previous.length === 0) {
       newPrev = "";
     }
-    return {
-      ...savedState,
-      currentState: {
-        content: `${newPrev}${formattedLines}\n${next}`,
-        selectionStart: start + offset,
-        selectionEnd: end + offset,
-      },
+    state.currentState = {
+      content: `${newPrev}${formattedLines}\n${next}`,
+      selectionStart: start + offset,
+      selectionEnd: end + offset,
     };
   };
 
-// cursor selection command interface
 export const cursorSelectionCommand =
   (cmd, { offset }) =>
-  ({ currentChange, ...stateChanges }) => {
-    const savedState = saveStateChanges(stateChanges);
+  (state) => {
     const {
       selection: { cursor, start, end },
-    } = currentChange;
+    } = state.currentChange;
     const newContent = cmd(cursor);
-    return {
-      ...savedState,
-      currentState: {
-        content: newContent,
-        selectionStart: start + offset,
-        selectionEnd: end + offset,
-      },
-    };
+    state.currentState.content = newContent;
+    state.currentState.selectionStart = start + offset;
+    state.currentState.selectionEnd = end + offset;
   };
 
 // Available commands
@@ -69,28 +81,26 @@ export const commands = [
     shift: true,
     command: redoStateChange,
   },
-  {
+  createCommand({
     label: "Bold Text",
     commandKey: "b",
-    Button: ({ onClick }) => (
-      <ButtonIcon type="bold" onClick={onClick} viewBox="0 0 16 16" />
-    ),
+    buttonType: "bold",
+    buttonViewBox: "0 0 16 16",
     command: cursorSelectionCommand(
       ({ previous, current, next }) => `${previous}**${current}**${next}`,
       { offset: 2 }
     ),
-  },
-  {
+  }),
+  createCommand({
     label: "Italic",
     commandKey: "i",
-    Button: ({ onClick }) => (
-      <ButtonIcon type="italic" onClick={onClick} viewBox="0 0 16 16" />
-    ),
+    buttonType: "italic",
+    buttonViewBox: "0 0 16 16",
     command: cursorSelectionCommand(
       ({ previous, current, next }) => `${previous}_${current}_${next}`,
       { offset: 1 }
     ),
-  },
+  }),
   {
     label: "Quote",
     Button: ({ onClick }) => (
@@ -108,7 +118,7 @@ export const commands = [
     ),
     command: cursorSelectionCommand(
       ({ previous, current, next }) => `${previous}\`${current}\`${next}`,
-      { offset: 2 }
+      { offset: 1 }
     ),
   },
 

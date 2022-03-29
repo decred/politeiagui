@@ -4,35 +4,28 @@ import {
   saveStateChanges,
 } from "./utils";
 import { useReducer } from "react";
+import { createNextState } from "@reduxjs/toolkit";
 
 function commandsReducer(editorState, { command, currentChange }) {
   if (!currentChange) {
-    return command(editorState);
+    return createNextState(command)(editorState);
   }
   const { content, selectionStart, selectionEnd } = currentChange;
   const cursor = getSelectedContent(content, selectionStart, selectionEnd);
   const lines = getMultiLineContent(content, selectionStart, selectionEnd);
-  const { currentState, previousState, nextState } = command({
+  const { currentState, previousState, nextState } = createNextState(command)({
     currentChange: {
       selection: { lines, cursor, start: selectionStart, end: selectionEnd },
       content,
     },
-    previousState: editorState.previousState,
-    nextState: editorState.nextState,
-    currentState: editorState.currentState,
+    ...editorState,
   });
   return { currentState, previousState, nextState };
 }
 
-function regularChangeAction({ currentChange: { content }, ...state }) {
-  return {
-    ...state,
-    currentState: {
-      ...state.currentState,
-      content,
-    },
-  };
-}
+const regularChangeCommand = (state) => {
+  state.currentState.content = state.currentChange.content;
+};
 
 function initializeEditor(initialValue) {
   return {
@@ -41,13 +34,7 @@ function initializeEditor(initialValue) {
       selectionStart: initialValue.length,
       selectionEnd: initialValue.length,
     },
-    previousState: [
-      {
-        content: initialValue,
-        selectionStart: initialValue.length,
-        selectionEnd: initialValue.length,
-      },
-    ],
+    previousState: [{ content: "", selectionStart: 0, selectionEnd: 0 }],
     nextState: [],
   };
 }
@@ -60,7 +47,7 @@ export function useMarkdownEditor(initialValue = "") {
 
   function onChange(value) {
     dispatch({
-      command: regularChangeAction,
+      command: regularChangeCommand,
       currentChange: {
         content: value,
       },
