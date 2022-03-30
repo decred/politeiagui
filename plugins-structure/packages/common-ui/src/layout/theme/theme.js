@@ -28,12 +28,11 @@ function ThemeConsumer({ children }) {
   return children;
 }
 
-export function UiTheme({ children, customThemes, defaultThemeName }) {
-  const themes = customThemes || defaultThemes;
+export function UiTheme({ children }) {
   return (
     <ThemeProvider
-      themes={themes}
-      defaultThemeName={defaultThemeName || DEFAULT_LIGHT_THEME_NAME}
+      themes={defaultThemes}
+      defaultThemeName={DEFAULT_LIGHT_THEME_NAME}
     >
       <ThemeConsumer>{children}</ThemeConsumer>
     </ThemeProvider>
