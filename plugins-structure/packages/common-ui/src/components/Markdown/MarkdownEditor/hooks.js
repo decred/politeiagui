@@ -1,48 +1,15 @@
+import { saveStateChanges } from "./utils";
 import {
-  getMultiLineContent,
-  getSelectedContent,
-  saveStateChanges,
-} from "./utils";
+  commandsReducer,
+  initializeEditorReducer,
+  regularChangeCommand,
+} from "./commands";
 import { useReducer } from "react";
-import { createNextState } from "@reduxjs/toolkit";
-
-function commandsReducer(editorState, { command, currentChange }) {
-  if (!currentChange) {
-    return createNextState(command)(editorState);
-  }
-  const { content, selectionStart, selectionEnd } = currentChange;
-  const cursor = getSelectedContent(content, selectionStart, selectionEnd);
-  const lines = getMultiLineContent(content, selectionStart, selectionEnd);
-  const { currentState, previousState, nextState } = createNextState(command)({
-    currentChange: {
-      selection: { lines, cursor, start: selectionStart, end: selectionEnd },
-      content,
-    },
-    ...editorState,
-  });
-  return { currentState, previousState, nextState };
-}
-
-const regularChangeCommand = (state) => {
-  state.currentState.content = state.currentChange.content;
-};
-
-function initializeEditor(initialValue) {
-  return {
-    currentState: {
-      content: initialValue,
-      selectionStart: initialValue.length,
-      selectionEnd: initialValue.length,
-    },
-    previousState: [{ content: "", selectionStart: 0, selectionEnd: 0 }],
-    nextState: [],
-  };
-}
 
 export function useMarkdownEditor(initialValue = "") {
   const [state, dispatch] = useReducer(
     commandsReducer,
-    initializeEditor(initialValue)
+    initializeEditorReducer(initialValue)
   );
 
   function onChange(value) {

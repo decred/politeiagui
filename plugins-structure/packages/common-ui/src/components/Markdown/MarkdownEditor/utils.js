@@ -7,6 +7,19 @@ function countOccurences(string, term) {
   return array.length - 1;
 }
 
+/**
+ * getMultiLineContent returns a TextSelection for current cursor lines. It
+ * will select all `content` lines between `startPos` and `endPos`. If selection
+ * is at the middle of some line, the whole line is selected.
+ * @param {String} content text content
+ * @param {Number} startPos selection start
+ * @param {Number} endPos selection end
+ * @returns {{
+ *  previous: String,
+ *  current: String[],
+ *  next: String,
+ * }} Text Selection
+ */
 export function getMultiLineContent(content, startPos, endPos) {
   const escapeChar = "&#27;",
     numberOfEscapes = 2; // Start escape, end escape
@@ -45,6 +58,18 @@ export function getMultiLineContent(content, startPos, endPos) {
   };
 }
 
+/**
+ * getSelectedContent returns a TextSelection for current cursor selection. It
+ * will select the `content` between `startPos` and `endPos`.
+ * @param {String} content text content
+ * @param {Number} startPos selection start
+ * @param {Number} endPos selection end
+ * @returns {{
+ *  previous: String,
+ *  current: String,
+ *  next: String,
+ * }} Text Selection
+ */
 export function getSelectedContent(content, startPos, endPos) {
   const previousContent = content.substring(0, startPos);
   const nextContent = content.substring(endPos, content.length);
@@ -57,41 +82,33 @@ export function getSelectedContent(content, startPos, endPos) {
 }
 
 export function saveStateChanges(state) {
-  const lastChange = state.previousState[0].content;
+  const lastChange = state.previousStates[0].content;
   const currentChange = state.currentState.content;
   if (lastChange !== currentChange) {
-    state.previousState = [state.currentState, ...state.previousState];
-    state.nextState = [];
+    state.previousStates = [state.currentState, ...state.previousStates];
+    // clear future changes.
+    state.nextStates = [];
   }
 }
 
-export function undoStateChange({ previousState, currentState, nextState }) {
-  const [lastChange, ...previousChanges] = previousState;
-  if (!lastChange) {
-    return { previousState, nextState, currentState };
+export function undoStateChange(state) {
+  if (state.previousStates.length) {
+    // save move current state to next states
+    state.nextStates = [state.currentState, ...state.nextStates];
+    // if there are no changes prior to last change
+    if (state.previousStates.length === 1) {
+      state.currentState = state.previousStates[0];
+    } else {
+      const { content, selectionStart, selectionEnd } =
+        state.previousStates.shift();
+      state.currentState = { content, selectionStart, selectionEnd };
+    }
   }
-  if (!previousChanges.length) {
-    return {
-      currentState: lastChange,
-      previousState,
-      nextState: [currentState, ...nextState],
-    };
-  }
-  return {
-    currentState: lastChange,
-    previousState: previousChanges,
-    nextState: [currentState, ...nextState],
-  };
 }
 
-export function redoStateChange({ previousState, currentState, nextState }) {
-  const [lastChange, ...nextChanges] = nextState;
-  if (!lastChange) {
-    return { previousState, nextState: [], currentState };
+export function redoStateChange(state) {
+  if (state.nextStates.length) {
+    state.previousStates.unshift(state.currentState);
+    state.currentState = state.nextStates.shift();
   }
-  return {
-    currentState: lastChange,
-    previousState: [currentState, ...previousState],
-    nextState: nextChanges,
-  };
 }

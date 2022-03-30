@@ -4,7 +4,7 @@ import {
   MarkdownDiffHTML,
   MarkdownEditor,
   MarkdownRenderer,
-  createCommand,
+  createEditorCommand,
 } from "../components/Markdown";
 import {
   ButtonIcon,
@@ -43,7 +43,7 @@ const customCommands = [
       };
     },
   },
-  createCommand({
+  createEditorCommand({
     label: "Copy All",
     commandKey: "c",
     shift: true,
