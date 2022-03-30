@@ -11,7 +11,7 @@ import {
 import { selectCurrentTheme } from "./themeSlice";
 import "./theme.css";
 
-const defaultThemes = {
+const themes = {
   [DEFAULT_DARK_THEME_NAME]: defaultDarkTheme,
   [DEFAULT_LIGHT_THEME_NAME]: defaultLightTheme,
 };
@@ -30,10 +30,7 @@ function ThemeConsumer({ children }) {
 
 export function UiTheme({ children }) {
   return (
-    <ThemeProvider
-      themes={defaultThemes}
-      defaultThemeName={DEFAULT_LIGHT_THEME_NAME}
-    >
+    <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
       <ThemeConsumer>{children}</ThemeConsumer>
     </ThemeProvider>
   );
