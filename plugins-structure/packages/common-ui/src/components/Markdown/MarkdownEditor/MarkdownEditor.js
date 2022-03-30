@@ -123,6 +123,7 @@ export function MarkdownEditor({
       >
         <textarea
           id="markdown-editor"
+          data-testid="markdown-editor"
           ref={editorRef}
           className={styles.editor}
           value={editorValue}
