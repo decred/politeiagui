@@ -1,0 +1,103 @@
+.censor {
+  color: var(--color-orange);
+}
+.censor:hover {
+  color: var(--color-orange-alt);
+  cursor: pointer;
+}
+
+.collapse {
+  cursor: pointer;
+  background: var(--tab-count-background);
+  color: var(--comment-like-color-active);
+  width: 2.8rem;
+  text-align: center;
+  margin-right: 1rem;
+  padding: 0.3rem 0rem;
+}
+
+.commentCard {
+  margin-bottom: 2rem;
+  padding: 1rem 1.4rem;
+}
+
+.body {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.summary {
+  display: flex;
+}
+
+.reply {
+  cursor: pointer;
+  margin-right: 1rem;
+  color: var(--tab-text-color) !important;
+}
+
+.thread {
+  margin-top: 2rem;
+  margin-left: 1.5rem;
+  border-left: 1px solid var(--separator-color);
+}
+
+.censoredComment {
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--comment-censored-background) !important;
+}
+
+/* Comment votes */
+.leftLikeBox {
+  padding-right: 1rem;
+  border-right: 1px solid var(--separator-color);
+}
+
+.rightLikeBox {
+  padding-left: 1rem;
+}
+
+.likeBtn {
+  border: none;
+  background: none !important;
+  outline: none;
+  cursor: pointer;
+  top: 3px;
+  position: relative;
+}
+
+.likeDisabled {
+  cursor: disabled;
+}
+
+.likesResult {
+  line-height: 16px !important;
+  text-align: right !important;
+  margin-left: 0.34rem;
+  color: var(--color-gray) !important;
+}
+
+.votes {
+  display: flex;
+  align-items: center;
+}
+
+.likeBtn > svg > g > path {
+  fill: var(--color-gray);
+}
+
+.hasVoted > svg > g > path {
+  fill: var(--color-primary-dark) !important;
+}
