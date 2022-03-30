@@ -1,8 +1,20 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { DEFAULT_LIGHT_THEME_NAME, ThemeProvider, useTheme } from "pi-ui";
-import { selectCurrentTheme, selectThemes } from "./themeSlice";
+import {
+  DEFAULT_DARK_THEME_NAME,
+  DEFAULT_LIGHT_THEME_NAME,
+  ThemeProvider,
+  defaultDarkTheme,
+  defaultLightTheme,
+  useTheme,
+} from "pi-ui";
+import { selectCurrentTheme } from "./themeSlice";
 import "./theme.css";
+
+const defaultThemes = {
+  [DEFAULT_DARK_THEME_NAME]: defaultDarkTheme,
+  [DEFAULT_LIGHT_THEME_NAME]: defaultLightTheme,
+};
 
 function ThemeConsumer({ children }) {
   const { setThemeName, themeName } = useTheme();
@@ -16,10 +28,13 @@ function ThemeConsumer({ children }) {
   return children;
 }
 
-export function UiTheme({ children }) {
-  const themes = useSelector(selectThemes);
+export function UiTheme({ children, customThemes, defaultThemeName }) {
+  const themes = customThemes || defaultThemes;
   return (
-    <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
+    <ThemeProvider
+      themes={themes}
+      defaultThemeName={defaultThemeName || DEFAULT_LIGHT_THEME_NAME}
+    >
       <ThemeConsumer>{children}</ThemeConsumer>
     </ThemeProvider>
   );
