@@ -82,7 +82,7 @@ function formatEachLine(lines, formatFn, { ignoreBlankLines } = {}) {
  * @param {String} initialValue initial editor content
  * @returns {EditorState} initial editor state
  */
-export function initializeEditorReducer(initialValue) {
+export function initializeEditorReducer(initialValue = "") {
   return {
     currentState: {
       content: initialValue,
@@ -228,24 +228,23 @@ export function regularChangeCommand(editorState, currentChange) {
 }
 
 /**
- * commands is the MarkdownEditorCommands list.
- * @type { MarkdownEditorCommand[] } Editor Commands list
+ * commandsMap is the MarkdownEditorCommands map.
  */
-export const commands = [
-  createEditorCommand({
+export const commandsMap = {
+  undo: createEditorCommand({
     label: "Undo",
     commandKey: "z",
     skipSaving: true,
     command: undoStateChange,
   }),
-  createEditorCommand({
+  redo: createEditorCommand({
     label: "Redo",
     commandKey: "z",
     shift: true,
     skipSaving: true,
     command: redoStateChange,
   }),
-  createEditorCommand({
+  bold: createEditorCommand({
     label: "Bold Text",
     commandKey: "b",
     buttonType: "bold",
@@ -255,7 +254,7 @@ export const commands = [
       { offset: 2 }
     ),
   }),
-  createEditorCommand({
+  italic: createEditorCommand({
     label: "Italic",
     commandKey: "i",
     buttonType: "italic",
@@ -265,7 +264,7 @@ export const commands = [
       { offset: 1 }
     ),
   }),
-  createEditorCommand({
+  quote: createEditorCommand({
     label: "Quote",
     buttonType: "quote",
     buttonViewBox: "0 0 16 16",
@@ -274,7 +273,7 @@ export const commands = [
       ignoreBlankLines: true,
     }),
   }),
-  createEditorCommand({
+  code: createEditorCommand({
     label: "Code",
     buttonType: "code",
     buttonViewBox: "0 0 16 16",
@@ -283,7 +282,7 @@ export const commands = [
       { offset: 1 }
     ),
   }),
-  createEditorCommand({
+  list: createEditorCommand({
     label: "List",
     buttonType: "bulletList",
     buttonViewBox: "0 0 16 16",
@@ -292,7 +291,7 @@ export const commands = [
       ignoreBlankLines: true,
     }),
   }),
-  createEditorCommand({
+  numberedList: createEditorCommand({
     label: "Numbered List",
     buttonType: "numberedList",
     buttonViewBox: "0 0 16 16",
@@ -301,7 +300,7 @@ export const commands = [
       ignoreBlankLines: true,
     }),
   }),
-  createEditorCommand({
+  taskList: createEditorCommand({
     label: "Task List",
     buttonType: "taskList",
     buttonViewBox: "0 0 16 16",
@@ -310,4 +309,10 @@ export const commands = [
       ignoreBlankLines: true,
     }),
   }),
-];
+};
+
+/**
+ * commands is the MarkdownEditorCommands list.
+ * @type { MarkdownEditorCommand[] } Editor Commands list
+ */
+export const commands = Object.values(commandsMap);
