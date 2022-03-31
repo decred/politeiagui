@@ -12,7 +12,7 @@ import {
 import ProposalDetails from "../../components/Proposal/ProposalDetails";
 import { Message } from "pi-ui";
 
-function Details({ token, isRaw }) {
+function Details({ token }) {
   const dispatch = useDispatch();
   const fullToken = useSelector(selectFullToken);
   const record = useSelector((state) =>
@@ -29,10 +29,6 @@ function Details({ token, isRaw }) {
   useEffect(() => {
     dispatch(fetchProposalDetails(token));
   }, [token, dispatch]);
-
-  if (isRaw) {
-    return JSON.stringify(record, null, 2);
-  }
 
   return detailsStatus === "succeeded" ? (
     <div>
