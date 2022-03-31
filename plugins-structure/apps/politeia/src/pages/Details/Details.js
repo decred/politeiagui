@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
+import { comments } from "@politeiagui/comments";
 import {
   fetchProposalDetails,
   fetchProposalTimestamps,
@@ -9,6 +10,7 @@ import {
   selectDetailsStatus,
   selectFullToken,
 } from "./detailsSlice";
+import { Comments } from "@politeiagui/comments/ui";
 import ProposalDetails from "../../components/Proposal/ProposalDetails";
 import { Message } from "pi-ui";
 
@@ -20,6 +22,9 @@ function Details({ token }) {
   );
   const voteSummary = useSelector((state) =>
     ticketvoteSummaries.selectByToken(state, fullToken)
+  );
+  const recordComments = useSelector((state) =>
+    comments.comments.selectByToken(state, fullToken)
   );
   const detailsStatus = useSelector(selectDetailsStatus);
   const detailsError = useSelector(selectDetailsError);
@@ -37,6 +42,7 @@ function Details({ token }) {
         voteSummary={voteSummary}
         onFetchTimestamps={onFetchTimestamps}
       />
+      <Comments comments={recordComments} />
     </div>
   ) : detailsStatus === "failed" ? (
     <Message kind="error">{detailsError}</Message>

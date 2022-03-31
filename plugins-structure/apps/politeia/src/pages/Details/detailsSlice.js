@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
+import { recordComments } from "@politeiagui/comments/comments";
 import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
 
@@ -30,14 +31,21 @@ export const fetchProposalDetails = createAsyncThunk(
       if (token.length === 7) {
         const detailsResponse = await dispatch(records.fetchDetails({ token }));
         const fetchedRecord = detailsResponse.payload;
-        fullToken = fetchedRecord.censorshiprecord.token;
-        const tvSummaries = await Promise.all([
-          dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
-        ]);
-        responses.push(...[fetchedRecord, tvSummaries]);
+        fullToken = fetchedRecord?.censorshiprecord?.token;
+        const [commentsResponse, ticketvoteSummariesResponse] =
+          await Promise.all([
+            dispatch(recordComments.fetch({ token: fullToken })),
+            dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
+          ]);
+        responses.push(
+          detailsResponse,
+          ticketvoteSummariesResponse,
+          commentsResponse
+        );
       } else {
         const res = await Promise.all([
           dispatch(records.fetchDetails({ token: fullToken })),
+          dispatch(recordComments.fetch({ token: fullToken })),
           dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
         ]);
         responses.push(...res);
@@ -54,6 +62,8 @@ export const fetchProposalDetails = createAsyncThunk(
       return rejectWithValue(error.message);
     }
   }
+  // TODO: add condition to fetch details only if ticketvote and comments
+  // reducers are connected
 );
 
 export const fetchProposalTimestamps = createAsyncThunk(

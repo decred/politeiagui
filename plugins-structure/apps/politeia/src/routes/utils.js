@@ -15,7 +15,7 @@ export function createAppRoute({
     path,
     view: async (params) => {
       await connectReducers([
-        ...reducers,
+        ...(reducers || []),
         { key: "uiTheme", reducer: themeReducer },
       ]);
       return ReactDOM.render(
