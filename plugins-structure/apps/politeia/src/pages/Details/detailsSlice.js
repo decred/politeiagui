@@ -28,8 +28,9 @@ export const fetchProposalDetails = createAsyncThunk(
       // dispatch other actions with full token. Otherwise, dispatch all actions
       // simultaneously.
       if (token.length === 7) {
-        const fetchedRecord = await dispatch(records.fetchDetails({ token }));
-        fullToken = fetchedRecord.payload.record.censorshiprecord.token;
+        const detailsResponse = await dispatch(records.fetchDetails({ token }));
+        const fetchedRecord = detailsResponse.payload;
+        fullToken = fetchedRecord.censorshiprecord.token;
         const tvSummaries = await Promise.all([
           dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
         ]);
