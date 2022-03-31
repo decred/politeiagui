@@ -71,7 +71,24 @@
       "@politeiagui/common-ui/utils": ["./packages/common-ui/src/utils.js"],
       "@politeiagui/common-ui/layout": [
         "./packages/common-ui/src/layout/index.js"
-      ]
+      ],
+      "@politeiagui/comments": ["./packages/comments/src/index.js"],
+      "@politeiagui/comments/comments": [
+        "./packages/comments/src/comments/comments/index.js"
+      ],
+      "@politeiagui/comments/count": [
+        "./packages/comments/src/comments/count/index.js"
+      ],
+      "@politeiagui/comments/policy": [
+        "./packages/comments/src/comments/policy/index.js"
+      ],
+      "@politeiagui/comments/timestamps": [
+        "./packages/comments/src/comments/timestamps/index.js"
+      ],
+      "@politeiagui/comments/votes": [
+        "./packages/comments/src/comments/votes/index.js"
+      ],
+      "@politeiagui/comments/ui": ["./packages/comments/src/ui/index.js"]
     }
   }
 }
