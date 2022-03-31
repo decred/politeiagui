@@ -36,7 +36,7 @@ export const detailsReducerObj = {
 export const routes = [
   createAppRoute({
     path: "/",
-    vreducers: [...ticketvoteConstants.reducersArray, homeReducerObj],
+    reducers: [...ticketvoteConstants.reducersArray, homeReducerObj],
     Component: Home,
   }),
   {
