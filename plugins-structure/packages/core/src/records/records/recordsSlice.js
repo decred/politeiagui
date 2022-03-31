@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getRecordStateCode, getRecordStatusCode } from "../utils";
 import { validateRecordStateAndStatus } from "../validation";
+import { getRecordsErrorMessage } from "../errors";
 import isArray from "lodash/fp/isArray";
 import pick from "lodash/fp/pick";
 import compose from "lodash/fp/compose";
@@ -27,7 +28,8 @@ export const fetchRecords = createAsyncThunk(
     try {
       return await extra.fetchRecords(getState(), tokens, filenames);
     } catch (e) {
-      return rejectWithValue(e.message);
+      const message = getRecordsErrorMessage(e.body, e.message);
+      return rejectWithValue(message);
     }
   },
   {

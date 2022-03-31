@@ -1,0 +1,57 @@
+.count {
+  color: var(--color-gray);
+}
+
+.filters {
+  display: flex;
+}
+.filters > * {
+  margin-right: 2rem;
+}
+.filters > *:last-child {
+  margin-right: 0px;
+}
+
+.commentsWrapper {
+  background: var(--card-background);
+}
+
+.commentsList {
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+span.flatButtonText {
+  cursor: pointer;
+  color: var(--color-primary);
+  font-size: var(--font-size-small);
+}
+
+.flatButtonWrapper {
+  margin-left: 2rem;
+  margin-right: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  border-radius: 0.2rem;
+  border: 0.1rem solid var(--color-primary);
+  user-select: none;
+}
+
+.flatButtonWrapper:hover {
+  cursor: pointer;
+}
+
+div.flatModeActive {
+  background-color: var(--color-primary);
+}
+
+span.flatModeActive {
+  color: var(--color-white);
+}
+
+.title {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

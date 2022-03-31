@@ -68,7 +68,10 @@
         "./packages/ticketvote/src/lib/validation.js"
       ],
       "@politeiagui/common-ui": ["./packages/common-ui/src/index.js"],
-      "@politeiagui/common-ui/utils": ["./packages/common-ui/src/utils.js"]
+      "@politeiagui/common-ui/utils": ["./packages/common-ui/src/utils.js"],
+      "@politeiagui/common-ui/layout": [
+        "./packages/common-ui/src/layout/index.js"
+      ]
     }
   }
 }

@@ -9,6 +9,13 @@ import {
 
 const VERSION = "v1";
 
+function ApiError(message, body) {
+  this.message = message;
+  this.body = body;
+  this.name = "API Error";
+}
+ApiError.prototype = new Error();
+
 // export client object with functions to interact with the API
 export const client = {
   async fetchRecordsInventory(obj) {
@@ -72,7 +79,6 @@ export const client = {
   },
 };
 
-// Not exported client utils
 export async function getCsrf(state) {
   const csrf = state.api && state.api.csrf;
   // if already has csrf just return it
@@ -85,8 +91,8 @@ export async function getCsrf(state) {
 export async function parseResponse(response) {
   const { status, statusText } = response;
   const json = await response.json();
-  if (status === 200) return json;
-  throw Error(statusText);
+  if ([200, 201].includes(status)) return json;
+  throw new ApiError(statusText, json);
 }
 
 export function fetchOptions(csrf, json, method) {

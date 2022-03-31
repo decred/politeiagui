@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { getTicketvoteError } from "../../lib/errors";
 import { validateTicketvoteTimestampsPageSize } from "../../lib/validation";
 
 export const initialState = {
@@ -21,7 +22,8 @@ export const fetchTicketvoteTimestamps = createAsyncThunk(
         state.ticketvotePolicy.policy.timestampspagesize;
       return { ...response, timestampsPageSize };
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getTicketvoteError(error.body, error.message);
+      return rejectWithValue(message);
     }
   },
   {

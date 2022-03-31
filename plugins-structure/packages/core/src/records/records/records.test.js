@@ -6,6 +6,7 @@ import reducer, {
 } from "./recordsSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { client } from "../../client";
+import { getRecordsUserError } from "../errors";
 
 describe("Given the recordsSlice", () => {
   let store;
@@ -226,6 +227,21 @@ describe("Given the recordsSlice", () => {
       expect(state.status).toEqual("failed");
       expect(state.error).toEqual("FAIL!");
     });
+    it("should return correct user error messages", async () => {
+      const errorcodes = Array(20)
+        .fill()
+        .map((_, i) => i + 1);
+      for (const errorcode of errorcodes) {
+        const error = { body: { errorcode } };
+        const message = getRecordsUserError(errorcode);
+        fetchRecordsSpy.mockRejectedValueOnce(error);
+        await store.dispatch(fetchRecords({ tokens: params }));
+        expect(fetchRecordsSpy).toBeCalled();
+        const state = store.getState();
+        expect(state.status).toEqual("failed");
+        expect(state.error).toEqual(message);
+      }
+    });
   });
 
   // Selectors
@@ -344,51 +360,53 @@ describe("Given the recordsSlice", () => {
         error: null,
       },
     };
-    const res = selectRecordsByStateAndStatus(mockState, {
-      recordsState: "vetted",
-      status: "public",
-    });
-    expect(res).toMatchObject({
-      "15b380b22dc1b072": {
-        state: 2,
-        status: 2,
-        version: 1,
-        timestamp: 1643054779,
-        username: "adminuser",
-        token: "15b380b22dc1b072",
-      },
-      "7a3b96e8f439b17a": {
-        state: 2,
-        status: 2,
-        version: 1,
-        timestamp: 1643054771,
-        username: "adminuser",
-        token: "7a3b96e8f439b17a",
-      },
-      "99bd3e32a4902045": {
-        state: 2,
-        status: 2,
-        version: 1,
-        timestamp: 1643054758,
-        username: "adminuser",
-        token: "99bd3e32a4902045",
-      },
-      cae588e536163306: {
-        state: 2,
-        status: 2,
-        version: 1,
-        timestamp: 1643054752,
-        username: "adminuser",
-        token: "cae588e536163306",
-      },
-      ec75681c4481e72a: {
-        state: 2,
-        status: 2,
-        version: 1,
-        timestamp: 1643054788,
-        username: "adminuser",
-        token: "ec75681c4481e72a",
-      },
+    it("should return correct records batch", () => {
+      const res = selectRecordsByStateAndStatus(mockState, {
+        recordsState: "vetted",
+        status: "public",
+      });
+      expect(res).toMatchObject({
+        "15b380b22dc1b072": {
+          state: 2,
+          status: 2,
+          version: 1,
+          timestamp: 1643054779,
+          username: "adminuser",
+          token: "15b380b22dc1b072",
+        },
+        "7a3b96e8f439b17a": {
+          state: 2,
+          status: 2,
+          version: 1,
+          timestamp: 1643054771,
+          username: "adminuser",
+          token: "7a3b96e8f439b17a",
+        },
+        "99bd3e32a4902045": {
+          state: 2,
+          status: 2,
+          version: 1,
+          timestamp: 1643054758,
+          username: "adminuser",
+          token: "99bd3e32a4902045",
+        },
+        cae588e536163306: {
+          state: 2,
+          status: 2,
+          version: 1,
+          timestamp: 1643054752,
+          username: "adminuser",
+          token: "cae588e536163306",
+        },
+        ec75681c4481e72a: {
+          state: 2,
+          status: 2,
+          version: 1,
+          timestamp: 1643054788,
+          username: "adminuser",
+          token: "ec75681c4481e72a",
+        },
+      });
     });
   });
 });

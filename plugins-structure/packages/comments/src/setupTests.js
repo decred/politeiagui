@@ -1,3 +1,6 @@
+import React from "react";
+import "@testing-library/jest-dom";
+
 // Universal mocks
 jest.mock(
   "@politeiagui/core/client",
@@ -19,27 +22,18 @@ jest.mock(
 );
 
 jest.mock(
-  "@politeiagui/core/records/utils",
+  "@politeiagui/core",
   () => ({
-    getTokensToFetch: () => ({
-      tokens: ["token1", "token2", "token3", "token4", "token5"],
-      last: "token5",
-    }),
-  }),
-  { virtual: true }
-);
-jest.mock(
-  "@politeiagui/core/records/validation",
-  () => ({
-    validateRecordsPageSize: () => true,
+    RECORDS_PAGE_SIZE: 5,
   }),
   { virtual: true }
 );
 
 jest.mock(
-  "@politeiagui/core",
+  "@politeiagui/common-ui",
   () => ({
-    RECORDS_PAGE_SIZE: 5,
+    Event: ({ timestamp }) => <div>{timestamp}</div>,
+    Join: ({ children }) => <div>{children}</div>,
   }),
   { virtual: true }
 );

@@ -6,6 +6,7 @@ import recordsInventoryReducer, {
 import recordsReducer from "../records/recordsSlice";
 import recordsPolicyReducer from "../policy/policySlice";
 import { configureStore } from "@reduxjs/toolkit";
+import { getRecordsUserError } from "../errors";
 import { client } from "../../client";
 
 describe("Given the recordsInventorySlice", () => {
@@ -253,6 +254,21 @@ describe("Given the recordsInventorySlice", () => {
         expect(state.recordsInventory.status).toEqual("failed");
         expect(state.recordsInventory.error).toEqual("FAIL!");
       });
+      it("should return correct user error messages", async () => {
+        const errorcodes = Array(20)
+          .fill()
+          .map((_, i) => i + 1);
+        for (const errorcode of errorcodes) {
+          const error = { body: { errorcode } };
+          const message = getRecordsUserError(errorcode);
+          fetchRecordsInventorySpy.mockRejectedValueOnce(error);
+          await preloadedStore.dispatch(fetchRecordsInventory(params));
+          expect(fetchRecordsInventorySpy).toBeCalled();
+          const state = preloadedStore.getState().recordsInventory;
+          expect(state.status).toEqual("failed");
+          expect(state.error).toEqual(message);
+        }
+      });
     });
   });
 
@@ -444,6 +460,21 @@ describe("Given the recordsInventorySlice", () => {
         expect(state.records.records).toEqual({});
         expect(state.records.status).toEqual("failed");
         expect(state.records.error).toEqual("FAIL!");
+      });
+      it("should return correct user error messages", async () => {
+        const errorcodes = Array(20)
+          .fill()
+          .map((_, i) => i + 1);
+        for (const errorcode of errorcodes) {
+          const error = { body: { errorcode } };
+          const message = getRecordsUserError(errorcode);
+          fetchRecordsSpy.mockRejectedValueOnce(error);
+          await preloadedStore.dispatch(fetchNextRecordsBatch(params));
+          expect(fetchRecordsSpy).toBeCalled();
+          const state = preloadedStore.getState().records;
+          expect(state.status).toEqual("failed");
+          expect(state.error).toEqual(message);
+        }
       });
     });
   });

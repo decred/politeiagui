@@ -7,6 +7,7 @@ import { connectReducers } from "@politeiagui/core";
 import { ticketvoteConstants } from "@politeiagui/ticketvote";
 import homeReducer from "../pages/Home/homeSlice";
 import detailsReducer from "../pages/Details/detailsSlice";
+import { createAppRoute } from "./utils";
 
 import {
   DEFAULT_DARK_THEME_NAME,
@@ -33,28 +34,11 @@ export const detailsReducerObj = {
 };
 
 export const routes = [
-  {
+  createAppRoute({
     path: "/",
-    view: async (params) => {
-      await connectReducers([
-        ...ticketvoteConstants.reducersArray,
-        homeReducerObj,
-      ]);
-      return ReactDOM.render(
-        <ThemeProvider
-          themes={themes}
-          defaultThemeName={DEFAULT_LIGHT_THEME_NAME}
-        >
-          <Provider store={store}>
-            <Home {...params} />
-          </Provider>
-        </ThemeProvider>,
-        document.querySelector("#root")
-      );
-    },
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
-  },
+    vreducers: [...ticketvoteConstants.reducersArray, homeReducerObj],
+    Component: Home,
+  }),
   {
     path: "/record/:token",
     view: async (params) => {
