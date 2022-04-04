@@ -14,15 +14,23 @@
     "test:format": "yarn prettier --check",
     "test:eslint": "eslint --ext .js ./src",
     "fix:eslint": "eslint --ext .js ./src --fix",
-    "test:ci": "npm run test:format && npm run test:eslint && cross-env jest --no-cache --passWithNoTests",
-    "test:dev": "npm run test:format && npm run test:eslint && cross-env jest --watchAll --no-cache",
+    "test:ci": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --no-cache",
+    "test:dev": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll --no-cache",
     "test": "is-ci \"test:ci\" \"test:dev\"",
     "test:coverage": "yarn test:ci; open coverage/lcov-report/index.html",
     "build": "webpack --config webpack.prod.js",
     "start": "webpack serve --config webpack.dev.js --open"
   },
   "dependencies": {
-    "@politeiagui/core": "1.0.0"
+    "@politeiagui/core": "1.0.0",
+    "diff": "^5.0.0",
+    "html-react-parser": "^1.4.8",
+    "node-html-parser": "^5.3.3",
+    "react-markdown": "^6.0.3",
+    "remark-gfm": "1.0.0",
+    "xss-filters": "^1.2.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@svgr/webpack": "^6.2.1"
+  }
 }
