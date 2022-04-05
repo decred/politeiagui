@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { commentsTimestamps } from "../comments/timestamps";
+import { commentsTimestamps } from "../../comments/timestamps";
 import { Button } from "pi-ui";
 import fileDownload from "js-file-download";
 
