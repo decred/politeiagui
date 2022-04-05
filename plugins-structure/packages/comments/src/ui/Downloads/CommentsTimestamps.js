@@ -2,25 +2,21 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { commentsTimestamps } from "../../comments/timestamps";
 import { Button } from "pi-ui";
-import fileDownload from "js-file-download";
+import { downloadJson } from "./utils";
 
 export const DownloadCommentsTimestamps = ({
   token,
   mode,
-  label = "Download Comments Timestamps",
+  label,
   commentids,
-  pageSize,
 }) => {
   const [allowDownload, setAllowDownload] = useState(false);
   const { onFetchTimestamps, timestamps, timestampsStatus } =
-    commentsTimestamps.useFetch({ token, commentids, pageSize });
+    commentsTimestamps.useFetch({ token, commentids });
 
   const handleFetchTimestamps = () => {
     if (timestampsStatus === "succeeded/isDone") {
-      fileDownload(
-        JSON.stringify(timestamps, null, 2),
-        `${token}-comments-timestamps.json`
-      );
+      downloadJson(timestamps, `${token}-comments-timestamps`);
     } else if (timestampsStatus === "idle") {
       onFetchTimestamps();
       setAllowDownload(true);
@@ -29,10 +25,7 @@ export const DownloadCommentsTimestamps = ({
 
   useEffect(() => {
     if (timestampsStatus === "succeeded/isDone" && allowDownload) {
-      fileDownload(
-        JSON.stringify(timestamps, null, 2),
-        `${token}-comments-timestamps.json`
-      );
+      downloadJson(timestamps, `${token}-comments-timestamps`);
     }
   }, [timestamps, timestampsStatus, token, allowDownload]);
 
@@ -46,11 +39,10 @@ DownloadCommentsTimestamps.propTypes = {
   token: PropTypes.string.isRequired,
   commentids: PropTypes.arrayOf(PropTypes.number),
   mode: PropTypes.oneOf(["button", "text"]),
-  pageSize: PropTypes.number,
+  label: PropTypes.string,
 };
 
 DownloadCommentsTimestamps.defaultProps = {
   mode: "button",
-  onFetchDone: () => {},
-  pageSize: 100,
+  label: "Download Comments Timestamps",
 };
