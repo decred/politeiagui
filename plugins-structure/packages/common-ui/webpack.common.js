@@ -33,6 +33,13 @@ const cssRules = [
   },
 ];
 
+const svgRules = [
+  {
+    test: /\.svg$/,
+    use: ["@svgr/webpack"],
+  },
+];
+
 module.exports = {
   entry: "./src/index.js",
   output: {
@@ -45,7 +52,7 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules, ...cssRules],
+    rules: [jsRules, ...cssRules, ...svgRules],
   },
   resolve: {
     fallback: {

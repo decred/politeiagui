@@ -72,9 +72,27 @@ const linkHandler = ({ href, children }) => {
   return <LinkRenderer url={newHref}>{children}</LinkRenderer>;
 };
 
-export const customRenderers = (renderImages) => {
+const blockquoteHandler =
+  (isDiff) =>
+  ({ children }) => {
+    let newChildren = [...children];
+    if (isDiff) {
+      // Remove all paragraph tags from blockquotes, so diff can recognize the
+      // differences inside blockquotes
+      newChildren = traverseChildren(<>{children}</>, (el) => {
+        if (React.isValidElement(el)) {
+          return el.type === "p" ? <>{el.props.children}</> : el;
+        }
+        return el;
+      });
+    }
+    return <blockquote>{newChildren}</blockquote>;
+  };
+
+export const customRenderers = (renderImages, isDiff) => {
   return {
     img: imageHandler(renderImages),
     a: linkHandler,
+    blockquote: blockquoteHandler(isDiff),
   };
 };

@@ -461,7 +461,7 @@
 
 .markdown-body .highlight pre,
 .markdown-body pre {
-  background-color: #f6f8fa;
+  background-color: #a6a6a61c;
   border-radius: 3px;
   font-size: 85%;
   line-height: 1.45;
@@ -501,4 +501,25 @@
 
 .markdown-body hr {
   border-bottom-color: #eee;
+}
+
+/* DIFF */
+.added {
+  color: var(--color-green);
+  background-color: #bffccc54;
+}
+.added > pre {
+  color: var(--color-green);
+  border: var(--color-green) 1px solid;
+  background-color: #bffccc1c !important;
+}
+.removed {
+  color: var(--color-orange);
+  background-color: #ffcccc57;
+}
+
+.removed > pre {
+  color: var(--color-orange);
+  border: var(--color-orange) 1px solid;
+  background-color: #ffcccc1c !important;
 }
