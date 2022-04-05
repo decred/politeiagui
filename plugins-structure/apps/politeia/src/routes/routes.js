@@ -7,6 +7,7 @@ import { Details, Home } from "../pages";
 import homeReducer from "../pages/Home/homeSlice";
 import detailsReducer from "../pages/Details/detailsSlice";
 import { createAppRoute } from "./utils";
+import { decodeProposalRecord } from "../components/Proposal/utils";
 
 export const homeReducerObj = {
   key: "home",
@@ -44,10 +45,10 @@ export const routes = [
       const { payload: recordDetails } = await store.dispatch(
         records.fetchDetails({ token })
       );
-      const recordDetailsString = JSON.stringify(recordDetails, null, 2);
+      const proposalDetails = decodeProposalRecord(recordDetails);
       return (document.querySelector(
         "#root"
-      ).innerHTML = `<pre>${recordDetailsString}</pre>`);
+      ).innerHTML = `<pre style="white-space: pre-line;margin: 1rem">${proposalDetails.body}</pre>`);
     },
     cleanup: () =>
       ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
