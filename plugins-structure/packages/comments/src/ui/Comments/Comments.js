@@ -32,18 +32,21 @@ export const Comments = ({
     setThreadSchema(schema);
   }, [sortedComments, isFlat]);
 
+  const commentsCount = Object.keys(comments).length;
+
   return (
     <div className={styles.commentsWrapper}>
       <Card paddingSize="small" className={styles.header}>
         <H2 className={styles.title}>
-          Comments{" "}
-          <span className={styles.count}>({Object.keys(comments).length})</span>
+          Comments <span className={styles.count}>({commentsCount})</span>
         </H2>
-        <CommentsFilter
-          isFlat={isFlat}
-          onSort={handleSortComments}
-          onToggleFlatMode={handleToggleFlatMode}
-        />
+        {!!commentsCount && (
+          <CommentsFilter
+            isFlat={isFlat}
+            onSort={handleSortComments}
+            onToggleFlatMode={handleToggleFlatMode}
+          />
+        )}
       </Card>
       <div className={styles.commentsList}>
         <CommentsList

@@ -1,66 +1,51 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { commentsCount } from "../comments/count";
 import { commentsTimestamps } from "../comments/timestamps";
-import { Button, Link } from "pi-ui";
-import isEmpty from "lodash/fp/isEmpty";
-import range from "lodash/range";
+import { Button } from "pi-ui";
 import fileDownload from "js-file-download";
-
-const ButtonComponent = (props) => <Button {...props}>Fetch Timestamps</Button>;
-
-const LinkComponent = (props) => (
-  <Link href="" {...props}>
-    Fetch Timestamps
-  </Link>
-);
 
 export const DownloadCommentsTimestamps = ({
   token,
   mode,
+  label = "Download Comments Timestamps",
   commentids,
   pageSize,
 }) => {
-  const { count, countStatus } = commentsCount.useFetch({ tokens: [token] });
-  const commentsCounter = count[token];
+  const [allowDownload, setAllowDownload] = useState(false);
   const { onFetchTimestamps, timestamps, timestampsStatus } =
-    commentsTimestamps.useFetch({
-      token,
-      commentids: !isEmpty(commentids)
-        ? commentids
-        : range(1, commentsCounter + 1),
-      pageSize,
-    });
+    commentsTimestamps.useFetch({ token, commentids, pageSize });
 
   const handleFetchTimestamps = () => {
     if (timestampsStatus === "succeeded/isDone") {
-      fileDownload(JSON.stringify(timestamps), `${token}-comments-timestamps`);
+      fileDownload(
+        JSON.stringify(timestamps, null, 2),
+        `${token}-comments-timestamps.json`
+      );
     } else if (timestampsStatus === "idle") {
       onFetchTimestamps();
+      setAllowDownload(true);
     }
   };
 
   useEffect(() => {
-    if (timestampsStatus === "succeeded/isDone") {
-      fileDownload(JSON.stringify(timestamps), `${token}-comments-timestamps`);
+    if (timestampsStatus === "succeeded/isDone" && allowDownload) {
+      fileDownload(
+        JSON.stringify(timestamps, null, 2),
+        `${token}-comments-timestamps.json`
+      );
     }
-  }, [timestamps, timestampsStatus, token]);
+  }, [timestamps, timestampsStatus, token, allowDownload]);
 
-  return countStatus === "succeeded" ? (
-    mode === "button" ? (
-      <ButtonComponent onClick={handleFetchTimestamps} />
-    ) : (
-      <LinkComponent onClick={handleFetchTimestamps} />
-    )
-  ) : (
-    "Loading"
-  );
+  return {
+    button: <Button onClick={handleFetchTimestamps}>{label}</Button>,
+    text: <span onClick={handleFetchTimestamps}>{label}</span>,
+  }[mode];
 };
 
 DownloadCommentsTimestamps.propTypes = {
   token: PropTypes.string.isRequired,
   commentids: PropTypes.arrayOf(PropTypes.number),
-  mode: PropTypes.oneOf(["button", "link"]),
+  mode: PropTypes.oneOf(["button", "text"]),
   pageSize: PropTypes.number,
 };
 
