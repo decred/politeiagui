@@ -1,3 +1,4 @@
+export { default as ProposalDownloads } from "./ProposalDownloads";
 export { default as ProposalMetadata } from "./ProposalMetadata";
 export { default as ProposalStatusBar } from "./ProposalStatusBar";
 export { default as ProposalStatusTag } from "./ProposalStatusTag";

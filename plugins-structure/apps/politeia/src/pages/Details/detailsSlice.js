@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { recordComments } from "@politeiagui/comments/comments";
-import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
-import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
 
 const initialState = {
   status: "idle",
@@ -21,9 +19,6 @@ export const fetchProposalDetails = createAsyncThunk(
       // create responses array so we can handle errors and details from thunks
       // responses.
       const responses = [];
-
-      // fetch ticketvote policy required for fetching ticketvote summaries.
-      await dispatch(ticketvotePolicy.fetch());
 
       // If token is short, fetch details first to get the full token, and then
       // dispatch other actions with full token. Otherwise, dispatch all actions
@@ -61,22 +56,12 @@ export const fetchProposalDetails = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  }
-  // TODO: add condition to fetch details only if ticketvote and comments
-  // reducers are connected
-);
-
-export const fetchProposalTimestamps = createAsyncThunk(
-  "details/fetchProposalTimestamps",
-  async ({ token, version }, { dispatch, rejectWithValue }) => {
-    try {
-      const timestamps = await dispatch(
-        recordsTimestamps.fetch({ token, version })
-      );
-      return timestamps.payload;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+  },
+  {
+    condition: (token, { getState }) => {
+      const fullToken = selectFullToken(getState());
+      return !fullToken || !fullToken.includes(token);
+    },
   }
 );
 
@@ -95,16 +80,6 @@ const detailsSlice = createSlice({
       .addCase(fetchProposalDetails.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-      })
-      .addCase(fetchProposalTimestamps.pending, (state) => {
-        state.downloadStatus = "loading";
-      })
-      .addCase(fetchProposalTimestamps.fulfilled, (state) => {
-        state.downloadStatus = "succeeded";
-      })
-      .addCase(fetchProposalTimestamps.rejected, (state, action) => {
-        state.downloadStatus = "failed";
-        state.error = action.payload;
       });
   },
 });
@@ -112,5 +87,17 @@ const detailsSlice = createSlice({
 export const selectDetailsStatus = (state) => state.details.status;
 export const selectDetailsError = (state) => state.details.error;
 export const selectFullToken = (state) => state.details.fullToken;
+export const selectRecord = (state) => {
+  const fullToken = state.details.fullToken;
+  return records.selectByToken(state, fullToken);
+};
+export const selectVoteSummary = (state) => {
+  const fullToken = state.details.fullToken;
+  return ticketvoteSummaries.selectByToken(state, fullToken);
+};
+export const selectComments = (state) => {
+  const fullToken = state.details.fullToken;
+  return recordComments.selectByToken(state, fullToken);
+};
 
 export default detailsSlice.reducer;

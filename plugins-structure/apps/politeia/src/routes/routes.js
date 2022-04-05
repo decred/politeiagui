@@ -35,6 +35,7 @@ export const routes = [
       ...commentsConstants.reducersArray,
       detailsReducerObj,
     ],
+    requiredPolicies: ["comments", "ticketvote"],
     Component: Details,
   }),
   {
