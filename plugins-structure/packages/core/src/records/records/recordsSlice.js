@@ -46,9 +46,9 @@ export const fetchRecords = createAsyncThunk(
  */
 export const fetchRecordDetails = createAsyncThunk(
   "records/fetchDetails",
-  async ({ token }, { getState, extra, rejectWithValue }) => {
+  async ({ token, version }, { getState, extra, rejectWithValue }) => {
     try {
-      return await extra.fetchRecordDetails(getState(), token);
+      return await extra.fetchRecordDetails(getState(), { token, version });
     } catch (error) {
       return rejectWithValue(error.message);
     }

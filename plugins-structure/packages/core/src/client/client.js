@@ -46,11 +46,11 @@ export const client = {
     const recordsInfo = await parseResponse(response);
     return recordsInfo.records;
   },
-  async fetchRecordDetails(state, token) {
+  async fetchRecordDetails(state, { token, version }) {
     const csrf = await getCsrf(state);
     const response = await fetch(
       `${RECORDS_API_ROUTE}${VERSION}${ROUTE_DETAILS}`,
-      fetchOptions(csrf, { token }, "POST")
+      fetchOptions(csrf, { token, version }, "POST")
     );
     const recordResponse = await parseResponse(response);
     return recordResponse.record;

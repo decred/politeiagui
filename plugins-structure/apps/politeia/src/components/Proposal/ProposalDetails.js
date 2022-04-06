@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  MarkdownDiffHTML,
   MarkdownRenderer,
   RecordCard,
   RecordToken,
@@ -12,7 +13,7 @@ import {
   ProposalStatusTag,
   ProposalSubtitle,
 } from "./common";
-import { Button, ButtonIcon } from "pi-ui";
+import { Button, ButtonIcon, Text } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
 
@@ -21,13 +22,23 @@ const ProposalDetails = ({
   voteSummary,
   piSummary,
   onFetchRecordTimestamps,
-  onFetchCommentsTimestamps,
+  onFetchVersion,
 }) => {
+  // TEMPORARY: this is temporary and should be removed when modal gets
+  // implemented.
+  const [diff, setDiff] = useState();
+
   const proposalDetails = decodeProposalRecord(record);
   function handleShowRawMarkdown() {
     window.location.pathname = `/record/${getShortToken(
       proposalDetails.token
     )}/raw`;
+  }
+  async function handleFetchVersion(version) {
+    const proposalVersion = await onFetchVersion(version);
+    // TODO: display diff on modal
+    const { body } = decodeProposalRecord(proposalVersion);
+    setDiff(body);
   }
   return (
     <div>
@@ -42,6 +53,7 @@ const ProposalDetails = ({
             editedat={proposalDetails.timestamps.editedat}
             token={proposalDetails.token}
             version={proposalDetails.version}
+            onChangeVersion={handleFetchVersion}
           />
         }
         rightHeader={<ProposalStatusTag piSummary={piSummary} />}
@@ -52,7 +64,17 @@ const ProposalDetails = ({
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
           </div>
         }
-        thirdRow={<MarkdownRenderer body={proposalDetails.body} />}
+        thirdRow={
+          diff ? (
+            <div>
+              <Text color="yellow">TEMPORARY</Text>
+              <button onClick={() => setDiff(null)}>Clear Diff</button>
+              <MarkdownDiffHTML oldText={diff} newText={proposalDetails.body} />
+            </div>
+          ) : (
+            <MarkdownRenderer body={proposalDetails.body} />
+          )
+        }
         fourthRow={
           <>
             <Button>Click Me</Button>
@@ -64,7 +86,6 @@ const ProposalDetails = ({
             <ProposalDownloads
               record={record}
               onFetchRecordTimestamps={onFetchRecordTimestamps}
-              onFetchCommentsTimestamps={onFetchCommentsTimestamps}
             />
             <div className={styles.footerButtons}>
               <ButtonIcon

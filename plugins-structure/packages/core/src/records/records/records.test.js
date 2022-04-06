@@ -147,74 +147,6 @@ describe("Given the recordsSlice", () => {
     it("should dispatch failure and update the error", async () => {
       let state = store.getState();
       const error = new Error("FAIL!");
-      fetchRecordDetailsSpy.mockRejectedValue(error);
-      await store.dispatch(fetchRecordDetails({ token: "abcdefg" }));
-      expect(fetchRecordDetailsSpy).toBeCalledWith(
-        { ...state, status: "loading" },
-        "abcdefg"
-      );
-      state = store.getState();
-      expect(state.records).toEqual({});
-      expect(state.status).toEqual("failed");
-      expect(state.error).toEqual("FAIL!");
-    });
-  });
-
-  // Details
-  describe("when invalid params are passed to fetchRecordDetails thunk", () => {
-    it("should not fetch nor fire actions", async () => {
-      const badArgs = [undefined, null, {}, [], 123];
-      for (const arg of badArgs) {
-        await store.dispatch(fetchRecordDetails({ token: arg }));
-        expect(fetchRecordDetailsSpy).not.toBeCalled();
-        const state = store.getState();
-        expect(state.records).toEqual({});
-        expect(state.status).toEqual("idle");
-      }
-    });
-  });
-  describe("when fetchRecordDetails dispatches", () => {
-    it("should update the status to loading", () => {
-      store.dispatch(fetchRecordDetails({ token: "abcdefg" }));
-      let state = store.getState();
-      expect(fetchRecordDetailsSpy).toBeCalledWith(state, "abcdefg");
-      state = store.getState();
-      expect(state.status).toEqual("loading");
-    });
-  });
-  describe("when fetchRecordDetails succeeds", () => {
-    it("should update records and status should be succeeded", async () => {
-      let state = store.getState();
-      const fakeRecordRes = {
-        state: 2,
-        status: 2,
-        version: 1,
-        timestamp: 1500000000,
-        username: "user1",
-        metadata: [],
-        files: [],
-        censorshiprecord: {
-          token: "fake_token",
-          merkle: "fake_merkle",
-          signature: "fake_signature",
-        },
-      };
-      fetchRecordDetailsSpy.mockResolvedValueOnce(fakeRecordRes);
-      await store.dispatch(fetchRecordDetails({ token: "fake_token" }));
-      expect(fetchRecordDetailsSpy).toBeCalledWith(
-        { ...state, status: "loading" },
-        "fake_token"
-      );
-      state = store.getState();
-      expect(state.records).toEqual({ fake_token: fakeRecordRes });
-      expect(state.status).toBe("succeeded");
-      expect(state.error).toBe(null);
-    });
-  });
-  describe("when fetchRecordDetails fails", () => {
-    it("should dispatch failure and update the error", async () => {
-      let state = store.getState();
-      const error = new Error("FAIL!");
       fetchRecordsSpy.mockRejectedValue(error);
       await store.dispatch(fetchRecords({ tokens: params }));
       expect(fetchRecordsSpy).toBeCalledWith(
@@ -241,6 +173,79 @@ describe("Given the recordsSlice", () => {
         expect(state.status).toEqual("failed");
         expect(state.error).toEqual(message);
       }
+    });
+  });
+
+  // Details
+  describe("when invalid params are passed to fetchRecordDetails thunk", () => {
+    it("should not fetch nor fire actions", async () => {
+      const badArgs = [undefined, null, {}, [], 123];
+      for (const arg of badArgs) {
+        await store.dispatch(fetchRecordDetails({ token: arg }));
+        expect(fetchRecordDetailsSpy).not.toBeCalled();
+        const state = store.getState();
+        expect(state.records).toEqual({});
+        expect(state.status).toEqual("idle");
+      }
+    });
+  });
+  describe("when fetchRecordDetails dispatches", () => {
+    it("should update the status to loading", () => {
+      store.dispatch(fetchRecordDetails({ token: "abcdefg" }));
+      let state = store.getState();
+      expect(fetchRecordDetailsSpy).toBeCalledWith(state, {
+        token: "abcdefg",
+        version: undefined,
+      });
+      state = store.getState();
+      expect(state.status).toEqual("loading");
+    });
+  });
+  describe("when fetchRecordDetails succeeds", () => {
+    it("should update records and status should be succeeded", async () => {
+      let state = store.getState();
+      const fakeRecordRes = {
+        state: 2,
+        status: 2,
+        version: 1,
+        timestamp: 1500000000,
+        username: "user1",
+        metadata: [],
+        files: [],
+        censorshiprecord: {
+          token: "fake_token",
+          merkle: "fake_merkle",
+          signature: "fake_signature",
+        },
+      };
+      fetchRecordDetailsSpy.mockResolvedValueOnce(fakeRecordRes);
+      await store.dispatch(fetchRecordDetails({ token: "fake_token" }));
+      expect(fetchRecordDetailsSpy).toBeCalledWith(
+        { ...state, status: "loading" },
+        { token: "fake_token", version: undefined }
+      );
+      state = store.getState();
+      expect(state.records).toEqual({ fake_token: fakeRecordRes });
+      expect(state.status).toBe("succeeded");
+      expect(state.error).toBe(null);
+    });
+  });
+  describe("when fetchRecordDetails fails", () => {
+    it("should dispatch failure and update the error", async () => {
+      let state = store.getState();
+      const error = new Error("FAIL!");
+      fetchRecordDetailsSpy.mockRejectedValue(error);
+      await store.dispatch(
+        fetchRecordDetails({ token: "abcdefg", version: 3 })
+      );
+      expect(fetchRecordDetailsSpy).toBeCalledWith(
+        { ...state, status: "loading" },
+        { token: "abcdefg", version: 3 }
+      );
+      state = store.getState();
+      expect(state.records).toEqual({});
+      expect(state.status).toEqual("failed");
+      expect(state.error).toEqual("FAIL!");
     });
   });
 

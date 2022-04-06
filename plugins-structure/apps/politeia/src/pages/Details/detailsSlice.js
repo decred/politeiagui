@@ -10,6 +10,7 @@ const initialState = {
   submissionsLastPos: null,
   error: null,
   downloadStatus: "idle",
+  versions: {},
 };
 
 export const fetchProposalDetails = createAsyncThunk(
@@ -69,6 +70,26 @@ export const fetchProposalDetails = createAsyncThunk(
   }
 );
 
+export const fetchProposalVersion = createAsyncThunk(
+  "details/fetchProposalVersion",
+  async ({ token, version }, { getState, rejectWithValue, extra }) => {
+    try {
+      const res = await extra.fetchRecordDetails(getState(), {
+        token,
+        version,
+      });
+      return res;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+  {
+    condition: (body) => {
+      return body && !!body.version && !!body.token;
+    },
+  }
+);
+
 const detailsSlice = createSlice({
   name: "details",
   initialState,
@@ -84,6 +105,15 @@ const detailsSlice = createSlice({
       .addCase(fetchProposalDetails.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      .addCase(fetchProposalVersion.pending, (state) => {
+        state.versionStatus = "loading";
+      })
+      .addCase(fetchProposalVersion.fulfilled, (state) => {
+        state.versionStatus = "succeeded";
+      })
+      .addCase(fetchProposalVersion.rejected, (state) => {
+        state.versionStatus = "failed";
       });
   },
 });

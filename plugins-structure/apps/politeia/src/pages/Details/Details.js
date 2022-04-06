@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProposalDetails,
+  fetchProposalVersion,
   selectComments,
   selectDetailsError,
   selectDetailsStatus,
@@ -27,6 +28,10 @@ function Details({ token }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
     return res.payload;
   }
+  async function onFetchPreviousVersions(version) {
+    const res = await dispatch(fetchProposalVersion({ token, version }));
+    return res.payload;
+  }
 
   useEffect(() => {
     dispatch(fetchProposalDetails(token));
@@ -38,6 +43,7 @@ function Details({ token }) {
         record={record}
         voteSummary={voteSummary}
         piSummary={piSummary}
+        onFetchVersion={onFetchPreviousVersions}
         onFetchRecordTimestamps={onFetchRecordTimestamps}
       />
       <Comments comments={recordComments} />
