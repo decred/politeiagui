@@ -36,7 +36,7 @@ export const fetchPiPolicy = createAsyncThunk(
   "pi/fetchPolicy",
   async (_, { getState, rejectWithValue }) => {
     try {
-      return api.fetchPolicy(getState());
+      return await api.fetchPolicy(getState());
     } catch (error) {
       return rejectWithValue(error.message);
     }
