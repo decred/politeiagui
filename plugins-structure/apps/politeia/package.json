@@ -4,15 +4,6 @@
   "main": "dist/main.js",
   "module": "src/index.js",
   "license": "MIT",
-  "babel": {
-    "env": {
-      "test": {
-        "plugins": [
-          "@babel/plugin-transform-modules-commonjs"
-        ]
-      }
-    }
-  },
   "scripts": {
     "prettier": "prettier \"src/**/*.js\"",
     "format": "yarn prettier --write",

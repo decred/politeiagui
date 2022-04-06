@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "./api";
+import { validatePiSummariesPageSize } from "./validation";
 
 const byTokenObj = {
   byToken: {},
@@ -7,7 +8,7 @@ const byTokenObj = {
   error: null,
 };
 
-const initialState = {
+export const initialState = {
   summaries: byTokenObj,
   policy: {
     policy: {},
@@ -20,13 +21,14 @@ export const fetchPiSummaries = createAsyncThunk(
   "pi/fetchSummaries",
   async ({ tokens }, { getState, rejectWithValue }) => {
     try {
-      return api.fetchSummaries(getState(), { tokens });
+      return await api.fetchSummaries(getState(), { tokens });
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
   {
-    condition: (body) => body && !!body.tokens,
+    condition: (body, { getState }) =>
+      body && !!body.tokens && validatePiSummariesPageSize(getState()),
   }
 );
 
