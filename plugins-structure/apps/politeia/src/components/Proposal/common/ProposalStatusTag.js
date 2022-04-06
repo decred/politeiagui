@@ -2,8 +2,8 @@ import React from "react";
 import { StatusTag } from "pi-ui";
 import { getProposalStatusTagProps } from "../utils";
 
-function ProposalStatusTag({ record, voteSummary }) {
-  const statusTagProps = getProposalStatusTagProps(record, voteSummary);
+function ProposalStatusTag({ piSummary }) {
+  const statusTagProps = getProposalStatusTagProps(piSummary);
   return <StatusTag {...statusTagProps} />;
 }
 

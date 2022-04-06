@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { recordComments } from "@politeiagui/comments/comments";
+import { piSummaries } from "../../pi";
 
 const initialState = {
   status: "idle",
@@ -24,24 +25,27 @@ export const fetchProposalDetails = createAsyncThunk(
       // dispatch other actions with full token. Otherwise, dispatch all actions
       // simultaneously.
       if (token.length === 7) {
-        const detailsResponse = await dispatch(records.fetchDetails({ token }));
-        const fetchedRecord = detailsResponse.payload;
+        const detailsRes = await dispatch(records.fetchDetails({ token }));
+        const fetchedRecord = detailsRes.payload;
         fullToken = fetchedRecord?.censorshiprecord?.token;
-        const [commentsResponse, ticketvoteSummariesResponse] =
+        const [commentsRes, ticketvoteSummariesRes, piSummariesRes] =
           await Promise.all([
             dispatch(recordComments.fetch({ token: fullToken })),
             dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
+            dispatch(piSummaries.fetch({ tokens: [fullToken] })),
           ]);
         responses.push(
-          detailsResponse,
-          ticketvoteSummariesResponse,
-          commentsResponse
+          detailsRes,
+          commentsRes,
+          ticketvoteSummariesRes,
+          piSummariesRes
         );
       } else {
         const res = await Promise.all([
           dispatch(records.fetchDetails({ token: fullToken })),
           dispatch(recordComments.fetch({ token: fullToken })),
           dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
+          dispatch(piSummaries.fetch({ tokens: [fullToken] })),
         ]);
         responses.push(...res);
       }
@@ -94,6 +98,10 @@ export const selectRecord = (state) => {
 export const selectVoteSummary = (state) => {
   const fullToken = state.details.fullToken;
   return ticketvoteSummaries.selectByToken(state, fullToken);
+};
+export const selectPiSummary = (state) => {
+  const fullToken = state.details.fullToken;
+  return piSummaries.selectByToken(state, fullToken);
 };
 export const selectComments = (state) => {
   const fullToken = state.details.fullToken;

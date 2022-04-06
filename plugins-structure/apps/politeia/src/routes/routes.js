@@ -6,17 +6,23 @@ import { commentsConstants } from "@politeiagui/comments";
 import { Details, Home } from "../pages";
 import homeReducer from "../pages/Home/homeSlice";
 import detailsReducer from "../pages/Details/detailsSlice";
+import piReducer from "../pi/piSlice";
 import { createAppRoute } from "./utils";
 import { decodeProposalRecord } from "../components/Proposal/utils";
 
-export const homeReducerObj = {
+const homeReducerObj = {
   key: "home",
   reducer: homeReducer,
 };
 
-export const detailsReducerObj = {
+const detailsReducerObj = {
   key: "details",
   reducer: detailsReducer,
+};
+
+const piReducerObj = {
+  key: "pi",
+  reducer: piReducer,
 };
 
 export const routes = [
@@ -26,7 +32,9 @@ export const routes = [
       ...ticketvoteConstants.reducersArray,
       ...commentsConstants.reducersArray,
       homeReducerObj,
+      piReducerObj,
     ],
+    requiredPolicies: ["comments", "ticketvote", "pi"],
     Component: Home,
   }),
   createAppRoute({
@@ -35,8 +43,9 @@ export const routes = [
       ...ticketvoteConstants.reducersArray,
       ...commentsConstants.reducersArray,
       detailsReducerObj,
+      piReducerObj,
     ],
-    requiredPolicies: ["comments", "ticketvote"],
+    requiredPolicies: ["comments", "ticketvote", "pi"],
     Component: Details,
   }),
   {

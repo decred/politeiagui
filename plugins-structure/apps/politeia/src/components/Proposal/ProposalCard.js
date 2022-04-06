@@ -9,7 +9,12 @@ import {
   ProposalSubtitle,
 } from "./common";
 
-const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
+const ProposalCard = ({
+  record,
+  voteSummary,
+  piSummary,
+  commentsCount = 0,
+}) => {
   const proposal = decodeProposalRecord(record);
   return (
     <div>
@@ -26,9 +31,7 @@ const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
             version={proposal.version}
           />
         }
-        rightHeader={
-          <ProposalStatusTag record={record} voteSummary={voteSummary} />
-        }
+        rightHeader={<ProposalStatusTag piSummary={piSummary} />}
         secondRow={<ProposalStatusBar voteSummary={voteSummary} />}
         footer={
           <>

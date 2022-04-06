@@ -5,6 +5,7 @@ import {
   selectComments,
   selectDetailsError,
   selectDetailsStatus,
+  selectPiSummary,
   selectRecord,
   selectVoteSummary,
 } from "./detailsSlice";
@@ -20,6 +21,7 @@ function Details({ token }) {
   const recordComments = useSelector(selectComments);
   const detailsStatus = useSelector(selectDetailsStatus);
   const detailsError = useSelector(selectDetailsError);
+  const piSummary = useSelector(selectPiSummary);
 
   async function onFetchRecordTimestamps({ token, version }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
@@ -35,6 +37,7 @@ function Details({ token }) {
       <ProposalDetails
         record={record}
         voteSummary={voteSummary}
+        piSummary={piSummary}
         onFetchRecordTimestamps={onFetchRecordTimestamps}
       />
       <Comments comments={recordComments} />

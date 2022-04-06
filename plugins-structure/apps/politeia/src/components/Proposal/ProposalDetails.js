@@ -19,6 +19,7 @@ import styles from "./styles.module.css";
 const ProposalDetails = ({
   record,
   voteSummary,
+  piSummary,
   onFetchRecordTimestamps,
   onFetchCommentsTimestamps,
 }) => {
@@ -43,9 +44,7 @@ const ProposalDetails = ({
             version={proposalDetails.version}
           />
         }
-        rightHeader={
-          <ProposalStatusTag record={record} voteSummary={voteSummary} />
-        }
+        rightHeader={<ProposalStatusTag piSummary={piSummary} />}
         secondRow={
           <div className={styles.secondRow}>
             <RecordToken token={proposalDetails.token} isCopyable={true} />

@@ -12,11 +12,13 @@ import map from "lodash/fp/map";
 import { commentsPolicy } from "@politeiagui/comments/policy";
 import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
+import { piPolicy } from "../pi";
 
 const mapLabelToPolicyFetch = {
   comments: () => store.dispatch(commentsPolicy.fetch()),
   ticketvote: () => store.dispatch(ticketvotePolicy.fetch()),
   records: () => store.dispatch(recordsPolicy.fetch()),
+  pi: () => store.dispatch(piPolicy.fetch()),
 };
 
 function fetchPolicies(policies) {

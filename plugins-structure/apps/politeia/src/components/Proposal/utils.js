@@ -17,6 +17,21 @@ import {
   TICKETVOTE_STATUS_STARTED,
   TICKETVOTE_STATUS_UNAUTHORIZED,
 } from "@politeiagui/ticketvote/constants";
+import {
+  PROPOSAL_SUMMARY_STATUS_ABANDONED,
+  PROPOSAL_SUMMARY_STATUS_ACTIVE,
+  PROPOSAL_SUMMARY_STATUS_APPROVED,
+  PROPOSAL_SUMMARY_STATUS_CENSORED,
+  PROPOSAL_SUMMARY_STATUS_CLOSED,
+  PROPOSAL_SUMMARY_STATUS_COMPLETED,
+  PROPOSAL_SUMMARY_STATUS_REJECTED,
+  PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW,
+  PROPOSAL_SUMMARY_STATUS_UNVETTED,
+  PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED,
+  PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED,
+  PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
+  PROPOSAL_SUMMARY_STATUS_VOTE_STARTED,
+} from "../../pi/constants";
 import isArray from "lodash/fp/isArray";
 
 const MONTHS_LABELS = [
@@ -265,7 +280,7 @@ function getProposalTimestamps(record) {
  * @param {VoteSummary} voteSummary ticketvote summary object
  * @returns {Object} `{ type, text }` StatusTag props
  */
-export function getProposalStatusTagProps(record, voteSummary) {
+export function getLegacyProposalStatusTagProps(record, voteSummary) {
   const voteMetadata = decodeVoteMetadataFile(record.files);
   const isRfpSubmission = voteMetadata?.linkto;
   if (record.status === RECORD_STATUS_PUBLIC && !!voteSummary) {
@@ -310,6 +325,69 @@ export function getProposalStatusTagProps(record, voteSummary) {
 
   return { type: "grayNegative", text: "missing" };
 }
+
+export const getProposalStatusTagProps = (proposalSummary, isDarkTheme) => {
+  if (proposalSummary) {
+    switch (proposalSummary.status) {
+      case PROPOSAL_SUMMARY_STATUS_UNVETTED:
+        return {
+          type: "yellowTime",
+          text: "Unvetted",
+        };
+      case PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED:
+      case PROPOSAL_SUMMARY_STATUS_ABANDONED:
+        return {
+          type: isDarkTheme ? "blueNegative" : "grayNegative",
+          text: "Abandoned",
+        };
+
+      case PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED:
+      case PROPOSAL_SUMMARY_STATUS_CENSORED:
+        return {
+          type: "orangeNegativeCircled",
+          text: "Censored",
+        };
+
+      case PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW:
+        return {
+          type: isDarkTheme ? "blueTime" : "blackTime",
+          text: "Waiting for author to authorize voting",
+        };
+
+      case PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED:
+        return {
+          type: "yellowTime",
+          text: "Waiting for admin to start voting",
+        };
+
+      case PROPOSAL_SUMMARY_STATUS_VOTE_STARTED:
+        return { type: "bluePending", text: "Voting" };
+
+      case PROPOSAL_SUMMARY_STATUS_REJECTED:
+        return {
+          type: "orangeNegativeCircled",
+          text: "Rejected",
+        };
+
+      case PROPOSAL_SUMMARY_STATUS_ACTIVE:
+        return { type: "bluePending", text: "Active" };
+
+      case PROPOSAL_SUMMARY_STATUS_CLOSED:
+        return { type: "grayNegative", text: "Closed" };
+
+      case PROPOSAL_SUMMARY_STATUS_COMPLETED:
+        return { type: "greenCheck", text: "Completed" };
+
+      case PROPOSAL_SUMMARY_STATUS_APPROVED:
+        return { type: "greenCheck", text: "Approved" };
+
+      default:
+        break;
+    }
+  }
+
+  return { type: "grayNegative", text: "missing" };
+};
 
 /**
  * showVoteStatusBar returns if vote has started, finished, approved or
