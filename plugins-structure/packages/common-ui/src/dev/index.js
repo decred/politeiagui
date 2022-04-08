@@ -7,6 +7,7 @@ import {
   createEditorCommand,
 } from "../components/Markdown";
 import {
+  Button,
   ButtonIcon,
   DEFAULT_DARK_THEME_NAME,
   DEFAULT_LIGHT_THEME_NAME,
@@ -19,6 +20,7 @@ import {
   useTheme,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
+import { ModalConfirm, ModalProvider, useModal } from "../components";
 
 const themes = {
   [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
@@ -111,14 +113,34 @@ function ThemeButtons() {
   );
 }
 
+function ModalButton() {
+  const [open] = useModal();
+  return (
+    <Button
+      onClick={() =>
+        open(ModalConfirm, {
+          onSubmit: () => {
+            console.log("confirmed");
+          },
+        })
+      }
+    >
+      Open Modal
+    </Button>
+  );
+}
+
 ReactDOM.render(
   <ThemeProvider themes={themes} defaultThemeName={DEFAULT_DARK_THEME_NAME}>
-    <ThemeButtons />
-    <h1>Markdown</h1>
-    <br />
-    <div id="markdown-diff-wrapper">
-      <MdTest />
-    </div>
+    <ModalProvider>
+      <ModalButton />
+      <ThemeButtons />
+      <h1>Markdown</h1>
+      <br />
+      <div id="markdown-diff-wrapper">
+        <MdTest />
+      </div>
+    </ModalProvider>
   </ThemeProvider>,
   document.querySelector("#root")
 );
