@@ -9,6 +9,44 @@
   align-self: end;
 }
 
+.splash {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  display: flex;
+  background-color: var(--card-background);
+  align-items: center;
+  justify-content: center;
+}
+.splash > * {
+  -webkit-animation: blink 3s infinite both;
+  animation: blink 3s infinite both;
+}
+
+@-webkit-keyframes blink {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+@keyframes blink {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .banner {
     padding: 3rem 2.5rem 0 2.5rem;
