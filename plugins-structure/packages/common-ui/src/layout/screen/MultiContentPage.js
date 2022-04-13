@@ -1,6 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Column, Row, StaticContainer } from "pi-ui";
 import styles from "./styles.module.css";
+import { SplashScreen } from "./SplashScreen";
 
 export function MultiContentPage({ banner, children, sidebar, loading }) {
   return !loading ? (
@@ -18,7 +20,13 @@ export function MultiContentPage({ banner, children, sidebar, loading }) {
       </StaticContainer>
     </div>
   ) : (
-    // TODO: Add Loading Page component
-    "Loading..."
+    <SplashScreen />
   );
 }
+
+MultiContentPage.propTypes = {
+  banner: PropTypes.node,
+  children: PropTypes.node,
+  sidebar: PropTypes.node,
+  loading: PropTypes.bool,
+};
