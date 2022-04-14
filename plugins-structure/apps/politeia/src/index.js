@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Header } from "./components";
 import { Provider } from "react-redux";
-import { store } from "@politeiagui/core";
+import { connectReducers, store } from "@politeiagui/core";
+import { themeReducer } from "@politeiagui/common-ui/layout";
 import { api } from "@politeiagui/core/api";
 import { router } from "@politeiagui/core/router";
 import { routes as coreRoutes } from "@politeiagui/core/routes";
@@ -34,12 +35,7 @@ function App() {
     initializeApp();
   }, []);
 
-  return (
-    <>
-      <Header />
-      <div id="root"></div>
-    </>
-  );
+  return <div id="root"></div>;
 }
 
 function getRoutes() {
@@ -79,11 +75,15 @@ function handleApi() {
     router.init({ routes });
   }
 }
-ReactDOM.render(
-  <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </ThemeProvider>,
-  appRoot
-);
+
+connectReducers([{ key: "uiTheme", reducer: themeReducer }]).then(() => {
+  return ReactDOM.render(
+    <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
+      <Provider store={store}>
+        <Header />
+        <App />
+      </Provider>
+    </ThemeProvider>,
+    appRoot
+  );
+});

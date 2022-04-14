@@ -1,0 +1,148 @@
+.collapsedNavWrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin-left: auto;
+  z-index: var(--z-index-5);
+  animation: slideFromLeft 0.2s;
+  -webkit-animation: slideFromLeft 0.2s;
+  -moz-animation: slideFromLeft 0.2s;
+  -o-animation: slideFromLeft 0.2s;
+}
+
+@keyframes slideFromLeft {
+  from {
+    left: 100%;
+  }
+  to {
+    left: 0;
+  }
+}
+
+.collapsedNav {
+  z-index: var(--z-index-5);
+  background-color: var(--html-bg);
+  box-shadow: 0.5rem 2rem 2rem 0 var(--color-shadow-light);
+}
+
+.collapsedItems {
+  width: 100%;
+  height: fit-content;
+  align-items: center;
+  display: flex;
+  justify-content: end;
+  min-height: 6rem;
+  padding: 0 3rem;
+  background-color: var(--card-background);
+}
+
+.drawerContent {
+  margin-top: var(--spacing-small);
+}
+
+.navbar {
+  height: 6rem;
+  align-items: center;
+}
+
+.navItems {
+  justify-self: end;
+  text-align: end;
+}
+
+.navItems > * {
+  justify-self: end;
+  padding: 0 2rem;
+  align-self: center;
+  display: inline-flex;
+  border-left: 0.1rem solid var(--separator-color);
+}
+
+.navItems > *:first-child {
+  border-left: 0;
+}
+
+.navItems > *:last-child {
+  padding-right: 0;
+}
+
+.navWrapper {
+  background-color: var(--header-color);
+  padding: 0 6rem;
+}
+
+.hamburgerToggle {
+  position: relative;
+}
+
+.hamburgerToggle,
+.hamburgerToggle::before,
+.hamburgerToggle::after {
+  display: inline-block;
+  width: 2rem;
+  height: 3px;
+  background-color: var(--color-primary-dark);
+}
+
+.hamburgerToggle::before,
+.hamburgerToggle::after {
+  position: absolute;
+  content: "";
+  left: 0;
+  transition: all 0.2s;
+  backface-visibility: hidden;
+}
+
+.hamburgerToggle::before {
+  transform: translateY(-0.7rem);
+}
+
+.hamburgerToggle::after {
+  transform: translateY(0.7rem);
+}
+
+.hamburgerToggleClose {
+  composes: hamburgerToggle;
+  background-color: transparent;
+}
+
+.hamburgerToggleClose::before {
+  top: 0;
+  transform: rotate(135deg) translateY(0rem);
+}
+
+.hamburgerToggleClose::after {
+  top: 0;
+  transform: rotate(-135deg) translateY(0rem);
+}
+
+.hamburgerToggleWrapper:hover .hamburgerToggleClose::before {
+  transform: rotate(135deg) translateY(0rem);
+}
+
+.hamburgerToggleWrapper:hover .hamburgerToggleClose::after {
+  transform: rotate(-135deg) translateY(0rem);
+}
+
+.hamburgerToggleWrapper {
+  transform: translateX(1rem);
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-index-5);
+}
+
+@media screen and (min-width: 1001px) {
+  .collapsedNavWrapper {
+    display: none !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  .navWrapper {
+    padding: 0 2.5rem;
+  }
+}
