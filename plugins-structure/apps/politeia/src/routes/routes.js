@@ -1,4 +1,4 @@
-import { Home } from "../pages";
+import { Home, New } from "../pages";
 import { ticketvoteConstants } from "@politeiagui/ticketvote";
 import homeReducer from "../pages/Home/homeSlice";
 import { createAppRoute } from "./utils";
@@ -13,5 +13,10 @@ export const routes = [
     path: "/",
     reducers: [...ticketvoteConstants.reducersArray, homeReducerObj],
     Component: Home,
+  }),
+  createAppRoute({
+    path: "/record/new",
+    reducers: [],
+    Component: New,
   }),
 ];
