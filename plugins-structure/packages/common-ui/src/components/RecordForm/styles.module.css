@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  flex-flow: column;
+}
+
+.input {
+  padding-left: 1rem !important;
+}
+
+.input::-webkit-input-placeholder {
+  color: hsl(0, 0%, 50%);
+}
+
+.markdownInput {
+  margin-top: 1rem;
+  margin-bottom: 2.3rem;
+}
+
+.select {
+  padding: 0 !important;
+  margin-top: 1rem;
+  margin-bottom: 2.3rem;
+}
+
+.select > div {
+  min-height: 4rem;
+}
+
+.button {
+  margin-top: 1rem;
+}
