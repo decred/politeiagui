@@ -26,6 +26,7 @@
     "diff": "^5.0.0",
     "html-react-parser": "^1.4.8",
     "node-html-parser": "^5.3.3",
+    "react-hook-form": "^7.30.0",
     "react-markdown": "^6.0.3",
     "remark-gfm": "1.0.0",
     "xss-filters": "^1.2.7"
