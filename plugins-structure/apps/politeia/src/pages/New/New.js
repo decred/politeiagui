@@ -1,5 +1,6 @@
 import React from "react";
 import { RecordForm } from "@politeiagui/common-ui";
+import { getStartEndDatesRange } from "../../utils/date";
 
 const PROPOSAL_TYPE_OPTIONS = [
   { label: "Regular Proposal", value: 1 },
@@ -15,6 +16,12 @@ const PROPOSAL_DOMAIN_OPTIONS = [
   { label: "Design", value: "design" },
 ];
 
+// TODO: Get `startdatemin` and `enddatemax` from pi policy
+const DATES_RANGE = {
+  min: 604800,
+  max: 31557600,
+};
+
 function New() {
   function handleSubmit(data) {
     console.log(data);
@@ -28,6 +35,7 @@ function New() {
       initialValues={{ name: "", amount: "" }}
     >
       {({
+        DatePickerInput,
         TextInput,
         SelectInput,
         MarkdownInput,
@@ -43,6 +51,16 @@ function New() {
             />
             <TextInput name="name" placeholder="Proposal Name" />
             <TextInput name="amount" placeholder="Amount (USD)" />
+            <DatePickerInput
+              name="startDate"
+              placeholder="Start Date"
+              years={getStartEndDatesRange(DATES_RANGE.min, DATES_RANGE.max)}
+            />
+            <DatePickerInput
+              name="endDate"
+              placeholder="End Date"
+              years={getStartEndDatesRange(DATES_RANGE.min, DATES_RANGE.max)}
+            />
             <SelectInput
               options={PROPOSAL_DOMAIN_OPTIONS}
               name="domain"
