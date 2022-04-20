@@ -19,6 +19,7 @@
 
 .tabs {
   display: flex;
+  color: var(--text-input-color);
 }
 .headers {
   display: flex;
