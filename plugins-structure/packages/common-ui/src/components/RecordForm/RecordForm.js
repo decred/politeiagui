@@ -8,6 +8,7 @@ import {
 import { BoxTextInput, Button, Card, Select } from "pi-ui";
 import styles from "./styles.module.css";
 import { MarkdownEditor } from "../Markdown";
+import { DatePickerInput } from "./DatePickerInput";
 
 function TextInput({
   name = "name",
@@ -104,11 +105,12 @@ export function RecordForm({ initialValues, children, onSubmit }) {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
           {children({
-            TextInput,
-            SelectInput,
+            DatePickerInput,
             MarkdownInput,
-            SubmitButton,
             SaveButton,
+            SelectInput,
+            SubmitButton,
+            TextInput,
           })}
         </form>
       </FormProvider>

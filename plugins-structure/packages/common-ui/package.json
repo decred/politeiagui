@@ -6,7 +6,8 @@
   "license": "MIT",
   "exports": {
     ".": "./src/index.js",
-    "./layout": "./src/layout/index.js"
+    "./layout": "./src/layout/index.js",
+    "./utils": "./src/utils.js"
   },
   "scripts": {
     "prettier": "prettier \"src/**/*.js\"",
