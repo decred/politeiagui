@@ -45,7 +45,6 @@ function Home() {
     ticketvotePolicyStatus !== "succeeded";
   return (
     <MultiContentPage
-      loading={loading}
       banner={
         <TabsBanner
           onSelectTab={handleSelectTab}
@@ -56,7 +55,7 @@ function Home() {
       }
       sidebar={"About Politeia"}
     >
-      {renderChild({ tab })}
+      {!loading && renderChild({ tab })}
     </MultiContentPage>
   );
 }

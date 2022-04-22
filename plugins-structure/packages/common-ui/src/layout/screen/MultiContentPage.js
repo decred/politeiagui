@@ -2,10 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Column, Row, StaticContainer } from "pi-ui";
 import styles from "./styles.module.css";
-import { SplashScreen } from "./SplashScreen";
 
-export function MultiContentPage({ banner, children, sidebar, loading }) {
-  return !loading ? (
+export function MultiContentPage({ banner, children, sidebar }) {
+  return (
     <div>
       {banner && <Row className={styles.banner}>{banner}</Row>}
       <StaticContainer className={styles.container}>
@@ -19,8 +18,6 @@ export function MultiContentPage({ banner, children, sidebar, loading }) {
         </Row>
       </StaticContainer>
     </div>
-  ) : (
-    <SplashScreen />
   );
 }
 
