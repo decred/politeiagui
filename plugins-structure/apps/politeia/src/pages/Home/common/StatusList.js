@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
-import { H1 } from "pi-ui";
 import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
@@ -49,7 +48,6 @@ function StatusList({
 
   return (
     <div>
-      <H1>{status}</H1>
       <RecordsList>
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
