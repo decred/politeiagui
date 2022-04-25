@@ -1,8 +1,22 @@
 .join {
   display: flex;
+  flex-wrap: wrap;
 }
 .separator {
   margin-left: 1rem;
   margin-right: 1rem;
   color: var(--color-gray);
+}
+
+@media screen and (max-width: 560px) {
+  .join {
+    flex-flow: column;
+    max-width: 100%;
+  }
+  .join > * {
+    padding: 1rem 0;
+  }
+  .separator {
+    display: none;
+  }
 }

@@ -6,6 +6,7 @@ import {
   MarkdownRenderer,
   createEditorCommand,
 } from "../components/Markdown";
+import { MultiContentPage, SingleContentPage, TabsBanner } from "../layout";
 import {
   ButtonIcon,
   DEFAULT_DARK_THEME_NAME,
@@ -98,7 +99,8 @@ function MdTest() {
 function ThemeButtons() {
   const { themeName, setThemeName } = useTheme();
   return (
-    <div style={{ margin: "1rem" }}>
+    <div style={{ margin: "1rem", display: "flex", alignItems: "center" }}>
+      Toggle Theme -
       <DarkLightToggle
         onToggle={() =>
           themeName === "dark"
@@ -113,12 +115,21 @@ function ThemeButtons() {
 
 ReactDOM.render(
   <ThemeProvider themes={themes} defaultThemeName={DEFAULT_DARK_THEME_NAME}>
-    <ThemeButtons />
-    <h1>Markdown</h1>
-    <br />
-    <div id="markdown-diff-wrapper">
-      <MdTest />
-    </div>
+    <MultiContentPage sidebar={<ThemeButtons />} banner={<h1>Markdown</h1>}>
+      <div id="markdown-diff-wrapper">
+        <MdTest />
+      </div>
+    </MultiContentPage>
+    <SingleContentPage
+      banner={
+        <TabsBanner
+          tabs={[<>"Under Review"</>, "Test"]}
+          title={<h1>Title</h1>}
+        />
+      }
+    >
+      <div id="markdown-diff-wrapper">Single content from fiuasbdfiubasiud</div>
+    </SingleContentPage>
   </ThemeProvider>,
   document.querySelector("#root")
 );
