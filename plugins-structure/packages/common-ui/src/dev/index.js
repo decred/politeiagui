@@ -8,6 +8,7 @@ import {
 } from "../components/Markdown";
 import { MultiContentPage, SingleContentPage, TabsBanner } from "../layout";
 import {
+  Button,
   ButtonIcon,
   DEFAULT_DARK_THEME_NAME,
   DEFAULT_LIGHT_THEME_NAME,
@@ -20,6 +21,7 @@ import {
   useTheme,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
+import { ModalConfirm, ModalProvider, useModal } from "../components";
 
 const themes = {
   [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
@@ -113,23 +115,45 @@ function ThemeButtons() {
   );
 }
 
-ReactDOM.render(
-  <ThemeProvider themes={themes} defaultThemeName={DEFAULT_DARK_THEME_NAME}>
-    <MultiContentPage sidebar={<ThemeButtons />} banner={<h1>Markdown</h1>}>
-      <div id="markdown-diff-wrapper">
-        <MdTest />
-      </div>
-    </MultiContentPage>
-    <SingleContentPage
-      banner={
-        <TabsBanner
-          tabs={[<>"Under Review"</>, "Test"]}
-          title={<h1>Title</h1>}
-        />
+function ModalButton() {
+  const [open] = useModal();
+  return (
+    <Button
+      onClick={() =>
+        open(ModalConfirm, {
+          onSubmit: () => {
+            console.log("confirmed");
+          },
+        })
       }
     >
-      <div id="markdown-diff-wrapper">Single content from fiuasbdfiubasiud</div>
-    </SingleContentPage>
+      Open Modal
+    </Button>
+  );
+}
+
+ReactDOM.render(
+  <ThemeProvider themes={themes} defaultThemeName={DEFAULT_DARK_THEME_NAME}>
+    <ModalProvider>
+      <MultiContentPage sidebar={<ThemeButtons />} banner={<h1>Markdown</h1>}>
+        <div id="markdown-diff-wrapper">
+          <ModalButton />
+          <MdTest />
+        </div>
+      </MultiContentPage>
+      <SingleContentPage
+        banner={
+          <TabsBanner
+            tabs={[<>"Under Review"</>, "Test"]}
+            title={<h1>Title</h1>}
+          />
+        }
+      >
+        <div id="markdown-diff-wrapper">
+          Single content from fiuasbdfiubasiud
+        </div>
+      </SingleContentPage>
+    </ModalProvider>
   </ThemeProvider>,
   document.querySelector("#root")
 );
