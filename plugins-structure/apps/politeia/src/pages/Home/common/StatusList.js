@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { RecordsList } from "@politeiagui/common-ui";
@@ -46,27 +46,24 @@ function StatusList({
 
   const summaries = useSelector(ticketvoteSummaries.selectAll);
 
+  const hasMoreToFetch = useMemo(
+    () => (hasMoreRecords && fetchStatus === "succeeded") || hasMoreInventory,
+    [hasMoreRecords, hasMoreInventory, fetchStatus]
+  );
+
   return (
-    <div>
-      <RecordsList>
-        {recordsInOrder.map((record) => {
-          const { token } = record.censorshiprecord;
-          return (
-            <ProposalCard
-              key={token}
-              record={record}
-              voteSummary={summaries[token]}
-            />
-          );
-        })}
-      </RecordsList>
-      <button
-        disabled={!hasMoreRecords && !hasMoreInventory}
-        onClick={handleFetchMore}
-      >
-        Fetch more
-      </button>
-    </div>
+    <RecordsList hasMore={hasMoreToFetch} onFetchMore={handleFetchMore}>
+      {recordsInOrder.map((record) => {
+        const { token } = record.censorshiprecord;
+        return (
+          <ProposalCard
+            key={token}
+            record={record}
+            voteSummary={summaries[token]}
+          />
+        );
+      })}
+    </RecordsList>
   );
 }
 
