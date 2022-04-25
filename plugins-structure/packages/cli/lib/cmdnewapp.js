@@ -1,12 +1,20 @@
 const fs = require("fs");
 const path = require("path");
 
-const { replaceFileValuesFromMap, copyFile } = require("./utils");
+const {
+  replaceFileValuesFromMap,
+  copyFile,
+  getPluginVersion,
+} = require("./utils");
 
 const baseAppPackageJSON = require("../app/package.json");
 const baseAppPath = path.resolve(__dirname, "../app");
 
-module.exports = function newApp(appName, { port }) {
+module.exports = function newApp(appName, { port, plugins }) {
+  if (!appName) {
+    console.error("Please specify the app name");
+    return;
+  }
   const appShellPath = path.resolve(__dirname, "../../../apps/");
   const appPath = path.resolve(appShellPath, appName);
   const appExists = fs.existsSync(appPath);
@@ -26,12 +34,29 @@ module.exports = function newApp(appName, { port }) {
   fs.mkdirSync(`${appPath}/src/public`);
 
   // create app package.json
+  const appPlugins = plugins.split(",");
+  const pluginsDeps = {};
+  for (let plugin of appPlugins) {
+    const pluginDepName = `@politeiagui/${plugin}`;
+    try {
+      const pluginDepVersion = getPluginVersion(plugin);
+      pluginsDeps[pluginDepName] = pluginDepVersion;
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+  }
   fs.writeFileSync(
     `${appPath}/package.json`,
     JSON.stringify(
       {
         name: appName,
         ...baseAppPackageJSON,
+        dependencies: {
+          "@politeiagui/core": "1.0.0",
+          "@politeiagui/common-ui": "1.0.0",
+          ...pluginsDeps,
+        },
       },
       null,
       2

@@ -15,7 +15,13 @@ function execute() {
     .action(cmdnewplugin);
 
   program
-    .command("newapp [app-name]")
+    .command("newapp")
+    .argument("[app-name]", "The name of your new app")
+    .option(
+      "--plugins [plugins]",
+      "list of plugins comma separated. Example: ticketvote,comments",
+      "ticketvote"
+    )
     .option("-p, --port <port>", "port number", 3000)
     .description("Creates a new app-shell")
     .action(cmdnewapp);
