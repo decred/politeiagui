@@ -137,6 +137,7 @@ ReactDOM.render(
     <ModalProvider>
       <MultiContentPage sidebar={<ThemeButtons />} banner={<h1>Markdown</h1>}>
         <div id="markdown-diff-wrapper">
+          <ModalButton />
           <MdTest />
         </div>
       </MultiContentPage>
