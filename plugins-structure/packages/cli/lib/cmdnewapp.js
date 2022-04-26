@@ -21,7 +21,7 @@ module.exports = function newApp(appName, { port, plugins, config }) {
     console.error("Error: Plugins must be a string");
     return;
   }
-  if (typeof config !== "string") {
+  if (config && typeof config !== "string") {
     console.error("Error: Config must be a string");
     return;
   }
