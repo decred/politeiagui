@@ -11,11 +11,35 @@ const {
 const baseAppPackageJSON = require("../app/package.json");
 const baseAppPath = path.resolve(__dirname, "../app");
 
-module.exports = function newApp(appName, { port, plugins }) {
+module.exports = function newApp(appName, { port, plugins, config }) {
+  let defaultApp = false;
   if (!appName) {
-    console.error("Please specify the app name");
+    console.error("Error: Please specify the app name");
     return;
   }
+  if (plugins && typeof plugins !== "string") {
+    console.error("Error: Plugins must be a string");
+    return;
+  }
+  if (typeof config !== "string") {
+    console.error("Error: Config must be a string");
+    return;
+  }
+  if (!plugins && !config) {
+    defaultApp = true;
+  }
+
+  let configFile;
+  if (typeof config === "string" && config) {
+    const configExists = fs.existsSync(path.resolve(__dirname, config));
+    if (!configExists) {
+      console.error("Error: Could not find config file");
+      return;
+    } else {
+      configFile = require(config);
+    }
+  }
+
   const appShellPath = path.resolve(__dirname, "../../../apps/");
   const appPath = path.resolve(appShellPath, appName);
   const appExists = fs.existsSync(appPath);
@@ -35,20 +59,32 @@ module.exports = function newApp(appName, { port, plugins }) {
   fs.mkdirSync(`${appPath}/src/public`);
 
   // create app package.json
-  const appPlugins = plugins.split(",");
   const pluginsDeps = {};
   const pluginsConfig = {};
-  for (let plugin of appPlugins) {
-    const pluginDepName = `@politeiagui/${plugin}`;
-    try {
-      const pluginDepVersion = getPluginVersion(plugin);
-      pluginsDeps[pluginDepName] = pluginDepVersion;
-      pluginsConfig[plugin] = pluginDepVersion;
-    } catch (e) {
-      console.log(e);
-      return;
+  if (!defaultApp) {
+    let appPlugins;
+    if (!config) {
+      appPlugins = plugins.split(",");
+      for (let plugin of appPlugins) {
+        const pluginDepName = `@politeiagui/${plugin}`;
+        try {
+          const pluginDepVersion = getPluginVersion(plugin);
+          pluginsDeps[pluginDepName] = pluginDepVersion;
+          pluginsConfig[plugin] = { version: pluginDepVersion };
+        } catch (e) {
+          console.log(e);
+          return;
+        }
+      }
+    } else {
+      appPlugins = configFile.plugins;
+      for (let plugin in appPlugins) {
+        const pluginDepName = `@politeiagui/${plugin}`;
+        pluginsDeps[pluginDepName] = appPlugins[plugin].version;
+      }
     }
   }
+
   fs.writeFileSync(
     path.join(appPath, "package.json"),
     JSON.stringify(
@@ -63,16 +99,24 @@ module.exports = function newApp(appName, { port, plugins }) {
       },
       null,
       2
-    ) + +os.EOL
+    ) + os.EOL
   );
-  // create plugins.config.json
-  const pluginsConfigJson = {
-    ...pluginsConfig,
-  };
-  fs.writeFileSync(
-    path.join(appPath, "plugins.config.json"),
-    JSON.stringify(pluginsConfigJson, null, 2) + os.EOL
-  );
+
+  // create config.json if one is not provided
+  if (!config) {
+    const configJson = {
+      plugins: {
+        ...pluginsConfig,
+      },
+    };
+    fs.writeFileSync(
+      path.join(appPath, "config.json"),
+      JSON.stringify(configJson, null, 2) + os.EOL
+    );
+  } else {
+    // copy if it is provided
+    fs.copyFileSync(config, `${appPath}/config.json`);
+  }
 
   // create webpack config files
   const wpDev = replaceFileValuesFromMap(`${baseAppPath}/webpack.dev.js`, {
