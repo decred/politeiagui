@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 
 const {
   replaceFileValuesFromMap,
@@ -36,18 +37,20 @@ module.exports = function newApp(appName, { port, plugins }) {
   // create app package.json
   const appPlugins = plugins.split(",");
   const pluginsDeps = {};
+  const pluginsConfig = {};
   for (let plugin of appPlugins) {
     const pluginDepName = `@politeiagui/${plugin}`;
     try {
       const pluginDepVersion = getPluginVersion(plugin);
       pluginsDeps[pluginDepName] = pluginDepVersion;
+      pluginsConfig[plugin] = pluginDepVersion;
     } catch (e) {
       console.log(e);
       return;
     }
   }
   fs.writeFileSync(
-    `${appPath}/package.json`,
+    path.join(appPath, "package.json"),
     JSON.stringify(
       {
         name: appName,
@@ -60,8 +63,17 @@ module.exports = function newApp(appName, { port, plugins }) {
       },
       null,
       2
-    )
+    ) + +os.EOL
   );
+  // create plugins.config.json
+  const pluginsConfigJson = {
+    ...pluginsConfig,
+  };
+  fs.writeFileSync(
+    path.join(appPath, "plugins.config.json"),
+    JSON.stringify(pluginsConfigJson, null, 2) + os.EOL
+  );
+
   // create webpack config files
   const wpDev = replaceFileValuesFromMap(`${baseAppPath}/webpack.dev.js`, {
     __PORT__: +port,
