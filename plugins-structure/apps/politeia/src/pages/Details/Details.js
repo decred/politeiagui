@@ -14,6 +14,8 @@ import { Comments } from "@politeiagui/comments/ui";
 import ProposalDetails from "../../components/Proposal/ProposalDetails";
 import { Message } from "pi-ui";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
+import { SingleContentPage } from "@politeiagui/common-ui/layout";
+import styles from "./styles.module.css";
 
 function Details({ token }) {
   const dispatch = useDispatch();
@@ -38,7 +40,7 @@ function Details({ token }) {
   }, [token, dispatch]);
 
   return detailsStatus === "succeeded" ? (
-    <div>
+    <SingleContentPage className={styles.detailsWrapper}>
       <ProposalDetails
         record={record}
         voteSummary={voteSummary}
@@ -47,11 +49,9 @@ function Details({ token }) {
         onFetchRecordTimestamps={onFetchRecordTimestamps}
       />
       <Comments comments={recordComments} />
-    </div>
-  ) : detailsStatus === "failed" ? (
-    <Message kind="error">{detailsError}</Message>
+    </SingleContentPage>
   ) : (
-    "Loading..."
+    detailsStatus === "failed" && <Message kind="error">{detailsError}</Message>
   );
 }
 

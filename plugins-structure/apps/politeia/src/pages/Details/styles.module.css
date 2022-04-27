@@ -1,0 +1,3 @@
+.detailsWrapper > * {
+  margin-bottom: var(--spacing-medium);
+}
