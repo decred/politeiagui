@@ -1,10 +1,7 @@
-const fs = require("fs");
 const path = require("path");
-const os = require("os");
 
 const {
   createSrcFiles,
-  getPluginVersion,
   validatePlugins,
   validateAppName,
   validateConfig,
