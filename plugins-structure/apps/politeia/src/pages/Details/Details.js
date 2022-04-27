@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Message } from "pi-ui";
+import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
+import { SingleContentPage } from "@politeiagui/common-ui/layout";
+import { Comments } from "@politeiagui/comments/ui";
+import { ProposalDetails, ProposalLoader } from "../../components";
 import {
   fetchProposalDetails,
   fetchProposalVersion,
@@ -10,11 +15,6 @@ import {
   selectRecord,
   selectVoteSummary,
 } from "./detailsSlice";
-import { Comments } from "@politeiagui/comments/ui";
-import ProposalDetails from "../../components/Proposal/ProposalDetails";
-import { Message } from "pi-ui";
-import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
-import { SingleContentPage } from "@politeiagui/common-ui/layout";
 import styles from "./styles.module.css";
 
 function Details({ token }) {
@@ -39,19 +39,25 @@ function Details({ token }) {
     dispatch(fetchProposalDetails(token));
   }, [token, dispatch]);
 
-  return detailsStatus === "succeeded" ? (
+  return (
     <SingleContentPage className={styles.detailsWrapper}>
-      <ProposalDetails
-        record={record}
-        voteSummary={voteSummary}
-        piSummary={piSummary}
-        onFetchVersion={onFetchPreviousVersions}
-        onFetchRecordTimestamps={onFetchRecordTimestamps}
-      />
-      <Comments comments={recordComments} />
+      {detailsStatus === "loading" && <ProposalLoader isDetails />}
+      {detailsStatus === "failed" && (
+        <Message kind="error">{detailsError}</Message>
+      )}
+      {detailsStatus === "succeeded" && (
+        <>
+          <ProposalDetails
+            record={record}
+            voteSummary={voteSummary}
+            piSummary={piSummary}
+            onFetchVersion={onFetchPreviousVersions}
+            onFetchRecordTimestamps={onFetchRecordTimestamps}
+          />
+          <Comments comments={recordComments} />
+        </>
+      )}
     </SingleContentPage>
-  ) : (
-    detailsStatus === "failed" && <Message kind="error">{detailsError}</Message>
   );
 }
 

@@ -23,16 +23,17 @@ const detailsReducerObj = {
 export const routes = [
   createAppRoute({
     path: "/",
+    requiredPolicies: ["records", "comments", "ticketvote"],
     reducers: [
       ...ticketvoteConstants.reducersArray,
       ...commentsConstants.reducersArray,
-      ...piReducers,
       homeReducerObj,
     ],
     Component: Home,
   }),
   createAppRoute({
     path: "/record/:token",
+    requiredPolicies: ["pi", "comments", "ticketvote"],
     reducers: [
       ...ticketvoteConstants.reducersArray,
       ...commentsConstants.reducersArray,
