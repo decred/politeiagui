@@ -66,11 +66,12 @@ module.exports = function newApp(appName, { port, plugins, config }) {
     if (!config) {
       appPlugins = plugins.split(",");
       for (let plugin of appPlugins) {
-        const pluginDepName = `@politeiagui/${plugin}`;
+        const trimmedPlugin = plugin.trim();
+        const pluginDepName = `@politeiagui/${trimmedPlugin}`;
         try {
-          const pluginDepVersion = getPluginVersion(plugin);
+          const pluginDepVersion = getPluginVersion(trimmedPlugin);
           pluginsDeps[pluginDepName] = pluginDepVersion;
-          pluginsConfig[plugin] = { version: pluginDepVersion };
+          pluginsConfig[trimmedPlugin] = { version: pluginDepVersion };
         } catch (e) {
           console.log(e);
           return;
