@@ -1,0 +1,14 @@
+.modalContent {
+  display: flex;
+  flex-flow: column;
+}
+
+.modalContent > *:not(.modalButtons) {
+  padding: 1rem 0;
+}
+
+.modalButtons {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}

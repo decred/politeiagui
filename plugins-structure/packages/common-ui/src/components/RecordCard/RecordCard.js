@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, H2 } from "pi-ui";
+import { Card, Column, H2, Row } from "pi-ui";
 import styles from "./styles.module.css";
 
 export function RecordCard({
@@ -14,21 +14,21 @@ export function RecordCard({
 }) {
   return (
     <Card className={styles.card}>
-      <div className={styles.firstRow}>
-        <div className={styles.header}>
+      <Row>
+        <Column xs={12} sm={7}>
           <a href={titleLink} data-link className={styles.title}>
             <H2>{title}</H2>
           </a>
+        </Column>
+        <Column xs={12} sm={5} className={styles.rightHeader}>
+          {rightHeader}
+        </Column>
+        <Column xs={12}>
           <div className={styles.subtitle}>{subtitle}</div>
-        </div>
-        <div>{rightHeader}</div>
-      </div>
-      <div className={styles.secondRow}>{secondRow}</div>
-      {thirdRow && (
-        <div className={styles.thirdRow}>
-          <div className={styles.fullRow}>{thirdRow}</div>
-        </div>
-      )}
+        </Column>
+      </Row>
+      {secondRow && <Row className={styles.secondRow}>{secondRow}</Row>}
+      {thirdRow && <Row className={styles.thirdRow}>{thirdRow}</Row>}
       {fourthRow && <div className={styles.fourthRow}>{fourthRow}</div>}
       <div className={styles.footer}>{footer}</div>
     </Card>
