@@ -13,6 +13,7 @@ import { commentsPolicy } from "@politeiagui/comments/policy";
 import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
 import { piPolicy } from "../pi";
+import { ModalProvider } from "@politeiagui/common-ui";
 
 const mapLabelToPolicyFetch = {
   comments: () => {
@@ -63,9 +64,11 @@ export function createAppRoute({
       await fetchPolicies(requiredPolicies);
       return ReactDOM.render(
         <Provider store={store}>
-          <UiTheme>
-            <Component {...params} />
-          </UiTheme>
+          <ModalProvider>
+            <UiTheme>
+              <Component {...params} />
+            </UiTheme>
+          </ModalProvider>
         </Provider>,
         document.querySelector(rootId)
       );

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  MarkdownDiffHTML,
   MarkdownRenderer,
   RecordCard,
   RecordToken,
+  useModal,
 } from "@politeiagui/common-ui";
 import { decodeProposalRecord } from "./utils";
 import {
@@ -13,9 +13,10 @@ import {
   ProposalStatusTag,
   ProposalSubtitle,
 } from "./common";
-import { Button, ButtonIcon, Text } from "pi-ui";
+import { Button, ButtonIcon } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
+import ModalProposalDiff from "./ModalProposalDiff";
 
 const ProposalDetails = ({
   record,
@@ -24,9 +25,7 @@ const ProposalDetails = ({
   onFetchRecordTimestamps,
   onFetchVersion,
 }) => {
-  // TEMPORARY: this is temporary and should be removed when modal gets
-  // implemented.
-  const [diff, setDiff] = useState();
+  const [open] = useModal();
 
   const proposalDetails = decodeProposalRecord(record);
   function handleShowRawMarkdown() {
@@ -36,10 +35,11 @@ const ProposalDetails = ({
   }
   async function handleFetchVersion(version) {
     const proposalVersion = await onFetchVersion(version);
-    // TODO: display diff on modal
-    const { body } = decodeProposalRecord(proposalVersion);
-    setDiff(body);
+    const { body: oldBody } = decodeProposalRecord(proposalVersion);
+    const { body: newBody } = proposalDetails;
+    open(ModalProposalDiff, { oldBody, newBody });
   }
+
   return (
     <div>
       <RecordCard
@@ -64,17 +64,7 @@ const ProposalDetails = ({
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
           </div>
         }
-        thirdRow={
-          diff ? (
-            <div>
-              <Text color="yellow">TEMPORARY</Text>
-              <button onClick={() => setDiff(null)}>Clear Diff</button>
-              <MarkdownDiffHTML oldText={diff} newText={proposalDetails.body} />
-            </div>
-          ) : (
-            <MarkdownRenderer body={proposalDetails.body} />
-          )
-        }
+        thirdRow={<MarkdownRenderer body={proposalDetails.body} />}
         fourthRow={
           <>
             <Button>Click Me</Button>
