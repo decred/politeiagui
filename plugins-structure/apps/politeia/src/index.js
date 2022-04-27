@@ -72,11 +72,6 @@ function initializeApi() {
 }
 
 function handleApi() {
-  // const state = store.getState();
-  // const status = api.selectStatus(state);
-  // if (status === "loading") {
-  //   document.querySelector("#root").innerHTML = "<h1>Loading api...</h1>";
-  // }
   if (!routerInitialized) {
     routerInitialized = true;
     router.init({ routes });
