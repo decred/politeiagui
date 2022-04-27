@@ -5,7 +5,6 @@ import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
 import { ProposalCard } from "../../../components";
-import { piSummaries } from "../../../pi";
 
 function StatusList({
   status,
@@ -46,7 +45,6 @@ function StatusList({
   );
 
   const summaries = useSelector(ticketvoteSummaries.selectAll);
-  const summariesPi = useSelector(piSummaries.selectAll);
 
   const hasMoreToFetch = useMemo(
     () => (hasMoreRecords && fetchStatus === "succeeded") || hasMoreInventory,
@@ -61,7 +59,6 @@ function StatusList({
           <ProposalCard
             key={token}
             record={record}
-            piSummary={summariesPi[token]}
             voteSummary={summaries[token]}
           />
         );

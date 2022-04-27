@@ -1,21 +1,13 @@
 import React from "react";
-import { Button } from "pi-ui";
+import { Button, StatusTag } from "pi-ui";
 import { RecordCard } from "@politeiagui/common-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
-import { decodeProposalRecord } from "./utils";
-import {
-  ProposalStatusBar,
-  ProposalStatusTag,
-  ProposalSubtitle,
-} from "./common";
+import { decodeProposalRecord, getLegacyProposalStatusTagProps } from "./utils";
+import { ProposalStatusBar, ProposalSubtitle } from "./common";
 
-const ProposalCard = ({
-  record,
-  voteSummary,
-  piSummary,
-  commentsCount = 0,
-}) => {
+const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
   const proposal = decodeProposalRecord(record);
+  const statusTagProps = getLegacyProposalStatusTagProps(record, voteSummary);
   return (
     <div>
       <RecordCard
@@ -31,7 +23,7 @@ const ProposalCard = ({
             version={proposal.version}
           />
         }
-        rightHeader={<ProposalStatusTag piSummary={piSummary} />}
+        rightHeader={<StatusTag {...statusTagProps} />}
         secondRow={<ProposalStatusBar voteSummary={voteSummary} />}
         footer={
           <>

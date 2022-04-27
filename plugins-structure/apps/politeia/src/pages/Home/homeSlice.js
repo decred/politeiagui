@@ -12,8 +12,6 @@ import {
   validateInventoryIsLoaded,
   validateInventoryListLength,
 } from "./validation";
-import { piSummaries } from "../../pi";
-import { validatePiSummariesPageSize } from "../../pi/validation";
 
 const initialStateStatus = {
   lastTokenPos: null,
@@ -44,14 +42,12 @@ export const fetchNextBatch = createAsyncThunk(
         records: recordsObject,
         recordsPolicy,
         ticketvotePolicy,
-        pi,
         home,
       } = getState();
       // Get all pages sizes allowed
       const ticketvoteSummariesPageSize =
         ticketvotePolicy.policy.summariespagesize;
       const recordsPageSize = recordsPolicy.policy.recordspagesize;
-      const piSummariesPageSize = pi.policy.policy.summariespagesize;
       // TODO: Add piSummariesPageSize
       const readableStatus = getHumanReadableTicketvoteStatus(status);
       // get tokens batch to perform the dispatches
@@ -59,11 +55,7 @@ export const fetchNextBatch = createAsyncThunk(
         records: recordsObject.records,
         // pageSize is the minimum value between all pages sizes, so we can
         // sync all requests with the same tokens batch
-        pageSize: Math.min(
-          ticketvoteSummariesPageSize,
-          recordsPageSize,
-          piSummariesPageSize
-        ),
+        pageSize: Math.min(ticketvoteSummariesPageSize, recordsPageSize),
         // inventoryList corresponds to all tokens from given ticketvote
         // inventory
         inventoryList: ticketvoteInventory[readableStatus].tokens,
@@ -75,7 +67,6 @@ export const fetchNextBatch = createAsyncThunk(
       await Promise.all([
         dispatch(records.fetch({ tokens, filenames: piFilenames })),
         dispatch(ticketvoteSummaries.fetch({ tokens })),
-        dispatch(piSummaries.fetch({ tokens })),
       ]);
       // returns the last token index so we can update our `lastTokenPos`
       // pointer
@@ -89,7 +80,6 @@ export const fetchNextBatch = createAsyncThunk(
       validateTicketvoteStatus(status) &&
       validateRecordsPageSize(getState()) &&
       validateTicketvoteSummariesPageSize(getState()) &&
-      validatePiSummariesPageSize(getState()) &&
       validateInventoryIsLoaded(
         getState().ticketvoteInventory[status].tokens
       ) &&
