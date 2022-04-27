@@ -7,10 +7,9 @@
 export function validatePiSummariesPageSize(state) {
   const pageSize =
     state &&
-    state.pi &&
-    state.pi.policy &&
-    state.pi.policy.policy &&
-    state.pi.policy.policy.summariespagesize;
+    state.piPolicy &&
+    state.piPolicy.policy &&
+    state.piPolicy.policy.summariespagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {

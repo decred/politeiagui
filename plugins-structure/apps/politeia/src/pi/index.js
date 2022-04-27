@@ -1,18 +1,17 @@
-import {
-  fetchPiPolicy,
-  fetchPiSummaries,
-  selectPiPolicy,
-  selectPiSummaries,
-  selectPiSummariesByToken,
-} from "./piSlice";
+import policyReducer from "./policy/policySlice";
+import summariesReducer from "./summaries/summariesSlice";
 
-export const piSummaries = {
-  fetch: fetchPiSummaries,
-  selectByToken: selectPiSummariesByToken,
-  selectAll: selectPiSummaries,
-};
+export * from "./constants";
+export { piPolicy } from "./policy";
+export { piSummaries } from "./summaries";
 
-export const piPolicy = {
-  fetch: fetchPiPolicy,
-  selectAll: selectPiPolicy,
-};
+export const reducersArray = [
+  {
+    key: "piPolicy",
+    reducer: policyReducer,
+  },
+  {
+    key: "piSummaries",
+    reducer: summariesReducer,
+  },
+];
