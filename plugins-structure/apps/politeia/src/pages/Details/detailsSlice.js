@@ -6,7 +6,7 @@ import { piSummaries } from "../../pi";
 
 const initialState = {
   status: "idle",
-  fullToken: null,
+  fullTokenMap: {},
   submissionsLastPos: null,
   error: null,
   downloadStatus: "idle",
@@ -100,7 +100,8 @@ const detailsSlice = createSlice({
       })
       .addCase(fetchProposalDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.fullToken = action.payload;
+        const token = action.meta.arg;
+        state.fullTokenMap[token] = action.payload;
       })
       .addCase(fetchProposalDetails.rejected, (state, action) => {
         state.status = "failed";
@@ -120,21 +121,22 @@ const detailsSlice = createSlice({
 
 export const selectDetailsStatus = (state) => state.details.status;
 export const selectDetailsError = (state) => state.details.error;
-export const selectFullToken = (state) => state.details.fullToken;
-export const selectRecord = (state) => {
-  const fullToken = state.details.fullToken;
+export const selectFullToken = (state, token) =>
+  state.details.fullTokenMap[token];
+export const selectRecord = (state, token) => {
+  const fullToken = state.details.fullTokenMap[token];
   return records.selectByToken(state, fullToken);
 };
-export const selectVoteSummary = (state) => {
-  const fullToken = state.details.fullToken;
+export const selectVoteSummary = (state, token) => {
+  const fullToken = state.details.fullTokenMap[token];
   return ticketvoteSummaries.selectByToken(state, fullToken);
 };
-export const selectPiSummary = (state) => {
-  const fullToken = state.details.fullToken;
+export const selectPiSummary = (state, token) => {
+  const fullToken = state.details.fullTokenMap[token];
   return piSummaries.selectByToken(state, fullToken);
 };
-export const selectComments = (state) => {
-  const fullToken = state.details.fullToken;
+export const selectComments = (state, token) => {
+  const fullToken = state.details.fullTokenMap[token];
   return recordComments.selectByToken(state, fullToken);
 };
 
