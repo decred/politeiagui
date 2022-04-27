@@ -7,6 +7,8 @@ import policyReducer from "./records/policy/policySlice";
 import recordsTimestampsReducer from "./records/timestamps/timestampsSlice";
 import apiReducer from "./api/apiSlice";
 
+import { listenerMiddleware } from "./listeners";
+
 // Define the Reducers that will always be present in the application
 const staticReducers = {
   api: apiReducer,
@@ -35,7 +37,7 @@ function configureCustomStore(initialState) {
           thunk: {
             extraArgument: client,
           },
-        }),
+        }).concat([listenerMiddleware]),
     },
     initialState
   );

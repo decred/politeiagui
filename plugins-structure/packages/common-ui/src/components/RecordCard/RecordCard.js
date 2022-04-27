@@ -16,9 +16,13 @@ export function RecordCard({
     <Card className={styles.card}>
       <Row>
         <Column xs={12} sm={7}>
-          <a href={titleLink} data-link className={styles.title}>
+          {!titleLink ? (
             <H2>{title}</H2>
-          </a>
+          ) : (
+            <a href={titleLink} data-link className={styles.title}>
+              <H2>{title}</H2>
+            </a>
+          )}
         </Column>
         <Column xs={12} sm={5} className={styles.rightHeader}>
           {rightHeader}
