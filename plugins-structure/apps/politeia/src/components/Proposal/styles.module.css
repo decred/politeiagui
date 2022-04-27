@@ -2,3 +2,64 @@
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
+
+.loaderWrapper {
+  margin-bottom: var(--spacing-medium);
+}
+
+.block {
+  width: 100%;
+  min-height: var(--font-size-xxlarge);
+  background-color: var(--dimmed-card-background);
+  min-width: 10rem;
+  animation: fadeIn linear 1s alternate infinite;
+  -webkit-animation: fadeIn linear 1s alternate infinite;
+  -moz-animation: fadeIn linear 1s alternate infinite;
+  -o-animation: fadeIn linear 1s alternate infinite;
+  -ms-animation: fadeIn linear 1s alternate infinite;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

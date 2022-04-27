@@ -10,14 +10,19 @@ export function RecordCard({
   secondRow,
   thirdRow,
   footer,
+  titleWithoutLink,
 }) {
   return (
     <Card className={styles.card}>
       <Row>
         <Column xs={12} sm={7}>
-          <a href={`/records/${token}`} data-link className={styles.title}>
+          {titleWithoutLink ? (
             <H2>{title}</H2>
-          </a>
+          ) : (
+            <a href={`/records/${token}`} data-link className={styles.title}>
+              <H2>{title}</H2>
+            </a>
+          )}
         </Column>
         <Column xs={12} sm={5} className={styles.rightHeader}>
           {rightHeader}

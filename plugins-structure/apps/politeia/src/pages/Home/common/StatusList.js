@@ -4,7 +4,8 @@ import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
-import { ProposalCard } from "../../../components";
+import { ProposalCard, ProposalLoader } from "../../../components";
+import max from "lodash/max";
 
 function StatusList({
   status,
@@ -47,23 +48,35 @@ function StatusList({
   const summaries = useSelector(ticketvoteSummaries.selectAll);
 
   const hasMoreToFetch = useMemo(
-    () => (hasMoreRecords && fetchStatus === "succeeded") || hasMoreInventory,
+    () => fetchStatus === "succeeded" && (hasMoreRecords || hasMoreInventory),
     [hasMoreRecords, hasMoreInventory, fetchStatus]
   );
 
+  const loadingPlaceholdersCount = max([
+    inventory.length - 1 - lastTokenPos,
+    0,
+  ]);
+
   return (
-    <RecordsList hasMore={hasMoreToFetch} onFetchMore={handleFetchMore}>
-      {recordsInOrder.map((record) => {
-        const { token } = record.censorshiprecord;
-        return (
-          <ProposalCard
-            key={token}
-            record={record}
-            voteSummary={summaries[token]}
-          />
-        );
-      })}
-    </RecordsList>
+    <div>
+      <RecordsList hasMore={hasMoreToFetch} onFetchMore={handleFetchMore}>
+        {recordsInOrder.map((record) => {
+          const { token } = record.censorshiprecord;
+          return (
+            <ProposalCard
+              key={token}
+              record={record}
+              voteSummary={summaries[token]}
+            />
+          );
+        })}
+      </RecordsList>
+      {Array(loadingPlaceholdersCount)
+        .fill("")
+        .map((_, i) => (
+          <ProposalLoader key={i} />
+        ))}
+    </div>
   );
 }
 

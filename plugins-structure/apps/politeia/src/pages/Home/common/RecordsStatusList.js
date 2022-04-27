@@ -12,7 +12,7 @@ function RecordsStatusList({ status, onRenderNextStatus }) {
     page,
   });
 
-  return inventoryStatus !== "idle" && inventoryStatus !== "loading" ? (
+  return (
     <StatusList
       status={status}
       onFetchNextInventoryPage={handleFetchNextInventoryPage}
@@ -20,8 +20,6 @@ function RecordsStatusList({ status, onRenderNextStatus }) {
       inventory={inventory}
       onRenderNextStatus={onRenderNextStatus}
     />
-  ) : (
-    "Loading ..."
   );
 }
 
