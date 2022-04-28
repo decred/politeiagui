@@ -50,7 +50,8 @@ export const fetchRecordDetails = createAsyncThunk(
     try {
       return await extra.fetchRecordDetails(getState(), { token, version });
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getRecordsErrorMessage(error.body, error.message);
+      return rejectWithValue(message);
     }
   },
   {
