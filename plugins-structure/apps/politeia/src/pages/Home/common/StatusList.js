@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
+import { commentsCount } from "@politeiagui/comments/count";
 import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
@@ -45,6 +46,8 @@ function StatusList({
     records.selectByTokensBatch(state, inventory)
   );
 
+  const countComments = useSelector(commentsCount.selectAll);
+
   const summaries = useSelector(ticketvoteSummaries.selectAll);
 
   const hasMoreToFetch = useMemo(
@@ -66,6 +69,7 @@ function StatusList({
             <ProposalCard
               key={token}
               record={record}
+              commentsCount={countComments[token]}
               voteSummary={summaries[token]}
             />
           );
