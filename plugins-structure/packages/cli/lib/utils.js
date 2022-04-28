@@ -155,36 +155,29 @@ function createSrcFiles({ baseAppPath, appName, appPath }) {
   fs.writeFileSync(`${appPath}/src/index.js`, indexJs);
 }
 
-function getPluginsDepsAndConfig({
-  isDefaultApp,
-  config,
-  plugins,
-  configFile,
-}) {
+function getPluginsDepsAndConfig({ isDefaultApp, plugins, configFile }) {
   const pluginsDeps = {};
   const pluginsConfig = {};
   if (!isDefaultApp) {
+    let appPlugins;
     if (!configFile) {
-      let appPlugins;
-      if (!config) {
-        appPlugins = plugins.split(",");
-        for (let plugin of appPlugins) {
-          const trimmedPlugin = plugin.trim();
-          const pluginDepName = `@politeiagui/${trimmedPlugin}`;
-          try {
-            const pluginDepVersion = getPluginVersion(trimmedPlugin);
-            pluginsDeps[pluginDepName] = pluginDepVersion;
-            pluginsConfig[trimmedPlugin] = { version: pluginDepVersion };
-          } catch (e) {
-            throw e;
-          }
+      appPlugins = plugins.split(",");
+      for (let plugin of appPlugins) {
+        const trimmedPlugin = plugin.trim();
+        const pluginDepName = `@politeiagui/${trimmedPlugin}`;
+        try {
+          const pluginDepVersion = getPluginVersion(trimmedPlugin);
+          pluginsDeps[pluginDepName] = pluginDepVersion;
+          pluginsConfig[trimmedPlugin] = { version: pluginDepVersion };
+        } catch (e) {
+          throw e;
         }
-      } else {
-        appPlugins = configFile.plugins;
-        for (let plugin in appPlugins) {
-          const pluginDepName = `@politeiagui/${plugin}`;
-          pluginsDeps[pluginDepName] = appPlugins[plugin].version;
-        }
+      }
+    } else {
+      appPlugins = configFile.plugins;
+      for (let plugin in appPlugins) {
+        const pluginDepName = `@politeiagui/${plugin}`;
+        pluginsDeps[pluginDepName] = appPlugins[plugin].version;
       }
     }
   }
