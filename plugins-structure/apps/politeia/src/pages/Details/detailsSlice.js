@@ -24,18 +24,18 @@ export const fetchProposalDetails = createAsyncThunk(
         const fetchedRecord = detailsRes.payload;
         fullToken = fetchedRecord?.censorshiprecord?.token;
       }
-
+      const state = getState();
       // Load previous information to avoid double requests
       const needsVoteSummaryFetch = !ticketvoteSummaries.selectByToken(
-        getState(),
+        state,
         fullToken
       );
       const needsCommentsFetch = !recordComments.selectByToken(
-        getState(),
+        state,
         fullToken
       );
       const needsPiSummariesFetch = !piSummaries.selectByToken(
-        getState(),
+        state,
         fullToken
       );
       // dispatch if info wasn't loaded
@@ -63,7 +63,7 @@ export const fetchProposalDetails = createAsyncThunk(
   },
   {
     condition: (token, { getState }) => {
-      const fullToken = selectFullToken(getState());
+      const fullToken = selectFullToken(getState(), token);
       return !fullToken || !fullToken.includes(token);
     },
   }
