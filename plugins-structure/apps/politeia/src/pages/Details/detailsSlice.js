@@ -15,41 +15,40 @@ const initialState = {
 
 export const fetchProposalDetails = createAsyncThunk(
   "details/fetchProposalDetails",
-  async (token, { dispatch, rejectWithValue }) => {
+  async (token, { dispatch, rejectWithValue, getState }) => {
     try {
       let fullToken = token;
-      // create responses array so we can handle errors and details from thunks
-      // responses.
-      const responses = [];
-
-      // If token is short, fetch details first to get the full token, and then
-      // dispatch other actions with full token. Otherwise, dispatch all actions
-      // simultaneously.
+      // ckeck if token is short
       if (token.length === 7) {
         const detailsRes = await dispatch(records.fetchDetails({ token }));
         const fetchedRecord = detailsRes.payload;
         fullToken = fetchedRecord?.censorshiprecord?.token;
-        const [commentsRes, ticketvoteSummariesRes, piSummariesRes] =
-          await Promise.all([
-            dispatch(recordComments.fetch({ token: fullToken })),
-            dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
-            dispatch(piSummaries.fetch({ tokens: [fullToken] })),
-          ]);
-        responses.push(
-          detailsRes,
-          commentsRes,
-          ticketvoteSummariesRes,
-          piSummariesRes
-        );
-      } else {
-        const res = await Promise.all([
-          dispatch(records.fetchDetails({ token: fullToken })),
-          dispatch(recordComments.fetch({ token: fullToken })),
-          dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
-          dispatch(piSummaries.fetch({ tokens: [fullToken] })),
-        ]);
-        responses.push(...res);
       }
+
+      // Load previous information to avoid double requests
+      const needsVoteSummaryFetch = !ticketvoteSummaries.selectByToken(
+        getState(),
+        fullToken
+      );
+      const needsCommentsFetch = !recordComments.selectByToken(
+        getState(),
+        fullToken
+      );
+      const needsPiSummariesFetch = !piSummaries.selectByToken(
+        getState(),
+        fullToken
+      );
+      // dispatch if info wasn't loaded
+      const responses = await Promise.all([
+        token.length > 7 &&
+          dispatch(records.fetchDetails({ token: fullToken })),
+        needsCommentsFetch &&
+          dispatch(recordComments.fetch({ token: fullToken })),
+        needsVoteSummaryFetch &&
+          dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
+        needsPiSummariesFetch &&
+          dispatch(piSummaries.fetch({ tokens: [fullToken] })),
+      ]);
 
       // Handle errors from other thunks.
       const invalidResponse = responses.find((r) => r.error);
