@@ -33,7 +33,8 @@ export const routes = [
   }),
   createAppRoute({
     path: "/record/new",
-    reducers: [],
+    reducers: [...piReducers],
+    requiredPolicies: ["pi"],
     Component: New,
   }),
   createAppRoute({

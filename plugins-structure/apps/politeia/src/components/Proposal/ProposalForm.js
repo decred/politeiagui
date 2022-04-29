@@ -8,20 +8,18 @@ const PROPOSAL_TYPE_OPTIONS = [
   { label: "RFP Submission", value: 3 },
 ];
 
-// TODO: Get domains from pi policy
-const PROPOSAL_DOMAIN_OPTIONS = [
-  { label: "Development", value: "development" },
-  { label: "Marketing", value: "marketing" },
-  { label: "Research", value: "research" },
-  { label: "Design", value: "design" },
-];
-
-// TODO: Get `startdatemin` and `enddatemax` from pi policy
-const DATES_RANGE = {
-  min: 604800,
-  max: 31557600,
-};
-export function ProposalForm({ onSubmit, onSave, initialValues }) {
+export function ProposalForm({
+  onSubmit,
+  onSave,
+  initialValues,
+  domains,
+  maxEndDate,
+  minStartDate,
+}) {
+  const domainsOptions = domains.map((domain) => ({
+    label: domain.charAt(0).toUpperCase() + domain.slice(1),
+    value: domain,
+  }));
   return (
     <RecordForm onSubmit={onSubmit} initialValues={initialValues}>
       {({
@@ -44,15 +42,15 @@ export function ProposalForm({ onSubmit, onSave, initialValues }) {
             <DatePickerInput
               name="startDate"
               placeholder="Start Date"
-              years={getStartEndDatesRange(DATES_RANGE.min, DATES_RANGE.max)}
+              years={getStartEndDatesRange(minStartDate, maxEndDate)}
             />
             <DatePickerInput
               name="endDate"
               placeholder="End Date"
-              years={getStartEndDatesRange(DATES_RANGE.min, DATES_RANGE.max)}
+              years={getStartEndDatesRange(minStartDate, maxEndDate)}
             />
             <SelectInput
-              options={PROPOSAL_DOMAIN_OPTIONS}
+              options={domainsOptions}
               name="domain"
               placeholder="Domain"
             />
