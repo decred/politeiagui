@@ -38,8 +38,9 @@
     "start": "webpack serve --config webpack.dev.js --open"
   },
   "dependencies": {
-    "@politeiagui/core": "1.0.0",
     "@politeiagui/common-ui": "1.0.0",
-    "js-file-download": "^0.4.12"
+    "@politeiagui/core": "1.0.0",
+    "js-file-download": "^0.4.12",
+    "react-hook-form": "^7.30.0"
   }
 }
