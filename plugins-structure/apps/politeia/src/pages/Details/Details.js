@@ -1,10 +1,14 @@
 import React from "react";
 import { Message } from "pi-ui";
-import { SingleContentPage } from "@politeiagui/common-ui/layout";
+import {
+  SingleContentPage,
+  useScrollToTop,
+} from "@politeiagui/common-ui/layout";
 import { Comments } from "@politeiagui/comments/ui";
 import { ProposalDetails, ProposalLoader } from "../../components";
 import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
+import { getURLSearchParams } from "../../utils/getURLSearchParams";
 
 function Details({ token }) {
   const {
@@ -18,6 +22,9 @@ function Details({ token }) {
     record,
     voteSummary,
   } = useProposalDetails({ token });
+  const params = getURLSearchParams();
+  const shouldScrollToComments = params?.scrollToComments;
+  useScrollToTop(!shouldScrollToComments);
   return (
     <SingleContentPage className={styles.detailsWrapper}>
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
@@ -33,7 +40,7 @@ function Details({ token }) {
             onFetchVersion={onFetchPreviousVersions}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
           />
-          <Comments comments={comments} />
+          <Comments comments={comments} scrollOnLoad={shouldScrollToComments} />
         </>
       )}
     </SingleContentPage>
