@@ -6,7 +6,9 @@ import {
   MarkdownRenderer,
   createEditorCommand,
 } from "../components/Markdown";
+import { MultiContentPage, SingleContentPage, TabsBanner } from "../layout";
 import {
+  Button,
   ButtonIcon,
   DEFAULT_DARK_THEME_NAME,
   DEFAULT_LIGHT_THEME_NAME,
@@ -19,6 +21,7 @@ import {
   useTheme,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
+import { ModalConfirm, ModalProvider, useModal } from "../components";
 
 const themes = {
   [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
@@ -98,7 +101,8 @@ function MdTest() {
 function ThemeButtons() {
   const { themeName, setThemeName } = useTheme();
   return (
-    <div style={{ margin: "1rem" }}>
+    <div style={{ margin: "1rem", display: "flex", alignItems: "center" }}>
+      Toggle Theme -
       <DarkLightToggle
         onToggle={() =>
           themeName === "dark"
@@ -111,14 +115,45 @@ function ThemeButtons() {
   );
 }
 
+function ModalButton() {
+  const [open] = useModal();
+  return (
+    <Button
+      onClick={() =>
+        open(ModalConfirm, {
+          onSubmit: () => {
+            console.log("confirmed");
+          },
+        })
+      }
+    >
+      Open Modal
+    </Button>
+  );
+}
+
 ReactDOM.render(
   <ThemeProvider themes={themes} defaultThemeName={DEFAULT_DARK_THEME_NAME}>
-    <ThemeButtons />
-    <h1>Markdown</h1>
-    <br />
-    <div id="markdown-diff-wrapper">
-      <MdTest />
-    </div>
+    <ModalProvider>
+      <MultiContentPage sidebar={<ThemeButtons />} banner={<h1>Markdown</h1>}>
+        <div id="markdown-diff-wrapper">
+          <ModalButton />
+          <MdTest />
+        </div>
+      </MultiContentPage>
+      <SingleContentPage
+        banner={
+          <TabsBanner
+            tabs={[<>"Under Review"</>, "Test"]}
+            title={<h1>Title</h1>}
+          />
+        }
+      >
+        <div id="markdown-diff-wrapper">
+          Single content from fiuasbdfiubasiud
+        </div>
+      </SingleContentPage>
+    </ModalProvider>
   </ThemeProvider>,
   document.querySelector("#root")
 );

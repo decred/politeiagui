@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { commentsTimestamps } from "./";
+import { recordComments } from "../comments";
+import { commentsPolicy } from "../policy";
 import chunk from "lodash/fp/chunk";
 import difference from "lodash/fp/difference";
 
-export function useCommentsTimestamps({ token, commentids = [], pageSize }) {
+export function useCommentsTimestamps({ token, commentids }) {
   const dispatch = useDispatch();
 
   const [fetchedTimestamps, setFetchedTimestamps] = useState([]);
@@ -13,12 +15,20 @@ export function useCommentsTimestamps({ token, commentids = [], pageSize }) {
   );
   const timestampsStatus = useSelector(commentsTimestamps.selectStatus);
   const timestampsError = useSelector(commentsTimestamps.selectError);
+  const pageSize = useSelector((state) =>
+    commentsPolicy.selectRule(state, "timestampspagesize")
+  );
+
+  const loadedIds = useSelector((state) =>
+    recordComments.selectIds(state, token)
+  );
+  const ids = commentids || loadedIds;
 
   // Actions
-  // onFetchTimestamps fetches all timestamps given commentids list hook param.
+  // onFetchTimestamps fetches all timestamps given ids list hook param.
   const onFetchTimestamps = useCallback(async () => {
-    // get paginated commentids without timestamps fetched
-    const timestampsToFetch = difference(commentids)(fetchedTimestamps);
+    // get paginated ids without timestamps fetched
+    const timestampsToFetch = difference(ids)(fetchedTimestamps);
     const [currentPage] = chunk(pageSize)(timestampsToFetch);
     // avoid fetching repeated timestamps before fetching, in order to avoid
     // repeated requests once fetch is done.
@@ -32,7 +42,7 @@ export function useCommentsTimestamps({ token, commentids = [], pageSize }) {
       // list.
       setFetchedTimestamps(fetchedTimestamps);
     }
-  }, [dispatch, token, commentids, pageSize, fetchedTimestamps]);
+  }, [dispatch, token, ids, pageSize, fetchedTimestamps]);
 
   useEffect(() => {
     // fetch timestamps if there are remaining timestamps.

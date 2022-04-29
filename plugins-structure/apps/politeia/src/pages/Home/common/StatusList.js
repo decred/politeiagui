@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
-import { H1 } from "pi-ui";
+import { commentsCount } from "@politeiagui/comments/count";
 import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
-import { ProposalCard } from "../../../components";
+import { ProposalCard, ProposalLoader } from "../../../components";
+import max from "lodash/max";
 
 function StatusList({
   status,
@@ -45,29 +46,40 @@ function StatusList({
     records.selectByTokensBatch(state, inventory)
   );
 
+  const countComments = useSelector(commentsCount.selectAll);
+
   const summaries = useSelector(ticketvoteSummaries.selectAll);
+
+  const hasMoreToFetch = useMemo(
+    () => fetchStatus === "succeeded" && (hasMoreRecords || hasMoreInventory),
+    [hasMoreRecords, hasMoreInventory, fetchStatus]
+  );
+
+  const loadingPlaceholdersCount = max([
+    inventory.length - 1 - lastTokenPos,
+    0,
+  ]);
 
   return (
     <div>
-      <H1>{status}</H1>
-      <RecordsList>
+      <RecordsList hasMore={hasMoreToFetch} onFetchMore={handleFetchMore}>
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
           return (
             <ProposalCard
               key={token}
               record={record}
+              commentsCount={countComments[token]}
               voteSummary={summaries[token]}
             />
           );
         })}
       </RecordsList>
-      <button
-        disabled={!hasMoreRecords && !hasMoreInventory}
-        onClick={handleFetchMore}
-      >
-        Fetch more
-      </button>
+      {Array(loadingPlaceholdersCount)
+        .fill("")
+        .map((_, i) => (
+          <ProposalLoader key={i} />
+        ))}
     </div>
   );
 }

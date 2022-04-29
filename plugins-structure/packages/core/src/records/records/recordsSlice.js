@@ -37,6 +37,28 @@ export const fetchRecords = createAsyncThunk(
   }
 );
 
+/**
+ * fetchRecordDetails async thunk responsible for fetching record details for
+ * given { token }.
+ *
+ * @params {Object} { token: String }
+ * @returns {Object} Record Details
+ */
+export const fetchRecordDetails = createAsyncThunk(
+  "records/fetchDetails",
+  async ({ token, version }, { getState, extra, rejectWithValue }) => {
+    try {
+      return await extra.fetchRecordDetails(getState(), { token, version });
+    } catch (error) {
+      const message = getRecordsErrorMessage(error.body, error.message);
+      return rejectWithValue(message);
+    }
+  },
+  {
+    condition: ({ token }) => !!token && typeof token === "string",
+  }
+);
+
 // Reducer
 const recordsSlice = createSlice({
   name: "records",
@@ -51,6 +73,19 @@ const recordsSlice = createSlice({
         state.records = { ...state.records, ...action.payload };
       })
       .addCase(fetchRecords.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(fetchRecordDetails.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchRecordDetails.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const record = action.payload;
+        const { token } = record.censorshiprecord;
+        state.records[token] = record;
+      })
+      .addCase(fetchRecordDetails.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

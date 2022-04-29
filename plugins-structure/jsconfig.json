@@ -7,6 +7,7 @@
       "@politeiagui/core/router": ["./packages/core/src/router/index.js"],
       "@politeiagui/core/client": ["./packages/core/src/client/index.js"],
       "@politeiagui/core/routes": ["./packages/core/src/routes/index.js"],
+      "@politeiagui/core/listeners": ["./packages/core/src/listeners/index.js"],
       "@politeiagui/core/records": [
         "./packages/core/src/records/records/index.js"
       ],
@@ -21,6 +22,9 @@
       ],
       "@politeiagui/core/records/inventory": [
         "./packages/core/src/records/inventory/index.js"
+      ],
+      "@politeiagui/core/records/timestamps": [
+        "./packages/core/src/records/timestamps/index.js"
       ],
       "@politeiagui/core/records/policy": [
         "./packages/core/src/records/policy/index.js"
@@ -65,9 +69,27 @@
         "./packages/ticketvote/src/lib/validation.js"
       ],
       "@politeiagui/common-ui": ["./packages/common-ui/src/index.js"],
+      "@politeiagui/common-ui/utils": ["./packages/common-ui/src/utils.js"],
       "@politeiagui/common-ui/layout": [
         "./packages/common-ui/src/layout/index.js"
-      ]
+      ],
+      "@politeiagui/comments": ["./packages/comments/src/index.js"],
+      "@politeiagui/comments/comments": [
+        "./packages/comments/src/comments/comments/index.js"
+      ],
+      "@politeiagui/comments/count": [
+        "./packages/comments/src/comments/count/index.js"
+      ],
+      "@politeiagui/comments/policy": [
+        "./packages/comments/src/comments/policy/index.js"
+      ],
+      "@politeiagui/comments/timestamps": [
+        "./packages/comments/src/comments/timestamps/index.js"
+      ],
+      "@politeiagui/comments/votes": [
+        "./packages/comments/src/comments/votes/index.js"
+      ],
+      "@politeiagui/comments/ui": ["./packages/comments/src/ui/index.js"]
     }
   }
 }

@@ -73,16 +73,12 @@ function initializeApi() {
 
 function handleApi() {
   const state = store.getState();
-  const status = api.selectStatus(state);
-  if (status === "loading") {
-    document.querySelector("#root").innerHTML = "<h1>Loading api...</h1>";
-  }
-  if (status === "succeeded" && !routerInitialized) {
+  const status = state.api.status;
+  if (!routerInitialized && status === "succeeded") {
     routerInitialized = true;
     router.init({ routes });
   }
 }
-
 ReactDOM.render(
   <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
     <Provider store={store}>

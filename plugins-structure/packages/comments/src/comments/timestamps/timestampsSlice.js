@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import { validateCommentsTimestampsPageSize } from "../../lib/validation";
+import { getCommentsError } from "../../lib/errors";
 
 export const initialState = {
   byToken: {},
@@ -14,7 +15,8 @@ export const fetchCommentsTimestamps = createAsyncThunk(
     try {
       return await api.fetchTimestamps(getState(), body);
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getCommentsError(error.body, error.message);
+      return rejectWithValue(message);
     }
   },
   {

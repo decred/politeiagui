@@ -1,31 +1,41 @@
 import React from "react";
-import { Card, H2 } from "pi-ui";
+import { Card, Column, H2, Row } from "pi-ui";
 import styles from "./styles.module.css";
 
 export function RecordCard({
-  token,
   title,
+  titleLink,
   subtitle,
   rightHeader,
   secondRow,
   thirdRow,
+  fourthRow,
   footer,
 }) {
   return (
     <Card className={styles.card}>
-      <div className={styles.firstRow}>
-        <div className={styles.header}>
-          <a href={`/records/${token}`} data-link className={styles.title}>
+      <Row>
+        <Column xs={12} sm={7}>
+          {!titleLink ? (
             <H2>{title}</H2>
-          </a>
+          ) : (
+            <H2>
+              <a href={titleLink} data-link className={styles.title}>
+                {title}
+              </a>
+            </H2>
+          )}
+        </Column>
+        <Column xs={12} sm={5} className={styles.rightHeader}>
+          {rightHeader}
+        </Column>
+        <Column xs={12}>
           <div className={styles.subtitle}>{subtitle}</div>
-        </div>
-        <div>{rightHeader}</div>
-      </div>
-      <div className={styles.secondRow}>{secondRow}</div>
-      <div className={styles.thirdRow}>
-        <div className={styles.fullRow}>{thirdRow}</div>
-      </div>
+        </Column>
+      </Row>
+      {secondRow && <Row className={styles.secondRow}>{secondRow}</Row>}
+      {thirdRow && <Row className={styles.thirdRow}>{thirdRow}</Row>}
+      {fourthRow && <div className={styles.fourthRow}>{fourthRow}</div>}
       <div className={styles.footer}>{footer}</div>
     </Card>
   );

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { getCommentsError } from "../../lib/errors";
 
 export const initialState = {
   byToken: {},
@@ -13,7 +14,8 @@ export const fetchComments = createAsyncThunk(
     try {
       return await api.fetchComments(getState(), { token });
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getCommentsError(error.body, error.message);
+      return rejectWithValue(message);
     }
   },
   {
@@ -51,6 +53,12 @@ const commentsSlice = createSlice({
 export const selectCommentsStatus = (state) => state.comments.status;
 export const selectCommentsByToken = (state, token) =>
   state.comments.byToken[token];
+
+export const selectRecordCommentsIds = (state, token) => {
+  const comments = selectCommentsByToken(state, token) || {};
+  const ids = Object.keys(comments);
+  return ids.map((id) => +id);
+};
 
 export const selectRecordCommentsById = (state, { token, id }) =>
   state.comments.byToken?.[token][id];

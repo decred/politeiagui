@@ -11,9 +11,11 @@
     "./records/constants": "./src/records/constants.js",
     "./records/validation": "./src/records/validation.js",
     "./records/inventory": "./src/records/inventory/index.js",
+    "./records/timestamps": "./src/records/timestamps/index.js",
     "./records/policy": "./src/records/policy/index.js",
     "./router": "./src/router/index.js",
-    "./routes": "./src/routes/index.js"
+    "./routes": "./src/routes/index.js",
+    "./listeners": "./src/listeners/index.js"
   },
   "babel": {
     "env": {
