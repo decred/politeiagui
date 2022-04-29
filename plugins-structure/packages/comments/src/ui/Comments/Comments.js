@@ -4,6 +4,7 @@ import { CommentsFilter, CommentsList } from "./";
 import { Card, H2 } from "pi-ui";
 import styles from "./styles.module.css";
 import { getThreadSchema } from "./utils";
+import { useScrollTo } from "@politeiagui/common-ui/layout";
 
 export const Comments = ({
   comments,
@@ -12,6 +13,7 @@ export const Comments = ({
   onCensor,
   showCensor,
   parentId,
+  scrollOnLoad,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [threadSchema, setThreadSchema] = useState();
@@ -34,6 +36,8 @@ export const Comments = ({
 
   const commentsCount = Object.keys(comments).length;
 
+  useScrollTo("comments-list", scrollOnLoad);
+
   return (
     <div className={styles.commentsWrapper}>
       <Card paddingSize="small" className={styles.header}>
@@ -48,7 +52,7 @@ export const Comments = ({
           />
         )}
       </Card>
-      <div className={styles.commentsList}>
+      <div className={styles.commentsList} id="comments-list">
         <CommentsList
           comments={comments}
           userVotes={userVotes}
