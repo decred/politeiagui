@@ -23,8 +23,8 @@ function Details({ token }) {
     voteSummary,
   } = useProposalDetails({ token });
   const params = getURLSearchParams();
-  const shouldScrollToComments = params?.scrollToComments;
-  useScrollToTop(!shouldScrollToComments);
+  const shouldScrollToComments = !!params?.scrollToComments;
+  useScrollToTop(shouldScrollToComments);
   return (
     <SingleContentPage className={styles.detailsWrapper}>
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
