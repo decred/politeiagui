@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Card, Link, classNames } from "pi-ui";
-import { Event, Join } from "@politeiagui/common-ui";
+import { Event, Join, MarkdownRenderer } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 import { CommentVotes } from "./CommentVotes";
 import { CommentForm } from "../CommentForm";
@@ -69,9 +69,14 @@ export const CommentCard = ({
         </div>
         {/* TODO: get comment censorship user */}
         <div className={styles.body} data-testid="comment-body">
-          {comment.deleted
-            ? `Censored. Reason: ${comment.reason}`
-            : comment.comment}
+          {comment.deleted ? (
+            `Censored. Reason: ${comment.reason}`
+          ) : (
+            <MarkdownRenderer
+              body={comment.comment}
+              disallowedElements={["h1", "h2", "h3", "h4", "h5", "h6"]}
+            />
+          )}
         </div>
         <div className={styles.footer}>
           {!disableReply && (

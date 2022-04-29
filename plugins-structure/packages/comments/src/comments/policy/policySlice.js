@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
+import { getCommentsError } from "../../lib/errors";
 
 export const initialState = {
   policy: {},
@@ -13,7 +14,8 @@ export const fetchCommentsPolicy = createAsyncThunk(
     try {
       return await api.fetchPolicy(getState());
     } catch (error) {
-      return rejectWithValue(error.message);
+      const message = getCommentsError(error.body, error.message);
+      return rejectWithValue(message);
     }
   }
 );
