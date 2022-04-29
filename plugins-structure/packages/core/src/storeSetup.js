@@ -4,6 +4,7 @@ import { client } from "./client/client";
 import recordsInventoryReducer from "./records/inventory/recordsInventorySlice";
 import recordsReducer from "./records/records/recordsSlice";
 import policyReducer from "./records/policy/policySlice";
+import recordsTimestampsReducer from "./records/timestamps/timestampsSlice";
 import apiReducer from "./api/apiSlice";
 
 import { listenerMiddleware } from "./listeners";
@@ -14,6 +15,7 @@ const staticReducers = {
   recordsInventory: recordsInventoryReducer,
   records: recordsReducer,
   recordsPolicy: policyReducer,
+  recordsTimestamps: recordsTimestampsReducer,
 };
 
 function createReducer(asyncReducers) {

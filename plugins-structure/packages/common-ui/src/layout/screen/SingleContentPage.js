@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 import { Row, StaticContainer } from "pi-ui";
 import styles from "./styles.module.css";
 
-export function SingleContentPage({ banner, children }) {
+export function SingleContentPage({ banner, children, className }) {
   return (
     <div>
       {banner && <Row className={styles.banner}>{banner}</Row>}
-      <StaticContainer>{children}</StaticContainer>
+      <StaticContainer className={className}>{children}</StaticContainer>
     </div>
   );
 }

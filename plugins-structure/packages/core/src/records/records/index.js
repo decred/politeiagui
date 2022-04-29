@@ -1,4 +1,5 @@
 import {
+  fetchRecordDetails,
   fetchRecords,
   selectRecordByToken,
   selectRecords,
@@ -9,6 +10,7 @@ import {
 
 export const records = {
   fetch: fetchRecords,
+  fetchDetails: fetchRecordDetails,
   selectStatus: selectRecordsStatus,
   selectByToken: selectRecordByToken,
   selectByTokensBatch: selectRecordsByTokensBatch,

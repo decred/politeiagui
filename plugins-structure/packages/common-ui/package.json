@@ -6,7 +6,22 @@
   "license": "MIT",
   "exports": {
     ".": "./src/index.js",
-    "./layout": "./src/layout/index.js"
+    "./layout": "./src/layout/index.js",
+    "./utils": "./src/utils.js"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs",
+          "@babel/plugin-transform-runtime"
+        ],
+        "presets": [
+          "@babel/preset-env",
+          "@babel/preset-react"
+        ]
+      }
+    }
   },
   "scripts": {
     "prettier": "prettier \"src/**/*.js\"",

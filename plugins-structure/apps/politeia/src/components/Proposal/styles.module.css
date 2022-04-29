@@ -3,6 +3,20 @@
   margin-bottom: 2rem;
 }
 
+.secondRow > * {
+  margin-top: var(--spacing-medium);
+}
+
+.secondRow > *:first-child {
+  margin-top: 0;
+}
+
+.footerButtons {
+  display: flex;
+  width: 6rem;
+  justify-content: space-between;
+}
+
 .loaderWrapper {
   margin-bottom: var(--spacing-medium);
 }

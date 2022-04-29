@@ -1,2 +1,2 @@
-export { comments } from "./comments";
+export { comments, commentsConstants } from "./comments";
 export { routes } from "./routes";

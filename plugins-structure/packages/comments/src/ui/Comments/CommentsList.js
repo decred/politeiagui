@@ -41,4 +41,9 @@ CommentsList.propTypes = {
   showCensor: PropTypes.bool,
   onCensor: PropTypes.func,
   threadSchema: PropTypes.object,
+  userVotes: PropTypes.object,
+};
+
+CommentsList.defaultProps = {
+  userVotes: {},
 };
