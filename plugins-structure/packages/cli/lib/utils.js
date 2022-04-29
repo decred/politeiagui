@@ -114,6 +114,8 @@ function createPackageJsonFile({
 }
 
 function createConfigFile({ appPath, config, pluginsConfig }) {
+  console.log("Creating config file...");
+  console.log("Plugins:");
   if (!config) {
     const configJson = {
       plugins: {
@@ -124,8 +126,11 @@ function createConfigFile({ appPath, config, pluginsConfig }) {
       path.join(appPath, "config.json"),
       JSON.stringify(configJson, null, 2) + os.EOL
     );
+    console.log(JSON.stringify(pluginsConfig, null, 2));
   } else {
     // copy if it is provided
+    const cfg = require(config);
+    console.log(JSON.stringify(cfg.plugins, null, 2));
     fs.copyFileSync(config, `${appPath}/config.json`);
   }
 }
