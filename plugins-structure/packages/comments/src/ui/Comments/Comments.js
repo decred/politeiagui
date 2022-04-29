@@ -36,10 +36,10 @@ export const Comments = ({
 
   const commentsCount = Object.keys(comments).length;
 
-  useScrollTo("comments-list", scrollOnLoad);
+  useScrollTo("comments-wrapper", scrollOnLoad);
 
   return (
-    <div className={styles.commentsWrapper}>
+    <div className={styles.commentsWrapper} id="comments-wrapper">
       <Card paddingSize="small" className={styles.header}>
         <H2 className={styles.title}>
           Comments <span className={styles.count}>({commentsCount})</span>
@@ -52,7 +52,7 @@ export const Comments = ({
           />
         )}
       </Card>
-      <div className={styles.commentsList} id="comments-list">
+      <div className={styles.commentsList}>
         <CommentsList
           comments={comments}
           userVotes={userVotes}
