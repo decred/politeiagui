@@ -27,6 +27,16 @@
   align-items: center;
 }
 
+.fourthRow {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  padding: var(--spacing-2) 0;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: var(--separator-color);
+}
+
 @media screen and (max-width: 560px) {
   .firstRow {
     flex-direction: column-reverse;

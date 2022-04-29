@@ -7,6 +7,10 @@ const basePluginPackageJSON = require("../plugin/package.json");
 const basePluginPath = path.resolve(__dirname, "../plugin");
 
 module.exports = function newPlugin(pluginName, { port }) {
+  if (!pluginName) {
+    console.error("Please specify the app name");
+    return;
+  }
   const packagePath = path.resolve(__dirname, "../../../packages/");
   const pluginPath = path.resolve(packagePath, pluginName);
   const pluginExists = fs.existsSync(pluginPath);

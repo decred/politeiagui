@@ -54,6 +54,12 @@ export const selectCommentsStatus = (state) => state.comments.status;
 export const selectCommentsByToken = (state, token) =>
   state.comments.byToken[token];
 
+export const selectRecordCommentsIds = (state, token) => {
+  const comments = selectCommentsByToken(state, token) || {};
+  const ids = Object.keys(comments);
+  return ids.map((id) => +id);
+};
+
 export const selectRecordCommentsById = (state, { token, id }) =>
   state.comments.byToken?.[token][id];
 

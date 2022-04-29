@@ -6,9 +6,11 @@ line structure and arguments.
 
 ## Overview
 
-1. [Setup](#setup)
-2. [New Plugin](#creating-a-new-plugin)
-3. [New App](#creating-a-new-application)
+- [Politeiagui CLI](#politeiagui-cli)
+  - [Overview](#overview)
+  - [Setup](#setup)
+  - [Creating a new plugin](#creating-a-new-plugin)
+  - [Creating a new application](#creating-a-new-application)
 
 ## Setup
 
@@ -72,7 +74,7 @@ Creating a new `ticketvote` plugin:
 $ pgui newplugin ticketvote
 
 Creating a new plugin: ticketvote
-Directory: /Users/victorguedes/Documents/decred/politeiagui/plugins-structure/packages/ticketvote
+Directory: /Directory/plugins-structure/packages/ticketvote
 
 
 
@@ -133,8 +135,13 @@ Usage: pgui newapp [options] [app-name]
 Creates a new app-shell
 
 Options:
-  -p, --port <port>  port number (default: 3000)
-  -h, --help         display help for command
+  -p, --port <port> port number (default: 3000)
+
+  --plugins [plugins] list of plugins comma separated. Will be ignored if a config file is provided. Example: ticketvote,comments
+
+  --config [config] custom config file relative to this folder. Example: ./config.json
+
+  -h, --help  display help for command
 ```
 
 Creating a new Proposals app
@@ -142,7 +149,7 @@ Creating a new Proposals app
 ```bash
 $ pgui newapp proposals
 Creating a new app: proposals
-Directory: /Users/victorguedes/Documents/decred/politeiagui/plugins-structure/apps/proposals
+Directory: /Directory/apps/proposals
 
 
 
@@ -162,6 +169,7 @@ apps/proposals
 │   └── public
 │       └── index.html
 ├── webpack.common.js
+├── config.json
 ├── webpack.dev.js
 └── webpack.prod.js
 ```
@@ -189,10 +197,45 @@ Let's take a look under the `package.json`:
     "start": "webpack serve --config webpack.dev.js --open"
   },
   "dependencies": {
-    "@politeiagui/core": "1.0.0"
+    "@politeiagui/core": "1.0.0",
+    "@politeiagui/common-ui": "1.0.0"
   },
   "devDependencies": {
     "webpack-bundle-analyzer": "^4.4.2"
   }
 }
 ```
+
+And your `config.json` will look like this:
+
+```json
+{
+  "plugins": {}
+}
+```
+
+You can provide a config file to tell which plugins you want. To add the ticketvote plugin, for example, you can use this config file:
+
+```json
+{
+  "plugins": {
+    "ticketvote": {
+      "version": "1.0.0"
+    }
+  }
+}
+```
+
+With the following command:
+
+```bash
+$ pgui newapp proposals --config="./config-example.json"
+```
+
+You can also pass a list of comma-separated plugins via the plugins option. For example:
+
+```bash
+$ pgui newapp proposals --plugins="comments,ticketvote"
+```
+
+Notice that if you send both a plugins list and a config file, the plugins list will be ignored.

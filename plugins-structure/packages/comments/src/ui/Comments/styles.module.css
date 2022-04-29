@@ -54,4 +54,5 @@ span.flatModeActive {
 .title {
   margin-top: 1rem;
   margin-bottom: 1rem;
+  font-weight: var(--font-weight-regular);
 }

@@ -2,14 +2,12 @@
   "name": "@politeiagui/cli",
   "version": "1.0.0",
   "description": "politeiagui cli",
+  "license": "MIT",
   "keywords": [
     "pgui",
     "politeiagui-cli",
     "@politeiagui/cli"
   ],
-  "author": "Victor Guedes <victorgcramos@gmail.com>",
-  "homepage": "https://github.com/decred/politeiagui#readme",
-  "license": "ISC",
   "main": "lib/pgui.js",
   "directories": {
     "lib": "lib",
@@ -18,10 +16,6 @@
   "files": [
     "lib"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/decred/politeiagui.git"
-  },
   "scripts": {
     "prettier": "prettier \"**/*.js\"",
     "format": "yarn prettier --write",
@@ -32,9 +26,6 @@
     "test:dev": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll --no-cache",
     "test": "is-ci \"test:ci\" \"test:dev\"",
     "test:coverage": "yarn test:ci; open coverage/lcov-report/index.html"
-  },
-  "bugs": {
-    "url": "https://github.com/decred/politeiagui/issues"
   },
   "bin": {
     "pgui": "lib/pgui.js"

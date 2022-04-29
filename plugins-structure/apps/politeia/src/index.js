@@ -72,12 +72,13 @@ function initializeApi() {
 }
 
 function handleApi() {
-  if (!routerInitialized) {
+  const state = store.getState();
+  const status = state.api.status;
+  if (!routerInitialized && status === "succeeded") {
     routerInitialized = true;
     router.init({ routes });
   }
 }
-
 ReactDOM.render(
   <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
     <Provider store={store}>
