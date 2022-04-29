@@ -25,7 +25,6 @@ export const CommentCard = ({
   userLink,
   userVote,
   onComment,
-  parentId,
   disableReply,
 }) => {
   const [showThread, setShowThread] = useState(true);
@@ -79,7 +78,7 @@ export const CommentCard = ({
           )}
         </div>
         <div className={styles.footer}>
-          {!disableReply && (
+          {!disableReply && !comment.deleted && (
             <span
               className={styles.reply}
               data-testid="comment-reply"
@@ -95,7 +94,9 @@ export const CommentCard = ({
           )}
         </div>
       </Card>
-      {showForm && <CommentForm onComment={onComment} parentId={parentId} />}
+      {showForm && (
+        <CommentForm onComment={onComment} parentId={comment.commentid} />
+      )}
       {showThread && (
         <div className={styles.thread} data-testid="comment-thread">
           {children}
