@@ -169,7 +169,7 @@ export function decodeProposalRecord(record) {
   const userMetadata = decodeProposalUserMetadata(record.metadata);
   const voteMetadata = decodeVoteMetadataFile(record.files);
   const body = decodeProposalBodyFile(record.files);
-  const { userid } = userMetadata.find((md) => md && md.payload.userid);
+  const useridMd = userMetadata.find((md) => md && md.payload.userid);
   const { token } = record.censorshiprecord;
   return {
     name: name ? name : getShortToken(token),
@@ -181,7 +181,7 @@ export function decodeProposalRecord(record) {
     voteMetadata,
     author: {
       username: record.username,
-      userid,
+      userid: useridMd?.payload?.userid,
     },
     body,
     proposalMetadata,
