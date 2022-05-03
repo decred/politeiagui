@@ -17,3 +17,7 @@ export const PROPOSAL_SUMMARY_STATUS_ACTIVE = "active";
 export const PROPOSAL_SUMMARY_STATUS_COMPLETED = "completed";
 export const PROPOSAL_SUMMARY_STATUS_APPROVED = "approved";
 export const PROPOSAL_SUMMARY_STATUS_CLOSED = "closed";
+
+export const PROPOSAL_TYPE_REGULAR = 1;
+export const PROPOSAL_TYPE_RFP = 2;
+export const PROPOSAL_TYPE_SUBMISSION = 3;
