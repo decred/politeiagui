@@ -5,7 +5,7 @@ import {
   useForm,
   useFormContext,
 } from "react-hook-form";
-import { BoxTextInput, Button, Card, Select } from "pi-ui";
+import { BoxTextInput, Button, Card, Message, Select, classNames } from "pi-ui";
 import styles from "./styles.module.css";
 import { MarkdownEditor } from "../Markdown";
 import { DatePickerInput } from "./DatePickerInput";
@@ -86,31 +86,54 @@ function SubmitButton({ children = "Submit", ...props }) {
   );
 }
 
-function SaveButton({ children = "Save", onSave = () => {}, ...props }) {
+function SaveButton({
+  children = "Save",
+  onSave = () => {},
+  className,
+  ...props
+}) {
   const { getValues } = useFormContext();
   function handleSave() {
     onSave(getValues());
   }
   return (
-    <Button kind="secondary" onClick={handleSave} {...props}>
+    <Button
+      kind="secondary"
+      onClick={handleSave}
+      className={classNames(styles.button, className)}
+      {...props}
+    >
       {children}
     </Button>
   );
 }
 
+function Warning({ children }) {
+  return (
+    <Message kind="warning" className={styles.warning}>
+      {children}
+    </Message>
+  );
+}
+
 export function RecordForm({ initialValues, children, onSubmit }) {
-  const methods = useForm({ defaultValues: initialValues });
+  const formProps = useForm({ defaultValues: initialValues });
   return (
     <Card paddingSize="small">
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
+      <FormProvider {...formProps}>
+        <form
+          onSubmit={formProps.handleSubmit(onSubmit)}
+          className={styles.form}
+        >
           {children({
+            formProps,
             DatePickerInput,
             MarkdownInput,
             SaveButton,
             SelectInput,
             SubmitButton,
             TextInput,
+            Warning,
           })}
         </form>
       </FormProvider>

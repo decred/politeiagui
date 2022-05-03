@@ -43,6 +43,11 @@
   margin-bottom: 2.3rem;
 }
 
+.warning {
+  margin-top: 1rem;
+  margin-bottom: 3.3rem;
+}
+
 .markdownInput textarea {
   font-family: var(--font-family-text);
   font-size: var(--font-size-normal);
