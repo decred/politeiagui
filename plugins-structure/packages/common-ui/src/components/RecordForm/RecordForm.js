@@ -10,29 +10,10 @@ import styles from "./styles.module.css";
 import { MarkdownEditor } from "../Markdown";
 import { DatePickerInput } from "./DatePickerInput";
 
-function TextInput({
-  name = "name",
-  placeholder,
-  min,
-  max,
-  minLength,
-  maxLength,
-  pattern,
-  validate,
-  required,
-}) {
+function TextInput({ name = "name", placeholder }) {
   return (
     <Controller
       name={name}
-      rules={{
-        min,
-        max,
-        minLength,
-        maxLength,
-        pattern,
-        validate,
-        required,
-      }}
       render={({ field: { onChange, value } }) => (
         <BoxTextInput
           onChange={onChange}
@@ -40,6 +21,24 @@ function TextInput({
           placeholder={placeholder}
           inputClassName={styles.input}
         />
+      )}
+    />
+  );
+}
+
+function CurrencyInput({ name = "amount", placeholder }) {
+  return (
+    <Controller
+      name={name}
+      render={({ field: { onChange, value } }) => (
+        <div className={styles.currency}>
+          {value && <span className={styles.currencyValue}>$</span>}
+          <BoxTextInput
+            placeholder={placeholder}
+            onChange={onChange}
+            value={value}
+          />
+        </div>
       )}
     />
   );
@@ -127,6 +126,7 @@ export function RecordForm({ initialValues, children, onSubmit }) {
         >
           {children({
             formProps,
+            CurrencyInput,
             DatePickerInput,
             MarkdownInput,
             SaveButton,
