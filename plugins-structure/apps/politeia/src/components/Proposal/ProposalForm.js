@@ -27,6 +27,7 @@ export function ProposalForm({
   return (
     <RecordForm onSubmit={onSubmit} initialValues={initialValues}>
       {({
+        CurrencyInput,
         DatePickerInput,
         TextInput,
         SelectInput,
@@ -48,7 +49,7 @@ export function ProposalForm({
               placeholder="Proposal Type"
             />
             <TextInput name="name" placeholder="Proposal Name" />
-            <TextInput name="amount" placeholder="Amount (USD)" />
+            <CurrencyInput name="amount" placeholder="Amount (USD)" />
             <Row>
               <Column xs={12} md={6}>
                 <DatePickerInput
