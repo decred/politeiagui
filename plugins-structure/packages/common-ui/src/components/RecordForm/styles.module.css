@@ -6,8 +6,8 @@
   position: absolute;
   top: 2.3rem;
   width: 100%;
+  color: var(--text-input-color);
   padding-left: 1rem;
-  background: white;
 }
 
 .datePicker {
@@ -48,11 +48,26 @@
 
 .input {
   padding-left: 1rem !important;
+  padding-bottom: 0.9rem !important;
+  padding-top: 0.9rem !important;
+  margin-top: 1rem !important;
 }
 
 .markdownInput {
   margin-top: 1rem;
   margin-bottom: 2.3rem;
+}
+
+/* Remove numberInput spinners */
+/* Chrome, Safari, Edge, Opera */
+.numberInput::-webkit-outer-spin-button,
+.numberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.numberInput[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .warning {

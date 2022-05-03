@@ -32,8 +32,10 @@ function CurrencyInput({ name = "amount", placeholder }) {
       name={name}
       render={({ field: { onChange, value } }) => (
         <div className={styles.currency}>
-          {value && <span className={styles.currencyValue}>$</span>}
+          <span className={styles.currencyValue}>$</span>
           <BoxTextInput
+            type="number"
+            inputClassName={classNames(styles.numberInput)}
             placeholder={placeholder}
             onChange={onChange}
             value={value}
