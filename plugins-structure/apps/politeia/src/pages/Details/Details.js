@@ -40,7 +40,14 @@ function Details({ token }) {
             onFetchVersion={onFetchPreviousVersions}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
           />
-          <Comments comments={comments} scrollOnLoad={shouldScrollToComments} />
+          <Comments
+            comments={comments}
+            // Mocking onReply until user layer is done.
+            onReply={(comment, parentid) => {
+              console.log(`Replying ${parentid}:`, comment);
+            }}
+            scrollOnLoad={shouldScrollToComments}
+          />
         </>
       )}
     </SingleContentPage>

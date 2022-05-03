@@ -14,6 +14,8 @@ export const Comments = ({
   showCensor,
   parentId,
   scrollOnLoad,
+  onReply,
+  disableReply,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [threadSchema, setThreadSchema] = useState();
@@ -60,6 +62,8 @@ export const Comments = ({
           threadSchema={threadSchema}
           parentId={parentId}
           onCensor={onCensor}
+          onReply={onReply}
+          disableReply={disableReply}
         />
       </div>
     </div>
@@ -73,8 +77,11 @@ Comments.propTypes = {
   onCensor: PropTypes.func,
   showCensor: PropTypes.bool,
   parentId: PropTypes.number,
+  onReply: PropTypes.func,
+  disableReply: PropTypes.bool,
 };
 
 Comments.defaultProps = {
   parentId: 0,
+  onReply: () => {},
 };
