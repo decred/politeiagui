@@ -5,12 +5,20 @@ import {
   useForm,
   useFormContext,
 } from "react-hook-form";
-import { BoxTextInput, Button, Card, Message, Select, classNames } from "pi-ui";
+import {
+  BoxTextInput,
+  Button,
+  Card,
+  Message,
+  Select,
+  classNames,
+  useTheme,
+} from "pi-ui";
 import styles from "./styles.module.css";
 import { MarkdownEditor } from "../Markdown";
 import { DatePickerInput } from "./DatePickerInput";
 
-function TextInput({ name = "name", placeholder }) {
+function TextInput({ name = "name", placeholder, ...props }) {
   return (
     <Controller
       name={name}
@@ -20,13 +28,14 @@ function TextInput({ name = "name", placeholder }) {
           value={value}
           placeholder={placeholder}
           inputClassName={styles.input}
+          {...props}
         />
       )}
     />
   );
 }
 
-function CurrencyInput({ name = "amount", placeholder }) {
+function CurrencyInput({ name = "amount", placeholder, ...props }) {
   return (
     <Controller
       name={name}
@@ -39,6 +48,7 @@ function CurrencyInput({ name = "amount", placeholder }) {
             placeholder={placeholder}
             onChange={onChange}
             value={value}
+            {...props}
           />
         </div>
       )}
@@ -47,6 +57,7 @@ function CurrencyInput({ name = "amount", placeholder }) {
 }
 
 function SelectInput({ name = "select", options, ...props }) {
+  const { theme } = useTheme();
   return (
     <Controller
       name={name}
@@ -56,6 +67,11 @@ function SelectInput({ name = "select", options, ...props }) {
           value={value}
           onChange={onChange}
           className={styles.select}
+          customStyles={{
+            control: () => ({
+              borderColor: theme["input-border-color"],
+            }),
+          }}
           {...props}
         />
       )}

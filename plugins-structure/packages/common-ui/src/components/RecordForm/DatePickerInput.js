@@ -11,6 +11,7 @@ export function DatePickerInput({
   years,
   className,
   isRange,
+  tabIndex,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   function formatValue(value) {
@@ -29,6 +30,7 @@ export function DatePickerInput({
     // In single mode return the formatted picked date.
     return formatDateToInternationalString(value);
   }
+
   return (
     <Controller
       name={name}
@@ -45,7 +47,9 @@ export function DatePickerInput({
             onChange={(year, month, day) => onChange({ year, month, day })}
           >
             <div
+              tabIndex={tabIndex}
               onClick={() => setIsOpen(!isOpen)}
+              onFocus={() => setIsOpen(!isOpen)}
               className={styles.datePickerContent}
             >
               {value ? (

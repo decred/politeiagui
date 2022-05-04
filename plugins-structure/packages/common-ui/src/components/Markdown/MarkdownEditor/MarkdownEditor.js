@@ -13,6 +13,7 @@ export function MarkdownEditor({
   isSplitView,
   hideButtonsMenu,
   customCommands = [],
+  ...props
 }) {
   const editorRef = useRef();
   const [showPreview, setShowPreview] = useState(false);
@@ -130,6 +131,7 @@ export function MarkdownEditor({
           onKeyDown={handleKeyPress}
           onChange={handleInputChange}
           onBlur={() => onSaveChanges()}
+          {...props}
         />
         <MarkdownRenderer body={editorValue} className={styles.preview} />
       </div>
