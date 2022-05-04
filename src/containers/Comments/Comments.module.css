@@ -28,8 +28,9 @@ h2.commentsTitle {
 }
 
 .sortContainer {
-  width: 20rem;
+  width: 30rem;
   display: flex;
+  align-items: center;
 }
 
 span.flatButtonText {
@@ -44,7 +45,7 @@ span.flatButtonText {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0.4rem 0.9rem;
   border-radius: 0.2rem;
   border: 0.1rem solid var(--color-primary);
   user-select: none;
