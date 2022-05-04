@@ -58,6 +58,8 @@ export function ProposalForm({
             <Row>
               <Column xs={12} sm={!isRfp ? 12 : 6}>
                 <SelectInput
+                  autoFocus
+                  tabIndex={1}
                   options={PROPOSAL_TYPE_OPTIONS}
                   name="type"
                   placeholder="Proposal Type"
@@ -67,12 +69,14 @@ export function ProposalForm({
                 <Column xs={12} sm={6}>
                   {isRfpProposal ? (
                     <DatePickerInput
+                      tabIndex={1}
                       name="deadline"
                       placeholder="Deadline"
                       years={proposalYears}
                     />
                   ) : (
                     <TextInput
+                      tabIndex={1}
                       name="rfpToken"
                       placeholder="RFP Proposal Token"
                     />
@@ -80,14 +84,19 @@ export function ProposalForm({
                 </Column>
               )}
             </Row>
-            <TextInput name="name" placeholder="Proposal Name" />
+            <TextInput name="name" tabIndex={1} placeholder="Proposal Name" />
             {!isRfpProposal && (
-              <CurrencyInput name="amount" placeholder="Amount (USD)" />
+              <CurrencyInput
+                name="amount"
+                tabIndex={1}
+                placeholder="Amount (USD)"
+              />
             )}
             {!isRfpProposal && (
               <Row>
                 <Column xs={12} md={6}>
                   <DatePickerInput
+                    tabIndex={1}
                     name="startDate"
                     placeholder="Start Date"
                     years={proposalYears}
@@ -95,6 +104,7 @@ export function ProposalForm({
                 </Column>
                 <Column xs={12} md={6}>
                   <DatePickerInput
+                    tabIndex={1}
                     name="endDate"
                     placeholder="End Date"
                     years={getStartEndDatesRange(minStartDate, maxEndDate)}
@@ -103,15 +113,18 @@ export function ProposalForm({
               </Row>
             )}
             <SelectInput
+              tabIndex={1}
               options={domainsOptions}
               name="domain"
               placeholder="Domain"
             />
-            <MarkdownInput name="body" />
+            <MarkdownInput name="body" tabIndex={1} />
             <ProposalRules />
             <div className={styles.formButtons}>
-              <SaveButton onSave={onSave}>Save Draft</SaveButton>
-              <SubmitButton />
+              <SaveButton tabIndex={1} onSave={onSave}>
+                Save Draft
+              </SaveButton>
+              <SubmitButton tabIndex={1} />
             </div>
           </div>
         );
