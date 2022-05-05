@@ -3,10 +3,7 @@ import get from "lodash/get";
 import styles from "./VettedProposals.module.css";
 import { tabValues, statusByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
-import {
-  useProposalsBatch,
-  useQueryStringWithIndexValue
-} from "src/hooks";
+import { useProposalsBatch, useQueryStringWithIndexValue } from "src/hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
