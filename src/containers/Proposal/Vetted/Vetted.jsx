@@ -1,19 +1,17 @@
 import React, { useCallback, useMemo } from "react";
 import get from "lodash/get";
-import isEmpty from "lodash/fp/isEmpty";
 import styles from "./VettedProposals.module.css";
 import { tabValues, statusByTab } from "./helpers";
 import { mapProposalsTokensByTab } from "src/containers/Proposal/helpers";
 import {
   useProposalsBatch,
-  useLegacyVettedProposals,
   useQueryStringWithIndexValue
 } from "src/hooks";
 import Proposal from "src/components/Proposal";
 import ProposalLoader from "src/components/Proposal/ProposalLoader";
 import { PublicActionsProvider } from "src/containers/Proposal/Actions";
 import RecordsView from "src/components/RecordsView";
-import { LIST_HEADER_VETTED, INELIGIBLE } from "src/constants";
+import { LIST_HEADER_VETTED } from "src/constants";
 import usePolicy from "src/hooks/api/usePolicy";
 
 const renderProposal = (record) =>
@@ -50,8 +48,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     verifying,
     onRestartMachine,
     hasMoreProposals,
-    onFetchMoreProposals,
-    isProposalsBatchComplete
+    onFetchMoreProposals
   } = useProposalsBatch({
     fetchRfpLinks: true,
     fetchVoteSummaries: true,
@@ -61,33 +58,6 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     fetchVoteSummary: true,
     fetchProposalSummary: true
   });
-
-  // TODO: remove legacy
-  const { legacyProposals, legacyProposalsTokens } = useLegacyVettedProposals(
-    isProposalsBatchComplete,
-    statuses[0] // hard code because legacy proposals tab always have 1 item in statuses
-  );
-
-  const mergedProposalsTokens = !isEmpty(legacyProposalsTokens)
-    ? Object.keys(proposalsTokens).reduce((acc, cur) => {
-        if (cur === INELIGIBLE) {
-          return {
-            ...acc,
-            [cur]: [
-              ...proposalsTokens[cur],
-              ...legacyProposalsTokens["abandoned"]
-            ]
-          };
-        }
-        return {
-          ...acc,
-          [cur]: [
-            ...(proposalsTokens[cur] || []),
-            ...(legacyProposalsTokens[cur] || [])
-          ]
-        };
-      }, {})
-    : proposalsTokens;
 
   const getEmptyMessage = useCallback((tab) => {
     const mapTabToMessage = {
@@ -99,10 +69,9 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
     return mapTabToMessage[tab];
   }, []);
 
-  // TODO: remove legacy
   const recordTokensByTab = useMemo(
-    () => mapProposalsTokensByTab(statusByTab, mergedProposalsTokens),
-    [mergedProposalsTokens]
+    () => mapProposalsTokensByTab(statusByTab, proposalsTokens),
+    [proposalsTokens]
   );
 
   const content = useCallback(
@@ -129,7 +98,7 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
 
   return (
     <RecordsView
-      records={{ ...proposals, ...legacyProposals }}
+      records={proposals}
       tabLabels={tabLabels}
       recordTokensByTab={recordTokensByTab}
       renderRecord={renderProposal}

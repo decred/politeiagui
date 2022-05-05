@@ -29,9 +29,7 @@ import useTimestamps from "src/hooks/api/useTimestamps";
 import { formatUnixTimestampToObj } from "src/utils";
 import { formatDateToInternationalString } from "src/helpers";
 
-// TODO: remove legacy
-export const Author = ({ username, url, isLegacy }) =>
-  isLegacy ? <span>{username}</span> : <Link to={url}>{username}</Link>;
+export const Author = ({ username, url }) => <Link to={url}>{username}</Link>;
 
 export const Event = ({ event, timestamp, className, size, additionInfo }) => (
   <DateTooltip
@@ -75,11 +73,10 @@ export const RecordToken = ({ token, isCopyable }) => {
   );
 };
 
-// TODO: remove legacy
-export const Title = ({ children, url, isLegacy, ...props }) => {
+export const Title = ({ children, url, ...props }) => {
   const SimpleWrapper = (props) => <div {...props} />;
   const Wrapper = url ? Link : SimpleWrapper;
-  return !isLegacy ? (
+  return (
     <Wrapper
       to={url}
       className={classNames(styles.baseTitle, url && styles.underlineTitle)}>
@@ -87,25 +84,6 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
         {children}
       </H2>
     </Wrapper>
-  ) : (
-    <>
-      <Tooltip
-        content="This proposal is an archived proposal. Clicking on it will take you to the proposals-archive website."
-        placement="right">
-        <Icon type="info" />
-      </Tooltip>
-      <a
-        href={url}
-        className={classNames(
-          styles.baseTitle,
-          styles.underlineTitle,
-          "margin-left-s"
-        )}>
-        <H2 {...props} data-testid="record-title-legacy">
-          {children}
-        </H2>
-      </a>
-    </>
   );
 };
 
@@ -254,11 +232,9 @@ export const MarkdownLink = ({ to, active = false, onClick }) => {
   );
 };
 
-// TODO: remove legacy
 export const CommentsLink = ({
   numOfComments,
   url,
-  isLegacy,
   showIcon = true,
   className
 }) => {
@@ -267,7 +243,6 @@ export const CommentsLink = ({
   return (
     <Link
       to={url}
-      isLegacy={isLegacy}
       gray={!isDarkTheme}
       dark={isDarkTheme}
       className={classNames(styles.commentsLink, className)}>
@@ -284,7 +259,7 @@ export const CommentsLink = ({
   );
 };
 
-export const RfpProposalLink = ({ url, rfpTitle, isLegacy }) => {
+export const RfpProposalLink = ({ url, rfpTitle }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
   return (
@@ -296,11 +271,7 @@ export const RfpProposalLink = ({ url, rfpTitle, isLegacy }) => {
         )}>
         Proposed for{" "}
       </span>
-      {isLegacy ? (
-        <a href={url}>{rfpTitle}</a>
-      ) : (
-        <Link to={url}>{rfpTitle}</Link>
-      )}
+      <Link to={url}>{rfpTitle}</Link>
     </div>
   );
 };
