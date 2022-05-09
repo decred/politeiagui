@@ -68,8 +68,13 @@ function SelectInput({ name = "select", options, ...props }) {
           onChange={onChange}
           className={styles.select}
           customStyles={{
-            control: () => ({
-              borderColor: theme["input-border-color"],
+            control: (_, { isFocused }) => ({
+              borderColor: isFocused
+                ? theme["tab-active-underline-color"]
+                : theme["input-border-color"],
+            }),
+            placeholder: () => ({
+              color: theme["text-input-color"],
             }),
           }}
           {...props}

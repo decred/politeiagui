@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Controller } from "react-hook-form";
-import { DatePicker, Icon, Text, classNames } from "pi-ui";
+import { DatePickerV2 as DatePicker, Icon, Text, classNames } from "pi-ui";
 import styles from "./styles.module.css";
 import { formatDateToInternationalString } from "../../utils";
 import { MONTHS_LABELS } from "../../constants";
@@ -10,24 +10,10 @@ export function DatePickerInput({
   placeholder,
   years,
   className,
-  isRange,
   tabIndex,
+  isMonthsMode,
 }) {
-  const [isOpen, setIsOpen] = useState(false);
   function formatValue(value) {
-    // If range mode is on, format both values and return as string.
-    if (isRange) {
-      let firstFormattedValue = "";
-      if (value[0]) {
-        firstFormattedValue = `${formatDateToInternationalString(value[0])} - `;
-      }
-      let secondFormattedValue;
-      if (value[1]) {
-        secondFormattedValue = `${formatDateToInternationalString(value[1])}`;
-      }
-      return `${firstFormattedValue}${secondFormattedValue}`;
-    }
-    // In single mode return the formatted picked date.
     return formatDateToInternationalString(value);
   }
 
@@ -38,20 +24,15 @@ export function DatePickerInput({
         <div className={styles.datePickerWrapper}>
           <DatePicker
             className={classNames(styles.datePicker, className)}
-            show={isOpen}
+            activeClassName={styles.activeDatePicker}
             value={value}
             years={years}
-            isRange={isRange}
+            isMonthsMode={isMonthsMode}
             lang={MONTHS_LABELS}
-            onDismiss={() => setIsOpen(false)}
-            onChange={(year, month, day) => onChange({ year, month, day })}
+            tabIndex={tabIndex}
+            onChange={onChange}
           >
-            <div
-              tabIndex={tabIndex}
-              onClick={() => setIsOpen(!isOpen)}
-              onFocus={() => setIsOpen(!isOpen)}
-              className={styles.datePickerContent}
-            >
+            <div className={styles.datePickerContent}>
               {value ? (
                 formatValue(value)
               ) : (

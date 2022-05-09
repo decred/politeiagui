@@ -24,6 +24,10 @@
   padding-top: 1rem;
 }
 
+.activeDatePicker {
+  border-color: var(--tab-active-underline-color);
+}
+
 .datePickerError {
   visibility: hidden;
   color: var(--color-orange);
@@ -53,9 +57,17 @@
   margin-top: 1rem !important;
 }
 
+.input:focus-visible {
+  border-color: var(--tab-active-underline-color);
+}
+
 .markdownInput {
   padding-top: 1rem;
   padding-bottom: 2.3rem;
+}
+
+.numberInput:focus-visible {
+  border-color: var(--tab-active-underline-color);
 }
 
 /* Remove numberInput spinners */
@@ -79,14 +91,15 @@
   font-family: var(--font-family-text);
   font-size: var(--font-size-normal);
 }
+
+.markdownInput textarea:focus-visible {
+  border-color: var(--tab-active-underline-color);
+  outline: 0;
+}
 .select {
   padding: 0 !important;
   margin-top: 1rem;
   margin-bottom: 2.3rem;
-}
-
-.select:focus {
-  border: red;
 }
 
 .select > div {
