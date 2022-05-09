@@ -8,10 +8,11 @@ import { MONTHS_LABELS } from "../../constants";
 export function DatePickerInput({
   name = "datePicker",
   placeholder,
-  years,
   className,
   tabIndex,
   isMonthsMode,
+  maxTimestamp,
+  minTimestamp,
 }) {
   function formatValue(value) {
     return formatDateToInternationalString(value);
@@ -26,8 +27,9 @@ export function DatePickerInput({
             className={classNames(styles.datePicker, className)}
             activeClassName={styles.activeDatePicker}
             value={value}
-            years={years}
             isMonthsMode={isMonthsMode}
+            maxTimestamp={maxTimestamp}
+            minTimestamp={minTimestamp}
             lang={MONTHS_LABELS}
             tabIndex={tabIndex}
             onChange={onChange}

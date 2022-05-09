@@ -1,6 +1,5 @@
 import React from "react";
 import { RecordForm } from "@politeiagui/common-ui";
-import { getStartEndDatesRange } from "../../utils/date";
 import { Column, Row } from "pi-ui";
 import styles from "./styles.module.css";
 import ProposalRules from "./ProposalRules";
@@ -28,7 +27,10 @@ export function ProposalForm({
     label: domain.charAt(0).toUpperCase() + domain.slice(1),
     value: domain,
   }));
-  const proposalYears = getStartEndDatesRange(minStartDate, maxEndDate);
+
+  const now = Date.now();
+  const minTimestamp = now + minStartDate * 1000;
+  const maxTimestamp = now + maxEndDate * 1000;
 
   return (
     <RecordForm onSubmit={onSubmit} initialValues={initialValues}>
@@ -70,9 +72,10 @@ export function ProposalForm({
                   {isRfpProposal ? (
                     <DatePickerInput
                       tabIndex={1}
+                      minTimestamp={minTimestamp}
+                      maxTimestamp={maxTimestamp}
                       name="deadline"
                       placeholder="Deadline"
-                      years={proposalYears}
                     />
                   ) : (
                     <TextInput
@@ -96,18 +99,20 @@ export function ProposalForm({
               <Row>
                 <Column xs={12} md={6}>
                   <DatePickerInput
+                    minTimestamp={minTimestamp}
+                    maxTimestamp={maxTimestamp}
                     tabIndex={1}
                     name="startDate"
                     placeholder="Start Date"
-                    years={proposalYears}
                   />
                 </Column>
                 <Column xs={12} md={6}>
                   <DatePickerInput
+                    minTimestamp={minTimestamp}
+                    maxTimestamp={maxTimestamp}
                     tabIndex={1}
                     name="endDate"
                     placeholder="End Date"
-                    years={getStartEndDatesRange(minStartDate, maxEndDate)}
                   />
                 </Column>
               </Row>
