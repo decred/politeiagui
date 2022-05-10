@@ -25,7 +25,7 @@
 }
 
 .activeDatePicker {
-  border-color: var(--tab-active-underline-color);
+  border-color: var(--color-primary);
 }
 
 .datePickerError {
@@ -58,7 +58,7 @@
 }
 
 .input:focus-visible {
-  border-color: var(--tab-active-underline-color);
+  border-color: var(--color-primary);
 }
 
 .markdownInput {
@@ -67,7 +67,7 @@
 }
 
 .numberInput:focus-visible {
-  border-color: var(--tab-active-underline-color);
+  border-color: var(--color-primary);
 }
 
 /* Remove numberInput spinners */
@@ -93,7 +93,7 @@
 }
 
 .markdownInput textarea:focus-visible {
-  border-color: var(--tab-active-underline-color);
+  border-color: var(--color-primary);
   outline: 0;
 }
 .select {

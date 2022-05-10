@@ -70,7 +70,7 @@ function SelectInput({ name = "select", options, ...props }) {
           customStyles={{
             control: (_, { isFocused }) => ({
               borderColor: isFocused
-                ? theme["tab-active-underline-color"]
+                ? theme["color-primary"]
                 : theme["input-border-color"],
             }),
             placeholder: () => ({
