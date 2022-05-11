@@ -14,7 +14,7 @@
     padding: 3rem 2.5rem 0 2.5rem;
   }
   .container {
-    margin: 0;
+    margin: 0 !important;
     width: 100%;
     min-width: 100%;
   }
