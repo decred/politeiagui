@@ -113,3 +113,7 @@
 .visible {
   visibility: visible;
 }
+
+.info {
+  margin-left: 1rem;
+}

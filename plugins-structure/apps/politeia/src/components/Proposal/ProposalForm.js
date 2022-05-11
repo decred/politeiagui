@@ -76,6 +76,13 @@ export function ProposalForm({
                       maxTimestamp={maxTimestamp}
                       name="deadline"
                       placeholder="Deadline"
+                      tooltipInfo={
+                        <Text className={styles.textTooltip}>
+                          The deadline for the RFP submissions, it can be edited
+                          at any point before the voting has been started and
+                          should be at least two weeks from now.
+                        </Text>
+                      }
                     />
                   ) : (
                     <TextInput

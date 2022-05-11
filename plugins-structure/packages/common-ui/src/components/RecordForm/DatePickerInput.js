@@ -1,6 +1,12 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import { DatePickerV2 as DatePicker, Icon, Text, classNames } from "pi-ui";
+import {
+  DatePickerV2 as DatePicker,
+  Icon,
+  Text,
+  Tooltip,
+  classNames,
+} from "pi-ui";
 import styles from "./styles.module.css";
 import { formatDateToInternationalString } from "../../utils";
 import { MONTHS_LABELS } from "../../constants";
@@ -11,6 +17,7 @@ export function DatePickerInput({
   className,
   tabIndex,
   isMonthsMode,
+  tooltipInfo,
   maxTimestamp,
   minTimestamp,
 }) {
@@ -42,7 +49,14 @@ export function DatePickerInput({
                   {placeholder}
                 </Text>
               )}
-              <Icon type="calendar" />
+              <div>
+                <Icon type="calendar" />
+                {tooltipInfo && (
+                  <Tooltip content={tooltipInfo} className={styles.info}>
+                    <Icon type="info" />
+                  </Tooltip>
+                )}
+              </div>
             </div>
           </DatePicker>
           <p
