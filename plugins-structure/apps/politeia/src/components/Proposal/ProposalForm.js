@@ -1,6 +1,6 @@
 import React from "react";
 import { RecordForm } from "@politeiagui/common-ui";
-import { Column, Row } from "pi-ui";
+import { Column, Row, Text } from "pi-ui";
 import styles from "./styles.module.css";
 import ProposalRules from "./ProposalRules";
 import {
@@ -82,6 +82,12 @@ export function ProposalForm({
                       tabIndex={1}
                       name="rfpToken"
                       placeholder="RFP Proposal Token"
+                      tooltipInfo={
+                        <Text className={styles.textTooltip}>
+                          The token for the RFP you are submitting on, it can be
+                          found on the RFP proposal page.
+                        </Text>
+                      }
                     />
                   )}
                 </Column>

@@ -25,7 +25,7 @@ function TextInput({ name = "name", placeholder, ...props }) {
       render={({ field: { onChange, value } }) => (
         <BoxTextInput
           onChange={onChange}
-          value={value}
+          value={value || ""}
           placeholder={placeholder}
           inputClassName={styles.input}
           {...props}

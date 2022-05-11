@@ -43,6 +43,11 @@
   margin-top: 0;
 }
 
+.textTooltip {
+  width: 15rem;
+  display: block;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
