@@ -10088,7 +10088,7 @@ performance-now@^2.1.0:
 
 "pi-ui@https://github.com/decred/pi-ui":
   version "1.0.0"
-  resolved "https://github.com/decred/pi-ui#097540e07f5431429ce7283a8b41dcc920aa0adf"
+  resolved "https://github.com/decred/pi-ui#173f0a75e8f321049c3d6eaea2d22307c7cd2c77"
   dependencies:
     clamp-js-main "^0.11.5"
     lodash "^4.17.15"
