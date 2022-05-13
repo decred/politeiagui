@@ -1,4 +1,4 @@
-.aboutPoliteia h2 {
+.about h2 {
   font-size: var(--font-size-xxlarge);
   font-weight: var(--font-weight-regular);
   line-height: var(--spacing-3);
@@ -7,7 +7,7 @@
   font-family: var(--font-family-text);
 }
 
-.aboutPoliteia p {
+.about p {
   margin-bottom: var(--spacing-2);
 
   font-size: var(--font-size-normal);

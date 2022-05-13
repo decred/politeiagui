@@ -2,7 +2,7 @@ import React from "react";
 import { router } from "@politeiagui/core/router";
 import { MultiContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
-import { AboutPoliteia } from "../../components";
+import { About } from "../../components";
 import UnderReview from "./UnderReview/UnderReview";
 import Approved from "./Approved/Approved";
 import Rejected from "./Rejected/Rejected";
@@ -49,7 +49,7 @@ function Home() {
           tabs={TAB_VALUES}
         />
       }
-      sidebar={<AboutPoliteia />}
+      sidebar={<About />}
     >
       {renderChild({ tab })}
     </MultiContentPage>
