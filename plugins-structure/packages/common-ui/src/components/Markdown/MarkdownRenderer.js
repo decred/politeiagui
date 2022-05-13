@@ -27,7 +27,7 @@ export const MarkdownRenderer = ({
   </div>
 );
 
-MarkdownRenderer.prototype = {
+MarkdownRenderer.propTypes = {
   body: PropTypes.string,
   className: PropTypes.string,
   confirmWithModal: PropTypes.bool,

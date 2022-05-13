@@ -33,6 +33,13 @@ const cssRules = [
   },
 ];
 
+const markdownRules = [
+  {
+    test: /\.md$/,
+    use: "raw-loader",
+  },
+];
+
 const plugins = [
   new HtmlWebpackPlugin({
     template: "./src/public/index.html",
@@ -47,7 +54,7 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules, ...cssRules],
+    rules: [jsRules, ...cssRules, ...markdownRules],
   },
   plugins,
   resolve: {

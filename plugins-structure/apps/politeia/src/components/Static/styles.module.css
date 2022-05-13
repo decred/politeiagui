@@ -1,0 +1,18 @@
+.aboutPoliteia h2 {
+  font-size: var(--font-size-xxlarge);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--spacing-3);
+  color: var(--text-heading2-color);
+  border: 0;
+  font-family: var(--font-family-text);
+}
+
+.aboutPoliteia p {
+  margin-bottom: var(--spacing-2);
+
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--spacing-2);
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
