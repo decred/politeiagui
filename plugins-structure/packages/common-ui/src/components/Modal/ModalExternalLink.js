@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Message, Modal, P, Text } from "pi-ui";
+import { Button, Message, Modal, Text } from "pi-ui";
+import { MarkdownRenderer } from "@politeiagui/common-ui";
+import externalLinkWarning from "../../assets/copies/external-link.md";
 import styles from "./styles.module.css";
 
 export function ModalExternalLink({ show, onClose, link, title, onConfirm }) {
@@ -22,15 +24,7 @@ export function ModalExternalLink({ show, onClose, link, title, onConfirm }) {
       contentClassName={styles.modalExternalLink}
     >
       <Message kind="warning">
-        <P>
-          {" "}
-          You are about to be sent to an external website. This can result in
-          unintended consequences.
-          <strong> DO NOT</strong> enter your credentials or reveal any other
-          sensitive information.
-          <strong> DO NOT</strong> download or run any linked files on the
-          computer storing your cryptocurrencies.
-        </P>
+        <MarkdownRenderer body={externalLinkWarning} />
       </Message>
       <div>
         <Text weight="bold">External link:</Text>

@@ -40,6 +40,13 @@ const svgRules = [
   },
 ];
 
+const markdownRules = [
+  {
+    test: /\.md$/,
+    use: "raw-loader",
+  },
+];
+
 module.exports = {
   entry: "./src/index.js",
   output: {
@@ -52,7 +59,7 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules, ...cssRules, ...svgRules],
+    rules: [jsRules, ...cssRules, ...svgRules, ...markdownRules],
   },
   resolve: {
     fallback: {
