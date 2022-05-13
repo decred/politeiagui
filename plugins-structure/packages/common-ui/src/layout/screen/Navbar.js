@@ -41,10 +41,10 @@ export function Navbar({ logo, children, drawerContent }) {
       </nav>
       {showCollapsed && (
         <Row className={classNames(styles.collapsedNavWrapper)}>
-          <Column xs={0} md={5}>
+          <Column xs={0} sm={5}>
             <span />
           </Column>
-          <Column xs={12} md={7} className={styles.collapsedNav}>
+          <Column xs={12} sm={7} className={styles.collapsedNav}>
             <div className={classNames(styles.collapsedItems, styles.navItems)}>
               {children}
             </div>

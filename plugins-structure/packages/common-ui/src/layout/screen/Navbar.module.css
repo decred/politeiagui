@@ -27,12 +27,13 @@
 
 .collapsedItems {
   width: 100%;
+  padding-right: 6rem;
   height: fit-content;
   align-items: center;
   display: flex;
   justify-content: end;
   min-height: 6rem;
-  padding: 0 3rem;
+
   background-color: var(--card-background);
 }
 
