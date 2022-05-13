@@ -2,7 +2,7 @@
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   color: var(--text-color);
-  font-family: "Source Sans Prop", sans-serif;
+  font-family: var(--font-family-text);
   font-size: var(--font-size-regular);
   line-height: 1.5;
   word-wrap: break-word;
