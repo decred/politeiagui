@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
 import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
+// import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
+import { fetchNextBatch } from "../actions";
 import { ProposalCard, ProposalLoader } from "../../../components";
 import max from "lodash/max";
 
@@ -16,19 +17,22 @@ function StatusList({
   onRenderNextStatus,
 }) {
   const dispatch = useDispatch();
+  const countComments = useSelector(commentsCount.selectAll);
+  const summaries = useSelector(ticketvoteSummaries.selectAll);
+  const recordsInOrder = useSelector((state) =>
+    records.selectByTokensBatch(state, inventory)
+  );
 
-  const fetchStatus = useSelector((state) => selectStatus(state, status));
-
+  // Fetch first batch on first render
   useEffect(() => {
-    if (inventory.length > 0 && fetchStatus === "idle") {
+    if (inventory.length > 0) {
       dispatch(fetchNextBatch(status));
     }
-  }, [dispatch, fetchStatus, inventory, status]);
+  }, [dispatch, inventory, status]);
 
-  const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
-  const lastTokenPos = useSelector((state) => selectLastToken(state, status));
   const hasMoreRecords =
-    lastTokenPos !== null && lastTokenPos < inventory.length - 1;
+    recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
+  const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
 
   function handleFetchMore() {
     if (hasMoreRecords) {
@@ -42,21 +46,10 @@ function StatusList({
     if (!hasMoreInventory && onRenderNextStatus) onRenderNextStatus();
   }, [hasMoreInventory, onRenderNextStatus]);
 
-  const recordsInOrder = useSelector((state) =>
-    records.selectByTokensBatch(state, inventory)
-  );
-
-  const countComments = useSelector(commentsCount.selectAll);
-
-  const summaries = useSelector(ticketvoteSummaries.selectAll);
-
-  const hasMoreToFetch = useMemo(
-    () => fetchStatus === "succeeded" && (hasMoreRecords || hasMoreInventory),
-    [hasMoreRecords, hasMoreInventory, fetchStatus]
-  );
+  const hasMoreToFetch = hasMoreRecords || hasMoreInventory;
 
   const loadingPlaceholdersCount = max([
-    inventory.length - 1 - lastTokenPos,
+    inventory.length - recordsInOrder.length,
     0,
   ]);
 

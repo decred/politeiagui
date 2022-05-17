@@ -1,5 +1,4 @@
 import React from "react";
-import InfiniteScroll from "react-infinite-scroller";
 import styles from "./styles.module.css";
 
 export function RecordsList({ children, hasMore, onFetchMore }) {
@@ -7,14 +6,11 @@ export function RecordsList({ children, hasMore, onFetchMore }) {
     onFetchMore();
   }
   return (
-    <InfiniteScroll
-      className={styles.recordsList}
-      hasMore={hasMore}
-      useWindow={true}
-      initialLoad={true}
-      loadMore={handleLoadMore}
-    >
-      {children}
-    </InfiniteScroll>
+    <div>
+      <div className={styles.recordsList}>{children}</div>
+      <button disabled={!hasMore} onClick={handleLoadMore}>
+        Fetch More
+      </button>
+    </div>
   );
 }
