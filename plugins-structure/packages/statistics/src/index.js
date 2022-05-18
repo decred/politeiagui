@@ -1,7 +1,34 @@
 import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
+// import { api } from "@politeiagui/core/api";
+// import { router } from "@politeiagui/core/router";
 import { recordsInventory } from "@politeiagui/core/records/inventory";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
+import {
+  getHumanReadableRecordState,
+  getHumanReadableRecordStatus,
+  getTokensToFetch,
+} from "@politeiagui/core/records/utils";
+
+async function fetchNextBatch({ recordsState, status }) {
+  const readableRecordsState = getHumanReadableRecordState(recordsState);
+  const readableStatus = getHumanReadableRecordStatus(status);
+  const {
+    recordsInventory,
+    records: recordsObj,
+    recordsPolicy,
+  } = store.getState();
+  const pageSize = recordsPolicy.policy.recordspagesize;
+  const inventoryList =
+    recordsInventory[readableRecordsState][readableStatus].tokens;
+  const recordsToFetch = getTokensToFetch({
+    inventoryList,
+    pageSize,
+    lookupTable: recordsObj.records,
+  });
+  const res = await store.dispatch(records.fetch({ tokens: recordsToFetch }));
+  return res.payload;
+}
 
 const publicRecord = {
   recordsState: "vetted",
@@ -35,6 +62,26 @@ function getInventoryStatus(state) {
     inventoryVettedPublicStatus,
     inventoryVettedCensoredStatus,
     inventoryVettedArchivedStatus,
+  };
+}
+
+function getInventory(state) {
+  const inventoryVettedPublic = recordsInventory.selectByStateAndStatus(
+    state,
+    publicRecord
+  );
+  const inventoryVettedCensored = recordsInventory.selectByStateAndStatus(
+    state,
+    censoredRecord
+  );
+  const inventoryVettedArchived = recordsInventory.selectByStateAndStatus(
+    state,
+    archivedRecord
+  );
+  return {
+    inventoryVettedPublic,
+    inventoryVettedCensored,
+    inventoryVettedArchived,
   };
 }
 
@@ -73,18 +120,17 @@ async function fetchInventory() {
   }
 }
 
-async function fetchRecords(status, opt) {
-  if (status) {
-    recordsInventory.selectByStateAndStatus(store.getState(), opt);
-    // let hasMoreRecords = recordsInventory.selectHasMoreRecordsToFetch(
-    //   store.getState(),
-    //   opt
-    // );
-    let hasMoreRecords = false;
+async function fetchRecords(inventory, opt) {
+  if (inventory) {
+    await fetchNextBatch(opt);
+    const recs = records.selectByStateAndStatus(store.getState(), opt);
+    let hasMoreRecords = Object.values(recs).length < inventory.length;
     while (hasMoreRecords) {
-      // TODO: redo without fetchNextRecordsBatch from recordsInventory
-      // await store.dispatch(recordsInventory.fetchNextRecordsBatch(opt));
-      hasMoreRecords = true;
+      await fetchNextBatch(opt);
+      const recs = records.selectByStateAndStatus(store.getState(), opt);
+      hasMoreRecords =
+        Object.values(recs).length !== 0 &&
+        Object.values(recs).length < inventory.length;
     }
   }
 }
@@ -93,13 +139,13 @@ async function statisticsPage() {
   await store.dispatch(recordsPolicy.fetch());
   await fetchInventory();
   const {
-    inventoryVettedPublicStatus,
-    inventoryVettedCensoredStatus,
-    inventoryVettedArchivedStatus,
-  } = getInventoryStatus(store.getState());
-  await fetchRecords(inventoryVettedPublicStatus, publicRecord);
-  await fetchRecords(inventoryVettedCensoredStatus, censoredRecord);
-  await fetchRecords(inventoryVettedArchivedStatus, archivedRecord);
+    inventoryVettedPublic,
+    inventoryVettedCensored,
+    inventoryVettedArchived,
+  } = getInventory(store.getState());
+  await fetchRecords(inventoryVettedPublic, publicRecord);
+  await fetchRecords(inventoryVettedCensored, censoredRecord);
+  await fetchRecords(inventoryVettedArchived, archivedRecord);
   const publicRecords = records.selectByStateAndStatus(
     store.getState(),
     publicRecord

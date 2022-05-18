@@ -2,10 +2,10 @@ import { listener } from "@politeiagui/core/listeners";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
+import { getTokensToFetch } from "@politeiagui/core/records/utils";
+import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
 import isEmpty from "lodash/isEmpty";
 import { fetchNextBatch } from "./actions";
-import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
-import { getTokensToFetch } from "@politeiagui/core/records/utils";
 
 const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { createAction } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
 import { recordsInventory } from "../inventory";
 import { records } from "../records";
-import { useDispatch, useSelector } from "react-redux";
 import { listener } from "../../listeners";
-import { createAction } from "@reduxjs/toolkit";
 import {
   getHumanReadableRecordState,
   getHumanReadableRecordStatus,
