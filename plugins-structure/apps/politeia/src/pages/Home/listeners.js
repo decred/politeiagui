@@ -22,15 +22,7 @@ function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
   return tokensToFetch;
 }
 
-let listenerCalls = 0;
-
 export function startHomeListeners() {
-  // listener.startListening({
-  //   type: "ticketvoteInventory/fetch/fulfilled",
-  //   effect: (action, listenerApi) => {
-  //     console.log(action, listenerApi);
-  //   },
-  // });
   listener.startListening({
     actionCreator: fetchNextBatch,
     effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
@@ -75,8 +67,7 @@ export function startHomeListeners() {
         pageSize: commentsCountPageSize,
       });
 
-      // Dispatch all
-      // dispatches if tokens are not empty
+      // Dispatches if tokens are not empty
       await Promise.all([
         !isEmpty(recordsToFetch) &&
           dispatch(

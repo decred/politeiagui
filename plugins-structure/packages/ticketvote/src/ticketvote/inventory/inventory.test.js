@@ -1,6 +1,5 @@
 import reducer, {
   fetchTicketvoteInventory,
-  fetchTicketvoteNextRecordsBatch,
   initialState,
 } from "./inventorySlice";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
@@ -219,71 +218,6 @@ describe("Given the recordsInventorySlice", () => {
         expect(state.status).toEqual("failed");
         expect(state.error).toEqual(message);
       }
-    });
-  });
-  describe("when fetchTicketvoteNextRecordsBatch is called with empty tokens", () => {
-    store = configureStore({
-      reducer: { ticketvoteInventory: reducer },
-    });
-    it("should not fetch records nor fire records actions", async () => {
-      await store.dispatch(
-        fetchTicketvoteNextRecordsBatch({ status: "unauthorized" })
-      );
-      expect(fetchRecordsSpy).not.toBeCalled();
-      const state = store.getState().ticketvoteInventory;
-      expect(state.unauthorized.tokens).toEqual([]);
-      expect(state.unauthorized.lastTokenPos).toEqual(null);
-      expect(state.unauthorized.status).toEqual("idle");
-    });
-  });
-  describe("when fetchTicketvoteNextRecordsBatch succeeds", () => {
-    const unauthorizedTokens = [
-      "token1",
-      "token2",
-      "token3",
-      "token4",
-      "token5",
-    ];
-    it("should have fetched records, and updated the lastTokenPos", async () => {
-      store = configureStore({
-        reducer: {
-          ticketvoteInventory: reducer,
-          ticketvotePolicy: policyReducer,
-          records: mockRecordsReducer,
-          recordsPolicy: mockRecordsPolicyReducer,
-        },
-        preloadedState: {
-          ticketvoteInventory: {
-            unauthorized: {
-              ...initialState.unauthorized,
-              tokens: unauthorizedTokens,
-              status: "succeeded/isDone",
-            },
-          },
-          ticketvotePolicy: {
-            policy: { inventorypagesize: 20 },
-          },
-          records: {
-            records: { token1: true },
-          },
-        },
-      });
-
-      expect(
-        store.getState().ticketvoteInventory.unauthorized.lastTokenPos
-      ).toEqual(null);
-
-      await store.dispatch(
-        fetchTicketvoteNextRecordsBatch({ status: "unauthorized" })
-      );
-
-      expect(fetchRecordsSpy).toBeCalledWith({
-        tokens: ["token2", "token3", "token4", "token5"],
-      });
-      const state = store.getState().ticketvoteInventory;
-      expect(state.unauthorized.tokens).toEqual(unauthorizedTokens);
-      expect(state.unauthorized.status).toEqual("succeeded/isDone");
-      expect(state.unauthorized.lastTokenPos).toEqual(4);
     });
   });
 });
