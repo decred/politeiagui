@@ -48,7 +48,9 @@
 
 .navItems {
   justify-self: end;
-  text-align: end;
+  align-items: center;
+  display: flex;
+  justify-content: end;
 }
 
 .navItems > * {
