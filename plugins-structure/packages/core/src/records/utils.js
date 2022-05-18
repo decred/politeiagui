@@ -218,3 +218,30 @@ export function decodeRecordMetadata(metadataStream) {
 export function getShortToken(token) {
   return token?.slice(0, 7);
 }
+
+/**
+ * Record File
+ * @typedef {{
+ *   inventoryList: Array,
+ *   lookupTable: Object,
+ *   pageSize: Number,
+ * }} TokensToFetchObjectParam
+ */
+/**
+ * getTokensToFetch traverses the inventoryList of tokens and add them to a new array if they are not in the lookupTable. If the new array reachs the length of pageSize or the inventoryList comes to an end the loop will break and the array will be returned
+ * @param {TokensToFetchObjectParam} param
+ * @returns {Array}
+ */
+export function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
+  const tokensToFetch = [];
+  let pos = 0;
+  while (inventoryList[pos]) {
+    const token = inventoryList[pos];
+    if (!lookupTable[token]) {
+      tokensToFetch.push(token);
+    }
+    if (tokensToFetch.length === pageSize) break;
+    pos++;
+  }
+  return tokensToFetch;
+}

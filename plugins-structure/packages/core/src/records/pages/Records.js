@@ -2,6 +2,37 @@ import React, { useEffect, useState } from "react";
 import { recordsInventory } from "../inventory";
 import { records } from "../records";
 import { useDispatch, useSelector } from "react-redux";
+import { listener } from "../../listeners";
+import { createAction } from "@reduxjs/toolkit";
+import {
+  getHumanReadableRecordState,
+  getHumanReadableRecordStatus,
+  getTokensToFetch,
+} from "../utils";
+
+const fetchNextBatch = createAction("records/fetchNextBatch");
+
+listener.startListening({
+  actionCreator: fetchNextBatch,
+  effect: async ({ payload: { recordsState, status } }, listenerApi) => {
+    const readableRecordsState = getHumanReadableRecordState(recordsState);
+    const readableStatus = getHumanReadableRecordStatus(status);
+    const {
+      recordsInventory,
+      records: recordsObj,
+      recordsPolicy,
+    } = listenerApi.getState();
+    const pageSize = recordsPolicy.policy.recordspagesize;
+    const inventoryList =
+      recordsInventory[readableRecordsState][readableStatus].tokens;
+    const recordsToFetch = getTokensToFetch({
+      inventoryList,
+      pageSize,
+      lookupTable: recordsObj.records,
+    });
+    await listenerApi.dispatch(records.fetch({ tokens: recordsToFetch }));
+  },
+});
 
 // fetch inventory and pass it down
 export function RecordsList({ recordsState, status }) {
@@ -38,12 +69,9 @@ function RecordsListAux({
 }) {
   const dispatch = useDispatch();
 
-  // TODO: redo without fetchNextRecordsBatch from recordsInventory
   useEffect(() => {
     if (inventory.length > 0) {
-      // dispatch(
-      //   recordsInventory.fetchNextRecordsBatch({ recordsState, status })
-      // );
+      dispatch(fetchNextBatch({ recordsState, status }));
     }
   }, [dispatch, inventory, recordsState, status]);
 
@@ -56,13 +84,12 @@ function RecordsListAux({
     []
   );
   const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
-  const hasMoreRecords = false;
+  const hasMoreRecords =
+    recordsInOrder.length > 0 && recordsInOrder.length < inventory.length;
 
   function handleFetchMore() {
     if (hasMoreRecords) {
-      // dispatch(
-      //   recordsInventory.fetchNextRecordsBatch({ recordsState, status })
-      // );
+      dispatch(fetchNextBatch({ recordsState, status }));
     } else if (hasMoreInventory) {
       fetchOneMoreInventoryPage();
     }

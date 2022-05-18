@@ -5,22 +5,9 @@ import { commentsCount } from "@politeiagui/comments/count";
 import isEmpty from "lodash/isEmpty";
 import { fetchNextBatch } from "./actions";
 import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
+import { getTokensToFetch } from "@politeiagui/core/records/utils";
 
 const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
-
-function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
-  const tokensToFetch = [];
-  let pos = 0;
-  while (inventoryList[pos]) {
-    const token = inventoryList[pos];
-    if (!lookupTable[token]) {
-      tokensToFetch.push(token);
-    }
-    if (tokensToFetch.length === pageSize) break;
-    pos++;
-  }
-  return tokensToFetch;
-}
 
 export function startHomeListeners() {
   listener.startListening({
