@@ -4,7 +4,6 @@ import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
 import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch, useSelector } from "react-redux";
-// import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
 import { fetchNextBatch } from "../actions";
 import { ProposalCard, ProposalLoader } from "../../../components";
 import max from "lodash/max";

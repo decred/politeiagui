@@ -38,11 +38,12 @@ function RecordsListAux({
 }) {
   const dispatch = useDispatch();
 
+  // TODO: redo without fetchNextRecordsBatch from recordsInventory
   useEffect(() => {
     if (inventory.length > 0) {
-      dispatch(
-        recordsInventory.fetchNextRecordsBatch({ recordsState, status })
-      );
+      // dispatch(
+      //   recordsInventory.fetchNextRecordsBatch({ recordsState, status })
+      // );
     }
   }, [dispatch, inventory, recordsState, status]);
 
@@ -55,18 +56,13 @@ function RecordsListAux({
     []
   );
   const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
-  const hasMoreRecords = useSelector((state) =>
-    recordsInventory.selectHasMoreRecordsToFetch(state, {
-      recordsState,
-      status,
-    })
-  );
+  const hasMoreRecords = false;
 
   function handleFetchMore() {
     if (hasMoreRecords) {
-      dispatch(
-        recordsInventory.fetchNextRecordsBatch({ recordsState, status })
-      );
+      // dispatch(
+      //   recordsInventory.fetchNextRecordsBatch({ recordsState, status })
+      // );
     } else if (hasMoreInventory) {
       fetchOneMoreInventoryPage();
     }

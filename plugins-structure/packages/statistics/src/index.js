@@ -76,16 +76,15 @@ async function fetchInventory() {
 async function fetchRecords(status, opt) {
   if (status) {
     recordsInventory.selectByStateAndStatus(store.getState(), opt);
-    let hasMoreRecords = recordsInventory.selectHasMoreRecordsToFetch(
-      store.getState(),
-      opt
-    );
+    // let hasMoreRecords = recordsInventory.selectHasMoreRecordsToFetch(
+    //   store.getState(),
+    //   opt
+    // );
+    let hasMoreRecords = false;
     while (hasMoreRecords) {
-      await store.dispatch(recordsInventory.fetchNextRecordsBatch(opt));
-      hasMoreRecords = recordsInventory.selectHasMoreRecordsToFetch(
-        store.getState(),
-        opt
-      );
+      // TODO: redo without fetchNextRecordsBatch from recordsInventory
+      // await store.dispatch(recordsInventory.fetchNextRecordsBatch(opt));
+      hasMoreRecords = true;
     }
   }
 }

@@ -6,6 +6,7 @@ import { ticketvoteSummaries } from "../../ticketvote/summaries";
 import { records } from "@politeiagui/core/records";
 import { TicketvoteRecordVoteStatusBar } from "../Vote";
 
+// TODO: redo without fetchNextRecordsBatch from recordsInventory
 export function TicketvoteRecordsList({ status }) {
   const [page, setPage] = useState(1);
   const { inventory, onFetchNextRecordsBatch, inventoryStatus } =

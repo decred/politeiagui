@@ -4,7 +4,6 @@ import {
   getRecordStateCode,
   getRecordStatusCode,
   getShortToken,
-  skipTokensAlreadyLoaded,
   validRecordStates,
   validRecordStatuses,
 } from "./utils";
@@ -98,74 +97,6 @@ describe("Given utils", () => {
     });
   });
 
-  describe("Given the skipTokensAlreadyLoaded helper", () => {
-    it("should return tokens and lastTokenPos when there's no loaded records", () => {
-      const tokensToFetch = [1, 2, 3, 4, 5];
-      const lastTokenPos = 4;
-      const records = {};
-      const inventoryListList = [1, 2, 3, 4, 5];
-      const { tokens, last } = skipTokensAlreadyLoaded({
-        tokens: tokensToFetch,
-        records,
-        lastTokenPos,
-        inventoryListList,
-      });
-      expect(tokens).toEqual(tokensToFetch);
-      expect(last).toEqual(lastTokenPos);
-    });
-    it("should return corectly when there are loaded records and no more inventoryList", () => {
-      const tokensToFetch = [1, 2, 3, 4, 5];
-      const lastTokenPos = 4;
-      const records = {
-        2: true,
-        4: true,
-      };
-      const inventoryList = [1, 2, 3, 4, 5];
-      const { tokens, last } = skipTokensAlreadyLoaded({
-        tokens: tokensToFetch,
-        records,
-        lastTokenPos,
-        inventoryList,
-      });
-      expect(tokens).toEqual([1, 3, 5]);
-      expect(last).toEqual(4);
-    });
-    it("should return corectly when there are loaded records and still not visited inventoryList tokens", () => {
-      const tokensToFetch = [1, 2, 3, 4, 5];
-      const lastTokenPos = 4;
-      const records = {
-        2: true,
-        4: true,
-      };
-      const inventoryList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-      const { tokens, last } = skipTokensAlreadyLoaded({
-        tokens: tokensToFetch,
-        records,
-        lastTokenPos,
-        inventoryList,
-      });
-      expect(tokens).toEqual([1, 3, 5, 6, 7]);
-      expect(last).toEqual(6);
-    });
-    it("should return corectly when there are loaded records, still not visited inventoryList tokens and some of these tokens are visited", () => {
-      const tokensToFetch = [1, 2, 3, 4, 5];
-      const lastTokenPos = 4;
-      const records = {
-        2: true,
-        4: true,
-        7: true,
-      };
-      const inventoryList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-      const { tokens, last } = skipTokensAlreadyLoaded({
-        tokens: tokensToFetch,
-        records,
-        lastTokenPos,
-        inventoryList,
-      });
-      expect(tokens).toEqual([1, 3, 5, 6, 8]);
-      expect(last).toEqual(7);
-    });
-  });
   describe("Given getShortToken", () => {
     it("should return 7-char token for given full token", () => {
       const shortToken = getShortToken("abcdefghijklmno");
