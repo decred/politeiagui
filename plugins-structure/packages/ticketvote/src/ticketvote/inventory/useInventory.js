@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ticketvoteInventory } from "./";
 
-// TODO: redo without fetchNextRecordsBatch from recordsInventory
 export function useTicketvoteInventory({ status, page = 1 }) {
   const dispatch = useDispatch();
   // Selectors

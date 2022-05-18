@@ -1,9 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ticketvoteSummaries } from "./";
-import { ticketvotePolicy } from "../policy";
 
-// TODO: FIX to fetch summaries without using old getTokensToFetch
 export function useTicketvoteSummaries({ tokens }) {
   const dispatch = useDispatch();
 
@@ -14,9 +12,6 @@ export function useTicketvoteSummaries({ tokens }) {
   const summariesStatus = useSelector(ticketvoteSummaries.selectStatus);
   const summariesError = useSelector(ticketvoteSummaries.selectError);
   const allSummaries = useSelector(ticketvoteSummaries.selectAll);
-  const pageSize = useSelector((state) =>
-    ticketvotePolicy.selectRule(state, "summariespagesize")
-  );
 
   // Actions
   const onFetchSummaries = useCallback(
@@ -24,13 +19,11 @@ export function useTicketvoteSummaries({ tokens }) {
     [dispatch]
   );
 
-  const onFetchSummariesNextPage = () => {};
   return {
     summaries,
     allSummaries,
     summariesError,
     summariesStatus,
     onFetchSummaries,
-    onFetchSummariesNextPage,
   };
 }
