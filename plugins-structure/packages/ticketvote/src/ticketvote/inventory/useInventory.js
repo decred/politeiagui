@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ticketvoteInventory } from "./";
 
@@ -16,10 +16,6 @@ export function useTicketvoteInventory({ status, page = 1 }) {
     ticketvoteInventory.selectError(state)
   );
 
-  const onFetchNextRecordsBatch = useCallback(() => {
-    // dispatch(ticketvoteInventory.fetchNextRecordsBatch({ status }));
-  }, [dispatch, status]);
-
   // Effects
   useEffect(() => {
     const fetchFirstPage = inventoryStatus === "idle" && page === 1;
@@ -36,6 +32,5 @@ export function useTicketvoteInventory({ status, page = 1 }) {
     inventory,
     inventoryError,
     inventoryStatus,
-    onFetchNextRecordsBatch,
   };
 }

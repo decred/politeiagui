@@ -2,7 +2,7 @@ import reducer, {
   fetchTicketvoteInventory,
   initialState,
 } from "./inventorySlice";
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import {
   getTicketvotePluginErrorMessage,
@@ -27,29 +27,12 @@ jest.mock(
   }),
   { virtual: true }
 );
-// Import mock records
-const { records } = require("@politeiagui/core/records");
-
-const mockRecordsReducer = createSlice({
-  name: "records",
-  initialState: {
-    records: {},
-  },
-}).reducer;
-
-const mockRecordsPolicyReducer = createSlice({
-  name: "recordsPolicy",
-  initialState: {
-    policy: { recordspagesize: 5 },
-  },
-}).reducer;
 
 describe("Given the recordsInventorySlice", () => {
   let store;
   // spy on the method used to fetch
 
   let fetchInventorySpy;
-  let fetchRecordsSpy;
   const params = {
     status: 1,
     page: 1,
@@ -69,7 +52,6 @@ describe("Given the recordsInventorySlice", () => {
       },
     });
     fetchInventorySpy = jest.spyOn(api, "fetchInventory");
-    fetchRecordsSpy = jest.spyOn(records, "fetch");
   });
   afterEach(() => {
     fetchInventorySpy.mockRestore();

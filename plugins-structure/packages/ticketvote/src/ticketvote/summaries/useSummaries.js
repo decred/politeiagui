@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ticketvoteSummaries } from "./";
 import { ticketvotePolicy } from "../policy";
 
+// TODO: FIX to fetch summaries without using old getTokensToFetch
 export function useTicketvoteSummaries({ tokens }) {
   const dispatch = useDispatch();
 

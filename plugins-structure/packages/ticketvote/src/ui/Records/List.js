@@ -9,11 +9,10 @@ import { TicketvoteRecordVoteStatusBar } from "../Vote";
 // TODO: redo without fetchNextRecordsBatch from recordsInventory
 export function TicketvoteRecordsList({ status }) {
   const [page, setPage] = useState(1);
-  const { inventory, onFetchNextRecordsBatch, inventoryStatus } =
-    ticketvoteInventory.useFetch({
-      status,
-      page,
-    });
+  const { inventory, inventoryStatus } = ticketvoteInventory.useFetch({
+    status,
+    page,
+  });
 
   const { summaries, onFetchSummariesNextPage } = ticketvoteSummaries.useFetch({
     tokens: inventory,
@@ -23,7 +22,7 @@ export function TicketvoteRecordsList({ status }) {
   );
 
   function handleFetchNextPage() {
-    onFetchNextRecordsBatch();
+    // onFetchNextRecordsBatch();
     onFetchSummariesNextPage();
   }
 
