@@ -14,7 +14,7 @@ export function TicketvoteRecordsList({ status }) {
     page,
   });
 
-  const { summaries, onFetchSummariesNextPage } = ticketvoteSummaries.useFetch({
+  const { summaries, onFetchSummaries } = ticketvoteSummaries.useFetch({
     tokens: inventory,
   });
   const recordsFetched = useSelector((state) =>
@@ -23,7 +23,7 @@ export function TicketvoteRecordsList({ status }) {
 
   function handleFetchNextPage() {
     // onFetchNextRecordsBatch();
-    onFetchSummariesNextPage();
+    onFetchSummaries();
   }
 
   return (
