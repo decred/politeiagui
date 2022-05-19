@@ -40,6 +40,13 @@ const markdownRules = [
   },
 ];
 
+const svgRules = [
+  {
+    test: /\.svg$/,
+    use: ["@svgr/webpack"],
+  },
+];
+
 const plugins = [
   new HtmlWebpackPlugin({
     template: "./src/public/index.html",
@@ -54,7 +61,7 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules, ...cssRules, ...markdownRules],
+    rules: [jsRules, ...cssRules, ...markdownRules, ...svgRules],
   },
   plugins,
   resolve: {
