@@ -1,16 +1,19 @@
 import React from "react";
+import { InfiniteScroller } from "../InfiniteScroller";
 import styles from "./styles.module.css";
 
-export function RecordsList({ children, hasMore, onFetchMore }) {
+export function RecordsList({ children, hasMore, onFetchMore, isLoading }) {
   function handleLoadMore() {
     onFetchMore();
   }
   return (
-    <div>
-      <div className={styles.recordsList}>{children}</div>
-      <button disabled={!hasMore} onClick={handleLoadMore}>
-        Fetch More
-      </button>
-    </div>
+    <InfiniteScroller
+      className={styles.recordsList}
+      hasMore={hasMore}
+      loadMore={handleLoadMore}
+      isLoading={isLoading}
+    >
+      {children}
+    </InfiniteScroller>
   );
 }

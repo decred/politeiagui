@@ -21,6 +21,9 @@ function StatusList({
   const recordsInOrder = useSelector((state) =>
     records.selectByTokensBatch(state, inventory)
   );
+  const countCommentsStatus = useSelector(commentsCount.selectStatus);
+  const summariesStatus = useSelector(ticketvoteSummaries.selectStatus);
+  const recordsStatus = useSelector(records.selectStatus);
 
   // Fetch first batch on first render
   useEffect(() => {
@@ -54,7 +57,15 @@ function StatusList({
 
   return (
     <div>
-      <RecordsList hasMore={hasMoreToFetch} onFetchMore={handleFetchMore}>
+      <RecordsList
+        hasMore={hasMoreToFetch}
+        onFetchMore={handleFetchMore}
+        isLoading={
+          countCommentsStatus === "loading" ||
+          summariesStatus === "loading" ||
+          recordsStatus === "loading"
+        }
+      >
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
           return (
