@@ -9,6 +9,9 @@ import { ProposalDetails, ProposalLoader } from "../../components";
 import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
+import { startDetailsListeners } from "./listeners";
+
+startDetailsListeners();
 
 function Details({ token }) {
   const {
@@ -31,7 +34,7 @@ function Details({ token }) {
       {detailsStatus === "failed" && (
         <Message kind="error">{detailsError}</Message>
       )}
-      {fullToken && detailsStatus === "succeeded" && (
+      {fullToken && record && detailsStatus === "succeeded" && (
         <>
           <ProposalDetails
             record={record}
@@ -40,14 +43,16 @@ function Details({ token }) {
             onFetchVersion={onFetchPreviousVersions}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
           />
-          <Comments
-            comments={comments}
-            // Mocking onReply until user layer is done.
-            onReply={(comment, parentid) => {
-              console.log(`Replying ${parentid}:`, comment);
-            }}
-            scrollOnLoad={shouldScrollToComments}
-          />
+          {comments && (
+            <Comments
+              comments={comments}
+              // Mocking onReply until user layer is done.
+              onReply={(comment, parentid) => {
+                console.log(`Replying ${parentid}:`, comment);
+              }}
+              scrollOnLoad={shouldScrollToComments}
+            />
+          )}
         </>
       )}
     </SingleContentPage>

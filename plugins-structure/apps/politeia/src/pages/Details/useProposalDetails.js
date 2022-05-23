@@ -1,36 +1,38 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
-import {
-  fetchProposalDetails,
-  fetchProposalVersion,
-  selectComments,
-  selectDetailsError,
-  selectDetailsStatus,
-  selectFullToken,
-  selectPiSummary,
-  selectRecord,
-  selectVoteSummary,
-} from "./detailsSlice";
+import { fetchProposalDetails } from "./actions";
+import { selectDetailsStatus, selectFullTokenFromStore } from "./selectors";
+import { records } from "@politeiagui/core/records";
+import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
+import { recordComments } from "@politeiagui/comments/comments";
+import { piSummaries } from "../../pi";
 
 function useProposalDetails({ token }) {
   const dispatch = useDispatch();
-  const record = useSelector((state) => selectRecord(state, token));
-  const voteSummary = useSelector((state) => selectVoteSummary(state, token));
-  const recordComments = useSelector((state) => selectComments(state, token));
-  const detailsStatus = useSelector((state) =>
-    selectDetailsStatus(state, token)
+  const detailsStatus = useSelector(selectDetailsStatus);
+  const fullToken = useSelector((state) =>
+    selectFullTokenFromStore(state, token)
   );
-  const detailsError = useSelector(selectDetailsError);
-  const piSummary = useSelector((state) => selectPiSummary(state, token));
-  const fullToken = useSelector((state) => selectFullToken(state, token));
+  const record = useSelector((state) =>
+    records.selectByToken(state, fullToken)
+  );
+  const voteSummary = useSelector((state) =>
+    ticketvoteSummaries.selectByToken(state, fullToken)
+  );
+  const comments = useSelector((state) =>
+    recordComments.selectByToken(state, fullToken)
+  );
+  const piSummary = useSelector((state) =>
+    piSummaries.selectByToken(state, fullToken)
+  );
 
   async function onFetchRecordTimestamps({ token, version }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
     return res.payload;
   }
   async function onFetchPreviousVersions(version) {
-    const res = await dispatch(fetchProposalVersion({ token, version }));
+    const res = await dispatch(records.fetchDetails({ token, version }));
     return res.payload;
   }
 
@@ -39,8 +41,9 @@ function useProposalDetails({ token }) {
   }, [token, dispatch]);
 
   return {
-    comments: recordComments,
-    detailsError,
+    comments,
+    // TODO: error selector
+    // detailsError,
     detailsStatus,
     fullToken,
     onFetchPreviousVersions,
