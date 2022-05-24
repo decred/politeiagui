@@ -105,7 +105,7 @@ export const proposalValidation =
       // Ensure start date is bigger than policy start date min.
       let startdateTimestamp;
       if (startdate) {
-        startdateTimestamp = convertObjectToUnixTimestamp(startdate);
+        startdateTimestamp = convertObjectToUnixTimestamp(startdate, true);
         const minStartdateTimestamp =
           Math.round(new Date().getTime() / 1000) + startdatemin;
         const dateString = formatDateToInternationalString(

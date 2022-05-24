@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { classNames, DatePicker, Icon, Text } from "pi-ui";
+import { classNames, DatePickerV2, Icon, Text } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./DatePickerField.module.css";
 import { Row } from "../layout";
@@ -10,9 +10,10 @@ import { formatDateToInternationalString } from "src/helpers";
 const DatePickerField = ({
   name,
   placeholder,
-  years,
   className,
   isRange,
+  maxTimestamp,
+  minTimestamp,
   error
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,7 @@ const DatePickerField = ({
   return (
     <FormikConsumer>
       {({ setFieldValue, setFieldTouched, values }) => {
-        const onDateChange = (year, month, day) => {
+        const onDateChange = ({ year, month, day }) => {
           if (!!year && !!month && !!day) {
             setFieldValue(name, { year, month, day });
           }
@@ -32,13 +33,6 @@ const DatePickerField = ({
         };
 
         const value = values[name];
-        const onRangeChange = (year, month, day, idx) => {
-          if (!!year && !!month && !!day) {
-            const newValue = value ? [...value] : [];
-            newValue[idx] = { year, month, day };
-            setFieldValue(name, newValue);
-          }
-        };
 
         const onDismiss = () => {
           if (isOpen) {
@@ -72,13 +66,13 @@ const DatePickerField = ({
           <div
             className={classNames("cursor-pointer", className)}
             data-testid="datepicker">
-            <DatePicker
+            <DatePickerV2
               show={isOpen}
-              years={years}
-              isRange={isRange}
-              value={values[name]}
+              minTimestamp={minTimestamp}
+              maxTimestamp={maxTimestamp}
+              value={value}
               lang={MONTHS_LABELS}
-              onChange={isRange ? onRangeChange : onDateChange}
+              onChange={onDateChange}
               onDismiss={onDismiss}>
               <Row
                 className={styles.box}
@@ -92,7 +86,7 @@ const DatePickerField = ({
                 )}
                 <Icon type="calendar" />
               </Row>
-            </DatePicker>
+            </DatePickerV2>
             <p className={classNames(styles.errorMsg, styles.active)}>
               {error}
             </p>

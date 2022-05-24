@@ -40,9 +40,7 @@ import {
 } from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
-  getRfpMinMaxDates,
-  getProposalDomainOptionsForSelect,
-  getStartEndDatesRange
+  getProposalDomainOptionsForSelect
 } from "./helpers";
 import { convertObjectToUnixTimestamp } from "src/helpers";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
@@ -59,6 +57,10 @@ const mapBlobToFile = new Map();
 const ListItem = ({ children }) => (
   <li className={styles.listItem}>{children}</li>
 );
+
+function getTimestampFromNow(timestamp = 0) {
+  return Date.now() + timestamp * 1000;
+}
 
 const Rules = () => (
   <>
@@ -143,16 +145,6 @@ const ProposalForm = React.memo(function ProposalForm({
   const domainOptions = useMemo(
     () => getProposalDomainOptionsForSelect(domains),
     [domains]
-  );
-
-  const deadlineRange = useMemo(
-    () => getRfpMinMaxDates(linkbyperiodmin, linkbyperiodmax),
-    [linkbyperiodmin, linkbyperiodmax]
-  );
-
-  const startAndEndDatesRange = useMemo(
-    () => getStartEndDatesRange(startdatemin, enddatemax),
-    [startdatemin, enddatemax]
   );
 
   const handleSelectFiledChange = useCallback(
@@ -240,9 +232,10 @@ const ProposalForm = React.memo(function ProposalForm({
           <>
             <DatePickerField
               className={styles.rfpDeadline}
-              years={deadlineRange}
               name="rfpDeadline"
               placeholder="Deadline"
+              minTimestamp={getTimestampFromNow(linkbyperiodmin)}
+              maxTimestamp={getTimestampFromNow(linkbyperiodmax)}
             />
             <Tooltip
               contentClassName={styles.deadlineTooltip}
@@ -319,16 +312,18 @@ const ProposalForm = React.memo(function ProposalForm({
           />
           <DatePickerField
             className={classNames(styles.startDate, "margin-bottom-m")}
-            years={startAndEndDatesRange}
             value={values.startDate}
             name="startDate"
             placeholder="Start Date"
+            minTimestamp={getTimestampFromNow(startdatemin)}
+            maxTimestamp={getTimestampFromNow(enddatemax)}
             error={touched.startDate && errors.startDate}
           />
           <DatePickerField
             className={classNames(styles.endDate, "margin-bottom-m")}
-            years={startAndEndDatesRange}
             value={values.endDate}
+            minTimestamp={getTimestampFromNow(startdatemin)}
+            maxTimestamp={getTimestampFromNow(enddatemax)}
             name="endDate"
             placeholder="End Date"
             error={touched.endDate && errors.endDate}
@@ -489,7 +484,7 @@ const ProposalFormWrapper = ({
             ? convertObjectToUnixTimestamp(rfpDeadline)
             : undefined,
           startDate: !isRFP
-            ? convertObjectToUnixTimestamp(startDate)
+            ? convertObjectToUnixTimestamp(startDate, true)
             : undefined,
           endDate: !isRFP ? convertObjectToUnixTimestamp(endDate) : undefined,
           amount: !isRFP ? amountNumber : undefined
