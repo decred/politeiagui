@@ -3,6 +3,7 @@ import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { recordComments } from "@politeiagui/comments/comments";
 import { piSummaries } from "../../pi";
+import { getStatusFromMultipleSlices } from "../../utils/getStatusFromMultipleSlices";
 
 export function selectDetailsStatus(state) {
   const recordStatus = records.selectStatus(state);
@@ -12,22 +13,7 @@ export function selectDetailsStatus(state) {
 
   const statuses = [recordStatus, voteSummaryStatus, commentsStatus, piSummary];
 
-  if (statuses.some((el) => el === "loading")) {
-    return "loading";
-  }
-  if (statuses.some((el) => el === "failed")) {
-    return "failed";
-  }
-  if (statuses.every((el) => el === "succeeded")) {
-    return "succeeded";
-  }
-  if (statuses.every((el) => el === "idle")) {
-    return "idle";
-  }
-  // when one request succeeds before the other ones start we want to keep loading
-  if (statuses.some((el) => el === "succeeded")) {
-    return "loading";
-  }
+  return getStatusFromMultipleSlices(statuses);
 }
 
 export function selectFullTokenFromStore(state, token) {

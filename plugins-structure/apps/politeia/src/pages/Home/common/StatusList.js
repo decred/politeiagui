@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
-import { records } from "@politeiagui/core/records";
-import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
-import { commentsCount } from "@politeiagui/comments/count";
 import { RecordsList } from "@politeiagui/common-ui";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchNextBatch } from "../actions";
+import { useDispatch } from "react-redux";
 import { ProposalCard, ProposalLoader } from "../../../components";
 import max from "lodash/max";
+import useStatusList from "../useStatusList";
 
 function StatusList({
   status,
@@ -16,25 +13,15 @@ function StatusList({
   onRenderNextStatus,
 }) {
   const dispatch = useDispatch();
-  const countComments = useSelector(commentsCount.selectAll);
-  const summaries = useSelector(ticketvoteSummaries.selectAll);
-  const recordsInOrder = useSelector((state) =>
-    records.selectByTokensBatch(state, inventory)
-  );
-  const countCommentsStatus = useSelector(commentsCount.selectStatus);
-  const summariesStatus = useSelector(ticketvoteSummaries.selectStatus);
-  const recordsStatus = useSelector(records.selectStatus);
-
-  // Fetch first batch on first render
-  useEffect(() => {
-    if (inventory.length > 0 && recordsInOrder.length === 0) {
-      dispatch(fetchNextBatch(status));
-    }
-  }, [dispatch, inventory, status, recordsInOrder]);
-
-  const hasMoreRecords =
-    recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
-  const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
+  const {
+    hasMoreRecords,
+    hasMoreInventory,
+    homeStatus,
+    countComments,
+    summaries,
+    fetchNextBatch,
+    recordsInOrder,
+  } = useStatusList({ inventory, inventoryStatus, status });
 
   function handleFetchMore() {
     if (hasMoreRecords) {
@@ -60,11 +47,7 @@ function StatusList({
       <RecordsList
         hasMore={hasMoreToFetch}
         onFetchMore={handleFetchMore}
-        isLoading={
-          countCommentsStatus === "loading" ||
-          summariesStatus === "loading" ||
-          recordsStatus === "loading"
-        }
+        isLoading={homeStatus === "loading"}
       >
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
