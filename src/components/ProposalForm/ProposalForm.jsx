@@ -234,6 +234,7 @@ const ProposalForm = React.memo(function ProposalForm({
               className={styles.rfpDeadline}
               name="rfpDeadline"
               placeholder="Deadline"
+              tabIndex={1}
               minTimestamp={getTimestampFromNow(linkbyperiodmin)}
               maxTimestamp={getTimestampFromNow(linkbyperiodmax)}
             />
@@ -311,6 +312,7 @@ const ProposalForm = React.memo(function ProposalForm({
             error={touched.amount && errors.amount}
           />
           <DatePickerField
+            tabIndex={1}
             className={classNames(styles.startDate, "margin-bottom-m")}
             value={values.startDate}
             name="startDate"
@@ -320,6 +322,7 @@ const ProposalForm = React.memo(function ProposalForm({
             error={touched.startDate && errors.startDate}
           />
           <DatePickerField
+            tabIndex={1}
             className={classNames(styles.endDate, "margin-bottom-m")}
             value={values.endDate}
             minTimestamp={getTimestampFromNow(startdatemin)}

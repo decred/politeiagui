@@ -14,7 +14,8 @@ const DatePickerField = ({
   isRange,
   maxTimestamp,
   minTimestamp,
-  error
+  error,
+  tabIndex
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const togglePicker = useCallback(() => {
@@ -67,6 +68,7 @@ const DatePickerField = ({
             className={classNames("cursor-pointer", className)}
             data-testid="datepicker">
             <DatePickerV2
+              tabIndex={tabIndex}
               show={isOpen}
               minTimestamp={minTimestamp}
               maxTimestamp={maxTimestamp}
@@ -100,7 +102,6 @@ const DatePickerField = ({
 DatePickerField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  year: PropTypes.object,
   readOnly: PropTypes.bool,
   className: PropTypes.string
 };
