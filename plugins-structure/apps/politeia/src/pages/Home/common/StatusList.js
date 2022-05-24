@@ -27,10 +27,10 @@ function StatusList({
 
   // Fetch first batch on first render
   useEffect(() => {
-    if (inventory.length > 0) {
+    if (inventory.length > 0 && recordsInOrder.length === 0) {
       dispatch(fetchNextBatch(status));
     }
-  }, [dispatch, inventory, status]);
+  }, [dispatch, inventory, status, recordsStatus]);
 
   const hasMoreRecords =
     recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
