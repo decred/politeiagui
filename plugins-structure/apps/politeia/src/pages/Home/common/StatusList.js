@@ -30,7 +30,7 @@ function StatusList({
     if (inventory.length > 0 && recordsInOrder.length === 0) {
       dispatch(fetchNextBatch(status));
     }
-  }, [dispatch, inventory, status, recordsStatus]);
+  }, [dispatch, inventory, status, recordsInOrder]);
 
   const hasMoreRecords =
     recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
