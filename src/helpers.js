@@ -484,15 +484,15 @@ export const getDomainName = (contractorDomains, op) => {
 
 /**
  * Converts { day, month, year } object to an unix second timestamp
- * If `maxTime` is active, returns the 23:59 time for given date. Else, returns
+ * If `endOfDay` is active, returns the 23:59 time for given date. Else, returns
  * 00:00.
  * @param {object} date
- * @param {boolean} maxTime
+ * @param {boolean} endOfDay
  */
-export const convertObjectToUnixTimestamp = (date, maxTime) => {
+export const convertObjectToUnixTimestamp = (date, endOfDay) => {
   if (!date) return 0;
   const { day, month, year } = date;
-  return maxTime
+  return endOfDay
     ? new Date(year, month - 1, day, 23, 59, 59).getTime() / 1000
     : new Date(year, month - 1, day, 0, 0, 1).getTime() / 1000;
 };

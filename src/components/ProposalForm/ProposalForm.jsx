@@ -58,7 +58,7 @@ const ListItem = ({ children }) => (
   <li className={styles.listItem}>{children}</li>
 );
 
-function getTimestampFromNow(timestamp = 0) {
+function sumNowAndDuration(timestamp = 0) {
   return Date.now() + timestamp * 1000;
 }
 
@@ -120,6 +120,7 @@ const ProposalForm = React.memo(function ProposalForm({
   useEffect(() => {
     if (!isInitialValid) {
       setFieldTouched("startDate");
+      setFieldTouched("endDate");
       validateForm();
     }
   }, [isInitialValid, validateForm, setFieldTouched]);
@@ -235,8 +236,8 @@ const ProposalForm = React.memo(function ProposalForm({
               name="rfpDeadline"
               placeholder="Deadline"
               tabIndex={1}
-              minTimestamp={getTimestampFromNow(linkbyperiodmin)}
-              maxTimestamp={getTimestampFromNow(linkbyperiodmax)}
+              minTimestamp={sumNowAndDuration(linkbyperiodmin)}
+              maxTimestamp={sumNowAndDuration(linkbyperiodmax)}
             />
             <Tooltip
               contentClassName={styles.deadlineTooltip}
@@ -317,16 +318,16 @@ const ProposalForm = React.memo(function ProposalForm({
             value={values.startDate}
             name="startDate"
             placeholder="Start Date"
-            minTimestamp={getTimestampFromNow(startdatemin)}
-            maxTimestamp={getTimestampFromNow(enddatemax)}
+            minTimestamp={sumNowAndDuration(startdatemin)}
+            maxTimestamp={sumNowAndDuration(enddatemax)}
             error={touched.startDate && errors.startDate}
           />
           <DatePickerField
             tabIndex={1}
             className={classNames(styles.endDate, "margin-bottom-m")}
             value={values.endDate}
-            minTimestamp={getTimestampFromNow(startdatemin)}
-            maxTimestamp={getTimestampFromNow(enddatemax)}
+            minTimestamp={sumNowAndDuration(startdatemin)}
+            maxTimestamp={sumNowAndDuration(enddatemax)}
             name="endDate"
             placeholder="End Date"
             error={touched.endDate && errors.endDate}
