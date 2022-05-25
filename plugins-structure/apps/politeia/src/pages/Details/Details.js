@@ -13,10 +13,18 @@ import { startDetailsListeners } from "./listeners";
 
 startDetailsListeners();
 
+function ErrorsMessages({ errors }) {
+  return errors.reduce((acc, cur) => {
+    if (cur) {
+      return [...acc, <Message kind="error">{cur}</Message>];
+    }
+    return acc;
+  }, []);
+}
+
 function Details({ token }) {
   const {
     comments,
-    detailsError,
     detailsStatus,
     fullToken,
     onFetchPreviousVersions,
@@ -24,6 +32,9 @@ function Details({ token }) {
     piSummary,
     record,
     voteSummary,
+    recordDetailsError,
+    voteSummaryError,
+    commentsError,
   } = useProposalDetails({ token });
   const params = getURLSearchParams();
   const shouldScrollToComments = !!params?.scrollToComments;
@@ -32,7 +43,9 @@ function Details({ token }) {
     <SingleContentPage className={styles.detailsWrapper}>
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
       {detailsStatus === "failed" && (
-        <Message kind="error">{detailsError}</Message>
+        <ErrorsMessages
+          errors={[recordDetailsError, voteSummaryError, commentsError]}
+        />
       )}
       {fullToken && record && detailsStatus === "succeeded" && (
         <>

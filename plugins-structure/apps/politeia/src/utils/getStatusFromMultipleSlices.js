@@ -5,14 +5,10 @@ export function getStatusFromMultipleSlices(statuses) {
   if (statuses.some((el) => el === "failed")) {
     return "failed";
   }
-  if (statuses.every((el) => el === "succeeded")) {
-    return "succeeded";
-  }
-  if (statuses.every((el) => el === "idle")) {
+  if (statuses.some((el) => el === "idle")) {
     return "idle";
   }
-  // when one request succeeds before the other ones start we want to keep loading
-  if (statuses.some((el) => el === "succeeded")) {
-    return "loading";
+  if (statuses.every((el) => el === "succeeded")) {
+    return "succeeded";
   }
 }

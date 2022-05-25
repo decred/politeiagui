@@ -13,7 +13,6 @@ import {
 const initialStatusInventory = {
   tokens: [],
   lastPage: 0,
-  lastTokenPos: null,
   status: "idle",
 };
 

@@ -94,6 +94,7 @@ const recordsSlice = createSlice({
 
 // Selectors
 export const selectRecordsStatus = (state) => state.records.status;
+export const selectRecordsError = (state) => state.records.error;
 export const selectRecordByToken = (state, token) =>
   state.records.records[token];
 export const selectRecords = (state) => state.records.records;

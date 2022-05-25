@@ -9,9 +9,14 @@ export function selectDetailsStatus(state) {
   const recordStatus = records.selectStatus(state);
   const voteSummaryStatus = ticketvoteSummaries.selectStatus(state);
   const commentsStatus = recordComments.selectStatus(state);
-  const piSummary = piSummaries.selectStatus(state);
+  const piSummaryStatus = piSummaries.selectStatus(state);
 
-  const statuses = [recordStatus, voteSummaryStatus, commentsStatus, piSummary];
+  const statuses = [
+    recordStatus,
+    voteSummaryStatus,
+    commentsStatus,
+    piSummaryStatus,
+  ];
 
   return getStatusFromMultipleSlices(statuses);
 }

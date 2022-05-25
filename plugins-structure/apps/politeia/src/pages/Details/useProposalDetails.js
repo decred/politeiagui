@@ -26,6 +26,9 @@ function useProposalDetails({ token }) {
   const piSummary = useSelector((state) =>
     piSummaries.selectByToken(state, fullToken)
   );
+  const recordDetailsError = useSelector(records.selectError);
+  const voteSummaryError = useSelector(ticketvoteSummaries.selectError);
+  const commentsError = useSelector(recordComments.selectError);
 
   async function onFetchRecordTimestamps({ token, version }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
@@ -42,8 +45,9 @@ function useProposalDetails({ token }) {
 
   return {
     comments,
-    // TODO: error selector
-    // detailsError,
+    recordDetailsError,
+    voteSummaryError,
+    commentsError,
     detailsStatus,
     fullToken,
     onFetchPreviousVersions,

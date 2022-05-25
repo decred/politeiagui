@@ -17,10 +17,14 @@ function useStatusList({ status, inventory, inventoryStatus }) {
 
   // Fetch first batch on first render
   useEffect(() => {
-    if (inventory.length > 0 && recordsInOrder.length === 0) {
+    if (
+      inventory.length > 0 &&
+      recordsInOrder.length === 0 &&
+      homeStatus !== "loading"
+    ) {
       dispatch(fetchNextBatch(status));
     }
-  }, [dispatch, inventory, status, recordsInOrder]);
+  }, [dispatch, inventory, status, recordsInOrder, homeStatus]);
 
   const hasMoreRecords =
     recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
