@@ -19,7 +19,10 @@ async function getFullToken(state, dispatch, token) {
 export function startDetailsListeners() {
   listener.startListening({
     actionCreator: fetchProposalDetails,
-    effect: async ({ payload }, { getState, dispatch }) => {
+    effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
+      // Only allow one instance of this listener to run at a time
+      listenerApi.unsubscribe();
+
       const state = getState();
       const [fullToken, detailsFetched] = await getFullToken(
         state,
@@ -33,13 +36,16 @@ export function startDetailsListeners() {
       const hasComments = recordComments.selectByToken(state, fullToken);
       const hasPiSummaries = piSummaries.selectByToken(state, fullToken);
 
-      Promise.all([
+      await Promise.all([
         !detailsFetched && dispatch(records.fetchDetails({ token: fullToken })),
         !hasComments && dispatch(recordComments.fetch({ token: fullToken })),
         !hasVoteSummary &&
           dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
         !hasPiSummaries && dispatch(piSummaries.fetch({ tokens: [fullToken] })),
       ]);
+
+      // Re-enable the listener
+      listenerApi.subscribe();
     },
   });
 }
