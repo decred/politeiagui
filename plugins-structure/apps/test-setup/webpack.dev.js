@@ -1,19 +1,12 @@
 const { merge } = require("webpack-merge");
 const common = require("./webpack.common");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-
-const plugins = [
-  new HtmlWebpackPlugin({
-    template: "./src/dev/index.html",
-  }),
-];
 
 const dev = {
   mode: "development",
-  entry: "./src/dev/index.js",
+  entry: "./src/index.js",
   devtool: "inline-source-map",
   devServer: {
-    port: 3005,
+    port: 3420,
     historyApiFallback: { index: "" },
     proxy: {
       "/api/*": {
@@ -26,7 +19,6 @@ const dev = {
     },
     https: true,
   },
-  plugins,
 };
 
 module.exports = merge(common, dev);
