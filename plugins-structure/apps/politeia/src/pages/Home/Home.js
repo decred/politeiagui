@@ -2,6 +2,7 @@ import React from "react";
 import { router } from "@politeiagui/core/router";
 import { MultiContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
+import { About } from "../../components";
 import UnderReview from "./UnderReview/UnderReview";
 import Approved from "./Approved/Approved";
 import Rejected from "./Rejected/Rejected";
@@ -44,11 +45,11 @@ function Home() {
         <TabsBanner
           onSelectTab={handleSelectTab}
           title="Proposals"
-          activeTab={TAB_VALUES.indexOf(tab)}
+          activeTab={TAB_VALUES.indexOf(tab || TAB_LABELS.underReview)}
           tabs={TAB_VALUES}
         />
       }
-      sidebar={"About Politeia"}
+      sidebar={<About />}
     >
       {renderChild({ tab })}
     </MultiContentPage>

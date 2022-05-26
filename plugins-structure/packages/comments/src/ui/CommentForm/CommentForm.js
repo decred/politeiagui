@@ -1,49 +1,48 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, TextArea } from "pi-ui";
-import { Formik } from "formik";
+import { Button } from "pi-ui";
+import { Controller, useForm } from "react-hook-form";
+import { MarkdownEditor } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 
-export const CommentForm = ({ onComment, onCancel, parentId }) => {
-  async function handleSubmitComment({ comment }, actions) {
+export const CommentForm = ({
+  onComment,
+  onCancel,
+  parentId,
+  disableSubmit,
+}) => {
+  const { handleSubmit, control, setError, watch } = useForm();
+
+  async function handleComment({ comment }) {
     try {
-      actions.setSubmitting(true);
       await onComment(comment, parentId);
-      actions.setSubmitting(false);
     } catch (error) {
-      actions.setSubmitting(false);
-      actions.setFieldError("comment", error.message);
+      setError("comment", error);
     }
   }
+  const comment = watch("comment");
+  const enableSubmit = comment && comment !== "" && !disableSubmit;
+
   return (
-    <Formik onSubmit={handleSubmitComment} initialValues={{ comment: "" }}>
-      {(props) => (
-        <form onSubmit={props.handleSubmit} className={styles.commentForm}>
-          {/* TODO: Use Markdown Editor */}
-          <TextArea
-            name="comment"
-            id="comment-text-area"
-            onChange={props.handleChange}
-            error={props.errors.comment}
-          />
-          <div className={styles.commentButtons}>
-            {onCancel && (
-              <Button onClick={onCancel} kind="secondary">
-                Cancel
-              </Button>
-            )}
-            <Button
-              type="submit"
-              kind={
-                props.isSubmitting || props.isValid ? "primary" : "disabled"
-              }
-            >
-              Add Comment
-            </Button>
-          </div>
-        </form>
-      )}
-    </Formik>
+    <form onSubmit={handleSubmit(handleComment)} className={styles.commentForm}>
+      <Controller
+        control={control}
+        name="comment"
+        render={({ field: { onChange } }) => (
+          <MarkdownEditor onChange={onChange} hideButtonsMenu />
+        )}
+      />
+      <div className={styles.commentButtons}>
+        {onCancel && (
+          <Button onClick={onCancel} kind="secondary">
+            Cancel
+          </Button>
+        )}
+        <Button type="submit" kind={enableSubmit ? "primary" : "disabled"}>
+          Add Comment
+        </Button>
+      </div>
+    </form>
   );
 };
 

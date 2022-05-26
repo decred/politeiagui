@@ -40,9 +40,7 @@ import {
 } from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
-  getRfpMinMaxDates,
-  getProposalDomainOptionsForSelect,
-  getStartEndDatesRange
+  getProposalDomainOptionsForSelect
 } from "./helpers";
 import { convertObjectToUnixTimestamp } from "src/helpers";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
@@ -59,6 +57,10 @@ const mapBlobToFile = new Map();
 const ListItem = ({ children }) => (
   <li className={styles.listItem}>{children}</li>
 );
+
+function sumNowAndDuration(timestamp = 0) {
+  return Date.now() + timestamp * 1000;
+}
 
 const Rules = () => (
   <>
@@ -118,6 +120,7 @@ const ProposalForm = React.memo(function ProposalForm({
   useEffect(() => {
     if (!isInitialValid) {
       setFieldTouched("startDate");
+      setFieldTouched("endDate");
       validateForm();
     }
   }, [isInitialValid, validateForm, setFieldTouched]);
@@ -143,16 +146,6 @@ const ProposalForm = React.memo(function ProposalForm({
   const domainOptions = useMemo(
     () => getProposalDomainOptionsForSelect(domains),
     [domains]
-  );
-
-  const deadlineRange = useMemo(
-    () => getRfpMinMaxDates(linkbyperiodmin, linkbyperiodmax),
-    [linkbyperiodmin, linkbyperiodmax]
-  );
-
-  const startAndEndDatesRange = useMemo(
-    () => getStartEndDatesRange(startdatemin, enddatemax),
-    [startdatemin, enddatemax]
   );
 
   const handleSelectFiledChange = useCallback(
@@ -240,9 +233,11 @@ const ProposalForm = React.memo(function ProposalForm({
           <>
             <DatePickerField
               className={styles.rfpDeadline}
-              years={deadlineRange}
               name="rfpDeadline"
               placeholder="Deadline"
+              tabIndex={1}
+              minTimestamp={sumNowAndDuration(linkbyperiodmin)}
+              maxTimestamp={sumNowAndDuration(linkbyperiodmax)}
             />
             <Tooltip
               contentClassName={styles.deadlineTooltip}
@@ -318,17 +313,21 @@ const ProposalForm = React.memo(function ProposalForm({
             error={touched.amount && errors.amount}
           />
           <DatePickerField
+            tabIndex={1}
             className={classNames(styles.startDate, "margin-bottom-m")}
-            years={startAndEndDatesRange}
             value={values.startDate}
             name="startDate"
             placeholder="Start Date"
+            minTimestamp={sumNowAndDuration(startdatemin)}
+            maxTimestamp={sumNowAndDuration(enddatemax)}
             error={touched.startDate && errors.startDate}
           />
           <DatePickerField
+            tabIndex={1}
             className={classNames(styles.endDate, "margin-bottom-m")}
-            years={startAndEndDatesRange}
             value={values.endDate}
+            minTimestamp={sumNowAndDuration(startdatemin)}
+            maxTimestamp={sumNowAndDuration(enddatemax)}
             name="endDate"
             placeholder="End Date"
             error={touched.endDate && errors.endDate}
@@ -489,7 +488,7 @@ const ProposalFormWrapper = ({
             ? convertObjectToUnixTimestamp(rfpDeadline)
             : undefined,
           startDate: !isRFP
-            ? convertObjectToUnixTimestamp(startDate)
+            ? convertObjectToUnixTimestamp(startDate, true)
             : undefined,
           endDate: !isRFP ? convertObjectToUnixTimestamp(endDate) : undefined,
           amount: !isRFP ? amountNumber : undefined

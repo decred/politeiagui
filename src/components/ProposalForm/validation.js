@@ -23,7 +23,8 @@ export const proposalValidation =
     namesupportedchars,
     namelengthmax,
     namelengthmin,
-    startdatemin
+    startdatemin,
+    enddatemax
   }) =>
   (values) => {
     const errors = {};
@@ -105,7 +106,7 @@ export const proposalValidation =
       // Ensure start date is bigger than policy start date min.
       let startdateTimestamp;
       if (startdate) {
-        startdateTimestamp = convertObjectToUnixTimestamp(startdate);
+        startdateTimestamp = convertObjectToUnixTimestamp(startdate, true);
         const minStartdateTimestamp =
           Math.round(new Date().getTime() / 1000) + startdatemin;
         const dateString = formatDateToInternationalString(
@@ -115,11 +116,24 @@ export const proposalValidation =
           errors.startDate = `Minimum possible start date is: ${dateString}`;
         }
       }
+      // Ensure end date is smaller than policy end date min
+      let enddateTimestamp;
+      if (enddate) {
+        enddateTimestamp = convertObjectToUnixTimestamp(enddate);
+        const maxEndDateTimestamp =
+          Math.round(new Date().getTime() / 1000) + enddatemax;
+        const dateString = formatDateToInternationalString(
+          formatUnixTimestampToObj(maxEndDateTimestamp)
+        );
+        if (enddateTimestamp > maxEndDateTimestamp) {
+          errors.endDate = `Maximum possible end date is: ${dateString}`;
+        }
+      }
 
       // If both start & end dates provided, ensure start
       // date is smaller.
       if (startdate && enddate) {
-        if (convertObjectToUnixTimestamp(enddate) <= startdateTimestamp) {
+        if (enddateTimestamp <= startdateTimestamp) {
           errors.startDate = "Start date must be before end date";
           errors.endDate = "End date must be after start date";
         }
