@@ -1,5 +1,5 @@
 import { MONTHS_LABELS, IDENTITY_ERROR } from "./constants";
-
+import { formatDateToInternationalString } from "./helpers";
 /**
  * Converts atoms to DCR
  *
@@ -82,3 +82,20 @@ export const isIdentityError = (error) => {
     mapPluginIdentityErrors[error.errorid] === error.errorcode;
   return error?.message === IDENTITY_ERROR || isPluginIdentityError;
 };
+
+/**
+ * parseTimestampsFromMessage returns a human friendly message with formatted
+ * timestamps.
+ * @param {string} msg
+ */
+export function formatTimestampsFromMessage(msg) {
+  let newMsg = msg;
+  const timestamps = msg.match(/[0-9]+/g);
+  timestamps.forEach((t) => {
+    const formattedTime = formatDateToInternationalString(
+      formatUnixTimestampToObj(t)
+    );
+    newMsg = newMsg.replace(t, formattedTime);
+  });
+  return newMsg;
+}
