@@ -9,6 +9,11 @@ import { selectFullTokenFromStore } from "./selectors";
 async function getFullToken(state, dispatch, token) {
   const storeToken = selectFullTokenFromStore(state, token);
   if (storeToken) {
+    const record = records.selectByToken(state, storeToken);
+    // means details was already fetched
+    if (record.files.length === 2) {
+      return [storeToken, true];
+    }
     return [storeToken, false];
   }
   const res = await dispatch(records.fetchDetails({ token }));
