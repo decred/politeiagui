@@ -16,199 +16,37 @@ Also, the Pi app shell itself provides the _pi plugin_ interface and includes
 all interaction methods with it, such as billing status changes, policy and
 proposal summaries.
 
-## Integration Slices
+## Integration listeners
 
-In order to provide a clean and easy-to-debug integration among all plugins and
-core packages, we decided to introduce the **Integration Slices** concept on our
-app-shell.
+In order to provide a clean integration among all plugins and
+core packages, we are using the Observables pattern. The app-shell can start
+listening to actions from plugins or custom ones created in the app-shell and
+fire effects to dispatch multiple plugins actions. A good use case is listen to
+a fetchNextBatch action and dispatch records, summaries and comments counts
+requests accordingly.
 
-Each integration slice provides an async thunk that integrates all other async
-thunks calls from plugins used on a specific page.
+To start listening to an action, you should import the listener object from the
+core:
 
-For example, on `homeSlice` we have a `fetchNextBatch` thunk to fetch records
-and ticketvote summaries according to the ticketvote inventory tokens list. Each
-batch request will trigger both `records.fetch` and `ticketvoteSummaries.fetch`
-calls with N tokens from the inventory, where N is the minimum value between
-`ticketvotePolicy` and `recordsPolicy` pages sizes.
+`import { listener } from "@politeiagui/core/listeners";`
 
-To illustrate the example above, let's understand how does the `homeSlice` work.
+Then you can `startListening` to action creators and call effects. For example:
 
-### Home Slice
-
-The Home Slice is located on the `src/pages/Home/homeSlice.js` directory, and
-controls the proposals batch fetching, where each batch is composed by N
-requests containing some records tokens batch, as described on the diagram
-below:
-
-<p align="center">
-  <img src="./src/public/assets/homeSlice-thunk.svg" />
-</p>
-
-Before requesting _records_, _ticketvote summaries_, _pi summaries_ and
-_comments count_, we need to load the tokens batch, which is retreived from the
-ticketvote inventory. The fetching conditions are described below:
-
-> The following pieces of code will only include _records_ and _ticketvote
-> summaries_. However, integrating pi summaries and comments count is analogous,
-> so we opted to omit them in the example.
-
-```javascript
-export const fetchNextBatch = createAsyncThunk(
-  "home/fetchNextBatch",
-  async (status, { dispatch, rejectWithValue, getState }) => {
-    // ...fetch records and ticketvote summaries
-  },
-  {
-    condition: (status, { getState }) =>
-      // from "@politeiagui/ticketvote/validation":
-      validateTicketvoteStatus(status) &&
-      validateTicketvoteSummariesPageSize(getState()) &&
-      // from "@politeiagui/core/records/validation":
-      validateRecordsPageSize(getState()) &&
-      // from from "src/pages/Home/validation":
-      validateInventoryIsLoaded(
-        getState().ticketvoteInventory[status].tokens
-      ) &&
-      validateInventoryListLength(
-        getState().ticketvoteInventory[status].tokens
-      ),
+```js
+listener.startListening({
+  actionCreator: myCustomAction,
+  effect: () => {
+    // will be called every time myCustomAction is dispatched
   }
-);
+})
 ```
 
-After loading the inventory, we can dispatch all actions from the regarded thunks
-with the given tokens batch, which is composed by N elements, where N is the
-minimum value between all plugin's policies being used on the thunk.
-
-```javascript
-const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
-
-export const fetchNextBatch = createAsyncThunk(
-  "home/fetchNextBatch",
-  async (status, { dispatch, rejectWithValue, getState }) => {
-    try {
-      // Get all required states from packages slices
-      const {
-        ticketvoteInventory,
-        records: recordsState,
-        recordsPolicy,
-        ticketvotePolicy,
-        home,
-      } = getState();
-      // Get all pages sizes allowed
-      const summariesPageSize = ticketvotePolicy.policy.summariespagesize;
-      const recordsPageSize = recordsPolicy.policy.recordspagesize;
-      // get tokens batch to perform the dispatches
-      const { tokens, last } = getTokensToFetch({
-        records: recordsState.records,
-        // pageSize is the minimum value between all pages sizes, so we can
-        // sync all requests with the same tokens batch
-        pageSize: Math.min(summariesPageSize, recordsPageSize),
-        // inventoryList corresponds to all tokens from given ticketvote
-        // inventory
-        inventoryList: ticketvoteInventory[status].tokens,
-        // lastTokenPos is the pointer that indicates the tokens batch index on
-        // homeSlice
-        lastTokenPos: home[status].lastTokenPos,
-      });
-
-      // dispatches
-      await dispatch(records.fetch({ tokens, filenames: piFilenames }));
-      await dispatch(ticketvoteSummaries.fetch({ tokens }));
-      // returns the last token index so we can update our `lastTokenPos`
-      // pointer
-      return last;
-    } catch (e) {
-      return rejectWithValue(e.message);
-    }
-  },
-  {
-    condition: (status, { getState }) => // ... fetch condition
-  }
-);
-```
-
-#### API
-
-- <a id="home-fetchnextbatch"></a> `async fetchNextBatch(status)`
-
-  Async thunk responsible for fetching home page batches.
-
-  | Param  | Type                          | Description       |
-  | ------ | ----------------------------- | ----------------- |
-  | status | <code>String or Number</code> | Ticketvote Status |
-
-  **Usage:**
-
-  ```javascript
-  import { store } from "@politeiagui/core";
-  import { fetchNextBatch } from "./homeSlice.js";
-
-  await store.dispatch(fetchNextBatch("unreviewed"));
-  const recordsFetched = store.getState().records.records;
-  // { [token1]: {...record1}, [token2]: {...record2}, [token3]: {...record3} }
-  const summariesFetched = store.getState().ticketvoteSummaries.summaries;
-  // { [token1]: {...summary1}, [token2]: {...summary2}, [token3]: {...summary3} }
-  const recordsFetchStatus = store.getState().home.status;
-  // "succeeded"
-  ```
-
-- <a id="home-selectlasttoken"></a> `selectLastToken(state, status)`
-
-  Last token position selector. Used to fetch paginated batches.
-
-  | Param  | Type                          | Description       |
-  | ------ | ----------------------------- | ----------------- |
-  | state  | <code>Object</code>           | Redux Store state |
-  | status | <code>String or Number</code> | Ticketvote Status |
-
-  **Usage:**
-
-  ```javascript
-  import { store } from "@politeiagui/core";
-  import { fetchNextBatch, selectLastToken } from "./homeSlice.js";
-
-  // fetch first
-  await store.dispatch(fetchNextBatch("unreviewed"));
-  const state = store.getState();
-  // selectLastToken selector
-  const lastTokenPos = selectLastToken(state, "unreviewed");
-  // lastTokenPos = 4
-  ```
-
-- <a id="home-selectstatus"></a> `selectStatus(state, status)`
-
-  Last token position selector. Used to fetch paginated batches.
-
-  | Param  | Type                          | Description       |
-  | ------ | ----------------------------- | ----------------- |
-  | state  | <code>Object</code>           | Redux Store state |
-  | status | <code>String or Number</code> | Ticketvote Status |
-
-  **Usage:**
-
-  ```javascript
-  import { store } from "@politeiagui/core";
-  import { fetchNextBatch, selectStatus } from "./homeSlice.js";
-
-  // fetch first
-  await store.dispatch(fetchNextBatch("unreviewed"));
-  let state = store.getState();
-  // selectStatus selector
-  let homeStatus = selectStatus(state, "unreviewed");
-  // homeStatus = "succeeded"
-
-  // Sync dispatch
-  store.dispatch(fetchNextBatch("unreviewed"));
-  state = store.getState();
-  homeStatus = selectStatus(state, "unreviewed");
-  // homeStatus = "loading"
-  ```
+For more details, see the [createListenerMiddleware docs](https://redux-toolkit.js.org/api/createListenerMiddleware)
 
 ## Proposal
 
-Once we integrated the plugins into `homeSlice`, we can now decode all
-information from records and transform it on a **proposal**.
+Once records are fetched, we can now decode all
+information and transform them on **proposals**.
 
 Let's use the utilities provided on `Proposal/utils.js` to perform it. It's
 pretty simple!
