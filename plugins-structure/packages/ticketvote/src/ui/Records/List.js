@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Card } from "pi-ui";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ticketvoteInventory } from "../../ticketvote/inventory";
 import { ticketvoteSummaries } from "../../ticketvote/summaries";
 import { records } from "@politeiagui/core/records";
+import { getTokensToFetch } from "@politeiagui/core/records/utils";
 import { TicketvoteRecordVoteStatusBar } from "../Vote";
+import { recordsPolicy } from "@politeiagui/core/records/policy";
+import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
 
-// TODO: redo without fetchNextRecordsBatch from recordsInventory
 export function TicketvoteRecordsList({ status }) {
   const [page, setPage] = useState(1);
+  const dispatch = useDispatch();
   const { inventory, inventoryStatus } = ticketvoteInventory.useFetch({
     status,
     page,
@@ -17,13 +20,35 @@ export function TicketvoteRecordsList({ status }) {
   const { summaries, onFetchSummaries } = ticketvoteSummaries.useFetch({
     tokens: inventory,
   });
+
+  const { policy, policyStatus } = recordsPolicy.useFetch();
+  const { policy: tktvotePolicy, policyStatus: tktvotePolicyStatus } =
+    ticketvotePolicy.useFetch();
+
   const recordsFetched = useSelector((state) =>
     records.selectByTokensBatch(state, inventory)
   );
+  const recordsObject = useSelector(records.selectAll);
 
   function handleFetchNextPage() {
-    // onFetchNextRecordsBatch();
-    onFetchSummaries();
+    if (
+      policyStatus === "succeeded" &&
+      tktvotePolicyStatus === "succeeded" &&
+      inventory.length !== 0
+    ) {
+      const recordsToFetch = getTokensToFetch({
+        inventoryList: inventory,
+        lookupTable: recordsObject,
+        pageSize: policy.recordspagesize,
+      });
+      const voteSummariesToFetch = getTokensToFetch({
+        inventoryList: inventory,
+        lookupTable: summaries,
+        pageSize: tktvotePolicy.summariespagesize,
+      });
+      dispatch(records.fetch({ tokens: recordsToFetch }));
+      onFetchSummaries(voteSummariesToFetch);
+    }
   }
 
   return (
@@ -48,7 +73,7 @@ export function TicketvoteRecordsList({ status }) {
             </Card>
           );
         })}
-      <button onClick={handleFetchNextPage}>Fetch Next Batch</button>
+      <button onClick={() => handleFetchNextPage()}>Fetch Next Batch</button>
     </div>
   );
 }
