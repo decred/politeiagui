@@ -1,11 +1,26 @@
 import zipObject from "lodash/zipObject";
 import sortBy from "lodash/fp/sortBy";
+import isArray from "lodash/fp/isArray";
 import { findMatch, generatePath, getParams } from "./helpers";
 
 /**
  * ProxyConfig is an object that maps the received route to target routes.
  * @typedef {Object} ProxyConfig
  */
+
+/**
+ * validRoutes returns if given every route from `routes` array has both `path`
+ * and `fetch` attributes.
+ * @param {Array} routes
+ * @returns {Bool} isValid
+ */
+export function validPluginsRoutes(routes) {
+  return (
+    routes &&
+    isArray(routes) &&
+    routes.every((route) => route.path && route.fetch)
+  );
+}
 
 /**
  * filterRoutesByMatchTargets returns a callback function that checks if given
@@ -102,6 +117,9 @@ function configurePluginsRouter() {
      * @param {string} url
      */
     async navigateTo(url) {
+      if (!routes) {
+        throw Error("router is not initialized. Use the init method");
+      }
       // Accepts pathnames and urls. Handle Pathnames correctly
       let pathname;
       try {
@@ -133,13 +151,19 @@ function configurePluginsRouter() {
     setupProxyConfig(config) {
       proxyConfig = config;
     },
+    cleanup() {
+      routes = null;
+      proxyConfig = undefined;
+    },
     /**
      * init initializes the router for given routes config
      * @param {{ routes: Array }} Config
      */
-    async init({ routes: pluginsRoutes = routes } = {}) {
+    async init({ routes: pluginsRoutes } = {}) {
+      if (!pluginsRoutes || !validPluginsRoutes(pluginsRoutes)) {
+        throw TypeError("`routes` must be an array of { path, fetch } ");
+      }
       routes = pluginsRoutes;
-      if (!routes) return;
       await verifyMatches(window.location.pathname);
     },
   };

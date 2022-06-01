@@ -1,22 +1,21 @@
 import isString from "lodash/fp/isString";
 import isArray from "lodash/fp/isArray";
+import { validPluginsRoutes } from "./router/pluginsRouter";
 
 export function validatePlugin({ routes, reducers, name }) {
   const validReducers =
     isArray(reducers) &&
     reducers.every((reducer) => reducer.key && reducer.reducer);
   if (reducers && !validReducers) {
-    throw Error("`reducers` must be array of { key, reducer }");
+    throw TypeError("`reducers` must be array of { key, reducer }");
   }
 
   if (!name || !isString(name)) {
-    throw Error("`name` is required and must be a string");
+    throw TypeError("`name` is required and must be a string");
   }
 
-  const validRoutes =
-    isArray(routes) && routes.every((route) => route.path && route.fetch);
-  if (routes && !validRoutes) {
-    throw Error("`routes` must be an array of { path, fetch } ");
+  if (!validPluginsRoutes(routes)) {
+    throw TypeError("`routes` must be an array of { path, fetch } ");
   }
 }
 
