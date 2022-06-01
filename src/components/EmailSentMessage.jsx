@@ -23,7 +23,7 @@ const EmailSentMessage = ({
     <P>
       If you're sure you should have received an email, join the
       #support:decred.org channel on{" "}
-      <Link href="https://chat.decred.org">Matrix</Link> to getassistance from
+      <Link href="https://chat.decred.org">Matrix</Link> to get assistance from
       Politeia administrators.
     </P>
   </>
