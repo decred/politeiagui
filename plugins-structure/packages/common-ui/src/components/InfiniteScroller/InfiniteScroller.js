@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 function AppendObservableElement({ hasMore, isLoading, loadMore }) {
-  const loaderRef = useRef(null);
   const [intersected, setIntersected] = useState(false);
+  const loaderRef = useRef(null);
 
   useEffect(() => {
     if (intersected && hasMore && !isLoading) {
@@ -22,8 +22,6 @@ function AppendObservableElement({ hasMore, isLoading, loadMore }) {
       const target = entities[0];
       if (target.isIntersecting) {
         setIntersected(true);
-      } else {
-        setIntersected(false);
       }
     }, options);
 
@@ -45,6 +43,7 @@ function InfiniteScroller({
   hasMore,
   isLoading,
   loadMore,
+  loadingSkeleton,
 }) {
   return (
     <div className={className}>
@@ -56,12 +55,14 @@ function InfiniteScroller({
           loadMore={loadMore}
         />
       )}
+      {isLoading && loadingSkeleton}
     </div>
   );
 }
 
 InfiniteScroller.propType = {
   children: PropTypes.array.isRequired,
+  loadingSkeleton: PropTypes.node,
   className: PropTypes.string,
   hasMore: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,

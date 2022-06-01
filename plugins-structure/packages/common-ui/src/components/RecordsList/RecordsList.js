@@ -2,7 +2,13 @@ import React from "react";
 import { InfiniteScroller } from "../InfiniteScroller";
 import styles from "./styles.module.css";
 
-export function RecordsList({ children, hasMore, onFetchMore, isLoading }) {
+export function RecordsList({
+  children,
+  hasMore,
+  onFetchMore,
+  isLoading,
+  loadingSkeleton,
+}) {
   function handleLoadMore() {
     onFetchMore();
   }
@@ -12,6 +18,7 @@ export function RecordsList({ children, hasMore, onFetchMore, isLoading }) {
       hasMore={hasMore}
       loadMore={handleLoadMore}
       isLoading={isLoading}
+      loadingSkeleton={loadingSkeleton}
     >
       {children}
     </InfiniteScroller>
