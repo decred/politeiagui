@@ -220,7 +220,7 @@ export function getShortToken(token) {
 }
 
 /**
- * Record File
+ * getTokensToFetch Object Param
  * @typedef {{
  *   inventoryList: Array,
  *   lookupTable: Object,
@@ -228,7 +228,10 @@ export function getShortToken(token) {
  * }} TokensToFetchObjectParam
  */
 /**
- * getTokensToFetch traverses the inventoryList of tokens and add them to a new array if they are not in the lookupTable. If the new array reachs the length of pageSize or the inventoryList comes to an end the loop will break and the array will be returned
+ * getTokensToFetch traverses the inventoryList of tokens and add them to a new
+ * array if they are not in the lookupTable. If the new array reachs the length
+ * of pageSize or the inventoryList comes to an end the loop will break and the
+ * array will be returned
  * @param {TokensToFetchObjectParam} param
  * @returns {Array}
  */
