@@ -6,7 +6,6 @@ export const Home = () => {
   const dispatch = useDispatch();
   // Ticketvote inventory ready to be fetched without any additional setup.
   useEffect(() => {
-    console.log("MOUNT");
     dispatch(ticketvote.inventory.fetch({ status: 3 }));
     dispatch(ticketvote.inventory.fetch({ status: 2 }));
     dispatch(ticketvote.inventory.fetch({ status: 1 }));
