@@ -16,29 +16,29 @@ export function validPluginsRoutes(routes) {
 }
 
 /**
- * ProxyConfig is an object that maps the received route to target routes.
- * @typedef {Object} ProxyConfig
+ * ProxyMap is an object that maps the received route to target routes.
+ * @typedef {Object.<string, string[]>} ProxyMap
  */
 /**
  * proxyHandler is responsible for handling route redirecting. It receives a
- * `config` object, and, for given `targetPath`, returns the corresponding route
- *  from `allRoutes` + proxy targets routes.
- * @param {ProxyConfig} config proxy config
+ * `proxyMap` object, and, for given `targetPath`, returns the corresponding
+ * matching route from `allRoutes` + proxied targets routes.
+ * @param {ProxyMap} proxyMap proxy map
  * @returns {ProxyHandler} Plugins Proxy handler
  */
-function proxyHandler(config) {
+function proxyHandler(proxyMap) {
   return {
     get: (allRoutes, targetPath) => {
       function findRoute(path) {
         return allRoutes.find((r) => r.path === path);
       }
-      // Find proxy config key that matches the targetPath. Required to find
+      // Find proxy proxyMap key that matches the targetPath. Required to find
       // routes without formatting their params.
-      const proxyConfigMatch = Object.keys(config).find((route) =>
+      const proxyMapMatch = Object.keys(proxyMap).find((route) =>
         targetPath.match(pathToRegex(route))
       );
       // Get targets once we know the correct path.
-      const targets = (config && config[proxyConfigMatch]) || [];
+      const targets = (proxyMap && proxyMap[proxyMapMatch]) || [];
       // Routes that match the targetPath without proxy.
       const unhandledTarget = findRoute(targetPath);
       // Routes that match target proxy routes.
@@ -57,10 +57,10 @@ function proxyHandler(config) {
  */
 function configurePluginsRouter() {
   let routes = null;
-  let proxyConfig;
+  let proxyMap;
 
   async function verifyMatches(pathname) {
-    const routesProxy = new Proxy(routes, proxyHandler(proxyConfig));
+    const routesProxy = new Proxy(routes, proxyHandler(proxyMap));
     // Get routes match from proxy
     const targetRoutes = routesProxy[pathname];
     for (const route of targetRoutes) {
@@ -106,15 +106,15 @@ function configurePluginsRouter() {
       await verifyMatches(url);
     },
     /**
-     * setupProxyConfig applies a ProxyConfig
-     * @param {ProxyConfig} config
+     * setupProxyMap applies a ProxyMap
+     * @param {ProxyMap} map
      */
-    setupProxyConfig(config) {
-      proxyConfig = config;
+    setupProxyMap(map) {
+      proxyMap = map;
     },
     cleanup() {
       routes = null;
-      proxyConfig = undefined;
+      proxyMap = undefined;
     },
     /**
      * init initializes the router for given routes config
@@ -137,6 +137,6 @@ function configurePluginsRouter() {
  *
  * Since this router does not render views, we can have multiple matches for
  * a single route path, which are executed according to plugins configuration
- * or `proxyConfig` order.
+ * or `proxyMap` order.
  */
 export const pluginsRouter = configurePluginsRouter();

@@ -93,7 +93,7 @@ describe("Given pluginsRouter", () => {
     };
     beforeEach(async () => {
       setWindowPathname("/");
-      pluginsRouter.setupProxyConfig(proxy);
+      pluginsRouter.setupProxyMap(proxy);
       await pluginsRouter.init({ routes });
     });
     afterEach(() => {

@@ -41,14 +41,14 @@ function clickHandler(linkSelector) {
  *
  * @param {{
  *  plugins: Array,
- *  pluginsProxyConfig: Object,
+ *  pluginsProxyMap: Object,
  *  viewRoutes: Array,
  *  linkSelector: string
  * }}
  */
 export async function appSetup({
   plugins,
-  pluginsProxyConfig,
+  pluginsProxyMap,
   viewRoutes,
   linkSelector = "[data-link]",
 }) {
@@ -56,7 +56,7 @@ export async function appSetup({
   plugins.every(validatePlugin);
 
   // Proxy plugin routes
-  pluginsRouter.setupProxyConfig(pluginsProxyConfig);
+  pluginsRouter.setupProxyMap(pluginsProxyMap);
 
   let pluginsRoutes = [];
   // Connect plugins reducers on store

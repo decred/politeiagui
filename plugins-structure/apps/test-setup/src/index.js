@@ -64,7 +64,7 @@ async function TestApp() {
   // redirect the setup to an app route. For example: we can setup the
   // ticketvote inventory on home page by proxying the "/ticketvote/inventory"
   // route to "/", and we should have it all ready to play on "/"
-  const pluginsProxyConfig = {
+  const pluginsProxyMap = {
     "/": ["/ticketvote/inventory", "/ticketvote/summaries"],
     "/record/:id": ["/ticketvote/timestamps", "/ticketvote/summaries"],
     "/app": ["/log/store", "/ticketvote/inventory", "/ticketvote/summaries"],
@@ -73,7 +73,7 @@ async function TestApp() {
   const App = await appSetup({
     // Log plugin is a test plugin, defined locally on the test-app shell
     plugins: [TicketvotePlugin, LogPlugin],
-    pluginsProxyConfig,
+    pluginsProxyMap,
     viewRoutes,
   });
 

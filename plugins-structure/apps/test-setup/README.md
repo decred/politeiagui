@@ -63,7 +63,7 @@ Example:
 > route to `/`, and we should have it all ready to play on `/`.
 
 ```javascript
-const pluginsProxyConfig = {
+const pluginsProxyMap = {
   "/": ["/ticketvote/inventory", "/ticketvote/summaries"],
   "/record/:id": ["/ticketvote/summaries", "/ticketvote/timestamps"],
   "/app": ["/ticketvote/inventory", "/ticketvote/summaries"],
@@ -71,7 +71,7 @@ const pluginsProxyConfig = {
 
 const App = await appSetup({
   plugins: [TicketvotePlugin],
-  pluginsProxyConfig,
+  pluginsProxyMap,
   viewRoutes,
 });
 ```
