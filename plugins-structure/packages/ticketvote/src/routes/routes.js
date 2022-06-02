@@ -16,7 +16,9 @@ function fetchPolicyIfIdle() {
   }
 }
 
-// Routes for ticketvote plugin
+/**
+ * Routes for ticketvote plugin router.
+ */
 export const routes = [
   {
     path: ROUTE_TICKETVOTE_INVENTORY,

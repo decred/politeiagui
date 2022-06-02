@@ -66,7 +66,7 @@ async function TestApp() {
   // route to "/", and we should have it all ready to play on "/"
   const pluginsProxyConfig = {
     "/": ["/ticketvote/inventory", "/ticketvote/summaries"],
-    "/record/:id": ["/ticketvote/summaries", "/ticketvote/timestamps"],
+    "/record/:id": ["/ticketvote/timestamps", "/ticketvote/summaries"],
     "/app": ["/log/store", "/ticketvote/inventory", "/ticketvote/summaries"],
   };
 

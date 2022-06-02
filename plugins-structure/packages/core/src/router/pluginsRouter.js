@@ -1,16 +1,9 @@
-import zipObject from "lodash/zipObject";
-import sortBy from "lodash/fp/sortBy";
 import isArray from "lodash/fp/isArray";
-import { findMatch, generatePath, getParams } from "./helpers";
+import { generatePath, pathToRegex } from "./helpers";
 
 /**
- * ProxyConfig is an object that maps the received route to target routes.
- * @typedef {Object} ProxyConfig
- */
-
-/**
- * validRoutes returns if given every route from `routes` array has both `path`
- * and `fetch` attributes.
+ * validPluginsRoutes returns if given every route from `routes` array has both
+ * `path` and `fetch` attributes.
  * @param {Array} routes
  * @returns {Bool} isValid
  */
@@ -23,71 +16,38 @@ export function validPluginsRoutes(routes) {
 }
 
 /**
- * filterRoutesByMatchTargets returns a callback function that checks if given
- * route corresponds to a match target
- * @param {Object} match
+ * ProxyConfig is an object that maps the received route to target routes.
+ * @typedef {Object} ProxyConfig
  */
-function filterRoutesByMatchTargets(match) {
-  return (route) => match.route.targets.some((target) => target === route.path);
-}
-
-function sortByTargetsOrder(match, routes) {
-  return sortBy((route) => match.route.targets.indexOf(route.route.path))(
-    routes
-  );
-}
-
 /**
- * routesWithMatchParams returns a callback function that enhances given route
- * with given match `params`, corresponding to route params keys.
- * @param {Object} match
- */
-function routesWithMatchParams(match) {
-  return (route) => {
-    const paramsKeys = Array.from(route.path.matchAll(/:(\w+)/g)).map(
-      (result) => result[1]
-    );
-    const paramsValues = match.result.slice(1);
-    const params = zipObject(paramsKeys, paramsValues);
-    return { route, params };
-  };
-}
-
-/**
- * proxy is responsible for handling route redirecting. It receives a `config`,
- * and, for given `targetRoute`, returns the corresponding `routes` route and
- * proxy targets route.
+ * proxyHandler is responsible for handling route redirecting. It receives a
+ * `config` object, and, for given `targetPath`, returns the corresponding route
+ *  from `allRoutes` + proxy targets routes.
  * @param {ProxyConfig} config proxy config
- * @param {Array} routes proxy default routes
- * @param {string} targetRoute route to match on proxy
- * @returns {Array} target proxy routes.
+ * @returns {ProxyHandler} Plugins Proxy handler
  */
-function proxy(config = {}, routes = [], targetRoute) {
-  let targetRoutes = [];
-  // Format proxy routes to use it on findMatch
-  const proxyRoutes = Object.keys(config).map((route) => ({
-    path: route,
-    targets: config[route],
-  }));
-  // 1. Search on proxy to see if it matches the proxy
-  const proxyMatch = findMatch(proxyRoutes, targetRoute);
-  // If proxy matches, get corresponding targets with match params.
-  if (proxyMatch) {
-    const unorderedRoutes = routes
-      .filter(filterRoutesByMatchTargets(proxyMatch))
-      .map(routesWithMatchParams(proxyMatch));
-
-    targetRoutes = sortByTargetsOrder(proxyMatch, unorderedRoutes);
-  }
-  // 2. Get regular routes matches (without proxy).
-  const regularMatch = findMatch(routes, targetRoute);
-  if (regularMatch) {
-    targetRoutes = [
-      { route: regularMatch.route, params: getParams(regularMatch) },
-      ...targetRoutes,
-    ];
-  }
-  return targetRoutes;
+function proxyHandler(config) {
+  return {
+    get: (allRoutes, targetPath) => {
+      function findRoute(path) {
+        return allRoutes.find((r) => r.path === path);
+      }
+      // Find proxy config key that matches the targetPath. Required to find
+      // routes without formatting their params.
+      const proxyConfigMatch = Object.keys(config).find((route) =>
+        targetPath.match(pathToRegex(route))
+      );
+      // Get targets once we know the correct path.
+      const targets = (config && config[proxyConfigMatch]) || [];
+      // Routes that match the targetPath without proxy.
+      const unhandledTarget = findRoute(targetPath);
+      // Routes that match target proxy routes.
+      const proxiedTargets = targets.map(findRoute);
+      // Remove undefined values. In case some route or target does not match
+      // current routes.
+      return [unhandledTarget, ...proxiedTargets].filter((t) => !!t);
+    },
+  };
 }
 
 /**
@@ -100,13 +60,14 @@ function configurePluginsRouter() {
   let proxyConfig;
 
   async function verifyMatches(pathname) {
+    const routesProxy = new Proxy(routes, proxyHandler(proxyConfig));
     // Get routes match from proxy
-    const targetRoutes = proxy(proxyConfig, routes, pathname);
-    for (const match of targetRoutes) {
+    const targetRoutes = routesProxy[pathname];
+    for (const route of targetRoutes) {
       // Every plugin route has its own fetch method, and plugins router
       // listens to window location pathname and triggers the fetching.
-      if (match.route.fetch) {
-        await match.route.fetch(match.params);
+      if (route.fetch) {
+        await route.fetch();
       }
     }
   }
