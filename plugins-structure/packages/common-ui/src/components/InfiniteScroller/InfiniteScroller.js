@@ -8,7 +8,6 @@ function AppendObservableElement({ hasMore, isLoading, loadMore }) {
   useEffect(() => {
     if (intersected && hasMore && !isLoading) {
       setIntersected(false);
-      console.log(intersected, "opa");
       loadMore();
     }
   }, [intersected, hasMore, isLoading, loadMore]);
