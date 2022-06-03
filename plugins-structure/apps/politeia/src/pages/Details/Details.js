@@ -9,11 +9,22 @@ import { ProposalDetails, ProposalLoader } from "../../components";
 import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
+import { startDetailsListeners } from "./listeners";
+
+startDetailsListeners();
+
+function ErrorsMessages({ errors }) {
+  return errors.reduce((acc, cur) => {
+    if (cur) {
+      return [...acc, <Message kind="error">{cur}</Message>];
+    }
+    return acc;
+  }, []);
+}
 
 function Details({ token }) {
   const {
     comments,
-    detailsError,
     detailsStatus,
     fullToken,
     onFetchPreviousVersions,
@@ -21,6 +32,9 @@ function Details({ token }) {
     piSummary,
     record,
     voteSummary,
+    recordDetailsError,
+    voteSummaryError,
+    commentsError,
   } = useProposalDetails({ token });
   const params = getURLSearchParams();
   const shouldScrollToComments = !!params?.scrollToComments;
@@ -29,9 +43,11 @@ function Details({ token }) {
     <SingleContentPage className={styles.detailsWrapper}>
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
       {detailsStatus === "failed" && (
-        <Message kind="error">{detailsError}</Message>
+        <ErrorsMessages
+          errors={[recordDetailsError, voteSummaryError, commentsError]}
+        />
       )}
-      {fullToken && detailsStatus === "succeeded" && (
+      {fullToken && record && detailsStatus === "succeeded" && (
         <>
           <ProposalDetails
             record={record}
@@ -40,14 +56,16 @@ function Details({ token }) {
             onFetchVersion={onFetchPreviousVersions}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
           />
-          <Comments
-            comments={comments}
-            // Mocking onReply until user layer is done.
-            onReply={(comment, parentid) => {
-              console.log(`Replying ${parentid}:`, comment);
-            }}
-            scrollOnLoad={shouldScrollToComments}
-          />
+          {comments && (
+            <Comments
+              comments={comments}
+              // Mocking onReply until user layer is done.
+              onReply={(comment, parentid) => {
+                console.log(`Replying ${parentid}:`, comment);
+              }}
+              scrollOnLoad={shouldScrollToComments}
+            />
+          )}
         </>
       )}
     </SingleContentPage>

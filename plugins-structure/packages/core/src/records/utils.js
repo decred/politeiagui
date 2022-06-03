@@ -1,6 +1,4 @@
 import invert from "lodash/fp/invert";
-import without from "lodash/fp/without";
-import take from "lodash/fp/take";
 import isEmpty from "lodash/fp/isEmpty";
 import {
   RECORD_STATE_UNVETTED,
@@ -181,82 +179,6 @@ export const validRecordStates = [
   ...validStringRecordStates,
   ...validNumberRecordStates,
 ];
-
-/**
- * getTokensToFetch returns the tokens batch and last position pointer for given
- * `inventory` and `pageSize`, indexed by `lastTokenPos` skipping `records`
- * already loaded.
- * @param {{
- *   records: Record[],
- *   pageSize: Number,
- *   inventoryList: RecordToken[],
- *   lastTokenPos: Number
- * }} fetchParams
- * @returns {Object} { tokens: RecordToken[], last: Number }
- */
-export function getTokensToFetch({
-  records,
-  pageSize,
-  inventoryList,
-  lastTokenPos,
-}) {
-  if (inventoryList.length === 0)
-    return {
-      tokens: [],
-      last: null,
-    };
-  let tokensToFetch = [];
-  if (lastTokenPos === null) {
-    // means it's the first fetch
-    tokensToFetch = take(pageSize, inventoryList);
-    lastTokenPos = tokensToFetch.length - 1;
-  } else {
-    // not the first fetch
-    tokensToFetch = take(pageSize, inventoryList.slice(lastTokenPos + 1));
-    lastTokenPos += tokensToFetch.length;
-  }
-  // skip tokens if already lodaded
-  return skipTokensAlreadyLoaded({
-    tokens: tokensToFetch,
-    records,
-    lastTokenPos,
-    inventoryList,
-  });
-}
-
-export function skipTokensAlreadyLoaded({
-  tokens,
-  records,
-  lastTokenPos,
-  inventoryList,
-}) {
-  const alreadyLoaded = [];
-  for (const token of tokens) {
-    if (records[token]) alreadyLoaded.push(token);
-  }
-  if (alreadyLoaded.length === 0) {
-    return {
-      tokens,
-      last: lastTokenPos,
-    };
-  }
-  const newTokens = without(alreadyLoaded, tokens);
-  for (let i = 0; i < alreadyLoaded.length; i++) {
-    if (lastTokenPos < inventoryList.length - 2) {
-      newTokens.push(inventoryList[lastTokenPos + 1]);
-      lastTokenPos++;
-    } else {
-      break;
-    }
-  }
-  return skipTokensAlreadyLoaded({
-    tokens: newTokens,
-    records,
-    lastTokenPos,
-    inventoryList,
-  });
-}
-
 /**
  * decodeRecordFile returns the JSON decoded file payload.
  * @param {RecordFile} file record file
@@ -295,4 +217,34 @@ export function decodeRecordMetadata(metadataStream) {
  */
 export function getShortToken(token) {
   return token?.slice(0, 7);
+}
+
+/**
+ * getTokensToFetch Object Param
+ * @typedef {{
+ *   inventoryList: Array,
+ *   lookupTable: Object,
+ *   pageSize: Number,
+ * }} TokensToFetchObjectParam
+ */
+/**
+ * getTokensToFetch traverses the inventoryList of tokens and add them to a new
+ * array if they are not in the lookupTable. If the new array reachs the length
+ * of pageSize or the inventoryList comes to an end the loop will break and the
+ * array will be returned
+ * @param {TokensToFetchObjectParam} param
+ * @returns {Array}
+ */
+export function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
+  const tokensToFetch = [];
+  let pos = 0;
+  while (inventoryList[pos]) {
+    const token = inventoryList[pos];
+    if (!lookupTable[token]) {
+      tokensToFetch.push(token);
+    }
+    if (tokensToFetch.length === pageSize) break;
+    pos++;
+  }
+  return tokensToFetch;
 }
