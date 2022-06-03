@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { ticketvoteInventory } from "@politeiagui/ticketvote/inventory";
+import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
 import StatusList from "./StatusList";
+import EmptyList from "./EmptyList";
+
+function getProposalsEmptyListMessage(status) {
+  const readableStatus = getHumanReadableTicketvoteStatus(status);
+  if (readableStatus === "ineligible") {
+    return "abandoned";
+  }
+  return readableStatus;
+}
 
 function RecordsStatusList({ status, onRenderNextStatus }) {
   const [page, setPage] = useState(1);
@@ -26,7 +36,11 @@ function RecordsStatusList({ status, onRenderNextStatus }) {
       inventory={inventory}
       onRenderNextStatus={onRenderNextStatus}
     />
-  ) : null;
+  ) : (
+    inventoryStatus === "succeeded/isDone" && (
+      <EmptyList status={getProposalsEmptyListMessage(status)} />
+    )
+  );
 }
 
 export default RecordsStatusList;

@@ -1,0 +1,5 @@
+.emptyList {
+  width: 100%;
+  color: var(--tab-text-color) !important;
+  text-align: center;
+}
