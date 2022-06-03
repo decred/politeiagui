@@ -18,8 +18,7 @@ const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
           <ProposalSubtitle
             userid={proposal.author.userid}
             username={proposal.author.username}
-            publishedat={proposal.timestamps.publishedat}
-            editedat={proposal.timestamps.editedat}
+            timestamps={proposal.timestamps}
             token={proposal.token}
             version={proposal.version}
           />

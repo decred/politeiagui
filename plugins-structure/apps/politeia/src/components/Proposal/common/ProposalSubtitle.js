@@ -6,17 +6,19 @@ import range from "lodash/range";
 function ProposalSubtitle({
   userid,
   username,
-  publishedat,
-  editedat,
   token,
   version,
+  timestamps = {},
   onChangeVersion,
 }) {
+  const { publishedat, editedat, abandonedat, censoredat } = timestamps;
   return (
     <Join>
       <Link href={`user/${userid}`}>{username}</Link>
       {publishedat && <Event event="published" timestamp={publishedat} />}
       {editedat && <Event event="edited" timestamp={editedat} />}
+      {abandonedat && <Event event="abandoned" timestamp={abandonedat} />}
+      {censoredat && <Event event="censored" timestamp={censoredat} />}
       {version > 1 &&
         (onChangeVersion ? (
           <Dropdown

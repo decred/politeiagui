@@ -57,8 +57,7 @@ const ProposalDetails = ({
           <ProposalSubtitle
             userid={proposalDetails.author.userid}
             username={proposalDetails.author.username}
-            publishedat={proposalDetails.timestamps.publishedat}
-            editedat={proposalDetails.timestamps.editedat}
+            timestamps={proposalDetails.timestamps}
             token={proposalDetails.token}
             version={proposalDetails.version}
             onChangeVersion={handleFetchVersion}
