@@ -109,6 +109,9 @@
 .button {
   margin-top: 1rem;
 }
+.button:focus {
+  border-width: 2px !important;
+}
 
 .visible {
   visibility: visible;
