@@ -185,6 +185,8 @@ export function decodeProposalRecord(record) {
     },
     body,
     proposalMetadata,
+    archived: record.status === RECORD_STATUS_ARCHIVED,
+    censored: record.status === RECORD_STATUS_CENSORED,
   };
 }
 
@@ -320,6 +322,12 @@ export function getLegacyProposalStatusTagProps(record, voteSummary) {
     return {
       type: "grayNegative",
       text: "Abandoned",
+    };
+  }
+  if (record.status === RECORD_STATUS_CENSORED) {
+    return {
+      type: "orangeNegativeCircled",
+      text: "Censored",
     };
   }
 

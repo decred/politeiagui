@@ -11,6 +11,7 @@ const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
   return (
     <div>
       <RecordCard
+        isDimmed={proposal.archived || proposal.censored}
         titleLink={`/record/${getShortToken(proposal.token)}`}
         title={proposal.name}
         subtitle={

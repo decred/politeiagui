@@ -3,6 +3,10 @@
     var(--container-padding-left);
 }
 
+.dimmedCard {
+  background-color: var(--dimmed-card-background) !important;
+}
+
 .secondRow {
   margin-top: var(--spacing-medium);
 }
