@@ -104,6 +104,8 @@ const MONTHS_LABELS = [
  *   },
  *   body: String,
  *   proposalMetadata: Object,
+ *   censored: Bool,
+ *   archived: Bool
  * }} Proposal
  */
 

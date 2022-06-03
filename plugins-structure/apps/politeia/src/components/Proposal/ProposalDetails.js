@@ -45,6 +45,7 @@ const ProposalDetails = ({
       <RecordCard
         token={proposalDetails.token}
         title={proposalDetails.name}
+        isDimmed={proposalDetails.archived || proposalDetails.censored}
         subtitle={
           <ProposalSubtitle
             userid={proposalDetails.author.userid}
