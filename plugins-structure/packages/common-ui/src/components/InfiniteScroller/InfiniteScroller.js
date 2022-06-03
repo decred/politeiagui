@@ -8,6 +8,7 @@ function AppendObservableElement({ hasMore, isLoading, loadMore }) {
   useEffect(() => {
     if (intersected && hasMore && !isLoading) {
       setIntersected(false);
+      console.log(intersected, "opa");
       loadMore();
     }
   }, [intersected, hasMore, isLoading, loadMore]);
@@ -46,17 +47,19 @@ function InfiniteScroller({
   loadingSkeleton,
 }) {
   return (
-    <div className={className}>
-      {children}
-      {children.length > 0 && (
-        <AppendObservableElement
-          hasMore={hasMore}
-          isLoading={isLoading}
-          loadMore={loadMore}
-        />
-      )}
+    <>
+      <div className={className}>
+        {children}
+        {children.length > 0 && (
+          <AppendObservableElement
+            hasMore={hasMore}
+            isLoading={isLoading}
+            loadMore={loadMore}
+          />
+        )}
+      </div>
       {isLoading && loadingSkeleton}
-    </div>
+    </>
   );
 }
 
