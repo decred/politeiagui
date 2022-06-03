@@ -105,7 +105,8 @@ const MONTHS_LABELS = [
  *   body: String,
  *   proposalMetadata: Object,
  *   censored: Bool,
- *   archived: Bool
+ *   archived: Bool,
+ *   abandonReason: String
  * }} Proposal
  */
 
@@ -189,18 +190,30 @@ export function decodeProposalRecord(record) {
     proposalMetadata,
     archived: record.status === RECORD_STATUS_ARCHIVED,
     censored: record.status === RECORD_STATUS_CENSORED,
+    abandonmentReason: getAbandonmentReason(userMetadata),
   };
 }
 
-function findPublicStatusMetadataFromPayloads(mdPayloads) {
+function findStatusMetadataFromPayloads(mdPayloads, status) {
   if (!mdPayloads) return {};
-  const publicMd = mdPayloads.find((p) => p.status === RECORD_STATUS_PUBLIC);
+  const publicMd = mdPayloads.find((p) => p.status === status);
   if (!publicMd) {
     // traverse payload arrays
     const arrayPayloads = mdPayloads.find((p) => isArray(p));
-    return findPublicStatusMetadataFromPayloads(arrayPayloads);
+    return findStatusMetadataFromPayloads(arrayPayloads, status);
   }
   return publicMd;
+}
+
+function getAbandonmentReason(userMetadata) {
+  if (!userMetadata) return null;
+  const payloads = userMetadata.map((md) => md.payload);
+  for (const status of [RECORD_STATUS_ARCHIVED, RECORD_STATUS_CENSORED]) {
+    const { reason } = findStatusMetadataFromPayloads(payloads, status);
+    if (reason) {
+      return reason;
+    }
+  }
 }
 
 /**
@@ -229,7 +242,7 @@ export function formatDateToInternationalString({ day, month, year }) {
 export function getPublicStatusChangeMetadata(userMetadata) {
   if (!userMetadata) return {};
   const payloads = userMetadata.map((md) => md.payload);
-  return findPublicStatusMetadataFromPayloads(payloads);
+  return findStatusMetadataFromPayloads(payloads, RECORD_STATUS_PUBLIC);
 }
 
 /**
