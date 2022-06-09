@@ -8,7 +8,7 @@ const commentValidationSchema = ({
   isAuthorUpdate
 }) =>
   Yup.object().shape({
-    comment: Yup.string().required("required"),
+    comment: Yup.string().trim().required("required"),
     title: isAuthorUpdate
       ? Yup.string()
           .nullable()
