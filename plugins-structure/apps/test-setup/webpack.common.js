@@ -11,6 +11,42 @@ const jsRules = {
   },
 };
 
+const cssRules = [
+  {
+    test: /\.css$/,
+    use: [
+      "style-loader",
+      {
+        loader: "css-loader",
+        options: {
+          importLoaders: 1,
+          modules: true,
+        },
+      },
+    ],
+    include: /\.module\.css$/,
+  },
+  {
+    test: /\.css$/,
+    use: ["style-loader", "css-loader"],
+    exclude: /\.module\.css$/,
+  },
+];
+
+const markdownRules = [
+  {
+    test: /\.md$/,
+    use: "raw-loader",
+  },
+];
+
+const svgRules = [
+  {
+    test: /\.svg$/,
+    use: ["@svgr/webpack"],
+  },
+];
+
 const plugins = [
   new HtmlWebpackPlugin({
     template: "./src/public/index.html",
@@ -25,7 +61,7 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules],
+    rules: [jsRules, ...cssRules, ...markdownRules, ...svgRules],
   },
   plugins,
   resolve: {
