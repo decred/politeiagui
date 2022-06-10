@@ -27,7 +27,6 @@ jobs:
         run: yarn prettify:diff
       - name: tests
         run: |
-          yarn run uidev &
           yarn test
           scripts/serverUpChecker.sh
         env:
