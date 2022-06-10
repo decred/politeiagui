@@ -14,7 +14,7 @@ export function validatePlugin({ routes, reducers, name }) {
     throw TypeError("`name` is required and must be a string");
   }
 
-  if (!validPluginsRoutes(routes)) {
+  if (routes && !validPluginsRoutes(routes)) {
     throw TypeError("`routes` must be an array of { path, fetch } ");
   }
 }
