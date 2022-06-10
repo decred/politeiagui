@@ -26,9 +26,7 @@ jobs:
       - name: pretty diff
         run: yarn prettify:diff
       - name: tests
-        run: |
-          yarn test
-          scripts/serverUpChecker.sh
+        run: yarn test
         env:
           CI: true
       - name: build
