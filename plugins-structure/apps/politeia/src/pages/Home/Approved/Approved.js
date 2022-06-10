@@ -1,16 +1,13 @@
 import React from "react";
 import RecordsStatusList from "../common/RecordsStatusList";
-import { useSelector } from "react-redux";
-import { ticketvoteInventory } from "@politeiagui/ticketvote/inventory";
-import isEmpty from "lodash/isEmpty";
 import EmptyList from "../common/EmptyList";
+import { selectIsStatusListEmpty } from "../selectors";
+import { useSelector } from "react-redux";
 
 function Approved() {
-  const [tokens, status] = useSelector((state) => [
-    ticketvoteInventory.selectByStatus(state, "approved"),
-    ticketvoteInventory.selectStatus(state, { status: "approved" }),
-  ]);
-  const isListEmpty = isEmpty(tokens) && status === "succeeded/isDone";
+  const isListEmpty = useSelector((state) =>
+    selectIsStatusListEmpty(state, "approved")
+  );
   return isListEmpty ? (
     <EmptyList status="approved" />
   ) : (
