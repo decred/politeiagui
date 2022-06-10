@@ -94,7 +94,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
         type: contractortype,
         users: initialSupervisorOptions,
         proposals: initialOwnedProposals
-      }}>
+      }}
+    >
       {({
         values,
         setFieldValue,
@@ -176,7 +177,8 @@ const ManageDccForm = ({ onUpdate, user }) => {
               <Button
                 kind={submitEnabled ? "primary" : "disabled"}
                 loading={isSubmitting}
-                type="submit">
+                type="submit"
+              >
                 {updated && !submitEnabled
                   ? "DCC Info Updated ✓"
                   : "Update DCC Info"}

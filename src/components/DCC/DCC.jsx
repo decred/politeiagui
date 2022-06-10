@@ -61,7 +61,8 @@ const Dcc = ({ dcc, extended }) => {
                   id={`dcc-title-${dccToken}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={extended ? "" : dccURL}>
+                  url={extended ? "" : dccURL}
+                >
                   {presentationalDccName(dcc)}
                 </Title>
               }
@@ -104,7 +105,8 @@ const Dcc = ({ dcc, extended }) => {
                 <Row
                   justify="space-between"
                   bottomMarginSize="m"
-                  className={styles.topDetails}>
+                  className={styles.topDetails}
+                >
                   <Field label="Type" value={presentationalDccType(dcc)} />
                   <Field label="Nominee" value={nomineeusername} />
                   <Field label="Domain" value={domainName} />

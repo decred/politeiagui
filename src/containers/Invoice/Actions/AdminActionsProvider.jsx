@@ -71,7 +71,8 @@ const AdminActionsProvider = ({ children }) => {
         onDispute: hanleOpenDisputeModal,
         onPay: hanleOpenPayModal,
         nextInvoice
-      }}>
+      }}
+    >
       {children}
     </adminInvoicesActionsContext.Provider>
   );

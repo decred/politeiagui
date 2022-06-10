@@ -54,7 +54,8 @@ const UserDccInfo = ({
         <Button
           className="margin-bottom-m"
           onClick={onToggleDccEdit}
-          kind={isLoading ? "disabled" : "primary"}>
+          kind={isLoading ? "disabled" : "primary"}
+        >
           {isLoading ? <Spinner invert /> : "Edit"}
         </Button>
       )}

@@ -81,7 +81,8 @@ const AdminProposals = ({ TopBanner, PageDetails, Main }) => {
       hasMore={hasMoreProposals}
       pageSize={proposalPageSize}
       isLoading={loading || verifying}
-      getEmptyMessage={getEmptyMessage}>
+      getEmptyMessage={getEmptyMessage}
+    >
       {({ tabs, content }) => (
         <>
           <TopBanner>

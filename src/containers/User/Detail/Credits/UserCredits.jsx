@@ -68,7 +68,8 @@ const Credits = ({ user }) => {
         <Button
           className="margin-top-s"
           size="sm"
-          onClick={handleOpenBuyCreditsModal}>
+          onClick={handleOpenBuyCreditsModal}
+        >
           Purchase more
         </Button>
       )}

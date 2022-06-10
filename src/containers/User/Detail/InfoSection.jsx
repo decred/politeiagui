@@ -28,10 +28,12 @@ const InfoSection = ({
         "margin-bottom-s",
         className,
         noMargin && "no-margin-bottom"
-      )}>
+      )}
+    >
       <span
         className={classNames(styles.label, isDarkTheme && styles.darkLabel)}
-        style={alignLabelCenter && { alignSelf: "center" }}>
+        style={alignLabelCenter && { alignSelf: "center" }}
+      >
         {label}:
       </span>
       {isLoading ? (

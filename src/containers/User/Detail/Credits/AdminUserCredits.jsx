@@ -104,14 +104,16 @@ const Credits = ({ user }) => {
             <Button
               className="margin-top-s"
               size="sm"
-              onClick={handleOpenBuyCreditsModal}>
+              onClick={handleOpenBuyCreditsModal}
+            >
               Purchase more
             </Button>
             <Button
               onClick={onRescanUserCredits}
               loading={isLoadingRescan}
               className="margin-top-s"
-              size="sm">
+              size="sm"
+            >
               Rescan
             </Button>
           </>

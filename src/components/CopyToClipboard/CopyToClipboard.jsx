@@ -31,7 +31,8 @@ const CopyToClipboard = ({ children, value, tooltipText, className }) => {
         className
       )}
       placement="bottom"
-      content={feedbackActive ? "Copied!" : tooltipText}>
+      content={feedbackActive ? "Copied!" : tooltipText}
+    >
       {children({ onCopyToClipboard })}
     </Tooltip>
   );

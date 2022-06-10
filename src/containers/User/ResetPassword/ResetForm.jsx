@@ -43,7 +43,8 @@ const ResetForm = () => {
       validationSchema={validationSchema}
       loading={!validationSchema}
       onSubmit={onSubmit}
-      enableReinitialize>
+      enableReinitialize
+    >
       {({
         Form,
         Title,

@@ -69,13 +69,15 @@ const ListUserInvoices = ({
               {user && user.proposalsowned && user.proposalsowned.length > 0 && (
                 <Link
                   className="cursor-pointer"
-                  to={`/user/${user.userid}?tab=proposals owned`}>
+                  to={`/user/${user.userid}?tab=proposals owned`}
+                >
                   Proposals owned
                 </Link>
               )}
               <DefaultNewButton />
             </>
-          }>
+          }
+        >
           <InvoiceFilterForm onChange={handleFiltersChange} disableUserFilter />
         </PageDetails>
       </TopBanner>

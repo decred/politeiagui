@@ -37,13 +37,15 @@ export const Event = ({ event, timestamp, className, size, additionInfo }) => (
   <DateTooltip
     timestamp={timestamp}
     placement="bottom"
-    additionInfo={additionInfo}>
+    additionInfo={additionInfo}
+  >
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
         className={classNames(styles.eventTooltip, className)}
         truncate
-        size={size}>
+        size={size}
+      >
         {`${event} ${timeAgo}`}
       </Text>
     )}
@@ -59,7 +61,8 @@ export const RecordToken = ({ token, isCopyable }) => {
           id={`proposal-token-${token}`}
           data-testid="record-token"
           truncate
-          tooltipPlacement={shouldPlaceTooltipLeft ? "left" : "bottom"}>
+          tooltipPlacement={shouldPlaceTooltipLeft ? "left" : "bottom"}
+        >
           {token}
         </CopyableText>
       )}
@@ -82,7 +85,8 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
   return !isLegacy ? (
     <Wrapper
       to={url}
-      className={classNames(styles.baseTitle, url && styles.underlineTitle)}>
+      className={classNames(styles.baseTitle, url && styles.underlineTitle)}
+    >
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>
@@ -91,7 +95,8 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
     <>
       <Tooltip
         content="This proposal is an archived proposal. Clicking on it will take you to the proposals-archive website."
-        placement="right">
+        placement="right"
+      >
         <Icon type="info" />
       </Tooltip>
       <a
@@ -100,7 +105,8 @@ export const Title = ({ children, url, isLegacy, ...props }) => {
           styles.baseTitle,
           styles.underlineTitle,
           "margin-left-s"
-        )}>
+        )}
+      >
         <H2 {...props} data-testid="record-title-legacy">
           {children}
         </H2>
@@ -114,7 +120,8 @@ export const Subtitle = ({ children, separatorSymbol = "•" }) => (
     className={classNames("margin-top-s", styles.subtitleWrapper)}
     SeparatorComponent={() => (
       <span className={styles.subtitleSeparator}>{separatorSymbol}</span>
-    )}>
+    )}
+  >
     {children}
   </Join>
 );
@@ -124,7 +131,8 @@ export const JoinTitle = ({ children, className, separatorSymbol = "•" }) => (
     className={classNames(className, styles.flexWrap)}
     SeparatorComponent={() => (
       <span className={styles.subtitleSeparator}>{separatorSymbol}</span>
-    )}>
+    )}
+  >
     {children}
   </Join>
 );
@@ -134,7 +142,8 @@ export const Edit = ({ url, tabIndex, disabled }) => (
     to={url || ""}
     tabIndex={tabIndex}
     data-testid="record-edit-button"
-    className={styles.editButton}>
+    className={styles.editButton}
+  >
     <ButtonIcon type="edit" disabled={disabled} />
   </Link>
 );
@@ -145,7 +154,8 @@ export const Status = ({ children, disableMobileView, className }) => (
       styles.status,
       disableMobileView && styles.disableMobileView,
       className
-    )}>
+    )}
+  >
     {children}
   </div>
 );
@@ -190,7 +200,8 @@ export const Header = React.memo(function Header({
             className={classNames(
               styles.titleEditWrapper,
               isRfp && styles.rfpTitleWrapper
-            )}>
+            )}
+          >
             {isRfp && <RfpTag />}
             {title}
             {edit}
@@ -221,11 +232,13 @@ export const ChartsLink = ({ token }) => {
         isDarkTheme && styles.darkActionsTooltip
       )}
       placement="bottom"
-      content="Voting Charts">
+      content="Voting Charts"
+    >
       <UILink
         target="_blank"
         rel="nofollow noopener noreferrer"
-        href={`https://${hostName}/proposal/${token}`}>
+        href={`https://${hostName}/proposal/${token}`}
+      >
         <ButtonIcon type="chart" />
       </UILink>
     </Tooltip>
@@ -242,12 +255,14 @@ export const MarkdownLink = ({ to, active = false, onClick }) => {
         isDarkTheme && styles.darkActionsTooltip
       )}
       placement="bottom"
-      content={active ? "See rendered markdown" : "See raw markdown"}>
+      content={active ? "See rendered markdown" : "See raw markdown"}
+    >
       <UILink
         target="_blank"
         rel="nofollow noopener noreferrer"
         href={to}
-        onClick={onClick}>
+        onClick={onClick}
+      >
         <ButtonIcon type="markdown" viewBox="0 0 208 128" />
       </UILink>
     </Tooltip>
@@ -270,13 +285,15 @@ export const CommentsLink = ({
       isLegacy={isLegacy}
       gray={!isDarkTheme}
       dark={isDarkTheme}
-      className={classNames(styles.commentsLink, className)}>
+      className={classNames(styles.commentsLink, className)}
+    >
       {showIcon && <Icon type="discuss" className="margin-right-s" />}
       <span
         className={classNames(
           styles.commentsNumber,
           isDarkTheme && styles.darkCommentsNumber
-        )}>
+        )}
+      >
         {numOfComments}
       </span>
       Comments
@@ -293,7 +310,8 @@ export const RfpProposalLink = ({ url, rfpTitle, isLegacy }) => {
         className={classNames(
           !isDarkTheme && styles.proposedFor,
           isDarkTheme && styles.darkProposedFor
-        )}>
+        )}
+      >
         Proposed for{" "}
       </span>
       {isLegacy ? (
@@ -358,7 +376,8 @@ export const LinkSection = ({ children, className, title }) => (
     className={className}
     title={title}
     closeOnItemClick={false}
-    data-testid="record-links">
+    data-testid="record-links"
+  >
     {React.Children.toArray(children).map((link, i) => (
       <DropdownItem key={i}>{link}</DropdownItem>
     ))}

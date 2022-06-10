@@ -69,7 +69,8 @@ const ProposalItem = ({
         justify="space-between"
         align={extraSmallMobile ? "flex-start" : "center"}
         onClick={goToFullProposal(history, proposalURL)}
-        noMargin>
+        noMargin
+      >
         <div className={classNames(styles.itemTitle, "flex-column")}>
           <Link dark to={proposalURL}>
             {name}
@@ -86,7 +87,8 @@ const ProposalItem = ({
             className={styles.statusBarWrapper}
             justify="center"
             align="center"
-            noMargin>
+            noMargin
+          >
             <StatusBar
               max={getQuorumInVotes(voteSummary)}
               status={getStatusBarData(voteSummary)}
@@ -108,7 +110,8 @@ const ProposalItem = ({
             className={styles.timeLeftPassed}
             justify="center"
             align="center"
-            noMargin>
+            noMargin
+          >
             <Event
               event={`vote end${isVoteActive ? "s" : "ed"}`}
               timestamp={voteEndTimestamp}
@@ -122,7 +125,8 @@ const ProposalItem = ({
             className={styles.statusWrapper}
             justify="center"
             align="center"
-            noMargin>
+            noMargin
+          >
             <Status className={styles.status}>
               <StatusTag
                 className={styles.statusTag}

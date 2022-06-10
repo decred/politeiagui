@@ -68,7 +68,8 @@ const VerifyKey = ({ location, history }) => {
             <Button
               className={classNames("margin-top-l", styles.btn)}
               onClick={pushToHome}
-              type="button">
+              type="button"
+            >
               Ok, go to home
             </Button>
           </div>
@@ -89,7 +90,8 @@ const VerifyKey = ({ location, history }) => {
             <Button
               className={classNames("margin-top-l", styles.btn)}
               onClick={pushToHome}
-              type="button">
+              type="button"
+            >
               {successButtonText}
             </Button>
           </div>

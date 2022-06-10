@@ -13,7 +13,8 @@ describe("Test Markdown", () => {
     const wrapper = shallow(
       <ThemeProvider
         themes={{ [DEFAULT_LIGHT_THEME_NAME]: defaultLightTheme }}
-        defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
+        defaultThemeName={DEFAULT_LIGHT_THEME_NAME}
+      >
         <Markdown body={mockData.maliciousBodyText} />
       </ThemeProvider>
     );

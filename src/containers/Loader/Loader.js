@@ -77,7 +77,8 @@ const Loader = ({ children }) => {
         error,
         currentUser: user,
         apiInfo
-      }}>
+      }}
+    >
       {initDone && !error ? children : <LoaderScreen error={error} />}
     </LoaderContext.Provider>
   );

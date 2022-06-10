@@ -43,7 +43,8 @@ const ModalFullImage = ({ images, show, initialIndex = 0, ...props }) => {
       {...props}
       show={show}
       wrapperClassName={styles.wrapper}
-      contentClassName={styles.content}>
+      contentClassName={styles.content}
+    >
       <div className={styles.navigator}>
         <Card className={styles.navigatorCard}>
           {canNavigate && (

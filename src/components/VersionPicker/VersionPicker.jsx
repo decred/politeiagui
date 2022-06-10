@@ -24,13 +24,15 @@ const VersionPicker = ({ version, token, className, proposalState }) => {
       <Dropdown
         title={`version ${version}`}
         className={className}
-        itemsListClassName={className}>
+        itemsListClassName={className}
+      >
         {versionsOptions.map((v) => (
           <DropdownItem
             key={v}
             onClick={() => {
               onChangeVersion(v, version);
-            }}>
+            }}
+          >
             version {v}
           </DropdownItem>
         ))}

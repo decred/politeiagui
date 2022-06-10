@@ -30,7 +30,8 @@ const CompareVersionSelector = ({
       <Dropdown
         title={base ? `version ${base}` : ZERO_VERSION_ALIAS}
         className={styles.versionSelectorWrapper}
-        itemsListClassName={className}>
+        itemsListClassName={className}
+      >
         {versionsOptions.map(
           (v) =>
             compare > v && (
@@ -38,7 +39,8 @@ const CompareVersionSelector = ({
                 key={v}
                 onClick={() => {
                   onChange(BASE, v);
-                }}>
+                }}
+              >
                 {v ? `version ${v}` : ZERO_VERSION_ALIAS}
               </DropdownItem>
             )
@@ -52,7 +54,8 @@ const CompareVersionSelector = ({
       <Dropdown
         title={`version ${compare}`}
         className={styles.versionSelectorWrapper}
-        itemsListClassName={className}>
+        itemsListClassName={className}
+      >
         {versionsOptions.map((v) => {
           return (
             base < v && (

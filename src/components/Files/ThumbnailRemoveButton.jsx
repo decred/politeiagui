@@ -8,7 +8,8 @@ const RemoveButton = ({ file, onRemove }) => (
     onClick={(e) => {
       e.preventDefault();
       onRemove(file);
-    }}>
+    }}
+  >
     &times;
   </button>
 );

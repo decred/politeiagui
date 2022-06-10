@@ -66,7 +66,8 @@ const DatePickerField = ({
         return (
           <div
             className={classNames("cursor-pointer", className)}
-            data-testid="datepicker">
+            data-testid="datepicker"
+          >
             <DatePickerV2
               tabIndex={tabIndex}
               show={isOpen}
@@ -75,13 +76,15 @@ const DatePickerField = ({
               value={value}
               lang={MONTHS_LABELS}
               onChange={onDateChange}
-              onDismiss={onDismiss}>
+              onDismiss={onDismiss}
+            >
               <Row
                 className={styles.box}
                 justify="space-between"
                 align="center"
                 noMargin
-                onClick={togglePicker}>
+                onClick={togglePicker}
+              >
                 {value && formattedValue()}
                 {!value && (
                   <Text className={styles.placeholder}>{placeholder}</Text>

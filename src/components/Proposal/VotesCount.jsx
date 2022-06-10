@@ -28,7 +28,8 @@ const VotesCount = ({
             <div>
               <Text
                 className={classNames(styles.votesLeft, styles.quorumReached)}
-                size="small">
+                size="small"
+              >
                 {votesLeft > 0
                   ? `${votesLeft} votes until quorum`
                   : "quorum reached!"}

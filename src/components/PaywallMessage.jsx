@@ -27,7 +27,8 @@ const PaywallMessage = ({ wrapper, ...props }) => {
           <Button
             onClick={openPaywallModal}
             className="margin-top-m"
-            data-testid="registration-fee-btn">
+            data-testid="registration-fee-btn"
+          >
             Pay the registration fee
           </Button>
         </WrapperComponent>

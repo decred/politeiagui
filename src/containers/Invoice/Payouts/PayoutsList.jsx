@@ -20,7 +20,8 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
   const actions = hasPayouts && (
     <Button
       className={classNames("cursor-pointer", styles.payBtn)}
-      onClick={onPay}>
+      onClick={onPay}
+    >
       Set invoices to paid
     </Button>
   );
@@ -70,7 +71,8 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                         truncate
                         id={`payment-address-${approvedtime}`}
                         className={styles.copyableText}
-                        tooltipPlacement={"left"}>
+                        tooltipPlacement={"left"}
+                      >
                         {address}
                       </CopyableText>
                     )
@@ -88,7 +90,8 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                 "Exchange Rate(USD)",
                 "Total Payment(DCR)",
                 "Address"
-              ]}></Table>
+              ]}
+            ></Table>
             <Row noMargin justify="right">
               <ExportToCsv
                 data={payouts.map(
@@ -137,7 +140,8 @@ const PayoutsList = ({ TopBanner, PageDetails, Main }) => {
                   "address",
                   "dcrtotal"
                 ]}
-                filename="payouts">
+                filename="payouts"
+              >
                 <Link className="cursor-pointer">Export To Csv</Link>
               </ExportToCsv>
             </Row>

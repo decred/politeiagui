@@ -27,7 +27,8 @@ const DraftsButton = () => {
       <Button
         kind="secondary"
         onClick={openDraftsModal}
-        data-testid="proposal-new-draft-button">
+        data-testid="proposal-new-draft-button"
+      >
         Drafts
       </Button>
     )

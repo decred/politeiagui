@@ -9,7 +9,8 @@ const PrivateKeyDownloadManager = ({ keyData }) => {
         style={{ marginRight: "1.7rem" }}
         filename="politeia-pki.json"
         mime="application/json;charset=utf-8"
-        data={keyData}>
+        data={keyData}
+      >
         <Button size="sm">Download Identity</Button>
       </FileDownloadLink>
     </>

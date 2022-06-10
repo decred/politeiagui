@@ -65,13 +65,15 @@ const ModalBuyProposalCredits = ({
       show={show}
       onClose={customOnClose}
       title="Purchase Proposal Credits"
-      contentStyle={{ width: "100%" }}>
+      contentStyle={{ width: "100%" }}
+    >
       <FormWrapper
         initialValues={{
           creditsNumber: "1"
         }}
         validationSchema={validationSchema}
-        onSubmit={handleGoToPaymentDetails}>
+        onSubmit={handleGoToPaymentDetails}
+      >
         {({
           Form,
           ErrorMessage,
@@ -105,7 +107,8 @@ const ModalBuyProposalCredits = ({
                 </Button>
                 <Button
                   kind={(disableNext && "disabled") || "primary"}
-                  type="submit">
+                  type="submit"
+                >
                   Next
                 </Button>
               </div>

@@ -33,7 +33,8 @@ const DateTooltip = ({
           {additionInfo && <p>{additionInfo}</p>}
         </>
       }
-      placement={placement}>
+      placement={placement}
+    >
       {children({ timeAgo })}
     </Tooltip>
   );

@@ -84,7 +84,8 @@ const Identity = ({ history, loadingKey, user }) => {
     <Card className="margin-bottom-m" paddingSize="small">
       <Text
         weight="semibold"
-        className={classNames(styles.fieldHeading, styles.block)}>
+        className={classNames(styles.fieldHeading, styles.block)}
+      >
         Public key
       </Text>
       {shouldAutoVerifyKey && updateUserKeyToken ? (
@@ -95,7 +96,8 @@ const Identity = ({ history, loadingKey, user }) => {
               history.push(
                 `/user/key/verify?verificationtoken=${updateUserKeyToken}`
               )
-            }>
+            }
+          >
             Auto verify key
           </Button>
         </DevelopmentOnlyContent>
@@ -121,7 +123,8 @@ const Identity = ({ history, loadingKey, user }) => {
             styles.block,
             "margin-bottom-s",
             "margin-top-s"
-          )}>
+          )}
+        >
           <P>
             Your public and private keys constitute your identity. The private
             key is used to sign your proposals, comments and any up/down votes

@@ -13,7 +13,8 @@ const TableButton = ({ onClick, disabled, children }) => {
             styles.tableButton,
             disabled && styles.tableButtonDisabled
           )}
-          onClick={!disabled ? onClick : () => null}>
+          onClick={!disabled ? onClick : () => null}
+        >
           {children}
         </span>
       )}

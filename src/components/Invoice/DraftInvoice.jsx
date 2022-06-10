@@ -22,7 +22,8 @@ const DraftInvoice = ({ draft, onDelete }) => {
                   id={`invoice-${draftId}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={`/invoices/new?draft=${draftId}`}>
+                  url={`/invoices/new?draft=${draftId}`}
+                >
                   {presentationalDraftInvoiceName(draft)}
                 </Title>
               }
@@ -32,7 +33,8 @@ const DraftInvoice = ({ draft, onDelete }) => {
                     kind="secondary"
                     size="sm"
                     className={styles.deleteDraft}
-                    onClick={handleDeleteDraft}>
+                    onClick={handleDeleteDraft}
+                  >
                     Delete
                   </Button>
                 </Status>

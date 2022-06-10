@@ -39,7 +39,8 @@ const AdminActionsProvider = ({ children }) => {
       value={{
         onReject: handleOpenRejectModal,
         onApprove: handleOpenApproveModal
-      }}>
+      }}
+    >
       {children}
     </adminDccsActionsContext.Provider>
   );

@@ -52,7 +52,8 @@ const InvoiceForm = React.memo(function InvoiceForm({
     <Button
       type="submit"
       kind={!isValid ? "disabled" : "primary"}
-      loading={isSubmitting}>
+      loading={isSubmitting}
+    >
       Submit
     </Button>
   );
@@ -285,7 +286,8 @@ const InvoiceFormWrapper = ({
       onSubmit={handleSubmit}
       initialValues={formInitialValues}
       isInitialValid={isInitialValid}
-      validationSchema={invoiceFormValidation}>
+      validationSchema={invoiceFormValidation}
+    >
       {(props) => (
         <InvoiceForm
           {...{

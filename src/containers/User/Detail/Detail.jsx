@@ -186,7 +186,8 @@ const UserDetail = ({
         onSelectTab={onSetIndex}
         className={isMobileScreen ? "padding-bottom-s" : ""}
         activeTabIndex={index}
-        mode={isMobileScreen ? "dropdown" : "horizontal"}>
+        mode={isMobileScreen ? "dropdown" : "horizontal"}
+      >
         {tabLabels.map((label) => (
           <Tab key={`tab-${label}`} label={label} />
         ))}
@@ -219,14 +220,16 @@ const UserDetail = ({
                 <Link
                   href="#"
                   onClick={handleOpenChangeUsernameModal}
-                  className={styles.titleLink}>
+                  className={styles.titleLink}
+                >
                   Change Username
                 </Link>
               )}
             </div>
           }
           subtitle={user.email}
-          actionsContent={null}>
+          actionsContent={null}
+        >
           {tabs}
         </PageDetails>
       </TopBanner>

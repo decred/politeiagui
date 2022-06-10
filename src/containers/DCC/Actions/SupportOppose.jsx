@@ -95,7 +95,8 @@ const SupportOpposeActions = ({ dcc, token, className, buttonsClassName }) => {
             className={classNames(
               "margin-top-s justify-right",
               buttonsClassName
-            )}>
+            )}
+          >
             {supportButton}
             {opposeButton}
           </div>

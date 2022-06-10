@@ -65,7 +65,8 @@ const MDGuideTable = () => {
           className={classNames(
             styles.codeBlock,
             isDarkTheme && styles.darkCodeBlock
-          )}>
+          )}
+        >
           if 1 * 2 != 3:
           <br />
           return false
@@ -100,7 +101,8 @@ const ModalMDGuide = ({ title = "Formatting Help", onClose, ...props }) => {
       onClose={onClose}
       {...props}
       contentStyle={{ width: "100%" }}
-      titleStyle={{ paddingRight: "4rem" }}>
+      titleStyle={{ paddingRight: "4rem" }}
+    >
       <MDGuideTable />
     </Modal>
   );

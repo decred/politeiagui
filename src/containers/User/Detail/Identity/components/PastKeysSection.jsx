@@ -32,7 +32,8 @@ export default ({ pastIdentities }) => {
           styles.fieldHeading,
           "margin-bottom-s",
           "margin-top-l"
-        )}>
+        )}
+      >
         Past public keys
       </Text>
       <P>
