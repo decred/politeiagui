@@ -5,6 +5,7 @@ import { appSetup, store } from "@politeiagui/core";
 // Plugins
 import TicketvotePlugin from "@politeiagui/ticketvote";
 import UiPlugin from "@politeiagui/common-ui";
+import CommentsPlugin from "@politeiagui/comments";
 // Test-plugins
 import { LogPlugin } from "./plugins/log";
 // Pages
@@ -72,14 +73,23 @@ async function TestApp() {
   // ticketvote inventory on home page by proxying the "/ticketvote/inventory"
   // route to "/", and we should have it all ready to play on "/"
   const pluginsProxyMap = {
-    "/": ["/ticketvote/inventory", "/ticketvote/summaries"],
-    "/record/:id": ["/ticketvote/timestamps", "/ticketvote/summaries"],
-    "/app": ["/log/store", "/ticketvote/inventory", "/ticketvote/summaries"],
+    "/": ["/ticketvote/inventory", "/ticketvote/summaries", "/comments"],
+    "/record/:id": [
+      "/ticketvote/timestamps",
+      "/ticketvote/summaries",
+      "/comments/details",
+    ],
+    "/app": [
+      "/log/store",
+      "/ticketvote/inventory",
+      "/ticketvote/summaries",
+      "/comments",
+    ],
   };
 
   const App = await appSetup({
     // Log plugin is a test plugin, defined locally on the test-app shell
-    plugins: [TicketvotePlugin, LogPlugin, UiPlugin],
+    plugins: [TicketvotePlugin, LogPlugin, UiPlugin, CommentsPlugin],
     pluginsProxyMap,
     viewRoutes,
   });
