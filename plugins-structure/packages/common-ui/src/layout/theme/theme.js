@@ -9,6 +9,7 @@ import {
   useTheme,
 } from "pi-ui";
 import { selectCurrentTheme } from "./themeSlice";
+import "pi-ui/dist/index.css";
 import "./theme.css";
 
 const themes = {
