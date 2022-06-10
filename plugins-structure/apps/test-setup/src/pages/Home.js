@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ticketvote } from "@politeiagui/ticketvote";
+import { RecordCard } from "@politeiagui/common-ui";
 
 export const Home = () => {
   const dispatch = useDispatch();
@@ -26,35 +27,17 @@ export const Home = () => {
     <div>
       <h1>Home Page</h1>
       <h3>Started</h3>
-      <ol>
-        {started.map((t, i) => (
-          <li key={i}>
-            <a data-link href={`/record/${t}`}>
-              {t}
-            </a>
-          </li>
-        ))}
-      </ol>
+      {started.map((t, i) => (
+        <RecordCard title={t} titleLink={`/record/${t}`} key={i} />
+      ))}
       <h3>Authorized</h3>
-      <ol>
-        {authorized.map((t, i) => (
-          <li key={i}>
-            <a data-link href={`/record/${t}`}>
-              {t}
-            </a>
-          </li>
-        ))}
-      </ol>
+      {authorized.map((t, i) => (
+        <RecordCard title={t} titleLink={`/record/${t}`} key={i} />
+      ))}
       <h3>Unauthorized</h3>
-      <ol>
-        {unauthorized.map((t, i) => (
-          <li key={i}>
-            <a data-link href={`/record/${t}`}>
-              {t}
-            </a>
-          </li>
-        ))}
-      </ol>
+      {unauthorized.map((t, i) => (
+        <RecordCard title={t} titleLink={`/record/${t}`} key={i} />
+      ))}
     </div>
   );
 };

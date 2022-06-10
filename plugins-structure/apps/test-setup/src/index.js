@@ -4,10 +4,13 @@ import { Provider } from "react-redux";
 import { appSetup, store } from "@politeiagui/core";
 // Plugins
 import TicketvotePlugin from "@politeiagui/ticketvote";
+import UiPlugin from "@politeiagui/common-ui";
 // Test-plugins
 import { LogPlugin } from "./plugins/log";
 // Pages
 import { Details, Home } from "./pages";
+// Theme
+import { UiTheme } from "@politeiagui/common-ui/layout";
 
 const root = document.querySelector("#root");
 
@@ -25,8 +28,10 @@ const viewRoutes = [
     view: async () => {
       return ReactDOM.render(
         <Provider store={store}>
-          <Header />
-          <Home />
+          <UiTheme>
+            <Header />
+            <Home />
+          </UiTheme>
         </Provider>,
         root
       );
@@ -49,8 +54,10 @@ const viewRoutes = [
     view: (params) =>
       ReactDOM.render(
         <Provider store={store}>
-          <Header />
-          <Details token={params.id} />
+          <UiTheme>
+            <Header />
+            <Details token={params.id} />
+          </UiTheme>
         </Provider>,
         root
       ),
@@ -72,7 +79,7 @@ async function TestApp() {
 
   const App = await appSetup({
     // Log plugin is a test plugin, defined locally on the test-app shell
-    plugins: [TicketvotePlugin, LogPlugin],
+    plugins: [TicketvotePlugin, LogPlugin, UiPlugin],
     pluginsProxyMap,
     viewRoutes,
   });
