@@ -30,7 +30,8 @@ const SignupForm = () => {
         initialValues={initialValues}
         loading={!validationSchema}
         validationSchema={validationSchema}
-        onSubmit={handleSubmitAction}>
+        onSubmit={handleSubmitAction}
+      >
         {({
           Form,
           Title,
@@ -147,12 +148,14 @@ const SignupForm = () => {
         }
       </FormWrapper>
       <DevelopmentOnlyContent
-        show={signupResponse && signupResponse.verificationtoken}>
+        show={signupResponse && signupResponse.verificationtoken}
+      >
         <RouterLink
           to={`/user/verify?email=${email}&verificationtoken=${
             signupResponse && signupResponse.verificationtoken
           }&username=${username}
-          `}>
+          `}
+        >
           Verify email
         </RouterLink>
       </DevelopmentOnlyContent>

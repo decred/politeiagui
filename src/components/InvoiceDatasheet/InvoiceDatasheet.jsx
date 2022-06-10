@@ -31,7 +31,8 @@ export const SheetRenderer = ({ headers, ...props }) => (
           <th
             key={`header-${idx}`}
             className={styles.tableHeadCell}
-            style={{ minWidth: col.width, width: col.width }}>
+            style={{ minWidth: col.width, width: col.width }}
+          >
             {col.value}
           </th>
         ))}
@@ -243,7 +244,8 @@ const InvoiceDatasheet = React.memo(function InvoiceDatasheet({
           <TableButton onClick={handleAddNewRow}>Add item</TableButton>
           <TableButton
             disabled={removeRowsIsDisabled}
-            onClick={handleRemoveLastRow}>
+            onClick={handleRemoveLastRow}
+          >
             Remove item
           </TableButton>
         </div>

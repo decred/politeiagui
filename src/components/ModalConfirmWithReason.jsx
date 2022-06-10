@@ -79,7 +79,8 @@ const ModalConfirmWithReason = ({
             backgroundColor={successIconBgColor}
           />
         )
-      }>
+      }
+    >
       {!success && (
         <P style={{ marginBottom: "20px" }}>
           Please, provide a reason for this action.
@@ -93,7 +94,8 @@ const ModalConfirmWithReason = ({
           validationSchema={Yup.object().shape({
             reason: Yup.string().required("Required")
           })}
-          onSubmit={onSubmitReason}>
+          onSubmit={onSubmitReason}
+        >
           {({
             Form,
             Actions,
@@ -125,7 +127,8 @@ const ModalConfirmWithReason = ({
                 <Button
                   data-testid="reason-confirm"
                   loading={isSubmitting}
-                  type="submit">
+                  type="submit"
+                >
                   Confirm
                 </Button>
               </Actions>
@@ -139,7 +142,8 @@ const ModalConfirmWithReason = ({
           <div className="justify-right margin-top-m">
             <Button
               data-testid="reason-confirm-success"
-              onClick={onCloseSuccess || onClose}>
+              onClick={onCloseSuccess || onClose}
+            >
               Ok
             </Button>
           </div>

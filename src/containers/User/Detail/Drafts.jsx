@@ -9,7 +9,8 @@ const Drafts = () => {
     <Tabs
       mode="dropdown"
       onSelectTab={setActiveTabIndex}
-      activeTabIndex={activeTabIndex}>
+      activeTabIndex={activeTabIndex}
+    >
       <Tab label="Invoices">
         <UserDraftInvoices />
       </Tab>

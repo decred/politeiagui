@@ -66,7 +66,8 @@ const ProposalBillingSummary = ({ TopBanner, PageDetails, Main }) => {
                 Proposal: (
                   <Link
                     to={`/admin/proposalsbilling/${token}`}
-                    className={styles.titleLink}>
+                    className={styles.titleLink}
+                  >
                     {title}
                   </Link>
                 ),

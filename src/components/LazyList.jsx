@@ -47,7 +47,8 @@ const LazyList = ({
         pageStart={pageStart}
         loadMore={onFetchMore}
         initialLoad={initialLoad}
-        hasMore={hasMore}>
+        hasMore={hasMore}
+      >
         {items.map(renderItem)}
       </InfiniteScroll>
       {isLoading ? (

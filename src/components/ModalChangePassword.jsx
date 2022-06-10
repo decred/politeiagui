@@ -62,7 +62,8 @@ const ModalChangePassword = ({
         )
       }
       show={show}
-      onClose={onClose}>
+      onClose={onClose}
+    >
       {!success && (
         <FormWrapper
           initialValues={{
@@ -72,7 +73,8 @@ const ModalChangePassword = ({
           }}
           onSubmit={onSubmitChangePassword}
           loading={!validationSchema}
-          validationSchema={validationSchema}>
+          validationSchema={validationSchema}
+        >
           {({
             Form,
             Actions,
@@ -130,7 +132,8 @@ const ModalChangePassword = ({
                   <Button
                     loading={isSubmitting}
                     kind={canSubmit ? "primary" : "disabled"}
-                    type="submit">
+                    type="submit"
+                  >
                     Change Password
                   </Button>
                 </Actions>

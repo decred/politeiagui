@@ -31,7 +31,8 @@ export const ThumbnailGrid = ({
       <Row
         className={styles.thumbnailGrid}
         justify="left"
-        topMarginSize={errors ? "s" : "m"}>
+        topMarginSize={errors ? "s" : "m"}
+      >
         {files.map((f, key) =>
           f.mime.includes("image") ? (
             <ImageThumbnail

@@ -12,7 +12,8 @@ const headingRenderer = ({ level, children }) => {
   return (
     <Heading
       style={{ marginBottom: "1.7rem" }}
-      className={styles.markdownHeadings}>
+      className={styles.markdownHeadings}
+    >
       {children}
     </Heading>
   );

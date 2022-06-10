@@ -76,7 +76,8 @@ const PageDetails = ({
         id="page-title"
         truncate
         linesBeforeTruncate={2}
-        className={styles.pageDetailsTitle}>
+        className={styles.pageDetailsTitle}
+      >
         {title}
       </H1>
     ) : (
@@ -85,18 +86,21 @@ const PageDetails = ({
   return (
     <PageDetailsUI
       className={classNames(styles.customPageDetails, className)}
-      {...props}>
+      {...props}
+    >
       <div className={classNames(styles.pageDetailsHeader, headerClassName)}>
         <div
           className={classNames(
             styles.titleAndSubtitleWrapper,
             titleAndSubtitleWrapperClassName
-          )}>
+          )}
+        >
           {titleContent}
           {!!subtitle && <Subtitle>{subtitle}</Subtitle>}
         </div>
         <div
-          className={classNames(styles.pageDetailsActions, actionsClassName)}>
+          className={classNames(styles.pageDetailsActions, actionsClassName)}
+        >
           {actionsContent}
         </div>
       </div>

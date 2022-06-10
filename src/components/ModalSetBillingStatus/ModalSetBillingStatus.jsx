@@ -104,12 +104,14 @@ const ModalSetBillingStatus = ({
             size={26}
           />
         )
-      }>
+      }
+    >
       {!success ? (
         <FormWrapper
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={onSubmitSetBillingStatus}>
+          onSubmit={onSubmitSetBillingStatus}
+        >
           {({
             Form,
             Actions,
@@ -165,7 +167,8 @@ const ModalSetBillingStatus = ({
                     data-testid="set-billing-status"
                     loading={isSubmitting}
                     kind={isValid ? "primary" : "disabled"}
-                    type="submit">
+                    type="submit"
+                  >
                     Set Billing Status
                   </Button>
                 </Actions>

@@ -12,7 +12,8 @@ const PageInvoiceEdit = ({ history, match }) => {
       type="button"
       kind="secondary"
       size={mobile ? "sm" : "md"}
-      onClick={() => history.push(`/invoices/${match.params.token}`)}>
+      onClick={() => history.push(`/invoices/${match.params.token}`)}
+    >
       Cancel
     </Button>
   );

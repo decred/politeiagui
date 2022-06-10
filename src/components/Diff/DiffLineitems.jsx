@@ -97,14 +97,13 @@ const DiffLineitems = ({ lineItems, proposals }) => {
             line.added && !isDarkTheme && styles.lineitemsAdded,
             line.removed && isDarkTheme && styles.lineitemsRemovedDark,
             line.removed && !isDarkTheme && styles.lineitemsRemoved
-          )}>
+          )}
+        >
           {line.items.map((item, idx) => (
             <td
               key={idx}
-              className={classNames(
-                "cell",
-                item.multiline && styles.multiline
-              )}>
+              className={classNames("cell", item.multiline && styles.multiline)}
+            >
               {item.value}
             </td>
           ))}

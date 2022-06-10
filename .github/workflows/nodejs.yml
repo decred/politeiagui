@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [16.x, 18.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -26,10 +26,7 @@ jobs:
       - name: pretty diff
         run: yarn prettify:diff
       - name: tests
-        run: |
-          yarn run uidev &
-          yarn test
-          scripts/serverUpChecker.sh
+        run: yarn test
         env:
           CI: true
       - name: build

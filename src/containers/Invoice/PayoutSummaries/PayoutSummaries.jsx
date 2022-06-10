@@ -77,7 +77,8 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
                         truncate
                         id={`invoice-token-${token}`}
                         className={styles.copyableText}
-                        tooltipPlacement={"left"}>
+                        tooltipPlacement={"left"}
+                      >
                         {token}
                       </CopyableText>
                     ),
@@ -89,7 +90,8 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
                         truncate
                         id={`proposal-token-${proposaltoken}`}
                         className={styles.copyableText}
-                        tooltipPlacement={"left"}>
+                        tooltipPlacement={"left"}
+                      >
                         {proposaltoken}
                       </CopyableText>
                     ),
@@ -113,7 +115,8 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
                 "Total(USD)",
                 "Paid Date",
                 "Amount Received(DCR)"
-              ]}></Table>
+              ]}
+            ></Table>
             <Row noMargin justify="right">
               <ExportToCsv
                 data={lineItemPayouts}
@@ -130,7 +133,8 @@ const InvoicePayoutsList = ({ TopBanner, PageDetails, Main }) => {
                   "paiddate",
                   "amountreceived"
                 ]}
-                filename="payouts">
+                filename="payouts"
+              >
                 <Link className="cursor-pointer">Export To Csv</Link>
               </ExportToCsv>
             </Row>

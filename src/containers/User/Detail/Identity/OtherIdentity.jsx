@@ -30,7 +30,8 @@ const OtherIdentity = ({ loadingKey, user }) => {
       <Text
         color="grayDark"
         weight="semibold"
-        className={classNames(styles.fieldHeading, styles.block)}>
+        className={classNames(styles.fieldHeading, styles.block)}
+      >
         Public key
       </Text>
       <PublicKeyText pubkey={pubkey} />

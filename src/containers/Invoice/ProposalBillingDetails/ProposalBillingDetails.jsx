@@ -27,7 +27,8 @@ const SubContractorReference = ({ username = "", userid = "", value }) => {
     <div
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
-      className={styles.value}>
+      className={styles.value}
+    >
       {value}*
       {show && (
         <Link className={styles.reference} to={`/user/${userid}`}>
@@ -202,7 +203,8 @@ const ProposalBillingDetails = ({ TopBanner, PageDetails, Main, match }) => {
                 "totalusd",
                 "invoice"
               ]}
-              filename="proposal_details.csv">
+              filename="proposal_details.csv"
+            >
               <PiLink className="cursor-pointer">Export To Csv</PiLink>
             </ExportToCsv>
             <H3 className={styles.totalText}>

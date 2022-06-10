@@ -14,7 +14,8 @@ const CommentsList = ({
       numOfReplies={(comment.children && comment.children.length) || 0}
       isFlatMode={isFlatMode}
       recordBaseLink={recordBaseLink}
-      proposalState={proposalState}>
+      proposalState={proposalState}
+    >
       <CommentsList
         comments={comment.children}
         proposalState={proposalState}

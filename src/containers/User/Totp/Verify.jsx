@@ -57,7 +57,8 @@ const VerifyTotp = ({
             kind={
               enableVerify ? (extended ? "primary" : "secondary") : "disabled"
             }
-            onClick={handleVerify}>
+            onClick={handleVerify}
+          >
             {buttonLabel}
           </Button>
         )}

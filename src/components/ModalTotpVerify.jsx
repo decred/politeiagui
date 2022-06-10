@@ -24,7 +24,8 @@ const ModalTotpVerifyContent = ({ onClose, onVerify }) => {
         <Message
           kind="error"
           data-testid="modal-totp-verify-error"
-          className="margin-bottom-m">
+          className="margin-bottom-m"
+        >
           {error.toString()}
         </Message>
       )}

@@ -35,11 +35,13 @@ const CheckboxGroupField = ({ groupName, options }) => {
       <Dropdown
         closeOnItemClick={false}
         title="Filter by status"
-        className={styles.groupDropdown}>
+        className={styles.groupDropdown}
+      >
         {elements.map((el, idx) => (
           <DropdownItem
             key={`checkbox-${idx}`}
-            className={styles.groupDropdownItem}>
+            className={styles.groupDropdownItem}
+          >
             {el}
           </DropdownItem>
         ))}

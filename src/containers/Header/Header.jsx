@@ -23,7 +23,8 @@ const Header = ({ noBorder }) => {
     <UIHeader className={classNames(noBorder && styles.noBorder)}>
       <NavLink
         to={url}
-        className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}>
+        className={extrasmall && showMenu ? styles.hideLogo : styles.showLogo}
+      >
         <Logo />
       </NavLink>
       {small ? (

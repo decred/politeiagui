@@ -11,7 +11,8 @@ const VotesList = ({ options, currentID }) => (
         <Card
           key={op.value}
           marker={op.value === currentID}
-          className={styles.card}>
+          className={styles.card}
+        >
           <Link to={`/user/${op.value}`}>{op.label}</Link>
         </Card>
       ))

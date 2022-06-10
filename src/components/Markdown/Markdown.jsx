@@ -19,7 +19,8 @@ const MarkdownRenderer = ({
       unwrapDisallowed={true}
       remarkPlugins={[gfm]}
       components={customComponents(renderImages)}
-      disallowedElements={disallowedElements}>
+      disallowedElements={disallowedElements}
+    >
       {body}
     </ReactMarkdown>
   </div>

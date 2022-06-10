@@ -15,7 +15,8 @@ import {
 const ContextLink = React.memo(({ parentid, recordToken }) => (
   <Link
     className={styles.contextLink}
-    to={`/record/${recordToken}/comments/${parentid}`}>
+    to={`/record/${recordToken}/comments/${parentid}`}
+  >
     see in context
   </Link>
 ));
@@ -260,7 +261,8 @@ const CommentWrapper = ({
         handleSubmitComment={handleSubmitComment}
         handleToggleReplyForm={handleToggleReplyForm}
         handleCommentSubmitted={handleCommentSubmitted}
-        isThread={isThread}>
+        isThread={isThread}
+      >
         <Replies>{children}</Replies>
       </CommentContent>
     </>

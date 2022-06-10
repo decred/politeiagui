@@ -9,7 +9,8 @@ export const TextThumbnail = ({ file, viewOnly, onRemove }) => (
     className={classNames(
       styles.fileThumbnailWrapper,
       viewOnly && styles.marginRight
-    )}>
+    )}
+  >
     <div className={styles.fileThumbnail}>
       <P className={styles.fileThumbnailText}>.txt</P>
     </div>

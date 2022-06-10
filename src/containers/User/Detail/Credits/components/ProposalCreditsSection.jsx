@@ -9,7 +9,8 @@ export default ({ proposalCredits, proposalCreditPrice }) => {
     <div className={classNames(styles.block, "margin-top-l")}>
       <div className={styles.blockDetails}>
         <Text
-          className={classNames(styles.title, isDarkTheme && styles.darkTitle)}>
+          className={classNames(styles.title, isDarkTheme && styles.darkTitle)}
+        >
           Proposal Credits
         </Text>
         <Text
@@ -17,7 +18,8 @@ export default ({ proposalCredits, proposalCreditPrice }) => {
           className={classNames(
             styles.status,
             "margin-top-xs margin-bottom-xs"
-          )}>
+          )}
+        >
           {proposalCredits}
         </Text>
       </div>
@@ -26,7 +28,8 @@ export default ({ proposalCredits, proposalCreditPrice }) => {
           className={classNames(
             styles.descriptionParagraph,
             isDarkTheme && styles.darkDescriptionParagraph
-          )}>
+          )}
+        >
           <b>Proposal credits:</b> each proposal submission requires{" "}
           <b>1 proposal</b> credit which costs{" "}
           <b>exactly {proposalCreditPrice || 0.1} DCR</b>.

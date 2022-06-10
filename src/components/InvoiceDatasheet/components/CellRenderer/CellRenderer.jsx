@@ -37,7 +37,8 @@ const CellRenderer = ({
       onMouseDown={handleOnMouseDown}
       onMouseOver={handleOnMouseOver}
       onDoubleClick={onDoubleClick}
-      onContextMenu={onContextMenu}>
+      onContextMenu={onContextMenu}
+    >
       {children}
     </td>
   );

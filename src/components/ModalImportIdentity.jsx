@@ -117,7 +117,8 @@ const ModalImportIdentity = ({
             backgroundColor={successIconBgColor}
           />
         )
-      }>
+      }
+    >
       {!success ? (
         <FormWrapper
           initialValues={{
@@ -125,7 +126,8 @@ const ModalImportIdentity = ({
             secretKey: ""
           }}
           onSubmit={onSubmitNewIdentity}
-          validationSchema={validationSchema}>
+          validationSchema={validationSchema}
+        >
           {({
             Form,
             Actions,
@@ -158,17 +160,20 @@ const ModalImportIdentity = ({
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center"
-                  }}>
+                  }}
+                >
                   <ReactFileReader
                     base64
                     handleFiles={onSelectFiles(setFileError, setFieldValue)}
                     multipleFiles={false}
-                    fileTypes="json">
+                    fileTypes="json"
+                  >
                     <Button type="button">Upload json identity file</Button>
                   </ReactFileReader>
                   <Text
                     className="margin-top-l margin-bottom-m"
-                    color="grayDark">
+                    color="grayDark"
+                  >
                     Or paste in your own
                   </Text>
                 </div>
@@ -192,7 +197,8 @@ const ModalImportIdentity = ({
                   <Button
                     loading={isSubmitting}
                     kind={canSubmit ? "primary" : "disabled"}
-                    type="submit">
+                    type="submit"
+                  >
                     Update Identity
                   </Button>
                 </Actions>

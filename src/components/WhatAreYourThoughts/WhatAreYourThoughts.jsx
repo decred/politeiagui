@@ -21,7 +21,8 @@ const WhatAreYourThoughts = ({ onLoginClick, onSignupClick }) => {
           <Button
             kind="secondary"
             onClick={onLoginClick}
-            data-testid="wayt-login-button">
+            data-testid="wayt-login-button"
+          >
             Log in
           </Button>
         )}

@@ -56,7 +56,8 @@ const Credits = ({ user }) => {
         onClick={onRescanUserCredits}
         loading={isLoadingRescan}
         className="margin-top-s"
-        size="sm">
+        size="sm"
+      >
         Rescan
       </Button>
       <RescanSection

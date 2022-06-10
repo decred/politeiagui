@@ -38,7 +38,8 @@ const RequestVerificationEmailForm = () => {
           email: ""
         }}
         validationSchema={validationSchema}
-        onSubmit={handleSubmitAction}>
+        onSubmit={handleSubmitAction}
+      >
         {({
           Form,
           Title,

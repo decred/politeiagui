@@ -209,7 +209,8 @@ const PublicActionsProvider = ({ children, history }) => {
         onCensor: handleOpenCensorModal,
         onStartRunoffVote: handleStartRunoffVoteModal,
         onSetBillingStatus: handleSetBillingStatusModal
-      }}>
+      }}
+    >
       {children}
     </PublicProposalsActionsContext.Provider>
   );

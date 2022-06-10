@@ -65,7 +65,8 @@ const App = () => {
     <ThemeProvider
       themes={themes}
       defaultThemeName={DEFAULT_LIGHT_THEME_NAME}
-      fonts={fonts}>
+      fonts={fonts}
+    >
       <ReduxProvider>
         <Config>
           <Loader>

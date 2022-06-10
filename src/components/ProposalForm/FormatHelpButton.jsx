@@ -9,7 +9,8 @@ const FormatHelpButton = ({ isDarkTheme, openMDGuideModal }) => (
       styles.formatHelpButton,
       isDarkTheme && styles.darkButton
     )}
-    onClick={openMDGuideModal}>
+    onClick={openMDGuideModal}
+  >
     Formatting Help
   </Text>
 );

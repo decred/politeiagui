@@ -46,13 +46,15 @@ const ModalSearchVotes = ({ show, onClose, proposal }) => {
       show={show}
       onClose={onClose}
       title={`Search votes - ${proposal.name}`}
-      className={styles.searchVotesModal}>
+      className={styles.searchVotesModal}
+    >
       <Formik
         initialValues={{
           search: ""
         }}
         onSubmit={handleSubmit}
-        validationSchema={validationSchema}>
+        validationSchema={validationSchema}
+      >
         {(props) => {
           const {
             values,

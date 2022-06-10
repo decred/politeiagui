@@ -14,7 +14,8 @@ const NavigationDrawer = ({ show, fullScreen }) => {
           ? styles.navigationDrawerFullScreen
           : styles.navigationDrawer,
         show && styles.navigationDrawerShow
-      )}>
+      )}
+    >
       <div className={classNames(styles.navWrapper, "margin-bottom-s")}>
         <HeaderNav />
       </div>

@@ -56,7 +56,8 @@ const HeaderNav = ({ history }) => {
             <DropdownItem
               className={classNames(isActive && styles.activeDropdownItem)}
               key={`link-${idx}`}
-              onClick={onMenuItemClick(path)}>
+              onClick={onMenuItemClick(path)}
+            >
               {label}
             </DropdownItem>
           )
@@ -92,7 +93,8 @@ const HeaderNav = ({ history }) => {
       className={classNames(
         styles.loggedInContainer,
         !enableCredits && styles.noCreditsContainer
-      )}>
+      )}
+    >
       <ConfigFilter showIf={(config) => config.enableCredits}>
         <ProposalCreditsIndicator user={user} />
       </ConfigFilter>
@@ -103,7 +105,8 @@ const HeaderNav = ({ history }) => {
         )}
         itemsListClassName={styles.dropdownList}
         closeOnItemClick={false}
-        title={username}>
+        title={username}
+      >
         {menuItems}
         <DropdownItem onClick={onThemeToggleHandler}>
           <DarkLightToggle
@@ -117,7 +120,8 @@ const HeaderNav = ({ history }) => {
   ) : (
     <nav className={styles.navContainer}>
       <div
-        className={classNames(styles.themeToggleWrapper, styles.publicWrapper)}>
+        className={classNames(styles.themeToggleWrapper, styles.publicWrapper)}
+      >
         <DarkLightToggle
           onToggle={onThemeToggleHandler}
           toggled={themeName === DEFAULT_DARK_THEME_NAME}
@@ -128,7 +132,8 @@ const HeaderNav = ({ history }) => {
           <NavLink
             className={styles.navLink}
             activeClassName={styles.activeNavLink}
-            to="/user/login">
+            to="/user/login"
+          >
             <Text className={styles.navLinkText} data-testid="nav-login">
               Log in
             </Text>
@@ -136,7 +141,8 @@ const HeaderNav = ({ history }) => {
           <NavLink
             className={styles.navLink}
             activeClassName={styles.activeNavLink}
-            to="/user/signup">
+            to="/user/signup"
+          >
             <Text className={styles.navLinkText}>Sign up</Text>
           </NavLink>
         </div>

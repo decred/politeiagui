@@ -33,7 +33,8 @@ const PaymentFaucet = ({ address, amount, onFail = noop }) => {
           <Button
             className="margin-top-s"
             loading={isApiRequestingPayWithFaucet}
-            onClick={handlePayment}>
+            onClick={handlePayment}
+          >
             Pay with Faucet
           </Button>
         )}
@@ -51,7 +52,8 @@ const PaymentFaucet = ({ address, amount, onFail = noop }) => {
               id="transactionLink"
               truncate
               rel="noopener noreferrer"
-              className={styles.transactionIdLink}>
+              className={styles.transactionIdLink}
+            >
               {payWithFaucetTxId}
             </Link>
           </Message>
