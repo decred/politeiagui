@@ -1,23 +1,31 @@
-import ReactDOM from "react-dom";
-import RecordCommentsPage from "../dev/pages/RecordComments";
+import { store } from "@politeiagui/core";
+import { comments } from "../comments";
+import {
+  validateCommentsCountsPageSize,
+  validateCommentsTimestampsPageSize,
+  validateCommentsVotesPageSize,
+} from "../lib/validation";
+
+function fetchPolicyIfIdle() {
+  if (comments.policy.selectStatus(store.getState()) === "idle") {
+    return store.dispatch(comments.policy.fetch());
+  }
+}
 
 export const routes = [
   {
     path: "/comments",
-    view: RecordCommentsPage,
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    fetch: async () => {
+      await fetchPolicyIfIdle();
+      validateCommentsCountsPageSize(store.getState());
+    },
   },
   {
-    path: "/comments/:token",
-    view: RecordCommentsPage,
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
-  },
-  {
-    path: "/comments/:token/:userid",
-    view: RecordCommentsPage,
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    path: "/comments/details",
+    fetch: async () => {
+      await fetchPolicyIfIdle();
+      validateCommentsTimestampsPageSize(store.getState());
+      validateCommentsVotesPageSize(store.getState());
+    },
   },
 ];
