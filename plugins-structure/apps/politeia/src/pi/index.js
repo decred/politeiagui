@@ -1,7 +1,7 @@
 import policyReducer from "./policy/policySlice";
 import summariesReducer from "./summaries/summariesSlice";
 
-export * from "./constants";
+export * from "./lib/constants";
 export { piPolicy } from "./policy";
 export { piSummaries } from "./summaries";
 

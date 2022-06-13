@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import * as api from "../api";
-import { validatePiSummariesPageSize } from "../validation";
+import * as api from "../lib/api";
+import { validatePiSummariesPageSize } from "../lib/validation";
 
 export const initialState = {
   byToken: {},
