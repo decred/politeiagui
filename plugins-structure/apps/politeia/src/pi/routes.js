@@ -16,4 +16,10 @@ export const routes = [
       validatePiSummariesPageSize(store.getState());
     },
   },
+  {
+    path: "/pi/new",
+    fetch: async () => {
+      await fetchPolicyIfIdle();
+    },
+  },
 ];

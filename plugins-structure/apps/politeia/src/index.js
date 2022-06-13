@@ -22,6 +22,7 @@ async function PoliteiaApp() {
       "/ticketvote/summaries",
       "/comments/counts",
     ],
+    "/record/new": ["/pi/new"],
     "/record/:id": [
       "/ticketvote/timestamps",
       "/ticketvote/summaries",
