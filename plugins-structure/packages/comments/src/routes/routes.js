@@ -14,17 +14,23 @@ function fetchPolicyIfIdle() {
 
 export const routes = [
   {
-    path: "/comments",
+    path: "/comments/counts",
     fetch: async () => {
       await fetchPolicyIfIdle();
       validateCommentsCountsPageSize(store.getState());
     },
   },
   {
-    path: "/comments/details",
+    path: "/comments/timestamps",
     fetch: async () => {
       await fetchPolicyIfIdle();
       validateCommentsTimestampsPageSize(store.getState());
+    },
+  },
+  {
+    path: "/comments/votes",
+    fetch: async () => {
+      await fetchPolicyIfIdle();
       validateCommentsVotesPageSize(store.getState());
     },
   },
