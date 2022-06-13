@@ -4,7 +4,6 @@ import { records } from "@politeiagui/core/records";
 import { Details, Home } from "../pages";
 import homeReducer from "../pages/Home/homeSlice";
 import detailsReducer from "../pages/Details/detailsSlice";
-import { reducersArray as piReducers } from "../pi";
 import { createAppRoute } from "./utils";
 import { decodeProposalRecord } from "../components/Proposal/utils";
 
@@ -26,7 +25,7 @@ export const routes = [
   }),
   createAppRoute({
     path: "/record/:token",
-    reducers: [...piReducers, detailsReducerObj],
+    reducers: [detailsReducerObj],
     Component: Details,
   }),
   {
