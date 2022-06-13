@@ -47,21 +47,21 @@ function clickHandler(linkSelector) {
  *  linkSelector: string
  * }}
  */
-export async function appSetup({
+export function appSetup({
   plugins,
   pluginsProxyMap,
   viewRoutes,
   linkSelector = "[data-link]",
 }) {
+  // Initialize router with core routes.
+  let pluginsRoutes = coreRoutes;
   // Validate App Plugins
   plugins.every(validatePlugin);
   // Proxy plugin routes
   pluginsRouter.setupProxyMap(pluginsProxyMap);
-  // Initialize router with core routes.
-  let pluginsRoutes = coreRoutes;
   // Connect plugins reducers on store
   for (const plugin of plugins) {
-    if (plugin.reducers) await connectReducers(plugin.reducers);
+    if (plugin.reducers) connectReducers(plugin.reducers);
     if (plugin.routes) {
       pluginsRoutes = mergeRoutes(pluginsRoutes, plugin.routes);
     }
@@ -76,6 +76,10 @@ export async function appSetup({
         popStateHandler,
         clickHandler: clickHandler(linkSelector),
       });
+    },
+    async navigateTo(url) {
+      await pluginsRouter.navigateTo(url);
+      router.navigateTo(url);
     },
   };
 }
