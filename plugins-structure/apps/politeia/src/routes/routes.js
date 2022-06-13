@@ -1,8 +1,6 @@
 import ReactDOM from "react-dom";
 import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
-import { ticketvoteConstants } from "@politeiagui/ticketvote";
-import { commentsConstants } from "@politeiagui/comments";
 import { Details, Home } from "../pages";
 import homeReducer from "../pages/Home/homeSlice";
 import detailsReducer from "../pages/Details/detailsSlice";
@@ -23,23 +21,12 @@ const detailsReducerObj = {
 export const routes = [
   createAppRoute({
     path: "/",
-    requiredPolicies: ["records", "comments", "ticketvote"],
-    reducers: [
-      ...ticketvoteConstants.reducersArray,
-      ...commentsConstants.reducersArray,
-      homeReducerObj,
-    ],
+    reducers: [homeReducerObj],
     Component: Home,
   }),
   createAppRoute({
     path: "/record/:token",
-    requiredPolicies: ["pi", "comments", "ticketvote"],
-    reducers: [
-      ...ticketvoteConstants.reducersArray,
-      ...commentsConstants.reducersArray,
-      ...piReducers,
-      detailsReducerObj,
-    ],
+    reducers: [...piReducers, detailsReducerObj],
     Component: Details,
   }),
   {
