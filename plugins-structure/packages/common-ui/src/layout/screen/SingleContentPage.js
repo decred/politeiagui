@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export function SingleContentPage({ banner, children, className }) {
   return (
     <div>
-      {banner && <Row className={styles.banner}>{banner}</Row>}
+      {banner && <Row className={styles.singlePageBanner}>{banner}</Row>}
       <StaticContainer className={className}>{children}</StaticContainer>
     </div>
   );

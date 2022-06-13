@@ -3,7 +3,7 @@ import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteConstants } from "@politeiagui/ticketvote";
 import { commentsConstants } from "@politeiagui/comments";
-import { Details, Home } from "../pages";
+import { Details, Home, New } from "../pages";
 import { reducersArray as piReducers } from "../pi";
 import { createAppRoute } from "./utils";
 import { decodeProposalRecord } from "../components/Proposal/utils";
@@ -17,6 +17,12 @@ export const routes = [
       ...commentsConstants.reducersArray,
     ],
     Component: Home,
+  }),
+  createAppRoute({
+    path: "/record/new",
+    reducers: [...piReducers],
+    requiredPolicies: ["pi"],
+    Component: New,
   }),
   createAppRoute({
     path: "/record/:token",

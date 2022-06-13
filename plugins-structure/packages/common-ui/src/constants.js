@@ -12,3 +12,5 @@ export const MONTHS_LABELS = [
   "Nov",
   "Dec",
 ];
+
+export const INVALID_DATE_LABEL = "Invalid date";

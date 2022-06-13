@@ -5,7 +5,7 @@ export * from "./theme";
 export * from "./ThemeToggle";
 
 export const theme = {
-  reset: resetTheme,
   select: selectCurrentTheme,
   set: setCurrentTheme,
+  reset: resetTheme,
 };
