@@ -73,17 +73,18 @@ async function TestApp() {
   // ticketvote inventory on home page by proxying the "/ticketvote/inventory"
   // route to "/", and we should have it all ready to play on "/"
   const pluginsProxyMap = {
-    "/": ["/ticketvote/inventory", "/ticketvote/summaries", "/comments"],
+    "/": ["/ticketvote/inventory", "/ticketvote/summaries", "/comments/counts"],
     "/record/:id": [
       "/ticketvote/timestamps",
       "/ticketvote/summaries",
-      "/comments/details",
+      "/comments/timestamps",
+      "/comments/votes",
     ],
     "/app": [
       "/log/store",
       "/ticketvote/inventory",
       "/ticketvote/summaries",
-      "/comments",
+      "/comments/counts",
     ],
   };
 
