@@ -57,7 +57,7 @@ function proxyHandler(proxyMap) {
  */
 function configurePluginsRouter() {
   let routes = null;
-  let proxyMap;
+  let proxyMap = {};
 
   async function verifyMatches(pathname) {
     const routesProxy = new Proxy(routes, proxyHandler(proxyMap));
@@ -114,7 +114,7 @@ function configurePluginsRouter() {
     },
     cleanup() {
       routes = null;
-      proxyMap = undefined;
+      proxyMap = {};
     },
     /**
      * init initializes the router for given routes config
