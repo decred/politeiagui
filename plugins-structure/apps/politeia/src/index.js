@@ -38,15 +38,16 @@ async function PoliteiaApp() {
   });
 
   App.init();
+
+  return ReactDOM.render(
+    <Provider store={store}>
+      <UiTheme>
+        <Header />
+        <div id="root" />
+      </UiTheme>
+    </Provider>,
+    document.querySelector("#app-root")
+  );
 }
 
 PoliteiaApp();
-
-ReactDOM.render(
-  <Provider store={store}>
-    {/* TODO: Use header after connecting theme/ui plugin */}
-    {/* <Header /> */}
-    <div id="root"></div>
-  </Provider>,
-  document.querySelector("#app-root")
-);

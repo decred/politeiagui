@@ -1,5 +1,7 @@
 import { Plugin } from "@politeiagui/core";
 import { themeReducer } from "@politeiagui/common-ui/layout";
+// Apply styles once theme is imported.
+import "pi-ui/dist/index.css";
 
 // UiPlugin Interface
 const UiPlugin = Plugin({

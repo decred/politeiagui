@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Navbar,
-  ThemeToggle,
-  UiTheme,
-  theme,
-} from "@politeiagui/common-ui/layout";
+import { Navbar, ThemeToggle, theme } from "@politeiagui/common-ui/layout";
 import { useSelector } from "react-redux";
 import { DEFAULT_DARK_THEME_NAME, Text } from "pi-ui";
 import LogoLight from "../../public/assets/images/pi-logo-light.svg";
@@ -22,13 +17,11 @@ function PoliteiaLogo() {
 
 function Header() {
   return (
-    <UiTheme>
-      <Navbar logo={<PoliteiaLogo />} drawerContent={<About />}>
-        <ThemeToggle />
-        <a href="/user/login">Log in</a>
-        <a href="/user/signup">Sign up</a>
-      </Navbar>
-    </UiTheme>
+    <Navbar logo={<PoliteiaLogo />} drawerContent={<About />}>
+      <ThemeToggle />
+      <a href="/user/login">Log in</a>
+      <a href="/user/signup">Sign up</a>
+    </Navbar>
   );
 }
 
