@@ -1,89 +1,52 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
-import { Header } from "./components";
 import { Provider } from "react-redux";
-import { connectReducers, store } from "@politeiagui/core";
-import { themeReducer } from "@politeiagui/common-ui/layout";
-import { api } from "@politeiagui/core/api";
-import { router } from "@politeiagui/core/router";
-import { routes as coreRoutes } from "@politeiagui/core/routes";
-import { routes as statisticsRoutes } from "@politeiagui/statistics";
-import { routes as ticketvoteRoutes } from "@politeiagui/ticketvote";
-import { routes as proposalsRoutes } from "./routes";
-import { mergeRoutes } from "./utils/mergeRoutes";
+import { appSetup, store } from "@politeiagui/core";
+// Plugins
+import TicketvotePlugin from "@politeiagui/ticketvote";
+import UiPlugin from "@politeiagui/common-ui";
+import CommentsPlugin from "@politeiagui/comments";
+import PiPlugin from "./pi";
+// App Routes
+import { routes } from "./routes";
+// Theme
+import { UiTheme } from "@politeiagui/common-ui/layout";
+// Components
+import { Header } from "./components";
 
-import {
-  DEFAULT_DARK_THEME_NAME,
-  DEFAULT_LIGHT_THEME_NAME,
-  ThemeProvider,
-  defaultDarkTheme,
-  defaultLightTheme,
-} from "pi-ui";
-import "pi-ui/dist/index.css";
+async function PoliteiaApp() {
+  const pluginsProxyMap = {
+    "/": [
+      "/records/batch",
+      "/ticketvote/inventory",
+      "/ticketvote/summaries",
+      "/comments/counts",
+    ],
+    "/record/:id": [
+      "/ticketvote/timestamps",
+      "/ticketvote/summaries",
+      "/comments/timestamps",
+      "/comments/votes",
+      "/pi/summaries",
+    ],
+  };
 
-const appRoot = document.querySelector("#app-root");
+  const App = await appSetup({
+    plugins: [TicketvotePlugin, UiPlugin, CommentsPlugin, PiPlugin],
+    pluginsProxyMap,
+    viewRoutes: routes,
+  });
 
-const themes = {
-  [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
-  [DEFAULT_DARK_THEME_NAME]: { ...defaultDarkTheme },
-};
-
-// Define an element where the routes will be rendered
-// Initialize router
-function App() {
-  useEffect(() => {
-    initializeApp();
-  }, []);
-
-  return <div id="root"></div>;
+  App.init();
 }
 
-function getRoutes() {
-  let routes = mergeRoutes(proposalsRoutes, coreRoutes, "core");
-  routes = mergeRoutes(routes, statisticsRoutes, "statistics");
-  routes = mergeRoutes(routes, ticketvoteRoutes, "ticketvote");
-  return routes;
-}
+PoliteiaApp();
 
-const routes = getRoutes();
-
-let routerInitialized = false;
-
-function initializeApp() {
-  const unsubscribe = initializeApi();
-  const apiStatus = api.selectStatus(store.getState());
-  if (apiStatus === "succeeded") {
-    unsubscribe();
-  }
-}
-
-function initializeApi() {
-  const apiStatus = api.selectStatus(store.getState());
-  let unsubscribe;
-  if (apiStatus === "idle") {
-    unsubscribe = store.subscribe(handleApi);
-    store.dispatch(api.fetch());
-  }
-  return unsubscribe;
-}
-
-function handleApi() {
-  const state = store.getState();
-  const status = state.api.status;
-  if (!routerInitialized && status === "succeeded") {
-    routerInitialized = true;
-    router.init({ routes });
-  }
-}
-
-connectReducers([{ key: "uiTheme", reducer: themeReducer }]).then(() => {
-  return ReactDOM.render(
-    <ThemeProvider themes={themes} defaultThemeName={DEFAULT_LIGHT_THEME_NAME}>
-      <Provider store={store}>
-        <Header />
-        <App />
-      </Provider>
-    </ThemeProvider>,
-    appRoot
-  );
-});
+ReactDOM.render(
+  <Provider store={store}>
+    {/* TODO: Use header after connecting theme/ui plugin */}
+    {/* <Header /> */}
+    <div id="root"></div>
+  </Provider>,
+  document.querySelector("#app-root")
+);
