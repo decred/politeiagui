@@ -51,7 +51,8 @@ const DownloadJSON = ({
           <span
             style={{ cursor: "pointer" }}
             {...props}
-            onClick={!isAsync ? onDownload : handleDownload}>
+            onClick={!isAsync ? onDownload : handleDownload}
+          >
             {label}
           </span>
         )

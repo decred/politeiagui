@@ -24,7 +24,8 @@ const Preferences = ({ user }) => {
     <Formik
       initialValues={initialValues}
       onSubmit={handlePreferencesSubmit}
-      enableReinitialize={true}>
+      enableReinitialize={true}
+    >
       {(formikProps) => {
         const { handleSubmit, setFieldValue, values } = formikProps;
         const customSetFieldValue = (...props) => {
@@ -186,7 +187,8 @@ const Preferences = ({ user }) => {
                 type="submit"
                 loading={isApiRequestingEditUser}
                 kind={showConfirm ? "disabled" : "primary"}
-                className={classNames(styles.submitButton, "margin-bottom-m")}>
+                className={classNames(styles.submitButton, "margin-bottom-m")}
+              >
                 {showConfirm && editUserResponse ? (
                   <div className={styles.savedIcon}>
                     Saved

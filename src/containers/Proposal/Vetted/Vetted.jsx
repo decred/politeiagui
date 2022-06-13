@@ -142,7 +142,8 @@ const VettedProposals = ({ TopBanner, PageDetails, Sidebar, Main }) => {
       dropdownTabsForMobile
       hasMore={hasMoreProposals}
       pageSize={proposalPageSize}
-      isLoading={loading || verifying}>
+      isLoading={loading || verifying}
+    >
       {content}
     </RecordsView>
   );

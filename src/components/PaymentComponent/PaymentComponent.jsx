@@ -24,7 +24,8 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
           styles.paywallInfo,
           isDarkTheme && styles.dark,
           "margin-top-l"
-        )}>
+        )}
+      >
         <div className={styles.qrcodeWrapper}>
           <QRCode addr={address} />
         </div>
@@ -39,7 +40,8 @@ const PaymentComponent = ({ address, amount, extraSmall, status }) => {
           <CopyableText
             id="component-payment-address"
             truncate
-            tooltipPlacement={"bottom"}>
+            tooltipPlacement={"bottom"}
+          >
             {address}
           </CopyableText>
           {!extraSmall && (

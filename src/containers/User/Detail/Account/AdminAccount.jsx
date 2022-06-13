@@ -171,7 +171,8 @@ const AdminAccount = ({
           className="margin-top-s"
           loading={isActivationLoading}
           size="sm"
-          onClick={handleOpenDeactivateReactivateUserModal}>
+          onClick={handleOpenDeactivateReactivateUserModal}
+        >
           Deactivate
         </Button>
       ) : (
@@ -180,7 +181,8 @@ const AdminAccount = ({
           className="margin-top-s"
           loading={isActivationLoading}
           size="sm"
-          onClick={handleOpenDeactivateReactivateUserModal}>
+          onClick={handleOpenDeactivateReactivateUserModal}
+        >
           Reactivate
         </Button>
       )}
@@ -209,7 +211,8 @@ const AdminAccount = ({
               loading={isApiRequestingMarkResetPasswordAsExpired}
               size="sm"
               className="margin-top-s"
-              onClick={handleOpenPasswordExpireModal}>
+              onClick={handleOpenPasswordExpireModal}
+            >
               Mark as expired
             </Button>
           )}
@@ -240,7 +243,8 @@ const AdminAccount = ({
               loading={isApiRequestingMarkNewUserAsExpired}
               className="margin-top-s"
               size="sm"
-              onClick={handleOpenVerificationTokenExpireModal}>
+              onClick={handleOpenVerificationTokenExpireModal}
+            >
               Mark as expired
             </Button>
           )}
@@ -271,7 +275,8 @@ const AdminAccount = ({
               loading={isApiRequestingMarkUpdateKeyAsExpired}
               className="margin-top-s"
               size="sm"
-              onClick={handleOpenUpdateKeyExpireModal}>
+              onClick={handleOpenUpdateKeyExpireModal}
+            >
               Mark as expired
             </Button>
           )}

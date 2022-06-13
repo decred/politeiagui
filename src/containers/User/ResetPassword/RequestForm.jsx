@@ -35,7 +35,8 @@ const RequestForm = () => {
           email: ""
         }}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}>
+        onSubmit={onSubmit}
+      >
         {({
           Form,
           Title,
@@ -87,7 +88,8 @@ const RequestForm = () => {
       </FormWrapper>
       <DevelopmentOnlyContent show={verificationToken}>
         <Link
-          to={`/user/password/reset?username=${username}&verificationtoken=${verificationToken}`}>
+          to={`/user/password/reset?username=${username}&verificationtoken=${verificationToken}`}
+        >
           Reset password
         </Link>
       </DevelopmentOnlyContent>

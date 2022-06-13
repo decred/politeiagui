@@ -18,7 +18,7 @@ function getMetadataItems({ domain, amount, endDate, startDate }) {
 function ProposalMetadata({ metadata }) {
   const { amount, startdate, enddate, domain } = metadata;
   const metadataAvailable = !!amount || !!domain || !!startdate || !!enddate;
-  if (!metadataAvailable) return;
+  if (!metadataAvailable) return null;
 
   const startDate = formatDateToInternationalString(
     (startdate && formatUnixTimestampToObj(startdate)) || {}
@@ -27,7 +27,7 @@ function ProposalMetadata({ metadata }) {
     (enddate && formatUnixTimestampToObj(enddate)) || {}
   );
   const items = getMetadataItems({ domain, amount, endDate, startDate });
-  return metadataAvailable && <LabelValueList items={items} />;
+  return <LabelValueList items={items} />;
 }
 
 export default ProposalMetadata;

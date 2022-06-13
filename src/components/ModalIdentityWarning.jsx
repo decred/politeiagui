@@ -16,7 +16,8 @@ const ModalIdentityWarning = ({
     title={title}
     onClose={onClose}
     iconType="info"
-    iconSize="lg">
+    iconSize="lg"
+  >
     {!isCms ? (
       <P>
         Politeia will send you a link to verify your email address. You must
@@ -42,7 +43,8 @@ const ModalIdentityWarning = ({
         float: "right",
         marginTop: "3rem"
       }}
-      onClick={onConfirm}>
+      onClick={onConfirm}
+    >
       {confirmMessage}
     </Button>
   </Modal>

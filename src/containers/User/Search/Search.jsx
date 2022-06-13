@@ -123,7 +123,8 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
       <TopBanner>
         <PageDetails
           actionsContent={null}
-          title={<Title className="margin-right-m">Search</Title>}>
+          title={<Title className="margin-right-m">Search</Title>}
+        >
           <Formik
             initialValues={{
               searchTerm: "",
@@ -132,7 +133,8 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
               domain: undefined
             }}
             onSubmit={onSubmit}
-            validationSchema={searchSchema}>
+            validationSchema={searchSchema}
+          >
             {({
               values,
               handleChange,
@@ -194,7 +196,8 @@ const UserSearch = ({ TopBanner, PageDetails, Main, Title }) => {
                       onClick={handleSubmit}
                       type="submit"
                       loading={isSubmitting}
-                      kind={isValid ? "primary" : "disabled"}>
+                      kind={isValid ? "primary" : "disabled"}
+                    >
                       Search
                     </Button>
                   </div>

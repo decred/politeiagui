@@ -1,3 +1,11 @@
+.detailsWrapper {
+  padding: var(--spacing-large) 0;
+}
+
 .detailsWrapper > * {
   margin-bottom: var(--spacing-medium);
+}
+
+.detailsWrapper > *:last-child {
+  margin-bottom: 0;
 }

@@ -126,7 +126,8 @@ const BillingInfo = ({ lineItems }) => {
           "Expenses",
           "Total"
         ]}
-        filename="proposal_details.csv">
+        filename="proposal_details.csv"
+      >
         <PiLink className="cursor-pointer">Export All To Csv</PiLink>
       </ExportToCsv>
       <H3 className={classNames(styles.totalText, "margin-top-l")}>
@@ -141,7 +142,8 @@ const ProposalTitle = ({ title, onClick }) => (
     weight="bold"
     size="large"
     onClick={onClick}
-    className={styles.proposalTitle}>
+    className={styles.proposalTitle}
+  >
     {title}
   </Text>
 );

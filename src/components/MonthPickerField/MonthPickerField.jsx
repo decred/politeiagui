@@ -112,13 +112,15 @@ const MonthPickerField = ({
                 years={years}
                 value={values[name]}
                 lang={MONTHS_LABELS}
-                onChange={onChange}>
+                onChange={onChange}
+              >
                 <span
                   className={classNames(
                     styles.valueWrapper,
                     readOnly && "cursor-not-allowed"
                   )}
-                  onClick={togglePicker}>
+                  onClick={togglePicker}
+                >
                   {makeText(values[name])}
                   {!readOnly && <Arrow isOpen={isOpen} />}
                 </span>

@@ -22,7 +22,8 @@ const SingleContentPage = ({
       <Header noBorder={true} />
       <Main
         fill
-        className={classNames(styles.singleContentMain, styles[contentWidth])}>
+        className={classNames(styles.singleContentMain, styles[contentWidth])}
+      >
         <ErrorBoundary errorRenderer={renderError}>
           {noCardWrap ? (
             children

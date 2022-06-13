@@ -89,7 +89,8 @@ const Invoice = ({
                   id={`invoice-title-${invoiceToken}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={extended ? "" : invoiceURL}>
+                  url={extended ? "" : invoiceURL}
+                >
                   {presentationalInvoiceName(invoice)}
                 </Title>
               }
@@ -106,7 +107,8 @@ const Invoice = ({
                       id={`invoice-${invoiceToken}-version`}
                       className={classNames(styles.version)}
                       color="gray"
-                      truncate>{`version ${version}`}</Text>
+                      truncate
+                    >{`version ${version}`}</Text>
                   )}
                   {showExtendedVersionPicker && (
                     <VersionPicker
@@ -152,7 +154,8 @@ const Invoice = ({
                         <CopyableText
                           id="invoice-payment-address"
                           truncate
-                          tooltipPlacement={"bottom"}>
+                          tooltipPlacement={"bottom"}
+                        >
                           {addr}
                         </CopyableText>
                       )}
@@ -193,7 +196,8 @@ const Invoice = ({
                   <Row
                     className={styles.filesRow}
                     justify="left"
-                    topMarginSize="s">
+                    topMarginSize="s"
+                  >
                     <ThumbnailGrid
                       value={invoiceAttachments}
                       onClick={() => null}

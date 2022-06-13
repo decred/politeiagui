@@ -13,7 +13,8 @@ const SidebarBlock = ({ children, className, ...props }) => (
       "margin-bottom-m",
       className
     )}
-    {...props}>
+    {...props}
+  >
     {children}
   </Card>
 );

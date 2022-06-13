@@ -33,7 +33,8 @@ const DraftDcc = ({ draft, onDelete }) => {
                   id={`dcc-${id}`}
                   truncate
                   linesBeforeTruncate={2}
-                  url={`/dccs/new?draft=${id}`}>
+                  url={`/dccs/new?draft=${id}`}
+                >
                   {presentationalDraftDccName(draft)}
                 </Title>
               }
@@ -43,7 +44,8 @@ const DraftDcc = ({ draft, onDelete }) => {
                     kind="secondary"
                     size="sm"
                     className={styles.deleteDraft}
-                    onClick={handleDeleteDraft}>
+                    onClick={handleDeleteDraft}
+                  >
                     Delete
                   </Button>
                 </Status>

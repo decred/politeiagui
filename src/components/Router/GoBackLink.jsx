@@ -54,7 +54,8 @@ const GoBackLink = ({ label, hierarchy, breakpoint }) => {
           previousHierarchyLink
             ? history.push(previousHierarchyLink)
             : history.go(-(previousDefaultLinkIndex + 1))
-        }>
+        }
+      >
         {backArrow} {label}
       </Link>
     </div>

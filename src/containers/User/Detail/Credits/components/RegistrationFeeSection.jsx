@@ -23,7 +23,8 @@ export default ({
     <div className={styles.block}>
       <div className={styles.blockDetails}>
         <Text
-          className={classNames(styles.title, isDarkTheme && styles.darkTitle)}>
+          className={classNames(styles.title, isDarkTheme && styles.darkTitle)}
+        >
           Registration fee
         </Text>
         <Text
@@ -31,7 +32,8 @@ export default ({
           className={classNames(
             styles.status,
             "margin-top-xs margin-bottom-xs"
-          )}>
+          )}
+        >
           {isPaid ? "Paid" : "Not paid"}
         </Text>
         {!isPaid && isUser && (
@@ -45,7 +47,8 @@ export default ({
             className="margin-top-s"
             loading={isApiRequestingMarkAsPaid}
             size="sm"
-            onClick={openMarkAsPaidModal}>
+            onClick={openMarkAsPaidModal}
+          >
             Mark as paid
           </Button>
         )}
@@ -55,7 +58,8 @@ export default ({
           className={classNames(
             styles.descriptionParagraph,
             isDarkTheme && styles.darkDescriptionParagraph
-          )}>
+          )}
+        >
           <b>Registration Fee:</b> In order to participate on proposals and to
           submit your own, Politeia requires a small registration fee of
           <b> exactly 0.1 DCR.</b>

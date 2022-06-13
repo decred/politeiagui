@@ -986,24 +986,23 @@ records from other plugins and apps. You can check the available utils below:
   const recordStateCode = getRecordStateCode(record.state);
   ```
 
-- <a id="utils-gettokenstofetch"></a> `getTokensToFetch(recordState)`
+- <a id="utils-gettokenstofetch"></a> `getTokensToFetch(params)`
 
-  Returns the tokens batch and last position pointer for given `inventory` and
-  `pageSize`, indexed by `lastTokenPos` skipping `records` already loaded.
+  Returns the tokens to batch for given `inventoryList` and `pageSize`,
+  skipping the tokens in the `lookupTable`.
 
   | Param       | Type                | Description                                          |
   | ----------- | ------------------- | ---------------------------------------------------- |
-  | fetchParams | <code>Object</code> | `{ records, pageSize, inventoryList, lastTokenPos }` |
+  | fetchParams | <code>Object</code> | `{ lookupTable, pageSize, inventoryList }` |
 
   **Usage:**
 
   ```javascript
   import { getTokensToFetch } from "@politeiagui/core/records/utils";
   const { tokens, last } = getTokensToFetch({
-    records: { token1: { ...record1 } },
+    looukpTable: { token1: {} },
     pageSize: 5,
     inventoryList: ["token1", "token2", "token3"],
-    lastTokenPos: 0,
   });
   // tokens: ["token2", "token3"]
   ```

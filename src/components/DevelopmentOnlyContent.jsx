@@ -8,14 +8,16 @@ const DevelopmentOnlyContent = ({ children, show, style }) =>
         padding: "4px",
         border: "1px solid #e47a0d",
         ...style
-      }}>
+      }}
+    >
       <span
         style={{
           position: "absolute",
           right: "1px",
           top: "-2px",
           fontSize: "1rem"
-        }}>
+        }}
+      >
         [dev]
       </span>
       {children}

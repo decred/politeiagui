@@ -128,13 +128,15 @@ const ModalStartVote = ({
             size={26}
           />
         )
-      }>
+      }
+    >
       {!success ? (
         <FormWrapper
           initialValues={initialValues}
           validationSchema={validationSchema(apiInfo.testnet)}
           isInitialValid={isInitialValid}
-          onSubmit={onSubmitStartVote}>
+          onSubmit={onSubmitStartVote}
+        >
           {({
             Form,
             Actions,
@@ -191,7 +193,8 @@ const ModalStartVote = ({
                   <Button
                     loading={isSubmitting}
                     kind={isValid ? "primary" : "disabled"}
-                    type="submit">
+                    type="submit"
+                  >
                     Start Vote
                   </Button>
                 </Actions>

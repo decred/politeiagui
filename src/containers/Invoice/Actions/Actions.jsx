@@ -35,7 +35,8 @@ const InvoiceActions = ({ invoice, extended }) => {
       onClick={withInvoice(onReject)}
       className={classNames("margin-right-s")}
       noBorder
-      kind="secondary">
+      kind="secondary"
+    >
       Reject
     </Button>
   );
@@ -44,7 +45,8 @@ const InvoiceActions = ({ invoice, extended }) => {
       onClick={withInvoice(onDispute)}
       className={classNames("margin-right-s")}
       noBorder
-      kind="secondary">
+      kind="secondary"
+    >
       Dispute
     </Button>
   );

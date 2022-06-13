@@ -67,7 +67,8 @@ const UnvettedActionsProvider = ({ children, history }) => {
       value={{
         onCensor: handleOpenCensorModal,
         onApprove: handleOpenApproveModal
-      }}>
+      }}
+    >
       {children}
     </UnvettedProposalsActionsContext.Provider>
   );

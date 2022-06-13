@@ -48,12 +48,14 @@ export default ({ proposalCreditPrice, user }) => {
   return data && !!data.length ? (
     <div
       className="margin-top-l"
-      style={!extraSmall ? { overflowX: "scroll" } : {}}>
+      style={!extraSmall ? { overflowX: "scroll" } : {}}
+    >
       <Text className="margin-right-xs">Credit History</Text>
       <ExportToCsv
         data={getCsvData(allPurchases)}
         fields={["numberPurchased", "price", "txId", "datePurchased", "type"]}
-        filename="payment_history">
+        filename="payment_history"
+      >
         <Link style={{ cursor: "pointer" }}>Export to csv</Link>
       </ExportToCsv>
       <div className="margin-top-s">

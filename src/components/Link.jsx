@@ -14,7 +14,8 @@ const Link = ({ to, children, isLegacy, ...props }) => (
             </a>
           )
         : (otherProps) => <RouterLink to={to} {...otherProps} />
-    }>
+    }
+  >
     {children}
   </UILink>
 );

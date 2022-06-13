@@ -11,7 +11,8 @@ export default ({ id }) => (
         styles.fieldHeading,
         "margin-bottom-s",
         "margin-top-l"
-      )}>
+      )}
+    >
       User ID
     </Text>
     <P className="margin-bottom-s">
@@ -19,7 +20,8 @@ export default ({ id }) => (
       <Link
         href="https://tools.ietf.org/html/rfc4122"
         target="_blank"
-        rel="nofollow noopener noreferrer">
+        rel="nofollow noopener noreferrer"
+      >
         RFC 4122
       </Link>
       , used to identify your user.

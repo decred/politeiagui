@@ -7,6 +7,9 @@ export function useFetchRecordsInventory({ recordsState, status, page = 1 }) {
   const recordsInvStatus = useSelector((state) =>
     recordsInventory.selectStatus(state, { recordsState, status })
   );
+  const recordsInv = useSelector((state) =>
+    recordsInventory.selectByStateAndStatus(state, { recordsState, status })
+  );
 
   useEffect(() => {
     const fetchFirstPage = recordsInvStatus === "idle" && page === 1;
@@ -18,8 +21,6 @@ export function useFetchRecordsInventory({ recordsState, status, page = 1 }) {
     // Disable rules of hooks because we don't want recordsInvStatus in our dependency list
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, page, recordsState, status]);
-  const recordsInv = useSelector((state) =>
-    recordsInventory.selectByStateAndStatus(state, { recordsState, status })
-  );
+
   return { status: recordsInvStatus, inventory: recordsInv };
 }

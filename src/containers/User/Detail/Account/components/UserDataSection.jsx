@@ -33,7 +33,8 @@ export default () => {
             <Button
               size="sm"
               className="margin-top-s margin-bottom-m"
-              onClick={handleOpenModalConfirm}>
+              onClick={handleOpenModalConfirm}
+            >
               Clear data
             </Button>
           </>

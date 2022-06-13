@@ -8,14 +8,16 @@ const HelpMessage = ({ className, children }) => {
   return (
     <div
       className={classNames("justify-center", styles.container)}
-      data-testid="help-message">
+      data-testid="help-message"
+    >
       <Text
         textAlign="center"
         className={classNames(
           className,
           styles.helpMessage,
           isDarkTheme && styles.dark
-        )}>
+        )}
+      >
         {children}
       </Text>
     </div>

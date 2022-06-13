@@ -305,7 +305,7 @@ export const commandsMap = {
     buttonType: "taskList",
     buttonViewBox: "0 0 16 16",
     command: multiLineCommand((curr) => `- [ ] ${curr}`, {
-      offset: 5,
+      offset: 6,
       ignoreBlankLines: true,
     }),
   }),

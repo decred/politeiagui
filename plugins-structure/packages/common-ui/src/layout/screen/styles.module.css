@@ -9,6 +9,13 @@
   align-self: end;
 }
 
+.singlePageBanner {
+  background-color: var(--topbanner-color);
+  min-height: 10rem;
+  padding: 3rem 6rem 0 6rem;
+  margin-bottom: 3rem;
+}
+
 @media screen and (max-width: 768px) {
   .banner {
     padding: 3rem 2.5rem 0 2.5rem;

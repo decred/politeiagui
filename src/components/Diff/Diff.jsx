@@ -151,7 +151,8 @@ export const DiffText = ({ newText, oldText }) => {
       className={classNames(
         elem.added && styles.lineAdded,
         elem.removed && styles.lineRemoved
-      )}>
+      )}
+    >
       {elem.value}
     </span>
   ));

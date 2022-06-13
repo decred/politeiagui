@@ -139,7 +139,8 @@ const CodeStats = ({ ids, start, end }) => {
           styles.titleLinkWrapper,
           "margin-top-m",
           "margin-bottom-s"
-        )}>
+        )}
+      >
         <H4>Past 3 months code stats</H4>
       </div>
       {ids.map((id) => (

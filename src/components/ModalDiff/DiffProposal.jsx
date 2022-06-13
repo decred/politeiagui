@@ -97,7 +97,8 @@ const DiffProposal = ({ latest, initVersion, token, ...props }) => {
             onSelectTab={setActiveTabIndex}
             activeTabIndex={activeTabIndex}
             className={styles.diffTabs}
-            contentClassName={styles.diffTabContent}>
+            contentClassName={styles.diffTabContent}
+          >
             <Tab label="Text Changes">
               <div className={styles.diffWrapper}>
                 <DiffHTML

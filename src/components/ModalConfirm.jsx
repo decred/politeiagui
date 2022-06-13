@@ -72,7 +72,8 @@ const ModalConfirm = ({
             size={26}
           />
         )
-      }>
+      }
+    >
       {!success && (
         <FormWrapper initialValues={{}} onSubmit={onSubmitForm}>
           {({
@@ -94,7 +95,8 @@ const ModalConfirm = ({
                 <Button
                   loading={isSubmitting}
                   type="submit"
-                  data-testid="modal-confirm-button">
+                  data-testid="modal-confirm-button"
+                >
                   Confirm
                 </Button>
               </Actions>
@@ -108,7 +110,8 @@ const ModalConfirm = ({
           <div className="justify-right margin-top-m">
             <Button
               onClick={onCloseSuccess || onClose}
-              data-testid="modal-confirm-success-msg">
+              data-testid="modal-confirm-success-msg"
+            >
               Ok
             </Button>
           </div>

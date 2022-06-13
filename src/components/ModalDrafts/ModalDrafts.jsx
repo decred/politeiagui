@@ -17,7 +17,8 @@ const ModalDrafts = ({ show, onClose, drafts, history }) => {
         {drafts.map((draft) => (
           <Card
             className={styles.draftWrapper}
-            onClick={handleClick(draft.draftId)}>
+            onClick={handleClick(draft.draftId)}
+          >
             {draft.type === PROPOSAL_TYPE_RFP ? (
               <Title>
                 <RfpTag />

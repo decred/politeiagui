@@ -104,7 +104,8 @@ const Comment = ({
       weight="semibold"
       className={styles.censor}
       data-testid="comment-censor"
-      onClick={onClickCensor}>
+      onClick={onClickCensor}
+    >
       Censor
     </Text>
   );
@@ -165,7 +166,8 @@ const Comment = ({
         highlightAsNew && styles.highlightAsNew,
         className
       )}
-      {...props}>
+      {...props}
+    >
       <div className={classNames("justify-space-between", styles.info)}>
         <Join>
           <Link
@@ -173,7 +175,8 @@ const Comment = ({
               styles.commentAuthor,
               highlightAuthor && styles.recordAuthor
             )}
-            to={authorURL}>
+            to={authorURL}
+          >
             {author}
           </Link>
           <DateTooltip timestamp={timestamp} placement="bottom">
@@ -232,7 +235,8 @@ const Comment = ({
               <Text
                 weight="semibold"
                 className={styles.reply}
-                onClick={onClickReply}>
+                onClick={onClickReply}
+              >
                 Reply
               </Text>
             </LoggedInContent>

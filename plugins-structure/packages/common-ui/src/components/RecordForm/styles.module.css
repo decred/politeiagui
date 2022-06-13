@@ -1,0 +1,122 @@
+.currency {
+  position: relative;
+}
+
+.currencyValue {
+  position: absolute;
+  top: 2.3rem;
+  width: 100%;
+  color: var(--text-input-color);
+  padding-left: 1rem;
+}
+
+.datePicker {
+  border: 0.1rem solid var(--input-border-color);
+  border-radius: 0.2rem;
+  height: 4rem;
+  min-width: 6rem;
+  background-color: var(--card-background);
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.datePickerWrapper {
+  padding-top: 1rem;
+}
+
+.activeDatePicker {
+  border-color: var(--color-primary);
+}
+
+.datePickerError {
+  visibility: hidden;
+  color: var(--color-orange);
+  font-size: var(--font-size-small);
+  min-height: 2rem;
+  margin-top: 0.3rem;
+}
+
+.datePickerContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.datePickerPlaceholder {
+  color: var(--text-input-color) !important;
+}
+
+.form {
+  display: flex;
+  flex-flow: column;
+}
+
+.input {
+  padding-left: 1rem !important;
+  padding-bottom: 0.9rem !important;
+  padding-top: 0.9rem !important;
+  margin-top: 1rem !important;
+}
+
+.input:focus-visible {
+  border-color: var(--color-primary);
+}
+
+.markdownInput {
+  padding-top: 1rem;
+  padding-bottom: 2.3rem;
+}
+
+.numberInput:focus-visible {
+  border-color: var(--color-primary);
+}
+
+/* Remove numberInput spinners */
+/* Chrome, Safari, Edge, Opera */
+.numberInput::-webkit-outer-spin-button,
+.numberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.numberInput[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.warning {
+  margin-top: 1rem;
+  margin-bottom: 3.3rem;
+}
+
+.markdownInput textarea {
+  font-family: var(--font-family-text);
+  font-size: var(--font-size-normal);
+}
+
+.markdownInput textarea:focus-visible {
+  border-color: var(--color-primary);
+  outline: 0;
+}
+.select {
+  padding: 0 !important;
+  margin-top: 1rem;
+  margin-bottom: 2.3rem;
+}
+
+.select > div {
+  min-height: 4rem;
+}
+
+.button {
+  margin-top: 1rem;
+}
+.button:focus {
+  box-shadow: 0px 0px 0px 2px var(--color-shadow-light);
+}
+
+.visible {
+  visibility: visible;
+}
+
+.info {
+  margin-left: 1rem;
+}

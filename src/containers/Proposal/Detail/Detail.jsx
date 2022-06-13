@@ -174,14 +174,16 @@ const ProposalDetail = ({ Main, match, history }) => {
       <>
         {!(currentUser && isSingleThread) && (
           <Card
-            className={classNames("container", styles.commentsHeaderWrapper)}>
+            className={classNames("container", styles.commentsHeaderWrapper)}
+          >
             <LoggedInContent
               fallback={
                 <WhatAreYourThoughts
                   onLoginClick={handleOpenLoginModal}
                   onSignupClick={onRedirectToSignup}
                 />
-              }>
+              }
+            >
               <Or>
                 {readOnly && (
                   <Message kind="blocked" title="Comments are not allowed">
