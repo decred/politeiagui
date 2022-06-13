@@ -11,14 +11,14 @@ const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
   return (
     <div>
       <RecordCard
+        isDimmed={proposal.archived || proposal.censored}
         titleLink={`/record/${getShortToken(proposal.token)}`}
         title={proposal.name}
         subtitle={
           <ProposalSubtitle
             userid={proposal.author.userid}
             username={proposal.author.username}
-            publishedat={proposal.timestamps.publishedat}
-            editedat={proposal.timestamps.editedat}
+            timestamps={proposal.timestamps}
             token={proposal.token}
             version={proposal.version}
           />

@@ -13,7 +13,7 @@ import {
   ProposalStatusTag,
   ProposalSubtitle,
 } from "./common";
-import { Button, ButtonIcon } from "pi-ui";
+import { Button, ButtonIcon, Message } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
 import ModalProposalDiff from "./ModalProposalDiff";
@@ -40,17 +40,24 @@ const ProposalDetails = ({
     open(ModalProposalDiff, { oldBody, newBody });
   }
 
+  const isAbandoned = proposalDetails.archived || proposalDetails.censored;
+
   return (
     <div>
+      {isAbandoned && (
+        <Message kind="warning">
+          Reason: {proposalDetails.abandonmentReason}
+        </Message>
+      )}
       <RecordCard
         token={proposalDetails.token}
         title={proposalDetails.name}
+        isDimmed={isAbandoned}
         subtitle={
           <ProposalSubtitle
             userid={proposalDetails.author.userid}
             username={proposalDetails.author.username}
-            publishedat={proposalDetails.timestamps.publishedat}
-            editedat={proposalDetails.timestamps.editedat}
+            timestamps={proposalDetails.timestamps}
             token={proposalDetails.token}
             version={proposalDetails.version}
             onChangeVersion={handleFetchVersion}
