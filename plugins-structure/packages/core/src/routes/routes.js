@@ -1,45 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import Home from "../records/pages/Home";
-import Records from "../records/pages/Records";
-import Record from "../records/pages/Record";
 import { store } from "../storeSetup";
+import { recordsPolicy } from "../records/policy";
+
+function fetchPolicyIfIdle() {
+  if (recordsPolicy.selectStatus(store.getState()) === "idle") {
+    return store.dispatch(recordsPolicy.fetch());
+  }
+}
 
 export const routes = [
   {
-    path: "/",
-    title: "Home",
-    view: () =>
-      ReactDOM.render(
-        <Provider store={store}>
-          <Home />
-        </Provider>,
-        document.querySelector("#root")
-      ),
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    path: "/records/batch",
+    fetch: async () => {
+      await fetchPolicyIfIdle();
+    },
   },
-  {
-    path: "/records",
-    title: "Records",
-    view: () =>
-      ReactDOM.render(
-        <Provider store={store}>
-          <Records />
-        </Provider>,
-        document.querySelector("#root")
-      ),
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
-  },
-  {
-    path: "/record/:id",
-    title: "Record",
-    view: (params) =>
-      ReactDOM.render(<Record {...params} />, document.querySelector("#root")),
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
-  },
-  { path: "/settings", view: () => console.log("view settings") },
 ];

@@ -1,6 +1,7 @@
 import { connectReducers, store, validatePlugin } from "./";
 import { api } from "./api";
 import { findMatch, pluginsRouter, router } from "./router";
+import { routes as coreRoutes } from "./routes";
 
 function mergeRoutes(routes, targetRoutes) {
   let mergedRoutes = routes;
@@ -54,11 +55,10 @@ export async function appSetup({
 }) {
   // Validate App Plugins
   plugins.every(validatePlugin);
-
   // Proxy plugin routes
   pluginsRouter.setupProxyMap(pluginsProxyMap);
-
-  let pluginsRoutes = [];
+  // Initialize router with core routes.
+  let pluginsRoutes = coreRoutes;
   // Connect plugins reducers on store
   for (const plugin of plugins) {
     if (plugin.reducers) await connectReducers(plugin.reducers);
