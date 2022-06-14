@@ -172,9 +172,11 @@ describe("Given the recordsInventorySlice", () => {
         it("should update tokens, last page and status (succeeded/hasMore for tokens.length == inventorypagesize)", async () => {
           const inventoryPageSize =
             preloadedStore.getState().recordsPolicy.policy.inventorypagesize;
-          const dummyToken = "testToken";
+          const publicTokens = Array(inventoryPageSize)
+            .fill("")
+            .map((_, i) => `testToken-${i}`);
           const resValue = {
-            vetted: { public: Array(inventoryPageSize).fill(dummyToken) },
+            vetted: { public: publicTokens },
             unvetted: {},
           };
           fetchRecordsInventorySpy.mockResolvedValueOnce(resValue);
@@ -192,8 +194,38 @@ describe("Given the recordsInventorySlice", () => {
           );
           const state = preloadedStore.getState();
           expect(state.recordsInventory.vetted.public.tokens).toEqual(
-            Array(inventoryPageSize).fill(dummyToken)
+            publicTokens
           );
+          expect(state.recordsInventory.vetted.public.lastPage).toEqual(1);
+          expect(state.recordsInventory.vetted.public.status).toEqual(
+            "succeeded/hasMore"
+          );
+        });
+        it("should avoid duplicate tokens", async () => {
+          const inventoryPageSize =
+            preloadedStore.getState().recordsPolicy.policy.inventorypagesize;
+          const publicTokens = Array(inventoryPageSize).fill("fakeToken");
+          const resValue = {
+            vetted: { public: publicTokens },
+            unvetted: {},
+          };
+          fetchRecordsInventorySpy.mockResolvedValueOnce(resValue);
+
+          await preloadedStore.dispatch(fetchRecordsInventory(params));
+
+          const objAfterTransformation = {
+            state: params.recordsState,
+            status: params.status,
+            page: params.page,
+          };
+
+          expect(fetchRecordsInventorySpy).toBeCalledWith(
+            objAfterTransformation
+          );
+          const state = preloadedStore.getState();
+          expect(state.recordsInventory.vetted.public.tokens).toEqual([
+            "fakeToken",
+          ]);
           expect(state.recordsInventory.vetted.public.lastPage).toEqual(1);
           expect(state.recordsInventory.vetted.public.status).toEqual(
             "succeeded/hasMore"

@@ -13,6 +13,7 @@ import {
   validateInventoryPageSize,
   validateRecordStateAndStatus,
 } from "../validation";
+import uniq from "lodash/uniq";
 
 const initialObj = {
   tokens: [],
@@ -98,9 +99,12 @@ const recordsInventorySlice = createSlice({
           state[stringState][readableStatus].status = "succeeded/isDone";
         }
         state[stringState][readableStatus].lastPage = page;
-        state[stringState][readableStatus].tokens.push(
-          ...recordsInventory[stringState][readableStatus]
-        );
+        const newTokens = [
+          ...state[stringState][readableStatus].tokens,
+          ...recordsInventory[stringState][readableStatus],
+        ];
+        // Avoid duplicate tokens
+        state[stringState][readableStatus].tokens = uniq(newTokens);
       })
       .addCase(fetchRecordsInventory.rejected, (state, action) => {
         state.status = "failed";

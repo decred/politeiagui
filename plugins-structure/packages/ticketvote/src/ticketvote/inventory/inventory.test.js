@@ -137,9 +137,11 @@ describe("Given the recordsInventorySlice", () => {
       expect(state.unauthorized.status).toEqual("succeeded/isDone");
     });
     it("should update tokens, last page and status (succeeded/hasMore for tokens.length == inventorypagesize)", async () => {
-      const fakeToken = "fakeToken";
+      const unauthorized = Array(20)
+        .fill("")
+        .map((_, i) => `fakeToken-${i}`);
       const resValue = {
-        vetted: { unauthorized: Array(20).fill(fakeToken) },
+        vetted: { unauthorized },
         bestblock: 420,
       };
       fetchInventorySpy.mockResolvedValueOnce(resValue);
@@ -148,7 +150,21 @@ describe("Given the recordsInventorySlice", () => {
 
       expect(fetchInventorySpy).toBeCalled();
       const state = store.getState().ticketvoteInventory;
-      expect(state.unauthorized.tokens).toEqual(Array(20).fill(fakeToken));
+      expect(state.unauthorized.tokens).toEqual(unauthorized);
+      expect(state.unauthorized.lastPage).toEqual(1);
+      expect(state.unauthorized.status).toEqual("succeeded/hasMore");
+    });
+    it("should avoid duplicate tokens", async () => {
+      const fakeToken = "fakeToken";
+      const resValue = {
+        vetted: { unauthorized: Array(20).fill(fakeToken) },
+        bestBlock: 420,
+      };
+      fetchInventorySpy.mockResolvedValueOnce(resValue);
+      await store.dispatch(fetchTicketvoteInventory(params));
+      expect(fetchInventorySpy).toBeCalled();
+      const state = store.getState().ticketvoteInventory;
+      expect(state.unauthorized.tokens).toEqual([fakeToken]);
       expect(state.unauthorized.lastPage).toEqual(1);
       expect(state.unauthorized.status).toEqual("succeeded/hasMore");
     });

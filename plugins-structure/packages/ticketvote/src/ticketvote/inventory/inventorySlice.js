@@ -9,6 +9,7 @@ import {
   validateTicketvoteInventoryPageSize,
   validateTicketvoteStatus,
 } from "../../lib/validation";
+import uniq from "lodash/uniq";
 
 const initialStatusInventory = {
   tokens: [],
@@ -80,7 +81,12 @@ const ticketvoteInventorySlice = createSlice({
           state[readableStatus].status = "succeeded/isDone";
         }
         state[readableStatus].lastPage = page;
-        state[readableStatus].tokens.push(...inventory[readableStatus]);
+        // remove duplicate tokens
+        const newTokens = [
+          ...state[readableStatus].tokens,
+          ...inventory[readableStatus],
+        ];
+        state[readableStatus].tokens = uniq(newTokens);
       })
       .addCase(fetchTicketvoteInventory.rejected, (state, action) => {
         state.status = "failed";
