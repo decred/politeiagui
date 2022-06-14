@@ -64,7 +64,7 @@ const routes = [
 const MyDevApp = appSetup({
   plugins: [MyPlugin],
   pluginsProxyMap: {
-    "/": ["/records/batch", "/records/inventory"],
+    "/": ["/records/batch", "/records/inventory", "/__PLUGIN_NAME__/setname"],
   },
   viewRoutes: routes,
 });
