@@ -44,12 +44,12 @@ describe("Given the newapp command", () => {
   it("should create new apps correctly", () => {
     fs.existsSync.mockReturnValue(false);
     newAppCmd("my-new-app", { port: 5000 });
-    expect(fs.writeFileSync).toHaveBeenCalledTimes(4);
+    expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
     expect(fs.existsSync).toHaveBeenCalledTimes(1);
     expect(fs.mkdirSync).toHaveBeenCalledTimes(3);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
-    expect(console.log).toHaveBeenCalledTimes(5);
+    expect(console.log).toHaveBeenCalledTimes(8);
   });
 
   it("should throw error when app exists", () => {

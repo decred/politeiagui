@@ -34,6 +34,7 @@ jest.mock(
   () => ({
     Event: ({ timestamp }) => <div>{timestamp}</div>,
     Join: ({ children }) => <div>{children}</div>,
+    MarkdownRenderer: ({ body }) => <div>{body}</div>,
   }),
   { virtual: true }
 );
