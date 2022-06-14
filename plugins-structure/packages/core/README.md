@@ -15,6 +15,8 @@ package management tool on any JavaScript application or plugin.
 - [Records](#core-records)
 - [Router](#core-router)
 - [Plugins Router](#core-router-plugins)
+- [Plugin Setup](#core-plugin-setup)
+- [App Setup](#core-app-setup)
 - [References](#references)
 
 ## <a id="files-structure"></a> Files Structure
