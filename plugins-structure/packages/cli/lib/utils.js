@@ -156,8 +156,12 @@ function createSrcFiles({ baseAppPath, appName, appPath }) {
   const indexJs = replaceFileValuesFromMap(`${baseAppPath}/src/index.js`, {
     __APP_NAME__: appName,
   });
+  const appJs = replaceFileValuesFromMap(`${baseAppPath}/src/app.js`, {
+    __APP_NAME__: appName,
+  });
   fs.writeFileSync(`${appPath}/src/public/index.html`, indexHtml);
   fs.writeFileSync(`${appPath}/src/index.js`, indexJs);
+  fs.writeFileSync(`${appPath}/src/app.js`, appJs);
 }
 
 function getPluginsDepsAndConfig({ isDefaultApp, plugins, configFile }) {
