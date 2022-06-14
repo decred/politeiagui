@@ -29,6 +29,7 @@ module.exports = function newPlugin(pluginName, { port }) {
   // create plugin dir
   fs.mkdirSync(pluginPath);
   fs.mkdirSync(`${pluginPath}/src`);
+  fs.mkdirSync(`${pluginPath}/src/dev`);
 
   // create plugin package.json
   fs.writeFileSync(
@@ -54,14 +55,21 @@ module.exports = function newPlugin(pluginName, { port }) {
   // create test config files
   copyFile("jest.config.js", pluginPath, basePluginPath);
   // create src files
-  const indexHtml = replaceFileValuesFromMap(
-    `${basePluginPath}/src/index.html`,
+  const indexDevHtml = replaceFileValuesFromMap(
+    `${basePluginPath}/src/dev/index.html`,
     { __PLUGIN_NAME__: pluginName }
+  );
+  const indexDevJs = replaceFileValuesFromMap(
+    `${basePluginPath}/src/dev/index.js`,
+    {
+      __PLUGIN_NAME__: pluginName,
+    }
   );
   const indexJs = replaceFileValuesFromMap(`${basePluginPath}/src/index.js`, {
     __PLUGIN_NAME__: pluginName,
   });
-  fs.writeFileSync(`${pluginPath}/src/index.html`, indexHtml);
+  fs.writeFileSync(`${pluginPath}/src/dev/index.html`, indexDevHtml);
+  fs.writeFileSync(`${pluginPath}/src/dev/index.js`, indexDevJs);
   fs.writeFileSync(`${pluginPath}/src/index.js`, indexJs);
 
   console.log("Done!");
