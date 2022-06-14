@@ -160,10 +160,17 @@ describe("Given the recordsInventorySlice", () => {
         vetted: { unauthorized: Array(20).fill(fakeToken) },
         bestBlock: 420,
       };
-      fetchInventorySpy.mockResolvedValueOnce(resValue);
+      fetchInventorySpy.mockResolvedValue(resValue);
       await store.dispatch(fetchTicketvoteInventory(params));
       expect(fetchInventorySpy).toBeCalled();
-      const state = store.getState().ticketvoteInventory;
+      let state = store.getState().ticketvoteInventory;
+      expect(state.unauthorized.tokens).toEqual([fakeToken]);
+      expect(state.unauthorized.lastPage).toEqual(1);
+      expect(state.unauthorized.status).toEqual("succeeded/hasMore");
+      // duplicate request
+      await store.dispatch(fetchTicketvoteInventory(params));
+      state = store.getState().ticketvoteInventory;
+      expect(fetchInventorySpy).toBeCalled();
       expect(state.unauthorized.tokens).toEqual([fakeToken]);
       expect(state.unauthorized.lastPage).toEqual(1);
       expect(state.unauthorized.status).toEqual("succeeded/hasMore");

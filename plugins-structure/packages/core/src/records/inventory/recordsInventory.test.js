@@ -209,7 +209,7 @@ describe("Given the recordsInventorySlice", () => {
             vetted: { public: publicTokens },
             unvetted: {},
           };
-          fetchRecordsInventorySpy.mockResolvedValueOnce(resValue);
+          fetchRecordsInventorySpy.mockResolvedValue(resValue);
 
           await preloadedStore.dispatch(fetchRecordsInventory(params));
 
@@ -222,7 +222,17 @@ describe("Given the recordsInventorySlice", () => {
           expect(fetchRecordsInventorySpy).toBeCalledWith(
             objAfterTransformation
           );
-          const state = preloadedStore.getState();
+          let state = preloadedStore.getState();
+          expect(state.recordsInventory.vetted.public.tokens).toEqual([
+            "fakeToken",
+          ]);
+          expect(state.recordsInventory.vetted.public.lastPage).toEqual(1);
+          expect(state.recordsInventory.vetted.public.status).toEqual(
+            "succeeded/hasMore"
+          );
+          // duplicate request
+          await preloadedStore.dispatch(fetchRecordsInventory(params));
+          state = preloadedStore.getState();
           expect(state.recordsInventory.vetted.public.tokens).toEqual([
             "fakeToken",
           ]);
