@@ -14,6 +14,7 @@ package management tool on any JavaScript application or plugin.
 - [Client](#core-client)
 - [Records](#core-records)
 - [Router](#core-router)
+- [Plugins Router](#core-router-plugins)
 - [References](#references)
 
 ## <a id="files-structure"></a> Files Structure
@@ -991,8 +992,8 @@ records from other plugins and apps. You can check the available utils below:
   Returns the tokens to batch for given `inventoryList` and `pageSize`,
   skipping the tokens in the `lookupTable`.
 
-  | Param       | Type                | Description                                          |
-  | ----------- | ------------------- | ---------------------------------------------------- |
+  | Param       | Type                | Description                                |
+  | ----------- | ------------------- | ------------------------------------------ |
   | fetchParams | <code>Object</code> | `{ lookupTable, pageSize, inventoryList }` |
 
   **Usage:**
@@ -1230,7 +1231,7 @@ API, with aditional configuration.
   const myHistory = router.getHistory();
   ```
 
-- <a id="router-gethistory"></a> `router.matchPath(path) => Boolean`
+- <a id="router-matchpath"></a> `router.matchPath(path) => Boolean`
 
   Returns if given path matches some configured route match.
 
@@ -1280,6 +1281,114 @@ API, with aditional configuration.
     router.reset();
   }
   ```
+
+## <a id="core-router-plugins">**Plugins Router**</a>
+
+The plugins router is used for plugins integration. Every plugin will expose a
+separate router that has its own isolated setup for each route. We can use the
+configured routes to integrate plugins into our applications, and configure the
+proxy to redirect plugins routes to app routes.
+
+> **We don't recommend using this router to render views. Due to proxy behavior,
+> using multiple sources of view is hard to debug and handle routing conflicts.**
+
+### Proxy
+
+You can setup a proxy map on your plugins router to redirect multiple plugins
+routes to one singular route. This is useful if you want to setup custom routes
+for your application.
+
+Example:
+
+```javascript
+import { pluginsRouter } from "@politeiagui/core/router";
+import { routes } from "@politeiagui/core/routes";
+
+/**
+ * ProxyMap is an object that maps the received route to target routes.
+ * @typedef {Object.<string, string[]>} ProxyMap
+ */
+const proxyMap = {
+  "/": ["/records/batch", "/records/inventory"],
+};
+// Setup Proxy
+pluginsRouter.setupProxyMap(proxyMap);
+// Initialize router
+pluginsRouter.init({ routes });
+// Navigate to `/`
+pluginsRouter.navigateTo("/");
+```
+
+Once the window location is `/`, it will execute the setup for both
+`records/batch` and `records/inventory` routes, so we don't need to worry about
+the usage requirements for records batch and records inventory.
+
+## <a id="core-plugin-setup">**Plugin Setup**</a>
+
+The core package also provides good utils for plugins creation, which helps us
+managing the reducers and routes connection.
+
+Let's create a new custom plugin using the `Plugin` interface from core package:
+
+```javascript
+// myplugin/plugin.js
+import { Plugin } from "@politeiagui/core";
+import { fetchApi, myReducer } from "./myPlugin";
+
+const MyPlugin = Plugin({
+  routes: [{ path: "/myplugin/fetch", fetch: () => fetchApi("/myapi") }],
+  reducers: [{ key: "myPlugin", reducer: myReducer }],
+  name: "my-plugin",
+});
+
+export default MyPlugin;
+```
+
+Easy, huh? Just use this interface and then use your politeiagui plugin on your
+application shell.
+
+## <a id="core-app-setup">**App Setup**</a>
+
+An application is just used to connect all plugins into an integrated interface.
+In order to provide a good experience for developers who want to create a new
+politeiagui application, we recommend using the `appSetup` util from the core
+package.
+
+Example:
+
+```javascript
+// app.js
+
+// Let's use React, but our setup is framework agnostic and can be used on any
+// javascript application
+import React from "react";
+import ReactDOM from "react-dom";
+import { appSetup } from "@politeiagui/core";
+// Plugins
+import MyPlugin from "@politeiagui/my-plugin";
+import ExternalPlugin from "external-plugin";
+
+const root = document.querySelector("#app-root");
+
+const App = appSetup({
+  plugins: [MyPlugin, ExternalPlugin],
+  viewRoutes: [
+    { path: "/", view: () => ReactDOM.render(<div>Home Page</div>, root) },
+  ],
+  pluginsProxyMap: { "/": ["/myplugin/fetch", "/externalplugin/fetch"] },
+});
+
+export default App;
+```
+
+Let's initialize the application:
+
+```javascript
+// index.js
+import App from "./app";
+
+App.init();
+```
 
 ## References
 
