@@ -21,6 +21,10 @@
   border-bottom: 1px solid var(--separator-color);
 }
 
+.modalWrapper {
+  width: 100%;
+}
+
 .versionPickerWrapper {
   align-items: center;
   display: flex;

@@ -72,20 +72,23 @@ function VersionsPickers({
 }
 
 function VersionsTimestamps({ oldProposal, newProposal }) {
-  return oldProposal && newProposal ? (
+  if (!oldProposal || !newProposal) return null;
+  const oldVersion = oldProposal.version;
+  const newVersion = newProposal.version;
+  const oldTimestamp =
+    oldVersion !== 1
+      ? oldProposal.timestamps.editedat
+      : oldProposal.timestamps.publishedat;
+  const newTimestamp =
+    newVersion !== 1
+      ? newProposal.timestamps.editedat
+      : newProposal.timestamps.publishedat;
+  return (
     <Join>
-      <Event
-        event={`version ${oldProposal.version} edited`}
-        timestamp={oldProposal.timestamps.editedat}
-      />
-      {oldProposal.version !== newProposal.version && (
-        <Event
-          event={`version ${newProposal.version} edited`}
-          timestamp={newProposal.timestamps.editedat}
-        />
-      )}
+      <Event timestamp={oldTimestamp} />
+      {oldVersion !== newVersion && <Event timestamp={newTimestamp} />}
     </Join>
-  ) : null;
+  );
 }
 
 function ModalProposalDiff({
@@ -135,7 +138,12 @@ function ModalProposalDiff({
   );
 
   return (
-    <Modal show={show} onClose={onClose} title={<ModalTitle />}>
+    <Modal
+      show={show}
+      onClose={onClose}
+      title={<ModalTitle />}
+      className={styles.modalWrapper}
+    >
       <div className={styles.diffWrapper}>
         <RecordCard
           title={currentProposal.name}
