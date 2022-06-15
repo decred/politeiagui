@@ -26,10 +26,7 @@ function ProposalSubtitle({
             title={`version ${version}`}
           >
             {range(version, 0, -1).map((v, i) => (
-              <DropdownItem
-                key={i}
-                onClick={() => v !== version && onChangeVersion(v)}
-              >
+              <DropdownItem key={i} onClick={() => onChangeVersion(v)}>
                 version {v}
               </DropdownItem>
             ))}

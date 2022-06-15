@@ -23,4 +23,8 @@ Event.propTypes = {
   show: PropTypes.bool,
 };
 
+Event.defaultProps = {
+  event: "",
+};
+
 export default Event;

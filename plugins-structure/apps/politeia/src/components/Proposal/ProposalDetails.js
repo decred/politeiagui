@@ -23,7 +23,6 @@ const ProposalDetails = ({
   voteSummary,
   piSummary,
   onFetchRecordTimestamps,
-  onFetchVersion,
 }) => {
   const [open] = useModal();
 
@@ -33,11 +32,13 @@ const ProposalDetails = ({
       proposalDetails.token
     )}/raw`;
   }
-  async function handleFetchVersion(version) {
-    const proposalVersion = await onFetchVersion(version);
-    const { body: oldBody } = decodeProposalRecord(proposalVersion);
-    const { body: newBody } = proposalDetails;
-    open(ModalProposalDiff, { oldBody, newBody });
+  async function handleChangeVersion(version) {
+    open(ModalProposalDiff, {
+      oldVersion: version === proposalDetails.version ? version - 1 : version,
+      currentProposal: proposalDetails,
+      newVersion: proposalDetails.version,
+      token: proposalDetails.token,
+    });
   }
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
@@ -60,7 +61,7 @@ const ProposalDetails = ({
             timestamps={proposalDetails.timestamps}
             token={proposalDetails.token}
             version={proposalDetails.version}
-            onChangeVersion={handleFetchVersion}
+            onChangeVersion={handleChangeVersion}
           />
         }
         rightHeader={<ProposalStatusTag piSummary={piSummary} />}

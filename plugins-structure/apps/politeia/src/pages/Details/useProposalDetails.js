@@ -34,10 +34,6 @@ function useProposalDetails({ token }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
     return res.payload;
   }
-  async function onFetchPreviousVersions(version) {
-    const res = await dispatch(records.fetchDetails({ token, version }));
-    return res.payload;
-  }
 
   useEffect(() => {
     dispatch(fetchProposalDetails(token));
@@ -50,7 +46,6 @@ function useProposalDetails({ token }) {
     commentsError,
     detailsStatus,
     fullToken,
-    onFetchPreviousVersions,
     onFetchRecordTimestamps,
     piSummary,
     record,

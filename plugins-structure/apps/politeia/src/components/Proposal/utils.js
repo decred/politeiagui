@@ -166,6 +166,7 @@ export function decodeProposalUserMetadata(metadataStreams) {
  * @returns {Proposal} formatted proposal object
  */
 export function decodeProposalRecord(record) {
+  if (!record) return;
   const { name, ...proposalMetadata } = decodeProposalMetadataFile(
     record.files
   );
