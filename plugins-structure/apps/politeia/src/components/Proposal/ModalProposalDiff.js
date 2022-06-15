@@ -91,14 +91,7 @@ function VersionsTimestamps({ oldProposal, newProposal }) {
   );
 }
 
-function ModalProposalDiff({
-  onClose,
-  show,
-  oldVersion,
-  newVersion,
-  currentProposal,
-  token,
-}) {
+function ProposalDiff({ currentProposal, oldVersion, newVersion, token }) {
   const dispatch = useDispatch();
   const [oldV, setOldV] = useState(oldVersion);
   const [newV, setNewV] = useState(newVersion);
@@ -136,7 +129,46 @@ function ModalProposalDiff({
     },
     [token, dispatch, oldV, oldStatus]
   );
+  return (
+    <div className={styles.diffWrapper}>
+      <RecordCard
+        title={currentProposal.name}
+        rightHeader={
+          <VersionsPickers
+            oldVersion={oldV}
+            newVersion={newV}
+            latestVersion={currentProposal.version}
+            setOldVersion={setOldV}
+            setNewVersion={setNewV}
+          />
+        }
+        secondRow={
+          <VersionsTimestamps
+            oldProposal={oldProposal}
+            newProposal={newProposal}
+          />
+        }
+        thirdRow={
+          <div className={styles.diffBody}>
+            <MarkdownDiffHTML
+              oldText={oldProposal?.body}
+              newText={newProposal?.body}
+            />
+          </div>
+        }
+      />
+    </div>
+  );
+}
 
+function ModalProposalDiff({
+  onClose,
+  show,
+  oldVersion,
+  newVersion,
+  currentProposal,
+  token,
+}) {
   return (
     <Modal
       show={show}
@@ -144,37 +176,12 @@ function ModalProposalDiff({
       title={<ModalTitle />}
       className={styles.modalWrapper}
     >
-      <div className={styles.diffWrapper}>
-        <RecordCard
-          title={currentProposal.name}
-          rightHeader={
-            <VersionsPickers
-              oldVersion={oldV}
-              newVersion={newV}
-              latestVersion={currentProposal.version}
-              setOldVersion={setOldV}
-              setNewVersion={setNewV}
-            />
-          }
-          secondRow={
-            <VersionsTimestamps
-              oldProposal={oldProposal}
-              newProposal={newProposal}
-            />
-          }
-          thirdRow={
-            oldProposal &&
-            newProposal && (
-              <div className={styles.diffBody}>
-                <MarkdownDiffHTML
-                  oldText={oldProposal.body}
-                  newText={newProposal.body}
-                />
-              </div>
-            )
-          }
-        />
-      </div>
+      <ProposalDiff
+        oldVersion={oldVersion}
+        newVersion={newVersion}
+        currentProposal={currentProposal}
+        token={token}
+      />
     </Modal>
   );
 }
