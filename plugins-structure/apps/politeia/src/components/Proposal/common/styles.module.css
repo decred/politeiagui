@@ -1,0 +1,6 @@
+.version {
+  color: var(--text-secondary-color) !important;
+}
+.version > * > * {
+  color: var(--text-secondary-color) !important;
+}
