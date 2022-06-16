@@ -34,6 +34,10 @@ import {
 } from "../../pi/constants";
 import isArray from "lodash/fp/isArray";
 
+const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
+const PROPOSAL_INDEX_FILENAME = "index.md";
+const PROPOSAL_VOTE_METADATA_FILENAME = "votemetadata.json";
+
 const MONTHS_LABELS = [
   "Jan",
   "Feb",
@@ -106,7 +110,8 @@ const MONTHS_LABELS = [
  *   proposalMetadata: Object,
  *   censored: Bool,
  *   archived: Bool,
- *   abandonReason: String
+ *   abandonReason: String,
+ *   attachments: Array
  * }} Proposal
  */
 
@@ -117,7 +122,7 @@ const MONTHS_LABELS = [
  * @returns {Object} Proposal metadata object
  */
 export function decodeProposalMetadataFile(files) {
-  const metadata = files.find((f) => f.name === "proposalmetadata.json");
+  const metadata = files.find((f) => f.name === PROPOSAL_METADATA_FILENAME);
   return decodeRecordFile(metadata);
 }
 
@@ -128,7 +133,7 @@ export function decodeProposalMetadataFile(files) {
  * @returns {Object} Proposal metadata object
  */
 export function decodeProposalBodyFile(files) {
-  const body = files.find((f) => f.name === "index.md");
+  const body = files.find((f) => f.name === PROPOSAL_INDEX_FILENAME);
   return body && decodeURIComponent(escape(window.atob(body.payload)));
 }
 
@@ -139,7 +144,8 @@ export function decodeProposalBodyFile(files) {
  * @returns {Object} `{linkto, linkby}` decoded vote metadata
  */
 export function decodeVoteMetadataFile(files) {
-  const metadata = files && files.find((f) => f.name === "votemetadata.json");
+  const metadata =
+    files && files.find((f) => f.name === PROPOSAL_VOTE_METADATA_FILENAME);
   return decodeRecordFile(metadata);
 }
 
@@ -158,6 +164,15 @@ export function decodeProposalUserMetadata(metadataStreams) {
   return userMd;
 }
 
+export function decodeProposalAttachments(files) {
+  return files.filter(
+    (f) =>
+      f.name !== PROPOSAL_INDEX_FILENAME &&
+      f.name !== PROPOSAL_VOTE_METADATA_FILENAME &&
+      f.name !== PROPOSAL_METADATA_FILENAME
+  );
+}
+
 /**
  * decodeProposalRecord returns a formatted proposal object for given record.
  * It decodes all proposal-related data from records and converts it into a
@@ -172,6 +187,7 @@ export function decodeProposalRecord(record) {
   const userMetadata = decodeProposalUserMetadata(record.metadata);
   const voteMetadata = decodeVoteMetadataFile(record.files);
   const body = decodeProposalBodyFile(record.files);
+  const attachments = decodeProposalAttachments(record.files);
   const useridMd = userMetadata.find((md) => md && md.payload.userid);
   const { token } = record.censorshiprecord;
   return {
@@ -191,6 +207,7 @@ export function decodeProposalRecord(record) {
     archived: record.status === RECORD_STATUS_ARCHIVED,
     censored: record.status === RECORD_STATUS_CENSORED,
     abandonmentReason: getAbandonmentReason(userMetadata),
+    attachments,
   };
 }
 
@@ -425,4 +442,92 @@ export function showVoteStatusBar(voteSummary) {
     TICKETVOTE_STATUS_APPROVED,
     TICKETVOTE_STATUS_REJECTED,
   ].includes(voteSummary.status);
+}
+
+function getKeyByValue(obj, val) {
+  return Object.values(obj).find((value) => value.digest === val);
+}
+
+function b64toBlob(b64Data, contentType = "", sliceSize = 512) {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
+}
+
+/**
+ * replaceImgDigestWithPayload uses a regex to parse images
+ * @param {String} text the markdown description
+ * @param {Map} files a files array
+ * @returns {object} { text, markdownFiles }
+ */
+export function replaceImgDigestWithPayload(text, files) {
+  const imageRegexParser =
+    /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = text.matchAll(imageRegexParser);
+  let newText = text;
+  const markdownFiles = [];
+  /**
+   * This for loop will update the newText replacing images digest by their
+   * base64 payload and push the img object to an array of markdownFiles.
+   * */
+  for (const img of imgs) {
+    const { digest } = img.groups;
+    const obj = getKeyByValue(files, digest);
+    if (obj) {
+      markdownFiles.push(obj);
+      newText = newText.replace(
+        digest,
+        `data:${obj.mime};base64,${obj.payload}`
+      );
+    }
+  }
+  return { text: newText, markdownFiles };
+}
+
+/**
+ * replaceBlobsByDigestsAndGetFiles uses a regex to parse images digests and
+ * creates a new Blob
+ * @param {String} description the markdown description
+ * @param {Map} map the map of blob -> file
+ * @returns {object} { description, files }
+ */
+export function replaceImgDigestByBlob(vals, map) {
+  if (!vals) return { text: "", markdownFiles: [] };
+  const { description, files } = vals;
+  const imageRegexParser =
+    /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const imgs = description.matchAll(imageRegexParser);
+  let newText = description;
+  const markdownFiles = [];
+  /**
+   * This for loop will update the newText replacing images digest by a blob and push the img object to an array of markdownFiles
+   * */
+  for (const img of imgs) {
+    const { digest } = img.groups;
+    const obj = getKeyByValue(files, digest);
+    if (obj) {
+      const urlCreator = window.URL || window.webkitURL;
+      const blobUrl = urlCreator.createObjectURL(
+        b64toBlob(obj.payload, obj.mime)
+      );
+      map.set(blobUrl, obj);
+      markdownFiles.push(obj);
+      newText = newText.replace(digest, blobUrl);
+    }
+  }
+  return { text: newText, markdownFiles };
 }

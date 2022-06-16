@@ -5,7 +5,7 @@ import {
   RecordToken,
   useModal,
 } from "@politeiagui/common-ui";
-import { decodeProposalRecord } from "./utils";
+import { decodeProposalRecord, replaceImgDigestWithPayload } from "./utils";
 import {
   ProposalDownloads,
   ProposalMetadata,
@@ -28,6 +28,10 @@ const ProposalDetails = ({
   const [open] = useModal();
 
   const proposalDetails = decodeProposalRecord(record);
+  const { text: body } = replaceImgDigestWithPayload(
+    proposalDetails.body,
+    proposalDetails.attachments
+  );
   function handleShowRawMarkdown() {
     window.location.pathname = `/record/${getShortToken(
       proposalDetails.token
@@ -36,8 +40,7 @@ const ProposalDetails = ({
   async function handleFetchVersion(version) {
     const proposalVersion = await onFetchVersion(version);
     const { body: oldBody } = decodeProposalRecord(proposalVersion);
-    const { body: newBody } = proposalDetails;
-    open(ModalProposalDiff, { oldBody, newBody });
+    open(ModalProposalDiff, { oldBody, newBody: body });
   }
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
@@ -71,7 +74,7 @@ const ProposalDetails = ({
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
           </div>
         }
-        thirdRow={<MarkdownRenderer body={proposalDetails.body} />}
+        thirdRow={<MarkdownRenderer body={body} />}
         fourthRow={
           <>
             <Button>Click Me</Button>
