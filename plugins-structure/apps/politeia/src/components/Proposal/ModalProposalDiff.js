@@ -18,7 +18,7 @@ function ModalTitle() {
     <div className={styles.modalHeader}>
       <H2>Compare Changes</H2>
       <Text className={styles.subtitle}>
-        Compare changes across different versions of the record.
+        Compare record changes across different versions.
       </Text>
     </div>
   );

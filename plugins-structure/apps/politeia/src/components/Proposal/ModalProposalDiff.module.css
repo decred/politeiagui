@@ -35,6 +35,10 @@
   width: 100%;
 }
 
+.versionsInfo > *:last-child {
+  justify-content: flex-end;
+}
+
 .versionPickerWrapper {
   align-items: center;
   display: flex;
