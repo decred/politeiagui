@@ -11,17 +11,27 @@
   padding: 0px !important;
 }
 
-.modalSubtitle {
+.subtitle {
   color: var(--text-secondary-color) !important;
 }
 
 .modalHeader {
   width: 100%;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
   border-bottom: 1px solid var(--separator-color);
 }
 
 .modalWrapper {
+  width: 100%;
+}
+
+.versionDownloads > * > * > * {
+  color: var(--text-secondary-color) !important;
+}
+
+.versionsInfo {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
 }
 

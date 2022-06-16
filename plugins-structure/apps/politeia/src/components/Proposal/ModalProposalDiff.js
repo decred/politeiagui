@@ -11,12 +11,13 @@ import { records } from "@politeiagui/core/records";
 import { decodeProposalRecord } from "./utils";
 import styles from "./ModalProposalDiff.module.css";
 import range from "lodash/range";
+import { ProposalDownloads } from "./common";
 
 function ModalTitle() {
   return (
     <div className={styles.modalHeader}>
       <H2>Compare Changes</H2>
-      <Text className={styles.modalSubtitle}>
+      <Text className={styles.subtitle}>
         Compare changes across different versions of the record.
       </Text>
     </div>
@@ -71,7 +72,13 @@ function VersionsPickers({
   );
 }
 
-function VersionsTimestamps({ oldProposal, newProposal }) {
+function VersionsInfo({
+  oldProposal,
+  newProposal,
+  onFetchTimestamps,
+  oldRecord,
+  newRecord,
+}) {
   if (!oldProposal || !newProposal) return null;
   const oldVersion = oldProposal.version;
   const newVersion = newProposal.version;
@@ -84,14 +91,42 @@ function VersionsTimestamps({ oldProposal, newProposal }) {
       ? newProposal.timestamps.editedat
       : newProposal.timestamps.publishedat;
   return (
-    <Join>
-      <Event timestamp={oldTimestamp} />
-      {oldVersion !== newVersion && <Event timestamp={newTimestamp} />}
-    </Join>
+    <div className={styles.versionsInfo}>
+      <Join>
+        <Text className={styles.subtitle}>Version {oldVersion}</Text>
+        <Event timestamp={oldTimestamp} />
+        <div className={styles.versionDownloads}>
+          <ProposalDownloads
+            withoutComments={true}
+            record={oldRecord}
+            onFetchRecordTimestamps={onFetchTimestamps}
+          />
+        </div>
+      </Join>
+      {oldVersion !== newVersion && (
+        <Join>
+          <Text className={styles.subtitle}>Version {newVersion}</Text>
+          <Event timestamp={newTimestamp} />
+          <div className={styles.versionDownloads}>
+            <ProposalDownloads
+              withoutComments={true}
+              record={newRecord}
+              onFetchRecordTimestamps={onFetchTimestamps}
+            />
+          </div>
+        </Join>
+      )}
+    </div>
   );
 }
 
-function ProposalDiff({ currentProposal, oldVersion, newVersion, token }) {
+function ProposalDiff({
+  currentProposal,
+  oldVersion,
+  newVersion,
+  token,
+  onFetchTimestamps,
+}) {
   const dispatch = useDispatch();
   const [oldV, setOldV] = useState(oldVersion);
   const [newV, setNewV] = useState(newVersion);
@@ -143,10 +178,15 @@ function ProposalDiff({ currentProposal, oldVersion, newVersion, token }) {
           />
         }
         secondRow={
-          <VersionsTimestamps
-            oldProposal={oldProposal}
-            newProposal={newProposal}
-          />
+          <div>
+            <VersionsInfo
+              oldProposal={oldProposal}
+              newProposal={newProposal}
+              oldRecord={oldRecord}
+              newRecord={newRecord}
+              onFetchTimestamps={onFetchTimestamps}
+            />
+          </div>
         }
         thirdRow={
           <div className={styles.diffBody}>
@@ -168,6 +208,7 @@ function ModalProposalDiff({
   newVersion,
   currentProposal,
   token,
+  onFetchTimestamps,
 }) {
   return (
     <Modal
@@ -181,6 +222,7 @@ function ModalProposalDiff({
         newVersion={newVersion}
         currentProposal={currentProposal}
         token={token}
+        onFetchTimestamps={onFetchTimestamps}
       />
     </Modal>
   );

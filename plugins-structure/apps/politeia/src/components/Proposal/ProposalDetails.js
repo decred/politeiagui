@@ -38,6 +38,7 @@ const ProposalDetails = ({
       currentProposal: proposalDetails,
       newVersion: proposalDetails.version,
       token: proposalDetails.token,
+      onFetchTimestamps: onFetchRecordTimestamps,
     });
   }
 
