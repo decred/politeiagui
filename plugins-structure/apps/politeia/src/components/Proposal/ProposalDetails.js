@@ -3,6 +3,7 @@ import {
   MarkdownRenderer,
   RecordCard,
   RecordToken,
+  ThumbnailGrid,
   useModal,
 } from "@politeiagui/common-ui";
 import { decodeProposalRecord, replaceImgDigestWithPayload } from "./utils";
@@ -28,7 +29,7 @@ const ProposalDetails = ({
   const [open] = useModal();
 
   const proposalDetails = decodeProposalRecord(record);
-  const { text: body } = replaceImgDigestWithPayload(
+  const { text: body, markdownFiles } = replaceImgDigestWithPayload(
     proposalDetails.body,
     proposalDetails.attachments
   );
@@ -42,6 +43,10 @@ const ProposalDetails = ({
     const { body: oldBody } = decodeProposalRecord(proposalVersion);
     open(ModalProposalDiff, { oldBody, newBody: body });
   }
+
+  const attachmentsNotInText = proposalDetails.attachments?.filter(
+    (f) => !markdownFiles.includes(f)
+  );
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
 
@@ -74,7 +79,12 @@ const ProposalDetails = ({
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
           </div>
         }
-        thirdRow={<MarkdownRenderer body={body} />}
+        thirdRow={
+          <div className={styles.proposalBody}>
+            <MarkdownRenderer body={body} />
+            <ThumbnailGrid files={attachmentsNotInText} />
+          </div>
+        }
         fourthRow={
           <>
             <Button>Click Me</Button>

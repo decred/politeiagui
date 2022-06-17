@@ -472,7 +472,7 @@ function b64toBlob(b64Data, contentType = "", sliceSize = 512) {
  * replaceImgDigestWithPayload uses a regex to parse images
  * @param {String} text the markdown description
  * @param {Map} files a files array
- * @returns {object} { text, markdownFiles }
+ * @returns {{ text: string, markdownFiles: Array }}
  */
 export function replaceImgDigestWithPayload(text, files) {
   const imageRegexParser =
@@ -513,9 +513,8 @@ export function replaceImgDigestByBlob(vals, map) {
   const imgs = description.matchAll(imageRegexParser);
   let newText = description;
   const markdownFiles = [];
-  /**
-   * This for loop will update the newText replacing images digest by a blob and push the img object to an array of markdownFiles
-   * */
+  // This for loop will update the newText replacing images digest by a blob and
+  // push the img object to an array of markdownFiles
   for (const img of imgs) {
     const { digest } = img.groups;
     const obj = getKeyByValue(files, digest);

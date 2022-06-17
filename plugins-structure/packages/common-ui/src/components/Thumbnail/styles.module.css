@@ -1,0 +1,40 @@
+.fileThumbnail {
+  transition: box-shadow 0.3s;
+  width: 125px;
+  height: 90px;
+  border-radius: 2px;
+  border: 1px solid var(--color-gray-lighter);
+}
+
+.fileThumbnail:hover {
+  box-shadow: 0 0 10px rgba(33, 33, 33, 0.2);
+}
+
+.fileThumbnailText {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.fileThumbnailWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.removeButton {
+  padding-left: 0.5rem;
+  cursor: pointer;
+}
+
+.thumbnailGrid {
+  display: flex;
+  overflow-y: scroll;
+}
+
+.thumbnailWrapper {
+  display: flex;
+  padding-right: 2rem;
+}

@@ -52,17 +52,12 @@ const LinkRenderer = ({ url, children }) => {
 // Use external link renderer when images are not allowed
 const imageHandler =
   (renderImages) =>
-  ({ src, alt }) => {
-    const filteredSrc = xssFilters.uriInDoubleQuotedAttr(src);
-    if (filteredSrc !== src) {
-      console.warn(XSS_ALERT);
-    }
-    return renderImages ? (
-      <img src={filteredSrc} alt={alt} />
+  ({ src, alt }) =>
+    renderImages ? (
+      <img src={src} alt={alt} />
     ) : (
-      <LinkRenderer url={filteredSrc}>{alt}</LinkRenderer>
+      <LinkRenderer url={src}>{alt}</LinkRenderer>
     );
-  };
 
 const linkHandler = ({ href, children }) => {
   const newHref = xssFilters.uriInDoubleQuotedAttr(href);
