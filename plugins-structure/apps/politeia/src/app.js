@@ -14,13 +14,13 @@ const pluginsInitializersByRoutesMap = {
     "ticketvote/summaries",
     "comments/counts",
   ],
-  "/record/new": ["/pi/new"],
+  "/record/new": ["pi/new"],
   "/record/:id": [
     "ticketvote/timestamps",
     "ticketvote/summaries",
     "comments/timestamps",
     "comments/votes",
-    "/pi/summaries",
+    "pi/summaries",
   ],
 };
 

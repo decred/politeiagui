@@ -16,36 +16,34 @@ export function validPluginsInitializers(initializers) {
 }
 
 /**
- * InitByRoutesMap is an object that maps the received init to target initializers.
+ * InitByRoutesMap is an object that maps a route path to corresponding plugins
+ * initializers ids.
  * @typedef {Object.<string, string[]>} InitByRoutesMap
  */
 /**
- * proxyRoutesInitializers is responsible for handling init redirecting. It receives a
- * `initializersByRoutesMap` object, and, for given `targetRoutePath`, returns the corresponding
- * matching init from `allInitializers` + proxied targets initializers.
- * @param {InitByRoutesMap} initializersByRoutesMap proxy map
- * @returns {ProxyHandler} Plugins Initializers Proxy handler
+/**
+ * getInitializersByRoutePath returns the plugins initializers using the 
+ * `initializersByRoutesMap` for given pathname
+ * @param {Array} pluginsInitializers
+ * @param {InitByRoutesMap} initializersByRoutesMap
+ * @returns {Array}
  */
-function proxyRoutesInitializers(initializersByRoutesMap) {
-  return {
-    get: (allInitializers, targetRoutePath) => {
-      function findInitializer(path) {
-        return allInitializers.find((init) => init.id === path);
-      }
-      const proxyMapMatch = Object.keys(initializersByRoutesMap).find((route) =>
-        targetRoutePath.match(pathToRegex(route))
-      );
-      // Get targets once we know the correct path.
-      const targets =
-        (initializersByRoutesMap && initializersByRoutesMap[proxyMapMatch]) ||
-        [];
-      const unhandledTarget = findInitializer(targetRoutePath);
-      const proxiedTargets = targets.map(findInitializer);
-      // Remove undefined values. In case some initializer or target does not
-      // match current initializers.
-      return [unhandledTarget, ...proxiedTargets].filter((t) => !!t);
-    },
-  };
+function getInitializersByRoutePath(
+  pluginsInitializers,
+  initializersByRoutesMap,
+  targetPath
+) {
+  function findInitializersByTarget(target) {
+    return pluginsInitializers.find((init) => init.id === target);
+  }
+  const routeMatch = Object.keys(initializersByRoutesMap).find((route) =>
+    targetPath.match(pathToRegex(route))
+  );
+  // Get targets once we know the correct path.
+  const targets =
+    (initializersByRoutesMap && initializersByRoutesMap[routeMatch]) || [];
+
+  return targets.map(findInitializersByTarget);
 }
 
 function configurePluginsInitializers() {
@@ -53,28 +51,28 @@ function configurePluginsInitializers() {
   let initializersByRoutesMap = {};
 
   async function verifyInitializersMatches(pathname) {
-    const initializersByRoutePath = new Proxy(
+    // Get initializers match from map
+    const matchingInitializers = getInitializersByRoutePath(
       initializers,
-      proxyRoutesInitializers(initializersByRoutesMap)
+      initializersByRoutesMap,
+      pathname
     );
-    // Get initializers match from proxy
-    const targetInitializers = initializersByRoutePath[pathname];
-    for (const init of targetInitializers) {
-      // Every plugin init has its own action method, and plugins router
+    for (const initializer of matchingInitializers) {
+      // Every plugin initializer has its own action method, and plugins router
       // listens to window location pathname and triggers the fetching.
-      if (init.action) {
-        await init.action();
+      if (initializer.action) {
+        await initializer.action();
       }
     }
   }
 
   return {
     /**
-     * init receives an URL and executes the action for initializers that match
+     * load receives an URL and executes the action for initializers that match
      * the given pathname.
      * @param {string} url
      */
-    async init(url) {
+    async load(url) {
       if (!initializers) {
         throw Error(
           "pluginsInitializers is not configured. Use the setup method"
