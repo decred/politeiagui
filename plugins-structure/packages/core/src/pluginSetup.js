@@ -20,10 +20,10 @@ export function validatePlugin({ routes, reducers, name }) {
 }
 
 /**
- * Plugin is the interface for plugins validation and setup.
+ * pluginSetup is the interface used for plugins validation and setup.
  * @param {Object} pluginParams
  */
-export function Plugin({ routes, reducers, name }) {
+export function pluginSetup({ routes, reducers, name }) {
   validatePlugin({ routes, reducers, name });
   return {
     reducers,

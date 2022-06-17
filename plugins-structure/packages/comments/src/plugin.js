@@ -1,8 +1,8 @@
-import { Plugin } from "@politeiagui/core";
+import { pluginSetup } from "@politeiagui/core";
 import { routes } from "./routes";
 import { commentsConstants } from "./comments";
 
-const CommentsPlugin = Plugin({
+const CommentsPlugin = pluginSetup({
   routes,
   reducers: commentsConstants.reducersArray,
   name: "comments",

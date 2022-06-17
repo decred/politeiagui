@@ -1,10 +1,10 @@
-import { Plugin } from "@politeiagui/core";
+import { pluginSetup } from "@politeiagui/core";
 import { routes } from "./routes";
 import policyReducer from "./policy/policySlice";
 import summariesReducer from "./summaries/summariesSlice";
 
 // Declare pi plugin interface
-const PiPlugin = Plugin({
+const PiPlugin = pluginSetup({
   routes,
   reducers: [
     {
