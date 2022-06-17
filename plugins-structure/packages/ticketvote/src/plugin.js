@@ -1,10 +1,10 @@
 import { pluginSetup } from "@politeiagui/core";
 import { ticketvoteConstants } from "./ticketvote";
-import { routes } from "./routes";
+import { initializers } from "./initializers";
 
 // Declare ticketvote plugin interface
 const TicketvotePlugin = pluginSetup({
-  routes,
+  initializers,
   reducers: ticketvoteConstants.reducersArray,
   name: "ticketvote",
 });
