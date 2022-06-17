@@ -7,27 +7,27 @@ import PiPlugin from "./pi";
 // App Routes
 import { routes } from "./routes";
 
-const pluginsProxyMap = {
+const pluginsInitializersByRoutesMap = {
   "/": [
-    "/records/batch",
-    "/ticketvote/inventory",
-    "/ticketvote/summaries",
-    "/comments/counts",
+    "records/batch",
+    "ticketvote/inventory",
+    "ticketvote/summaries",
+    "comments/counts",
   ],
   "/record/new": ["/pi/new"],
   "/record/:id": [
-    "/ticketvote/timestamps",
-    "/ticketvote/summaries",
-    "/comments/timestamps",
-    "/comments/votes",
+    "ticketvote/timestamps",
+    "ticketvote/summaries",
+    "comments/timestamps",
+    "comments/votes",
     "/pi/summaries",
   ],
 };
 
 const PoliteiaApp = appSetup({
   plugins: [TicketvotePlugin, UiPlugin, CommentsPlugin, PiPlugin],
-  pluginsProxyMap,
-  viewRoutes: routes,
+  pluginsInitializersByRoutesMap,
+  routes,
 });
 
 export default PoliteiaApp;

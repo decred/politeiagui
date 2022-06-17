@@ -8,17 +8,17 @@ function fetchPolicyIfIdle() {
   }
 }
 
-export const routes = [
+export const initializers = [
   {
-    path: "/pi/summaries",
-    fetch: async () => {
+    id: "pi/summaries",
+    action: async () => {
       await fetchPolicyIfIdle();
       validatePiSummariesPageSize(store.getState());
     },
   },
   {
-    path: "/pi/new",
-    fetch: async () => {
+    id: "pi/new",
+    action: async () => {
       await fetchPolicyIfIdle();
     },
   },
