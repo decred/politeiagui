@@ -1,115 +1,82 @@
-import { pluginsRouter } from "./pluginsInitializers";
+import { pluginsInitializers } from "./pluginsInitializers";
 
-const routes = [
-  { path: "/", fetch: jest.fn() },
-  { path: "/test/path1", fetch: jest.fn() },
-  { path: "/test/path2", fetch: jest.fn() },
-  { path: "/test/subroute/path1", fetch: jest.fn() },
-  { path: "/path1", fetch: jest.fn() },
+const initializers = [
+  { id: "1", action: jest.fn() },
+  { id: "test/1", action: jest.fn() },
+  { id: "test/2", action: jest.fn() },
+  { id: "test/1/2", action: jest.fn() },
+  { id: "2", action: jest.fn() },
 ];
 
-function routeByPath(path) {
-  return routes.find((route) => route.path === path);
+const initializersByRoutesMap = {
+  "/": ["1", "test/1"],
+  "/path": ["2", "test/2"],
+  "/nested": ["test/1/2"],
+};
+
+function findInitializerById(id) {
+  return initializers.find((i) => i.id === id);
 }
 
-describe("Given pluginsRouter", () => {
-  let windowSpy;
-  function setWindowPathname(path) {
-    windowSpy.mockImplementation(() => ({
-      location: {
-        pathname: path,
-      },
-    }));
-  }
-  beforeEach(() => {
-    windowSpy = jest.spyOn(window, "window", "get");
-  });
-  afterEach(() => {
-    windowSpy.mockRestore();
-  });
-
-  describe("with valid routes setup", () => {
-    beforeEach(async () => {
-      setWindowPathname("/");
-      await pluginsRouter.init({ routes });
-    });
-    afterEach(() => {
-      for (const route of routes) {
-        route.fetch.mockRestore();
-      }
-      pluginsRouter.cleanup();
-    });
-    it("should initialize router successfully", async () => {
-      expect(routeByPath("/").fetch).toBeCalled();
-    });
-    it("should navigate between routes", async () => {
-      const path1 = "/test/path1";
-      await pluginsRouter.navigateTo(path1);
-      expect(routeByPath(path1).fetch).toBeCalled();
-
-      const path2 = "/test/path2";
-      await pluginsRouter.navigateTo(path2);
-      expect(routeByPath(path2).fetch).toBeCalled();
-    });
-    it("should not call any routes if navigation path does not match", async () => {
-      // Reset initial call so we can check the number of calls after the
-      // navigation.
-      routeByPath("/").fetch.mockReset();
-      // Navigate to an invalid route
-      await pluginsRouter.navigateTo("/invalid/url");
-      // No routes called.
-      for (const route of routes) {
-        expect(route.fetch).not.toBeCalled();
-      }
-    });
-  });
-  describe("with invalid routes setup", () => {
+describe("Given pluginsInitializers", () => {
+  describe("given and unconfigured pluginsInitializers", () => {
+    let consoleWarnSpy;
     beforeEach(() => {
-      // Set pathname to a valid route.
-      setWindowPathname("/");
+      consoleWarnSpy = jest.spyOn(console, "warn");
+      consoleWarnSpy.mockImplementation();
     });
     afterEach(() => {
-      pluginsRouter.cleanup();
+      consoleWarnSpy.mockRestore();
+      pluginsInitializers.cleanup();
     });
-    it("should not initialize the router if 'routes' is empty", async () => {
-      await expect(pluginsRouter.init()).rejects.toThrow();
-      expect(routeByPath("/").fetch).not.toBeCalled();
+    it("should configure initializers without routes map", () => {
+      pluginsInitializers.configure({ initializers });
+      expect(consoleWarnSpy).toBeCalled();
+      expect(pluginsInitializers.getInitializers()).toEqual(initializers);
     });
-    it("should not initialize the router if 'routes' is malformed", async () => {
-      const fetch = jest.fn();
-      // Invalid `pathhhh` key.
-      const routes = [{ pathhhh: "/", fetch }];
-      await expect(pluginsRouter.init({ routes })).rejects.toThrow();
-      expect(fetch).not.toBeCalled();
+    it("should configure initializers with routes map", () => {
+      pluginsInitializers.configure({ initializers, initializersByRoutesMap });
+      expect(consoleWarnSpy).not.toBeCalled();
+      expect(pluginsInitializers.getInitializers()).toEqual(initializers);
     });
-    it("should not navigate and throw error if route is not initialized", async () => {
-      await expect(pluginsRouter.navigateTo("/")).rejects.toThrow();
+    it("should not configure initializers without 'initializer' param", () => {
+      expect(() => pluginsInitializers.configure()).toThrow();
+      expect(pluginsInitializers.getInitializers()).toEqual(null);
     });
   });
-  describe("with proxy configured", () => {
-    const proxy = {
-      "/": ["/path1", "/test/path1"],
-      "/custom": ["/test/path2", "/test/subroute/path1"],
-    };
-    beforeEach(async () => {
-      setWindowPathname("/");
-      pluginsRouter.setupProxyMap(proxy);
-      await pluginsRouter.init({ routes });
+  describe("given a configured pluginsInitializers", () => {
+    beforeEach(() => {
+      pluginsInitializers.configure({ initializers, initializersByRoutesMap });
     });
     afterEach(() => {
-      for (const route of routes) {
-        route.fetch.mockRestore();
+      pluginsInitializers.cleanup();
+      for (const init of initializers) {
+        init.action.mockClear();
       }
-      pluginsRouter.cleanup();
     });
-    it("should fetch both proxied and regular-setup routes", async () => {
-      expect(routeByPath("/").fetch).toBeCalled();
-      expect(routeByPath("/path1").fetch).toBeCalled();
-      expect(routeByPath("/test/path1").fetch).toBeCalled();
-      // Navigate to another proxied route:
-      await pluginsRouter.navigateTo("/custom");
-      expect(routeByPath("/test/path2").fetch).toBeCalled();
-      expect(routeByPath("/test/subroute/path1").fetch).toBeCalled();
+    it("should initialize from id", async () => {
+      await pluginsInitializers.initializeFromId("1");
+      const { action } = findInitializerById("1");
+      expect(action).toBeCalled();
+    });
+    it("should not initialize from invalid id", async () => {
+      await pluginsInitializers.initializeFromId("invalid");
+      for (const initializer of initializers) {
+        expect(initializer.action).not.toBeCalled();
+      }
+    });
+    it("should initialize from URL", async () => {
+      await pluginsInitializers.initializeFromUrl("/");
+      const { action: act1 } = findInitializerById("1");
+      const { action: act2 } = findInitializerById("test/1");
+      expect(act1).toBeCalled();
+      expect(act2).toBeCalled();
+    });
+    it("should not initialize from invalid URL", async () => {
+      await pluginsInitializers.initializeFromUrl("/invalid");
+      for (const initializer of initializers) {
+        expect(initializer.action).not.toBeCalled();
+      }
     });
   });
 });
