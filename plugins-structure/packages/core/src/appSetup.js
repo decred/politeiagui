@@ -1,24 +1,22 @@
 import { connectReducers, store, validatePlugin } from "./";
 import { api } from "./api";
-import { findMatch, pluginsRouter, router } from "./router";
-import { routes as coreRoutes } from "./routes";
+import { router } from "./router";
+import { pluginsInitializers } from "./initializers";
+import { initializers as coreInitializers } from "./initializers";
 
-function mergeRoutes(routes, targetRoutes) {
-  let mergedRoutes = routes;
-  for (const route of targetRoutes) {
-    if (findMatch(mergedRoutes, route.path)) {
-      console.warn(
-        `Conflicting background route path on "${route.path}". Pay attention`
-      );
-    }
-    mergedRoutes = [...mergedRoutes, route];
+function mergeInitializers(initializers, targetInitializers) {
+  let mergedInitializers = initializers;
+  for (const initializer of targetInitializers) {
+    // TODO: Find initializers by id
+
+    mergedInitializers = [...mergedInitializers, initializer];
   }
-  return mergedRoutes;
+  return mergedInitializers;
 }
 
 async function popStateHandler(e) {
   const targetUrl = e.target.window.location.pathname;
-  await pluginsRouter.navigateTo(targetUrl);
+  await pluginsInitializers.start(targetUrl);
   router.navigateTo(targetUrl);
 }
 
@@ -26,7 +24,7 @@ function clickHandler(linkSelector) {
   return async (e) => {
     if (e.target.matches(linkSelector)) {
       e.preventDefault();
-      await pluginsRouter.navigateTo(e.target.href);
+      await pluginsInitializers.start(e.target.href);
       router.navigateTo(e.target.href);
     }
   };
@@ -35,50 +33,47 @@ function clickHandler(linkSelector) {
 /**
  * appSetup returns an app instance, executing both view router and plugins
  * router. It connects plugins reducer into the core store, and connects all
- * plugins routes.
+ * plugins initializers.
  *
- * When an user hits a route, the app will first load the plugins routes and
+ * When an user hits a route, the app will first load the plugins initializers and
  * execute their respective fetch methods. When done, load the view.
  *
  * @param {{
  *  plugins: Array,
- *  pluginsProxyMap: Object,
- *  viewRoutes: Array,
+ *  pluginsInitializersByRoutesMap: Object,
+ *  routes: Array,
  *  linkSelector: string
  * }}
  */
 export function appSetup({
   plugins,
-  pluginsProxyMap,
-  viewRoutes,
+  pluginsInitializersByRoutesMap,
+  routes,
   linkSelector = "[data-link]",
 }) {
-  // Initialize router with core routes.
-  let pluginsRoutes = coreRoutes;
-  // Validate App Plugins
+  let initializers = coreInitializers;
   plugins.every(validatePlugin);
-  // Proxy plugin routes
-  pluginsRouter.setupProxyMap(pluginsProxyMap);
+  pluginsInitializers.setupInitializersByRoute(pluginsInitializersByRoutesMap);
   // Connect plugins reducers on store
   for (const plugin of plugins) {
     if (plugin.reducers) connectReducers(plugin.reducers);
-    if (plugin.routes) {
-      pluginsRoutes = mergeRoutes(pluginsRoutes, plugin.routes);
+    if (plugin.initializers) {
+      initializers = mergeInitializers(initializers, plugin.initializers);
     }
   }
 
   return {
     async init() {
       await store.dispatch(api.fetch());
-      await pluginsRouter.init({ routes: pluginsRoutes });
+      await pluginsInitializers.setup({ initializers });
       await router.init({
-        routes: viewRoutes,
+        routes,
         popStateHandler,
         clickHandler: clickHandler(linkSelector),
       });
     },
     async navigateTo(url) {
-      await pluginsRouter.navigateTo(url);
+      await pluginsInitializers.start(url);
       router.navigateTo(url);
     },
   };

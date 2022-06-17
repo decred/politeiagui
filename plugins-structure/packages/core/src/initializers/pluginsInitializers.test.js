@@ -1,4 +1,4 @@
-import { pluginsRouter } from "./pluginsRouter";
+import { pluginsRouter } from "./pluginsInitializers";
 
 const routes = [
   { path: "/", fetch: jest.fn() },
