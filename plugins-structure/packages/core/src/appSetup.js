@@ -56,7 +56,6 @@ export function appSetup({
 }) {
   let initializers = coreInitializers;
   plugins.every(validatePlugin);
-  pluginsInitializers.setupInitializersByRoute(pluginsInitializersByRoutesMap);
   // Connect plugins reducers and initializers
   for (const plugin of plugins) {
     if (plugin.reducers) connectReducers(plugin.reducers);
@@ -64,11 +63,15 @@ export function appSetup({
       initializers = mergeInitializers(initializers, plugin.initializers);
     }
   }
+  pluginsInitializers.configure({
+    initializers,
+    initializersByRoutesMap: pluginsInitializersByRoutesMap,
+  });
 
   return {
     async init() {
       await store.dispatch(api.fetch());
-      await pluginsInitializers.setup({ initializers });
+      await pluginsInitializers.initializeFromUrl(window.location.pathname);
       await router.init({
         routes,
         popStateHandler,

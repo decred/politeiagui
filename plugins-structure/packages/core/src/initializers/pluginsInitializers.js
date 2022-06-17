@@ -1,5 +1,11 @@
 import isArray from "lodash/fp/isArray";
+import isEmpty from "lodash/fp/isEmpty";
 import { pathToRegex } from "../router/helpers";
+
+const NO_MAP_WARNING =
+  "You currently have no initializers mapped to routes. You can setup the map using the `configure` method. If no map is provided, you won't load initializers for routes paths";
+const NOT_CONFIGURED_ERROR =
+  "pluginsInitializers is not configured. Use the `configure` method";
 
 /**
  * validPluginsInitializers returns if given every init from `initializers`
@@ -15,17 +21,21 @@ export function validPluginsInitializers(initializers) {
   );
 }
 
+function findInitializerById(initializers, id) {
+  return initializers.find((init) => init.id === id);
+}
+
 /**
- * InitByRoutesMap is an object that maps a route path to corresponding plugins
+ * InitializersByRoutesMap is an object that maps a route path to corresponding plugins
  * initializers ids.
- * @typedef {Object.<string, string[]>} InitByRoutesMap
+ * @typedef {Object.<string, string[]>} InitializersByRoutesMap
  */
 /**
 /**
  * getInitializersByRoutePath returns the plugins initializers using the 
  * `initializersByRoutesMap` for given pathname.
  * @param {Array} pluginsInitializers
- * @param {InitByRoutesMap} initializersByRoutesMap
+ * @param {InitializersByRoutesMap} initializersByRoutesMap
  * @returns {Array}
  */
 function getInitializersByRoutePath(
@@ -33,33 +43,31 @@ function getInitializersByRoutePath(
   initializersByRoutesMap,
   targetPath
 ) {
-  function findInitializersByTarget(target) {
-    return pluginsInitializers.find((init) => init.id === target);
-  }
   const routeMatch = Object.keys(initializersByRoutesMap).find((route) =>
     targetPath.match(pathToRegex(route))
   );
-  // Get targets once we know the correct path.
-  const targets =
+  const ids =
     (initializersByRoutesMap && initializersByRoutesMap[routeMatch]) || [];
 
-  return targets.map(findInitializersByTarget);
+  return ids.map((id) => findInitializerById(pluginsInitializers, id));
 }
 
 function configurePluginsInitializers() {
   let initializers = null;
   let initializersByRoutesMap = {};
 
+  function getIsConfigured() {
+    if (!initializers) throw Error(NOT_CONFIGURED_ERROR);
+    return true;
+  }
+
   async function verifyInitializersMatches(pathname) {
-    // Get initializers match from map
     const matchingInitializers = getInitializersByRoutePath(
       initializers,
       initializersByRoutesMap,
       pathname
     );
     for (const initializer of matchingInitializers) {
-      // Every plugin initializer has its own action method, and plugins router
-      // listens to window location pathname and triggers the fetching.
       if (initializer.action) {
         await initializer.action();
       }
@@ -73,11 +81,9 @@ function configurePluginsInitializers() {
      * @param {string} url
      */
     async initializeFromUrl(url) {
-      if (!initializers) {
-        throw Error(
-          "pluginsInitializers is not configured. Use the setup method"
-        );
-      }
+      getIsConfigured();
+      if (isEmpty(initializersByRoutesMap)) console.warn(NO_MAP_WARNING);
+
       // Accepts pathnames and urls. Handle Pathnames correctly
       let pathname;
       try {
@@ -88,30 +94,38 @@ function configurePluginsInitializers() {
       await verifyInitializersMatches(pathname);
     },
     /**
-     * setupInitializersByRoute applies a InitByRoutesMap so initializers can
-     * be executed for each route.
-     * @param {InitByRoutesMap} map
+     * initializeFromId executes the action for the initializer correspondent to
+     * the `id` param.
+     * @param {string} id
      */
-    setupInitializersByRoute(map) {
-      initializersByRoutesMap = map;
+    async initializeFromId(id) {
+      getIsConfigured();
+      const initializer = findInitializerById(initializers, id);
+      if (initializer) {
+        await initializer.action();
+      }
+    },
+    getInitializers() {
+      return initializers;
     },
     cleanup() {
       initializers = null;
       initializersByRoutesMap = {};
     },
     /**
-     * setup initializes the router for given initializers config
-     * @param {{ initializers: Array }} Config
+     * configure sets plugins `initializers` and `initializersRoutesByMap`.
+     * @param {{
+     *  initializers: Array,
+     *  initializersByRoutesMap: InitializersByRoutesMap
+     * }} Config
      */
-    async setup({ initializers: pluginsInitializers } = {}) {
-      if (
-        !pluginsInitializers ||
-        !validPluginsInitializers(pluginsInitializers)
-      ) {
+    configure({ initializers: inits, initializersByRoutesMap: map } = {}) {
+      if (!inits || !validPluginsInitializers(inits)) {
         throw TypeError("`initializers` must be an array of { id, action } ");
       }
-      initializers = pluginsInitializers;
-      await verifyInitializersMatches(window.location.pathname);
+      if (isEmpty(map)) console.warn(NO_MAP_WARNING);
+      initializers = inits;
+      initializersByRoutesMap = map;
     },
   };
 }
