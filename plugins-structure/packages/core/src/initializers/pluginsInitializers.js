@@ -23,7 +23,7 @@ export function validPluginsInitializers(initializers) {
 /**
 /**
  * getInitializersByRoutePath returns the plugins initializers using the 
- * `initializersByRoutesMap` for given pathname
+ * `initializersByRoutesMap` for given pathname.
  * @param {Array} pluginsInitializers
  * @param {InitByRoutesMap} initializersByRoutesMap
  * @returns {Array}
@@ -68,11 +68,11 @@ function configurePluginsInitializers() {
 
   return {
     /**
-     * load receives an URL and executes the action for initializers that match
-     * the given pathname.
+     * initializeFromUrl executes the action for initializers that match
+     * the given `url` param.
      * @param {string} url
      */
-    async load(url) {
+    async initializeFromUrl(url) {
       if (!initializers) {
         throw Error(
           "pluginsInitializers is not configured. Use the setup method"
@@ -88,7 +88,8 @@ function configurePluginsInitializers() {
       await verifyInitializersMatches(pathname);
     },
     /**
-     * setupInitializersByRoute applies a InitByRoutesMap
+     * setupInitializersByRoute applies a InitByRoutesMap so initializers can
+     * be executed for each route.
      * @param {InitByRoutesMap} map
      */
     setupInitializersByRoute(map) {
@@ -115,5 +116,4 @@ function configurePluginsInitializers() {
   };
 }
 
-// TODO: description
 export const pluginsInitializers = configurePluginsInitializers();

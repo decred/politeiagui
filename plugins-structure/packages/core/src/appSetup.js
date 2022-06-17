@@ -19,7 +19,7 @@ function mergeInitializers(initializers, targetInitializers) {
 
 async function popStateHandler(e) {
   const targetUrl = e.target.window.location.pathname;
-  await pluginsInitializers.load(targetUrl);
+  await pluginsInitializers.initializeFromUrl(targetUrl);
   router.navigateTo(targetUrl);
 }
 
@@ -27,7 +27,7 @@ function clickHandler(linkSelector) {
   return async (e) => {
     if (e.target.matches(linkSelector)) {
       e.preventDefault();
-      await pluginsInitializers.load(e.target.href);
+      await pluginsInitializers.initializeFromUrl(e.target.href);
       router.navigateTo(e.target.href);
     }
   };
@@ -76,7 +76,7 @@ export function appSetup({
       });
     },
     async navigateTo(url) {
-      await pluginsInitializers.load(url);
+      await pluginsInitializers.initializeFromUrl(url);
       router.navigateTo(url);
     },
   };
