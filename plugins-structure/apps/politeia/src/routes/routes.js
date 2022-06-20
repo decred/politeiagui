@@ -48,7 +48,7 @@ export const routes = [
     view: routeView(New),
   }),
   App.createRoute({
-    path: "/record/:id",
+    path: "/record/:token",
     initIds: [
       "ticketvote/timestamps",
       "ticketvote/summaries",
