@@ -1,6 +1,14 @@
 import isString from "lodash/fp/isString";
 import isArray from "lodash/fp/isArray";
-import { validPluginsInitializers } from "./initializers/pluginsInitializers";
+import isFunction from "lodash/fp/isFunction";
+
+function validPluginsInitializers(initializers) {
+  return (
+    initializers &&
+    isArray(initializers) &&
+    initializers.every((init) => isString(init.id) && isFunction(init.action))
+  );
+}
 
 export function validatePlugin({ initializers, reducers, name }) {
   const validReducers =

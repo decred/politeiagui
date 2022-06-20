@@ -1,8 +1,7 @@
 import { connectReducers, store, validatePlugin } from "./";
 import { api } from "./api";
 import { router } from "./router";
-import { pluginsInitializers } from "./initializers";
-import { initializers as coreInitializers } from "./initializers";
+import { initializers as recordsInitializers } from "./records/initializers";
 
 function mergeInitializers(initializers, targetInitializers) {
   let mergedInitializers = initializers;
@@ -17,45 +16,16 @@ function mergeInitializers(initializers, targetInitializers) {
   return mergedInitializers;
 }
 
-async function popStateHandler(e) {
-  const targetUrl = e.target.window.location.pathname;
-  await pluginsInitializers.initializeFromUrl(targetUrl);
-  router.navigateTo(targetUrl);
-}
-
-function clickHandler(linkSelector) {
-  return async (e) => {
-    if (e.target.matches(linkSelector)) {
-      e.preventDefault();
-      await pluginsInitializers.initializeFromUrl(e.target.href);
-      router.navigateTo(e.target.href);
-    }
-  };
-}
-
 /**
  * appSetup returns an app instance. It connects plugins reducers into the core
  * store, and connects all plugins initializers.
  *
- * When an user hits a route, the app will first load the corresponding plugins
- * initializers for the route path and execute their respective actions. When
- * done, the router will load the route view.
- *
- * @param {{
- *  plugins: Array,
- *  pluginsInitializersByRoutesMap: Object,
- *  routes: Array,
- *  linkSelector: string
- * }}
+ * @param {{ plugins: Array, initializersByRoutesMap: Object }} appConfig
  */
-export function appSetup({
-  plugins,
-  pluginsInitializersByRoutesMap,
-  routes,
-  linkSelector = "[data-link]",
-}) {
-  let initializers = coreInitializers;
+export function appSetup({ plugins, config }) {
+  let initializers = recordsInitializers;
   plugins.every(validatePlugin);
+
   // Connect plugins reducers and initializers
   for (const plugin of plugins) {
     if (plugin.reducers) connectReducers(plugin.reducers);
@@ -63,24 +33,49 @@ export function appSetup({
       initializers = mergeInitializers(initializers, plugin.initializers);
     }
   }
-  pluginsInitializers.configure({
-    initializers,
-    initializersByRoutesMap: pluginsInitializersByRoutesMap,
-  });
 
   return {
-    async init() {
+    config,
+    /**
+     * init is responsible for initializing the app.
+     * @param {{ routes: Array }} initParams
+     */
+    async init({ routes } = {}) {
       await store.dispatch(api.fetch());
-      await pluginsInitializers.initializeFromUrl(window.location.pathname);
       await router.init({
         routes,
-        popStateHandler,
-        clickHandler: clickHandler(linkSelector),
       });
     },
-    async navigateTo(url) {
-      await pluginsInitializers.initializeFromUrl(url);
-      router.navigateTo(url);
+    /**
+     * getConfig returns the app config.
+     * @returns {Object} config
+     */
+    getConfig() {
+      return config;
+    },
+    /**
+     * createRoute is an interface for creating app routes. Before rendering
+     * some route view, execute all initializers actions for given `initIds`.
+     * @param {{ path: string,
+     *  view: Function,
+     *  initIds: Array,
+     *  cleanup: Function
+     * }} routeParams
+     */
+    createRoute({ path, view, initIds = [], cleanup } = {}) {
+      const routeInitializersActions = initializers
+        .filter((init) => initIds.includes(init.id))
+        .map((init) => init.action);
+      return {
+        path,
+        cleanup,
+        view: async (routeParams) => {
+          for (const action of routeInitializersActions) {
+            await action();
+          }
+          return await view(routeParams);
+        },
+      };
     },
   };
 }

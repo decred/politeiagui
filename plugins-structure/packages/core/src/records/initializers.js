@@ -1,9 +1,9 @@
 import { store } from "../storeSetup";
-import { recordsPolicy } from "../records/policy";
+import { recordsPolicy } from "./policy";
 import {
   validateInventoryPageSize,
   validateRecordsPageSize,
-} from "../records/validation";
+} from "./validation";
 
 function fetchPolicyIfIdle() {
   if (recordsPolicy.selectStatus(store.getState()) === "idle") {

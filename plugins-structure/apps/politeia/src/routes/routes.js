@@ -1,22 +1,63 @@
+import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import { store } from "@politeiagui/core";
+import { ModalProvider } from "@politeiagui/common-ui";
 import { records } from "@politeiagui/core/records";
+import { UiTheme } from "@politeiagui/common-ui/layout";
+
 import { Details, Home, New } from "../pages";
-import { createAppRoute } from "./utils";
 import { decodeProposalRecord } from "../components/Proposal/utils";
+import App from "../app";
+
+function cleanup() {
+  return ReactDOM.unmountComponentAtNode(document.querySelector("#root"));
+}
+
+function routeView(Component) {
+  return async (params) => {
+    return ReactDOM.render(
+      <Provider store={store}>
+        <ModalProvider>
+          <UiTheme>
+            <Component {...params} />
+          </UiTheme>
+        </ModalProvider>
+      </Provider>,
+      document.querySelector("#root")
+    );
+  };
+}
 
 export const routes = [
-  createAppRoute({
+  App.createRoute({
     path: "/",
-    Component: Home,
+    initIds: [
+      "records/batch",
+      "ticketvote/inventory",
+      "ticketvote/summaries",
+      "comments/counts",
+    ],
+    cleanup,
+    view: routeView(Home),
   }),
-  createAppRoute({
+  App.createRoute({
     path: "/record/new",
-    Component: New,
+    initIds: ["pi/new"],
+    cleanup,
+    view: routeView(New),
   }),
-  createAppRoute({
-    path: "/record/:token",
-    Component: Details,
+  App.createRoute({
+    path: "/record/:id",
+    initIds: [
+      "ticketvote/timestamps",
+      "ticketvote/summaries",
+      "comments/timestamps",
+      "comments/votes",
+      "pi/summaries",
+    ],
+    cleanup,
+    view: routeView(Details),
   }),
   {
     path: "/record/:token/raw",
@@ -29,7 +70,6 @@ export const routes = [
         "#root"
       ).innerHTML = `<pre style="white-space: pre-line;margin: 1rem">${proposalDetails.body}</pre>`);
     },
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    cleanup,
   },
 ];

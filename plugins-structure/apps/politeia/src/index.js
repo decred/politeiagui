@@ -8,8 +8,9 @@ import { UiTheme } from "@politeiagui/common-ui/layout";
 import { Header } from "./components";
 // App
 import App from "./app";
+import { routes } from "./routes";
 
-App.init();
+App.init({ routes });
 
 ReactDOM.render(
   <Provider store={store}>
