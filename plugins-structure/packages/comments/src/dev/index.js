@@ -2,7 +2,7 @@
 import { store } from "@politeiagui/core";
 import { router } from "@politeiagui/core/router";
 import { api } from "@politeiagui/core/api";
-import { routes } from "./routes";
+import { routes } from "../routes";
 
 function initializePlugin() {
   const unsubscribe = initializeApi();

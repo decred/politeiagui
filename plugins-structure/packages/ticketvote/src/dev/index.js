@@ -2,12 +2,9 @@ import { appSetup } from "@politeiagui/core";
 import TicketvotePlugin from "../";
 import { routes } from "../routes";
 
-async function initializeApp() {
-  const App = await appSetup({
-    plugins: [TicketvotePlugin],
-    routes,
-  });
-  App.init();
-}
+const TicketvoteApp = appSetup({
+  plugins: [TicketvotePlugin],
+  config: { name: "Ticketvote App Showcase" },
+});
 
-initializeApp();
+TicketvoteApp.init({ routes });
