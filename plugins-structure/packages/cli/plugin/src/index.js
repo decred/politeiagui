@@ -1,4 +1,4 @@
-import { Plugin, store } from "@politeiagui/core";
+import { pluginSetup, store } from "@politeiagui/core";
 import { createSlice } from "@reduxjs/toolkit";
 
 const pluginSlice = createSlice({
@@ -18,17 +18,17 @@ const pluginSlice = createSlice({
 
 const { set, reset } = pluginSlice.actions;
 
-const pluginRoutes = [
+const initializers = [
   {
-    path: "/__PLUGIN_NAME__/setname",
-    fetch: () => store.dispatch(set("__PLUGIN_NAME__")),
+    id: "__PLUGIN_NAME__/setname",
+    action: () => store.dispatch(set("__PLUGIN_NAME__")),
   },
-  { path: "/__PLUGIN_NAME__/reset", fetch: () => store.dispatch(reset()) },
+  { id: "__PLUGIN_NAME__/reset", action: () => store.dispatch(reset()) },
 ];
 
-const MyPlugin = Plugin({
+const MyPlugin = pluginSetup({
+  initializers,
   reducers: [{ key: "__PLUGIN_NAME__", reducer: pluginSlice.reducer }],
-  routes: pluginRoutes,
   name: "__PLUGIN_NAME__",
 });
 

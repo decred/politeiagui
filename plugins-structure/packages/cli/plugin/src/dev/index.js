@@ -9,8 +9,8 @@ const publicRecord = {
 };
 
 const navLinks = `<nav>
-<a href="/">Home Page</a>
-<a href="/__PLUGIN_NAME__">__PLUGIN_NAME__ Page</a>
+<a href="/" data-link>Home Page</a>
+<a href="/__PLUGIN_NAME__" data-link>__PLUGIN_NAME__ Page</a>
 </nav>`;
 
 function __PLUGIN_NAME__Page() {
@@ -33,10 +33,7 @@ async function HomePage() {
     publicRecord
   );
   return `
-  <nav>
-    <a href="/">Home Page</a>
-    <a href="/__PLUGIN_NAME__">__PLUGIN_NAME__ Page</a>
-  </nav>
+  ${navLinks}
   <h1>__PLUGIN_NAME__ Home</h1>
   <h2>Public Tokens</h2>
   <ol>
@@ -45,28 +42,29 @@ async function HomePage() {
   `;
 }
 
+const MyDevApp = appSetup({
+  plugins: [MyPlugin],
+  config: {
+    name: "__PLUGIN_NAME__ App Example",
+  },
+});
+
 // Routes for __PLUGIN_NAME__ plugin
 const routes = [
-  {
+  MyDevApp.createRoute({
     path: "/__PLUGIN_NAME__",
     view: async () => {
       document.querySelector("#root").innerHTML = __PLUGIN_NAME__Page();
     },
-  },
-  {
+    initializerIds: ["__PLUGIN_NAME__/reset"],
+  }),
+  MyDevApp.createRoute({
     path: "/",
     view: async () => {
       document.querySelector("#root").innerHTML = await HomePage();
     },
-  },
+    initializerIds: ["records/inventory", "__PLUGIN_NAME__/setname"],
+  }),
 ];
 
-const MyDevApp = appSetup({
-  plugins: [MyPlugin],
-  pluginsProxyMap: {
-    "/": ["/records/batch", "/records/inventory", "/__PLUGIN_NAME__/setname"],
-  },
-  viewRoutes: routes,
-});
-
-MyDevApp.init();
+MyDevApp.init({ routes });
