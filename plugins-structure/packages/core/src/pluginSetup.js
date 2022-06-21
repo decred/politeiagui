@@ -1,7 +1,26 @@
 import isString from "lodash/fp/isString";
 import isArray from "lodash/fp/isArray";
 import isFunction from "lodash/fp/isFunction";
+/**
+ * InitializerAction is the method to be executed by an intializer.
+ * @callback InitializerAction
+ * @returns {Promise}
+ */
 
+/**
+ * Initializer is an `action` that will setup the plugin for usage in some given
+ * `id` case.
+ * @typedef {{
+ *  id: string,
+ *  action: InitializerAction
+ * }} Initializer
+ */
+
+/**
+ * validPluginsInitializers checks if all plugins initializers are valid.
+ * @param {Initializer[]} initializers
+ * @returns {boolean} isValid
+ */
 function validPluginsInitializers(initializers) {
   return (
     initializers &&
@@ -28,8 +47,13 @@ export function validatePlugin({ initializers, reducers, name }) {
 }
 
 /**
- * pluginSetup is the interface used for plugins validation and setup.
- * @param {Object} pluginParams
+ * pluginSetup is the interface used for plugins setup and validation.
+ *
+ * @param {{
+ *  initializers: Initializer[],
+ *  reducers: Array,
+ *  name: string
+ * }} pluginParams
  */
 export function pluginSetup({ initializers, reducers, name }) {
   validatePlugin({ initializers, reducers, name });
@@ -37,5 +61,10 @@ export function pluginSetup({ initializers, reducers, name }) {
     reducers,
     initializers,
     name,
+    initialize: async (id) => {
+      const initializer = initializers.find((init) => init.id === id);
+      if (!initializer) return;
+      return await initializer.action();
+    },
   };
 }

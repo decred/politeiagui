@@ -1284,66 +1284,43 @@ API, with aditional configuration.
   }
   ```
 
-## <a id="core-router-plugins">**Plugins Router**</a>
-
-The plugins router is used for plugins integration. Every plugin will expose a
-separate router that has its own isolated setup for each route. We can use the
-configured routes to integrate plugins into our applications, and configure the
-proxy to redirect plugins routes to app routes.
-
-> **We don't recommend using this router to render views. Due to proxy behavior,
-> using multiple sources of view is hard to debug and handle routing conflicts.**
-
-### Proxy
-
-You can setup a proxy map on your plugins router to redirect multiple plugins
-routes to one singular route. This is useful if you want to setup custom routes
-for your application.
-
-Example:
-
-```javascript
-import { pluginsRouter } from "@politeiagui/core/router";
-import { routes } from "@politeiagui/core/routes";
-
-/**
- * ProxyMap is an object that maps the received route to target routes.
- * @typedef {Object.<string, string[]>} ProxyMap
- */
-const proxyMap = {
-  "/": ["/records/batch", "/records/inventory"],
-};
-// Setup Proxy
-pluginsRouter.setupProxyMap(proxyMap);
-// Initialize router
-pluginsRouter.init({ routes });
-// Navigate to `/`
-pluginsRouter.navigateTo("/");
-```
-
-Once the window location is `/`, it will execute the setup for both
-`records/batch` and `records/inventory` routes, so we don't need to worry about
-the usage requirements for records batch and records inventory.
-
 ## <a id="core-plugin-setup">**Plugin Setup**</a>
 
 The core package also provides good utils for plugins creation, which helps us
-managing the reducers and routes connection.
+managing the reducers and plugin intializers.
 
-Let's create a new custom plugin using the `Plugin` interface from core package:
+> An `initializer` is an `{ id, action }` object, which will setup pugins custom
+> setup for some given use case described by the `id`.
+
+Let's create a new custom plugin using the `pluginSetup` util from core package:
 
 ```javascript
 // myplugin/plugin.js
-import { Plugin } from "@politeiagui/core";
+import { pluginSetup, store } from "@politeiagui/core";
 import { fetchApi, myReducer } from "./myPlugin";
 
-const MyPlugin = Plugin({
-  routes: [{ path: "/myplugin/fetch", fetch: () => fetchApi("/myapi") }],
+const MyPlugin = pluginSetup({
+  initializers: [
+    { id: "myplugin/fetch", action: () => store.dispatch(fetchApi()) },
+  ],
   reducers: [{ key: "myPlugin", reducer: myReducer }],
   name: "my-plugin",
 });
 
 export default MyPlugin;
+```
+
+You can initialize some plugin using the `initialize` method. Example:
+
+```javascript
+import React from "react";
+import MyPlugin from "@politeiagui/my-plugin";
+
+MyPlugin.initialize("myplugin/fetch");
+
+function Component(props) {
+  return <div>My Component</div>;
+}
 ```
 
 Easy, huh? Just use this interface and then use your politeiagui plugin on your
@@ -1374,23 +1351,41 @@ const root = document.querySelector("#app-root");
 
 const App = appSetup({
   plugins: [MyPlugin, ExternalPlugin],
-  viewRoutes: [
-    { path: "/", view: () => ReactDOM.render(<div>Home Page</div>, root) },
-  ],
-  pluginsProxyMap: { "/": ["/myplugin/fetch", "/externalplugin/fetch"] },
+  config: {
+    name: "My App",
+    foo: "bar",
+  },
 });
 
 export default App;
 ```
 
-Let's initialize the application:
+Let's initialize the application with a `routes` array defined using the
+`createRoute` method from our configured app.
+
+The `createRoute` method receives an objecto containing a route `path`, a `view`
+some `initializerIds` to **initialize plugins** for given path, and a `cleanup`
+to be executed when route becomes inactive.
 
 ```javascript
 // index.js
 import App from "./app";
 
-App.init();
+const routes = [
+  App.createRoute({
+    path: "/",
+    view: () => ReactDOM.render(<div>My App</div>, root),
+    initializerIds: ["myplugin/fetch"],
+    cleanup: () => ReactDOM.unmountComponentAtNode(root);
+  })
+]
+
+App.init({ routes });
 ```
+
+So, as described above, once the user hits `/`, before rendering the `view`, it
+will execute the `myplugin/fetch` initializer so our view can be ready to use
+without any additional setup.
 
 ## References
 
