@@ -55,22 +55,22 @@ export function appSetup({ plugins, config }) {
     },
     /**
      * createRoute is an interface for creating app routes. Before rendering
-     * some route view, execute all initializers actions for given `initIds`.
+     * some route view, execute all initializers actions for given `initializerIds`.
      * @param {{ path: string,
      *  view: Function,
-     *  initIds: Array,
+     *  initializerIds: Array,
      *  cleanup: Function
      * }} routeParams
      */
-    createRoute({ path, view, initIds = [], cleanup } = {}) {
-      const routeInitializersActions = initializers
-        .filter((init) => initIds.includes(init.id))
+    createRoute({ path, view, initializerIds = [], cleanup } = {}) {
+      const routeInitializerActions = initializers
+        .filter((init) => initializerIds.includes(init.id))
         .map((init) => init.action);
       return {
         path,
         cleanup,
         view: async (routeParams) => {
-          for (const action of routeInitializersActions) {
+          for (const action of routeInitializerActions) {
             await action();
           }
           return await view(routeParams);

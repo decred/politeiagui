@@ -32,7 +32,7 @@ function routeView(Component) {
 export const routes = [
   App.createRoute({
     path: "/",
-    initIds: [
+    initializerIds: [
       "records/batch",
       "ticketvote/inventory",
       "ticketvote/summaries",
@@ -43,13 +43,13 @@ export const routes = [
   }),
   App.createRoute({
     path: "/record/new",
-    initIds: ["pi/new"],
+    initializerIds: ["pi/new"],
     cleanup,
     view: routeView(New),
   }),
   App.createRoute({
     path: "/record/:token",
-    initIds: [
+    initializerIds: [
       "ticketvote/timestamps",
       "ticketvote/summaries",
       "comments/timestamps",
