@@ -3,12 +3,15 @@ const path = require("path");
 const os = require("os");
 
 function replaceFileValuesFromMap(filePath, replaceMap) {
-  const fileString = fs.readFileSync(filePath)?.toString();
-  let newFile;
+  let newFile = fs.readFileSync(filePath)?.toString();
   for (const key in replaceMap) {
-    newFile = fileString.replace(new RegExp(key, "g"), replaceMap[key]);
+    newFile = newFile.replace(new RegExp(key, "g"), replaceMap[key]);
   }
   return newFile;
+}
+
+function getPluginNameFromDep(pluginDep) {
+  return pluginDep.replace("@politeiagui/", "");
 }
 
 function copyFile(filename, targetPath, basePath) {
@@ -148,7 +151,11 @@ function createTestConfigFiles({ appPath, baseAppPath }) {
   copyFile("jest.config.js", appPath, baseAppPath);
 }
 
-function createSrcFiles({ baseAppPath, appName, appPath }) {
+function createAppSrcFiles({ baseAppPath, appName, appPath, pluginsDeps }) {
+  const plugins = Object.keys(pluginsDeps).map(getPluginNameFromDep).join(", ");
+  const pluginsImports = Object.keys(pluginsDeps)
+    .map((dep) => `import ${getPluginNameFromDep(dep)} from "${dep}";`)
+    .join("\n");
   const indexHtml = replaceFileValuesFromMap(
     `${baseAppPath}/src/public/index.html`,
     { __APP_NAME__: appName }
@@ -158,6 +165,8 @@ function createSrcFiles({ baseAppPath, appName, appPath }) {
   });
   const appJs = replaceFileValuesFromMap(`${baseAppPath}/src/app.js`, {
     __APP_NAME__: appName,
+    __PLUGINS_IMPORTS__: "\n" + pluginsImports,
+    '"__PLUGINS_CONNECTED__"': plugins,
   });
   fs.writeFileSync(`${appPath}/src/public/index.html`, indexHtml);
   fs.writeFileSync(`${appPath}/src/index.js`, indexJs);
@@ -204,7 +213,7 @@ module.exports = {
   loadConfigFile,
   createPackageJsonFile,
   createConfigFile,
-  createSrcFiles,
+  createAppSrcFiles,
   createWebpackConfigFiles,
   createTestConfigFiles,
   getPluginsDepsAndConfig,
