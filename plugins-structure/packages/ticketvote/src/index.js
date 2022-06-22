@@ -3,4 +3,6 @@ export {
   ticketvoteConstants,
   ticketvoteHelpers,
 } from "./ticketvote";
-export { routes } from "./routes";
+export * from "./routes";
+export * from "./initializers";
+export { default } from "./plugin";

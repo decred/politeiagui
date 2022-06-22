@@ -4,13 +4,13 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const plugins = [
   new HtmlWebpackPlugin({
-    template: "./src/index.html",
+    template: "./src/dev/index.html",
   }),
 ];
 
 const dev = {
   mode: "development",
-  entry: "./src/index.js",
+  entry: "./src/dev/index.js",
   devtool: "inline-source-map",
   devServer: {
     port: __PORT__,

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { store } from "../storeSetup";
-import { routes } from "../routes/routes";
+import { routes } from "../routes";
 import { router } from "../router/router";
 import { api } from "../api";
 import {

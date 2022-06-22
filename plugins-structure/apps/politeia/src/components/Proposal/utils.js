@@ -31,7 +31,7 @@ import {
   PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED,
   PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
   PROPOSAL_SUMMARY_STATUS_VOTE_STARTED,
-} from "../../pi/constants";
+} from "../../pi/lib/constants";
 import isArray from "lodash/fp/isArray";
 
 const MONTHS_LABELS = [
