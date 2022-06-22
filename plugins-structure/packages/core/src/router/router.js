@@ -60,7 +60,11 @@ export const router = (function () {
 
   function onClickHandler(e) {
     const selectorElement = searchSelectorElement(e.target, settings.selector);
-    if (selectorElement) {
+    if (
+      selectorElement &&
+      selectorElement.href.startsWith(window.location.origin + "/") &&
+      selectorElement.target !== "_blank"
+    ) {
       e.preventDefault();
       this.navigateTo(selectorElement.href);
     }
