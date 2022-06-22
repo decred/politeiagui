@@ -2,7 +2,7 @@ import React from "react";
 import { router } from "@politeiagui/core/router";
 import {
   MarkdownRenderer,
-  ModalImage,
+  ModalImages,
   RecordCard,
   RecordToken,
   ThumbnailGrid,
@@ -43,11 +43,14 @@ const ProposalDetails = ({
     const { body: oldBody } = decodeProposalRecord(proposalVersion);
     open(ModalProposalDiff, { oldBody, newBody: body });
   }
-  function handleOpenImageModal(file) {
-    open(ModalImage, {
-      src: `data:${file.mime};base64,${file.payload}`,
-      alt: file.name,
-    });
+  function handleOpenImageModal(index) {
+    const images = proposalDetails.attachments
+      .filter((f) => f.mime === "image/png")
+      .map((file) => ({
+        src: `data:${file.mime};base64,${file.payload}`,
+        alt: file.name,
+      }));
+    open(ModalImages, { images, activeIndex: index });
   }
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;

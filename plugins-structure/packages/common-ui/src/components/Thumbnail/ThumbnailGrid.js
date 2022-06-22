@@ -19,7 +19,7 @@ export function ThumbnailGrid({
           {files.map((f, key) => (
             <div className={styles.thumbnailWrapper} key={key}>
               {f.mime.includes("image") ? (
-                <ImageThumbnail file={f} onClick={() => onClick(f)} />
+                <ImageThumbnail file={f} onClick={() => onClick(key)} />
               ) : (
                 <TextThumbnail key={key} />
               )}

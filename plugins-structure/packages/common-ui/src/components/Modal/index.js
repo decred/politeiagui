@@ -1,4 +1,4 @@
 export * from "./ModalProvider";
-export * from "./ModalImage";
+export * from "./ModalImages";
 export * from "./ModalConfirm";
 export * from "./ModalExternalLink";
