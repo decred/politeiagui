@@ -8,6 +8,7 @@ export function ThumbnailGrid({
   files,
   errors,
   onRemove = () => {},
+  onClick = () => {},
   readOnly = false,
 }) {
   return (
@@ -16,13 +17,9 @@ export function ThumbnailGrid({
         {errors && <div>Errors</div>}
         <div className={styles.thumbnailGrid}>
           {files.map((f, key) => (
-            <div className={styles.thumbnailWrapper}>
+            <div className={styles.thumbnailWrapper} key={key}>
               {f.mime.includes("image") ? (
-                <ImageThumbnail
-                  file={f}
-                  key={key}
-                  onClick={() => console.log("Clicked")}
-                />
+                <ImageThumbnail file={f} onClick={() => onClick(f)} />
               ) : (
                 <TextThumbnail key={key} />
               )}
