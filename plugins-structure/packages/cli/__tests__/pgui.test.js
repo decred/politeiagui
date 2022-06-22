@@ -25,7 +25,6 @@ describe("Given the newplugin command", () => {
     expect(fs.mkdirSync).toHaveBeenCalledTimes(2);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
-    expect(console.log).toHaveBeenCalledTimes(5);
   });
 
   it("should throw error when plugin exists", () => {
@@ -49,7 +48,6 @@ describe("Given the newapp command", () => {
     expect(fs.mkdirSync).toHaveBeenCalledTimes(3);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
-    expect(console.log).toHaveBeenCalledTimes(8);
   });
 
   it("should throw error when app exists", () => {
