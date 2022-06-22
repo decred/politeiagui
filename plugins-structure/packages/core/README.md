@@ -14,7 +14,6 @@ package management tool on any JavaScript application or plugin.
 - [Client](#core-client)
 - [Records](#core-records)
 - [Router](#core-router)
-- [Plugins Router](#core-router-plugins)
 - [Plugin Setup](#core-plugin-setup)
 - [App Setup](#core-app-setup)
 - [References](#references)
@@ -33,6 +32,9 @@ package management tool on any JavaScript application or plugin.
 │   │   ├── /policy
 │   │   ├── /records
 │   │   ├── /ui
+│   │   ├── constants.js
+│   │   ├── errors.js
+│   │   ├── initializers.js
 │   │   ├── utils.js
 │   │   ├── utils.test.js
 │   │   ├── validation.js
@@ -1338,16 +1340,10 @@ Example:
 ```javascript
 // app.js
 
-// Let's use React, but our setup is framework agnostic and can be used on any
-// javascript application
-import React from "react";
-import ReactDOM from "react-dom";
 import { appSetup } from "@politeiagui/core";
 // Plugins
 import MyPlugin from "@politeiagui/my-plugin";
 import ExternalPlugin from "external-plugin";
-
-const root = document.querySelector("#app-root");
 
 const App = appSetup({
   plugins: [MyPlugin, ExternalPlugin],
@@ -1369,7 +1365,13 @@ to be executed when route becomes inactive.
 
 ```javascript
 // index.js
+// Let's use React, but our setup is framework agnostic and can be used on any
+// javascript application
+import React from "react";
+import ReactDOM from "react-dom";
 import App from "./app";
+
+const root = document.querySelector("#app-root");
 
 const routes = [
   App.createRoute({
