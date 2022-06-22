@@ -67,3 +67,23 @@ export function getMatches(routes, targetRoute) {
     });
   return matches;
 }
+
+/**
+ * searchSelectorElement will look recursevely to the parents of the target of
+ * an event looking if it has a provided selector
+ * @param {HTMLElement} el
+ * @param {string} selector
+ * @returns false if it hits the root or the element if an element that matches
+ * the selector is found
+ */
+export function searchSelectorElement(el, selector) {
+  if (!el || !selector) {
+    return false;
+  }
+  if ((el.matches && el.matches(selector)) || el.selector) {
+    return el;
+  } else {
+    if (el.parentNode) return searchSelectorElement(el.parentNode, selector);
+    else return false;
+  }
+}

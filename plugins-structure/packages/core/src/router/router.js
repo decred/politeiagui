@@ -1,6 +1,11 @@
 import isFunction from "lodash/fp/isFunction";
 import isArray from "lodash/fp/isArray";
-import { findMatch, getParams, pathToRegex } from "./helpers";
+import {
+  findMatch,
+  getParams,
+  pathToRegex,
+  searchSelectorElement,
+} from "./helpers";
 
 const routerInitialSettings = {
   routes: null,
@@ -54,9 +59,14 @@ export const router = (function () {
   }
 
   function onClickHandler(e) {
-    if (e.target.matches(settings.selector)) {
+    const selectorElement = searchSelectorElement(e.target, settings.selector);
+    if (
+      selectorElement &&
+      selectorElement.href.startsWith(window.location.origin + "/") &&
+      selectorElement.target !== "_blank"
+    ) {
       e.preventDefault();
-      this.navigateTo(e.target.href);
+      this.navigateTo(selectorElement.href);
     }
   }
 

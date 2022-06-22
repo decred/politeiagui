@@ -1,4 +1,4 @@
-import { findMatch, generatePath } from "./helpers";
+import { findMatch, generatePath, searchSelectorElement } from "./helpers";
 
 const mockNestedRoutes = [
   {
@@ -86,5 +86,60 @@ describe("Given the findMatch helper", () => {
     expect(route).toEqual("/test-url/4/test");
     expect(arg1).toEqual("4");
     expect(arg2).not.toBeDefined();
+  });
+});
+
+describe("Given the searchSelectorElement helper", () => {
+  it("should return false if no element is passed", () => {
+    const selector = "selector";
+    const el = searchSelectorElement(undefined, selector);
+    expect(el).toBe(false);
+  });
+  it("should return false if no selector is passed", () => {
+    const bodyEl = document.createElement("body");
+    const el = searchSelectorElement(bodyEl, undefined);
+    expect(el).toBe(false);
+  });
+  it("should return false if selector does not match element or its parents", () => {
+    const bodyEl = document.createElement("body");
+    const divEl = document.createElement("div");
+    const anchorEl = document.createElement("a");
+    divEl.appendChild(anchorEl);
+    bodyEl.appendChild(divEl);
+    const el = searchSelectorElement(anchorEl, "selector");
+    expect(el).toBe(false);
+  });
+  it("should return the element if selector matches element", () => {
+    const selector = "selector";
+    const bodyEl = document.createElement("body");
+    const divEl = document.createElement("div");
+    const anchorEl = document.createElement("a");
+    anchorEl[selector] = true;
+    divEl.appendChild(anchorEl);
+    bodyEl.appendChild(divEl);
+    const el = searchSelectorElement(anchorEl, selector);
+    expect(el).toBe(anchorEl);
+  });
+  it("should return the parent element if the selector matches it", () => {
+    const selector = "selector";
+    const bodyEl = document.createElement("body");
+    const divEl = document.createElement("div");
+    const anchorEl = document.createElement("a");
+    divEl[selector] = true;
+    divEl.appendChild(anchorEl);
+    bodyEl.appendChild(divEl);
+    const el = searchSelectorElement(anchorEl, selector);
+    expect(el).toBe(divEl);
+  });
+  it("should return the grandparent element if the selector matches it", () => {
+    const selector = "selector";
+    const bodyEl = document.createElement("body");
+    const divEl = document.createElement("div");
+    const anchorEl = document.createElement("a");
+    bodyEl[selector] = true;
+    divEl.appendChild(anchorEl);
+    bodyEl.appendChild(divEl);
+    const el = searchSelectorElement(anchorEl, selector);
+    expect(el).toBe(bodyEl);
   });
 });
