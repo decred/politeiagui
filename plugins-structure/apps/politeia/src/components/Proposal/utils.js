@@ -444,89 +444,16 @@ export function showVoteStatusBar(voteSummary) {
   ].includes(voteSummary.status);
 }
 
-function getKeyByValue(obj, val) {
-  return Object.values(obj).find((value) => value.digest === val);
-}
-
-function b64toBlob(b64Data, contentType = "", sliceSize = 512) {
-  const byteCharacters = atob(b64Data);
-  const byteArrays = [];
-
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-
-    const byteArray = new Uint8Array(byteNumbers);
-    byteArrays.push(byteArray);
-  }
-
-  const blob = new Blob(byteArrays, { type: contentType });
-  return blob;
-}
-
-/**
- * replaceImgDigestWithPayload uses a regex to parse images
- * @param {String} text the markdown description
- * @param {Map} files a files array
- * @returns {{ text: string, markdownFiles: Array }}
- */
-export function replaceImgDigestWithPayload(text, files) {
-  const imageRegexParser =
+export function getImagesByDigest(text, files) {
+  if (!text) return {};
+  const markdownImageRegexParser =
     /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
-  const imgs = text.matchAll(imageRegexParser);
-  let newText = text;
-  const markdownFiles = [];
-  /**
-   * This for loop will update the newText replacing images digest by their
-   * base64 payload and push the img object to an array of markdownFiles.
-   * */
-  for (const img of imgs) {
-    const { digest } = img.groups;
-    const obj = getKeyByValue(files, digest);
-    if (obj) {
-      markdownFiles.push(obj);
-      newText = newText.replace(
-        digest,
-        `data:${obj.mime};base64,${obj.payload}`
-      );
-    }
+  const inlineImagesMatches = text.matchAll(markdownImageRegexParser);
+  let imagesByDigest = {};
+  for (const match of inlineImagesMatches) {
+    const { digest } = match.groups;
+    const file = files.find((f) => f.digest === digest);
+    imagesByDigest[digest] = file;
   }
-  return { text: newText, markdownFiles };
-}
-
-/**
- * replaceBlobsByDigestsAndGetFiles uses a regex to parse images digests and
- * creates a new Blob
- * @param {String} description the markdown description
- * @param {Map} map the map of blob -> file
- * @returns {object} { description, files }
- */
-export function replaceImgDigestByBlob(vals, map) {
-  if (!vals) return { text: "", markdownFiles: [] };
-  const { description, files } = vals;
-  const imageRegexParser =
-    /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
-  const imgs = description.matchAll(imageRegexParser);
-  let newText = description;
-  const markdownFiles = [];
-  // This for loop will update the newText replacing images digest by a blob and
-  // push the img object to an array of markdownFiles
-  for (const img of imgs) {
-    const { digest } = img.groups;
-    const obj = getKeyByValue(files, digest);
-    if (obj) {
-      const urlCreator = window.URL || window.webkitURL;
-      const blobUrl = urlCreator.createObjectURL(
-        b64toBlob(obj.payload, obj.mime)
-      );
-      map.set(blobUrl, obj);
-      markdownFiles.push(obj);
-      newText = newText.replace(digest, blobUrl);
-    }
-  }
-  return { text: newText, markdownFiles };
+  return imagesByDigest;
 }

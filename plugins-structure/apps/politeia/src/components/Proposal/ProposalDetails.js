@@ -1,12 +1,14 @@
 import React from "react";
+import { router } from "@politeiagui/core/router";
 import {
   MarkdownRenderer,
+  ModalImage,
   RecordCard,
   RecordToken,
   ThumbnailGrid,
   useModal,
 } from "@politeiagui/common-ui";
-import { decodeProposalRecord, replaceImgDigestWithPayload } from "./utils";
+import { decodeProposalRecord, getImagesByDigest } from "./utils";
 import {
   ProposalDownloads,
   ProposalMetadata,
@@ -29,24 +31,24 @@ const ProposalDetails = ({
   const [open] = useModal();
 
   const proposalDetails = decodeProposalRecord(record);
-  const { text: body, markdownFiles } = replaceImgDigestWithPayload(
-    proposalDetails.body,
-    proposalDetails.attachments
-  );
+  const body = proposalDetails.body;
+
+  const imagesByDigest = getImagesByDigest(body, proposalDetails.attachments);
+
   function handleShowRawMarkdown() {
-    window.location.pathname = `/record/${getShortToken(
-      proposalDetails.token
-    )}/raw`;
+    router.navigateTo(`/record/${getShortToken(proposalDetails.token)}/raw`);
   }
   async function handleFetchVersion(version) {
     const proposalVersion = await onFetchVersion(version);
     const { body: oldBody } = decodeProposalRecord(proposalVersion);
     open(ModalProposalDiff, { oldBody, newBody: body });
   }
-
-  const attachmentsNotInText = proposalDetails.attachments?.filter(
-    (f) => !markdownFiles.includes(f)
-  );
+  function handleOpenImageModal(file) {
+    open(ModalImage, {
+      src: `data:${file.mime};base64,${file.payload}`,
+      alt: file.name,
+    });
+  }
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
 
@@ -81,8 +83,12 @@ const ProposalDetails = ({
         }
         thirdRow={
           <div className={styles.proposalBody}>
-            <MarkdownRenderer body={body} />
-            <ThumbnailGrid files={attachmentsNotInText} />
+            <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
+            <ThumbnailGrid
+              files={proposalDetails.attachments}
+              readOnly
+              onClick={handleOpenImageModal}
+            />
           </div>
         }
         fourthRow={
