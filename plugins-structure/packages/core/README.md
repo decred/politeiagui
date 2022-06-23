@@ -14,6 +14,8 @@ package management tool on any JavaScript application or plugin.
 - [Client](#core-client)
 - [Records](#core-records)
 - [Router](#core-router)
+- [Plugin Setup](#core-plugin-setup)
+- [App Setup](#core-app-setup)
 - [References](#references)
 
 ## <a id="files-structure"></a> Files Structure
@@ -30,6 +32,9 @@ package management tool on any JavaScript application or plugin.
 │   │   ├── /policy
 │   │   ├── /records
 │   │   ├── /ui
+│   │   ├── constants.js
+│   │   ├── errors.js
+│   │   ├── initializers.js
 │   │   ├── utils.js
 │   │   ├── utils.test.js
 │   │   ├── validation.js
@@ -991,8 +996,8 @@ records from other plugins and apps. You can check the available utils below:
   Returns the tokens to batch for given `inventoryList` and `pageSize`,
   skipping the tokens in the `lookupTable`.
 
-  | Param       | Type                | Description                                          |
-  | ----------- | ------------------- | ---------------------------------------------------- |
+  | Param       | Type                | Description                                |
+  | ----------- | ------------------- | ------------------------------------------ |
   | fetchParams | <code>Object</code> | `{ lookupTable, pageSize, inventoryList }` |
 
   **Usage:**
@@ -1230,7 +1235,7 @@ API, with aditional configuration.
   const myHistory = router.getHistory();
   ```
 
-- <a id="router-gethistory"></a> `router.matchPath(path) => Boolean`
+- <a id="router-matchpath"></a> `router.matchPath(path) => Boolean`
 
   Returns if given path matches some configured route match.
 
@@ -1280,6 +1285,109 @@ API, with aditional configuration.
     router.reset();
   }
   ```
+
+## <a id="core-plugin-setup">**Plugin Setup**</a>
+
+The core package also provides good utils for plugins creation, which helps us
+managing the reducers and plugin intializers.
+
+> An `initializer` is an `{ id, action }` object, which will setup pugins custom
+> setup for some given use case described by the `id`.
+
+Let's create a new custom plugin using the `pluginSetup` util from core package:
+
+```javascript
+// myplugin/plugin.js
+import { pluginSetup, store } from "@politeiagui/core";
+import { fetchApi, myReducer } from "./myPlugin";
+
+const MyPlugin = pluginSetup({
+  initializers: [
+    { id: "myplugin/fetch", action: () => store.dispatch(fetchApi()) },
+  ],
+  reducers: [{ key: "myPlugin", reducer: myReducer }],
+  name: "my-plugin",
+});
+
+export default MyPlugin;
+```
+
+You can initialize some plugin using the `initialize` method. Example:
+
+```javascript
+import React from "react";
+import MyPlugin from "@politeiagui/my-plugin";
+
+MyPlugin.initialize("myplugin/fetch");
+
+function Component(props) {
+  return <div>My Component</div>;
+}
+```
+
+Easy, huh? Just use this interface and then use your politeiagui plugin on your
+application shell.
+
+## <a id="core-app-setup">**App Setup**</a>
+
+An application is just used to connect all plugins into an integrated interface.
+In order to provide a good experience for developers who want to create a new
+politeiagui application, we recommend using the `appSetup` util from the core
+package.
+
+Example:
+
+```javascript
+// app.js
+
+import { appSetup } from "@politeiagui/core";
+// Plugins
+import MyPlugin from "@politeiagui/my-plugin";
+import ExternalPlugin from "external-plugin";
+
+const App = appSetup({
+  plugins: [MyPlugin, ExternalPlugin],
+  config: {
+    name: "My App",
+    foo: "bar",
+  },
+});
+
+export default App;
+```
+
+Let's initialize the application with a `routes` array defined using the
+`createRoute` method from our configured app.
+
+The `createRoute` method receives an objecto containing a route `path`, a `view`
+some `initializerIds` to **initialize plugins** for given path, and a `cleanup`
+to be executed when route becomes inactive.
+
+```javascript
+// index.js
+// Let's use React, but our setup is framework agnostic and can be used on any
+// javascript application
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./app";
+
+const root = document.querySelector("#app-root");
+
+const routes = [
+  App.createRoute({
+    path: "/",
+    view: () => ReactDOM.render(<div>My App</div>, root),
+    initializerIds: ["myplugin/fetch"],
+    cleanup: () => ReactDOM.unmountComponentAtNode(root);
+  })
+]
+
+App.init({ routes });
+```
+
+So, as described above, once the user hits `/`, before rendering the `view`, it
+will execute the `myplugin/fetch` initializer so our view can be ready to use
+without any additional setup.
 
 ## References
 

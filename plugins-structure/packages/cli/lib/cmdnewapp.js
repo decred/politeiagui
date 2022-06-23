@@ -1,7 +1,7 @@
 const path = require("path");
 
 const {
-  createSrcFiles,
+  createAppSrcFiles,
   validatePlugins,
   validateAppName,
   validateConfig,
@@ -41,7 +41,7 @@ module.exports = function newApp(appName, { port, plugins, config }) {
     createConfigFile({ appPath, config, pluginsConfig });
     createWebpackConfigFiles({ appPath, port, baseAppPath });
     createTestConfigFiles({ appPath, baseAppPath });
-    createSrcFiles({ appPath, appName, baseAppPath });
+    createAppSrcFiles({ appPath, appName, baseAppPath, pluginsDeps });
   } catch (e) {
     console.error(e);
     return;

@@ -1,5 +1,11 @@
 import isFunction from "lodash/fp/isFunction";
 import isArray from "lodash/fp/isArray";
+import {
+  findMatch,
+  getParams,
+  pathToRegex,
+  searchSelectorElement,
+} from "./helpers";
 
 const routerInitialSettings = {
   routes: null,
@@ -7,55 +13,10 @@ const routerInitialSettings = {
   onpopstate: true,
 };
 
-export function generatePath(path, params) {
-  return path
-    .replace(/:(\w+)/g, (_, key) => {
-      if (params[key] === null || params[key] === undefined) {
-        throw new Error(`Missing ":${key}" param`);
-      }
-      return params[key];
-    })
-    .replace(/\/*\*$/, (_) =>
-      params["*"] == null ? "" : params["*"].replace(/^\/*/, "/")
-    );
-}
-
-function pathToRegex(path) {
-  return new RegExp(
-    "^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$"
-  );
-}
-
-export function findMatch(routes, targetRoute) {
-  const potentialMatches = routes.map((route) => ({
-    route,
-    result: targetRoute.match(pathToRegex(route.path)),
-  }));
-  const match = potentialMatches.find((potentialMatch) => {
-    if (potentialMatch.result === null) {
-      return false;
-    }
-    const [, ...params] = potentialMatch.result;
-    if (!params.length) {
-      return true;
-    }
-    return params.every((p) => p.split("/").length === 1);
-  });
-  return match;
-}
-
 export const router = (function () {
   let settings = routerInitialSettings;
   let cleanup = null;
   let title = null;
-
-  function getParams(match) {
-    const values = match.result.slice(1);
-    const keys = Array.from(match.route.path.matchAll(/:(\w+)/g)).map(
-      (result) => result[1]
-    );
-    return Object.fromEntries(keys.map((key, i) => [key, values[i]]));
-  }
 
   function push(url) {
     if (!window.history.pushState) return;
@@ -98,9 +59,14 @@ export const router = (function () {
   }
 
   function onClickHandler(e) {
-    if (e.target.matches(settings.selector)) {
+    const selectorElement = searchSelectorElement(e.target, settings.selector);
+    if (
+      selectorElement &&
+      selectorElement.href.startsWith(window.location.origin + "/") &&
+      selectorElement.target !== "_blank"
+    ) {
       e.preventDefault();
-      this.navigateTo(e.target.href);
+      this.navigateTo(selectorElement.href);
     }
   }
 
