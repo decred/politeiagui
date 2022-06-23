@@ -4,15 +4,45 @@
 
 .diffBody {
   padding-top: 2rem;
-  border-top: 1px solid var(--separator-color);
 }
 
 .diffWrapper > * {
   padding: 0px !important;
 }
+.diffWrapper > * > *:nth-child(2) {
+  margin: 0;
+}
+
+.diffHeader {
+  position: sticky;
+  background-color: var(--card-background);
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--separator-color);
+  top: -3rem;
+}
+
+.filesDiffWrapper {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--separator-color);
+  display: flex;
+  overflow-x: auto;
+}
+
+.added {
+  border: 2px solid var(--color-green);
+}
+
+.removed {
+  border: 2px solid var(--color-orange);
+}
 
 .subtitle {
   color: var(--text-secondary-color) !important;
+}
+
+.modalContent > h1 {
+  margin-bottom: 0px;
 }
 
 .modalHeader {

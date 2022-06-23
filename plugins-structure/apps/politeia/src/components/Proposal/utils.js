@@ -427,3 +427,25 @@ export function showVoteStatusBar(voteSummary) {
     TICKETVOTE_STATUS_REJECTED,
   ].includes(voteSummary.status);
 }
+
+/**
+ * getFilesDiff returns an array of files with a `added` or `removed` key for
+ * added or removed files. Unchanged files aren't tagged and composes the last
+ * elements of the diff array.
+ *
+ * @param {Array} newFiles new record files
+ * @param {Array} oldFiles old record files
+ */
+export function getFilesDiff(newFiles, oldFiles) {
+  const filesDiffFunc = (arr) => (elem) =>
+    !arr.some(
+      (arrelem) =>
+        arrelem.name === elem.name && arrelem.payload === elem.payload
+    );
+  const filesEqFunc = (arr) => (elem) => !filesDiffFunc(arr)(elem);
+  return {
+    added: newFiles.filter(filesDiffFunc(oldFiles)),
+    removed: oldFiles.filter(filesDiffFunc(newFiles)),
+    unchanged: newFiles.filter(filesEqFunc(oldFiles)),
+  };
+}

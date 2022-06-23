@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { H2, Icon, Modal, Select, Text } from "pi-ui";
+import { records } from "@politeiagui/core/records";
 import {
   Event,
   Join,
   MarkdownDiffHTML,
   RecordCard,
 } from "@politeiagui/common-ui";
-import { records } from "@politeiagui/core/records";
-import { decodeProposalRecord } from "./utils";
+import { decodeProposalRecord, getFilesDiff } from "./utils";
+import { ProposalDownloads } from "./common";
 import styles from "./ModalProposalDiff.module.css";
 import range from "lodash/range";
-import { ProposalDownloads } from "./common";
+import isEmpty from "lodash/fp/isEmpty";
 
 function ModalTitle() {
   return (
@@ -23,6 +24,38 @@ function ModalTitle() {
     </div>
   );
 }
+
+// TODO: Remove this and get from decoded proposal record
+function filterByAttachments(file) {
+  return !["proposalmetadata.json", "votemetadata.json", "index.md"].includes(
+    file.name
+  );
+}
+
+function AttachmentsDiff({ newFiles, oldFiles }) {
+  const { added, removed, unchanged } = getFilesDiff(newFiles, oldFiles);
+  // TODO: Replace text by thumbnail grid
+  return (
+    ![added, removed, unchanged].every(isEmpty) && (
+      <div className={styles.filesDiffWrapper}>
+        {added.map((file, i) => (
+          <div key={i} className={styles.added}>
+            {file.name}
+          </div>
+        ))}
+        {removed.map((file, i) => (
+          <div key={i} className={styles.removed}>
+            {file.name}
+          </div>
+        ))}
+        {unchanged.map((file, i) => (
+          <div key={i}>{file.name}</div>
+        ))}
+      </div>
+    )
+  );
+}
+
 function VersionSelector({ maxVersion, onChange, current, minVersion = 1 }) {
   const options = range(maxVersion, minVersion - 1, -1).map((v) => ({
     label: `version ${v}`,
@@ -168,6 +201,7 @@ function ProposalDiff({
     <div className={styles.diffWrapper}>
       <RecordCard
         title={currentProposal.name}
+        headerClassName={styles.diffHeader}
         rightHeader={
           <VersionsPickers
             oldVersion={oldV}
@@ -177,24 +211,29 @@ function ProposalDiff({
             setNewVersion={setNewV}
           />
         }
-        secondRow={
-          <div>
-            <VersionsInfo
-              oldProposal={oldProposal}
-              newProposal={newProposal}
-              oldRecord={oldRecord}
-              newRecord={newRecord}
-              onFetchTimestamps={onFetchTimestamps}
-            />
-          </div>
+        subtitle={
+          <VersionsInfo
+            oldProposal={oldProposal}
+            newProposal={newProposal}
+            oldRecord={oldRecord}
+            newRecord={newRecord}
+            onFetchTimestamps={onFetchTimestamps}
+          />
         }
         thirdRow={
-          <div className={styles.diffBody}>
-            <MarkdownDiffHTML
-              oldText={oldProposal?.body}
-              newText={newProposal?.body}
-            />
-          </div>
+          oldStatus === "succeeded" &&
+          newStatus === "succeeded" && (
+            <div className={styles.diffBody}>
+              <MarkdownDiffHTML
+                oldText={oldProposal?.body}
+                newText={newProposal?.body}
+              />
+              <AttachmentsDiff
+                oldFiles={oldRecord.files.filter(filterByAttachments)}
+                newFiles={newRecord.files.filter(filterByAttachments)}
+              />
+            </div>
+          )
         }
       />
     </div>
@@ -216,6 +255,7 @@ function ModalProposalDiff({
       onClose={onClose}
       title={<ModalTitle />}
       className={styles.modalWrapper}
+      contentClassName={styles.modalContent}
     >
       <ProposalDiff
         oldVersion={oldVersion}
