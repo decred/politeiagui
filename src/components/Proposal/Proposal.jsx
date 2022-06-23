@@ -261,7 +261,8 @@ const Proposal = React.memo(function Proposal({
         className={classNames(
           (isAbandoned || isCensored) && styles.abandonedProposal,
           isNotExtendedRfpOrSubmission && styles.rfpProposal
-        )}>
+        )}
+      >
         {({
           Author,
           Event,
@@ -299,7 +300,8 @@ const Proposal = React.memo(function Proposal({
                   truncate
                   isLegacy={isLegacy}
                   linesBeforeTruncate={2}
-                  url={proposalURL}>
+                  url={proposalURL}
+                >
                   {name || shortToken}
                 </Title>
               }
@@ -317,7 +319,8 @@ const Proposal = React.memo(function Proposal({
                     placement={mobile ? "left" : "right"}
                     content="You have to revoke the voting authorization to edit the proposal"
                     className={styles.disabled}
-                    contentClassName={styles.authorizeTooltip}>
+                    contentClassName={styles.authorizeTooltip}
+                  >
                     <Edit tabIndex={-1} />
                   </Tooltip>
                 ) : null
@@ -364,7 +367,8 @@ const Proposal = React.memo(function Proposal({
                     <Text
                       id={`proposal-${shortToken}-version`}
                       className={styles.version}
-                      truncate>{`version ${version}`}</Text>
+                      truncate
+                    >{`version ${version}`}</Text>
                   )}
                   {showExtendedVersionPicker && (
                     <VersionPicker
@@ -414,13 +418,15 @@ const Proposal = React.memo(function Proposal({
                     <Tooltip
                       placement="bottom"
                       content={`block ${startblockheight} to ${endblockheight}`}
-                      contentClassName={styles.quorumTooltip}>
+                      contentClassName={styles.quorumTooltip}
+                    >
                       <Text
                         className={classNames(
                           "hide-on-mobile",
                           styles.blocksLeft
                         )}
-                        size="small">
+                        size="small"
+                      >
                         {`${voteBlocksLeft} block${
                           voteBlocksLeft > 1 ? "s" : ""
                         } left`}
@@ -513,7 +519,8 @@ const Proposal = React.memo(function Proposal({
               <Row className={styles.lastRow} justify="space-between">
                 <LinkSection
                   className={styles.downloadLinksWrapper}
-                  title="Available Downloads">
+                  title="Available Downloads"
+                >
                   <DownloadRecord
                     fileName={`${shortToken}-v${version}`}
                     content={proposal}
