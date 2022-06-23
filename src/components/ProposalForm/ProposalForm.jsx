@@ -75,8 +75,7 @@ const Rules = () => (
         <Link
           href="https://docs.decred.org/contributing/contributor-compensation/"
           target="_blank"
-          rel="noopener noreferrer"
-        >
+          rel="noopener noreferrer">
           here
         </Link>
       </ListItem>
@@ -86,8 +85,7 @@ const Rules = () => (
         <Link
           href="https://docs.decred.org/governance/politeia/proposal-guidelines/"
           target="_blank"
-          rel="noopener noreferrer"
-        >
+          rel="noopener noreferrer">
           Proposal Guidelines
         </Link>
       </ListItem>
@@ -209,6 +207,13 @@ const ProposalForm = React.memo(function ProposalForm({
   const hasError = errors && errors.global;
   useScrollTo("record-submission-error-message", hasError);
 
+  function getEndDateMinTimestamp() {
+    return values.startDate
+      ? // One day from startDate in ms
+        (convertObjectToUnixTimestamp(values.startDate) + 86400) * 1000
+      : sumNowAndDuration(startdatemin);
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Message kind="warning" className="margin-bottom-m">
@@ -222,8 +227,7 @@ const ProposalForm = React.memo(function ProposalForm({
         className={classNames(
           styles.typeRow,
           isRFPSubmission && styles.typeRowNoMargin
-        )}
-      >
+        )}>
         <SelectField
           name="type"
           onChange={handleSelectFiledChange("type")}
@@ -247,8 +251,7 @@ const ProposalForm = React.memo(function ProposalForm({
               className={styles.tooltipWrapper}
               placement={smallTablet ? "left" : "bottom"}
               content="The deadline for the RFP submissions,
-              it can be edited at any point before the voting has been started and should be at least two weeks from now."
-            >
+              it can be edited at any point before the voting has been started and should be at least two weeks from now.">
               <div className={styles.iconWrapper}>
                 <Icon type="info" size={smallTablet ? "md" : "lg"} />
               </div>
@@ -285,8 +288,7 @@ const ProposalForm = React.memo(function ProposalForm({
               className={styles.tooltipWrapper}
               placement="left"
               content="The token for the RFP you are submitting on,
-              it can be found on the RFP proposal page."
-            >
+              it can be found on the RFP proposal page.">
               <div className={styles.iconWrapper}>
                 <Icon type="info" size={smallTablet ? "md" : "lg"} />
               </div>
@@ -331,7 +333,7 @@ const ProposalForm = React.memo(function ProposalForm({
             tabIndex={1}
             className={classNames(styles.endDate, "margin-bottom-m")}
             value={values.endDate}
-            minTimestamp={sumNowAndDuration(startdatemin)}
+            minTimestamp={getEndDateMinTimestamp()}
             maxTimestamp={sumNowAndDuration(enddatemax)}
             name="endDate"
             placeholder="End Date"
@@ -410,8 +412,7 @@ const ProposalForm = React.memo(function ProposalForm({
           <Message
             id="record-submission-error-message"
             className={classNames(styles.errorRow, "margin-bottom-m")}
-            kind="error"
-          >
+            kind="error">
             {errors.global.toString()}
           </Message>
         </Row>
@@ -555,8 +556,7 @@ const ProposalFormWrapper = ({
         loading={!proposalFormValidation}
         validate={proposalFormValidation}
         isInitialValid={!initialErrors}
-        onSubmit={handleSubmit}
-      >
+        onSubmit={handleSubmit}>
         {(props) => (
           <ProposalForm
             {...{
