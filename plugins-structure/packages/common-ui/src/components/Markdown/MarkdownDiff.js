@@ -37,12 +37,12 @@ function joinDiffArrays(diff = []) {
   return joined;
 }
 
-export function getDiffHTML(oldText = "", newText = "") {
+export function getDiffHTML(oldText = "", newText = "", filesBySrc = {}) {
   const oldMarkdown = renderToStaticMarkup(
-    <MarkdownRenderer body={oldText} isDiff={true} />
+    <MarkdownRenderer body={oldText} isDiff={true} filesBySrc={filesBySrc} />
   );
   const newMarkdown = renderToStaticMarkup(
-    <MarkdownRenderer body={newText} isDiff={true} />
+    <MarkdownRenderer body={newText} isDiff={true} filesBySrc={filesBySrc} />
   );
 
   const oldNode = parseNode(oldMarkdown).firstChild.firstChild.innerHTML;
@@ -55,8 +55,8 @@ export function getDiffHTML(oldText = "", newText = "") {
   return joinDiffArrays(diff);
 }
 
-export function MarkdownDiffHTML({ oldText, newText }) {
-  const html = getDiffHTML(oldText, newText);
+export function MarkdownDiffHTML({ oldText, newText, filesBySrc }) {
+  const html = getDiffHTML(oldText, newText, filesBySrc);
   return (
     <div>
       <div className="markdown-body markdown-diff">{parse(html)}</div>
