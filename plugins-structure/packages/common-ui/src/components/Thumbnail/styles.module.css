@@ -33,7 +33,7 @@
 
 .thumbnailGrid {
   display: flex;
-  overflow-y: scroll;
+  overflow-x: auto;
 }
 
 .thumbnailWrapper {
