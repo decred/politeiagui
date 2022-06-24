@@ -34,6 +34,9 @@ const ProposalDetails = ({
   const body = proposalDetails.body;
 
   const imagesByDigest = getImagesByDigest(body, proposalDetails.attachments);
+  const imagesNotInText = proposalDetails.attachments.filter(
+    (f) => !imagesByDigest[f.digest]
+  );
 
   function handleShowRawMarkdown() {
     router.navigateTo(`/record/${getShortToken(proposalDetails.token)}/raw`);
@@ -44,7 +47,7 @@ const ProposalDetails = ({
     open(ModalProposalDiff, { oldBody, newBody: body });
   }
   function handleOpenImageModal(index) {
-    const images = proposalDetails.attachments
+    const images = imagesNotInText
       .filter((f) => f.mime === "image/png")
       .map((file) => ({
         src: `data:${file.mime};base64,${file.payload}`,
@@ -88,7 +91,7 @@ const ProposalDetails = ({
           <div className={styles.proposalBody}>
             <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
             <ThumbnailGrid
-              files={proposalDetails.attachments}
+              files={imagesNotInText}
               readOnly
               onClick={handleOpenImageModal}
             />
