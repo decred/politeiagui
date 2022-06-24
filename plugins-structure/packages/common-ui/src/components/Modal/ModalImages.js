@@ -6,17 +6,16 @@ function ImagesCarousel({ images, activeIndex }) {
   const [index, setIndex] = useState(activeIndex);
   const length = images.length - 1;
   return (
-    <div onClick={() => setIndex(index < length ? index + 1 : 0)}>
-      {images.map(
-        (img, i) =>
-          i === index && (
-            <img
-              alt={img.alt}
-              key={i}
-              src={img.src}
-              className={styles.modalImage}
-            />
-          )
+    <div
+      className={styles.modalImagesWrapper}
+      onClick={() => setIndex(index < length ? index + 1 : 0)}
+    >
+      {images[index] && (
+        <img
+          alt={images[index].alt}
+          src={images[index].src}
+          className={styles.modalImage}
+        />
       )}
     </div>
   );

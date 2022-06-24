@@ -1,15 +1,15 @@
 .fileThumbnail {
   transition: box-shadow 0.3s;
-  width: 125px;
-  height: 90px;
+  width: 12.5rem;
+  height: 9rem;
   object-fit: cover;
   object-position: 0% 100%;
-  border-radius: 2px;
-  border: 1px solid var(--color-gray-lighter);
+  border-radius: 0.2rem;
+  border: 0.1rem solid var(--color-gray-lighter);
 }
 
 .fileThumbnail:hover {
-  box-shadow: 0 0 10px rgba(33, 33, 33, 0.2);
+  box-shadow: 0 0 1rem rgba(33, 33, 33, 0.2);
 }
 
 .fileThumbnailText {
@@ -21,7 +21,7 @@
 .fileThumbnailWrapper {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
   align-items: flex-start;
   cursor: pointer;
 }

@@ -3,6 +3,7 @@ import { ButtonIcon } from "pi-ui";
 import { ImageThumbnail } from "./ImageThumbnail";
 import { TextThumbnail } from "./TextThumbnail";
 import styles from "./styles.module.css";
+import isEmpty from "lodash/isEmpty";
 
 export function ThumbnailGrid({
   files,
@@ -12,7 +13,8 @@ export function ThumbnailGrid({
   readOnly = false,
 }) {
   return (
-    files && (
+    files &&
+    !isEmpty(files) && (
       <>
         {errors && <div>Errors</div>}
         <div className={styles.thumbnailGrid}>
