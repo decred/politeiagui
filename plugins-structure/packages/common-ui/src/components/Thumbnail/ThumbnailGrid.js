@@ -11,6 +11,7 @@ export function ThumbnailGrid({
   onRemove = () => {},
   onClick = () => {},
   readOnly = false,
+  thumbnailClassName,
 }) {
   return (
     files &&
@@ -21,7 +22,11 @@ export function ThumbnailGrid({
           {files.map((f, key) => (
             <div className={styles.thumbnailWrapper} key={key}>
               {f.mime.includes("image") ? (
-                <ImageThumbnail file={f} onClick={() => onClick(key)} />
+                <ImageThumbnail
+                  className={thumbnailClassName}
+                  file={f}
+                  onClick={() => onClick(key)}
+                />
               ) : (
                 <TextThumbnail key={key} />
               )}
