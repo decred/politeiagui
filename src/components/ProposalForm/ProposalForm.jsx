@@ -209,6 +209,13 @@ const ProposalForm = React.memo(function ProposalForm({
   const hasError = errors && errors.global;
   useScrollTo("record-submission-error-message", hasError);
 
+  function getEndDateMinTimestamp() {
+    return values.startDate
+      ? // One day from startDate in ms
+        (convertObjectToUnixTimestamp(values.startDate) + 86400) * 1000
+      : sumNowAndDuration(startdatemin);
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Message kind="warning" className="margin-bottom-m">
@@ -331,7 +338,7 @@ const ProposalForm = React.memo(function ProposalForm({
             tabIndex={1}
             className={classNames(styles.endDate, "margin-bottom-m")}
             value={values.endDate}
-            minTimestamp={sumNowAndDuration(startdatemin)}
+            minTimestamp={getEndDateMinTimestamp()}
             maxTimestamp={sumNowAndDuration(enddatemax)}
             name="endDate"
             placeholder="End Date"

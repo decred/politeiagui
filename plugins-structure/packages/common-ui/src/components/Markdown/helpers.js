@@ -51,14 +51,20 @@ const LinkRenderer = ({ url, children }) => {
 
 // Use external link renderer when images are not allowed
 const imageHandler =
-  (renderImages) =>
+  (renderImages, filesBySrc) =>
   ({ src, alt }) => {
     const filteredSrc = xssFilters.uriInDoubleQuotedAttr(src);
     if (filteredSrc !== src) {
       console.warn(XSS_ALERT);
     }
+    // Replace image src for base64 payload if src corresponds to an index on
+    // imagesBySrc.
+    let imgSrc = filteredSrc;
+    const file = filesBySrc && filesBySrc[filteredSrc];
+    if (file) imgSrc = `data:${file.mime};base64,${file.payload}`;
+
     return renderImages ? (
-      <img src={filteredSrc} alt={alt} />
+      <img src={imgSrc} alt={alt} />
     ) : (
       <LinkRenderer url={filteredSrc}>{alt}</LinkRenderer>
     );
@@ -89,9 +95,9 @@ const blockquoteHandler =
     return <blockquote>{newChildren}</blockquote>;
   };
 
-export const customRenderers = (renderImages, isDiff) => {
+export const customRenderers = (renderImages, isDiff, filesBySrc) => {
   return {
-    img: imageHandler(renderImages),
+    img: imageHandler(renderImages, filesBySrc),
     a: linkHandler,
     blockquote: blockquoteHandler(isDiff),
   };

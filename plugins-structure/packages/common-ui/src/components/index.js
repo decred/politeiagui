@@ -8,3 +8,4 @@ export * from "./RecordCard";
 export * from "./RecordForm";
 export * from "./RecordsList";
 export * from "./RecordToken";
+export * from "./Thumbnail";

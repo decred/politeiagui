@@ -34,3 +34,7 @@
   width: 100%;
   margin-top: var(--spacing-1);
 }
+
+.modalImage {
+  max-width: 100%;
+}
