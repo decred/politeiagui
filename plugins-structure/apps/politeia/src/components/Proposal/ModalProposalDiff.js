@@ -7,8 +7,9 @@ import {
   Join,
   MarkdownDiffHTML,
   RecordCard,
+  ThumbnailGrid,
 } from "@politeiagui/common-ui";
-import { decodeProposalRecord, getFilesDiff } from "./utils";
+import { decodeProposalRecord, getFilesDiff, getImagesByDigest } from "./utils";
 import { ProposalDownloads } from "./common";
 import styles from "./ModalProposalDiff.module.css";
 import range from "lodash/range";
@@ -25,32 +26,26 @@ function ModalTitle() {
   );
 }
 
-// TODO: Remove this and get from decoded proposal record
-function filterByAttachments(file) {
-  return !["proposalmetadata.json", "votemetadata.json", "index.md"].includes(
-    file.name
-  );
-}
-
 function AttachmentsDiff({ newFiles, oldFiles }) {
   const { added, removed, unchanged } = getFilesDiff(newFiles, oldFiles);
-  // TODO: Replace text by thumbnail grid
   return (
     ![added, removed, unchanged].every(isEmpty) && (
       <div className={styles.filesDiffWrapper}>
-        {added.map((file, i) => (
-          <div key={i} className={styles.added}>
-            {file.name}
-          </div>
-        ))}
-        {removed.map((file, i) => (
-          <div key={i} className={styles.removed}>
-            {file.name}
-          </div>
-        ))}
-        {unchanged.map((file, i) => (
-          <div key={i}>{file.name}</div>
-        ))}
+        <ThumbnailGrid
+          files={added}
+          readOnly
+          thumbnailClassName={styles.added}
+        />
+        <ThumbnailGrid
+          files={removed}
+          readOnly
+          thumbnailClassName={styles.removed}
+        />
+        <ThumbnailGrid
+          files={unchanged}
+          readOnly
+          thumbnailClassName={styles.unchanged}
+        />
       </div>
     )
   );
@@ -180,6 +175,22 @@ function ProposalDiff({
   // Proposals
   const oldProposal = decodeProposalRecord(oldRecord);
   const newProposal = decodeProposalRecord(newRecord);
+  // Proposals decoded files
+  const oldImagesByDigest = getImagesByDigest(
+    oldProposal?.body,
+    oldProposal?.attachments
+  );
+  const newImagesByDigest = getImagesByDigest(
+    newProposal?.body,
+    newProposal?.attachments
+  );
+  const oldProposalAttachments = oldProposal?.attachments.filter(
+    (f) => !oldImagesByDigest[f.digest]
+  );
+  const newProposalAttachments = newProposal?.attachments.filter(
+    (f) => !newImagesByDigest[f.digest]
+  );
+  const imagesByDigest = { ...oldImagesByDigest, ...newImagesByDigest };
   // Effect for versions changes
   useEffect(
     function handleNewVersionChange() {
@@ -227,10 +238,11 @@ function ProposalDiff({
               <MarkdownDiffHTML
                 oldText={oldProposal?.body}
                 newText={newProposal?.body}
+                filesBySrc={imagesByDigest}
               />
               <AttachmentsDiff
-                oldFiles={oldRecord.files.filter(filterByAttachments)}
-                newFiles={newRecord.files.filter(filterByAttachments)}
+                oldFiles={oldProposalAttachments}
+                newFiles={newProposalAttachments}
               />
             </div>
           )

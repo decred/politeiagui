@@ -41,6 +41,10 @@
   color: var(--text-secondary-color) !important;
 }
 
+.modalContent {
+  min-height: 40vh;
+}
+
 .modalContent > h1 {
   margin-bottom: 0px;
 }
