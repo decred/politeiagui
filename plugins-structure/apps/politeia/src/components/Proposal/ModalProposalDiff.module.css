@@ -29,6 +29,10 @@
   overflow-x: auto;
 }
 
+.filesDiffWrapper > * {
+  overflow-x: visible;
+}
+
 .added {
   border: 2px solid var(--color-green);
 }
