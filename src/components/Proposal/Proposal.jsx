@@ -354,7 +354,7 @@ const Proposal = React.memo(function Proposal({
                   ) : (
                     !showEditedDate && (
                       <span data-testid="proposal-published-timestamp">
-                        <Event event="published" timestamp={timestamp} />
+                        <Event event="submitted" timestamp={timestamp} />
                       </span>
                     )
                   )}
