@@ -13,3 +13,11 @@ coverage
 .env.test.local
 .env.production.local
 .next
+
+# prevent adding dummy apps to github. With this we are telling git
+# to ignore everything inside the apps folder besides /politeia.
+# To add apps to the whitelist just add a new line like: !apps/my_app
+
+!apps/
+apps/*
+!apps/politeia
