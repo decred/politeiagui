@@ -1,13 +1,86 @@
 import { listener } from "@politeiagui/core/listeners";
-import { records } from "@politeiagui/core/records";
-import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
+import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
+import { records } from "@politeiagui/core/records";
 import { getTokensToFetch } from "@politeiagui/core/records/utils";
 import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
 import isEmpty from "lodash/isEmpty";
 import { fetchNextBatch } from "./actions";
 
 const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
+
+function fetchNextBatchCommentsEffect(state, dispatch, { inventoryList }) {
+  const {
+    commentsCount: { byToken },
+    commentsPolicy: {
+      policy: { countpagesize },
+    },
+  } = state;
+
+  const commentsCountToFetch = getTokensToFetch({
+    inventoryList,
+    lookupTable: byToken,
+    pageSize: countpagesize,
+  });
+
+  return (
+    !isEmpty(commentsCountToFetch) &&
+    dispatch(
+      commentsCount.fetch({
+        tokens: commentsCountToFetch,
+      })
+    )
+  );
+}
+
+function fetchNextBatchRecordsEffect(state, dispatch, { inventoryList }) {
+  const {
+    records: { records: recordsObj },
+    recordsPolicy: {
+      policy: { recordspagesize },
+    },
+  } = state;
+
+  const recordsToFetch = getTokensToFetch({
+    inventoryList,
+    lookupTable: recordsObj,
+    pageSize: recordspagesize,
+  });
+
+  return (
+    !isEmpty(recordsToFetch) &&
+    dispatch(
+      records.fetch({
+        tokens: recordsToFetch,
+        filenames: piFilenames,
+      })
+    )
+  );
+}
+
+function fetchNextBatchTicketvoteEffect(state, dispatch, { inventoryList }) {
+  const {
+    ticketvoteSummaries: { byToken },
+    ticketvotePolicy: {
+      policy: { summariespagesize },
+    },
+  } = state;
+
+  const voteSummariesToFetch = getTokensToFetch({
+    inventoryList,
+    lookupTable: byToken,
+    pageSize: summariespagesize,
+  });
+
+  return (
+    !isEmpty(voteSummariesToFetch) &&
+    dispatch(
+      ticketvoteSummaries.fetch({
+        tokens: voteSummariesToFetch,
+      })
+    )
+  );
+}
 
 export function startHomeListeners() {
   listener.startListening({
@@ -23,67 +96,28 @@ export function startHomeListeners() {
     effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
       // Only allow one instance of this listener to run at a time
       listenerApi.unsubscribe();
+
       const readableStatus = getHumanReadableTicketvoteStatus(payload);
-
-      // Get all required states from packages slices
-      const {
-        ticketvoteInventory,
-        records: recordsObject,
-        ticketvoteSummaries: voteSummariesObj,
-        commentsCount: commentsCountObj,
-        recordsPolicy,
-        commentsPolicy,
-        ticketvotePolicy,
-      } = getState();
-
-      // Get all pages sizes allowed
-      const ticketvoteSummariesPageSize =
-        ticketvotePolicy.policy.summariespagesize;
-      const recordsPageSize = recordsPolicy.policy.recordspagesize;
-      const commentsCountPageSize = commentsPolicy.policy.countpagesize;
-      // TODO: Add piSummariesPageSize
-
-      // Get tokens pageSize tokens to fire the dispatchs
-      // Skip those already loaded
+      const { ticketvoteInventory } = getState();
       const inventoryList = ticketvoteInventory[readableStatus].tokens;
-      const recordsToFetch = getTokensToFetch({
+      const ticketVoteAction = fetchNextBatchTicketvoteEffect(
+        getState(),
+        dispatch,
+        { inventoryList }
+      );
+      const recordsAction = fetchNextBatchRecordsEffect(getState(), dispatch, {
         inventoryList,
-        lookupTable: recordsObject.records,
-        pageSize: recordsPageSize,
       });
-      const voteSummariesToFetch = getTokensToFetch({
-        inventoryList,
-        lookupTable: voteSummariesObj.byToken,
-        pageSize: ticketvoteSummariesPageSize,
-      });
-      const commentsCountToFetch = getTokensToFetch({
-        inventoryList,
-        lookupTable: commentsCountObj.byToken,
-        pageSize: commentsCountPageSize,
-      });
+      const commentsAction = fetchNextBatchCommentsEffect(
+        getState(),
+        dispatch,
+        {
+          inventoryList,
+        }
+      );
 
-      // Dispatches if tokens are not empty
-      await Promise.all([
-        !isEmpty(recordsToFetch) &&
-          dispatch(
-            records.fetch({
-              tokens: recordsToFetch,
-              filenames: piFilenames,
-            })
-          ),
-        !isEmpty(voteSummariesToFetch) &&
-          dispatch(
-            ticketvoteSummaries.fetch({
-              tokens: voteSummariesToFetch,
-            })
-          ),
-        !isEmpty(commentsCountToFetch) &&
-          dispatch(
-            commentsCount.fetch({
-              tokens: commentsCountToFetch,
-            })
-          ),
-      ]);
+      // Dispatches actions
+      await Promise.all([recordsAction, ticketVoteAction, commentsAction]);
 
       // Re-enable the listener
       listenerApi.subscribe();
