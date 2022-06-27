@@ -123,25 +123,23 @@ function VersionsInfo({
       <Join>
         <Text className={styles.subtitle}>Version {oldVersion}</Text>
         <Event timestamp={oldTimestamp} />
-        <div className={styles.versionDownloads}>
-          <ProposalDownloads
-            withoutComments={true}
-            record={oldRecord}
-            onFetchRecordTimestamps={onFetchTimestamps}
-          />
-        </div>
+        <ProposalDownloads
+          headerClassName={styles.versionDownloads}
+          withoutComments={true}
+          record={oldRecord}
+          onFetchRecordTimestamps={onFetchTimestamps}
+        />
       </Join>
       {oldVersion !== newVersion && (
         <Join>
           <Text className={styles.subtitle}>Version {newVersion}</Text>
           <Event timestamp={newTimestamp} />
-          <div className={styles.versionDownloads}>
-            <ProposalDownloads
-              withoutComments={true}
-              record={newRecord}
-              onFetchRecordTimestamps={onFetchTimestamps}
-            />
-          </div>
+          <ProposalDownloads
+            headerClassName={styles.versionDownloads}
+            withoutComments={true}
+            record={newRecord}
+            onFetchRecordTimestamps={onFetchTimestamps}
+          />
         </Join>
       )}
     </div>

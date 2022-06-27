@@ -26,6 +26,7 @@ function ProposalSubtitle({
             id={`proposal-${token}-version`}
             title={`version ${version}`}
             itemsListClassName={styles.version}
+            dropdownHeaderClassName={styles.version}
             className={styles.version}
           >
             {range(version, 0, -1).map((v, i) => (

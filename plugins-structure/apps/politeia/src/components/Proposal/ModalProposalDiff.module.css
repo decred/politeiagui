@@ -18,6 +18,7 @@
   background-color: var(--card-background);
   padding: 2rem 0;
   border-bottom: 0.1rem solid var(--separator-color);
+  /* Stick on top without extra margin */
   top: -3rem;
 }
 
@@ -42,11 +43,11 @@
 }
 
 .subtitle {
-  color: var(--text-secondary-color) !important;
+  color: var(--text-secondary-color);
 }
 
 .modalContent {
-  min-height: 40vh;
+  min-height: 50vh;
 }
 
 .modalContent > h1 {
@@ -63,8 +64,8 @@
   width: 100%;
 }
 
-.versionDownloads > * > * > * {
-  color: var(--text-secondary-color) !important;
+.versionDownloads {
+  color: var(--text-secondary-color);
 }
 
 .versionsInfo {
@@ -84,6 +85,7 @@
 
 @media screen and (max-width: 560px) {
   .diffHeader {
+    /* Stick on top without extra margin. */
     top: -5rem;
   }
 }

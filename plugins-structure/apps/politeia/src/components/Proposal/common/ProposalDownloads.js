@@ -13,6 +13,7 @@ const ProposalDownloads = ({
   onFetchRecordTimestamps,
   title,
   withoutComments,
+  headerClassName,
 }) => {
   if (!record) return null;
 
@@ -33,7 +34,11 @@ const ProposalDownloads = ({
   }
 
   return (
-    <Dropdown title={title} closeOnItemClick={false}>
+    <Dropdown
+      title={title}
+      closeOnItemClick={false}
+      dropdownHeaderClassName={headerClassName}
+    >
       <DropdownItem
         onClick={handleDownload(record, `${shortToken}-v${version}`)}
       >
