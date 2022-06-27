@@ -10,6 +10,10 @@ import { Details, Home, New } from "../pages";
 import { decodeProposalRecord } from "../components/Proposal/utils";
 import App from "../app";
 
+// Statistics Routes
+import { routes as statisticsRoutes } from "@politeiagui/statistics";
+import { mergeRoutes } from "@politeiagui/core/router";
+
 function cleanup() {
   return ReactDOM.unmountComponentAtNode(document.querySelector("#root"));
 }
@@ -29,10 +33,10 @@ function routeView(Component) {
   };
 }
 
-export const routes = [
+const proposalsRoutes = [
   App.createRoute({
     path: "/",
-    initializerIds: [
+    pluginInitializerIds: [
       "records/batch",
       "ticketvote/inventory",
       "ticketvote/summaries",
@@ -43,13 +47,13 @@ export const routes = [
   }),
   App.createRoute({
     path: "/record/new",
-    initializerIds: ["pi/new"],
+    pluginInitializerIds: ["pi/new"],
     cleanup,
     view: routeView(New),
   }),
   App.createRoute({
     path: "/record/:token",
-    initializerIds: [
+    pluginInitializerIds: [
       "ticketvote/timestamps",
       "ticketvote/summaries",
       "comments/timestamps",
@@ -73,3 +77,5 @@ export const routes = [
     cleanup,
   },
 ];
+
+export const routes = mergeRoutes(proposalsRoutes, statisticsRoutes);

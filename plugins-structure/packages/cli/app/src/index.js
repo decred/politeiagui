@@ -29,8 +29,8 @@ const routes = [
         root
       ),
     cleanup,
-    initializerIds: [
-      /* Pass initializerIds to setup your route to consume some plugin */
+    pluginInitializerIds: [
+      /* Pass pluginInitializerIds to setup your route to consume some plugin */
     ],
   }),
   App.createRoute({
@@ -43,8 +43,8 @@ const routes = [
         root
       ),
     cleanup,
-    initializerIds: [
-      /* Pass initializerIds to setup your route to consume some plugin */
+    pluginInitializerIds: [
+      /* Pass pluginInitializerIds to setup your route to consume some plugin */
     ],
   }),
 ];

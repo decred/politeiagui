@@ -1360,7 +1360,7 @@ Let's initialize the application with a `routes` array defined using the
 `createRoute` method from our configured app.
 
 The `createRoute` method receives an objecto containing a route `path`, a `view`
-some `initializerIds` to **initialize plugins** for given path, and a `cleanup`
+some `pluginInitializerIds` to **initialize plugins** for given path, and a `cleanup`
 to be executed when route becomes inactive.
 
 ```javascript
@@ -1377,7 +1377,7 @@ const routes = [
   App.createRoute({
     path: "/",
     view: () => ReactDOM.render(<div>My App</div>, root),
-    initializerIds: ["myplugin/fetch"],
+    pluginInitializerIds: ["myplugin/fetch"],
     cleanup: () => ReactDOM.unmountComponentAtNode(root);
   })
 ]
