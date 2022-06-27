@@ -2,6 +2,7 @@ import { connectReducers, store, validatePlugin } from "./";
 import { api } from "./api";
 import { router } from "./router";
 import { initializers as recordsInitializers } from "./records/initializers";
+import uniq from "lodash/fp/uniq";
 
 function mergeInitializers(initializers, targetInitializers) {
   let mergedInitializers = initializers;
@@ -14,6 +15,27 @@ function mergeInitializers(initializers, targetInitializers) {
     mergedInitializers = [...mergedInitializers, initializer];
   }
   return mergedInitializers;
+}
+
+function getInitializersActionsByIds(initializers, ids, path) {
+  const actions = [];
+  for (const id of ids) {
+    const init = initializers.find((i) => i.id === id);
+    if (!init)
+      throw Error(
+        `createRoute: initializer id "${id}" for path "${path}" isn't defined.`
+      );
+    actions.push(init.action);
+  }
+  return actions;
+}
+
+function validateUniqPluginInitializerIds(ids = []) {
+  const uniqIds = uniq(ids);
+  if (uniqIds.length !== ids.length) {
+    throw Error(`"pluginInitializerIds" must be an array of uniq values`);
+  }
+  return true;
 }
 
 /**
@@ -55,24 +77,25 @@ export function appSetup({ plugins, config }) {
     },
     /**
      * createRoute is an interface for creating app routes. Before rendering
-     * some route view, execute all initializers actions for given `initializerIds`.
+     * some route view, execute all initializers actions for given
+     * `pluginInitializerIds`.
      * @param {{ path: string,
      *  view: Function,
-     *  initializerIds: Array,
+     *  pluginInitializerIds: string[],
      *  cleanup: Function
      * }} routeParams
      */
-    createRoute({ path, view, initializerIds = [], cleanup } = {}) {
-      const routeInitializerActions = initializers
-        .filter((init) => initializerIds.includes(init.id))
-        .map((init) => init.action);
+    createRoute({ path, view, pluginInitializerIds = [], cleanup } = {}) {
+      validateUniqPluginInitializerIds(pluginInitializerIds);
+      const actions = getInitializersActionsByIds(
+        initializers,
+        pluginInitializerIds
+      );
       return {
         path,
         cleanup,
         view: async (routeParams) => {
-          for (const action of routeInitializerActions) {
-            await action();
-          }
+          await Promise.all([...actions.map((a) => a())]);
           return await view(routeParams);
         },
       };
