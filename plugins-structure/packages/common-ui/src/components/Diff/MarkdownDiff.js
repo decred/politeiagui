@@ -3,7 +3,8 @@ import parse from "html-react-parser";
 import { diffArrays } from "diff";
 import { renderToStaticMarkup } from "react-dom/server";
 import { parse as parseNode } from "node-html-parser";
-import { MarkdownRenderer } from ".";
+import { MarkdownRenderer } from "../Markdown";
+import "./styles.css";
 
 function splitRawMdLines(mdText = "") {
   const splitted = mdText

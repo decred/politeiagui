@@ -1,0 +1,31 @@
+/* Markdown Diff */
+.added {
+  color: var(--color-green);
+  background-color: #bffccc54;
+  padding: 0.3rem;
+}
+.added > pre {
+  color: var(--color-green);
+  border: var(--color-green) 1px solid;
+  background-color: #bffccc1c !important;
+}
+.removed {
+  color: var(--color-orange);
+  background-color: #ffcccc57;
+  padding: 0.3rem;
+}
+
+.removed > pre {
+  color: var(--color-orange);
+  border: var(--color-orange) 1px solid;
+  background-color: #ffcccc1c !important;
+}
+
+.added img {
+  max-width: 96%;
+  margin: 2% 2% 0 2%;
+}
+.removed img {
+  max-width: 96%;
+  margin: 2% 2% 0 2%;
+}
