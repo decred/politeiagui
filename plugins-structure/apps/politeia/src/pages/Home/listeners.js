@@ -105,9 +105,37 @@ export function startHomeListeners() {
         dispatch,
         { inventoryList }
       );
+      await ticketVoteAction();
+      // Re-enable the listener
+      listenerApi.subscribe();
+    },
+  });
+  listener.startListening({
+    actionCreator: fetchNextBatch,
+    effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
+      // Only allow one instance of this listener to run at a time
+      listenerApi.unsubscribe();
+
+      const readableStatus = getHumanReadableTicketvoteStatus(payload);
+      const { ticketvoteInventory } = getState();
+      const inventoryList = ticketvoteInventory[readableStatus].tokens;
       const recordsAction = fetchNextBatchRecordsEffect(getState(), dispatch, {
         inventoryList,
       });
+      await recordsAction();
+      // Re-enable the listener
+      listenerApi.subscribe();
+    },
+  });
+  listener.startListening({
+    actionCreator: fetchNextBatch,
+    effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
+      // Only allow one instance of this listener to run at a time
+      listenerApi.unsubscribe();
+
+      const readableStatus = getHumanReadableTicketvoteStatus(payload);
+      const { ticketvoteInventory } = getState();
+      const inventoryList = ticketvoteInventory[readableStatus].tokens;
       const commentsAction = fetchNextBatchCommentsEffect(
         getState(),
         dispatch,
@@ -115,10 +143,7 @@ export function startHomeListeners() {
           inventoryList,
         }
       );
-
-      // Dispatches actions
-      await Promise.all([recordsAction, ticketVoteAction, commentsAction]);
-
+      await commentsAction();
       // Re-enable the listener
       listenerApi.subscribe();
     },
