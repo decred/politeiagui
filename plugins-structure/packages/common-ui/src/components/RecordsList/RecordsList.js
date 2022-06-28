@@ -8,6 +8,7 @@ export function RecordsList({
   onFetchMore,
   isLoading,
   loadingSkeleton,
+  childrenThreshold,
 }) {
   function handleLoadMore() {
     onFetchMore();
@@ -19,6 +20,7 @@ export function RecordsList({
       loadMore={handleLoadMore}
       isLoading={isLoading}
       loadingSkeleton={loadingSkeleton}
+      childrenThreshold={childrenThreshold}
     >
       {children}
     </InfiniteScroller>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchNextBatch } from "./actions";
 import { selectHomeStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
+import { recordsPolicy } from "@politeiagui/core/records/policy";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
 
@@ -11,6 +12,9 @@ function useStatusList({ status, inventory, inventoryStatus }) {
   const homeStatus = useSelector(selectHomeStatus);
   const countComments = useSelector(commentsCount.selectAll);
   const summaries = useSelector(ticketvoteSummaries.selectAll);
+  const recordsPageSize = useSelector((state) =>
+    recordsPolicy.selectRule(state, "recordspagesize")
+  );
   const recordsInOrder = useSelector((state) =>
     records.selectByTokensBatch(state, inventory)
   );
@@ -39,6 +43,7 @@ function useStatusList({ status, inventory, inventoryStatus }) {
     summaries,
     fetchNextBatch,
     recordsInOrder,
+    recordsPageSize,
   };
 }
 

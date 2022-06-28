@@ -43,13 +43,14 @@ function InfiniteScroller({
   hasMore,
   isLoading,
   loadMore,
+  childrenThreshold,
   loadingSkeleton,
 }) {
   return (
     <>
       <div className={className}>
         {children}
-        {children.length > 0 && (
+        {children.length >= childrenThreshold && (
           <AppendObservableElement
             hasMore={hasMore}
             isLoading={isLoading}
@@ -66,9 +67,14 @@ InfiniteScroller.propType = {
   children: PropTypes.array.isRequired,
   loadingSkeleton: PropTypes.node,
   className: PropTypes.string,
+  childrenThreshold: PropTypes.number,
   hasMore: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   loadMore: PropTypes.func.isRequired,
+};
+
+InfiniteScroller.defaultProps = {
+  childrenThreshold: 1,
 };
 
 export default InfiniteScroller;

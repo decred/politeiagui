@@ -9,9 +9,9 @@ import { fetchNextBatch } from "./actions";
 
 const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
 
-function fetchNextBatchCommentsEffect(state, dispatch, { inventoryList }) {
+async function fetchNextComments(state, dispatch, { inventoryList }) {
   const {
-    commentsCount: { byToken },
+    commentsCount: { byToken, status },
     commentsPolicy: {
       policy: { countpagesize },
     },
@@ -23,19 +23,18 @@ function fetchNextBatchCommentsEffect(state, dispatch, { inventoryList }) {
     pageSize: countpagesize,
   });
 
-  return (
-    !isEmpty(commentsCountToFetch) &&
-    dispatch(
+  if (status !== "loading" && !isEmpty(commentsCountToFetch)) {
+    await dispatch(
       commentsCount.fetch({
         tokens: commentsCountToFetch,
       })
-    )
-  );
+    );
+  }
 }
 
-function fetchNextBatchRecordsEffect(state, dispatch, { inventoryList }) {
+async function fetchNextRecords(state, dispatch, { inventoryList }) {
   const {
-    records: { records: recordsObj },
+    records: { records: recordsObj, status },
     recordsPolicy: {
       policy: { recordspagesize },
     },
@@ -47,20 +46,23 @@ function fetchNextBatchRecordsEffect(state, dispatch, { inventoryList }) {
     pageSize: recordspagesize,
   });
 
-  return (
-    !isEmpty(recordsToFetch) &&
+  if (status !== "loading" && !isEmpty(recordsToFetch)) {
     dispatch(
       records.fetch({
         tokens: recordsToFetch,
         filenames: piFilenames,
       })
-    )
-  );
+    );
+  }
 }
 
-function fetchNextBatchTicketvoteEffect(state, dispatch, { inventoryList }) {
+async function fetchNextTicketvoteSummaries(
+  state,
+  dispatch,
+  { inventoryList }
+) {
   const {
-    ticketvoteSummaries: { byToken },
+    ticketvoteSummaries: { byToken, status },
     ticketvotePolicy: {
       policy: { summariespagesize },
     },
@@ -72,14 +74,13 @@ function fetchNextBatchTicketvoteEffect(state, dispatch, { inventoryList }) {
     pageSize: summariespagesize,
   });
 
-  return (
-    !isEmpty(voteSummariesToFetch) &&
-    dispatch(
+  if (status !== "loading" && !isEmpty(voteSummariesToFetch)) {
+    await dispatch(
       ticketvoteSummaries.fetch({
         tokens: voteSummariesToFetch,
       })
-    )
-  );
+    );
+  }
 }
 
 export function startHomeListeners() {
@@ -93,59 +94,35 @@ export function startHomeListeners() {
   });
   listener.startListening({
     actionCreator: fetchNextBatch,
-    effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
-      // Only allow one instance of this listener to run at a time
-      listenerApi.unsubscribe();
-
+    effect: async ({ payload }, { getState, dispatch }) => {
       const readableStatus = getHumanReadableTicketvoteStatus(payload);
       const { ticketvoteInventory } = getState();
       const inventoryList = ticketvoteInventory[readableStatus].tokens;
-      const ticketVoteAction = fetchNextBatchTicketvoteEffect(
-        getState(),
-        dispatch,
-        { inventoryList }
-      );
-      await ticketVoteAction();
-      // Re-enable the listener
-      listenerApi.subscribe();
-    },
-  });
-  listener.startListening({
-    actionCreator: fetchNextBatch,
-    effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
-      // Only allow one instance of this listener to run at a time
-      listenerApi.unsubscribe();
-
-      const readableStatus = getHumanReadableTicketvoteStatus(payload);
-      const { ticketvoteInventory } = getState();
-      const inventoryList = ticketvoteInventory[readableStatus].tokens;
-      const recordsAction = fetchNextBatchRecordsEffect(getState(), dispatch, {
+      await fetchNextTicketvoteSummaries(getState(), dispatch, {
         inventoryList,
       });
-      await recordsAction();
-      // Re-enable the listener
-      listenerApi.subscribe();
     },
   });
   listener.startListening({
     actionCreator: fetchNextBatch,
-    effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
-      // Only allow one instance of this listener to run at a time
-      listenerApi.unsubscribe();
-
+    effect: async ({ payload }, { getState, dispatch }) => {
       const readableStatus = getHumanReadableTicketvoteStatus(payload);
       const { ticketvoteInventory } = getState();
       const inventoryList = ticketvoteInventory[readableStatus].tokens;
-      const commentsAction = fetchNextBatchCommentsEffect(
-        getState(),
-        dispatch,
-        {
-          inventoryList,
-        }
-      );
-      await commentsAction();
-      // Re-enable the listener
-      listenerApi.subscribe();
+      await fetchNextRecords(getState(), dispatch, {
+        inventoryList,
+      });
+    },
+  });
+  listener.startListening({
+    actionCreator: fetchNextBatch,
+    effect: async ({ payload }, { getState, dispatch }) => {
+      const readableStatus = getHumanReadableTicketvoteStatus(payload);
+      const { ticketvoteInventory } = getState();
+      const inventoryList = ticketvoteInventory[readableStatus].tokens;
+      await fetchNextComments(getState(), dispatch, {
+        inventoryList,
+      });
     },
   });
 }
