@@ -1,15 +1,17 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const jsRules = {
-  test: /\.js?$/,
-  loader: "babel-loader",
-  exclude: /node_modules/,
-  options: {
-    presets: ["@babel/preset-env", "@babel/preset-react"],
-    plugins: ["@babel/plugin-transform-runtime"],
+const jsRules = [
+  {
+    test: /\.js?$/,
+    loader: "babel-loader",
+    exclude: /node_modules/,
+    options: {
+      presets: ["@babel/preset-env", "@babel/preset-react"],
+      plugins: ["@babel/plugin-transform-runtime"],
+    },
   },
-};
+];
 
 const cssRules = [
   {
@@ -61,7 +63,7 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules, ...cssRules, ...markdownRules, ...svgRules],
+    rules: [...jsRules, ...cssRules, ...markdownRules, ...svgRules],
   },
   plugins,
   resolve: {
