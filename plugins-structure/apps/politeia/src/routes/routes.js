@@ -10,10 +10,6 @@ import { Details, Home, New } from "../pages";
 import { decodeProposalRecord } from "../components/Proposal/utils";
 import App from "../app";
 
-// Statistics Routes
-import { routes as statisticsRoutes } from "@politeiagui/statistics";
-import { mergeRoutes } from "@politeiagui/core/router";
-
 function cleanup() {
   return ReactDOM.unmountComponentAtNode(document.querySelector("#root"));
 }
@@ -33,7 +29,7 @@ function routeView(Component) {
   };
 }
 
-const proposalsRoutes = [
+export const routes = [
   App.createRoute({
     path: "/",
     pluginInitializerIds: [
@@ -77,5 +73,3 @@ const proposalsRoutes = [
     cleanup,
   },
 ];
-
-export const routes = mergeRoutes(proposalsRoutes, statisticsRoutes);

@@ -2,7 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { store } from "@politeiagui/core";
+import { mergeRoutes } from "@politeiagui/core/router";
 import App from "./app";
+// You can import routes from plugins and merge them with your app routes. See
+// the example below for more information
+import { routes as statisticsRoutes } from "@politeiagui/statistics";
 
 const root = document.querySelector("#root");
 
@@ -18,7 +22,7 @@ function cleanup() {
   return ReactDOM.unmountComponentAtNode(root);
 }
 
-const routes = [
+const appRoutes = [
   App.createRoute({
     path: "/__APP_NAME__",
     view: () =>
@@ -48,5 +52,9 @@ const routes = [
     ],
   }),
 ];
+
+// You can combine different routes arrays using the `mergeRoutes` util from the
+// core router.
+const routes = mergeRoutes(appRoutes, statisticsRoutes);
 
 App.init({ routes });

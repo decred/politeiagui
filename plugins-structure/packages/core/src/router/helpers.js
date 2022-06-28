@@ -90,7 +90,7 @@ export function searchSelectorElement(el, selector) {
 
 /**
  * mergeRoutes return an array with `extraRoutes` merged with `routes`. If some
- * path is already defined, it will log a warning
+ * path is already defined, it will log a warning and skip the conflicting path.
  *
  * @param {Array} routes Current app routes
  * @param {Array} extraRoutes  Routes to merge
