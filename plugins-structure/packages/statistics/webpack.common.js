@@ -1,15 +1,17 @@
 const path = require("path");
 const pkgName = require("./package.json").name;
 
-const jsRules = {
-  test: /\.js?$/,
-  loader: "babel-loader",
-  exclude: /node_modules/,
-  options: {
-    presets: ["@babel/preset-env"],
-    plugins: ["@babel/plugin-transform-runtime"],
+const jsRules = [
+  {
+    test: /\.js?$/,
+    loader: "babel-loader",
+    exclude: /node_modules/,
+    options: {
+      presets: ["@babel/preset-env"],
+      plugins: ["@babel/plugin-transform-runtime"],
+    },
   },
-};
+];
 
 module.exports = {
   entry: "./src/index.js",
@@ -22,7 +24,7 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules],
+    rules: [...jsRules],
   },
   resolve: {
     fallback: {
