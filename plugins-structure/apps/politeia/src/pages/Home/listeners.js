@@ -1,87 +1,11 @@
 import { listener } from "@politeiagui/core/listeners";
-import { commentsCount } from "@politeiagui/comments/count";
-import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
-import { records } from "@politeiagui/core/records";
-import { getTokensToFetch } from "@politeiagui/core/records/utils";
 import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
-import isEmpty from "lodash/isEmpty";
+import { fetchNextComments } from "@politeiagui/comments/effects";
+import { fetchNextRecords } from "@politeiagui/core/records/effects";
+import { fetchNextTicketvoteSummaries } from "@politeiagui/ticketvote/effects";
 import { fetchNextBatch } from "./actions";
 
 const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
-
-async function fetchNextComments(state, dispatch, { inventoryList }) {
-  const {
-    commentsCount: { byToken, status },
-    commentsPolicy: {
-      policy: { countpagesize },
-    },
-  } = state;
-
-  const commentsCountToFetch = getTokensToFetch({
-    inventoryList,
-    lookupTable: byToken,
-    pageSize: countpagesize,
-  });
-
-  if (status !== "loading" && !isEmpty(commentsCountToFetch)) {
-    await dispatch(
-      commentsCount.fetch({
-        tokens: commentsCountToFetch,
-      })
-    );
-  }
-}
-
-async function fetchNextRecords(state, dispatch, { inventoryList }) {
-  const {
-    records: { records: recordsObj, status },
-    recordsPolicy: {
-      policy: { recordspagesize },
-    },
-  } = state;
-
-  const recordsToFetch = getTokensToFetch({
-    inventoryList,
-    lookupTable: recordsObj,
-    pageSize: recordspagesize,
-  });
-
-  if (status !== "loading" && !isEmpty(recordsToFetch)) {
-    dispatch(
-      records.fetch({
-        tokens: recordsToFetch,
-        filenames: piFilenames,
-      })
-    );
-  }
-}
-
-async function fetchNextTicketvoteSummaries(
-  state,
-  dispatch,
-  { inventoryList }
-) {
-  const {
-    ticketvoteSummaries: { byToken, status },
-    ticketvotePolicy: {
-      policy: { summariespagesize },
-    },
-  } = state;
-
-  const voteSummariesToFetch = getTokensToFetch({
-    inventoryList,
-    lookupTable: byToken,
-    pageSize: summariespagesize,
-  });
-
-  if (status !== "loading" && !isEmpty(voteSummariesToFetch)) {
-    await dispatch(
-      ticketvoteSummaries.fetch({
-        tokens: voteSummariesToFetch,
-      })
-    );
-  }
-}
 
 export function startHomeListeners() {
   listener.startListening({
@@ -94,35 +18,27 @@ export function startHomeListeners() {
   });
   listener.startListening({
     actionCreator: fetchNextBatch,
-    effect: async ({ payload }, { getState, dispatch }) => {
+    effect: async (
+      { payload },
+      { getState, dispatch, subscribe, unsubscribe }
+    ) => {
+      unsubscribe();
       const readableStatus = getHumanReadableTicketvoteStatus(payload);
-      const { ticketvoteInventory } = getState();
-      const inventoryList = ticketvoteInventory[readableStatus].tokens;
-      await fetchNextTicketvoteSummaries(getState(), dispatch, {
-        inventoryList,
-      });
-    },
-  });
-  listener.startListening({
-    actionCreator: fetchNextBatch,
-    effect: async ({ payload }, { getState, dispatch }) => {
-      const readableStatus = getHumanReadableTicketvoteStatus(payload);
-      const { ticketvoteInventory } = getState();
-      const inventoryList = ticketvoteInventory[readableStatus].tokens;
-      await fetchNextRecords(getState(), dispatch, {
-        inventoryList,
-      });
-    },
-  });
-  listener.startListening({
-    actionCreator: fetchNextBatch,
-    effect: async ({ payload }, { getState, dispatch }) => {
-      const readableStatus = getHumanReadableTicketvoteStatus(payload);
-      const { ticketvoteInventory } = getState();
-      const inventoryList = ticketvoteInventory[readableStatus].tokens;
-      await fetchNextComments(getState(), dispatch, {
-        inventoryList,
-      });
+      const state = getState();
+      const inventoryList = state.ticketvoteInventory[readableStatus].tokens;
+      await Promise.all([
+        fetchNextTicketvoteSummaries(state, dispatch, {
+          inventoryList,
+        }),
+        fetchNextRecords(state, dispatch, {
+          inventoryList,
+          filenames: piFilenames,
+        }),
+        fetchNextComments(state, dispatch, {
+          inventoryList,
+        }),
+      ]);
+      subscribe();
     },
   });
 }

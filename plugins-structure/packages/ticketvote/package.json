@@ -7,6 +7,7 @@
     ".": "./src/index.js",
     "./api": "./src/lib/api.js",
     "./routes": "./src/routes/index.js",
+    "./effects": "./src/effects/index.js",
     "./details": "./src/ticketvote/details/index.js",
     "./inventory": "./src/ticketvote/inventory/index.js",
     "./policy": "./src/ticketvote/policy/index.js",

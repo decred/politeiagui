@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.js",
     "./api": "./src/lib/api.js",
+    "./effects": "./src/effects/index.js",
     "./comments": "./src/comments/comments/index.js",
     "./count": "./src/comments/count/index.js",
     "./policy": "./src/comments/policy/index.js",
