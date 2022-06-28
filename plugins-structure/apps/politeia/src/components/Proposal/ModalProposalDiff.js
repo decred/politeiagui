@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { H2, Icon, Modal, Select, Text } from "pi-ui";
+import { ButtonIcon, H2, Icon, Modal, Select, Text } from "pi-ui";
 import { records } from "@politeiagui/core/records";
 import {
   Event,
   Join,
   MarkdownDiffHTML,
+  RawDiff,
   RecordCard,
   ThumbnailGrid,
 } from "@politeiagui/common-ui";
@@ -79,9 +80,34 @@ function VersionsPickers({
   oldVersion,
   setNewVersion,
   setOldVersion,
+  setDiffView,
 }) {
+  const [isMarkdown, setMarkdownView] = useState(true);
+  function handleToggleView() {
+    setMarkdownView(!isMarkdown);
+    setDiffView(!isMarkdown);
+  }
   return (
     <div className={styles.versionPickerWrapper}>
+      <div className={styles.versionPickerViewToggle}>
+        {isMarkdown ? (
+          <ButtonIcon
+            tooltipText="View raw diff"
+            tooltipPlacement="bottom"
+            type="code"
+            viewBox="0 0 16 16"
+            onClick={handleToggleView}
+          />
+        ) : (
+          <ButtonIcon
+            tooltipText="View markdown diff"
+            tooltipPlacement="bottom"
+            type="markdown"
+            viewBox="0 0 208 128"
+            onClick={handleToggleView}
+          />
+        )}
+      </div>
       <VersionSelector
         maxVersion={newVersion}
         onChange={setOldVersion}
@@ -156,6 +182,7 @@ function ProposalDiff({
   const dispatch = useDispatch();
   const [oldV, setOldV] = useState(oldVersion);
   const [newV, setNewV] = useState(newVersion);
+  const [isMarkdownView, setIsMarkdownView] = useState(true);
   // Records
   const oldRecord = useSelector((state) =>
     records.selectVersionByToken(state, { version: oldV, token })
@@ -218,6 +245,7 @@ function ProposalDiff({
             latestVersion={currentProposal.version}
             setOldVersion={setOldV}
             setNewVersion={setNewV}
+            setDiffView={setIsMarkdownView}
           />
         }
         subtitle={
@@ -233,11 +261,18 @@ function ProposalDiff({
           oldStatus === "succeeded" &&
           newStatus === "succeeded" && (
             <div className={styles.diffBody}>
-              <MarkdownDiffHTML
-                oldText={oldProposal?.body}
-                newText={newProposal?.body}
-                filesBySrc={imagesByDigest}
-              />
+              {isMarkdownView ? (
+                <MarkdownDiffHTML
+                  oldText={oldProposal?.body}
+                  newText={newProposal?.body}
+                  filesBySrc={imagesByDigest}
+                />
+              ) : (
+                <RawDiff
+                  oldText={oldProposal?.body}
+                  newText={newProposal?.body}
+                />
+              )}
               <AttachmentsDiff
                 oldFiles={oldProposalAttachments}
                 newFiles={newProposalAttachments}

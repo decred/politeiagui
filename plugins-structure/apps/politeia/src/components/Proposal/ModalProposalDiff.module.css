@@ -78,6 +78,9 @@
   justify-content: flex-end;
 }
 
+.versionPickerViewToggle {
+  padding-right: 2rem;
+}
 .versionPickerWrapper {
   align-items: center;
   display: flex;
