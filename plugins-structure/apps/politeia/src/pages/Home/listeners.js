@@ -1,6 +1,6 @@
 import { listener } from "@politeiagui/core/listeners";
 import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
-import { fetchNextComments } from "@politeiagui/comments/effects";
+import { fetchNextCommentsCount } from "@politeiagui/comments/effects";
 import { fetchNextRecords } from "@politeiagui/core/records/effects";
 import { fetchNextTicketvoteSummaries } from "@politeiagui/ticketvote/effects";
 import { fetchNextBatch } from "./actions";
@@ -34,7 +34,7 @@ export function startHomeListeners() {
           inventoryList,
           filenames: piFilenames,
         }),
-        fetchNextComments(state, dispatch, {
+        fetchNextCommentsCount(state, dispatch, {
           inventoryList,
         }),
       ]);

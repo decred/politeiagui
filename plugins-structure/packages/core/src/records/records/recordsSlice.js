@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getRecordStateCode, getRecordStatusCode } from "../utils";
 import { validateRecordStateAndStatus } from "../validation";
 import { getRecordsErrorMessage } from "../errors";
+import { getShortToken } from "../utils";
 import isArray from "lodash/fp/isArray";
 import pick from "lodash/fp/pick";
 import compose from "lodash/fp/compose";
@@ -116,6 +117,23 @@ export const selectRecordsByStateAndStatus = (
     }
     return res;
   }
+};
+
+export const selectFullToken = (state, token) => {
+  const allRecords = selectRecords(state);
+  if (token.length > 7) {
+    return token;
+  }
+  // is already in the store
+  if (Object.keys(allRecords).length !== 0) {
+    for (const key of Object.keys(allRecords)) {
+      // it's loaded
+      if (getShortToken(key) === token) {
+        return key;
+      }
+    }
+  }
+  return null;
 };
 
 export const selectRecordsByTokensBatch = (state, tokens) =>

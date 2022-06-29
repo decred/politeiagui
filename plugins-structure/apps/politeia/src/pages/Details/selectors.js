@@ -1,4 +1,3 @@
-import { getShortToken } from "@politeiagui/core/records/utils";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { recordComments } from "@politeiagui/comments/comments";
@@ -19,21 +18,4 @@ export function selectDetailsStatus(state) {
   ];
 
   return getStatusFromMultipleSlices(statuses);
-}
-
-export function selectFullTokenFromStore(state, token) {
-  const allRecords = records.selectAll(state);
-  if (token.length > 7) {
-    return token;
-  }
-  // is already in the store
-  if (Object.keys(allRecords).length !== 0) {
-    for (const key of Object.keys(allRecords)) {
-      // it's loaded
-      if (getShortToken(key) === token) {
-        return key;
-      }
-    }
-  }
-  return null;
 }

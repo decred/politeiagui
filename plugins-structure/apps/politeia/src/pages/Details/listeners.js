@@ -1,13 +1,13 @@
 import { listener } from "@politeiagui/core/listeners";
 import { records } from "@politeiagui/core/records";
-import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
-import { recordComments } from "@politeiagui/comments/comments";
-import { piSummaries } from "../../pi";
+import { fetchRecordTicketvoteSummaries } from "@politeiagui/ticketvote/effects";
 import { fetchProposalDetails } from "./actions";
-import { selectFullTokenFromStore } from "./selectors";
+import { fetchRecordComments } from "@politeiagui/comments/effects";
+import { fetchRecordPiSummaries } from "../../pi/effects";
+import { fetchRecordDetails } from "@politeiagui/core/records/effects";
 
 async function getFullToken(state, dispatch, token) {
-  const storeToken = selectFullTokenFromStore(state, token);
+  const storeToken = records.selectFullToken(state, token);
   if (storeToken) {
     const record = records.selectByToken(state, storeToken);
     // means details was already fetched
@@ -24,33 +24,27 @@ async function getFullToken(state, dispatch, token) {
 export function startDetailsListeners() {
   listener.startListening({
     actionCreator: fetchProposalDetails,
-    effect: async ({ payload }, { getState, dispatch, ...listenerApi }) => {
-      // Only allow one instance of this listener to run at a time
-      listenerApi.unsubscribe();
-
+    effect: async (
+      { payload },
+      { getState, dispatch, unsubscribe, subscribe }
+    ) => {
+      unsubscribe();
       const state = getState();
       const [fullToken, detailsFetched] = await getFullToken(
         state,
         dispatch,
         payload
       );
-      const hasVoteSummary = ticketvoteSummaries.selectByToken(
-        state,
-        fullToken
-      );
-      const hasComments = recordComments.selectByToken(state, fullToken);
-      const hasPiSummaries = piSummaries.selectByToken(state, fullToken);
-
       await Promise.all([
-        !detailsFetched && dispatch(records.fetchDetails({ token: fullToken })),
-        !hasComments && dispatch(recordComments.fetch({ token: fullToken })),
-        !hasVoteSummary &&
-          dispatch(ticketvoteSummaries.fetch({ tokens: [fullToken] })),
-        !hasPiSummaries && dispatch(piSummaries.fetch({ tokens: [fullToken] })),
+        fetchRecordDetails(state, dispatch, {
+          token: fullToken,
+          detailsFetched,
+        }),
+        fetchRecordComments(state, dispatch, { token: fullToken }),
+        fetchRecordTicketvoteSummaries(state, dispatch, { token: fullToken }),
+        fetchRecordPiSummaries(state, dispatch, { token: fullToken }),
       ]);
-
-      // Re-enable the listener
-      listenerApi.subscribe();
+      subscribe();
     },
   });
 }

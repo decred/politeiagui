@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
 import { fetchProposalDetails } from "./actions";
-import { selectDetailsStatus, selectFullTokenFromStore } from "./selectors";
+import { selectDetailsStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { recordComments } from "@politeiagui/comments/comments";
@@ -12,7 +12,7 @@ function useProposalDetails({ token }) {
   const dispatch = useDispatch();
   const detailsStatus = useSelector(selectDetailsStatus);
   const fullToken = useSelector((state) =>
-    selectFullTokenFromStore(state, token)
+    records.selectFullToken(state, token)
   );
   const record = useSelector((state) =>
     records.selectByToken(state, fullToken)

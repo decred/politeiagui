@@ -1,8 +1,18 @@
 import { commentsCount } from "../comments/count";
+import { recordComments } from "../comments/comments";
 import { getTokensToFetch } from "@politeiagui/core/records/utils";
 import isEmpty from "lodash/isEmpty";
 
-export async function fetchNextComments(state, dispatch, { inventoryList }) {
+export async function fetchRecordComments(state, dispatch, { token }) {
+  const hasComments = recordComments.selectByToken(state, token);
+  if (!hasComments) await dispatch(recordComments.fetch({ token: token }));
+}
+
+export async function fetchNextCommentsCount(
+  state,
+  dispatch,
+  { inventoryList }
+) {
   const {
     commentsCount: { byToken, status },
     commentsPolicy: {
