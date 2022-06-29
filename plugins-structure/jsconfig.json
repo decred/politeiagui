@@ -7,6 +7,7 @@
       "@politeiagui/core/router": ["./packages/core/src/router/index.js"],
       "@politeiagui/core/client": ["./packages/core/src/client/index.js"],
       "@politeiagui/core/routes": ["./packages/core/src/routes/index.js"],
+      "@politeiagui/core/storage": ["./packages/core/src/storage/index.js"],
       "@politeiagui/core/listeners": ["./packages/core/src/listeners/index.js"],
       "@politeiagui/core/records": [
         "./packages/core/src/records/records/index.js"
@@ -72,6 +73,9 @@
       "@politeiagui/common-ui/utils": ["./packages/common-ui/src/utils.js"],
       "@politeiagui/common-ui/layout": [
         "./packages/common-ui/src/layout/index.js"
+      ],
+      "@politeiagui/common-ui/theme": [
+        "./packages/common-ui/src/layout/theme/index.js"
       ],
       "@politeiagui/comments": ["./packages/comments/src/index.js"],
       "@politeiagui/comments/comments": [
