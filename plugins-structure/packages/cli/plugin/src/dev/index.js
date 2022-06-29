@@ -56,14 +56,14 @@ const routes = [
     view: async () => {
       document.querySelector("#root").innerHTML = __PLUGIN_NAME__Page();
     },
-    initializerIds: ["__PLUGIN_NAME__/reset"],
+    pluginInitializerIds: ["__PLUGIN_NAME__/reset"],
   }),
   MyDevApp.createRoute({
     path: "/",
     view: async () => {
       document.querySelector("#root").innerHTML = await HomePage();
     },
-    initializerIds: ["records/inventory", "__PLUGIN_NAME__/setname"],
+    pluginInitializerIds: ["records/inventory", "__PLUGIN_NAME__/setname"],
   }),
 ];
 
