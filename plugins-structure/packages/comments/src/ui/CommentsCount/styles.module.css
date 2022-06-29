@@ -1,6 +1,7 @@
 .count {
   color: var(--color-primary-dark);
   font-weight: var(--font-weight-semi-bold);
+  margin-left: 0.2rem;
 }
 
 .countWrapper {
@@ -16,5 +17,5 @@ a.countWrapper:hover {
 }
 
 .countWrapper > * {
-  margin-right: 0.7rem;
+  margin-right: 0.5rem;
 }
