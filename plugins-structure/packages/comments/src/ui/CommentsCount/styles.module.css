@@ -1,0 +1,20 @@
+.count {
+  color: var(--color-primary-dark);
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.countWrapper {
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary-color);
+  justify-content: space-between;
+}
+
+a.countWrapper:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.countWrapper > * {
+  margin-right: 0.7rem;
+}
