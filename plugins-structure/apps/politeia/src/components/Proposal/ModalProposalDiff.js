@@ -89,6 +89,22 @@ function VersionsPickers({
   }
   return (
     <div className={styles.versionPickerWrapper}>
+      <div className={styles.versionPicker}>
+        <VersionSelector
+          maxVersion={newVersion}
+          onChange={setOldVersion}
+          current={oldVersion}
+        />
+        <div className={styles.compareIcon}>
+          <Icon type="compare" />
+        </div>
+        <VersionSelector
+          maxVersion={latestVersion}
+          onChange={setNewVersion}
+          current={newVersion}
+          minVersion={oldVersion}
+        />
+      </div>
       <div className={styles.versionPickerViewToggle}>
         {isMarkdown ? (
           <ButtonIcon
@@ -108,20 +124,6 @@ function VersionsPickers({
           />
         )}
       </div>
-      <VersionSelector
-        maxVersion={newVersion}
-        onChange={setOldVersion}
-        current={oldVersion}
-      />
-      <div className={styles.compareIcon}>
-        <Icon type="compare" />
-      </div>
-      <VersionSelector
-        maxVersion={latestVersion}
-        onChange={setNewVersion}
-        current={newVersion}
-        minVersion={oldVersion}
-      />
     </div>
   );
 }

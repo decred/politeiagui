@@ -78,9 +78,15 @@
   justify-content: flex-end;
 }
 
-.versionPickerViewToggle {
-  padding-right: 2rem;
+.versionPicker {
+  display: flex;
+  align-items: center;
 }
+
+.versionPickerViewToggle {
+  padding-left: 2rem;
+}
+
 .versionPickerWrapper {
   align-items: center;
   display: flex;
@@ -90,5 +96,23 @@
   .diffHeader {
     /* Stick on top without extra margin. */
     top: -5rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .versionPickerWrapper {
+    justify-content: space-between;
+    border-bottom: 0.1px solid var(--separator-color);
+    padding-bottom: 2rem;
+  }
+
+  .versionPicker {
+    order: 2;
+  }
+
+  .versionPickerViewToggle {
+    padding-right: 2rem;
+    padding-left: 0rem;
+    order: 1;
   }
 }
