@@ -14,9 +14,15 @@
     "test:dev": "npm run test:format && npm run test:eslint && cross-env jest --watchAll --no-cache",
     "test": "is-ci \"test:ci\" \"test:dev\"",
     "test:coverage": "yarn test:ci; open coverage/lcov-report/index.html",
+    "cy:run": "cypress run",
+    "test:e2e:open": "cypress open --e2e",
+    "test:e2e:chrome": "cypress open --e2e --browser=chrome",
+    "cy:run:e2e": "cypress run --e2e ",
+    "test:e2e:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test 'yarn serve' https-get://localhost:3000 cy:run:e2e",
     "build": "webpack --config webpack.prod.js",
     "bundle-report": "webpack-bundle-analyzer --port 4200 dist/stats.json",
-    "start": "webpack serve --config webpack.dev.js --open"
+    "start": "webpack serve --config webpack.dev.js --open",
+    "serve": "webpack serve --config webpack.dev.js"
   },
   "dependencies": {
     "@politeiagui/comments": "1.0.0",

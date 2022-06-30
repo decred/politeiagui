@@ -146,6 +146,7 @@ export function RecordForm({ initialValues, children, onSubmit }) {
         <form
           onSubmit={formProps.handleSubmit(onSubmit)}
           className={styles.form}
+          data-testid="record-form"
         >
           {children({
             formProps,

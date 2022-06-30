@@ -4,8 +4,8 @@ import styles from "./styles.module.css";
 import { DateTooltip } from "../DateTooltip";
 import { Text, classNames } from "pi-ui";
 
-const Event = ({ event, timestamp, className, size }) => (
-  <DateTooltip timestamp={timestamp} placement="bottom">
+const Event = ({ event, timestamp, className, size, ...props }) => (
+  <DateTooltip timestamp={timestamp} placement="bottom" {...props}>
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}

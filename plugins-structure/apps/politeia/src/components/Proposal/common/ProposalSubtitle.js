@@ -15,11 +15,37 @@ function ProposalSubtitle({
   const { publishedat, editedat, abandonedat, censoredat } = timestamps;
   return (
     <Join>
-      <Link href={`user/${userid}`}>{username}</Link>
-      {publishedat && <Event event="published" timestamp={publishedat} />}
-      {editedat && <Event event="edited" timestamp={editedat} />}
-      {abandonedat && <Event event="abandoned" timestamp={abandonedat} />}
-      {censoredat && <Event event="censored" timestamp={censoredat} />}
+      <Link href={`user/${userid}`} data-testid="proposal-username">
+        {username}
+      </Link>
+      {publishedat && (
+        <Event
+          event="published"
+          timestamp={publishedat}
+          data-testid="proposal-date-published"
+        />
+      )}
+      {editedat && (
+        <Event
+          event="edited"
+          timestamp={editedat}
+          data-testid="proposal-date-edited"
+        />
+      )}
+      {abandonedat && (
+        <Event
+          event="abandoned"
+          timestamp={abandonedat}
+          data-testid="proposal-date-abandoned"
+        />
+      )}
+      {censoredat && (
+        <Event
+          event="censored"
+          timestamp={censoredat}
+          data-testid="proposal-date-censored"
+        />
+      )}
       {version > 1 &&
         (onChangeVersion ? (
           <Dropdown
@@ -28,6 +54,7 @@ function ProposalSubtitle({
             itemsListClassName={styles.version}
             dropdownHeaderClassName={styles.version}
             className={styles.version}
+            data-testid="proposal-version"
           >
             {range(version, 0, -1).map((v, i) => (
               <DropdownItem key={i} onClick={() => onChangeVersion(v)}>

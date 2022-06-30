@@ -40,7 +40,7 @@ export const CommentCard = ({
   }
 
   return (
-    <div>
+    <div data-testid="comment-card">
       <Card
         className={classNames(
           styles.commentCard,

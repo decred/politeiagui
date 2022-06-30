@@ -1,3 +1,5 @@
+import { getDefaultErrorMessage } from "@politeiagui/core/client";
+
 export function getTicketvotePluginErrorMessage(code, context = "") {
   const errorMap = {
     1: `The provided record token is invalid, ${context}`,
@@ -22,7 +24,7 @@ export function getTicketvotePluginErrorMessage(code, context = "") {
     20: `The provided record status is invalid, ${context}`,
   };
 
-  return errorMap[code];
+  return errorMap[code] || getDefaultErrorMessage(code, "ticketvote");
 }
 
 export function getTicketvoteUserErrorMessage(code, context = "") {
@@ -37,7 +39,7 @@ export function getTicketvoteUserErrorMessage(code, context = "") {
     8: "The provided payload is duplicate",
   };
 
-  return errorMap[code];
+  return errorMap[code] || getDefaultErrorMessage(code, "ticketvote");
 }
 
 export function getTicketvoteError(

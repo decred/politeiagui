@@ -20,6 +20,7 @@ export function DatePickerInput({
   tooltipInfo,
   maxTimestamp,
   minTimestamp,
+  ...props
 }) {
   function formatValue(value) {
     return formatDateToInternationalString(value);
@@ -29,7 +30,7 @@ export function DatePickerInput({
     <Controller
       name={name}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
-        <div className={styles.datePickerWrapper}>
+        <div className={styles.datePickerWrapper} {...props}>
           <DatePicker
             className={classNames(styles.datePicker, className)}
             activeClassName={styles.activeDatePicker}

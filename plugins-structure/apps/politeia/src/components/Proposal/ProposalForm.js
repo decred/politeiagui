@@ -58,7 +58,11 @@ export function ProposalForm({
               then using the editor to submit the final version.
             </Warning>
             <Row>
-              <Column xs={12} sm={!isRfp ? 12 : 6}>
+              <Column
+                xs={12}
+                sm={!isRfp ? 12 : 6}
+                data-testid="proposal-form-type"
+              >
                 <SelectInput
                   autoFocus
                   tabIndex={1}
@@ -71,6 +75,7 @@ export function ProposalForm({
                 <Column xs={12} sm={6}>
                   {isRfpProposal ? (
                     <DatePickerInput
+                      data-testid="proposal-form-rfp-deadline-input"
                       tabIndex={1}
                       minTimestamp={minTimestamp}
                       maxTimestamp={maxTimestamp}
@@ -87,6 +92,7 @@ export function ProposalForm({
                   ) : (
                     <TextInput
                       tabIndex={1}
+                      data-testid="proposal-form-rfp-token-input"
                       name="rfpToken"
                       placeholder="RFP Proposal Token"
                       tooltipInfo={
@@ -100,11 +106,17 @@ export function ProposalForm({
                 </Column>
               )}
             </Row>
-            <TextInput name="name" tabIndex={1} placeholder="Proposal Name" />
+            <TextInput
+              name="name"
+              tabIndex={1}
+              placeholder="Proposal Name"
+              data-testid="proposal-form-name-input"
+            />
             {!isRfpProposal && (
               <CurrencyInput
                 name="amount"
                 tabIndex={1}
+                data-testid="proposal-form-amount-input"
                 placeholder="Amount (USD)"
               />
             )}
@@ -115,6 +127,7 @@ export function ProposalForm({
                     minTimestamp={minTimestamp}
                     maxTimestamp={maxTimestamp}
                     tabIndex={1}
+                    data-testid="proposal-form-start-date-input"
                     name="startDate"
                     placeholder="Start Date"
                   />
@@ -124,25 +137,39 @@ export function ProposalForm({
                     minTimestamp={minTimestamp}
                     maxTimestamp={maxTimestamp}
                     tabIndex={1}
+                    data-testid="proposal-form-end-date-input"
                     name="endDate"
                     placeholder="End Date"
                   />
                 </Column>
               </Row>
             )}
-            <SelectInput
+            <div data-testid="proposal-form-domain">
+              <SelectInput
+                tabIndex={1}
+                options={domainsOptions}
+                name="domain"
+                placeholder="Domain"
+              />
+            </div>
+            <MarkdownInput
+              name="body"
               tabIndex={1}
-              options={domainsOptions}
-              name="domain"
-              placeholder="Domain"
+              data-testid="proposal-form-markdown-input"
             />
-            <MarkdownInput name="body" tabIndex={1} />
             <ProposalRules />
             <div className={styles.formButtons}>
-              <SaveButton tabIndex={1} onSave={onSave}>
+              <SaveButton
+                tabIndex={1}
+                onSave={onSave}
+                data-testid="proposal-form-save-draft-button"
+              >
                 Save Draft
               </SaveButton>
-              <SubmitButton tabIndex={1} />
+              <SubmitButton
+                tabIndex={1}
+                data-testid="proposal-form-submit-button"
+              />
             </div>
           </div>
         );

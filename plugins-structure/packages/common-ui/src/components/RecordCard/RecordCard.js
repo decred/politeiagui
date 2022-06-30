@@ -24,21 +24,32 @@ export function RecordCard({
       )}
     >
       <Row className={classNames(headerClassName)}>
-        <Column xs={12} sm={12} md={7}>
+        <Column xs={12} sm={12} md={7} data-testid="record-card-title">
           {!titleLink ? (
             <H2>{title}</H2>
           ) : (
             <H2>
-              <a href={titleLink} data-link className={styles.title}>
+              <a
+                href={titleLink}
+                data-link
+                className={styles.title}
+                data-testid="record-card-title-link"
+              >
                 {title}
               </a>
             </H2>
           )}
         </Column>
-        <Column xs={12} sm={12} md={5} className={styles.rightHeader}>
+        <Column
+          xs={12}
+          sm={12}
+          md={5}
+          className={styles.rightHeader}
+          data-testid="record-card-right-header"
+        >
           {rightHeader}
         </Column>
-        <Column xs={12}>
+        <Column xs={12} data-testid="record-card-subtitle">
           <div className={styles.subtitle}>{subtitle}</div>
         </Column>
       </Row>

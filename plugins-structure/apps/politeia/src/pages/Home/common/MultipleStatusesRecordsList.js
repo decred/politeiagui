@@ -14,7 +14,7 @@ function MultipleStatusesRecordsList({ statuses }) {
   }
 
   return statusesToRender.map((status, key) => (
-    <ul key={key}>
+    <ul key={key} data-testid="multiple-statuses-list">
       <RecordsStatusList
         status={status}
         onRenderNextStatus={

@@ -11,7 +11,7 @@ const ProposalCard = ({ record, voteSummary, commentsCount }) => {
   const statusTagProps = getLegacyProposalStatusTagProps(record, voteSummary);
   const proposalLink = `/record/${getShortToken(proposal.token)}`;
   return (
-    <div>
+    <div data-testid="proposal-card">
       <RecordCard
         isDimmed={proposal.archived || proposal.censored}
         titleLink={proposalLink}

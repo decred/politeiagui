@@ -12,7 +12,9 @@ function UnderReviewPage() {
   return isListEmpty ? (
     <EmptyMessage status="under review" />
   ) : (
-    <MultipleStatusesRecordsList statuses={statuses} />
+    <div data-testid="proposals-under-review-list">
+      <MultipleStatusesRecordsList statuses={statuses} />
+    </div>
   );
 }
 

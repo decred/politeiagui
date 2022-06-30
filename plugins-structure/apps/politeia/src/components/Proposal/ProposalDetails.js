@@ -62,7 +62,7 @@ const ProposalDetails = ({
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
 
   return (
-    <div>
+    <div data-testid="proposal-details">
       {isAbandoned && (
         <Message kind="warning">
           Reason: {proposalDetails.abandonmentReason}
@@ -91,7 +91,7 @@ const ProposalDetails = ({
           </div>
         }
         thirdRow={
-          <div className={styles.proposalBody}>
+          <div className={styles.proposalBody} data-testid="proposal-body">
             <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
             <ThumbnailGrid
               files={imagesNotInText}
