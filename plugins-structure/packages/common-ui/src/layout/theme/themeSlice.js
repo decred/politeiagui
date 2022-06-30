@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { DEFAULT_LIGHT_THEME_NAME } from "pi-ui";
-import { getFromLocalStorage } from "@politeiagui/core/storage";
+import { getFromLocalStorage } from "@politeiagui/core/localstorage";
 
 const currentThemeFromLS = getFromLocalStorage("uiTheme/currentTheme");
 
