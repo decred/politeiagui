@@ -8,7 +8,7 @@ import {
   defaultLightTheme,
   useTheme,
 } from "pi-ui";
-import { initialState, selectCurrentTheme } from "./themeSlice";
+import { selectCurrentTheme } from "./themeSlice";
 import { startThemeListener } from "./listeners";
 import "./theme.css";
 
@@ -32,8 +32,9 @@ function ThemeConsumer({ children }) {
 }
 
 export function UiTheme({ children }) {
+  const currentTheme = useSelector(selectCurrentTheme);
   return (
-    <ThemeProvider themes={themes} defaultThemeName={initialState.currentTheme}>
+    <ThemeProvider themes={themes} defaultThemeName={currentTheme}>
       <ThemeConsumer>{children}</ThemeConsumer>
     </ThemeProvider>
   );
