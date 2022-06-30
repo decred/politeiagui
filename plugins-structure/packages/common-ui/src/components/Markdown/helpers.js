@@ -1,5 +1,7 @@
 import React from "react";
 import xssFilters from "xss-filters";
+import { isExternalLink } from "@politeiagui/core/router";
+import { ModalExternalLink, useModal } from "../Modal";
 
 export const XSS_ALERT =
   "You tried to render a malicious URL. The URL is being converted in order to avoid XSS attacks";
@@ -26,24 +28,16 @@ export const traverseChildren = (el, cb) => {
   return newElement ? cb(newElement) : cb(el);
 };
 
-const isExternalLink = (link) => {
-  const tmpLink = document.createElement("a");
-  tmpLink.href = link;
-  const externalLink =
-    tmpLink.hostname && tmpLink.hostname !== window.top.location.hostname;
-
-  return externalLink;
-};
-
 const LinkRenderer = ({ url, children }) => {
-  function onLinkClick(e) {
-    if (isExternalLink(url)) {
+  const [open] = useModal();
+  function handleExternalLink(e) {
+    if (isExternalLink(url) && open) {
       e.preventDefault();
-      console.log("clicked URL:", url);
+      open(ModalExternalLink, { link: url });
     }
   }
   return (
-    <a href={url} onClick={onLinkClick}>
+    <a href={url} onClick={handleExternalLink} data-link>
       {children}
     </a>
   );
@@ -95,7 +89,7 @@ const blockquoteHandler =
     return <blockquote>{newChildren}</blockquote>;
   };
 
-export const customRenderers = (renderImages, isDiff, filesBySrc) => {
+export const customRenderers = ({ renderImages, isDiff, filesBySrc }) => {
   return {
     img: imageHandler(renderImages, filesBySrc),
     a: linkHandler,

@@ -113,3 +113,14 @@ export function mergeRoutes(routes, extraRoutes) {
 
   return newArr;
 }
+
+/**
+ * isExternalLink returns if some given url does not match the current window
+ * location host.
+ * @param {string} url
+ */
+export function isExternalLink(url) {
+  const tmp = document.createElement("a");
+  tmp.href = url;
+  return tmp.host !== window.location.host;
+}
