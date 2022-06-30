@@ -1,0 +1,25 @@
+.rawDiff {
+  font-family: "Courier New", Courier, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.added {
+  color: var(--color-green);
+  background-color: #bffccc54;
+  padding: 0.1rem;
+}
+
+.removed {
+  color: var(--color-orange);
+  background-color: #ffcccc57;
+  padding: 0.1rem;
+}
+
+.rawLineBreak {
+  width: 2rem;
+  display: block;
+  height: var(--font-size-normal);
+  background-color: inherit;
+  margin: 0.5rem 0;
+}

@@ -10,6 +10,7 @@ import values from "lodash/fp/values";
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
 export const initialState = {
   records: {},
+  recordsVersions: {},
   status: "idle",
   error: null,
 };
@@ -59,6 +60,22 @@ export const fetchRecordDetails = createAsyncThunk(
   }
 );
 
+export const fetchRecordVersionDetails = createAsyncThunk(
+  "records/fetchVersionDetails",
+  async ({ token, version }, { getState, extra, rejectWithValue }) => {
+    try {
+      return await extra.fetchRecordDetails(getState(), { token, version });
+    } catch (error) {
+      const message = getRecordsErrorMessage(error.body, error.message);
+      return rejectWithValue(message);
+    }
+  },
+  {
+    condition: ({ token, version }) =>
+      !!token && typeof token === "string" && !!version,
+  }
+);
+
 // Reducer
 const recordsSlice = createSlice({
   name: "records",
@@ -88,6 +105,37 @@ const recordsSlice = createSlice({
       .addCase(fetchRecordDetails.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      .addCase(fetchRecordVersionDetails.pending, (state, action) => {
+        const { token, version } = action.meta.arg;
+        state.recordsVersions[token] = {
+          ...(state.recordsVersions[token] || {}),
+          [version]: {
+            status: "loading",
+          },
+        };
+      })
+      .addCase(fetchRecordVersionDetails.fulfilled, (state, action) => {
+        const record = action.payload;
+        const { version } = record;
+        const { token } = record.censorshiprecord;
+        state.recordsVersions[token] = {
+          ...(state.recordsVersions[token] || {}),
+          [version]: {
+            record,
+            status: "succeeded",
+          },
+        };
+      })
+      .addCase(fetchRecordVersionDetails.rejected, (state, action) => {
+        const { token, version } = action.meta.arg;
+        state.recordsVersions[token] = {
+          ...(state.recordsVersions[token] || {}),
+          [version]: {
+            error: action.payload,
+            status: "failed",
+          },
+        };
       });
   },
 });
@@ -120,6 +168,29 @@ export const selectRecordsByStateAndStatus = (
 
 export const selectRecordsByTokensBatch = (state, tokens) =>
   compose(values, pick(tokens))(state.records.records);
+
+export const selectRecordVersionByToken = (state, { version, token }) => {
+  const latestRecord = state.records.records[token];
+  const latestVersion = latestRecord?.version;
+  if (latestVersion === version) {
+    return latestRecord;
+  }
+  // in case proposal version is not latest, get from recordsVersions
+  const recordVersions = state.records.recordsVersions[token];
+  if (!recordVersions) return;
+  return recordVersions[version]?.record;
+};
+
+export const selectRecordVersionStatusByToken = (state, { version, token }) => {
+  const latestRecord = state.records.records[token];
+  const latestVersion = latestRecord?.version;
+  if (latestVersion === version) {
+    return state.records.status;
+  }
+  const recordVersions = state.records.recordsVersions[token];
+  if (!recordVersions) return;
+  return recordVersions[version]?.status;
+};
 
 // Export default reducer
 export default recordsSlice.reducer;
