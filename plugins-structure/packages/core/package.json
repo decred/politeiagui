@@ -15,7 +15,8 @@
     "./records/policy": "./src/records/policy/index.js",
     "./router": "./src/router/index.js",
     "./routes": "./src/routes/index.js",
-    "./listeners": "./src/listeners/index.js"
+    "./listeners": "./src/listeners/index.js",
+    "./localstorage": "./src/localStorage/index.js"
   },
   "babel": {
     "env": {

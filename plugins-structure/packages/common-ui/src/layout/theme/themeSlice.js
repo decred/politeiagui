@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { DEFAULT_LIGHT_THEME_NAME } from "pi-ui";
+import { getFromLocalStorage } from "@politeiagui/core/localstorage";
 
-const initialState = {
-  currentTheme: DEFAULT_LIGHT_THEME_NAME,
+const currentThemeFromLS = getFromLocalStorage("uiTheme/currentTheme");
+
+export const initialState = {
+  currentTheme: currentThemeFromLS || DEFAULT_LIGHT_THEME_NAME,
 };
 
 const themeSlice = createSlice({
@@ -13,7 +16,7 @@ const themeSlice = createSlice({
       state.currentTheme = action.payload;
     },
     resetTheme(state) {
-      state.currentTheme = initialState.currentTheme;
+      state.currentTheme = DEFAULT_LIGHT_THEME_NAME;
     },
   },
 });
