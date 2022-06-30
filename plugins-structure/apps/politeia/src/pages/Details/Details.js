@@ -9,9 +9,6 @@ import { ProposalDetails, ProposalLoader } from "../../components";
 import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
-import { startDetailsListeners } from "./listeners";
-
-startDetailsListeners();
 
 function ErrorsMessages({ errors }) {
   return errors.reduce((acc, cur) => {

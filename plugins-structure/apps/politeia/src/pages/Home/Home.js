@@ -7,9 +7,6 @@ import UnderReview from "./UnderReview/UnderReview";
 import Approved from "./Approved/Approved";
 import Rejected from "./Rejected/Rejected";
 import Abandoned from "./Abandoned/Abandoned";
-import { startHomeListeners } from "./listeners";
-
-startHomeListeners();
 
 const TAB_LABELS = {
   underReview: "Under Review",

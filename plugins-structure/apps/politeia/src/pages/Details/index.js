@@ -1,6 +1,7 @@
 import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
+import { listeners } from "./listeners";
 import Details from "./Details";
 
 export default App.createRoute({
@@ -12,6 +13,7 @@ export default App.createRoute({
     "comments/votes",
     "pi/summaries",
   ],
+  listeners,
   cleanup: routeCleanup,
   view: createRouteView(Details),
 });

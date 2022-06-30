@@ -1,4 +1,3 @@
-import { listener } from "@politeiagui/core/listeners";
 import { records } from "@politeiagui/core/records";
 import { fetchRecordTicketvoteSummaries } from "@politeiagui/ticketvote/effects";
 import { fetchProposalDetails } from "./actions";
@@ -21,8 +20,8 @@ async function getFullToken(state, dispatch, token) {
   return [fetchedRecord?.censorshiprecord?.token, true];
 }
 
-export function startDetailsListeners() {
-  listener.startListening({
+export const listeners = [
+  {
     actionCreator: fetchProposalDetails,
     effect: async (
       { payload },
@@ -46,5 +45,5 @@ export function startDetailsListeners() {
       ]);
       subscribe();
     },
-  });
-}
+  },
+];

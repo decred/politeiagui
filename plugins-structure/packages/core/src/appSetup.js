@@ -2,6 +2,7 @@ import { connectReducers, store, validatePlugin } from "./";
 import { api } from "./api";
 import { router } from "./router";
 import { initializers as recordsInitializers } from "./records/initializers";
+import { listener } from "./listeners";
 
 function mergeInitializers(initializers, targetInitializers) {
   let mergedInitializers = initializers;
@@ -16,13 +17,24 @@ function mergeInitializers(initializers, targetInitializers) {
   return mergedInitializers;
 }
 
+function registerListeners(listeners) {
+  for (let l of listeners) {
+    listener.startListening(l);
+  }
+}
+
+function clearListeners(listeners) {
+  for (let l of listeners) {
+    listener.stopListening(l);
+  }
+}
+
 /**
  * appSetup returns an app instance. It connects plugins reducers into the core
- * store, and connects all plugins initializers.
- *
- * @param {{ plugins: Array, initializersByRoutesMap: Object }} appConfig
+ * store, connects all plugins initializers and register app level listeners
+ * @param {{ plugins: Array, listeners: Array, initializersByRoutesMap: Object }} appConfig
  */
-export function appSetup({ plugins, config }) {
+export function appSetup({ plugins, listeners = [], config }) {
   let initializers = recordsInitializers;
   plugins.every(validatePlugin);
 
@@ -33,6 +45,8 @@ export function appSetup({ plugins, config }) {
       initializers = mergeInitializers(initializers, plugin.initializers);
     }
   }
+
+  registerListeners(listeners);
 
   return {
     config,
@@ -59,17 +73,28 @@ export function appSetup({ plugins, config }) {
      * @param {{ path: string,
      *  view: Function,
      *  initializerIds: Array,
+     *  listeners: Array
      *  cleanup: Function
      * }} routeParams
      */
-    createRoute({ path, view, initializerIds = [], cleanup } = {}) {
+    createRoute({
+      path,
+      view,
+      initializerIds = [],
+      listeners = [],
+      cleanup,
+    } = {}) {
       const routeInitializerActions = initializers
         .filter((init) => initializerIds.includes(init.id))
         .map((init) => init.action);
       return {
         path,
-        cleanup,
+        cleanup: () => {
+          cleanup();
+          clearListeners(listeners);
+        },
         view: async (routeParams) => {
+          registerListeners(listeners);
           for (const action of routeInitializerActions) {
             await action();
           }
