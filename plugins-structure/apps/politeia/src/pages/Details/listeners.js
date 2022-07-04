@@ -1,29 +1,22 @@
 import { records } from "@politeiagui/core/records";
 import { fetchProposalDetails } from "./actions";
 
-async function getFullToken(state, dispatch, token) {
-  const storeToken = records.selectFullToken(state, token);
-  if (storeToken) {
-    const record = records.selectByToken(state, storeToken);
-    // means details was already fetched
-    if (record.files.length === 2) {
-      return [storeToken, true];
-    }
-    return [storeToken, false];
-  }
-  const res = await dispatch(records.fetchDetails({ token }));
-  const fetchedRecord = res.payload;
-  return [fetchedRecord?.censorshiprecord?.token, true];
+async function waitForFullToken(token, take) {
+  const [_, currentState] = await take((_, currentState) => {
+    const storeToken = records.selectFullToken(currentState, token);
+    return storeToken;
+  });
+  return records.selectFullToken(currentState, token);
 }
 
 function injectEffect(effect) {
   return async (
     { payload },
-    { getState, dispatch, unsubscribe, subscribe }
+    { getState, dispatch, unsubscribe, subscribe, take }
   ) => {
     unsubscribe();
     const state = getState();
-    const [fullToken] = await getFullToken(state, dispatch, payload);
+    const fullToken = await waitForFullToken(payload, take);
     await effect(state, dispatch, { token: fullToken });
     subscribe();
   };
@@ -36,12 +29,9 @@ function injectfetchRecordDetailsEffect(effect) {
   ) => {
     unsubscribe();
     const state = getState();
-    const [fullToken, detailsFetched] = await getFullToken(
-      state,
-      dispatch,
-      payload
-    );
-    await effect(state, dispatch, { token: fullToken, detailsFetched });
+    await effect(state, dispatch, {
+      token: payload,
+    });
     subscribe();
   };
 }
