@@ -4,6 +4,7 @@ import {
   validateInventoryPageSize,
   validateRecordsPageSize,
 } from "./validation";
+import { fetchNextRecords, fetchRecordDetails } from "./effects";
 
 function fetchPolicyIfIdle() {
   if (recordsPolicy.selectStatus(store.getState()) === "idle") {
@@ -18,6 +19,11 @@ export const initializers = [
       await fetchPolicyIfIdle();
       validateRecordsPageSize(store.getState());
     },
+    effect: fetchNextRecords,
+  },
+  {
+    id: "records/details",
+    effect: fetchRecordDetails,
   },
   {
     id: "records/inventory",

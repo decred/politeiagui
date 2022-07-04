@@ -69,34 +69,51 @@ export function appSetup({ plugins, listeners = [], config }) {
     },
     /**
      * createRoute is an interface for creating app routes. Before rendering
-     * some route view, execute all initializers actions for given `initializerIds`.
+     * some route view, execute all initializers actions for given `initialize`.
      * @param {{ path: string,
      *  view: Function,
-     *  initializerIds: Array,
+     *  initialize: Array,
      *  listeners: Array
      *  cleanup: Function
      * }} routeParams
      */
-    createRoute({
-      path,
-      view,
-      initializerIds = [],
-      listeners = [],
-      cleanup,
-    } = {}) {
-      const routeInitializerActions = initializers
-        .filter((init) => initializerIds.includes(init.id))
-        .map((init) => init.action);
+    createRoute({ path, view, initialize = [], listeners = [], cleanup } = {}) {
+      const routeInitializers = initializers.reduce((prev, cur) => {
+        const el = initialize.find((val) => val.id === cur.id);
+        if (el) {
+          return [
+            ...prev,
+            {
+              ...cur,
+              ...el,
+            },
+          ];
+        }
+        return prev;
+      }, []);
+
+      let idListeners = [];
+      for (const initializer of routeInitializers) {
+        if (initializer.listener) {
+          idListeners.push({
+            actionCreator: initializer.listener.actionCreator,
+            effect: initializer.listener.injectEffect(initializer.effect),
+          });
+        }
+      }
+      const allListeners = [...idListeners, ...listeners];
       return {
         path,
         cleanup: () => {
           cleanup();
-          clearListeners(listeners);
+          clearListeners(allListeners);
         },
         view: async (routeParams) => {
-          registerListeners(listeners);
-          for (const action of routeInitializerActions) {
-            await action();
+          registerListeners(allListeners);
+          for (const init of routeInitializers) {
+            if (init.action) {
+              await init.action();
+            }
           }
           return await view(routeParams);
         },

@@ -5,6 +5,7 @@ import {
   validateCommentsTimestampsPageSize,
   validateCommentsVotesPageSize,
 } from "../lib/validation";
+import { fetchNextCommentsCount, fetchRecordComments } from "../effects";
 
 function fetchPolicyIfIdle() {
   if (comments.policy.selectStatus(store.getState()) === "idle") {
@@ -19,6 +20,7 @@ export const initializers = [
       await fetchPolicyIfIdle();
       validateCommentsCountsPageSize(store.getState());
     },
+    effect: fetchNextCommentsCount,
   },
   {
     id: "comments/timestamps",
@@ -33,5 +35,6 @@ export const initializers = [
       await fetchPolicyIfIdle();
       validateCommentsVotesPageSize(store.getState());
     },
+    effect: fetchRecordComments,
   },
 ];

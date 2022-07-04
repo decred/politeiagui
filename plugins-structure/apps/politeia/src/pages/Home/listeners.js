@@ -1,10 +1,48 @@
-import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
-import { fetchNextCommentsCount } from "@politeiagui/comments/effects";
-import { fetchNextRecords } from "@politeiagui/core/records/effects";
-import { fetchNextTicketvoteSummaries } from "@politeiagui/ticketvote/effects";
 import { fetchNextBatch } from "./actions";
+import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
+
+function getInventoryList(payload, state) {
+  const readableStatus = getHumanReadableTicketvoteStatus(payload);
+  return state.ticketvoteInventory[readableStatus].tokens;
+}
 
 const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
+
+function injectEffect(effect) {
+  return async (
+    { payload },
+    { getState, dispatch, subscribe, unsubscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    const inventoryList = getInventoryList(payload, state);
+    await effect(state, dispatch, { inventoryList });
+    subscribe();
+  };
+}
+
+function injectRecordsBatchEffect(effect) {
+  return async (
+    { payload },
+    { getState, dispatch, subscribe, unsubscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    const inventoryList = getInventoryList(payload, state);
+    await effect(state, dispatch, { inventoryList, filenames: piFilenames });
+    subscribe();
+  };
+}
+
+export const initializeFetchNextBatchListener = {
+  actionCreator: fetchNextBatch,
+  injectEffect,
+};
+
+export const initializeRecordsBatchFetchNextBatchListener = {
+  actionCreator: fetchNextBatch,
+  injectEffect: injectRecordsBatchEffect,
+};
 
 export const listeners = [
   {
@@ -13,31 +51,6 @@ export const listeners = [
       if (payload.inventory[meta.arg.status].length > 0) {
         listenerApi.dispatch(fetchNextBatch(meta.arg.status));
       }
-    },
-  },
-  {
-    actionCreator: fetchNextBatch,
-    effect: async (
-      { payload },
-      { getState, dispatch, subscribe, unsubscribe }
-    ) => {
-      unsubscribe();
-      const readableStatus = getHumanReadableTicketvoteStatus(payload);
-      const state = getState();
-      const inventoryList = state.ticketvoteInventory[readableStatus].tokens;
-      await Promise.all([
-        fetchNextTicketvoteSummaries(state, dispatch, {
-          inventoryList,
-        }),
-        fetchNextRecords(state, dispatch, {
-          inventoryList,
-          filenames: piFilenames,
-        }),
-        fetchNextCommentsCount(state, dispatch, {
-          inventoryList,
-        }),
-      ]);
-      subscribe();
     },
   },
 ];

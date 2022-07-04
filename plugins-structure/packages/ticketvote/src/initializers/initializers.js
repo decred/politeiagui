@@ -5,6 +5,10 @@ import {
   validateTicketvoteSummariesPageSize,
   validateTicketvoteTimestampsPageSize,
 } from "../lib/validation";
+import {
+  fetchNextTicketvoteSummaries,
+  fetchRecordTicketvoteSummaries,
+} from "../effects";
 
 function fetchPolicyIfIdle() {
   if (ticketvote.policy.selectStatus(store.getState()) === "idle") {
@@ -29,6 +33,15 @@ export const initializers = [
       await fetchPolicyIfIdle();
       validateTicketvoteSummariesPageSize(store.getState());
     },
+    effect: fetchNextTicketvoteSummaries,
+  },
+  {
+    id: "ticketvote/summaries/single",
+    action: async () => {
+      await fetchPolicyIfIdle();
+      validateTicketvoteSummariesPageSize(store.getState());
+    },
+    effect: fetchRecordTicketvoteSummaries,
   },
   {
     id: "ticketvote/timestamps",
