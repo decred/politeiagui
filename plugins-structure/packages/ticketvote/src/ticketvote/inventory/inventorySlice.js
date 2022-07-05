@@ -93,14 +93,14 @@ const ticketvoteInventorySlice = createSlice({
 export const selectTicketvoteInventoryByStatus = (state, status) => {
   if (validateTicketvoteStatus(status)) {
     const readableStatus = getHumanReadableTicketvoteStatus(status);
-    return state.ticketvoteInventory[readableStatus].tokens;
+    return state.ticketvoteInventory?.[readableStatus].tokens;
   }
 };
 
 export const selectTicketvoteInventoryStatus = (state, { status }) => {
   if (validateTicketvoteStatus(status)) {
     const readableStatus = getHumanReadableTicketvoteStatus(status);
-    return state.ticketvoteInventory[readableStatus].status;
+    return state.ticketvoteInventory?.[readableStatus].status;
   }
 };
 
@@ -109,13 +109,13 @@ export const selectTicketvoteInventoryLastPage = (state, { status }) => {
     // We have valids record state and status.
     // Convert them to strings if they are not.
     const readableStatus = getHumanReadableTicketvoteStatus(status);
-    return state.ticketvoteInventory[readableStatus].lastPage;
+    return state.ticketvoteInventory?.[readableStatus].lastPage;
   }
 };
 
 // Error
 export const selectTicketvoteInventoryError = (state) =>
-  state.ticketvoteInventory.error;
+  state.ticketvoteInventory?.error;
 
 // Export default reducer
 export default ticketvoteInventorySlice.reducer;

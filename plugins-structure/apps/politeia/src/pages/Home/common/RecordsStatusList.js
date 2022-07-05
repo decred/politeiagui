@@ -13,12 +13,12 @@ function RecordsStatusList({ status, onRenderNextStatus }) {
   });
 
   useEffect(() => {
-    if (inventoryStatus === "succeeded/isDone" && inventory.length === 0)
+    if (inventoryStatus === "succeeded/isDone" && inventory?.length === 0)
       onRenderNextStatus && onRenderNextStatus();
   }, [inventoryStatus, inventory, onRenderNextStatus]);
 
   // No need to render StatusList component if inventory list is empty
-  return inventory.length > 0 ? (
+  return inventory?.length > 0 ? (
     <StatusList
       status={status}
       onFetchNextInventoryPage={handleFetchNextInventoryPage}
