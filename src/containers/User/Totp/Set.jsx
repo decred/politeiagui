@@ -14,14 +14,13 @@ const SetTotp = ({ totp = {}, isAlreadySet }) =>
         </div>
         <div className={styles.instructions}>
           <P>
-            You can activate the 2FA on your account following the instructions
-            below. Once you activate the 2FA on your account,{" "}
-            <b>
-              you'll be required to inform your code every time you attempt to
-              login.
-            </b>
+            You can activate 2FA on your account by following the instructions
+            below. Once you activate 2FA on your account,{" "}
+            <b>you'll be required to enter your code every time you login.</b>
           </P>
-          <P>You will be able deactivate the 2FA after you setup the keys.</P>
+          <P>
+            You will be able to deactivate the 2FA after you setup the keys.
+          </P>
           <P>
             1 - <b>Save the backup key below</b>. If you did not write down or
             copy this backup key during 2FA setup, there's no way for you to
