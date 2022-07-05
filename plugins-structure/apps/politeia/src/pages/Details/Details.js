@@ -33,6 +33,7 @@ function Details({ token }) {
     voteSummaryError,
     commentsError,
   } = useProposalDetails({ token });
+  // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
   const shouldScrollToComments = !!params?.scrollToComments;
   useScrollToTop(shouldScrollToComments);

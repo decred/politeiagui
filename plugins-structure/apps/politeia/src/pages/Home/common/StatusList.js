@@ -68,8 +68,8 @@ function StatusList({
             <ProposalCard
               key={token}
               record={record}
-              commentsCount={countComments[token]}
-              voteSummary={summaries[token]}
+              commentsCount={countComments?.[token]}
+              voteSummary={summaries?.[token]}
             />
           );
         })}

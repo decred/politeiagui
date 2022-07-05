@@ -5,7 +5,7 @@ import { getShortToken } from "@politeiagui/core/records/utils";
 import { decodeProposalRecord, getLegacyProposalStatusTagProps } from "./utils";
 import { ProposalStatusBar, ProposalSubtitle } from "./common";
 
-const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
+const ProposalCard = ({ record, voteSummary, commentsCount }) => {
   const proposal = decodeProposalRecord(record);
   const statusTagProps = getLegacyProposalStatusTagProps(record, voteSummary);
   return (
@@ -27,7 +27,7 @@ const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
         secondRow={<ProposalStatusBar voteSummary={voteSummary} />}
         footer={
           <>
-            <span>{commentsCount} Comments</span>
+            {commentsCount && <span>{commentsCount} Comments</span>}
             <Button>Click Me</Button>
           </>
         }
