@@ -27,7 +27,9 @@ const ProposalCard = ({ record, voteSummary, commentsCount }) => {
         secondRow={<ProposalStatusBar voteSummary={voteSummary} />}
         footer={
           <>
-            {commentsCount && <span>{commentsCount} Comments</span>}
+            {commentsCount !== undefined && (
+              <span>{commentsCount} Comments</span>
+            )}
             <Button>Click Me</Button>
           </>
         }
