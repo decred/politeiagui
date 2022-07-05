@@ -40,13 +40,13 @@ const commentsPolicySlice = createSlice({
 });
 
 // Selectors
-export const selectCommentsPolicy = (state) => state.commentsPolicy.policy;
+export const selectCommentsPolicy = (state) => state.commentsPolicy?.policy;
 export const selectCommentsPolicyRule = (state, rule) =>
-  state.commentsPolicy.policy && state.commentsPolicy.policy[rule];
+  state.commentsPolicy?.policy[rule];
 export const selectCommentsPolicyStatus = (state) =>
-  state.commentsPolicy.status;
+  state.commentsPolicy?.status;
 
 // Errors
-export const selectCommentsPolicyError = (state) => state.commentsPolicy.error;
+export const selectCommentsPolicyError = (state) => state.commentsPolicy?.error;
 
 export default commentsPolicySlice.reducer;
