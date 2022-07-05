@@ -36,7 +36,8 @@ const piPolicySlice = createSlice({
   },
 });
 
-export const selectPiPolicy = (state) => state.piPolicy.policy;
-export const selectPiPolicyStatus = (state) => state.piPolicy.status;
+export const selectPiPolicy = (state) => state.piPolicy?.policy;
+export const selectPiPolicyStatus = (state) => state.piPolicy?.status;
+export const selectPiPolicyError = (state) => state.piPolicy?.error;
 
 export default piPolicySlice.reducer;

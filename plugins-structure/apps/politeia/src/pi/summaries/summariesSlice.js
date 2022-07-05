@@ -46,8 +46,8 @@ const piSumamriesSlice = createSlice({
 });
 
 export const selectPiSummariesByToken = (state, token) =>
-  state.piSummaries.byToken[token];
-export const selectPiSummaries = (state) => state.piSummaries.byToken;
-export const selectPiSummariesStatus = (state) => state.piSummaries.status;
+  state.piSummaries?.byToken[token];
+export const selectPiSummaries = (state) => state.piSummaries?.byToken;
+export const selectPiSummariesStatus = (state) => state.piSummaries?.status;
 
 export default piSumamriesSlice.reducer;
