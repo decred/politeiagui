@@ -122,5 +122,5 @@ export function mergeRoutes(routes, extraRoutes) {
 export function isExternalLink(url) {
   const tmp = document.createElement("a");
   tmp.href = url;
-  return tmp.host !== window.location.host;
+  return tmp.hostname && tmp.hostname !== window.top.location.hostname;
 }
