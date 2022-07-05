@@ -36,7 +36,7 @@ function injectfetchRecordDetailsEffect(effect) {
   };
 }
 
-export const initializefetchProposalDetailsListener = {
+export const initializeFetchProposalDetailsListener = {
   actionCreator: fetchProposalDetails,
   injectEffect,
 };

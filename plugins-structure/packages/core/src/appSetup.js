@@ -4,7 +4,7 @@ import { router } from "./router";
 import { initializers as recordsInitializers } from "./records/initializers";
 import { listener } from "./listeners";
 
-function mergeInitializers(initializers, targetInitializers) {
+function mergeAppAndPluginInitializers(initializers, targetInitializers) {
   let mergedInitializers = initializers;
   for (const initializer of targetInitializers) {
     if (mergedInitializers.find((mi) => mi.id === initializer.id)) {
@@ -15,6 +15,47 @@ function mergeInitializers(initializers, targetInitializers) {
     mergedInitializers = [...mergedInitializers, initializer];
   }
   return mergedInitializers;
+}
+
+function mergeListeners(routeInitializers, listeners) {
+  let idListeners = [];
+  for (const { listener, effect } of routeInitializers) {
+    if (listener) {
+      idListeners.push({
+        actionCreator: listener.actionCreator,
+        effect: listener.injectEffect(effect),
+      });
+    }
+  }
+  return [...idListeners, ...listeners];
+}
+
+function mergeRouteAndAppInitializersPropoerties(
+  appInitializers,
+  routeInitializers
+) {
+  const initializerInRoute = (init) => (val) => val.id === init.id;
+  const initializersReducer = (newAppInitializersArray, appInitializer) => {
+    const routeInitializer = routeInitializers.find(
+      initializerInRoute(appInitializer)
+    );
+    // If is in route, merge the content of routeInitializer and appInitializer
+    // appInitializer = {id, action}
+    // routeInitializer = {id, listener, view, ...}
+    // newInitializer = {id, action, listener, view, ...}
+    // else do nothing and return the array to go to the next iteration
+    if (routeInitializer) {
+      return [
+        ...newAppInitializersArray,
+        {
+          ...appInitializer,
+          ...routeInitializer,
+        },
+      ];
+    }
+    return newAppInitializersArray;
+  };
+  return appInitializers.reduce(initializersReducer, []);
 }
 
 function registerListeners(listeners) {
@@ -42,7 +83,10 @@ export function appSetup({ plugins, listeners = [], config }) {
   for (const plugin of plugins) {
     if (plugin.reducers) connectReducers(plugin.reducers);
     if (plugin.initializers) {
-      initializers = mergeInitializers(initializers, plugin.initializers);
+      initializers = mergeAppAndPluginInitializers(
+        initializers,
+        plugin.initializers
+      );
     }
   }
 
@@ -78,30 +122,12 @@ export function appSetup({ plugins, listeners = [], config }) {
      * }} routeParams
      */
     createRoute({ path, view, initialize = [], listeners = [], cleanup } = {}) {
-      const routeInitializers = initializers.reduce((prev, cur) => {
-        const el = initialize.find((val) => val.id === cur.id);
-        if (el) {
-          return [
-            ...prev,
-            {
-              ...cur,
-              ...el,
-            },
-          ];
-        }
-        return prev;
-      }, []);
+      const routeInitializers = mergeRouteAndAppInitializersPropoerties(
+        initializers,
+        initialize
+      );
+      const allListeners = mergeListeners(routeInitializers, listeners);
 
-      let idListeners = [];
-      for (const initializer of routeInitializers) {
-        if (initializer.listener) {
-          idListeners.push({
-            actionCreator: initializer.listener.actionCreator,
-            effect: initializer.listener.injectEffect(initializer.effect),
-          });
-        }
-      }
-      const allListeners = [...idListeners, ...listeners];
       return {
         path,
         cleanup: () => {

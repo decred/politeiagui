@@ -1,6 +1,5 @@
 import isString from "lodash/fp/isString";
 import isArray from "lodash/fp/isArray";
-import isFunction from "lodash/fp/isFunction";
 /**
  * InitializerAction is the method to be executed by an intializer.
  * @callback InitializerAction
@@ -25,7 +24,7 @@ function validPluginsInitializers(initializers) {
   return (
     initializers &&
     isArray(initializers) &&
-    initializers.every((init) => isString(init.id) && isFunction(init.action))
+    initializers.every((init) => isString(init.id))
   );
 }
 
@@ -42,7 +41,9 @@ export function validatePlugin({ initializers, reducers, name }) {
   }
 
   if (initializers && !validPluginsInitializers(initializers)) {
-    throw TypeError("`initializers` must be an array of { id, action } ");
+    throw TypeError(
+      "`initializers` must be an array of objects where the id key is required"
+    );
   }
 }
 

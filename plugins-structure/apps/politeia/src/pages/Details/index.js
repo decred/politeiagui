@@ -2,8 +2,8 @@ import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
 import {
+  initializeFetchProposalDetailsListener,
   initializeRecordDetailsFetchProposalDetailsListener,
-  initializefetchProposalDetailsListener,
 } from "./listeners";
 import Details from "./Details";
 
@@ -22,15 +22,15 @@ export default App.createRoute({
     },
     {
       id: "ticketvote/summaries/single",
-      listener: initializefetchProposalDetailsListener,
+      listener: initializeFetchProposalDetailsListener,
     },
     {
       id: "comments/votes",
-      listener: initializefetchProposalDetailsListener,
+      listener: initializeFetchProposalDetailsListener,
     },
     {
       id: "pi/summaries",
-      listener: initializefetchProposalDetailsListener,
+      listener: initializeFetchProposalDetailsListener,
     },
   ],
   cleanup: routeCleanup,
