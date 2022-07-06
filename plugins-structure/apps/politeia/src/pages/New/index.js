@@ -5,7 +5,7 @@ import New from "./New";
 
 export default App.createRoute({
   path: "/record/new",
-  setupServices: ["pi/new"],
+  setupServices: [{ id: "pi/new" }],
   cleanup: routeCleanup,
   view: createRouteView(New),
 });
