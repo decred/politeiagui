@@ -1,34 +1,32 @@
 import isString from "lodash/fp/isString";
 import isArray from "lodash/fp/isArray";
 /**
- * InitializerAction is the method to be executed by an intializer.
- * @callback InitializerAction
+ * ServiceAction is the method to be executed by an intializer.
+ * @callback ServiceAction
  * @returns {Promise}
  */
 
 /**
- * Initializer is an `action` that will setup the plugin for usage in some given
+ * Service is an `action` that will setup the plugin for usage in some given
  * `id` case.
  * @typedef {{
  *  id: string,
- *  action: InitializerAction
- * }} Initializer
+ *  action: ServiceAction
+ * }} Service
  */
 
 /**
- * validPluginsInitializers checks if all plugins initializers are valid.
- * @param {Initializer[]} initializers
+ * validPluginServices checks if all plugins services are valid.
+ * @param {Service[]} services
  * @returns {boolean} isValid
  */
-function validPluginsInitializers(initializers) {
+function validPluginServices(services) {
   return (
-    initializers &&
-    isArray(initializers) &&
-    initializers.every((init) => isString(init.id))
+    services && isArray(services) && services.every((init) => isString(init.id))
   );
 }
 
-export function validatePlugin({ initializers, reducers, name }) {
+export function validatePlugin({ services, reducers, name }) {
   const validReducers =
     isArray(reducers) &&
     reducers.every((reducer) => reducer.key && reducer.reducer);
@@ -40,9 +38,9 @@ export function validatePlugin({ initializers, reducers, name }) {
     throw TypeError("`name` is required and must be a string");
   }
 
-  if (initializers && !validPluginsInitializers(initializers)) {
+  if (services && !validPluginServices(services)) {
     throw TypeError(
-      "`initializers` must be an array of objects where the id key is required"
+      "`services` must be an array of objects where the id key is required"
     );
   }
 }
@@ -51,21 +49,21 @@ export function validatePlugin({ initializers, reducers, name }) {
  * pluginSetup is the interface used for plugins setup and validation.
  *
  * @param {{
- *  initializers: Initializer[],
+ *  services: Service[],
  *  reducers: Array,
  *  name: string
  * }} pluginParams
  */
-export function pluginSetup({ initializers, reducers, name }) {
-  validatePlugin({ initializers, reducers, name });
+export function pluginSetup({ services, reducers, name }) {
+  validatePlugin({ services, reducers, name });
   return {
     reducers,
-    initializers,
+    services,
     name,
     initialize: async (id) => {
-      const initializer = initializers.find((init) => init.id === id);
-      if (!initializer) return;
-      return await initializer.action();
+      const service = services.find((init) => init.id === id);
+      if (!service) return;
+      return await service.action();
     },
   };
 }

@@ -1,25 +1,25 @@
 import { connectReducers, store, validatePlugin } from "./";
 import { api } from "./api";
 import { router } from "./router";
-import { initializers as recordsInitializers } from "./records/initializers";
+import { services as recordsServices } from "./records/services";
 import { listener } from "./listeners";
 
-function mergeAppAndPluginInitializers(initializers, targetInitializers) {
-  let mergedInitializers = initializers;
-  for (const initializer of targetInitializers) {
-    if (mergedInitializers.find((mi) => mi.id === initializer.id)) {
+function mergeAppAndPluginServices(services, targetServices) {
+  let mergedServices = services;
+  for (const service of targetServices) {
+    if (mergedServices.find((mi) => mi.id === service.id)) {
       console.warn(
-        `There are multiple plugins initializers with the '${initializer.id}' ID. Pay attention.`
+        `There are multiple plugins services with the '${service.id}' ID. Pay attention.`
       );
     }
-    mergedInitializers = [...mergedInitializers, initializer];
+    mergedServices = [...mergedServices, service];
   }
-  return mergedInitializers;
+  return mergedServices;
 }
 
-function mergeListeners(routeInitializers, listeners) {
+function mergeListeners(routeServices, listeners) {
   let idListeners = [];
-  for (const { listener, effect } of routeInitializers) {
+  for (const { listener, effect } of routeServices) {
     if (listener) {
       idListeners.push({
         actionCreator: listener.actionCreator,
@@ -30,32 +30,27 @@ function mergeListeners(routeInitializers, listeners) {
   return [...idListeners, ...listeners];
 }
 
-function mergeRouteAndAppInitializersPropoerties(
-  appInitializers,
-  routeInitializers
-) {
-  const initializerInRoute = (init) => (val) => val.id === init.id;
-  const initializersReducer = (newAppInitializersArray, appInitializer) => {
-    const routeInitializer = routeInitializers.find(
-      initializerInRoute(appInitializer)
-    );
-    // If is in route, merge the content of routeInitializer and appInitializer
-    // appInitializer = {id, action}
-    // routeInitializer = {id, listener, view, ...}
-    // newInitializer = {id, action, listener, view, ...}
+function addRouteServicesProperties(appServices, routeServices) {
+  const serviceInRoute = (init) => (val) => val.id === init.id;
+  const servicesReducer = (newAppServicesArray, appService) => {
+    const routeService = routeServices.find(serviceInRoute(appService));
+    // If is in route, merge the content of routeService and appService
+    // appService = {id, action}
+    // routeService = {id, listener, view, ...}
+    // newService = {id, action, listener, view, ...}
     // else do nothing and return the array to go to the next iteration
-    if (routeInitializer) {
+    if (routeService) {
       return [
-        ...newAppInitializersArray,
+        ...newAppServicesArray,
         {
-          ...appInitializer,
-          ...routeInitializer,
+          ...appService,
+          ...routeService,
         },
       ];
     }
-    return newAppInitializersArray;
+    return newAppServicesArray;
   };
-  return appInitializers.reduce(initializersReducer, []);
+  return appServices.reduce(servicesReducer, []);
 }
 
 function registerListeners(listeners) {
@@ -72,21 +67,18 @@ function clearListeners(listeners) {
 
 /**
  * appSetup returns an app instance. It connects plugins reducers into the core
- * store, connects all plugins initializers and register app level listeners
- * @param {{ plugins: Array, listeners: Array, initializersByRoutesMap: Object }} appConfig
+ * store, connects all plugins services and register app level listeners
+ * @param {{ plugins: Array, listeners: Array, config: Object }}
  */
 export function appSetup({ plugins, listeners = [], config }) {
-  let initializers = recordsInitializers;
+  let appServices = recordsServices;
   plugins.every(validatePlugin);
 
-  // Connect plugins reducers and initializers
+  // Connect plugins reducers and services
   for (const plugin of plugins) {
     if (plugin.reducers) connectReducers(plugin.reducers);
-    if (plugin.initializers) {
-      initializers = mergeAppAndPluginInitializers(
-        initializers,
-        plugin.initializers
-      );
+    if (plugin.services) {
+      appServices = mergeAppAndPluginServices(appServices, plugin.services);
     }
   }
 
@@ -113,20 +105,26 @@ export function appSetup({ plugins, listeners = [], config }) {
     },
     /**
      * createRoute is an interface for creating app routes. Before rendering
-     * some route view, execute all initializers actions for given `initialize`.
+     * some route view, execute all services actions for given `service`.
      * @param {{ path: string,
      *  view: Function,
-     *  initialize: Array,
+     *  setupServices: Array,
      *  listeners: Array
      *  cleanup: Function
      * }} routeParams
      */
-    createRoute({ path, view, initialize = [], listeners = [], cleanup } = {}) {
-      const routeInitializers = mergeRouteAndAppInitializersPropoerties(
-        initializers,
-        initialize
+    createRoute({
+      path,
+      view,
+      setupServices = [],
+      listeners = [],
+      cleanup,
+    } = {}) {
+      const routeServices = addRouteServicesProperties(
+        appServices,
+        setupServices
       );
-      const allListeners = mergeListeners(routeInitializers, listeners);
+      const allListeners = mergeListeners(routeServices, listeners);
 
       return {
         path,
@@ -136,9 +134,9 @@ export function appSetup({ plugins, listeners = [], config }) {
         },
         view: async (routeParams) => {
           registerListeners(allListeners);
-          for (const init of routeInitializers) {
-            if (init.action) {
-              await init.action();
+          for (const service of routeServices) {
+            if (service.action) {
+              await service.action();
             }
           }
           return await view(routeParams);

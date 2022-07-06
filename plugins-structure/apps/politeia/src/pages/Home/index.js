@@ -3,28 +3,28 @@ import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
 import Home from "./Home";
 import {
-  initializeFetchNextBatchListener,
-  initializeRecordsBatchFetchNextBatchListener,
+  fetchNextBatchListener,
   listeners,
+  recordsFetchNextBatchListener,
 } from "./listeners";
 
 export default App.createRoute({
   path: "/",
-  initialize: [
+  setupServices: [
     {
       id: "ticketvote/inventory",
     },
     {
       id: "records/batch",
-      listener: initializeRecordsBatchFetchNextBatchListener,
+      listener: recordsFetchNextBatchListener,
     },
     {
       id: "ticketvote/summaries",
-      listener: initializeFetchNextBatchListener,
+      listener: fetchNextBatchListener,
     },
     {
-      id: "comments/counts",
-      listener: initializeFetchNextBatchListener,
+      id: "comments/count",
+      listener: fetchNextBatchListener,
     },
   ],
   listeners,

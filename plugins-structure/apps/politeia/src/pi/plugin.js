@@ -1,11 +1,11 @@
 import { pluginSetup } from "@politeiagui/core";
-import { initializers } from "./initializers";
+import { services } from "./services";
 import policyReducer from "./policy/policySlice";
 import summariesReducer from "./summaries/summariesSlice";
 
 // Declare pi plugin interface
 const PiPlugin = pluginSetup({
-  initializers,
+  services,
   reducers: [
     {
       key: "piPolicy",

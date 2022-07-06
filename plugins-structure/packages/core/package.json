@@ -7,7 +7,6 @@
     "./api": "./src/api/index.js",
     "./client": "./src/client/index.js",
     "./records": "./src/records/records/index.js",
-    "./records/effects": "./src/records/effects/index.js",
     "./records/utils": "./src/records/utils.js",
     "./records/constants": "./src/records/constants.js",
     "./records/validation": "./src/records/validation.js",

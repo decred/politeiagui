@@ -34,12 +34,12 @@ function injectRecordsBatchEffect(effect) {
   };
 }
 
-export const initializeFetchNextBatchListener = {
+export const fetchNextBatchListener = {
   actionCreator: fetchNextBatch,
   injectEffect,
 };
 
-export const initializeRecordsBatchFetchNextBatchListener = {
+export const recordsFetchNextBatchListener = {
   actionCreator: fetchNextBatch,
   injectEffect: injectRecordsBatchEffect,
 };

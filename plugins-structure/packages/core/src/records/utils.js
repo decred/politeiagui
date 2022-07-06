@@ -9,6 +9,8 @@ import {
   RECORD_STATUS_UNREVIEWED,
 } from "./constants.js";
 import { Buffer } from "buffer";
+import { store } from "../storeSetup";
+import { recordsPolicy } from "./policy";
 
 /**
  * Record File
@@ -247,4 +249,10 @@ export function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
     pos++;
   }
   return tokensToFetch;
+}
+
+export function fetchPolicyIfIdle() {
+  if (recordsPolicy.selectStatus(store.getState()) === "idle") {
+    return store.dispatch(recordsPolicy.fetch());
+  }
 }

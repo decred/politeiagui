@@ -1,5 +1,5 @@
-import { records } from "../records";
-import { getTokensToFetch } from "@politeiagui/core/records/utils";
+import { records } from "./";
+import { getTokensToFetch } from "../utils";
 import isEmpty from "lodash/isEmpty";
 
 function getDetailsFetched(state, token) {

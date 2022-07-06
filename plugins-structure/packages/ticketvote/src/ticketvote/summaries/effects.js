@@ -1,4 +1,4 @@
-import { ticketvoteSummaries } from "../ticketvote/summaries";
+import { ticketvoteSummaries } from "./";
 import { getTokensToFetch } from "@politeiagui/core/records/utils";
 import isEmpty from "lodash/isEmpty";
 

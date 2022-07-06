@@ -1,15 +1,12 @@
 import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
-import {
-  initializeFetchProposalDetailsListener,
-  initializeRecordDetailsFetchProposalDetailsListener,
-} from "./listeners";
+import { fetchDetailsListener, recordFetchDetailsListener } from "./listeners";
 import Details from "./Details";
 
 export default App.createRoute({
   path: "/record/:token",
-  initialize: [
+  setupServices: [
     {
       id: "ticketvote/timestamps",
     },
@@ -18,19 +15,19 @@ export default App.createRoute({
     },
     {
       id: "records/details",
-      listener: initializeRecordDetailsFetchProposalDetailsListener,
+      listener: recordFetchDetailsListener,
     },
     {
       id: "ticketvote/summaries/single",
-      listener: initializeFetchProposalDetailsListener,
+      listener: fetchDetailsListener,
     },
     {
-      id: "comments/votes",
-      listener: initializeFetchProposalDetailsListener,
+      id: "comments",
+      listener: fetchDetailsListener,
     },
     {
       id: "pi/summaries",
-      listener: initializeFetchProposalDetailsListener,
+      listener: fetchDetailsListener,
     },
   ],
   cleanup: routeCleanup,

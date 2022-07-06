@@ -34,7 +34,7 @@ package management tool on any JavaScript application or plugin.
 │   │   ├── /ui
 │   │   ├── constants.js
 │   │   ├── errors.js
-│   │   ├── initializers.js
+│   │   ├── services.js
 │   │   ├── utils.js
 │   │   ├── utils.test.js
 │   │   ├── validation.js
@@ -1291,7 +1291,7 @@ API, with aditional configuration.
 The core package also provides good utils for plugins creation, which helps us
 managing the reducers and plugin intializers.
 
-> An `initializer` is an `{ id, action }` object, which will setup pugins custom
+> A `service` is a `{ id, action }` object, which will setup pugins custom
 > setup for some given use case described by the `id`.
 
 Let's create a new custom plugin using the `pluginSetup` util from core package:
@@ -1302,7 +1302,7 @@ import { pluginSetup, store } from "@politeiagui/core";
 import { fetchApi, myReducer } from "./myPlugin";
 
 const MyPlugin = pluginSetup({
-  initializers: [
+  services: [
     { id: "myplugin/fetch", action: () => store.dispatch(fetchApi()) },
   ],
   reducers: [{ key: "myPlugin", reducer: myReducer }],
@@ -1360,7 +1360,7 @@ Let's initialize the application with a `routes` array defined using the
 `createRoute` method from our configured app.
 
 The `createRoute` method receives an objecto containing a route `path`, a `view`
-some `initializerIds` to **initialize plugins** for given path, and a `cleanup`
+some `services` to **initialize plugins** for given path, and a `cleanup`
 to be executed when route becomes inactive.
 
 ```javascript
@@ -1377,7 +1377,7 @@ const routes = [
   App.createRoute({
     path: "/",
     view: () => ReactDOM.render(<div>My App</div>, root),
-    initializerIds: ["myplugin/fetch"],
+    setupServices: ["myplugin/fetch"],
     cleanup: () => ReactDOM.unmountComponentAtNode(root);
   })
 ]
@@ -1386,7 +1386,7 @@ App.init({ routes });
 ```
 
 So, as described above, once the user hits `/`, before rendering the `view`, it
-will execute the `myplugin/fetch` initializer so our view can be ready to use
+will setup the `myplugin/fetch` service so our view can be ready to use
 without any additional setup.
 
 ## References

@@ -22,7 +22,7 @@ function injectEffect(effect) {
   };
 }
 
-function injectfetchRecordDetailsEffect(effect) {
+function injectRecordDetailsEffect(effect) {
   return async (
     { payload },
     { getState, dispatch, unsubscribe, subscribe }
@@ -36,12 +36,12 @@ function injectfetchRecordDetailsEffect(effect) {
   };
 }
 
-export const initializeFetchProposalDetailsListener = {
+export const fetchDetailsListener = {
   actionCreator: fetchProposalDetails,
   injectEffect,
 };
 
-export const initializeRecordDetailsFetchProposalDetailsListener = {
+export const recordFetchDetailsListener = {
   actionCreator: fetchProposalDetails,
-  injectEffect: injectfetchRecordDetailsEffect,
+  injectEffect: injectRecordDetailsEffect,
 };

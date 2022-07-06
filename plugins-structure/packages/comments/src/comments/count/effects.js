@@ -1,12 +1,6 @@
-import { commentsCount } from "../comments/count";
-import { recordComments } from "../comments/comments";
-import { getTokensToFetch } from "@politeiagui/core/records/utils";
+import { getTokensToFetch } from "@politeiagui/core";
 import isEmpty from "lodash/isEmpty";
-
-export async function fetchRecordComments(state, dispatch, { token }) {
-  const hasComments = recordComments.selectByToken(state, token);
-  if (!hasComments) await dispatch(recordComments.fetch({ token: token }));
-}
+import { commentsCount } from "./";
 
 export async function fetchNextCommentsCount(
   state,
