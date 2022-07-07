@@ -23,6 +23,7 @@ function mergeListeners(routeServices, listeners) {
     if (listener) {
       idListeners.push({
         actionCreator: listener.actionCreator,
+        type: listener.type,
         effect: listener.injectEffect(effect),
       });
     }
@@ -120,11 +121,14 @@ export function appSetup({ plugins, listeners = [], config }) {
       listeners = [],
       cleanup,
     } = {}) {
+      console.log(setupServices);
       const routeServices = addRouteServicesProperties(
         appServices,
         setupServices
       );
       const allListeners = mergeListeners(routeServices, listeners);
+
+      console.log(allListeners);
 
       return {
         path,
@@ -133,6 +137,7 @@ export function appSetup({ plugins, listeners = [], config }) {
           clearListeners(allListeners);
         },
         view: async (routeParams) => {
+          console.log(allListeners);
           registerListeners(allListeners);
           for (const service of routeServices) {
             if (service.action) {

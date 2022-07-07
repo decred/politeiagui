@@ -40,8 +40,10 @@ function useProposalDetails({ token }) {
   }
 
   useEffect(() => {
-    dispatch(fetchProposalDetails(token));
-  }, [token, dispatch]);
+    if (detailsStatus !== "loading") {
+      dispatch(fetchProposalDetails(token));
+    }
+  }, [token, dispatch, detailsStatus]);
 
   return {
     comments,

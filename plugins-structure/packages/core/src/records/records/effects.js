@@ -15,8 +15,10 @@ function getDetailsFetched(state, token) {
 }
 
 export async function fetchRecordDetails(state, dispatch, { token }) {
-  if (!getDetailsFetched(state, token))
+  const recordsStatus = records.selectStatus(state);
+  if (!getDetailsFetched(state, token) && recordsStatus !== "loading") {
     await dispatch(records.fetchDetails({ token }));
+  }
 }
 
 export async function fetchNextRecords(
