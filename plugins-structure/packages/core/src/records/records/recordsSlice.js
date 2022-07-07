@@ -77,8 +77,7 @@ const recordsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(fetchRecordDetails.pending, (state, action) => {
-        console.log(action);
+      .addCase(fetchRecordDetails.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchRecordDetails.fulfilled, (state, action) => {
@@ -86,6 +85,7 @@ const recordsSlice = createSlice({
         const record = action.payload;
         const { token } = record.censorshiprecord;
         state.records[token] = record;
+        state.records[token].detailsFetched = true;
       })
       .addCase(fetchRecordDetails.rejected, (state, action) => {
         state.status = "failed";

@@ -16,6 +16,5 @@ export function selectDetailsStatus(state) {
   if (commentsStatus) statuses.push(commentsStatus);
   if (piSummaryStatus) statuses.push(piSummaryStatus);
 
-  console.log(statuses);
   return getStatusFromMultipleSlices(statuses);
 }

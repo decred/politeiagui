@@ -41,10 +41,10 @@ function useProposalDetails({ token }) {
   }
 
   useEffect(() => {
-    if (recordStatus !== "loading") {
+    if (recordStatus !== "loading" && !record?.detailsFetched) {
       dispatch(fetchProposalDetails(token));
     }
-  }, [token, dispatch, recordStatus]);
+  }, [token, dispatch, recordStatus, record]);
 
   return {
     comments,

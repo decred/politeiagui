@@ -2,21 +2,10 @@ import { records } from "./";
 import { getTokensToFetch } from "../utils";
 import isEmpty from "lodash/isEmpty";
 
-function getDetailsFetched(state, token) {
-  const storeToken = records.selectFullToken(state, token);
-  if (storeToken) {
-    const record = records.selectByToken(state, storeToken);
-    if (record.files.length === 2) {
-      return true;
-    }
-    return false;
-  }
-  return false;
-}
-
 export async function fetchRecordDetails(state, dispatch, { token }) {
   const recordsStatus = records.selectStatus(state);
-  if (!getDetailsFetched(state, token) && recordsStatus !== "loading") {
+  const record = records.selectByToken(state, token);
+  if (!record?.detailsFetched && recordsStatus !== "loading") {
     await dispatch(records.fetchDetails({ token }));
   }
 }
