@@ -34,7 +34,6 @@ function StatusList({
     summaries,
     fetchNextBatch,
     recordsInOrder,
-    recordsPageSize,
   } = useStatusList({ inventory, inventoryStatus, status });
 
   function handleFetchMore() {
@@ -57,7 +56,6 @@ function StatusList({
         hasMore={hasMoreToFetch}
         onFetchMore={handleFetchMore}
         isLoading={homeStatus === "loading"}
-        childrenThreshold={recordsPageSize}
         loadingSkeleton={
           <LoadingSkeleton inventory={inventory} records={recordsInOrder} />
         }

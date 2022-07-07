@@ -20,6 +20,9 @@ function useStatusList({ status, inventory, inventoryStatus }) {
   );
 
   // Fetch first batch on first render
+  // This only triggers the fetchNextBatch action when the records
+  // array is empty on purpose because after it has one or more elements
+  // the infiniteScroller will be responsible for calling it.
   useEffect(() => {
     if (
       inventory.length > 0 &&
