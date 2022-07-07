@@ -3,7 +3,7 @@ import { fetchProposalDetails } from "./actions";
 function injectEffect(effect) {
   return async (
     { payload },
-    { getState, dispatch, unsubscribe, subscribe }
+    { getState, dispatch, subscribe, unsubscribe }
   ) => {
     unsubscribe();
     const state = getState();

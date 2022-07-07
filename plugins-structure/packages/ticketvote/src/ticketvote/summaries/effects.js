@@ -18,7 +18,7 @@ export async function fetchNextTicketvoteSummaries(
   { inventoryList }
 ) {
   const {
-    ticketvoteSummaries: { byToken, status },
+    ticketvoteSummaries: { byToken },
     ticketvotePolicy: {
       policy: { summariespagesize },
     },
@@ -30,7 +30,7 @@ export async function fetchNextTicketvoteSummaries(
     pageSize: summariespagesize,
   });
 
-  if (status !== "loading" && !isEmpty(voteSummariesToFetch)) {
+  if (!isEmpty(voteSummariesToFetch)) {
     await dispatch(
       ticketvoteSummaries.fetch({
         tokens: voteSummariesToFetch,

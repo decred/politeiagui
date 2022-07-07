@@ -9,28 +9,18 @@ function getInventoryList(payload, state) {
 const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
 
 function injectEffect(effect) {
-  return async (
-    { payload },
-    { getState, dispatch, subscribe, unsubscribe }
-  ) => {
-    unsubscribe();
+  return async ({ payload }, { getState, dispatch }) => {
     const state = getState();
     const inventoryList = getInventoryList(payload, state);
     await effect(state, dispatch, { inventoryList });
-    subscribe();
   };
 }
 
 function injectRecordsBatchEffect(effect) {
-  return async (
-    { payload },
-    { getState, dispatch, subscribe, unsubscribe }
-  ) => {
-    unsubscribe();
+  return async ({ payload }, { getState, dispatch }) => {
     const state = getState();
     const inventoryList = getInventoryList(payload, state);
     await effect(state, dispatch, { inventoryList, filenames: piFilenames });
-    subscribe();
   };
 }
 

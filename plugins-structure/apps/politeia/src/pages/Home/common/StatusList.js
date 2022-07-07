@@ -24,6 +24,7 @@ function StatusList({
   inventoryStatus,
   onFetchNextInventoryPage,
   onRenderNextStatus,
+  recordsPageSize,
 }) {
   const dispatch = useDispatch();
   const {
@@ -56,6 +57,7 @@ function StatusList({
         hasMore={hasMoreToFetch}
         onFetchMore={handleFetchMore}
         isLoading={homeStatus === "loading"}
+        childrenThreshold={recordsPageSize}
         loadingSkeleton={
           <LoadingSkeleton inventory={inventory} records={recordsInOrder} />
         }

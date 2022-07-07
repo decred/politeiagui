@@ -74,7 +74,7 @@ InfiniteScroller.propType = {
 };
 
 InfiniteScroller.defaultProps = {
-  childrenThreshold: 1,
+  childrenThreshold: 5,
 };
 
 export default InfiniteScroller;

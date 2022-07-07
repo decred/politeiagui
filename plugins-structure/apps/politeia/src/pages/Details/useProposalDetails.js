@@ -17,6 +17,7 @@ function useProposalDetails({ token }) {
   const record = useSelector((state) =>
     records.selectByToken(state, fullToken)
   );
+  const recordStatus = useSelector(records.selectStatus);
   const voteSummary = useSelector((state) =>
     ticketvoteSummaries.selectByToken(state, fullToken)
   );
@@ -40,10 +41,10 @@ function useProposalDetails({ token }) {
   }
 
   useEffect(() => {
-    if (detailsStatus !== "loading") {
+    if (recordStatus !== "loading") {
       dispatch(fetchProposalDetails(token));
     }
-  }, [token, dispatch, detailsStatus]);
+  }, [token, dispatch, recordStatus]);
 
   return {
     comments,

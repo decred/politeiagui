@@ -77,7 +77,8 @@ const recordsSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      .addCase(fetchRecordDetails.pending, (state) => {
+      .addCase(fetchRecordDetails.pending, (state, action) => {
+        console.log(action);
         state.status = "loading";
       })
       .addCase(fetchRecordDetails.fulfilled, (state, action) => {
