@@ -29,3 +29,8 @@
   max-width: 96%;
   margin: 2% 2% 0 2%;
 }
+
+/* Links Read only. */
+.markdown-diff a {
+  pointer-events: none;
+}

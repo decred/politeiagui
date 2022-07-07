@@ -62,11 +62,9 @@ export function appSetup({ plugins, config }) {
      * init is responsible for initializing the app.
      * @param {{ routes: Array }} initParams
      */
-    async init({ routes } = {}) {
+    async init({ routes, routerOptions } = {}) {
       await store.dispatch(api.fetch());
-      await router.init({
-        routes,
-      });
+      await router.init({ routes, options: routerOptions });
     },
     /**
      * getConfig returns the app config.

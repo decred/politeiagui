@@ -33,6 +33,7 @@
   background: rgba(0, 0, 0, 0.1);
   width: 100%;
   margin-top: var(--spacing-1);
+  user-select: all;
 }
 
 .modalImage {
