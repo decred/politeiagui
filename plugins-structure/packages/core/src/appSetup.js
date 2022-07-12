@@ -63,7 +63,7 @@ function registerListeners(listeners) {
 
 function clearListeners(listeners) {
   for (let l of listeners) {
-    listener.stopListening(l);
+    listener.stopListening({ ...l, cancelActive: true });
   }
 }
 

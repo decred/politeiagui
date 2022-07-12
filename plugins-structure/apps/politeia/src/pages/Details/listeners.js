@@ -1,14 +1,9 @@
 import { fetchProposalDetails } from "./actions";
 
 function injectEffect(effect) {
-  return async (
-    { payload },
-    { getState, dispatch, subscribe, unsubscribe }
-  ) => {
-    unsubscribe();
+  return async ({ payload }, { getState, dispatch }) => {
     const state = getState();
     await effect(state, dispatch, { token: payload.censorshiprecord.token });
-    subscribe();
   };
 }
 

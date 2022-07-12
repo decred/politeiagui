@@ -243,7 +243,7 @@ export function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
   let pos = 0;
   while (inventoryList[pos]) {
     const token = inventoryList[pos];
-    if (!lookupTable[token]) {
+    if (lookupTable[token] === undefined) {
       tokensToFetch.push(token);
     }
     if (tokensToFetch.length === pageSize) break;
