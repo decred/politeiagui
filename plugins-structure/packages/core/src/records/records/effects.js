@@ -16,7 +16,7 @@ export async function fetchNextRecords(
   { inventoryList, filenames }
 ) {
   const {
-    records: { records: recordsObj },
+    records: { records: recordsObj, status },
     recordsPolicy: {
       policy: { recordspagesize },
     },
@@ -28,7 +28,7 @@ export async function fetchNextRecords(
     pageSize: recordspagesize,
   });
 
-  if (!isEmpty(recordsToFetch)) {
+  if (!isEmpty(recordsToFetch) && status !== "loading") {
     dispatch(
       records.fetch({
         tokens: recordsToFetch,

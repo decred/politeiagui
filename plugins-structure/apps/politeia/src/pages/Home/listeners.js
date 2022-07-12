@@ -1,4 +1,9 @@
-import { fetchNextBatch } from "./actions";
+import {
+  fetchNextBatch,
+  fetchNextBatchCount,
+  fetchNextBatchRecords,
+  fetchNextBatchSummaries,
+} from "./actions";
 import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
 
 function getInventoryList(payload, state) {
@@ -8,29 +13,46 @@ function getInventoryList(payload, state) {
 
 const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
 
+let i = 0;
+
 function injectEffect(effect) {
-  return async ({ payload }, { getState, dispatch }) => {
+  return async (
+    { payload },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
     const state = getState();
     const inventoryList = getInventoryList(payload, state);
     await effect(state, dispatch, { inventoryList });
+    subscribe();
   };
 }
 
 function injectRecordsBatchEffect(effect) {
-  return async ({ payload }, { getState, dispatch }) => {
+  return async (
+    { payload },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
     const state = getState();
     const inventoryList = getInventoryList(payload, state);
     await effect(state, dispatch, { inventoryList, filenames: piFilenames });
+    subscribe();
   };
 }
 
-export const fetchNextBatchListenerCreator = {
-  actionCreator: fetchNextBatch,
+export const fetchNextBatchCountListenerCreator = {
+  actionCreator: fetchNextBatchCount,
   injectEffect,
 };
 
-export const recordsFetchNextBatchListenerCreator = {
-  actionCreator: fetchNextBatch,
+export const fetchNextBatchSummariesListenerCreator = {
+  actionCreator: fetchNextBatchSummaries,
+  injectEffect,
+};
+
+export const fetchNextBatchRecordsListenerCreator = {
+  actionCreator: fetchNextBatchRecords,
   injectEffect: injectRecordsBatchEffect,
 };
 

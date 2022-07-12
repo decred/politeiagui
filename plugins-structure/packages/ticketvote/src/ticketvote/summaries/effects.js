@@ -8,7 +8,9 @@ export async function fetchRecordTicketvoteSummaries(
   { token }
 ) {
   const hasVoteSummary = ticketvoteSummaries.selectByToken(state, token);
-  if (!hasVoteSummary)
+  const voteSummaryStatus = ticketvoteSummaries.selectStatus(state);
+
+  if (!hasVoteSummary && voteSummaryStatus !== "loading")
     await dispatch(ticketvoteSummaries.fetch({ tokens: [token] }));
 }
 
@@ -18,7 +20,7 @@ export async function fetchNextTicketvoteSummaries(
   { inventoryList }
 ) {
   const {
-    ticketvoteSummaries: { byToken },
+    ticketvoteSummaries: { byToken, status },
     ticketvotePolicy: {
       policy: { summariespagesize },
     },
@@ -30,7 +32,7 @@ export async function fetchNextTicketvoteSummaries(
     pageSize: summariespagesize,
   });
 
-  if (!isEmpty(voteSummariesToFetch)) {
+  if (!isEmpty(voteSummariesToFetch) && status !== "loading") {
     await dispatch(
       ticketvoteSummaries.fetch({
         tokens: voteSummariesToFetch,

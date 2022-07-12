@@ -7,6 +7,7 @@ import min from "lodash/min";
 import useStatusList from "../useStatusList";
 
 function LoadingSkeleton({ inventory, records }) {
+  if (!inventory) return [];
   const loadingPlaceholdersCount = max([
     min([inventory.length - records.length, 5]),
     0,
@@ -35,6 +36,7 @@ function StatusList({
     summaries,
     fetchNextBatch,
     recordsInOrder,
+    areAllInventoryEntriesFetched,
   } = useStatusList({ inventory, inventoryStatus, status });
 
   function handleFetchMore() {
@@ -46,8 +48,19 @@ function StatusList({
   }
 
   useEffect(() => {
-    if (!hasMoreInventory && onRenderNextStatus) onRenderNextStatus();
-  }, [hasMoreInventory, onRenderNextStatus]);
+    if (
+      inventoryStatus === "succeeded/isDone" &&
+      areAllInventoryEntriesFetched &&
+      onRenderNextStatus
+    ) {
+      onRenderNextStatus();
+    }
+  }, [
+    hasMoreInventory,
+    onRenderNextStatus,
+    inventoryStatus,
+    areAllInventoryEntriesFetched,
+  ]);
 
   const hasMoreToFetch = hasMoreRecords || hasMoreInventory;
 

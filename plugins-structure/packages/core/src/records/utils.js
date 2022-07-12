@@ -238,6 +238,7 @@ export function getShortToken(token) {
  * @returns {Array}
  */
 export function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
+  if (!inventoryList) return [];
   const tokensToFetch = [];
   let pos = 0;
   while (inventoryList[pos]) {

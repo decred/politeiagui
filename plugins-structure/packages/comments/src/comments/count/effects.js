@@ -8,7 +8,7 @@ export async function fetchNextCommentsCount(
   { inventoryList }
 ) {
   const {
-    commentsCount: { byToken },
+    commentsCount: { byToken, status },
     commentsPolicy: {
       policy: { countpagesize },
     },
@@ -20,7 +20,7 @@ export async function fetchNextCommentsCount(
     pageSize: countpagesize,
   });
 
-  if (!isEmpty(commentsCountToFetch)) {
+  if (!isEmpty(commentsCountToFetch) && status !== "loading") {
     await dispatch(
       commentsCount.fetch({
         tokens: commentsCountToFetch,

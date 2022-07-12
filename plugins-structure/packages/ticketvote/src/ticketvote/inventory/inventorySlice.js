@@ -11,7 +11,7 @@ import {
 } from "../../lib/validation";
 
 const initialStatusInventory = {
-  tokens: [],
+  tokens: undefined,
   lastPage: 0,
   status: "idle",
 };
@@ -80,7 +80,11 @@ const ticketvoteInventorySlice = createSlice({
           state[readableStatus].status = "succeeded/isDone";
         }
         state[readableStatus].lastPage = page;
-        state[readableStatus].tokens.push(...inventory[readableStatus]);
+        if (!state[readableStatus].tokens) {
+          state[readableStatus].tokens = inventory[readableStatus];
+        } else {
+          state[readableStatus].tokens.push(...inventory[readableStatus]);
+        }
       })
       .addCase(fetchTicketvoteInventory.rejected, (state, action) => {
         state.status = "failed";

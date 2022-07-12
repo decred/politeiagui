@@ -6,6 +6,14 @@ import { recordsPolicy } from "@politeiagui/core/records/policy";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
 
+function areAllEntriesFetched(inventoryList, records) {
+  if (!inventoryList) return false;
+  for (const inventory of inventoryList) {
+    if (!records[inventory]) return false;
+  }
+  return true;
+}
+
 function useStatusList({ inventory, inventoryStatus }) {
   const homeStatus = useSelector(selectHomeStatus);
   const countComments = useSelector(commentsCount.selectAll);
@@ -16,6 +24,7 @@ function useStatusList({ inventory, inventoryStatus }) {
   const recordsInOrder = useSelector((state) =>
     records.selectByTokensBatch(state, inventory)
   );
+  const allRecords = useSelector(records.selectAll);
 
   const hasMoreRecords =
     recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
@@ -31,6 +40,7 @@ function useStatusList({ inventory, inventoryStatus }) {
     fetchNextBatch,
     recordsInOrder,
     recordsPageSize,
+    areAllInventoryEntriesFetched: areAllEntriesFetched(inventory, allRecords),
   };
 }
 
