@@ -1,7 +1,10 @@
 import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
-import { fetchDetailsListener, recordFetchDetailsListener } from "./listeners";
+import {
+  fetchDetailsListenerCreator,
+  recordFetchDetailsListenerCreator,
+} from "./listeners";
 import Details from "./Details";
 
 export default App.createRoute({
@@ -15,19 +18,19 @@ export default App.createRoute({
     },
     {
       id: "records/details",
-      listener: recordFetchDetailsListener,
+      listenerCreator: recordFetchDetailsListenerCreator,
     },
     {
       id: "ticketvote/summaries/single",
-      listener: fetchDetailsListener,
+      listenerCreator: fetchDetailsListenerCreator,
     },
     {
       id: "comments",
-      listener: fetchDetailsListener,
+      listenerCreator: fetchDetailsListenerCreator,
     },
     {
       id: "pi/summaries",
-      listener: fetchDetailsListener,
+      listenerCreator: fetchDetailsListenerCreator,
     },
   ],
   cleanup: routeCleanup,

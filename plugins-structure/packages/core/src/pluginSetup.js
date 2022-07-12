@@ -5,13 +5,19 @@ import isArray from "lodash/fp/isArray";
  * @callback ServiceAction
  * @returns {Promise}
  */
+/**
+ * Effect is the function to be executed when the action triggers.
+ * @callback Effect
+ * @returns {Promise}
+ */
 
 /**
  * Service is an `action` that will setup the plugin for usage in some given
  * `id` case.
  * @typedef {{
  *  id: string,
- *  action: ServiceAction
+ *  action: ServiceAction,
+ *  effect: Effect
  * }} Service
  */
 

@@ -26,12 +26,12 @@ function injectRecordDetailsEffect(effect) {
   };
 }
 
-export const fetchDetailsListener = {
+export const fetchDetailsListenerCreator = {
   type: "records/fetchDetails/fulfilled",
   injectEffect,
 };
 
-export const recordFetchDetailsListener = {
+export const recordFetchDetailsListenerCreator = {
   actionCreator: fetchProposalDetails,
   injectEffect: injectRecordDetailsEffect,
 };

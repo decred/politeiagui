@@ -19,12 +19,12 @@ function mergeAppAndPluginServices(services, targetServices) {
 
 function mergeListeners(routeServices, listeners) {
   let idListeners = [];
-  for (const { listener, effect } of routeServices) {
-    if (listener) {
+  for (const { listenerCreator, effect } of routeServices) {
+    if (listenerCreator) {
       idListeners.push({
-        actionCreator: listener.actionCreator,
-        type: listener.type,
-        effect: listener.injectEffect(effect),
+        actionCreator: listenerCreator.actionCreator,
+        type: listenerCreator.type,
+        effect: listenerCreator.injectEffect(effect),
       });
     }
   }
