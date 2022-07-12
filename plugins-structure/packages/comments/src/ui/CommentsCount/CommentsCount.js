@@ -13,13 +13,13 @@ const Wrapper = ({ link, children, className }) =>
   );
 
 export const CommentsCount = ({ link, count }) => {
-  return (
+  return count !== undefined ? (
     <Wrapper link={link} className={styles.countWrapper}>
       <Icon type="discuss" />
       <span className={styles.count}>{count}</span>
       Comments
     </Wrapper>
-  );
+  ) : null;
 };
 
 CommentsCount.propTypes = {

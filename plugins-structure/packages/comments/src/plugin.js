@@ -1,9 +1,9 @@
 import { pluginSetup } from "@politeiagui/core";
-import { initializers } from "./initializers";
+import { services } from "./comments/services";
 import { commentsConstants } from "./comments";
 
 const CommentsPlugin = pluginSetup({
-  initializers,
+  services,
   reducers: commentsConstants.reducersArray,
   name: "comments",
 });

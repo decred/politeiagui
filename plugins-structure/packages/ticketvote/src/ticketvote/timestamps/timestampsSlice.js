@@ -92,12 +92,12 @@ const ticketvoteTimestampsSlice = createSlice({
 
 // Selectors
 export const selectTicketvoteTimestampsStatus = (state) =>
-  state.ticketvoteTimestamps.status;
+  state.ticketvoteTimestamps?.status;
 export const selectTicketvoteTimestampsByToken = (state, token) =>
-  state.ticketvoteTimestamps.byToken[token];
+  state.ticketvoteTimestamps?.byToken[token];
 
 // Errors
 export const selectTicketvoteTimestampsError = (state) =>
-  state.ticketvoteTimestamps.error;
+  state.ticketvoteTimestamps?.error;
 
 export default ticketvoteTimestampsSlice.reducer;

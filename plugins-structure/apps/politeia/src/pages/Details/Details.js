@@ -9,9 +9,6 @@ import { ProposalDetails, ProposalLoader } from "../../components";
 import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
-import { startDetailsListeners } from "./listeners";
-
-startDetailsListeners();
 
 function ErrorsMessages({ errors }) {
   return errors.reduce((acc, cur) => {
@@ -35,6 +32,7 @@ function Details({ token }) {
     voteSummaryError,
     commentsError,
   } = useProposalDetails({ token });
+  // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
   const shouldScrollToComments = !!params?.scrollToComments;
   useScrollToTop(shouldScrollToComments);

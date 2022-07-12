@@ -1,64 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
 import { store } from "@politeiagui/core";
-import { ModalProvider } from "@politeiagui/common-ui";
 import { records } from "@politeiagui/core/records";
-import { UiTheme } from "@politeiagui/common-ui/layout";
-
-import { Details, Home, New } from "../pages";
+import { DetailsRoute, HomeRoute, NewProposalRoute } from "../pages";
 import { decodeProposalRecord } from "../components/Proposal/utils";
-import App from "../app";
-
-function cleanup() {
-  return ReactDOM.unmountComponentAtNode(document.querySelector("#root"));
-}
-
-function routeView(Component) {
-  return async (params) => {
-    return ReactDOM.render(
-      <Provider store={store}>
-        <ModalProvider>
-          <UiTheme>
-            <Component {...params} />
-          </UiTheme>
-        </ModalProvider>
-      </Provider>,
-      document.querySelector("#root")
-    );
-  };
-}
+import { routeCleanup } from "../utils/routeCleanup";
 
 export const routes = [
-  App.createRoute({
-    path: "/",
-    pluginInitializerIds: [
-      "records/batch",
-      "ticketvote/inventory",
-      "ticketvote/summaries",
-      "comments/counts",
-    ],
-    cleanup,
-    view: routeView(Home),
-  }),
-  App.createRoute({
-    path: "/record/new",
-    pluginInitializerIds: ["pi/new"],
-    cleanup,
-    view: routeView(New),
-  }),
-  App.createRoute({
-    path: "/record/:token",
-    pluginInitializerIds: [
-      "ticketvote/timestamps",
-      "ticketvote/summaries",
-      "comments/timestamps",
-      "comments/votes",
-      "pi/summaries",
-    ],
-    cleanup,
-    view: routeView(Details),
-  }),
+  HomeRoute,
+  NewProposalRoute,
+  DetailsRoute,
   {
     path: "/record/:token/raw",
     view: async ({ token }) => {
@@ -70,6 +19,6 @@ export const routes = [
         "#root"
       ).innerHTML = `<pre style="white-space: pre-line;margin: 1rem">${proposalDetails.body}</pre>`);
     },
-    cleanup,
+    cleanup: routeCleanup,
   },
 ];

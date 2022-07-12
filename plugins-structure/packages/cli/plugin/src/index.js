@@ -18,7 +18,7 @@ const pluginSlice = createSlice({
 
 const { set, reset } = pluginSlice.actions;
 
-const initializers = [
+const services = [
   {
     id: "__PLUGIN_NAME__/setname",
     action: () => store.dispatch(set("__PLUGIN_NAME__")),
@@ -27,7 +27,7 @@ const initializers = [
 ];
 
 const MyPlugin = pluginSetup({
-  initializers,
+  services,
   reducers: [{ key: "__PLUGIN_NAME__", reducer: pluginSlice.reducer }],
   name: "__PLUGIN_NAME__",
 });

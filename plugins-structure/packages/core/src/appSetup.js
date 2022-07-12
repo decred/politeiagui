@@ -1,60 +1,98 @@
 import { connectReducers, store, validatePlugin } from "./";
 import { api } from "./api";
 import { router } from "./router";
-import { initializers as recordsInitializers } from "./records/initializers";
+import { services as recordsServices } from "./records/services";
+import { listener } from "./listeners";
 import uniq from "lodash/fp/uniq";
 
-function mergeInitializers(initializers, targetInitializers) {
-  let mergedInitializers = initializers;
-  for (const initializer of targetInitializers) {
-    if (mergedInitializers.find((mi) => mi.id === initializer.id)) {
+function mergeAppAndPluginServices(services, targetServices) {
+  let mergedServices = services;
+  for (const service of targetServices) {
+    if (mergedServices.find((mi) => mi.id === service.id)) {
       console.warn(
-        `There are multiple plugins initializers with the '${initializer.id}' ID. Pay attention.`
+        `There are multiple plugins services with the '${service.id}' ID. Pay attention.`
       );
     }
-    mergedInitializers = [...mergedInitializers, initializer];
+    mergedServices = [...mergedServices, service];
   }
-  return mergedInitializers;
+  return mergedServices;
 }
 
-function getInitializersActionsByIds(initializers, ids, path) {
-  const actions = [];
-  for (const id of ids) {
-    const init = initializers.find((i) => i.id === id);
-    if (!init)
-      throw Error(
-        `createRoute: initializer id "${id}" for path "${path}" isn't defined.`
-      );
-    actions.push(init.action);
+function mergeListeners(routeServices, listeners) {
+  let idListeners = [];
+  for (const { listenerCreator, effect } of routeServices) {
+    if (listenerCreator) {
+      idListeners.push({
+        actionCreator: listenerCreator.actionCreator,
+        type: listenerCreator.type,
+        effect: listenerCreator.injectEffect(effect),
+      });
+    }
   }
-  return actions;
+  return [...idListeners, ...listeners];
 }
 
-function validateUniqPluginInitializerIds(ids = []) {
+function addRouteServicesProperties(appServices, routeServices) {
+  const serviceInRoute = (init) => (val) => val.id === init.id;
+  const servicesReducer = (newAppServicesArray, appService) => {
+    const routeService = routeServices.find(serviceInRoute(appService));
+    // If is in route, merge the content of routeService and appService
+    // appService = {id, action}
+    // routeService = {id, listener, view, ...}
+    // newService = {id, action, listener, view, ...}
+    // else do nothing and return the array to go to the next iteration
+    if (routeService) {
+      return [
+        ...newAppServicesArray,
+        {
+          ...appService,
+          ...routeService,
+        },
+      ];
+    }
+    return newAppServicesArray;
+  };
+  return appServices.reduce(servicesReducer, []);
+}
+
+function registerListeners(listeners) {
+  for (let l of listeners) {
+    listener.startListening(l);
+  }
+}
+
+function clearListeners(listeners) {
+  for (let l of listeners) {
+    listener.stopListening({ ...l, cancelActive: true });
+  }
+}
+
+function validateServicesIds(ids = []) {
   const uniqIds = uniq(ids);
   if (uniqIds.length !== ids.length) {
-    throw Error(`"pluginInitializerIds" must be an array of uniq values`);
+    throw Error("services ids must be an array of uniq values");
   }
   return true;
 }
 
 /**
  * appSetup returns an app instance. It connects plugins reducers into the core
- * store, and connects all plugins initializers.
- *
- * @param {{ plugins: Array, initializersByRoutesMap: Object }} appConfig
+ * store, connects all plugins services and register app level listeners
+ * @param {{ plugins: Array, listeners: Array, config: Object }}
  */
-export function appSetup({ plugins, config }) {
-  let initializers = recordsInitializers;
+export function appSetup({ plugins, listeners = [], config }) {
+  let appServices = recordsServices;
   plugins.every(validatePlugin);
 
-  // Connect plugins reducers and initializers
+  // Connect plugins reducers and services
   for (const plugin of plugins) {
     if (plugin.reducers) connectReducers(plugin.reducers);
-    if (plugin.initializers) {
-      initializers = mergeInitializers(initializers, plugin.initializers);
+    if (plugin.services) {
+      appServices = mergeAppAndPluginServices(appServices, plugin.services);
     }
   }
+
+  registerListeners(listeners);
 
   return {
     config,
@@ -75,25 +113,41 @@ export function appSetup({ plugins, config }) {
     },
     /**
      * createRoute is an interface for creating app routes. Before rendering
-     * some route view, execute all initializers actions for given
-     * `pluginInitializerIds`.
+     * some route view, execute all services actions for given `service`.
      * @param {{ path: string,
      *  view: Function,
-     *  pluginInitializerIds: string[],
+     *  setupServices: Array,
+     *  listeners: Array
      *  cleanup: Function
      * }} routeParams
      */
-    createRoute({ path, view, pluginInitializerIds = [], cleanup } = {}) {
-      validateUniqPluginInitializerIds(pluginInitializerIds);
-      const actions = getInitializersActionsByIds(
-        initializers,
-        pluginInitializerIds
+    createRoute({
+      path,
+      view,
+      setupServices = [],
+      listeners = [],
+      cleanup,
+    } = {}) {
+      validateServicesIds(setupServices);
+      const routeServices = addRouteServicesProperties(
+        appServices,
+        setupServices
       );
+      const allListeners = mergeListeners(routeServices, listeners);
+
       return {
         path,
-        cleanup,
+        cleanup: () => {
+          cleanup();
+          clearListeners(allListeners);
+        },
         view: async (routeParams) => {
-          await Promise.all([...actions.map((a) => a())]);
+          registerListeners(allListeners);
+          for (const service of routeServices) {
+            if (service.action) {
+              await service.action();
+            }
+          }
           return await view(routeParams);
         },
       };

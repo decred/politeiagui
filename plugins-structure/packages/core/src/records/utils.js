@@ -9,6 +9,8 @@ import {
   RECORD_STATUS_UNREVIEWED,
 } from "./constants.js";
 import { Buffer } from "buffer";
+import { store } from "../storeSetup";
+import { recordsPolicy } from "./policy";
 
 /**
  * Record File
@@ -236,15 +238,22 @@ export function getShortToken(token) {
  * @returns {Array}
  */
 export function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
+  if (!inventoryList) return [];
   const tokensToFetch = [];
   let pos = 0;
   while (inventoryList[pos]) {
     const token = inventoryList[pos];
-    if (!lookupTable[token]) {
+    if (lookupTable[token] === undefined) {
       tokensToFetch.push(token);
     }
     if (tokensToFetch.length === pageSize) break;
     pos++;
   }
   return tokensToFetch;
+}
+
+export function fetchPolicyIfIdle() {
+  if (recordsPolicy.selectStatus(store.getState()) === "idle") {
+    return store.dispatch(recordsPolicy.fetch());
+  }
 }

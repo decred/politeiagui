@@ -7,6 +7,7 @@ import min from "lodash/min";
 import useStatusList from "../useStatusList";
 
 function LoadingSkeleton({ inventory, records }) {
+  if (!inventory) return [];
   const loadingPlaceholdersCount = max([
     min([inventory.length - records.length, 5]),
     0,
@@ -24,6 +25,7 @@ function StatusList({
   inventoryStatus,
   onFetchNextInventoryPage,
   onRenderNextStatus,
+  recordsPageSize,
 }) {
   const dispatch = useDispatch();
   const {
@@ -34,6 +36,7 @@ function StatusList({
     summaries,
     fetchNextBatch,
     recordsInOrder,
+    areAllInventoryEntriesFetched,
   } = useStatusList({ inventory, inventoryStatus, status });
 
   function handleFetchMore() {
@@ -45,8 +48,19 @@ function StatusList({
   }
 
   useEffect(() => {
-    if (!hasMoreInventory && onRenderNextStatus) onRenderNextStatus();
-  }, [hasMoreInventory, onRenderNextStatus]);
+    if (
+      inventoryStatus === "succeeded/isDone" &&
+      areAllInventoryEntriesFetched &&
+      onRenderNextStatus
+    ) {
+      onRenderNextStatus();
+    }
+  }, [
+    hasMoreInventory,
+    onRenderNextStatus,
+    inventoryStatus,
+    areAllInventoryEntriesFetched,
+  ]);
 
   const hasMoreToFetch = hasMoreRecords || hasMoreInventory;
 
@@ -56,6 +70,7 @@ function StatusList({
         hasMore={hasMoreToFetch}
         onFetchMore={handleFetchMore}
         isLoading={homeStatus === "loading"}
+        childrenThreshold={recordsPageSize}
         loadingSkeleton={
           <LoadingSkeleton inventory={inventory} records={recordsInOrder} />
         }
@@ -66,8 +81,8 @@ function StatusList({
             <ProposalCard
               key={token}
               record={record}
-              commentsCount={countComments[token]}
-              voteSummary={summaries[token]}
+              commentsCount={countComments?.[token]}
+              voteSummary={summaries?.[token]}
             />
           );
         })}

@@ -38,14 +38,14 @@ const ticketvotePolicySlice = createSlice({
 });
 
 // Selectors
-export const selectTicketvotePolicy = (state) => state.ticketvotePolicy.policy;
+export const selectTicketvotePolicy = (state) => state.ticketvotePolicy?.policy;
 export const selectTicketvotePolicyRule = (state, rule) =>
-  state.ticketvotePolicy.policy && state.ticketvotePolicy.policy[rule];
+  state.ticketvotePolicy?.policy[rule];
 export const selectTicketvotePolicyStatus = (state) =>
-  state.ticketvotePolicy.status;
+  state.ticketvotePolicy?.status;
 
 // Errors
 export const selectTicketvotePolicyError = (state) =>
-  state.ticketvotePolicy.error;
+  state.ticketvotePolicy?.error;
 
 export default ticketvotePolicySlice.reducer;

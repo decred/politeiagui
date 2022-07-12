@@ -33,8 +33,8 @@ const appRoutes = [
         root
       ),
     cleanup,
-    pluginInitializerIds: [
-      /* Pass pluginInitializerIds to setup your route to consume some plugin */
+    setupServices: [
+      /* Pass setupServices to setup your route to consume some plugin. You can also add listeners with action and injectEffect */
     ],
   }),
   App.createRoute({
@@ -47,8 +47,8 @@ const appRoutes = [
         root
       ),
     cleanup,
-    pluginInitializerIds: [
-      /* Pass pluginInitializerIds to setup your route to consume some plugin */
+    setupServices: [
+      /* Pass setupServices to setup your route to consume some plugin. You can also add listeners with action and injectEffect */
     ],
   }),
 ];

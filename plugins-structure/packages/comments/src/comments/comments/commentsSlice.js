@@ -50,9 +50,9 @@ const commentsSlice = createSlice({
 });
 
 // Selectors
-export const selectCommentsStatus = (state) => state.comments.status;
+export const selectCommentsStatus = (state) => state.comments?.status;
 export const selectCommentsByToken = (state, token) =>
-  state.comments.byToken[token];
+  state.comments?.byToken[token];
 
 export const selectRecordCommentsIds = (state, token) => {
   const comments = selectCommentsByToken(state, token) || {};
@@ -61,8 +61,8 @@ export const selectRecordCommentsIds = (state, token) => {
 };
 
 export const selectRecordCommentsById = (state, { token, id }) =>
-  state.comments.byToken?.[token][id];
+  state.comments?.byToken[token]?.[id];
 
-export const selectCommentsError = (state) => state.comments.error;
+export const selectCommentsError = (state) => state.comments?.error;
 
 export default commentsSlice.reducer;

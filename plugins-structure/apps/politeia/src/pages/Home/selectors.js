@@ -10,7 +10,11 @@ export function selectHomeStatus(state) {
   const summariesStatus = ticketvoteSummaries.selectStatus(state);
   const recordsStatus = records.selectStatus(state);
 
-  const statuses = [countCommentsStatus, summariesStatus, recordsStatus];
+  const statuses = [];
+
+  if (countCommentsStatus) statuses.push(countCommentsStatus);
+  if (summariesStatus) statuses.push(summariesStatus);
+  if (recordsStatus) statuses.push(recordsStatus);
 
   return getStatusFromMultipleSlices(statuses);
 }

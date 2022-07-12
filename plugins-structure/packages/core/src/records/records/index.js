@@ -2,6 +2,7 @@ import {
   fetchRecordDetails,
   fetchRecordVersionDetails,
   fetchRecords,
+  selectFullToken,
   selectRecordByToken,
   selectRecordVersionByToken,
   selectRecordVersionStatusByToken,
@@ -15,6 +16,7 @@ import {
 export const records = {
   fetch: fetchRecords,
   fetchDetails: fetchRecordDetails,
+  selectFullToken: selectFullToken,
   fetchVersionDetails: fetchRecordVersionDetails,
   selectStatus: selectRecordsStatus,
   selectError: selectRecordsError,
