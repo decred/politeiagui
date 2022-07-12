@@ -8,7 +8,7 @@ import "./styles.css";
 
 export function MarkdownRenderer({
   body,
-  filesBySrc,
+  filesBySrc = {},
   className,
   renderImages = true,
   isDiff,
@@ -21,7 +21,11 @@ export function MarkdownRenderer({
         skipHtml={true}
         unwrapDisallowed={true}
         remarkPlugins={[gfm]}
-        components={customRenderers(renderImages, isDiff, filesBySrc)}
+        components={customRenderers({
+          renderImages,
+          isDiff,
+          filesBySrc,
+        })}
         disallowedElements={disallowedElements}
       >
         {body}

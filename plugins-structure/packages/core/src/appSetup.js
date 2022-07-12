@@ -3,6 +3,7 @@ import { api } from "./api";
 import { router } from "./router";
 import { services as recordsServices } from "./records/services";
 import { listener } from "./listeners";
+import uniq from "lodash/fp/uniq";
 
 function mergeAppAndPluginServices(services, targetServices) {
   let mergedServices = services;
@@ -66,6 +67,14 @@ function clearListeners(listeners) {
   }
 }
 
+function validateServicesIds(ids = []) {
+  const uniqIds = uniq(ids);
+  if (uniqIds.length !== ids.length) {
+    throw Error("services ids must be an array of uniq values");
+  }
+  return true;
+}
+
 /**
  * appSetup returns an app instance. It connects plugins reducers into the core
  * store, connects all plugins services and register app level listeners
@@ -91,11 +100,9 @@ export function appSetup({ plugins, listeners = [], config }) {
      * init is responsible for initializing the app.
      * @param {{ routes: Array }} initParams
      */
-    async init({ routes } = {}) {
+    async init({ routes, routerOptions } = {}) {
       await store.dispatch(api.fetch());
-      await router.init({
-        routes,
-      });
+      await router.init({ routes, options: routerOptions });
     },
     /**
      * getConfig returns the app config.
@@ -121,6 +128,7 @@ export function appSetup({ plugins, listeners = [], config }) {
       listeners = [],
       cleanup,
     } = {}) {
+      validateServicesIds(setupServices);
       const routeServices = addRouteServicesProperties(
         appServices,
         setupServices

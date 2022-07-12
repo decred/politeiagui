@@ -12,11 +12,19 @@ export function RecordCard({
   fourthRow,
   footer,
   isDimmed,
+  className,
+  headerClassName,
 }) {
   return (
-    <Card className={classNames(styles.card, isDimmed && styles.dimmedCard)}>
-      <Row>
-        <Column xs={12} sm={7}>
+    <Card
+      className={classNames(
+        styles.card,
+        isDimmed && styles.dimmedCard,
+        className
+      )}
+    >
+      <Row className={classNames(headerClassName)}>
+        <Column xs={12} sm={12} md={7}>
           {!titleLink ? (
             <H2>{title}</H2>
           ) : (
@@ -27,7 +35,7 @@ export function RecordCard({
             </H2>
           )}
         </Column>
-        <Column xs={12} sm={5} className={styles.rightHeader}>
+        <Column xs={12} sm={12} md={5} className={styles.rightHeader}>
           {rightHeader}
         </Column>
         <Column xs={12}>

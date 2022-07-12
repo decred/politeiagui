@@ -1328,6 +1328,10 @@ function Component(props) {
 Easy, huh? Just use this interface and then use your politeiagui plugin on your
 application shell.
 
+Since our design uses _yarn_ monorepo structure to manage our project on
+build-time, it's required to run `yarn` on the root so it recognizes the
+new plugin.
+
 ## <a id="core-app-setup">**App Setup**</a>
 
 An application is just used to connect all plugins into an integrated interface.

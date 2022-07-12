@@ -24,7 +24,6 @@ function Details({ token }) {
     comments,
     detailsStatus,
     fullToken,
-    onFetchPreviousVersions,
     onFetchRecordTimestamps,
     piSummary,
     record,
@@ -51,7 +50,6 @@ function Details({ token }) {
             record={record}
             voteSummary={voteSummary}
             piSummary={piSummary}
-            onFetchVersion={onFetchPreviousVersions}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
           />
           {comments && (

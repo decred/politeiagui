@@ -87,3 +87,40 @@ export function searchSelectorElement(el, selector) {
     else return false;
   }
 }
+
+/**
+ * mergeRoutes return an array with `extraRoutes` merged with `routes`. If some
+ * path is already defined, it will log a warning and skip the conflicting path.
+ *
+ * @param {Array} routes Current app routes
+ * @param {Array} extraRoutes  Routes to merge
+ */
+export function mergeRoutes(routes, extraRoutes) {
+  const newArr = routes;
+  let conflicting = false;
+  for (let i = 0; i < extraRoutes.length; i++) {
+    for (let j = 0; j < routes.length; j++) {
+      if (extraRoutes[i].path === routes[j].path) {
+        console.warn(
+          `Conflicting path '${extraRoutes[i].path}'. Pay attention!`
+        );
+        conflicting = true;
+      }
+    }
+    if (!conflicting) newArr.push(extraRoutes[i]);
+    conflicting = false;
+  }
+
+  return newArr;
+}
+
+/**
+ * isExternalLink returns if some given url does not match the current window
+ * location host.
+ * @param {string} url
+ */
+export function isExternalLink(url) {
+  const tmp = document.createElement("a");
+  tmp.href = url;
+  return tmp.hostname && tmp.hostname !== window.top.location.hostname;
+}

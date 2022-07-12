@@ -1,3 +1,4 @@
+export * from "./Diff";
 export * from "./DateTooltip";
 export * from "./Event";
 export * from "./Join";

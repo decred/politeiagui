@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import {
-  MarkdownDiffHTML,
   MarkdownEditor,
   MarkdownRenderer,
   createEditorCommand,
 } from "../components/Markdown";
+import { MarkdownDiffHTML } from "../components/Diff";
 import { MultiContentPage, SingleContentPage, TabsBanner } from "../layout";
 import {
   Button,
