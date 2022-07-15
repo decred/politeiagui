@@ -143,6 +143,7 @@ const Proposal = React.memo(function Proposal({
     version,
     linkby,
     linkto,
+    legacytoken,
     proposedFor,
     type,
     rfpSubmissions,
@@ -468,8 +469,8 @@ const Proposal = React.memo(function Proposal({
               <Row justify="space-between">
                 <CommentsLink numOfComments={commentsCount} url={commentsURL} />
                 <div>
-                  {(isVoteActive || isVotingFinished) && (
-                    <ChartsLink token={fullToken} />
+                  {((isVoteActive || isVotingFinished) && !legacytoken) && (
+                    <ChartsLink token={fullToken}/>
                   )}
                 </div>
                 {extended && <MarkdownLink to={`/record/${shortToken}/raw`} />}
@@ -536,7 +537,7 @@ const Proposal = React.memo(function Proposal({
                     )}
                     url={window.location.origin + proposalURL}
                   />
-                  {(isVoteActive || isVotingFinished) && (
+                  {((isVoteActive || isVotingFinished) && !legacytoken) && (
                     <ChartsLink token={fullToken} />
                   )}
                   {extended && (

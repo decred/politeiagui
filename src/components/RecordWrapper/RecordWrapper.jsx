@@ -184,7 +184,8 @@ export const Header = React.memo(function Header({
   );
 });
 
-export const ChartsLink = ({ token }) => {
+export const ChartsLink = ({ token, legacytoken }) => {
+  console.log(legacytoken);
   const { apiInfo } = useLoader();
   const { themeName } = useTheme();
   const hostName = apiInfo.testnet
@@ -203,7 +204,7 @@ export const ChartsLink = ({ token }) => {
       <UILink
         target="_blank"
         rel="nofollow noopener noreferrer"
-        href={`https://${hostName}/proposal/${token}`}>
+        href={`https://${hostName}/proposal/${legacytoken || token}`}>
         <ButtonIcon type="chart" />
       </UILink>
     </Tooltip>
