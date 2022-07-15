@@ -28,7 +28,8 @@ const AttachFiles = ({ onChange, label, small, acceptedFiles, ...props }) => {
       <span
         className={classNames(styles.attachFileButton, small && styles.small)}
         onClick={openAttachModal}
-        {...props}>
+        {...props}
+      >
         {label}
         <img alt="Attach" src={attachSVG} />
       </span>

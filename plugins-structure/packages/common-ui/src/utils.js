@@ -1,4 +1,5 @@
-import { MONTHS_LABELS } from "./constants";
+import { INVALID_DATE_LABEL, MONTHS_LABELS } from "./constants";
+
 /**
  * Formats unix seconds timestamp to a UTC string date
  *
@@ -30,14 +31,14 @@ export const formatUnixTimestampToObj = (unixtimestamp) => {
  * @param {object} { day, month, year }
  * @returns {string}
  */
-export function formatDateToInternationalString({ day, month, year }) {
+export const formatDateToInternationalString = ({ day, month, year }) => {
   const monthLabel = MONTHS_LABELS[month - 1];
   if (monthLabel === undefined) {
-    return "Invalid Date";
+    return INVALID_DATE_LABEL;
   }
   const dayView = `0${day}`.slice(-2);
   return `${dayView} ${MONTHS_LABELS[month - 1]} ${year}`;
-}
+};
 
 /**
  * Returns a formatter to format a number to US standard currency string.

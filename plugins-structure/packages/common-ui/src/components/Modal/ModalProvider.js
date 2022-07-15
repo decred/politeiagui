@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 
-export const modalContext = createContext({ component: () => null, props: {} });
+export const modalContext = createContext([]);
 
 export const useModal = () => useContext(modalContext);
 

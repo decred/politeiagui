@@ -1,0 +1,118 @@
+.compareIcon {
+  padding: 0 1rem;
+}
+
+.diffBody {
+  padding-top: 2rem;
+}
+
+.diffWrapper > * {
+  padding: 0 !important;
+}
+.diffWrapper > * > *:nth-child(2) {
+  margin: 0;
+}
+
+.diffHeader {
+  position: sticky;
+  background-color: var(--card-background);
+  padding: 2rem 0;
+  border-bottom: 0.1rem solid var(--separator-color);
+  /* Stick on top without extra margin */
+  top: -3rem;
+}
+
+.filesDiffWrapper {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 0.1rem solid var(--separator-color);
+  display: flex;
+  overflow-x: auto;
+}
+
+.filesDiffWrapper > * {
+  overflow-x: visible;
+}
+
+.added {
+  border: 0.2rem solid var(--color-green);
+}
+
+.removed {
+  border: 0.2rem solid var(--color-orange);
+}
+
+.subtitle {
+  color: var(--text-secondary-color);
+}
+
+.modalContent {
+  min-height: 50vh;
+}
+
+.modalContent > h1 {
+  margin-bottom: 0;
+}
+
+.modalHeader {
+  width: 100%;
+  padding-bottom: 2rem;
+  border-bottom: 0.1px solid var(--separator-color);
+}
+
+.modalWrapper {
+  width: 100%;
+}
+
+.versionDownloads {
+  color: var(--text-secondary-color);
+}
+
+.versionsInfo {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.versionsInfo > *:last-child {
+  justify-content: flex-end;
+}
+
+.versionPicker {
+  display: flex;
+  align-items: center;
+}
+
+.versionPickerViewToggle {
+  padding-left: 2rem;
+}
+
+.versionPickerWrapper {
+  align-items: center;
+  display: flex;
+}
+
+@media screen and (max-width: 560px) {
+  .diffHeader {
+    /* Stick on top without extra margin. */
+    top: -5rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .versionPickerWrapper {
+    justify-content: space-between;
+    border-bottom: 0.1px solid var(--separator-color);
+    padding-bottom: 2rem;
+  }
+
+  .versionPicker {
+    order: 2;
+  }
+
+  .versionPickerViewToggle {
+    padding-right: 2rem;
+    padding-left: 0rem;
+    order: 1;
+  }
+}

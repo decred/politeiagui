@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Dropdown, DropdownItem } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import {
@@ -7,7 +8,13 @@ import {
 } from "@politeiagui/comments/ui";
 import fileDownload from "js-file-download";
 
-const ProposalDownloads = ({ record, onFetchRecordTimestamps }) => {
+const ProposalDownloads = ({
+  record,
+  onFetchRecordTimestamps,
+  title,
+  withoutComments,
+  headerClassName,
+}) => {
   if (!record) return null;
 
   const { token } = record.censorshiprecord;
@@ -27,7 +34,11 @@ const ProposalDownloads = ({ record, onFetchRecordTimestamps }) => {
   }
 
   return (
-    <Dropdown title="Available Downloads" closeOnItemClick={false}>
+    <Dropdown
+      title={title}
+      closeOnItemClick={false}
+      dropdownHeaderClassName={headerClassName}
+    >
       <DropdownItem
         onClick={handleDownload(record, `${shortToken}-v${version}`)}
       >
@@ -36,22 +47,37 @@ const ProposalDownloads = ({ record, onFetchRecordTimestamps }) => {
       <DropdownItem onClick={handleFetchRecordTimestamps}>
         Proposal Timestamps
       </DropdownItem>
-      <DropdownItem>
-        <DownloadCommentsBundle
-          token={token}
-          mode="text"
-          label="Comments Bundle"
-        />
-      </DropdownItem>
-      <DropdownItem>
-        <DownloadCommentsTimestamps
-          token={token}
-          mode="text"
-          label="Comments Timestamps"
-        />
-      </DropdownItem>
+      {!withoutComments && (
+        <>
+          <DropdownItem>
+            <DownloadCommentsBundle
+              token={token}
+              mode="text"
+              label="Comments Bundle"
+            />
+          </DropdownItem>
+          <DropdownItem>
+            <DownloadCommentsTimestamps
+              token={token}
+              mode="text"
+              label="Comments Timestamps"
+            />
+          </DropdownItem>
+        </>
+      )}
     </Dropdown>
   );
+};
+
+ProposalDownloads.propTypes = {
+  onFetchRecordTimestamps: PropTypes.func.isRequired,
+  record: PropTypes.object,
+  title: PropTypes.string,
+  withoutComments: PropTypes.bool,
+};
+
+ProposalDownloads.defaultProps = {
+  title: "Available Downloads",
 };
 
 export default ProposalDownloads;

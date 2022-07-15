@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import * as api from "../api";
+import * as api from "../lib/api";
 import reducer, { fetchPiPolicy, initialState } from "./policySlice";
 
 const mockPolicy = {

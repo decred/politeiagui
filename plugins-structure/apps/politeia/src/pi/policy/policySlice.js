@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import * as api from "../api";
+import * as api from "../lib/api";
 
 export const initialState = {
   policy: {},
@@ -36,7 +36,8 @@ const piPolicySlice = createSlice({
   },
 });
 
-export const selectPiPolicy = (state) => state.piPolicy.policy;
-export const selectPiPolicyStatus = (state) => state.piPolicy.status;
+export const selectPiPolicy = (state) => state.piPolicy?.policy;
+export const selectPiPolicyStatus = (state) => state.piPolicy?.status;
+export const selectPiPolicyError = (state) => state.piPolicy?.error;
 
 export default piPolicySlice.reducer;

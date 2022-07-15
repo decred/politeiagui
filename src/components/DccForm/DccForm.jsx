@@ -26,7 +26,8 @@ import { getContractorDomains } from "src/helpers";
 
 const Select = ({ error, ...props }) => (
   <div
-    className={classNames(styles.formSelect, error && styles.formSelectError)}>
+    className={classNames(styles.formSelect, error && styles.formSelectError)}
+  >
     <SelectField {...props} />
     {error && <p className={styles.errorMsg}>{error}</p>}
   </div>
@@ -68,7 +69,8 @@ const DccForm = React.memo(function DccForm({
       <Button
         type="submit"
         kind={!isValid || !isUserValid ? "disabled" : "primary"}
-        loading={isSubmitting}>
+        loading={isSubmitting}
+      >
         Submit
       </Button>
     ),
@@ -257,7 +259,8 @@ const DccFormWrapper = ({
       onSubmit={handleSubmit}
       initialValues={formInitialValues}
       isInitialValid={isInitialValid}
-      validationSchema={dccFormValidation}>
+      validationSchema={dccFormValidation}
+    >
       {(props) => (
         <DccForm
           {...{

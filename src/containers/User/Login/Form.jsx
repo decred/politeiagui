@@ -73,7 +73,8 @@ const LoginForm = ({
       }}
       loading={!validationSchema}
       validationSchema={validationSchema}
-      onSubmit={onSubmit}>
+      onSubmit={onSubmit}
+    >
       {({
         Form,
         Title,
@@ -124,7 +125,8 @@ const LoginForm = ({
                 loading={isSubmitting}
                 kind="primary"
                 type="submit"
-                data-testid="login-form-button">
+                data-testid="login-form-button"
+              >
                 Login
               </Button>
             </Actions>
@@ -135,7 +137,8 @@ const LoginForm = ({
                 customComponent={({ className, ...props }) => (
                   <Text
                     className={classNames(className, styles.privacyPolicyTxt)}
-                    {...props}>
+                    {...props}
+                  >
                     {" "}
                     Privacy Policy
                   </Text>

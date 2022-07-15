@@ -17,7 +17,8 @@ const Placeholder = () => {
       width={800}
       speed={2}
       primaryColor={primaryColor}
-      secondaryColor={secondaryColor}>
+      secondaryColor={secondaryColor}
+    >
       <rect x="0" y="30" width="800" height="200" />
     </ContentLoader>
   );
@@ -32,7 +33,8 @@ const ProposalsList = ({
       <Text
         className={classNames(styles.title, "margin-bottom-m")}
         color="primaryDark"
-        weight="semibold">
+        weight="semibold"
+      >
         Submitted Proposals
       </Text>
       {hasSubmissions ? (

@@ -1,24 +1,26 @@
 import React from "react";
 import { Button, StatusTag } from "pi-ui";
 import { RecordCard } from "@politeiagui/common-ui";
+import { CommentsCount } from "@politeiagui/comments/ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import { decodeProposalRecord, getLegacyProposalStatusTagProps } from "./utils";
 import { ProposalStatusBar, ProposalSubtitle } from "./common";
 
-const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
+const ProposalCard = ({ record, voteSummary, commentsCount }) => {
   const proposal = decodeProposalRecord(record);
   const statusTagProps = getLegacyProposalStatusTagProps(record, voteSummary);
+  const proposalLink = `/record/${getShortToken(proposal.token)}`;
   return (
     <div>
       <RecordCard
-        titleLink={`/record/${getShortToken(proposal.token)}`}
+        isDimmed={proposal.archived || proposal.censored}
+        titleLink={proposalLink}
         title={proposal.name}
         subtitle={
           <ProposalSubtitle
             userid={proposal.author.userid}
             username={proposal.author.username}
-            publishedat={proposal.timestamps.publishedat}
-            editedat={proposal.timestamps.editedat}
+            timestamps={proposal.timestamps}
             token={proposal.token}
             version={proposal.version}
           />
@@ -27,7 +29,10 @@ const ProposalCard = ({ record, voteSummary, commentsCount = 0 }) => {
         secondRow={<ProposalStatusBar voteSummary={voteSummary} />}
         footer={
           <>
-            <span>{commentsCount} Comments</span>
+            <CommentsCount
+              link={`${proposalLink}?scrollToComments=true`}
+              count={commentsCount}
+            />
             <Button>Click Me</Button>
           </>
         }

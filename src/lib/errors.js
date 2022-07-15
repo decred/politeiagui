@@ -1,3 +1,5 @@
+import { formatTimestampsFromMessage } from "src/utils";
+
 const APIPi = "pi";
 const APIRecords = "records";
 const APIComments = "comments";
@@ -296,8 +298,10 @@ function PiPluginError(code, context) {
     5: `The file exceeds the maximum allowed size, ${context}`,
     6: `Proposal name is invalid, ${context}`,
     7: `This operation is not allowed, ${context}`,
-    8: `Proposal start date is invalid, ${context}`,
-    9: `Proposal end date is invalid, ${context}`,
+    8: `Proposal start date is invalid, ${formatTimestampsFromMessage(
+      context
+    )}`,
+    9: `Proposal end date is invalid, ${formatTimestampsFromMessage(context)}`,
     10: `Proposal amount is invalid, ${context}`,
     11: `Proposal domain is invalid, ${context}`,
     15: `${context}`,

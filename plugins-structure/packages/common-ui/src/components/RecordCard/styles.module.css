@@ -3,6 +3,10 @@
     var(--container-padding-left);
 }
 
+.dimmedCard {
+  background-color: var(--dimmed-card-background) !important;
+}
+
 .secondRow {
   margin-top: var(--spacing-medium);
 }
@@ -37,15 +41,17 @@
   border-color: var(--separator-color);
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 768px) {
   .firstRow {
     flex-direction: column-reverse;
     justify-content: flex-end;
   }
 
   .rightHeader {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
     justify-self: start;
+    grid-row: 1;
+    width: 100%;
   }
   .header {
     margin-top: var(--spacing-small);

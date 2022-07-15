@@ -1,3 +1,4 @@
+export * from "./Diff";
 export * from "./DateTooltip";
 export * from "./Event";
 export * from "./Join";
@@ -5,5 +6,7 @@ export * from "./LabelValueList";
 export * from "./Markdown";
 export * from "./Modal";
 export * from "./RecordCard";
+export * from "./RecordForm";
 export * from "./RecordsList";
 export * from "./RecordToken";
+export * from "./Thumbnail";

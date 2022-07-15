@@ -106,7 +106,8 @@ const CommentForm = ({
         namelengthmin,
         isAuthorUpdate
       })}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+    >
       {({
         values,
         handleBlur,
@@ -142,7 +143,8 @@ const CommentForm = ({
                     className={styles.titleTooltipWrapper}
                     placement="right"
                     content="The proposal author is allowed to give periodic updates on the status of their proposal.  You can start an update thread by submitting a new comment.  Users
-will only be able to reply to your most recent update thread.">
+will only be able to reply to your most recent update thread."
+                  >
                     <div>
                       <Icon type="info" size={smallTablet ? "md" : "lg"} />
                     </div>
@@ -180,7 +182,8 @@ will only be able to reply to your most recent update thread.">
                 type="submit"
                 data-testid="comment-submit-button"
                 kind={!isValid || disableSubmit ? "disabled" : "primary"}
-                loading={isSubmitting}>
+                loading={isSubmitting}
+              >
                 {isEditing ? "Edit " : "Add "} comment
               </Button>
             </Row>

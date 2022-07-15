@@ -50,9 +50,9 @@ const commentsCountSlice = createSlice({
 });
 
 // Selectors
-export const selectCommentsCountStatus = (state) => state.commentsCount.status;
-export const selectCommentsCounts = (state) => state.commentsCount.byToken;
+export const selectCommentsCountStatus = (state) => state.commentsCount?.status;
+export const selectCommentsCounts = (state) => state.commentsCount?.byToken;
 
-export const selectCommentsCountError = (state) => state.commentsCount.error;
+export const selectCommentsCountError = (state) => state.commentsCount?.error;
 
 export default commentsCountSlice.reducer;

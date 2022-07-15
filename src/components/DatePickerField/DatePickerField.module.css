@@ -4,7 +4,7 @@
   height: 4.4rem;
   min-width: 6rem;
   background-color: var(--card-background);
-  padding: 1rem;
+  padding: 1rem 2rem;
 }
 
 .placeholder {

@@ -13,7 +13,8 @@ const NewButton = ({ history, goTo, label, disabled }) => {
         type="button"
         kind={disabled ? "disabled" : "primary"}
         className={styles.newButton}
-        onClick={onClick}>
+        onClick={onClick}
+      >
         {extraSmall ? "+" : label}
       </Button>
     </LoggedInContent>

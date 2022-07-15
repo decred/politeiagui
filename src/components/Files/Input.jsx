@@ -14,7 +14,8 @@ const FilesInput = ({ onChange, children, acceptedFiles }) => {
       id="my-file-input"
       accept={acceptedFiles || "*"}
       onChange={handleFilesChange}
-      multiple>
+      multiple
+    >
       {children}
     </FileReaderInput>
   );

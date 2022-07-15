@@ -11,7 +11,8 @@ const FileDownloadLink = ({
     style={style}
     className="download-link"
     href={`data:${mime},${encodeURIComponent(data)}`}
-    download={filename}>
+    download={filename}
+  >
     {children}
   </a>
 );

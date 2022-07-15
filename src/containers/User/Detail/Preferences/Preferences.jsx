@@ -24,7 +24,8 @@ const Preferences = ({ user }) => {
     <Formik
       initialValues={initialValues}
       onSubmit={handlePreferencesSubmit}
-      enableReinitialize={true}>
+      enableReinitialize={true}
+    >
       {(formikProps) => {
         const { handleSubmit, setFieldValue, values } = formikProps;
         const customSetFieldValue = (...props) => {
@@ -35,9 +36,9 @@ const Preferences = ({ user }) => {
           <form onSubmit={handleSubmit}>
             <div>
               <Message className={styles.marginHorizontal1} kind="info">
-                Currently, each notification email is only attempted to be sent
-                once. If the email cannot be delivered in the initial attempt,
-                for whatever reason, Politeia won't try to resend it.
+                Currently, only one attempt is made to send each notification
+                email. Politeia will not try to resend an email if, for whatever
+                reason, it cannot be delivered.
               </Message>
               <Card className="container margin-top-s">
                 <H2>Email notifications for my proposals</H2>
@@ -71,7 +72,7 @@ const Preferences = ({ user }) => {
                 />
               </Card>
               <Card className="container margin-top-s">
-                <H2>Email notifications for others' proposals</H2>
+                <H2>Email notifications for other's proposals</H2>
                 <Field
                   component={Checkbox}
                   checked={values["regularproposalnotifications-vetted"]}
@@ -186,7 +187,8 @@ const Preferences = ({ user }) => {
                 type="submit"
                 loading={isApiRequestingEditUser}
                 kind={showConfirm ? "disabled" : "primary"}
-                className={classNames(styles.submitButton, "margin-bottom-m")}>
+                className={classNames(styles.submitButton, "margin-bottom-m")}
+              >
                 {showConfirm && editUserResponse ? (
                   <div className={styles.savedIcon}>
                     Saved

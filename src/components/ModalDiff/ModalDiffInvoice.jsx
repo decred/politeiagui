@@ -42,7 +42,8 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
     <Modal
       onClose={onClose}
       {...props}
-      contentStyle={{ width: "100%", minHeight: "40rem" }}>
+      contentStyle={{ width: "100%", minHeight: "40rem" }}
+    >
       {error && <Message kind="error">{error.toString()}</Message>}
       <Header
         title={
@@ -66,7 +67,8 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
             {invoice.version && (
               <Text
                 id={`proposal-${invoice.proposalToken}-version`}
-                className={styles.version}>{`version ${invoice.version}`}</Text>
+                className={styles.version}
+              >{`version ${invoice.version}`}</Text>
             )}
           </Subtitle>
         }
@@ -87,7 +89,8 @@ const ModalDiffInvoice = ({ onClose, invoice, prevInvoice, ...props }) => {
             <CopyableText
               id="invoice-diff-payment-address"
               truncate
-              tooltipPlacement={"bottom"}>
+              tooltipPlacement={"bottom"}
+            >
               {addr}
             </CopyableText>
           )}

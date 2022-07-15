@@ -168,7 +168,6 @@ An `inventory` is a `{ { [status]: [...tokens] } }` map used to index `record to
   const initialStatusInventory = {
     tokens: [],
     lastPage: 0,
-    lastTokenPos: null,
     status: "idle",
   };
 
@@ -297,7 +296,6 @@ An `inventory` is a `{ { [status]: [...tokens] } }` map used to index `record to
   ```javascript
   export const initialState = {
     byToken: {},
-    lastTokenPos: null,
     status: "idle",
     error: null,
   };

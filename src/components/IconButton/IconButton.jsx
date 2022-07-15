@@ -8,7 +8,8 @@ const IconButton = React.forwardRef(({ onClick, className, ...props }, ref) => {
     <button
       ref={ref}
       onClick={onClick}
-      className={classNames(styles.iconButton, className)}>
+      className={classNames(styles.iconButton, className)}
+    >
       <Icon {...props} />
     </button>
   );

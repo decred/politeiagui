@@ -1,20 +1,28 @@
 import React from "react";
-import InfiniteScroll from "react-infinite-scroller";
+import { InfiniteScroller } from "../InfiniteScroller";
 import styles from "./styles.module.css";
 
-export function RecordsList({ children, hasMore, onFetchMore }) {
+export function RecordsList({
+  children,
+  hasMore,
+  onFetchMore,
+  isLoading,
+  loadingSkeleton,
+  childrenThreshold,
+}) {
   function handleLoadMore() {
     onFetchMore();
   }
   return (
-    <InfiniteScroll
+    <InfiniteScroller
       className={styles.recordsList}
       hasMore={hasMore}
-      useWindow={true}
-      initialLoad={true}
       loadMore={handleLoadMore}
+      isLoading={isLoading}
+      loadingSkeleton={loadingSkeleton}
+      childrenThreshold={childrenThreshold}
     >
       {children}
-    </InfiniteScroll>
+    </InfiniteScroller>
   );
 }

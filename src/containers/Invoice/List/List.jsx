@@ -123,7 +123,8 @@ const ListAdminInvoices = ({ TopBanner, PageDetails, Main }) => {
           title={isAdmin ? "All Invoices" : "Domain Invoices"}
           actionsContent={
             <ActionsContent openInviteModal={handleOpenInviteContractorModal} />
-          }>
+          }
+        >
           <InvoiceFilterForm onChange={handleFiltersChange} isAdminPage />
         </PageDetails>
       </TopBanner>

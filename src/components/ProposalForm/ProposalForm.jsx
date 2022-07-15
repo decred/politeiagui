@@ -40,9 +40,7 @@ import {
 } from "src/constants";
 import {
   getProposalTypeOptionsForSelect,
-  getRfpMinMaxDates,
-  getProposalDomainOptionsForSelect,
-  getStartEndDatesRange
+  getProposalDomainOptionsForSelect
 } from "./helpers";
 import { convertObjectToUnixTimestamp } from "src/helpers";
 import { isActiveApprovedRfp } from "src/containers/Proposal/helpers";
@@ -60,6 +58,10 @@ const ListItem = ({ children }) => (
   <li className={styles.listItem}>{children}</li>
 );
 
+function sumNowAndDuration(timestamp = 0) {
+  return Date.now() + timestamp * 1000;
+}
+
 const Rules = () => (
   <>
     <H3>Rules:</H3>
@@ -73,7 +75,8 @@ const Rules = () => (
         <Link
           href="https://docs.decred.org/contributing/contributor-compensation/"
           target="_blank"
-          rel="noopener noreferrer">
+          rel="noopener noreferrer"
+        >
           here
         </Link>
       </ListItem>
@@ -83,7 +86,8 @@ const Rules = () => (
         <Link
           href="https://docs.decred.org/governance/politeia/proposal-guidelines/"
           target="_blank"
-          rel="noopener noreferrer">
+          rel="noopener noreferrer"
+        >
           Proposal Guidelines
         </Link>
       </ListItem>
@@ -118,6 +122,7 @@ const ProposalForm = React.memo(function ProposalForm({
   useEffect(() => {
     if (!isInitialValid) {
       setFieldTouched("startDate");
+      setFieldTouched("endDate");
       validateForm();
     }
   }, [isInitialValid, validateForm, setFieldTouched]);
@@ -143,16 +148,6 @@ const ProposalForm = React.memo(function ProposalForm({
   const domainOptions = useMemo(
     () => getProposalDomainOptionsForSelect(domains),
     [domains]
-  );
-
-  const deadlineRange = useMemo(
-    () => getRfpMinMaxDates(linkbyperiodmin, linkbyperiodmax),
-    [linkbyperiodmin, linkbyperiodmax]
-  );
-
-  const startAndEndDatesRange = useMemo(
-    () => getStartEndDatesRange(startdatemin, enddatemax),
-    [startdatemin, enddatemax]
   );
 
   const handleSelectFiledChange = useCallback(
@@ -214,6 +209,13 @@ const ProposalForm = React.memo(function ProposalForm({
   const hasError = errors && errors.global;
   useScrollTo("record-submission-error-message", hasError);
 
+  function getEndDateMinTimestamp() {
+    return values.startDate
+      ? // One day from startDate in ms
+        (convertObjectToUnixTimestamp(values.startDate) + 86400) * 1000
+      : sumNowAndDuration(startdatemin);
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Message kind="warning" className="margin-bottom-m">
@@ -227,7 +229,8 @@ const ProposalForm = React.memo(function ProposalForm({
         className={classNames(
           styles.typeRow,
           isRFPSubmission && styles.typeRowNoMargin
-        )}>
+        )}
+      >
         <SelectField
           name="type"
           onChange={handleSelectFiledChange("type")}
@@ -240,16 +243,19 @@ const ProposalForm = React.memo(function ProposalForm({
           <>
             <DatePickerField
               className={styles.rfpDeadline}
-              years={deadlineRange}
               name="rfpDeadline"
               placeholder="Deadline"
+              tabIndex={1}
+              minTimestamp={sumNowAndDuration(linkbyperiodmin)}
+              maxTimestamp={sumNowAndDuration(linkbyperiodmax)}
             />
             <Tooltip
               contentClassName={styles.deadlineTooltip}
               className={styles.tooltipWrapper}
               placement={smallTablet ? "left" : "bottom"}
               content="The deadline for the RFP submissions,
-              it can be edited at any point before the voting has been started and should be at least two weeks from now.">
+              it can be edited at any point before the voting has been started and should be at least two weeks from now."
+            >
               <div className={styles.iconWrapper}>
                 <Icon type="info" size={smallTablet ? "md" : "lg"} />
               </div>
@@ -286,7 +292,8 @@ const ProposalForm = React.memo(function ProposalForm({
               className={styles.tooltipWrapper}
               placement="left"
               content="The token for the RFP you are submitting on,
-              it can be found on the RFP proposal page.">
+              it can be found on the RFP proposal page."
+            >
               <div className={styles.iconWrapper}>
                 <Icon type="info" size={smallTablet ? "md" : "lg"} />
               </div>
@@ -318,17 +325,21 @@ const ProposalForm = React.memo(function ProposalForm({
             error={touched.amount && errors.amount}
           />
           <DatePickerField
+            tabIndex={1}
             className={classNames(styles.startDate, "margin-bottom-m")}
-            years={startAndEndDatesRange}
             value={values.startDate}
             name="startDate"
             placeholder="Start Date"
+            minTimestamp={sumNowAndDuration(startdatemin)}
+            maxTimestamp={sumNowAndDuration(enddatemax)}
             error={touched.startDate && errors.startDate}
           />
           <DatePickerField
+            tabIndex={1}
             className={classNames(styles.endDate, "margin-bottom-m")}
-            years={startAndEndDatesRange}
             value={values.endDate}
+            minTimestamp={getEndDateMinTimestamp()}
+            maxTimestamp={sumNowAndDuration(enddatemax)}
             name="endDate"
             placeholder="End Date"
             error={touched.endDate && errors.endDate}
@@ -406,7 +417,8 @@ const ProposalForm = React.memo(function ProposalForm({
           <Message
             id="record-submission-error-message"
             className={classNames(styles.errorRow, "margin-bottom-m")}
-            kind="error">
+            kind="error"
+          >
             {errors.global.toString()}
           </Message>
         </Row>
@@ -489,7 +501,7 @@ const ProposalFormWrapper = ({
             ? convertObjectToUnixTimestamp(rfpDeadline)
             : undefined,
           startDate: !isRFP
-            ? convertObjectToUnixTimestamp(startDate)
+            ? convertObjectToUnixTimestamp(startDate, true)
             : undefined,
           endDate: !isRFP ? convertObjectToUnixTimestamp(endDate) : undefined,
           amount: !isRFP ? amountNumber : undefined
@@ -550,7 +562,8 @@ const ProposalFormWrapper = ({
         loading={!proposalFormValidation}
         validate={proposalFormValidation}
         isInitialValid={!initialErrors}
-        onSubmit={handleSubmit}>
+        onSubmit={handleSubmit}
+      >
         {(props) => (
           <ProposalForm
             {...{

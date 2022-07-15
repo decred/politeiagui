@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { classNames, DatePicker, Icon, Text } from "pi-ui";
+import { classNames, DatePickerV2, Icon, Text } from "pi-ui";
 import { FormikConsumer } from "formik";
 import styles from "./DatePickerField.module.css";
 import { Row } from "../layout";
@@ -10,10 +10,12 @@ import { formatDateToInternationalString } from "src/helpers";
 const DatePickerField = ({
   name,
   placeholder,
-  years,
   className,
   isRange,
-  error
+  maxTimestamp,
+  minTimestamp,
+  error,
+  tabIndex
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const togglePicker = useCallback(() => {
@@ -23,7 +25,7 @@ const DatePickerField = ({
   return (
     <FormikConsumer>
       {({ setFieldValue, setFieldTouched, values }) => {
-        const onDateChange = (year, month, day) => {
+        const onDateChange = ({ year, month, day }) => {
           if (!!year && !!month && !!day) {
             setFieldValue(name, { year, month, day });
           }
@@ -32,13 +34,6 @@ const DatePickerField = ({
         };
 
         const value = values[name];
-        const onRangeChange = (year, month, day, idx) => {
-          if (!!year && !!month && !!day) {
-            const newValue = value ? [...value] : [];
-            newValue[idx] = { year, month, day };
-            setFieldValue(name, newValue);
-          }
-        };
 
         const onDismiss = () => {
           if (isOpen) {
@@ -71,28 +66,32 @@ const DatePickerField = ({
         return (
           <div
             className={classNames("cursor-pointer", className)}
-            data-testid="datepicker">
-            <DatePicker
+            data-testid="datepicker"
+          >
+            <DatePickerV2
+              tabIndex={tabIndex}
               show={isOpen}
-              years={years}
-              isRange={isRange}
-              value={values[name]}
+              minTimestamp={minTimestamp}
+              maxTimestamp={maxTimestamp}
+              value={value}
               lang={MONTHS_LABELS}
-              onChange={isRange ? onRangeChange : onDateChange}
-              onDismiss={onDismiss}>
+              onChange={onDateChange}
+              onDismiss={onDismiss}
+            >
               <Row
                 className={styles.box}
                 justify="space-between"
                 align="center"
                 noMargin
-                onClick={togglePicker}>
+                onClick={togglePicker}
+              >
                 {value && formattedValue()}
                 {!value && (
                   <Text className={styles.placeholder}>{placeholder}</Text>
                 )}
                 <Icon type="calendar" />
               </Row>
-            </DatePicker>
+            </DatePickerV2>
             <p className={classNames(styles.errorMsg, styles.active)}>
               {error}
             </p>
@@ -106,7 +105,6 @@ const DatePickerField = ({
 DatePickerField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
-  year: PropTypes.object,
   readOnly: PropTypes.bool,
   className: PropTypes.string
 };

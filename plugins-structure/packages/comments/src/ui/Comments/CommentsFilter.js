@@ -45,6 +45,7 @@ export const CommentsFilter = ({ onSort, onToggleFlatMode, isFlat }) => {
         options={options}
         value={selected}
         onChange={handleFilterChanges}
+        customStyles={{ container: () => ({ padding: "0" }) }}
       />
       <div
         className={classNames(

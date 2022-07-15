@@ -1,26 +1,3 @@
-.listItemWrapper {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.secondRow > * {
-  margin-top: var(--spacing-medium);
-}
-
-.secondRow > *:first-child {
-  margin-top: 0;
-}
-
-.footerButtons {
-  display: flex;
-  width: 6rem;
-  justify-content: space-between;
-}
-
-.loaderWrapper {
-  margin-bottom: var(--spacing-medium);
-}
-
 .block {
   width: 100%;
   min-height: var(--font-size-xxlarge);
@@ -31,6 +8,53 @@
   -moz-animation: fadeIn linear 1s alternate infinite;
   -o-animation: fadeIn linear 1s alternate infinite;
   -ms-animation: fadeIn linear 1s alternate infinite;
+}
+
+.footerButtons {
+  display: flex;
+  width: 6rem;
+  justify-content: space-between;
+}
+
+.formButtons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.listItemWrapper {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.loaderWrapper {
+  margin-bottom: var(--spacing-medium);
+}
+
+.proposalBody > *:first-child {
+  padding-bottom: 2rem;
+  border-top: 0.1rem solid var(--separator-color);
+  border-bottom: 0.1rem solid var(--separator-color);
+}
+.proposalBody > * {
+  padding-top: 2rem;
+}
+
+.rules > li {
+  margin-top: 1rem;
+}
+
+.secondRow > * {
+  margin-top: var(--spacing-medium);
+}
+
+.secondRow > *:first-child {
+  margin-top: 0;
+}
+
+.textTooltip {
+  width: 15rem;
+  display: block;
 }
 
 @keyframes fadeIn {

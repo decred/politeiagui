@@ -40,12 +40,14 @@ const FlatModeButton = ({ isActive, onClick }) => (
         styles.flatButtonWrapper,
         isActive && styles.flatModeActive
       )}
-      onClick={onClick}>
+      onClick={onClick}
+    >
       <Text
         className={classNames(
           styles.flatButtonText,
           isActive && styles.flatModeActive
-        )}>
+        )}
+      >
         Flat mode
       </Text>
     </div>
@@ -65,7 +67,8 @@ const FlatModeButton = ({ isActive, onClick }) => (
               to top level comments.
             </p>
           </>
-        }>
+        }
+      >
         <Icon type="info" />
       </Tooltip>
     </div>
@@ -237,14 +240,14 @@ const CommentsListAndActions = React.memo(
                 <H2 className={styles.commentsTitle}>
                   {authorUpdateTitle ? authorUpdateTitle : "Comments"}{" "}
                   <span
-                    className={
-                      styles.commentsCount
-                    }>{`(${commentsCount})`}</span>
+                    className={styles.commentsCount}
+                  >{`(${commentsCount})`}</span>
                 </H2>
                 {hasDuplicatedComments && (
                   <Text
                     color="gray"
-                    size="small">{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
+                    size="small"
+                  >{`(${numOfDuplicatedComments} duplicate comments omitted)`}</Text>
                 )}
               </div>
             )}
@@ -309,7 +312,8 @@ const CommentsListAndActions = React.memo(
                 loadingLikes,
                 getCommentVotes,
                 sectionId
-              }}>
+              }}
+            >
               <CommentsListWrapper
                 lastTimeAccessed={lastVisitTimestamp}
                 threadParentID={threadParentID}
@@ -414,7 +418,8 @@ const Comments = ({
       {comments && (
         <Card
           id="commentArea"
-          className={classNames(styles.commentAreaContainer, className)}>
+          className={classNames(styles.commentAreaContainer, className)}
+        >
           <CommentsListAndActions
             sortOption={sortOption}
             setSortOption={setSortOption}

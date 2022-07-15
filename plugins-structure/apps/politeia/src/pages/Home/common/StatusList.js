@@ -1,12 +1,23 @@
-import React, { useEffect, useMemo } from "react";
-import { records } from "@politeiagui/core/records";
-import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
-import { commentsCount } from "@politeiagui/comments/count";
+import React, { useEffect } from "react";
 import { RecordsList } from "@politeiagui/common-ui";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchNextBatch, selectLastToken, selectStatus } from "../homeSlice";
+import { useDispatch } from "react-redux";
 import { ProposalCard, ProposalLoader } from "../../../components";
 import max from "lodash/max";
+import min from "lodash/min";
+import useStatusList from "../useStatusList";
+
+function LoadingSkeleton({ inventory, records }) {
+  if (!inventory) return [];
+  const loadingPlaceholdersCount = max([
+    min([inventory.length - records.length, 5]),
+    0,
+  ]);
+  const loadersArray = [];
+  for (let i = 0; i < loadingPlaceholdersCount; i++) {
+    loadersArray.push(<ProposalLoader key={i} />);
+  }
+  return loadersArray;
+}
 
 function StatusList({
   status,
@@ -14,21 +25,19 @@ function StatusList({
   inventoryStatus,
   onFetchNextInventoryPage,
   onRenderNextStatus,
+  recordsPageSize,
 }) {
   const dispatch = useDispatch();
-
-  const fetchStatus = useSelector((state) => selectStatus(state, status));
-
-  useEffect(() => {
-    if (inventory.length > 0 && fetchStatus === "idle") {
-      dispatch(fetchNextBatch(status));
-    }
-  }, [dispatch, fetchStatus, inventory, status]);
-
-  const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
-  const lastTokenPos = useSelector((state) => selectLastToken(state, status));
-  const hasMoreRecords =
-    lastTokenPos !== null && lastTokenPos < inventory.length - 1;
+  const {
+    hasMoreRecords,
+    hasMoreInventory,
+    homeStatus,
+    countComments,
+    summaries,
+    fetchNextBatch,
+    recordsInOrder,
+    areAllInventoryEntriesFetched,
+  } = useStatusList({ inventory, inventoryStatus, status });
 
   function handleFetchMore() {
     if (hasMoreRecords) {
@@ -39,47 +48,45 @@ function StatusList({
   }
 
   useEffect(() => {
-    if (!hasMoreInventory && onRenderNextStatus) onRenderNextStatus();
-  }, [hasMoreInventory, onRenderNextStatus]);
-
-  const recordsInOrder = useSelector((state) =>
-    records.selectByTokensBatch(state, inventory)
-  );
-
-  const countComments = useSelector(commentsCount.selectAll);
-
-  const summaries = useSelector(ticketvoteSummaries.selectAll);
-
-  const hasMoreToFetch = useMemo(
-    () => fetchStatus === "succeeded" && (hasMoreRecords || hasMoreInventory),
-    [hasMoreRecords, hasMoreInventory, fetchStatus]
-  );
-
-  const loadingPlaceholdersCount = max([
-    inventory.length - 1 - lastTokenPos,
-    0,
+    if (
+      inventoryStatus === "succeeded/isDone" &&
+      areAllInventoryEntriesFetched &&
+      onRenderNextStatus
+    ) {
+      onRenderNextStatus();
+    }
+  }, [
+    hasMoreInventory,
+    onRenderNextStatus,
+    inventoryStatus,
+    areAllInventoryEntriesFetched,
   ]);
+
+  const hasMoreToFetch = hasMoreRecords || hasMoreInventory;
 
   return (
     <div>
-      <RecordsList hasMore={hasMoreToFetch} onFetchMore={handleFetchMore}>
+      <RecordsList
+        hasMore={hasMoreToFetch}
+        onFetchMore={handleFetchMore}
+        isLoading={homeStatus === "loading"}
+        childrenThreshold={recordsPageSize}
+        loadingSkeleton={
+          <LoadingSkeleton inventory={inventory} records={recordsInOrder} />
+        }
+      >
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
           return (
             <ProposalCard
               key={token}
               record={record}
-              commentsCount={countComments[token]}
-              voteSummary={summaries[token]}
+              commentsCount={countComments?.[token]}
+              voteSummary={summaries?.[token]}
             />
           );
         })}
       </RecordsList>
-      {Array(loadingPlaceholdersCount)
-        .fill("")
-        .map((_, i) => (
-          <ProposalLoader key={i} />
-        ))}
     </div>
   );
 }

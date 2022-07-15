@@ -47,11 +47,11 @@ const ticketvoteResultsSlice = createSlice({
 
 // Selectors
 export const selectTicketvoteResultsStatus = (state) =>
-  state.ticketvoteResults.status;
+  state.ticketvoteResults?.status;
 export const selectTicketvoteResultsByToken = (state, token) =>
-  state.ticketvoteResults.byToken[token];
+  state.ticketvoteResults?.byToken[token];
 
 export const selectTicketvoteResultsError = (state) =>
-  state.ticketvoteResults.error;
+  state.ticketvoteResults?.error;
 
 export default ticketvoteResultsSlice.reducer;

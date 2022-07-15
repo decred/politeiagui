@@ -11,7 +11,8 @@ const ModalPrivacyPolicy = (props) => {
       style={{ maxWidth: "70rem" }}
       {...props}
       iconType="info"
-      iconSize="lg">
+      iconSize="lg"
+    >
       <StaticMarkdown contentName={privacyPolicyContent} />
       <div className="justify-right">
         <Link to="/user/privacy-policy" className="margin-top-m">

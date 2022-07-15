@@ -1,4 +1,5 @@
-import Home from "./Home/Home";
-import Details from "./Details/Details";
+import HomeRoute from "./Home";
+import NewProposalRoute from "./New";
+import DetailsRoute from "./Details";
 
-export { Home, Details };
+export { HomeRoute, NewProposalRoute, DetailsRoute };

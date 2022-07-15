@@ -65,36 +65,45 @@ const ticketvoteSummariesSlice = createSlice({
 
 // Selectors
 export const selectTicketvoteSummariesStatus = (state) =>
-  state.ticketvoteSummaries.status;
+  state.ticketvoteSummaries?.status;
 export const selectTicketvoteSummariesByRecordToken = (state, token) =>
-  state.ticketvoteSummaries.byToken[token];
+  state.ticketvoteSummaries?.byToken[token];
 export const selectTicketvoteSummaries = (state) =>
-  state.ticketvoteSummaries.byToken;
+  state.ticketvoteSummaries?.byToken;
 
 export const selectTicketvoteSummariesByStatus = (state, status) => {
   if (validateTicketvoteStatus(status)) {
-    return Object.values(state.ticketvoteSummaries.byToken).filter(
-      (summary) => summary.status === getTicketvoteStatusCode(status)
-    );
+    return state.ticketvoteSummaries
+      ? Object.values(state.ticketvoteSummaries.byToken).filter(
+          (summary) => summary.status === getTicketvoteStatusCode(status)
+        )
+      : undefined;
   }
 };
 
 export const selectTicketvoteSummariesByTokensBatch = (state, tokens) => {
   if (!isArray(tokens))
     throw new TypeError("the parameter 'tokens' must be an array");
-  const summariesByTokens = pick(tokens)(state.ticketvoteSummaries.byToken);
+  const summariesByTokens = state.ticketvoteSummaries
+    ? pick(tokens)(state.ticketvoteSummaries.byToken)
+    : undefined;
   return summariesByTokens;
 };
 
 export const selectTicketvoteSummariesFetchedTokens = (state, tokens) => {
-  if (!tokens) return Object.keys(state.ticketvoteSummaries.byToken);
-  const summariesByTokens = pick(tokens)(state.ticketvoteSummaries.byToken);
+  if (!tokens)
+    return state.ticketvoteSummaries
+      ? Object.keys(state.ticketvoteSummaries.byToken)
+      : undefined;
+  const summariesByTokens = state.ticketvoteSummaries
+    ? pick(tokens)(state.ticketvoteSummaries.byToken)
+    : undefined;
   return Object.keys(summariesByTokens);
 };
 
 // Error
 export const selectTicketvoteSummariesError = (state) =>
-  state.ticketvoteSummaries.error;
+  state.ticketvoteSummaries?.error;
 
 // Export default reducer
 export default ticketvoteSummariesSlice.reducer;

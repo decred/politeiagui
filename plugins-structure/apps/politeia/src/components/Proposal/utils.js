@@ -31,8 +31,12 @@ import {
   PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED,
   PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
   PROPOSAL_SUMMARY_STATUS_VOTE_STARTED,
-} from "../../pi/constants";
+} from "../../pi/lib/constants";
 import isArray from "lodash/fp/isArray";
+
+const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
+const PROPOSAL_INDEX_FILENAME = "index.md";
+const PROPOSAL_VOTE_METADATA_FILENAME = "votemetadata.json";
 
 const MONTHS_LABELS = [
   "Jan",
@@ -104,6 +108,10 @@ const MONTHS_LABELS = [
  *   },
  *   body: String,
  *   proposalMetadata: Object,
+ *   censored: Bool,
+ *   archived: Bool,
+ *   abandonReason: String,
+ *   attachments: Array
  * }} Proposal
  */
 
@@ -114,7 +122,7 @@ const MONTHS_LABELS = [
  * @returns {Object} Proposal metadata object
  */
 export function decodeProposalMetadataFile(files) {
-  const metadata = files.find((f) => f.name === "proposalmetadata.json");
+  const metadata = files.find((f) => f.name === PROPOSAL_METADATA_FILENAME);
   return decodeRecordFile(metadata);
 }
 
@@ -125,7 +133,7 @@ export function decodeProposalMetadataFile(files) {
  * @returns {Object} Proposal metadata object
  */
 export function decodeProposalBodyFile(files) {
-  const body = files.find((f) => f.name === "index.md");
+  const body = files.find((f) => f.name === PROPOSAL_INDEX_FILENAME);
   return body && decodeURIComponent(escape(window.atob(body.payload)));
 }
 
@@ -136,7 +144,8 @@ export function decodeProposalBodyFile(files) {
  * @returns {Object} `{linkto, linkby}` decoded vote metadata
  */
 export function decodeVoteMetadataFile(files) {
-  const metadata = files && files.find((f) => f.name === "votemetadata.json");
+  const metadata =
+    files && files.find((f) => f.name === PROPOSAL_VOTE_METADATA_FILENAME);
   return decodeRecordFile(metadata);
 }
 
@@ -155,6 +164,15 @@ export function decodeProposalUserMetadata(metadataStreams) {
   return userMd;
 }
 
+export function decodeProposalAttachments(files) {
+  return files.filter(
+    (f) =>
+      f.name !== PROPOSAL_INDEX_FILENAME &&
+      f.name !== PROPOSAL_VOTE_METADATA_FILENAME &&
+      f.name !== PROPOSAL_METADATA_FILENAME
+  );
+}
+
 /**
  * decodeProposalRecord returns a formatted proposal object for given record.
  * It decodes all proposal-related data from records and converts it into a
@@ -163,12 +181,14 @@ export function decodeProposalUserMetadata(metadataStreams) {
  * @returns {Proposal} formatted proposal object
  */
 export function decodeProposalRecord(record) {
+  if (!record) return;
   const { name, ...proposalMetadata } = decodeProposalMetadataFile(
     record.files
   );
   const userMetadata = decodeProposalUserMetadata(record.metadata);
   const voteMetadata = decodeVoteMetadataFile(record.files);
   const body = decodeProposalBodyFile(record.files);
+  const attachments = decodeProposalAttachments(record.files);
   const useridMd = userMetadata.find((md) => md && md.payload.userid);
   const { token } = record.censorshiprecord;
   return {
@@ -185,18 +205,33 @@ export function decodeProposalRecord(record) {
     },
     body,
     proposalMetadata,
+    archived: record.status === RECORD_STATUS_ARCHIVED,
+    censored: record.status === RECORD_STATUS_CENSORED,
+    abandonmentReason: getAbandonmentReason(userMetadata),
+    attachments,
   };
 }
 
-function findPublicStatusMetadataFromPayloads(mdPayloads) {
+function findStatusMetadataFromPayloads(mdPayloads, status) {
   if (!mdPayloads) return {};
-  const publicMd = mdPayloads.find((p) => p.status === RECORD_STATUS_PUBLIC);
+  const publicMd = mdPayloads.find((p) => p.status === status);
   if (!publicMd) {
     // traverse payload arrays
     const arrayPayloads = mdPayloads.find((p) => isArray(p));
-    return findPublicStatusMetadataFromPayloads(arrayPayloads);
+    return findStatusMetadataFromPayloads(arrayPayloads, status);
   }
   return publicMd;
+}
+
+function getAbandonmentReason(userMetadata) {
+  if (!userMetadata) return null;
+  const payloads = userMetadata.map((md) => md.payload);
+  for (const status of [RECORD_STATUS_ARCHIVED, RECORD_STATUS_CENSORED]) {
+    const { reason } = findStatusMetadataFromPayloads(payloads, status);
+    if (reason) {
+      return reason;
+    }
+  }
 }
 
 /**
@@ -225,7 +260,7 @@ export function formatDateToInternationalString({ day, month, year }) {
 export function getPublicStatusChangeMetadata(userMetadata) {
   if (!userMetadata) return {};
   const payloads = userMetadata.map((md) => md.payload);
-  return findPublicStatusMetadataFromPayloads(payloads);
+  return findStatusMetadataFromPayloads(payloads, RECORD_STATUS_PUBLIC);
 }
 
 /**
@@ -322,6 +357,12 @@ export function getLegacyProposalStatusTagProps(record, voteSummary) {
       text: "Abandoned",
     };
   }
+  if (record.status === RECORD_STATUS_CENSORED) {
+    return {
+      type: "orangeNegativeCircled",
+      text: "Censored",
+    };
+  }
 
   return { type: "grayNegative", text: "missing" };
 }
@@ -402,4 +443,40 @@ export function showVoteStatusBar(voteSummary) {
     TICKETVOTE_STATUS_APPROVED,
     TICKETVOTE_STATUS_REJECTED,
   ].includes(voteSummary.status);
+}
+
+/**
+ * getFilesDiff returns an array of files with a `added` or `removed` key for
+ * added or removed files. Unchanged files aren't tagged and composes the last
+ * elements of the diff array.
+ *
+ * @param {Array} newFiles new record files
+ * @param {Array} oldFiles old record files
+ */
+export function getFilesDiff(newFiles, oldFiles) {
+  const filesDiffFunc = (arr) => (elem) =>
+    !arr.some(
+      (arrelem) =>
+        arrelem.name === elem.name && arrelem.payload === elem.payload
+    );
+  const filesEqFunc = (arr) => (elem) => !filesDiffFunc(arr)(elem);
+  return {
+    added: newFiles.filter(filesDiffFunc(oldFiles)),
+    removed: oldFiles.filter(filesDiffFunc(newFiles)),
+    unchanged: newFiles.filter(filesEqFunc(oldFiles)),
+  };
+}
+
+export function getImagesByDigest(text, files) {
+  if (!text) return {};
+  const markdownImageRegexParser =
+    /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
+  const inlineImagesMatches = text.matchAll(markdownImageRegexParser);
+  let imagesByDigest = {};
+  for (const match of inlineImagesMatches) {
+    const { digest } = match.groups;
+    const file = files.find((f) => f.digest === digest);
+    imagesByDigest[digest] = file;
+  }
+  return imagesByDigest;
 }

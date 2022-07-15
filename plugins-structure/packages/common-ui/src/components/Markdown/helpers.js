@@ -1,5 +1,7 @@
 import React from "react";
 import xssFilters from "xss-filters";
+import { isExternalLink } from "@politeiagui/core/router";
+import { ModalExternalLink, useModal } from "../Modal";
 
 export const XSS_ALERT =
   "You tried to render a malicious URL. The URL is being converted in order to avoid XSS attacks";
@@ -26,24 +28,16 @@ export const traverseChildren = (el, cb) => {
   return newElement ? cb(newElement) : cb(el);
 };
 
-const isExternalLink = (link) => {
-  const tmpLink = document.createElement("a");
-  tmpLink.href = link;
-  const externalLink =
-    tmpLink.hostname && tmpLink.hostname !== window.top.location.hostname;
-
-  return externalLink;
-};
-
 const LinkRenderer = ({ url, children }) => {
-  function onLinkClick(e) {
-    if (isExternalLink(url)) {
+  const [open] = useModal();
+  function handleExternalLink(e) {
+    if (isExternalLink(url) && open) {
       e.preventDefault();
-      console.log("clicked URL:", url);
+      open(ModalExternalLink, { link: url });
     }
   }
   return (
-    <a href={url} onClick={onLinkClick}>
+    <a href={url} onClick={handleExternalLink} data-link>
       {children}
     </a>
   );
@@ -51,14 +45,20 @@ const LinkRenderer = ({ url, children }) => {
 
 // Use external link renderer when images are not allowed
 const imageHandler =
-  (renderImages) =>
+  (renderImages, filesBySrc) =>
   ({ src, alt }) => {
     const filteredSrc = xssFilters.uriInDoubleQuotedAttr(src);
     if (filteredSrc !== src) {
       console.warn(XSS_ALERT);
     }
+    // Replace image src for base64 payload if src corresponds to an index on
+    // imagesBySrc.
+    let imgSrc = filteredSrc;
+    const file = filesBySrc && filesBySrc[filteredSrc];
+    if (file) imgSrc = `data:${file.mime};base64,${file.payload}`;
+
     return renderImages ? (
-      <img src={filteredSrc} alt={alt} />
+      <img src={imgSrc} alt={alt} />
     ) : (
       <LinkRenderer url={filteredSrc}>{alt}</LinkRenderer>
     );
@@ -89,9 +89,9 @@ const blockquoteHandler =
     return <blockquote>{newChildren}</blockquote>;
   };
 
-export const customRenderers = (renderImages, isDiff) => {
+export const customRenderers = ({ renderImages, isDiff, filesBySrc }) => {
   return {
-    img: imageHandler(renderImages),
+    img: imageHandler(renderImages, filesBySrc),
     a: linkHandler,
     blockquote: blockquoteHandler(isDiff),
   };

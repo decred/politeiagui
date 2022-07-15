@@ -7,6 +7,7 @@ function RecordsStatusList({ status, onRenderNextStatus }) {
   function handleFetchNextInventoryPage() {
     setPage(page + 1);
   }
+
   const { inventoryStatus, inventory } = ticketvoteInventory.useFetch({
     status,
     page,

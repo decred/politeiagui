@@ -63,11 +63,11 @@ const commentsVotesSlice = createSlice({
 });
 
 // Selectors
-export const selectCommentsVotesStatus = (state) => state.commentsVotes.status;
+export const selectCommentsVotesStatus = (state) => state.commentsVotes?.status;
 export const selectUserCommentsVotesByToken = (state, { token, userid }) =>
-  state.commentsVotes.byUser?.[userid][token];
+  state.commentsVotes?.byUser[userid]?.[token];
 
 // Errors
-export const selectCommentsVotesError = (state) => state.commentsVotes.error;
+export const selectCommentsVotesError = (state) => state.commentsVotes?.error;
 
 export default commentsVotesSlice.reducer;

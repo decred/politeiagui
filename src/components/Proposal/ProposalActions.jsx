@@ -38,7 +38,8 @@ const UnvettedActions = ({ proposal }) => {
             onClick={withProposal(onCensor)}
             className={classNames("margin-right-s", styles.reportButton)}
             noBorder
-            kind="secondary">
+            kind="secondary"
+          >
             Report as spam
           </Button>
           <Button onClick={withProposal(onApprove)}>Approve</Button>
@@ -104,7 +105,8 @@ const PublicActions = ({
               onClick={withProposal(onCensor)}
               className={classNames("margin-right-s", styles.reportButton)}
               noBorder
-              kind="secondary">
+              kind="secondary"
+            >
               Report as spam
             </Button>
           </AdminContent>
@@ -132,7 +134,8 @@ const PublicActions = ({
         <AdminContent>
           <div
             className="justify-right margin-top-m"
-            data-testid="proposal-set-billing-button">
+            data-testid="proposal-set-billing-button"
+          >
             <Button onClick={withProposal(onSetBillingStatus)}>
               Set Billing Status
             </Button>
@@ -143,10 +146,8 @@ const PublicActions = ({
         <AdminContent>
           <div className="justify-right margin-top-m">
             <Button
-              onClick={withProposal(
-                onStartRunoffVote,
-                resetRfpSubmissionsData
-              )}>
+              onClick={withProposal(onStartRunoffVote, resetRfpSubmissionsData)}
+            >
               Start Runoff Vote
             </Button>
           </div>

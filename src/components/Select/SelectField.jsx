@@ -19,7 +19,8 @@ const SelectField = ({ name, options, disabled, ...props }) => {
             onChange={onSelectChange}
             options={options}
             isDisabled={disabled}
-            {...props}></Select>
+            {...props}
+          ></Select>
         );
       }}
     </FormikConsumer>

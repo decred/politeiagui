@@ -5,7 +5,8 @@ const SubmitButton = ({ isSubmitting, disableSubmit, isValid }) => (
   <Button
     type="submit"
     kind={!isValid || disableSubmit ? "disabled" : "primary"}
-    loading={isSubmitting}>
+    loading={isSubmitting}
+  >
     Submit
   </Button>
 );

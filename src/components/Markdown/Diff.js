@@ -33,7 +33,8 @@ const DiffHeader = ({
               className="linkish"
               style={{ marginRight: "10px" }}
               onClick={onToggleFilesDiff}
-              href="">
+              href=""
+            >
               {filesDiff ? "Text Changes" : "Attachments changes"}
               {isNewFile && <span className="new-file-indicator" />}
             </span>
@@ -58,12 +59,14 @@ const DiffBody = ({
     <div className="diff-text-preview-toggle" onClick={onToggleTextDiffPreview}>
       <div
         className={!preview ? "diff-active-toggle" : ""}
-        onClick={!preview ? onToggleTextDiffPreview : null}>
+        onClick={!preview ? onToggleTextDiffPreview : null}
+      >
         View version {version}
       </div>
       <div
         className={preview ? "diff-active-toggle" : ""}
-        onClick={preview ? onToggleTextDiffPreview : null}>
+        onClick={preview ? onToggleTextDiffPreview : null}
+      >
         Text changes
       </div>
     </div>

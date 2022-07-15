@@ -6,32 +6,39 @@ import gfm from "remark-gfm";
 import { customRenderers } from "./helpers";
 import "./styles.css";
 
-export const MarkdownRenderer = ({
+export function MarkdownRenderer({
   body,
+  filesBySrc = {},
   className,
   renderImages = true,
   isDiff,
   disallowedElements,
-}) => (
-  <div className={className} data-testid="markdown-renderer">
-    <ReactMarkdown
-      className={classNames("markdown-body", isDiff && "markdown-diff")}
-      skipHtml={true}
-      unwrapDisallowed={true}
-      remarkPlugins={[gfm]}
-      components={customRenderers(renderImages, isDiff)}
-      disallowedElements={disallowedElements}
-    >
-      {body}
-    </ReactMarkdown>
-  </div>
-);
+}) {
+  return (
+    <div className={className} data-testid="markdown-renderer">
+      <ReactMarkdown
+        className={classNames("markdown-body", isDiff && "markdown-diff")}
+        skipHtml={true}
+        unwrapDisallowed={true}
+        remarkPlugins={[gfm]}
+        components={customRenderers({
+          renderImages,
+          isDiff,
+          filesBySrc,
+        })}
+        disallowedElements={disallowedElements}
+      >
+        {body}
+      </ReactMarkdown>
+    </div>
+  );
+}
 
-MarkdownRenderer.prototype = {
+MarkdownRenderer.propTypes = {
   body: PropTypes.string,
+  filesBySrc: PropTypes.object,
   className: PropTypes.string,
-  confirmWithModal: PropTypes.bool,
   renderImages: PropTypes.bool,
-  displayExternalLikWarning: PropTypes.bool,
-  escapeHtml: PropTypes.bool,
+  isDiff: PropTypes.bool,
+  disallowedElements: PropTypes.arrayOf(PropTypes.string),
 };

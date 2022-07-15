@@ -23,7 +23,8 @@ export const Row = ({
         wrap && styles.wrap,
         className
       )}
-      onClick={onClick}>
+      onClick={onClick}
+    >
       {children}
     </div>
   );

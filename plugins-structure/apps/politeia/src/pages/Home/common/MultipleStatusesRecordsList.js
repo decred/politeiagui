@@ -17,7 +17,9 @@ function MultipleStatusesRecordsList({ statuses }) {
     <ul key={key}>
       <RecordsStatusList
         status={status}
-        onRenderNextStatus={handleRenderNextStatus}
+        onRenderNextStatus={
+          key === statusesToRender.length - 1 ? handleRenderNextStatus : null
+        }
       />
     </ul>
   ));

@@ -1,11 +1,14 @@
 import React from "react";
+import { router } from "@politeiagui/core/router";
 import {
   MarkdownRenderer,
+  ModalImages,
   RecordCard,
   RecordToken,
+  ThumbnailGrid,
   useModal,
 } from "@politeiagui/common-ui";
-import { decodeProposalRecord } from "./utils";
+import { decodeProposalRecord, getImagesByDigest } from "./utils";
 import {
   ProposalDownloads,
   ProposalMetadata,
@@ -13,7 +16,7 @@ import {
   ProposalStatusTag,
   ProposalSubtitle,
 } from "./common";
-import { Button, ButtonIcon } from "pi-ui";
+import { Button, ButtonIcon, Message } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
 import ModalProposalDiff from "./ModalProposalDiff";
@@ -23,37 +26,60 @@ const ProposalDetails = ({
   voteSummary,
   piSummary,
   onFetchRecordTimestamps,
-  onFetchVersion,
 }) => {
   const [open] = useModal();
 
   const proposalDetails = decodeProposalRecord(record);
+  const body = proposalDetails.body;
+
+  const imagesByDigest = getImagesByDigest(body, proposalDetails.attachments);
+  const imagesNotInText = proposalDetails.attachments.filter(
+    (f) => !imagesByDigest[f.digest]
+  );
+
   function handleShowRawMarkdown() {
-    window.location.pathname = `/record/${getShortToken(
-      proposalDetails.token
-    )}/raw`;
+    router.navigateTo(`/record/${getShortToken(proposalDetails.token)}/raw`);
   }
-  async function handleFetchVersion(version) {
-    const proposalVersion = await onFetchVersion(version);
-    const { body: oldBody } = decodeProposalRecord(proposalVersion);
-    const { body: newBody } = proposalDetails;
-    open(ModalProposalDiff, { oldBody, newBody });
+  async function handleChangeVersion(version) {
+    open(ModalProposalDiff, {
+      oldVersion: version === proposalDetails.version ? version - 1 : version,
+      currentProposal: proposalDetails,
+      newVersion: proposalDetails.version,
+      token: proposalDetails.token,
+      onFetchTimestamps: onFetchRecordTimestamps,
+    });
   }
+  function handleOpenImageModal(index) {
+    const images = imagesNotInText
+      .filter((f) => f.mime === "image/png")
+      .map((file) => ({
+        src: `data:${file.mime};base64,${file.payload}`,
+        alt: file.name,
+      }));
+    open(ModalImages, { images, activeIndex: index });
+  }
+
+  const isAbandoned = proposalDetails.archived || proposalDetails.censored;
 
   return (
     <div>
+      {isAbandoned && (
+        <Message kind="warning">
+          Reason: {proposalDetails.abandonmentReason}
+        </Message>
+      )}
       <RecordCard
         token={proposalDetails.token}
         title={proposalDetails.name}
+        isDimmed={isAbandoned}
         subtitle={
           <ProposalSubtitle
             userid={proposalDetails.author.userid}
             username={proposalDetails.author.username}
-            publishedat={proposalDetails.timestamps.publishedat}
-            editedat={proposalDetails.timestamps.editedat}
+            timestamps={proposalDetails.timestamps}
             token={proposalDetails.token}
             version={proposalDetails.version}
-            onChangeVersion={handleFetchVersion}
+            onChangeVersion={handleChangeVersion}
           />
         }
         rightHeader={<ProposalStatusTag piSummary={piSummary} />}
@@ -64,7 +90,16 @@ const ProposalDetails = ({
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
           </div>
         }
-        thirdRow={<MarkdownRenderer body={proposalDetails.body} />}
+        thirdRow={
+          <div className={styles.proposalBody}>
+            <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
+            <ThumbnailGrid
+              files={imagesNotInText}
+              readOnly
+              onClick={handleOpenImageModal}
+            />
+          </div>
+        }
         fourthRow={
           <>
             <Button>Click Me</Button>

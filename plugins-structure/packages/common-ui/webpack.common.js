@@ -1,15 +1,17 @@
 const path = require("path");
 const pkgName = require("./package.json").name;
 
-const jsRules = {
-  test: /\.js?$/,
-  loader: "babel-loader",
-  exclude: /node_modules/,
-  options: {
-    presets: ["@babel/preset-env", "@babel/preset-react"],
-    plugins: ["@babel/plugin-transform-runtime"],
+const jsRules = [
+  {
+    test: /\.js?$/,
+    loader: "babel-loader",
+    exclude: /node_modules/,
+    options: {
+      presets: ["@babel/preset-env", "@babel/preset-react"],
+      plugins: ["@babel/plugin-transform-runtime"],
+    },
   },
-};
+];
 
 const cssRules = [
   {
@@ -40,6 +42,13 @@ const svgRules = [
   },
 ];
 
+const markdownRules = [
+  {
+    test: /\.md$/,
+    use: "raw-loader",
+  },
+];
+
 module.exports = {
   entry: "./src/index.js",
   output: {
@@ -52,7 +61,7 @@ module.exports = {
     clean: true,
   },
   module: {
-    rules: [jsRules, ...cssRules, ...svgRules],
+    rules: [...jsRules, ...cssRules, ...svgRules, ...markdownRules],
   },
   resolve: {
     fallback: {

@@ -2,7 +2,7 @@
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   color: var(--text-color);
-  font-family: "Source Sans Prop", sans-serif;
+  font-family: var(--font-family-text);
   font-size: var(--font-size-regular);
   line-height: 1.5;
   word-wrap: break-word;
@@ -501,25 +501,4 @@
 
 .markdown-body hr {
   border-bottom-color: #eee;
-}
-
-/* DIFF */
-.added {
-  color: var(--color-green);
-  background-color: #bffccc54;
-}
-.added > pre {
-  color: var(--color-green);
-  border: var(--color-green) 1px solid;
-  background-color: #bffccc1c !important;
-}
-.removed {
-  color: var(--color-orange);
-  background-color: #ffcccc57;
-}
-
-.removed > pre {
-  color: var(--color-orange);
-  border: var(--color-orange) 1px solid;
-  background-color: #ffcccc1c !important;
 }

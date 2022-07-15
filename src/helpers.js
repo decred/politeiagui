@@ -485,13 +485,17 @@ export const getDomainName = (contractorDomains, op) => {
 
 /**
  * Converts { day, month, year } object to an unix second timestamp
- * uses 23:59 of that day as time.
+ * If `endOfDay` is active, returns the 23:59 time for given date. Else, returns
+ * 00:00.
  * @param {object} date
+ * @param {boolean} endOfDay
  */
-export const convertObjectToUnixTimestamp = (date) => {
+export const convertObjectToUnixTimestamp = (date, endOfDay) => {
   if (!date) return 0;
   const { day, month, year } = date;
-  return new Date(Date.UTC(year, month - 1, day, 23, 59)).getTime() / 1000;
+  return endOfDay
+    ? new Date(year, month - 1, day, 23, 59, 59).getTime() / 1000
+    : new Date(year, month - 1, day, 0, 0, 1).getTime() / 1000;
 };
 
 /** INLINE IMAGES HELPERS */

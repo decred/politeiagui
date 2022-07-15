@@ -1,13 +1,10 @@
-// @politeiagui/core is available for the plugin usage
 import ReactDOM from "react-dom";
-// Dev Pages
-import AllStatusesPage from "../dev/pages/AllStatuses";
+import AllStatusPage from "../dev/pages/AllStatuses";
 
-// Routes for ticketvote plugin
 export const routes = [
   {
-    path: "/ticketvote",
-    view: AllStatusesPage,
+    path: "/",
+    view: AllStatusPage,
     cleanup: () =>
       ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
   },

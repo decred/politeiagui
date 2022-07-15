@@ -73,7 +73,8 @@ const DigitsInput = ({
           className,
           styles.digitsWrapper,
           focused && styles.focusedInput
-        )}>
+        )}
+      >
         {digits.map((value, index) => {
           return (
             <NumberInput

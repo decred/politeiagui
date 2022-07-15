@@ -39,7 +39,8 @@ const ModalExternalLink = ({ show, onClose, link }) => {
             borderRadius: "6px",
             background: "#dcdcdc5c",
             width: "100%"
-          }}>
+          }}
+        >
           <Text>{tmpLink.protocol + "//"}</Text>
           <Text color="orange">{tmpLink.hostname}</Text>
           <Text>{tmpLink.pathname + tmpLink.search + tmpLink.hash}</Text>

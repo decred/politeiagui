@@ -45,7 +45,8 @@ const ModalInviteContractor = ({ show, onClose }) => {
       title={success ? "Invite sent!" : "Invite Contractor"}
       show={show}
       onClose={onClose}
-      iconComponent={icon}>
+      iconComponent={icon}
+    >
       {!success && (
         <P style={{ marginBottom: "20px" }}>
           Please, provide the email to where to send the invitation
@@ -61,7 +62,8 @@ const ModalInviteContractor = ({ show, onClose }) => {
             email: Yup.string().email("Invalid email").required("Required"),
             isTemp: Yup.boolean()
           })}
-          onSubmit={onInvite}>
+          onSubmit={onInvite}
+        >
           {({
             Form,
             Actions,

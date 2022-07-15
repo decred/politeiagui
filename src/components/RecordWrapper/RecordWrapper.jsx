@@ -35,13 +35,15 @@ export const Event = ({ event, timestamp, className, size, additionInfo }) => (
   <DateTooltip
     timestamp={timestamp}
     placement="bottom"
-    additionInfo={additionInfo}>
+    additionInfo={additionInfo}
+  >
     {({ timeAgo }) => (
       <Text
         id={`event-${event}-${timestamp}`}
         className={classNames(styles.eventTooltip, className)}
         truncate
-        size={size}>
+        size={size}
+      >
         {`${event} ${timeAgo}`}
       </Text>
     )}
@@ -57,7 +59,8 @@ export const RecordToken = ({ token, isCopyable }) => {
           id={`proposal-token-${token}`}
           data-testid="record-token"
           truncate
-          tooltipPlacement={shouldPlaceTooltipLeft ? "left" : "bottom"}>
+          tooltipPlacement={shouldPlaceTooltipLeft ? "left" : "bottom"}
+        >
           {token}
         </CopyableText>
       )}
@@ -79,7 +82,8 @@ export const Title = ({ children, url, ...props }) => {
   return (
     <Wrapper
       to={url}
-      className={classNames(styles.baseTitle, url && styles.underlineTitle)}>
+      className={classNames(styles.baseTitle, url && styles.underlineTitle)}
+    >
       <H2 {...props} data-testid="record-title">
         {children}
       </H2>
@@ -92,7 +96,8 @@ export const Subtitle = ({ children, separatorSymbol = "•" }) => (
     className={classNames("margin-top-s", styles.subtitleWrapper)}
     SeparatorComponent={() => (
       <span className={styles.subtitleSeparator}>{separatorSymbol}</span>
-    )}>
+    )}
+  >
     {children}
   </Join>
 );
@@ -102,7 +107,8 @@ export const JoinTitle = ({ children, className, separatorSymbol = "•" }) => (
     className={classNames(className, styles.flexWrap)}
     SeparatorComponent={() => (
       <span className={styles.subtitleSeparator}>{separatorSymbol}</span>
-    )}>
+    )}
+  >
     {children}
   </Join>
 );
@@ -112,7 +118,8 @@ export const Edit = ({ url, tabIndex, disabled }) => (
     to={url || ""}
     tabIndex={tabIndex}
     data-testid="record-edit-button"
-    className={styles.editButton}>
+    className={styles.editButton}
+  >
     <ButtonIcon type="edit" disabled={disabled} />
   </Link>
 );
@@ -123,7 +130,8 @@ export const Status = ({ children, disableMobileView, className }) => (
       styles.status,
       disableMobileView && styles.disableMobileView,
       className
-    )}>
+    )}
+  >
     {children}
   </div>
 );
@@ -168,7 +176,8 @@ export const Header = React.memo(function Header({
             className={classNames(
               styles.titleEditWrapper,
               isRfp && styles.rfpTitleWrapper
-            )}>
+            )}
+          >
             {isRfp && <RfpTag />}
             {title}
             {edit}
@@ -200,7 +209,8 @@ export const ChartsLink = ({ token, legacytoken }) => {
         isDarkTheme && styles.darkActionsTooltip
       )}
       placement="bottom"
-      content="Voting Charts">
+      content="Voting Charts"
+    >
       <UILink
         target="_blank"
         rel="nofollow noopener noreferrer"
@@ -221,12 +231,14 @@ export const MarkdownLink = ({ to, active = false, onClick }) => {
         isDarkTheme && styles.darkActionsTooltip
       )}
       placement="bottom"
-      content={active ? "See rendered markdown" : "See raw markdown"}>
+      content={active ? "See rendered markdown" : "See raw markdown"}
+    >
       <UILink
         target="_blank"
         rel="nofollow noopener noreferrer"
         href={to}
-        onClick={onClick}>
+        onClick={onClick}
+      >
         <ButtonIcon type="markdown" viewBox="0 0 208 128" />
       </UILink>
     </Tooltip>
@@ -246,13 +258,15 @@ export const CommentsLink = ({
       to={url}
       gray={!isDarkTheme}
       dark={isDarkTheme}
-      className={classNames(styles.commentsLink, className)}>
+      className={classNames(styles.commentsLink, className)}
+    >
       {showIcon && <Icon type="discuss" className="margin-right-s" />}
       <span
         className={classNames(
           styles.commentsNumber,
           isDarkTheme && styles.darkCommentsNumber
-        )}>
+        )}
+      >
         {numOfComments}
       </span>
       Comments
@@ -269,7 +283,8 @@ export const RfpProposalLink = ({ url, rfpTitle }) => {
         className={classNames(
           !isDarkTheme && styles.proposedFor,
           isDarkTheme && styles.darkProposedFor
-        )}>
+        )}
+      >
         Proposed for{" "}
       </span>
       <Link to={url}>{rfpTitle}</Link>
@@ -330,7 +345,8 @@ export const LinkSection = ({ children, className, title }) => (
     className={className}
     title={title}
     closeOnItemClick={false}
-    data-testid="record-links">
+    data-testid="record-links"
+  >
     {React.Children.toArray(children).map((link, i) => (
       <DropdownItem key={i}>{link}</DropdownItem>
     ))}

@@ -19,7 +19,8 @@ const RouterProvider = ({ location, children, ...rest }) => {
   }, [location]);
   return (
     <routerCtx.Provider
-      value={{ ...ctxValue, navigationHistory: navigationHistory.current }}>
+      value={{ ...ctxValue, navigationHistory: navigationHistory.current }}
+    >
       {children}
     </routerCtx.Provider>
   );

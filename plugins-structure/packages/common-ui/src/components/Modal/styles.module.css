@@ -12,3 +12,30 @@
   display: flex;
   justify-content: end;
 }
+
+.modalExternalLink > * {
+  margin-top: var(--spacing-1);
+}
+
+.modalExternalLink .center {
+  text-align: center;
+}
+
+.modalExternalLink .right {
+  text-align: end;
+}
+
+.modalExternalLinkUrl {
+  display: inline-block;
+  border: 1px solid var(--color-gray-light);
+  padding: 0.5em;
+  border-radius: 0.6rem;
+  background: rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-top: var(--spacing-1);
+  user-select: all;
+}
+
+.modalImage {
+  max-width: 100%;
+}

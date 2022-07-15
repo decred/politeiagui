@@ -36,7 +36,8 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
       <Text
         data-testid={`score-${isLike ? "like" : "dislike"}`}
         size="small"
-        className={classNames(styles.likesResult, "unselectable")}>
+        className={classNames(styles.likesResult, "unselectable")}
+      >
         {count}
       </Text>
     ),
@@ -52,7 +53,8 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
             disabled && styles.likeDisabled
           )}
           data-testid="like-btn"
-          onClick={handleDebounceVote(handleLike)}>
+          onClick={handleDebounceVote(handleLike)}
+        >
           <Icon iconColor={likeColor} backgroundColor={likeColor} type="like" />
         </button>
         {renderCount(upLikes, true)}
@@ -64,7 +66,8 @@ const Likes = ({ upLikes, downLikes, onLike, onDislike, option, disabled }) => {
             disabled && styles.likeDisabled
           )}
           data-testid="dislike-btn"
-          onClick={handleDebounceVote(handleDislike)}>
+          onClick={handleDebounceVote(handleDislike)}
+        >
           <Icon
             iconColor={dislikeColor}
             backgroundColor={dislikeColor}

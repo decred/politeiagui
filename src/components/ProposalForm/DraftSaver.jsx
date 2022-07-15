@@ -13,7 +13,8 @@ const DraftSaver = ({
   setValues,
   dirty,
   submitSuccess,
-  mapBlobToFile
+  mapBlobToFile,
+  setTouched
 }) => {
   const [draftId, setDraftId] = useState(getQueryStringValue("draft"));
   const {
@@ -97,7 +98,7 @@ const DraftSaver = ({
         const filteredFiles = files.filter(
           (file) => !markdownFiles.includes(file)
         );
-        setValues({
+        const newValues = {
           name,
           description: text,
           files: filteredFiles,
@@ -108,17 +109,20 @@ const DraftSaver = ({
           endDate,
           amount,
           domain
-        });
+        };
+        setValues(newValues);
+        setTouched(newValues);
       }
     },
-    [draftProposals, dirty, draftId, setValues, mapBlobToFile]
+    [draftProposals, dirty, draftId, setValues, mapBlobToFile, setTouched]
   );
   return (
     <Button
       type="button"
       kind={saving || !canSaveDraft ? "disabled" : "secondary"}
       loading={saving}
-      onClick={handleSave}>
+      onClick={handleSave}
+    >
       {saved ? "Saved ✓" : "Save Draft"}
     </Button>
   );

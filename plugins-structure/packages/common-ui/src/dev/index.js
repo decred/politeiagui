@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import {
-  MarkdownDiffHTML,
   MarkdownEditor,
   MarkdownRenderer,
   createEditorCommand,
 } from "../components/Markdown";
+import { MarkdownDiffHTML } from "../components/Diff";
 import { MultiContentPage, SingleContentPage, TabsBanner } from "../layout";
 import {
   Button,
@@ -21,7 +21,12 @@ import {
   useTheme,
 } from "pi-ui";
 import "pi-ui/dist/index.css";
-import { ModalConfirm, ModalProvider, useModal } from "../components";
+import {
+  ModalConfirm,
+  ModalExternalLink,
+  ModalProvider,
+  useModal,
+} from "../components";
 
 const themes = {
   [DEFAULT_LIGHT_THEME_NAME]: { ...defaultLightTheme },
@@ -118,17 +123,24 @@ function ThemeButtons() {
 function ModalButton() {
   const [open] = useModal();
   return (
-    <Button
-      onClick={() =>
-        open(ModalConfirm, {
-          onSubmit: () => {
-            console.log("confirmed");
-          },
-        })
-      }
-    >
-      Open Modal
-    </Button>
+    <div>
+      <Button
+        onClick={() =>
+          open(ModalConfirm, {
+            onSubmit: () => {
+              console.log("confirmed");
+            },
+          })
+        }
+      >
+        Modal Confirm
+      </Button>
+      <Button
+        onClick={() => open(ModalExternalLink, { link: "https://github.com" })}
+      >
+        Modal External Link
+      </Button>
+    </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Column, H2, Row } from "pi-ui";
+import { Card, Column, H2, Row, classNames } from "pi-ui";
 import styles from "./styles.module.css";
 
 export function RecordCard({
@@ -11,11 +11,20 @@ export function RecordCard({
   thirdRow,
   fourthRow,
   footer,
+  isDimmed,
+  className,
+  headerClassName,
 }) {
   return (
-    <Card className={styles.card}>
-      <Row>
-        <Column xs={12} sm={7}>
+    <Card
+      className={classNames(
+        styles.card,
+        isDimmed && styles.dimmedCard,
+        className
+      )}
+    >
+      <Row className={classNames(headerClassName)}>
+        <Column xs={12} sm={12} md={7}>
           {!titleLink ? (
             <H2>{title}</H2>
           ) : (
@@ -26,7 +35,7 @@ export function RecordCard({
             </H2>
           )}
         </Column>
-        <Column xs={12} sm={5} className={styles.rightHeader}>
+        <Column xs={12} sm={12} md={5} className={styles.rightHeader}>
           {rightHeader}
         </Column>
         <Column xs={12}>

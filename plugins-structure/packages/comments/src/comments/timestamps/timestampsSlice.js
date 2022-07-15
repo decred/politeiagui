@@ -70,12 +70,12 @@ const commentsTimestampsSlice = createSlice({
 
 // Selectors
 export const selectCommentsTimestampsStatus = (state) =>
-  state.commentsTimestamps.status;
+  state.commentsTimestamps?.status;
 export const selectCommentsTimestampsByToken = (state, token) =>
-  state.commentsTimestamps.byToken[token];
+  state.commentsTimestamps?.byToken[token];
 
 // Errors
 export const selectCommentsTimestampsError = (state) =>
-  state.commentsTimestamps.error;
+  state.commentsTimestamps?.error;
 
 export default commentsTimestampsSlice.reducer;

@@ -12,7 +12,8 @@ const ProposalFormLoader = () => {
       width={800}
       speed={2}
       primaryColor={primaryColor}
-      secondaryColor={secondaryColor}>
+      secondaryColor={secondaryColor}
+    >
       <rect x="0" y="30" width="800" height="200" />
       <rect x="630" y="250" width="170" height="50" />
     </ContentLoader>

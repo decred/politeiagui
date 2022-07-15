@@ -1,47 +1,13 @@
-import ReactDOM from "react-dom";
 import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
-import { ticketvoteConstants } from "@politeiagui/ticketvote";
-import { commentsConstants } from "@politeiagui/comments";
-import { Details, Home } from "../pages";
-import homeReducer from "../pages/Home/homeSlice";
-import detailsReducer from "../pages/Details/detailsSlice";
-import { reducersArray as piReducers } from "../pi";
-import { createAppRoute } from "./utils";
+import { DetailsRoute, HomeRoute, NewProposalRoute } from "../pages";
 import { decodeProposalRecord } from "../components/Proposal/utils";
-
-const homeReducerObj = {
-  key: "home",
-  reducer: homeReducer,
-};
-
-const detailsReducerObj = {
-  key: "details",
-  reducer: detailsReducer,
-};
+import { routeCleanup } from "../utils/routeCleanup";
 
 export const routes = [
-  createAppRoute({
-    path: "/",
-    requiredPolicies: ["records", "comments", "ticketvote"],
-    reducers: [
-      ...ticketvoteConstants.reducersArray,
-      ...commentsConstants.reducersArray,
-      homeReducerObj,
-    ],
-    Component: Home,
-  }),
-  createAppRoute({
-    path: "/record/:token",
-    requiredPolicies: ["pi", "comments", "ticketvote"],
-    reducers: [
-      ...ticketvoteConstants.reducersArray,
-      ...commentsConstants.reducersArray,
-      ...piReducers,
-      detailsReducerObj,
-    ],
-    Component: Details,
-  }),
+  HomeRoute,
+  NewProposalRoute,
+  DetailsRoute,
   {
     path: "/record/:token/raw",
     view: async ({ token }) => {
@@ -53,7 +19,6 @@ export const routes = [
         "#root"
       ).innerHTML = `<pre style="white-space: pre-line;margin: 1rem">${proposalDetails.body}</pre>`);
     },
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    cleanup: routeCleanup,
   },
 ];
