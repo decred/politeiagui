@@ -213,7 +213,8 @@ export const ChartsLink = ({ token, legacytoken }) => {
       <UILink
         target="_blank"
         rel="nofollow noopener noreferrer"
-        href={`https://${hostName}/proposal/${legacytoken || token}`}>
+        href={`https://${hostName}/proposal/${legacytoken || token}`}
+      >
         <ButtonIcon type="chart" />
       </UILink>
     </Tooltip>

@@ -5,7 +5,8 @@ import { Link as RouterLink } from "react-router-dom";
 const Link = ({ to, children, ...props }) => (
   <UILink
     {...props}
-    customComponent={(otherProps) => <RouterLink to={to} {...otherProps} />}>
+    customComponent={(otherProps) => <RouterLink to={to} {...otherProps} />}
+  >
     {children}
   </UILink>
 );

@@ -289,13 +289,22 @@ const ProposalDetail = ({ Main, match, history }) => {
                   collapseBodyContent={!!threadParentID}
                 />
                 <Message className="margin-bottom-m">
-                {proposal?.legacytoken && (
-                  <P>
-                  This proposal was submitted to a previous version of politeia that saved all proposal data to a git repo. The original proposal data, including all proposal signatures and timestamps, can be found <PiUiLink target="_blank"
-                  rel="noopener noreferrer"
-                  href={`https://github.com/decred-proposals/mainnet/tree/master/${proposal.legacytoken}`}>here</PiUiLink>.
-                </P>
-                )}
+                  {proposal?.legacytoken && (
+                    <P>
+                      This proposal was submitted to a previous version of
+                      politeia that saved all proposal data to a git repo. The
+                      original proposal data, including all proposal signatures
+                      and timestamps, can be found{" "}
+                      <PiUiLink
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={`https://github.com/decred-proposals/mainnet/tree/master/${proposal.legacytoken}`}
+                      >
+                        here
+                      </PiUiLink>
+                      .
+                    </P>
+                  )}
                 </Message>
                 {!isCensoredProposal(proposal) &&
                   !commentsLoading &&
