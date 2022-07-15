@@ -194,7 +194,6 @@ export const Header = React.memo(function Header({
 });
 
 export const ChartsLink = ({ token, legacytoken }) => {
-  console.log(legacytoken);
   const { apiInfo } = useLoader();
   const { themeName } = useTheme();
   const hostName = apiInfo.testnet
