@@ -288,8 +288,8 @@ const ProposalDetail = ({ Main, match, history }) => {
                   extended
                   collapseBodyContent={!!threadParentID}
                 />
-                <Message className="margin-bottom-m">
-                  {proposal?.legacytoken && (
+                {proposal?.legacytoken && (
+                  <Message className="margin-bottom-m">
                     <P>
                       This proposal was submitted to a previous version of
                       politeia that saved all proposal data to a git repo. The
@@ -304,8 +304,8 @@ const ProposalDetail = ({ Main, match, history }) => {
                       </PiUiLink>
                       .
                     </P>
-                  )}
-                </Message>
+                  </Message>
+                )}
                 {!isCensoredProposal(proposal) &&
                   !commentsLoading &&
                   commentsFinishedLoading &&
