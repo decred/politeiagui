@@ -161,7 +161,7 @@ const parseProposalIndexFile = (proposal = {}) => {
 // its metadata & status changes
 export const parseRawProposal = (proposal) => {
   // Parse metdata
-  const { name, startdate, enddate, domain, amount } =
+  const { name, startdate, enddate, domain, amount, legacytoken } =
     parseProposalMetadata(proposal);
   const { linkby, linkto } = parseVoteMetadata(proposal);
   const { description } = parseProposalIndexFile(proposal);
@@ -181,6 +181,7 @@ export const parseRawProposal = (proposal) => {
     amount: amount / 100, // BE stores amount in cents - calculate USD.
     startDate: startdate,
     endDate: enddate,
+    legacytoken,
     domain,
     linkby,
     userid: usermds.userid || proposal.userid,

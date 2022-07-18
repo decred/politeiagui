@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useEffect, useState } from "react";
-import { Card, Message, P, classNames } from "pi-ui";
+import { Card, Message, P, classNames, Link as PiUiLink } from "pi-ui";
 import get from "lodash/fp/get";
 import { withRouter } from "react-router-dom";
 import Proposal from "src/components/Proposal";
@@ -288,6 +288,24 @@ const ProposalDetail = ({ Main, match, history }) => {
                   extended
                   collapseBodyContent={!!threadParentID}
                 />
+                <Message className="margin-bottom-m">
+                  {proposal?.legacytoken && (
+                    <P>
+                      This proposal was submitted to a previous version of
+                      politeia that saved all proposal data to a git repo. The
+                      original proposal data, including all proposal signatures
+                      and timestamps, can be found{" "}
+                      <PiUiLink
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={`https://github.com/decred-proposals/mainnet/tree/master/${proposal.legacytoken}`}
+                      >
+                        here
+                      </PiUiLink>
+                      .
+                    </P>
+                  )}
+                </Message>
                 {!isCensoredProposal(proposal) &&
                   !commentsLoading &&
                   commentsFinishedLoading &&

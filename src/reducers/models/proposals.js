@@ -35,8 +35,6 @@ import {
   parseReceivedProposalsMap,
   parseRawProposal
 } from "src/helpers";
-// TODO: remove legacy
-import legacyProposals from "src/legacyproposals.json";
 
 const mapStatusToName = {
   [PROPOSAL_STATUS_UNREVIEWED]: UNREVIEWED,
@@ -65,11 +63,6 @@ const DEFAULT_STATE = {
   allProposalsByUserId: {},
   allTokensByUserId: {},
   numOfProposalsByUserId: {},
-  // TODO: remove legacy
-  // In tests legacyProposals.proposals is undefined, thus the need for `|| []`.
-  legacyProposals: (legacyProposals.proposals || []).map((p) =>
-    shortRecordToken(p.censorshiprecord.token)
-  ),
   newProposalToken: null
 };
 

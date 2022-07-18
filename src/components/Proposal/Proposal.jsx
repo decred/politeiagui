@@ -14,11 +14,7 @@ import Markdown from "../Markdown";
 import ModalSearchVotes from "../ModalSearchVotes";
 import RecordWrapper from "../RecordWrapper";
 import IconButton from "src/components/IconButton";
-import {
-  getProposalStatusTagProps,
-  getLegacyProposalStatusTagProps,
-  getStatusBarData
-} from "./helpers";
+import { getProposalStatusTagProps, getStatusBarData } from "./helpers";
 import {
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_RFP_SUBMISSION,
@@ -28,7 +24,6 @@ import {
   getMarkdownContent,
   getVotesReceived,
   isAbandonedProposal,
-  isLegacyAbandonedProposal,
   isCensoredProposal,
   isPublicProposal,
   isClosedProposal,
@@ -148,6 +143,7 @@ const Proposal = React.memo(function Proposal({
     version,
     linkby,
     linkto,
+    legacytoken,
     proposedFor,
     type,
     rfpSubmissions,
@@ -173,21 +169,12 @@ const Proposal = React.memo(function Proposal({
   );
   const fullToken = censorshiprecord && censorshiprecord.token;
   const votesCount = !!voteSummary && getVotesReceived(voteSummary);
-  const {
-    proposalURL,
-    authorURL,
-    commentsURL,
-    // TODO: remove legacy
-    isLegacy,
-    rfpProposalURL,
-    legacyRfpName
-  } = useProposalURLs(shortToken, userid, isRfpSubmission, linkto);
+  const { proposalURL, authorURL, commentsURL, rfpProposalURL } =
+    useProposalURLs(shortToken, userid, isRfpSubmission, linkto);
   const isPublic = isPublicProposal(proposal);
   const isVotingFinished = isVotingFinishedProposal(voteSummary);
   const isVoteActive = isVoteActiveProposal(voteSummary);
-  const isAbandoned =
-    isAbandonedProposal(proposalSummary) ||
-    (isLegacy && isLegacyAbandonedProposal(proposal));
+  const isAbandoned = isAbandonedProposal(proposalSummary);
   const isCensored = isCensoredProposal(proposal);
   const isClosed = isClosedProposal(proposalSummary);
   const proposalStatusReason =
@@ -205,8 +192,7 @@ const Proposal = React.memo(function Proposal({
   const isPublicAccessible = isPublic || isAbandoned || isCensored;
   const isAuthor = currentUser && currentUser.username === username;
   const isVotingAuthorized = isVotingAuthorizedProposal(voteSummary);
-  const isEditable =
-    isAuthor && isEditableProposal(proposal, voteSummary) && !isLegacy;
+  const isEditable = isAuthor && isEditableProposal(proposal, voteSummary);
   const { apiInfo } = useLoader();
   const mobile = useMediaQuery("(max-width: 560px)");
   const showEditedDate = version > 1 && timestamp !== publishedat;
@@ -246,9 +232,11 @@ const Proposal = React.memo(function Proposal({
     [files, rawMarkdown]
   );
 
-  const statusTagProps = isLegacy
-    ? getLegacyProposalStatusTagProps(proposal, voteSummary, isDarkTheme)
-    : getProposalStatusTagProps(proposal, proposalSummary, isDarkTheme);
+  const statusTagProps = getProposalStatusTagProps(
+    proposal,
+    proposalSummary,
+    isDarkTheme
+  );
 
   const { text: proposalStatusLabel } = statusTagProps || {};
   const hasProposalStatusInformation =
@@ -298,7 +286,6 @@ const Proposal = React.memo(function Proposal({
                 <Title
                   id={`proposal-title-${shortToken}`}
                   truncate
-                  isLegacy={isLegacy}
                   linesBeforeTruncate={2}
                   url={proposalURL}
                 >
@@ -328,19 +315,11 @@ const Proposal = React.memo(function Proposal({
               isRfp={isRfp}
               isRfpSubmission={isRfpSubmission}
               rfpProposalLink={
-                <RfpProposalLink
-                  url={rfpProposalURL}
-                  rfpTitle={isLegacy ? legacyRfpName : proposedFor}
-                  isLegacy={isLegacy}
-                />
+                <RfpProposalLink url={rfpProposalURL} rfpTitle={proposedFor} />
               }
               subtitle={
                 <Subtitle>
-                  <Author
-                    username={username}
-                    url={authorURL}
-                    isLegacy={isLegacy}
-                  />
+                  <Author username={username} url={authorURL} />
                   {isRfp && linkby && (
                     <Event
                       event={`${isRfpActive ? "expires" : "expired"}`}
@@ -456,7 +435,7 @@ const Proposal = React.memo(function Proposal({
                       eligibleVotes={getEligibleTickets(voteSummary)}
                       quorumVotes={getQuorumInVotes(voteSummary)}
                       votesReceived={getVotesReceived(voteSummary)}
-                      onSearchVotes={!isLegacy ? openSearchVotesModal : null}
+                      onSearchVotes={openSearchVotesModal}
                     />
                   }
                 />
@@ -494,13 +473,9 @@ const Proposal = React.memo(function Proposal({
             )}
             {isPublicAccessible && !extended && (
               <Row justify="space-between">
-                <CommentsLink
-                  numOfComments={commentsCount}
-                  url={commentsURL}
-                  isLegacy={isLegacy}
-                />
+                <CommentsLink numOfComments={commentsCount} url={commentsURL} />
                 <div>
-                  {(isVoteActive || isVotingFinished) && (
+                  {(isVoteActive || isVotingFinished) && !legacytoken && (
                     <ChartsLink token={fullToken} />
                   )}
                 </div>
@@ -569,7 +544,7 @@ const Proposal = React.memo(function Proposal({
                     )}
                     url={window.location.origin + proposalURL}
                   />
-                  {(isVoteActive || isVotingFinished) && (
+                  {(isVoteActive || isVotingFinished) && !legacytoken && (
                     <ChartsLink token={fullToken} />
                   )}
                   {extended && (
@@ -586,7 +561,6 @@ const Proposal = React.memo(function Proposal({
                 rfpSubmissionsVoteSummaries={
                   isRfp && rfpSubmissions && rfpSubmissions.voteSummaries
                 }
-                isLegacy={isLegacy}
               />
             </LoggedInContent>
           </>

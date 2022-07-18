@@ -8,30 +8,9 @@ import {
   PROPOSAL_VOTING_ACTIVE
 } from "../../constants";
 import { shortRecordToken } from "src/helpers";
-import votesstatus from "src/legacyvotestatuses";
 
 const DEFAULT_STATE = {
-  // TODO: remove legacy
-  // In tests votesstatus.votesstatus is undefined, thus the need for `|| []`.
-  byToken: (votesstatus.votesstatus || [])
-    .map((st) => {
-      return {
-        ...st,
-        results: st.results.map((res) => ({
-          id: res.option.id,
-          description: res.option.description,
-          votebit: res.option.bits,
-          votes: res.votesreceived
-        }))
-      };
-    })
-    .reduce(
-      (acc, cur) => ({
-        ...acc,
-        [shortRecordToken(cur.token)]: cur
-      }),
-      {}
-    ),
+  byToken: [],
   bestBlock: null
 };
 

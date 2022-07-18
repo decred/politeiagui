@@ -11,7 +11,6 @@ export const billingStatusChangesByToken = get([
   "proposals",
   "billingStatusChanges"
 ]);
-export const legacyProposals = get(["proposals", "legacyProposals"]);
 export const allProposalsByUserID = get(["proposals", "allProposalsByUserId"]);
 export const allTokensByUserID = get(["proposals", "allTokensByUserId"]);
 export const numOfProposalsByUserId = get([

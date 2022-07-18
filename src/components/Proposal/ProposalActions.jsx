@@ -54,8 +54,7 @@ const PublicActions = ({
   voteSummary,
   billingStatusChangeMetadata,
   rfpSubmissionsVoteSummaries,
-  resetRfpSubmissionsData,
-  isLegacy
+  resetRfpSubmissionsData
 }) => {
   if (!usePublicProposalActions()) {
     throw Error(
@@ -89,8 +88,7 @@ const PublicActions = ({
   const isUnderDiscussion = isUnderDiscussionProposal(proposal, voteSummary);
   const isApproved = isApprovedProposal(proposal, voteSummary);
   const { numbillingstatuschanges } = billingStatusChangeMetadata || {};
-  const needsBillingStatus =
-    !isLegacy && !isRfp && isApproved && currentUser?.isadmin;
+  const needsBillingStatus = !isRfp && isApproved && currentUser?.isadmin;
   const isSetBillingStatusAllowed =
     needsBillingStatus && numbillingstatuschanges < billingstatuschangesmax;
 
@@ -100,7 +98,7 @@ const PublicActions = ({
 
   return (
     <>
-      {isUnderDiscussion && !isLegacy && (
+      {isUnderDiscussion && (
         <div className="justify-right margin-top-m">
           <AdminContent>
             <Button
