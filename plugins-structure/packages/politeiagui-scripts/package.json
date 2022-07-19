@@ -53,6 +53,7 @@
     "is-ci": "^3.0.1",
     "read-pkg-up": "7.0.0",
     "stream-browserify": "^3.0.0",
+    "which": "2.0.2",
     "yargs-parser": "^21.0.1"
   }
 }

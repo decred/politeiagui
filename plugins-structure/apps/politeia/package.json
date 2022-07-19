@@ -5,15 +5,14 @@
   "module": "src/index.js",
   "license": "MIT",
   "scripts": {
-    "prettier": "prettier \"src/**/*.js\"",
-    "format": "yarn prettier --write",
-    "test:format": "yarn prettier --check",
+    "prettify": "politeiagui-scripts prettify",
+    "prettify:write": "politeiagui-scripts prettify --write",
+    "prettify:check": "politeiagui-scripts prettify --check",
     "test:eslint": "eslint --ext .js ./src",
     "fix:eslint": "eslint --ext .js ./src --fix",
     "test:ci": "yarn test:format && yarn test:eslint && cross-env jest --no-cache",
     "test:dev": "yarn test:format && yarn test:eslint && cross-env jest --watchAll --no-cache",
     "test": "politeiagui-scripts test",
-    "test:coverage": "yarn test:ci; open coverage/lcov-report/index.html",
     "build": "webpack --config webpack.prod.js",
     "bundle-report": "webpack-bundle-analyzer --port 4200 dist/stats.json",
     "start": "politeiagui-scripts start"
