@@ -352,8 +352,11 @@ export const getCommentsUrl = (token, isJsEnabled) =>
 export const getAuthorUrl = (userid, isJsEnabled) =>
   isJsEnabled ? `/user/${userid}` : `${NOJS_ROUTE_PREFIX}/user/${userid}`;
 
-export const goToFullProposal = (history, proposalURL) => () =>
-  history.push(proposalURL);
+export const goToFullProposal = (history, proposalURL) => (e) => {
+  if (!e.metaKey && !e.ctrlKey) {
+    return history.push(proposalURL);
+  }
+};
 
 /**
  * Returns the proposal list with RFP Proposal linked to RFP submissions
