@@ -1,12 +1,11 @@
 ## About Decred
 
-Decred is money evolved. It is secure, adaptable, and sustainable. Decred is
-governed and controlled by the Decred stakeholders, making it the world's first
-cryptocurrency DAO.
+Decred is a blockchain-based cryptocurrency with a strong focus on community
+input, open governance, and sustainable funding for development.
 
 ## About Politeia
 
-Politeia is Decred's proposal system. It is used to request funding from the
+Politeia is Decred's proposal system. It's used to request funding from the
 Decred treasury. Anyone can submit a proposal to Politeia and the Decred
 stakeholders will vote on whether to fund or reject the proposal.
 
