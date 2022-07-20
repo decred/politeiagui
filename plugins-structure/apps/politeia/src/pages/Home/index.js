@@ -24,6 +24,10 @@ export default App.createRoute({
       listenerCreator: fetchNextBatchSummariesListenerCreator,
     },
     {
+      id: "pi/summaries",
+      listenerCreator: fetchNextBatchSummariesListenerCreator,
+    },
+    {
       id: "comments/count",
       listenerCreator: fetchNextBatchCountListenerCreator,
     },

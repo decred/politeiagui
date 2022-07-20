@@ -29,7 +29,7 @@ export default App.createRoute({
       listenerCreator: fetchDetailsListenerCreator,
     },
     {
-      id: "pi/summaries",
+      id: "pi/summaries/single",
       listenerCreator: fetchDetailsListenerCreator,
     },
   ],
