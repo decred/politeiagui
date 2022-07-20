@@ -309,13 +309,14 @@ function getProposalTimestamps(record) {
 }
 
 /**
- * getProposalStatusTagProps returns the formatted `{ type, text }`
- * props for StatusTag component for given record and ticketvote summary.
+ * getProposalStatusTagPropsFromVoteSummary returns the formatted
+ * `{ type, text }` props for StatusTag component for given record and
+ * ticketvote summary.
  * @param {Record} record record object
  * @param {VoteSummary} voteSummary ticketvote summary object
  * @returns {Object} `{ type, text }` StatusTag props
  */
-export function getLegacyProposalStatusTagProps(record, voteSummary) {
+export function getProposalStatusTagPropsFromVoteSummary(record, voteSummary) {
   const voteMetadata = decodeVoteMetadataFile(record.files);
   const isRfpSubmission = voteMetadata?.linkto;
   if (record.status === RECORD_STATUS_PUBLIC && !!voteSummary) {
