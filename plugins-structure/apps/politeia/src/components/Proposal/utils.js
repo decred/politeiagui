@@ -367,67 +367,66 @@ export function getLegacyProposalStatusTagProps(record, voteSummary) {
   return { type: "grayNegative", text: "missing" };
 }
 
-export const getProposalStatusTagProps = (proposalSummary, isDarkTheme) => {
-  if (proposalSummary) {
-    switch (proposalSummary.status) {
-      case PROPOSAL_SUMMARY_STATUS_UNVETTED:
-        return {
-          type: "yellowTime",
-          text: "Unvetted",
-        };
-      case PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED:
-      case PROPOSAL_SUMMARY_STATUS_ABANDONED:
-        return {
-          type: isDarkTheme ? "blueNegative" : "grayNegative",
-          text: "Abandoned",
-        };
+export const getProposalStatusTagProps = (proposalSummary) => {
+  if (!proposalSummary?.status)
+    return { type: "grayNegative", text: "missing" };
 
-      case PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED:
-      case PROPOSAL_SUMMARY_STATUS_CENSORED:
-        return {
-          type: "orangeNegativeCircled",
-          text: "Censored",
-        };
+  switch (proposalSummary.status) {
+    case PROPOSAL_SUMMARY_STATUS_UNVETTED:
+      return {
+        type: "yellowTime",
+        text: "Unvetted",
+      };
+    case PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED:
+    case PROPOSAL_SUMMARY_STATUS_ABANDONED:
+      return {
+        type: "grayNegative",
+        text: "Abandoned",
+      };
 
-      case PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW:
-        return {
-          type: isDarkTheme ? "blueTime" : "blackTime",
-          text: "Waiting for author to authorize voting",
-        };
+    case PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED:
+    case PROPOSAL_SUMMARY_STATUS_CENSORED:
+      return {
+        type: "orangeNegativeCircled",
+        text: "Censored",
+      };
 
-      case PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED:
-        return {
-          type: "yellowTime",
-          text: "Waiting for admin to start voting",
-        };
+    case PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW:
+      return {
+        type: "blackTime",
+        text: "Waiting for author to authorize voting",
+      };
 
-      case PROPOSAL_SUMMARY_STATUS_VOTE_STARTED:
-        return { type: "bluePending", text: "Voting" };
+    case PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED:
+      return {
+        type: "yellowTime",
+        text: "Waiting for admin to start voting",
+      };
 
-      case PROPOSAL_SUMMARY_STATUS_REJECTED:
-        return {
-          type: "orangeNegativeCircled",
-          text: "Rejected",
-        };
+    case PROPOSAL_SUMMARY_STATUS_VOTE_STARTED:
+      return { type: "bluePending", text: "Voting" };
 
-      case PROPOSAL_SUMMARY_STATUS_ACTIVE:
-        return { type: "bluePending", text: "Active" };
+    case PROPOSAL_SUMMARY_STATUS_REJECTED:
+      return {
+        type: "orangeNegativeCircled",
+        text: "Rejected",
+      };
 
-      case PROPOSAL_SUMMARY_STATUS_CLOSED:
-        return { type: "grayNegative", text: "Closed" };
+    case PROPOSAL_SUMMARY_STATUS_ACTIVE:
+      return { type: "bluePending", text: "Active" };
 
-      case PROPOSAL_SUMMARY_STATUS_COMPLETED:
-        return { type: "greenCheck", text: "Completed" };
+    case PROPOSAL_SUMMARY_STATUS_CLOSED:
+      return { type: "grayNegative", text: "Closed" };
 
-      case PROPOSAL_SUMMARY_STATUS_APPROVED:
-        return { type: "greenCheck", text: "Approved" };
+    case PROPOSAL_SUMMARY_STATUS_COMPLETED:
+      return { type: "greenCheck", text: "Completed" };
 
-      default:
-        break;
-    }
+    case PROPOSAL_SUMMARY_STATUS_APPROVED:
+      return { type: "greenCheck", text: "Approved" };
+
+    default:
+      break;
   }
-
-  return { type: "grayNegative", text: "missing" };
 };
 
 /**
