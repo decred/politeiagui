@@ -12,22 +12,22 @@
     "lint:fix": "politeiagui-scripts lint --fix",
     "test": "politeiagui-scripts test",
     "build": "politeiagui-scripts build",
-    "bundle-report": "webpack-bundle-analyzer --port 4200 dist/stats.json",
+    "analyze": "source-map-explorer 'dist/*.js'",
     "start": "politeiagui-scripts start"
   },
   "dependencies": {
-    "politeiagui-scripts": "1.0.0",
     "@politeiagui/comments": "1.0.0",
     "@politeiagui/common-ui": "1.0.0",
     "@politeiagui/core": "1.0.0",
     "@politeiagui/statistics": "1.0.0",
     "@politeiagui/ticketvote": "1.0.0",
-    "js-file-download": "^0.4.12"
+    "js-file-download": "^0.4.12",
+    "politeiagui-scripts": "1.0.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.15.4",
     "@testing-library/jest-dom": "^5.14.1",
     "jest-extended": "^1.0.0",
-    "webpack-bundle-analyzer": "^4.4.2"
+    "source-map-explorer": "^2.5.2"
   }
 }
