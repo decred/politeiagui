@@ -3,6 +3,11 @@ const path = require("path");
 const readPkgUp = require("read-pkg-up");
 const has = require("lodash").has;
 const which = require("which");
+const webpack = require("webpack");
+const chalk = require("chalk");
+const bfj = require("bfj");
+const WebpackDevServer = require("webpack-dev-server");
+const createDevServerConfig = require("./config/webpack/webpackDevServer.config");
 const { cosmiconfigSync } = require("cosmiconfig");
 
 const { packageJson: pkg, path: pkgPath } = readPkgUp.sync({
@@ -45,11 +50,79 @@ function resolveBin(
 
 function hasLocalConfig(moduleName, searchOptions = {}) {
   const explorerSync = cosmiconfigSync(moduleName, searchOptions);
-  console.log("opa", searchOptions.stopDir);
-  console.log(pkgPath);
   const result = explorerSync.search(pkgPath);
-  console.log(result);
   return result !== null;
+}
+
+function start(config) {
+  let compiler;
+  try {
+    compiler = webpack(config);
+  } catch (err) {
+    console.log(chalk.red("Failed to compile."));
+    console.log();
+    console.log(err.message || err);
+    console.log();
+    process.exit(1);
+  }
+
+  const serverConfig = {
+    ...createDevServerConfig
+  };
+
+  const devServer = new WebpackDevServer(serverConfig, compiler);
+  devServer.startCallback(() => {
+    console.log(chalk.cyan("Starting the development server...\n"));
+  });
+
+  ["SIGINT", "SIGTERM"].forEach(function (sig) {
+    process.on(sig, function () {
+      devServer.close();
+      process.exit();
+    });
+  });
+
+  process.stdin.on("end", function () {
+    devServer.close();
+    process.exit();
+  });
+}
+
+function build(config, writeStatsJson) {
+  let compiler;
+  try {
+    compiler = webpack(config);
+  } catch (err) {
+    console.log(chalk.red("Failed to compile."));
+    console.log();
+    console.log(err.message || err);
+    console.log();
+    process.exit(1);
+  }
+
+  return new Promise((resolve, reject) => {
+    compiler.run((err, stats) => {
+      if (err) {
+        console.log(err.message || err);
+        return reject(err);
+      } else {
+        console.log(stats.toJson({ all: false, warnings: true, errors: true }));
+      }
+
+      const resolveArgs = {
+        stats
+      };
+
+      if (writeStatsJson) {
+        return bfj
+          .write(paths.appBuild + "/bundle-stats.json", stats.toJson())
+          .then(() => resolve(resolveArgs))
+          .catch((error) => reject(new Error(error)));
+      }
+
+      return resolve(resolveArgs);
+    });
+  });
 }
 
 module.exports = {
@@ -57,5 +130,7 @@ module.exports = {
   hasPkgProp,
   resolveBin,
   hasLocalConfig,
-  fromRoot
+  fromRoot,
+  start,
+  build
 };

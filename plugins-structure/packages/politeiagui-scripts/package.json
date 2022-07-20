@@ -47,6 +47,7 @@
     "webpack-dev-server": "^4.9.3"
   },
   "dependencies": {
+    "bfj": "^7.0.2",
     "chalk": "4.1.2",
     "cosmiconfig": "7.0.1",
     "cross-spawn": "^7.0.3",
