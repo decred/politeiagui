@@ -11,7 +11,7 @@
     "lint:test": "politeiagui-scripts lint",
     "lint:fix": "politeiagui-scripts lint --fix",
     "test": "politeiagui-scripts test",
-    "build": "webpack --config webpack.prod.js",
+    "build": "politeiagui-scripts build",
     "bundle-report": "webpack-bundle-analyzer --port 4200 dist/stats.json",
     "start": "politeiagui-scripts start"
   },

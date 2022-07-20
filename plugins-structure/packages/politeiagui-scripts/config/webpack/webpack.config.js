@@ -8,10 +8,14 @@ const plugins = (webpackEnv) =>
   webpackEnv === "development"
     ? [
         new HtmlWebpackPlugin({
-          template: "./src/public/index.html"
+          template: resolveApp("./src/public/index.html")
         })
       ]
-    : [];
+    : [
+        new HtmlWebpackPlugin({
+          template: resolveApp("./src/public/index.html")
+        })
+      ];
 
 const pkgName = require(resolveApp("./package.json")).name;
 
@@ -77,7 +81,7 @@ module.exports = function (webpackEnv) {
     mode: isEnvDevelopment ? "development" : "production",
     output: {
       publicPath: "/",
-      path: resolveApp(path.resolve(__dirname, "dist")),
+      path: resolveApp("./dist"),
       library: {
         name: pkgName + ".js",
         type: "umd"
