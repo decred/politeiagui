@@ -18,7 +18,7 @@ try {
 }
 
 const serverConfig = {
-  ...createDevServerConfig,
+  ...createDevServerConfig
 };
 
 const devServer = new WebpackDevServer(serverConfig, compiler);

@@ -1,24 +1,24 @@
-const { merge } = require('webpack-merge');
-const common = require('./webpack.common');
+const { merge } = require("webpack-merge");
+const common = require("./webpack.common");
 
 const dev = {
-  mode: 'development',
-  entry: './src/index.js',
-  devtool: 'inline-source-map',
+  mode: "development",
+  entry: "./src/index.js",
+  devtool: "inline-source-map",
   devServer: {
     port: 3000,
-    historyApiFallback: { index: '' },
+    historyApiFallback: { index: "" },
     proxy: {
       "/api/*": {
         target: "https://localhost:4443",
         secure: false,
         pathRewrite: {
-          "^/api": ""
-        }
-      }
+          "^/api": "",
+        },
+      },
     },
-    https: true
-  }
+    https: true,
+  },
 };
 
 module.exports = merge(common, dev);

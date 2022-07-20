@@ -3,9 +3,10 @@ const path = require("path");
 const readPkgUp = require("read-pkg-up");
 const has = require("lodash").has;
 const which = require("which");
+const { cosmiconfigSync } = require("cosmiconfig");
 
 const { packageJson: pkg, path: pkgPath } = readPkgUp.sync({
-  cwd: fs.realpathSync(process.cwd()),
+  cwd: fs.realpathSync(process.cwd())
 });
 
 const appDirectory = path.dirname(pkgPath);
@@ -42,8 +43,19 @@ function resolveBin(
   }
 }
 
+function hasLocalConfig(moduleName, searchOptions = {}) {
+  const explorerSync = cosmiconfigSync(moduleName, searchOptions);
+  console.log("opa", searchOptions.stopDir);
+  console.log(pkgPath);
+  const result = explorerSync.search(pkgPath);
+  console.log(result);
+  return result !== null;
+}
+
 module.exports = {
   hasFile,
   hasPkgProp,
   resolveBin,
+  hasLocalConfig,
+  fromRoot
 };

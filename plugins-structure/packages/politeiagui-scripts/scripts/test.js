@@ -18,7 +18,7 @@ const config =
   !args.includes("--config") &&
   !hasFile("jest.config.js") &&
   !hasPkgProp("jest")
-    ? ["--config", JSON.stringify(require("../config/jest.config"))]
+    ? ["--config", JSON.stringify(require("../config/jest/jest.config"))]
     : [];
 
 jest.run([...config, ...watch, ...args]);
