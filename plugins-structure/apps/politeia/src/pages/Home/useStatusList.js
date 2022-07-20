@@ -5,6 +5,7 @@ import { records } from "@politeiagui/core/records";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
+import { piSummaries } from "../../pi/summaries";
 
 function areAllEntriesFetched(inventoryList, records) {
   if (!inventoryList) return false;
@@ -17,7 +18,8 @@ function areAllEntriesFetched(inventoryList, records) {
 function useStatusList({ inventory, inventoryStatus }) {
   const homeStatus = useSelector(selectHomeStatus);
   const countComments = useSelector(commentsCount.selectAll);
-  const summaries = useSelector(ticketvoteSummaries.selectAll);
+  const voteSummaries = useSelector(ticketvoteSummaries.selectAll);
+  const proposalSummaries = useSelector(piSummaries.selectAll);
   const recordsPageSize = useSelector((state) =>
     recordsPolicy.selectRule(state, "recordspagesize")
   );
@@ -36,7 +38,8 @@ function useStatusList({ inventory, inventoryStatus }) {
     hasMoreRecords,
     homeStatus,
     countComments,
-    summaries,
+    voteSummaries,
+    proposalSummaries,
     fetchNextBatch,
     recordsInOrder,
     recordsPageSize,

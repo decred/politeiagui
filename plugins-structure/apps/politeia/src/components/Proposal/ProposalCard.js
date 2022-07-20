@@ -3,12 +3,17 @@ import { Button, StatusTag } from "pi-ui";
 import { RecordCard } from "@politeiagui/common-ui";
 import { CommentsCount } from "@politeiagui/comments/ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
-import { decodeProposalRecord, getLegacyProposalStatusTagProps } from "./utils";
+import { decodeProposalRecord, getProposalStatusTagProps } from "./utils";
 import { ProposalStatusBar, ProposalSubtitle } from "./common";
 
-const ProposalCard = ({ record, voteSummary, commentsCount }) => {
+const ProposalCard = ({
+  record,
+  voteSummary,
+  commentsCount,
+  proposalSummary,
+}) => {
   const proposal = decodeProposalRecord(record);
-  const statusTagProps = getLegacyProposalStatusTagProps(record, voteSummary);
+  const statusTagProps = getProposalStatusTagProps(proposalSummary);
   const proposalLink = `/record/${getShortToken(proposal.token)}`;
   return (
     <div>

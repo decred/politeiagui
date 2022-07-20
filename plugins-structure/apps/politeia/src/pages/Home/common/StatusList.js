@@ -33,7 +33,8 @@ function StatusList({
     hasMoreInventory,
     homeStatus,
     countComments,
-    summaries,
+    voteSummaries,
+    proposalSummaries,
     fetchNextBatch,
     recordsInOrder,
     areAllInventoryEntriesFetched,
@@ -82,7 +83,8 @@ function StatusList({
               key={token}
               record={record}
               commentsCount={countComments?.[token]}
-              voteSummary={summaries?.[token]}
+              voteSummary={voteSummaries?.[token]}
+              proposalSummary={proposalSummaries?.[token]}
             />
           );
         })}
