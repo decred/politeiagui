@@ -1,6 +1,7 @@
 export const PI_API_ROUTE = "/api/pi/";
 export const VERSION = "v1";
 
+export const ROUTE_BILLING_STATUS_CHANGES = "/billingstatuschanges";
 export const ROUTE_SUMMARIES = "/summaries";
 export const ROUTE_POLICY = "/policy";
 
