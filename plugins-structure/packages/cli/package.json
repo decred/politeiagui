@@ -40,9 +40,7 @@
     }
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
-    "@testing-library/jest-dom": "^5.14.1",
-    "jest-extended": "^1.0.0"
+    "@babel/plugin-transform-modules-commonjs": "^7.15.4"
   },
   "dependencies": {
     "commander": "^8.3.0"
