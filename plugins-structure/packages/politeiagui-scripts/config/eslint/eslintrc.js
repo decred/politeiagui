@@ -8,8 +8,8 @@ module.exports = {
     "sort-imports": [
       "error",
       {
-        ignoreDeclarationSort: true
-      }
+        ignoreDeclarationSort: true,
+      },
     ],
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
@@ -18,8 +18,8 @@ module.exports = {
         vars: "all",
         varsIgnorePattern: "^_",
         args: "after-used",
-        argsIgnorePattern: "^_"
-      }
-    ]
-  }
+        argsIgnorePattern: "^_",
+      },
+    ],
+  },
 };

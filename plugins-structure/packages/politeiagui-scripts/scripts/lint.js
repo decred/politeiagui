@@ -36,7 +36,7 @@ const cache = args.includes("--no-cache")
   : [
       "--cache",
       "--cache-location",
-      fromRoot("node_modules/.cache/.eslintcache")
+      fromRoot("node_modules/.cache/.eslintcache"),
     ];
 
 const filesGiven = parsedArgs._.length > 0;
@@ -62,7 +62,7 @@ const result = spawn.sync(
     ...cache,
     ...args,
     noEslintRc,
-    ...filesToApply
+    ...filesToApply,
   ],
   { stdio: "inherit" }
 );

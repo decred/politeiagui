@@ -9,6 +9,13 @@
   "bin": {
     "politeiagui-scripts": "./bin/politeiagui-scripts.js"
   },
+  "scripts": {
+    "prettify": "node ./scripts/prettify.js",
+    "prettify:write": "node ./scripts/prettify.js --write",
+    "prettify:check": "node ./scripts/prettify.js --check",
+    "lint:test": "node ./scripts/lint.js",
+    "lint:fix": "node ./scripts/lint.js --fix"
+  },
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/plugin-transform-modules-commonjs": "^7.18.6",

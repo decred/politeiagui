@@ -1,7 +1,7 @@
 module.exports = {
   transform: {
-    "\\.js$": ["babel-jest", { cwd: __dirname }]
+    "\\.js$": ["babel-jest", { cwd: __dirname }],
   },
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["jest-extended/all"]
+  setupFilesAfterEnv: ["jest-extended/all"],
 };

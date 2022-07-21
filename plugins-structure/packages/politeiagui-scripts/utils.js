@@ -15,6 +15,7 @@ const { packageJson: pkg, path: pkgPath } = readPkgUp.sync({
 });
 
 const appDirectory = path.dirname(pkgPath);
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 const fromRoot = (...p) => path.join(appDirectory, ...p);
 const hasFile = (...p) => fs.existsSync(fromRoot(...p));
 const hasPkgProp = (props) => [...props].some((prop) => has(pkg, prop));
@@ -115,7 +116,7 @@ function build(config, writeStatsJson) {
 
       if (writeStatsJson) {
         return bfj
-          .write(paths.appBuild + "/bundle-stats.json", stats.toJson())
+          .write(resolveApp("./dist") + "/bundle-stats.json", stats.toJson())
           .then(() => resolve(resolveArgs))
           .catch((error) => reject(new Error(error)));
       }
