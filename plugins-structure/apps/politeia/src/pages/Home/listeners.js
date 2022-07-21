@@ -1,5 +1,6 @@
 import {
   fetchNextBatch,
+  fetchNextBatchBillingStatuses,
   fetchNextBatchCount,
   fetchNextBatchRecords,
   fetchNextBatchSummaries,
@@ -44,12 +45,18 @@ export const fetchNextBatchRecordsListenerCreator = {
   injectEffect: injectRecordsBatchEffect,
 };
 
+export const fetchNextBatchBillingStatusesListenerCreator = {
+  actionCreator: fetchNextBatchBillingStatuses,
+  injectEffect,
+};
+
 export const listeners = [
   {
     type: "ticketvoteInventory/fetch/fulfilled",
     effect: ({ meta, payload }, listenerApi) => {
-      if (payload.inventory[meta.arg.status].length > 0) {
-        listenerApi.dispatch(fetchNextBatch(meta.arg.status));
+      const { status } = meta.arg;
+      if (payload.inventory[status].length > 0) {
+        listenerApi.dispatch(fetchNextBatch(status));
       }
     },
   },

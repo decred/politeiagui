@@ -3,6 +3,7 @@ import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
 import Home from "./Home";
 import {
+  fetchNextBatchBillingStatusesListenerCreator,
   fetchNextBatchCountListenerCreator,
   fetchNextBatchRecordsListenerCreator,
   fetchNextBatchSummariesListenerCreator,
@@ -26,6 +27,10 @@ export default App.createRoute({
     {
       id: "pi/summaries",
       listenerCreator: fetchNextBatchSummariesListenerCreator,
+    },
+    {
+      id: "pi/billingStatusChanges",
+      listenerCreator: fetchNextBatchBillingStatusesListenerCreator,
     },
     {
       id: "comments/count",
