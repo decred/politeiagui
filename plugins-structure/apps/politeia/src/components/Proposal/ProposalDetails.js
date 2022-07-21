@@ -20,12 +20,14 @@ import { Button, ButtonIcon, Message } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
 import ModalProposalDiff from "./ModalProposalDiff";
+import last from "lodash/last";
 
 const ProposalDetails = ({
   record,
   voteSummary,
   piSummary,
   onFetchRecordTimestamps,
+  billingStatusChanges,
 }) => {
   const [open] = useModal();
 
@@ -60,12 +62,20 @@ const ProposalDetails = ({
   }
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
+  const billingSatusChangeReason =
+    billingStatusChanges && last(billingStatusChanges)?.reason;
 
   return (
     <div>
       {isAbandoned && (
         <Message kind="warning">
           Reason: {proposalDetails.abandonmentReason}
+        </Message>
+      )}
+      {billingSatusChangeReason && (
+        <Message kind="warning">
+          {/* TODO: format message and inform status */}
+          Reason: {billingSatusChangeReason}
         </Message>
       )}
       <RecordCard
