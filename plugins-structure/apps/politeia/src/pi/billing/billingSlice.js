@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../lib/api";
-// TODO: validate billing status changes page size
+import { validatePiBillingStatusChangesPageSize } from "../lib/validation";
 
 export const initialState = {
   byToken: {},
@@ -17,6 +17,12 @@ export const fetchBillingStatusChanges = createAsyncThunk(
       // TODO: user friendly error message
       return rejectWithValue(error.message);
     }
+  },
+  {
+    condition: (body, { getState }) =>
+      body &&
+      !!body.tokens &&
+      validatePiBillingStatusChangesPageSize(getState()),
   }
 );
 

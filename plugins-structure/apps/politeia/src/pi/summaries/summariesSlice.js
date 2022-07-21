@@ -14,6 +14,7 @@ export const fetchPiSummaries = createAsyncThunk(
     try {
       return await api.fetchSummaries(getState(), { tokens });
     } catch (error) {
+      // TODO: user friendly error message
       return rejectWithValue(error.message);
     }
   },
