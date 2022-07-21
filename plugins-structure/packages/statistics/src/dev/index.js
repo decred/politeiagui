@@ -7,7 +7,7 @@ import { recordsPolicy } from "@politeiagui/core/records/policy";
 import {
   getHumanReadableRecordState,
   getHumanReadableRecordStatus,
-  getTokensToFetch
+  getTokensToFetch,
 } from "@politeiagui/core/records/utils";
 
 async function fetchNextBatch({ recordsState, status }) {
@@ -16,7 +16,7 @@ async function fetchNextBatch({ recordsState, status }) {
   const {
     recordsInventory,
     records: recordsObj,
-    recordsPolicy
+    recordsPolicy,
   } = store.getState();
   const pageSize = recordsPolicy.policy.recordspagesize;
   const inventoryList =
@@ -24,7 +24,7 @@ async function fetchNextBatch({ recordsState, status }) {
   const recordsToFetch = getTokensToFetch({
     inventoryList,
     pageSize,
-    lookupTable: recordsObj.records
+    lookupTable: recordsObj.records,
   });
   const res = await store.dispatch(records.fetch({ tokens: recordsToFetch }));
   return res.payload;
@@ -32,17 +32,17 @@ async function fetchNextBatch({ recordsState, status }) {
 
 const publicRecord = {
   recordsState: "vetted",
-  status: "public"
+  status: "public",
 };
 
 const censoredRecord = {
   recordsState: "vetted",
-  status: "censored"
+  status: "censored",
 };
 
 const archivedRecord = {
   recordsState: "vetted",
-  status: "archived"
+  status: "archived",
 };
 
 function getInventoryStatus(state) {
@@ -61,7 +61,7 @@ function getInventoryStatus(state) {
   return {
     inventoryVettedPublicStatus,
     inventoryVettedCensoredStatus,
-    inventoryVettedArchivedStatus
+    inventoryVettedArchivedStatus,
   };
 }
 
@@ -81,7 +81,7 @@ function getInventory(state) {
   return {
     inventoryVettedPublic,
     inventoryVettedCensored,
-    inventoryVettedArchived
+    inventoryVettedArchived,
   };
 }
 
@@ -89,14 +89,14 @@ async function fetchInventory() {
   const {
     inventoryVettedPublicStatus,
     inventoryVettedCensoredStatus,
-    inventoryVettedArchivedStatus
+    inventoryVettedArchivedStatus,
   } = getInventoryStatus(store.getState());
   if (inventoryVettedPublicStatus === "idle") {
     await store.dispatch(
       recordsInventory.fetch({
         ...publicRecord,
         page:
-          recordsInventory.selectLastPage(store.getState(), publicRecord) + 1
+          recordsInventory.selectLastPage(store.getState(), publicRecord) + 1,
       })
     );
   }
@@ -105,7 +105,7 @@ async function fetchInventory() {
       recordsInventory.fetch({
         ...censoredRecord,
         page:
-          recordsInventory.selectLastPage(store.getState(), censoredRecord) + 1
+          recordsInventory.selectLastPage(store.getState(), censoredRecord) + 1,
       })
     );
   }
@@ -114,7 +114,7 @@ async function fetchInventory() {
       recordsInventory.fetch({
         ...archivedRecord,
         page:
-          recordsInventory.selectLastPage(store.getState(), archivedRecord) + 1
+          recordsInventory.selectLastPage(store.getState(), archivedRecord) + 1,
       })
     );
   }
@@ -141,7 +141,7 @@ async function statisticsPage() {
   const {
     inventoryVettedPublic,
     inventoryVettedCensored,
-    inventoryVettedArchived
+    inventoryVettedArchived,
   } = getInventory(store.getState());
   await fetchRecords(inventoryVettedPublic, publicRecord);
   await fetchRecords(inventoryVettedCensored, censoredRecord);
@@ -198,12 +198,12 @@ function calcStatistics(publicRecords, censoredRecords, archivedRecords) {
     if (acc[cur.username]) {
       return {
         ...acc,
-        [cur.username]: acc[cur.username] + 1
+        [cur.username]: acc[cur.username] + 1,
       };
     } else {
       return {
         ...acc,
-        [cur.username]: 1
+        [cur.username]: 1,
       };
     }
   }, {});
@@ -223,8 +223,8 @@ export const routes = [
     path: "/statistics",
     view: async () => {
       document.querySelector("#root").innerHTML = await statisticsPage();
-    }
-  }
+    },
+  },
 ];
 
 let routerInitialized = false;

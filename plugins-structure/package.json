@@ -9,12 +9,12 @@
     ]
   },
   "scripts": {
-    "format": "lerna run format",
-    "fix:eslint": "lerna run fix:eslint",
-    "test": "lerna run test:ci",
-    "start": "lerna run --parallel start",
-    "build": "lerna run build",
-    "build:dev": "lerna run build:dev"
+    "prettify": "lerna run prettify",
+    "prettify:write": "lerna run prettify:write",
+    "prettify:check": "lerna run prettify:check",
+    "lint:test": "lerna run lint",
+    "lint:fix": "lerna run lint:fix",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "lerna": "^4.0.0"
