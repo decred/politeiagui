@@ -42,4 +42,9 @@ const piBillingSlice = createSlice({
   },
 });
 
+export const selectPiBillingStatusChangesByToken = (state, token) =>
+  state.piBilling?.byToken[token];
+export const selectPiBillingStatusChanges = (state) => state.piBilling?.byToken;
+export const selectPiBillingStatus = (state) => state.piBilling?.status;
+
 export default piBillingSlice.reducer;
