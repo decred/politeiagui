@@ -6,6 +6,7 @@ import { recordsPolicy } from "@politeiagui/core/records/policy";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
 import { piSummaries } from "../../pi/summaries";
+import { piBilling } from "../../pi/billing";
 
 function areAllEntriesFetched(inventoryList, records) {
   if (!inventoryList) return false;
@@ -27,6 +28,7 @@ function useStatusList({ inventory, inventoryStatus }) {
     records.selectByTokensBatch(state, inventory)
   );
   const allRecords = useSelector(records.selectAll);
+  const billingStatusChanges = useSelector(piBilling.selectAll);
 
   const hasMoreRecords =
     recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
@@ -44,6 +46,7 @@ function useStatusList({ inventory, inventoryStatus }) {
     recordsInOrder,
     recordsPageSize,
     areAllInventoryEntriesFetched: areAllEntriesFetched(inventory, allRecords),
+    billingStatusChanges,
   };
 }
 

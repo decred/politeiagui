@@ -11,7 +11,7 @@ function Approved() {
   return isListEmpty ? (
     <EmptyList status="approved" />
   ) : (
-    <RecordsStatusList status={"approved"} />
+    <RecordsStatusList status={"approved"} hasBillingStatus />
   );
 }
 
