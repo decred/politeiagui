@@ -17,6 +17,5 @@
   "dependencies": {
     "@politeiagui/core": "1.0.0",
     "politeiagui-scripts": "1.0.0"
-  },
-  "devDependencies": {}
+  }
 }

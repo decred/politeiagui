@@ -24,6 +24,7 @@
     "@reduxjs/toolkit": "^1.8.3",
     "lodash": "^4.17.21",
     "pi-ui": "https://github.com/decred/pi-ui",
+    "prop-types": "15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.30.0",

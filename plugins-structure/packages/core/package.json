@@ -18,15 +18,6 @@
     "./listeners": "./src/listeners/index.js",
     "./localstorage": "./src/localStorage/index.js"
   },
-  "babel": {
-    "env": {
-      "test": {
-        "plugins": [
-          "@babel/plugin-transform-modules-commonjs"
-        ]
-      }
-    }
-  },
   "scripts": {
     "prettify": "politeiagui-scripts prettify",
     "prettify:write": "politeiagui-scripts prettify --write",
@@ -41,8 +32,6 @@
     "politeiagui-scripts": "1.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
-    "@testing-library/jest-dom": "^5.14.1",
     "jest-extended": "^1.0.0"
   }
 }

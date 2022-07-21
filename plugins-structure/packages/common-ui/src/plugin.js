@@ -1,5 +1,5 @@
 import { pluginSetup } from "@politeiagui/core";
-import { themeReducer } from "@politeiagui/common-ui/layout";
+import { themeReducer } from "../layout";
 // Apply styles once theme is imported.
 import "pi-ui/dist/index.css";
 

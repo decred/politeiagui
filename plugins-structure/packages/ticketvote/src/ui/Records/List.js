@@ -7,18 +7,18 @@ import { records } from "@politeiagui/core/records";
 import { getTokensToFetch } from "@politeiagui/core/records/utils";
 import { TicketvoteRecordVoteStatusBar } from "../Vote";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
-import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
+import { ticketvotePolicy } from "../../ticketvote/policy";
 
 export function TicketvoteRecordsList({ status }) {
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const { inventory, inventoryStatus } = ticketvoteInventory.useFetch({
     status,
-    page,
+    page
   });
 
   const { summaries, onFetchSummaries } = ticketvoteSummaries.useFetch({
-    tokens: inventory,
+    tokens: inventory
   });
 
   const { policy, policyStatus } = recordsPolicy.useFetch();
@@ -39,12 +39,12 @@ export function TicketvoteRecordsList({ status }) {
       const recordsToFetch = getTokensToFetch({
         inventoryList: inventory,
         lookupTable: recordsObject,
-        pageSize: policy.recordspagesize,
+        pageSize: policy.recordspagesize
       });
       const voteSummariesToFetch = getTokensToFetch({
         inventoryList: inventory,
         lookupTable: summaries,
-        pageSize: tktvotePolicy.summariespagesize,
+        pageSize: tktvotePolicy.summariespagesize
       });
       dispatch(records.fetch({ tokens: recordsToFetch }));
       onFetchSummaries(voteSummariesToFetch);

@@ -19,14 +19,11 @@
     "@politeiagui/comments": "1.0.0",
     "@politeiagui/common-ui": "1.0.0",
     "@politeiagui/core": "1.0.0",
-    "@politeiagui/statistics": "1.0.0",
     "@politeiagui/ticketvote": "1.0.0",
     "js-file-download": "^0.4.12",
     "politeiagui-scripts": "1.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
-    "@testing-library/jest-dom": "^5.14.1",
     "jest-extended": "^1.0.0",
     "source-map-explorer": "^2.5.2"
   }
