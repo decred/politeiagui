@@ -10,7 +10,11 @@ import {
   RecordCard,
   ThumbnailGrid,
 } from "@politeiagui/common-ui";
-import { decodeProposalRecord, getFilesDiff, getImagesByDigest } from "./utils";
+import {
+  decodeProposalRecord,
+  getFilesDiff,
+  getImagesByDigest,
+} from "../../pi/proposals/utils";
 import { ProposalDownloads } from "./common";
 import styles from "./ModalProposalDiff.module.css";
 import range from "lodash/range";

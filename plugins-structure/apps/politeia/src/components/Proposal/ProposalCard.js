@@ -3,7 +3,10 @@ import { Button, StatusTag } from "pi-ui";
 import { RecordCard } from "@politeiagui/common-ui";
 import { CommentsCount } from "@politeiagui/comments/ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
-import { decodeProposalRecord, getProposalStatusTagProps } from "./utils";
+import {
+  decodeProposalRecord,
+  getProposalStatusTagProps,
+} from "../../pi/proposals/utils";
 import { ProposalStatusBar, ProposalSubtitle } from "./common";
 
 const ProposalCard = ({

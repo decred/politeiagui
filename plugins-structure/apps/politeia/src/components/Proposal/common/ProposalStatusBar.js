@@ -1,6 +1,6 @@
 import React from "react";
 import { TicketvoteRecordVoteStatusBar } from "@politeiagui/ticketvote/ui";
-import { showVoteStatusBar } from "../utils";
+import { showVoteStatusBar } from "../../../pi/proposals/utils";
 
 function ProposalStatusBar({ voteSummary }) {
   return (

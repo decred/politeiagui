@@ -8,7 +8,10 @@ import {
   ThumbnailGrid,
   useModal,
 } from "@politeiagui/common-ui";
-import { decodeProposalRecord, getImagesByDigest } from "./utils";
+import {
+  decodeProposalRecord,
+  getImagesByDigest,
+} from "../../pi/proposals/utils";
 import {
   ProposalDownloads,
   ProposalMetadata,
