@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../lib/api";
 import { validatePiBillingStatusChangesPageSize } from "../lib/validation";
+import last from "lodash/last";
 
 export const initialState = {
   byToken: {},
@@ -50,6 +51,10 @@ const piBillingSlice = createSlice({
 
 export const selectPiBillingStatusChangesByToken = (state, token) =>
   state.piBilling?.byToken[token];
+export const selectPiBillingLastStatusChangeByToken = (state, token) => {
+  const statusChanges = selectPiBillingStatusChangesByToken(state, token);
+  return last(statusChanges);
+};
 export const selectPiBillingStatusChanges = (state) => state.piBilling?.byToken;
 export const selectPiBillingStatus = (state) => state.piBilling?.status;
 

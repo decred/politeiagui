@@ -27,8 +27,8 @@ function useProposalDetails({ token }) {
   const piSummary = useSelector((state) =>
     piSummaries.selectByToken(state, fullToken)
   );
-  const billingStatusChanges = useSelector((state) =>
-    piBilling.selectByToken(state, fullToken)
+  const billingStatusChange = useSelector((state) =>
+    piBilling.selectLastByToken(state, fullToken)
   );
   const recordDetailsError = useSelector(records.selectError);
   const voteSummaryError = useSelector(ticketvoteSummaries.selectError);
@@ -56,7 +56,7 @@ function useProposalDetails({ token }) {
     piSummary,
     record,
     voteSummary,
-    billingStatusChanges,
+    billingStatusChange,
   };
 }
 

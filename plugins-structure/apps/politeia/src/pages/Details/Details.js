@@ -31,7 +31,7 @@ function Details({ token }) {
     recordDetailsError,
     voteSummaryError,
     commentsError,
-    billingStatusChanges,
+    billingStatusChange,
   } = useProposalDetails({ token });
   // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
@@ -51,7 +51,7 @@ function Details({ token }) {
             record={record}
             voteSummary={voteSummary}
             piSummary={piSummary}
-            billingStatusChanges={billingStatusChanges}
+            billingStatusChange={billingStatusChange}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
           />
           {comments && (

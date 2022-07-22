@@ -1,5 +1,6 @@
 import {
   fetchBillingStatusChanges,
+  selectPiBillingLastStatusChangeByToken,
   selectPiBillingStatus,
   selectPiBillingStatusChanges,
   selectPiBillingStatusChangesByToken,
@@ -10,4 +11,5 @@ export const piBilling = {
   selectStatus: selectPiBillingStatus,
   selectAll: selectPiBillingStatusChanges,
   selectByToken: selectPiBillingStatusChangesByToken,
+  selectLastByToken: selectPiBillingLastStatusChangeByToken,
 };
