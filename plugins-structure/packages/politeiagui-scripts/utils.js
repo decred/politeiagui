@@ -104,10 +104,30 @@ function build(config, writeStatsJson) {
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       if (err) {
-        console.log(err.message || err);
+        console.log(chalk.red("Failed!"));
+        console.log(chalk.red(err.message || err));
         return reject(err);
       } else {
-        console.log(stats.toJson({ all: false, warnings: true, errors: true }));
+        console.log(chalk.green("Success!"));
+        const { errors, warnings } = stats.toJson({
+          all: false,
+          warnings: true,
+          errors: true
+        });
+        let msg = "";
+        if (errors.length !== 0) {
+          for (error of errors) {
+            msg += error.message + "\n\n";
+          }
+          console.log(chalk.red(msg));
+        }
+        msg = "";
+        if (warnings.length !== 0) {
+          for (warning of warnings) {
+            msg += warning.message + "\n\n";
+          }
+          console.log(chalk.yellow(msg));
+        }
       }
 
       const resolveArgs = {
@@ -133,5 +153,6 @@ module.exports = {
   hasLocalConfig,
   fromRoot,
   start,
-  build
+  build,
+  resolveApp
 };
