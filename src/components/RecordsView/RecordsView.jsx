@@ -120,7 +120,7 @@ const RecordsView = ({
         items={filteredRecords}
         renderItem={renderRecord}
         onFetchMore={handleFetchMoreRecords}
-        hasMore={hasMore}
+        hasMore={!!hasMore}
         emptyListComponent={
           <HelpMessage>{getEmptyMessage(tabOption)}</HelpMessage>
         }
