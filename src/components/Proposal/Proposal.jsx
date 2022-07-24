@@ -7,6 +7,7 @@ import {
   useMediaQuery,
   useTheme,
   Tooltip,
+  ButtonIcon,
   DEFAULT_DARK_THEME_NAME
 } from "pi-ui";
 import React, { useMemo } from "react";
@@ -433,9 +434,9 @@ const Proposal = React.memo(function Proposal({
                     <VotesCount
                       isVoteActive={isVoteActive}
                       eligibleVotes={getEligibleTickets(voteSummary)}
+                      quorumPercentage={voteSummary.quorumpercentage}
                       quorumVotes={getQuorumInVotes(voteSummary)}
                       votesReceived={getVotesReceived(voteSummary)}
-                      onSearchVotes={openSearchVotesModal}
                     />
                   }
                 />
@@ -546,6 +547,15 @@ const Proposal = React.memo(function Proposal({
                   />
                   {(isVoteActive || isVotingFinished) && !legacytoken && (
                     <ChartsLink token={fullToken} />
+                  )}
+                  {(isVoteActive && getVotesReceived(voteSummary) > 0) && (
+                    <div>
+                      <ButtonIcon
+                        type="search"
+                        onClick={openSearchVotesModal}
+                        className={styles.voteCountSearch}
+                      />
+                    </div>
                   )}
                   {extended && (
                     <MarkdownLink to={`/record/${shortToken}/raw`} />
