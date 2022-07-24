@@ -548,7 +548,7 @@ const Proposal = React.memo(function Proposal({
                   {(isVoteActive || isVotingFinished) && !legacytoken && (
                     <ChartsLink token={fullToken} />
                   )}
-                  {(isVoteActive && getVotesReceived(voteSummary) > 0) && (
+                  {isVoteActive && getVotesReceived(voteSummary) > 0 && (
                     <div>
                       <ButtonIcon
                         type="search"
