@@ -37,7 +37,11 @@ function useProposalDetails({ token }) {
   }
 
   useEffect(() => {
-    if (recordStatus !== "loading" && !record?.detailsFetched) {
+    if (
+      recordStatus !== "loading" &&
+      recordStatus !== "failed" &&
+      !record?.detailsFetched
+    ) {
       dispatch(fetchProposalDetails(token));
     }
   }, [token, dispatch, recordStatus, record]);
