@@ -7,7 +7,7 @@ jest.mock("fs", () => ({
   readFileSync: jest.fn().mockReturnValue("__PORT__"),
   writeFileSync: jest.fn(),
   mkdirSync: jest.fn(),
-  copyFileSync: jest.fn()
+  copyFileSync: jest.fn(),
 }));
 
 beforeEach(() => {

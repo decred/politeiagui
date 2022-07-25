@@ -11,7 +11,7 @@ const createDevServerConfig = require("./config/webpack/webpackDevServer.config"
 const { cosmiconfigSync } = require("cosmiconfig");
 
 const { packageJson: pkg, path: pkgPath } = readPkgUp.sync({
-  cwd: fs.realpathSync(process.cwd())
+  cwd: fs.realpathSync(process.cwd()),
 });
 
 const appDirectory = path.dirname(pkgPath);
@@ -68,7 +68,7 @@ function start(config) {
   }
 
   const serverConfig = {
-    ...createDevServerConfig
+    ...createDevServerConfig,
   };
 
   const devServer = new WebpackDevServer(serverConfig, compiler);
@@ -112,18 +112,18 @@ function build(config, writeStatsJson) {
         const { errors, warnings } = stats.toJson({
           all: false,
           warnings: true,
-          errors: true
+          errors: true,
         });
         let msg = "";
         if (errors.length !== 0) {
-          for (error of errors) {
+          for (const error of errors) {
             msg += error.message + "\n\n";
           }
           console.log(chalk.red(msg));
         }
         msg = "";
         if (warnings.length !== 0) {
-          for (warning of warnings) {
+          for (const warning of warnings) {
             msg += warning.message + "\n\n";
           }
           console.log(chalk.yellow(msg));
@@ -131,7 +131,7 @@ function build(config, writeStatsJson) {
       }
 
       const resolveArgs = {
-        stats
+        stats,
       };
 
       if (writeStatsJson) {
@@ -154,5 +154,5 @@ module.exports = {
   fromRoot,
   start,
   build,
-  resolveApp
+  resolveApp,
 };

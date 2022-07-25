@@ -6,10 +6,10 @@ module.exports = {
       target: "https://localhost:4443",
       secure: false,
       pathRewrite: {
-        "^/api": ""
-      }
-    }
+        "^/api": "",
+      },
+    },
   },
   open: true,
-  server: "https"
+  server: "https",
 };

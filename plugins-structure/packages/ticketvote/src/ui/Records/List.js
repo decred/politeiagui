@@ -14,11 +14,11 @@ export function TicketvoteRecordsList({ status }) {
   const dispatch = useDispatch();
   const { inventory, inventoryStatus } = ticketvoteInventory.useFetch({
     status,
-    page
+    page,
   });
 
   const { summaries, onFetchSummaries } = ticketvoteSummaries.useFetch({
-    tokens: inventory
+    tokens: inventory,
   });
 
   const { policy, policyStatus } = recordsPolicy.useFetch();
@@ -39,12 +39,12 @@ export function TicketvoteRecordsList({ status }) {
       const recordsToFetch = getTokensToFetch({
         inventoryList: inventory,
         lookupTable: recordsObject,
-        pageSize: policy.recordspagesize
+        pageSize: policy.recordspagesize,
       });
       const voteSummariesToFetch = getTokensToFetch({
         inventoryList: inventory,
         lookupTable: summaries,
-        pageSize: tktvotePolicy.summariespagesize
+        pageSize: tktvotePolicy.summariespagesize,
       });
       dispatch(records.fetch({ tokens: recordsToFetch }));
       onFetchSummaries(voteSummariesToFetch);

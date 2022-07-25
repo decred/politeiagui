@@ -17,21 +17,21 @@ export async function fetchNextRecords(
   const {
     records: { records: recordsObj },
     recordsPolicy: {
-      policy: { recordspagesize }
-    }
+      policy: { recordspagesize },
+    },
   } = state;
 
   const recordsToFetch = getTokensToFetch({
     inventoryList,
     lookupTable: recordsObj,
-    pageSize: recordspagesize
+    pageSize: recordspagesize,
   });
 
   if (!isEmpty(recordsToFetch)) {
     dispatch(
       records.fetch({
         tokens: recordsToFetch,
-        filenames
+        filenames,
       })
     );
   }

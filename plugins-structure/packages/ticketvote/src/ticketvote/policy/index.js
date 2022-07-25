@@ -3,7 +3,7 @@ import {
   selectTicketvotePolicy,
   selectTicketvotePolicyError,
   selectTicketvotePolicyRule,
-  selectTicketvotePolicyStatus
+  selectTicketvotePolicyStatus,
 } from "./policySlice";
 
 import { useTicketvotePolicy } from "./usePolicy";
@@ -14,5 +14,5 @@ export const ticketvotePolicy = {
   selectStatus: selectTicketvotePolicyStatus,
   selectError: selectTicketvotePolicyError,
   selectRule: selectTicketvotePolicyRule,
-  useFetch: useTicketvotePolicy
+  useFetch: useTicketvotePolicy,
 };

@@ -1,12 +1,12 @@
 import reducer, {
   fetchTicketvoteInventory,
-  initialState
+  initialState,
 } from "./inventorySlice";
 import { configureStore } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import {
   getTicketvotePluginErrorMessage,
-  getTicketvoteUserErrorMessage
+  getTicketvoteUserErrorMessage,
 } from "../../lib/errors";
 import policyReducer from "../policy/policySlice";
 
@@ -15,15 +15,15 @@ jest.mock(
   "@politeiagui/core/records",
   () => ({
     records: {
-      fetch: () => jest.fn()
-    }
+      fetch: () => jest.fn(),
+    },
   }),
   { virtual: true }
 );
 jest.mock(
   "@politeiagui/core/records/validation",
   () => ({
-    validateRecordsPageSize: () => true
+    validateRecordsPageSize: () => true,
   }),
   { virtual: true }
 );
@@ -35,7 +35,7 @@ describe("Given the recordsInventorySlice", () => {
   let fetchInventorySpy;
   const params = {
     status: 1,
-    page: 1
+    page: 1,
   };
   beforeEach(() => {
     // mock a minimal store with extra argument
@@ -43,13 +43,13 @@ describe("Given the recordsInventorySlice", () => {
     store = configureStore({
       reducer: {
         ticketvoteInventory: reducer,
-        ticketvotePolicy: policyReducer
+        ticketvotePolicy: policyReducer,
       },
       preloadedState: {
         ticketvotePolicy: {
-          policy: { inventorypagesize: 20 }
-        }
-      }
+          policy: { inventorypagesize: 20 },
+        },
+      },
     });
     fetchInventorySpy = jest.spyOn(api, "fetchInventory");
   });
@@ -65,11 +65,11 @@ describe("Given the recordsInventorySlice", () => {
     it("should not fetch nor fire actions", async () => {
       const invalidStatusParams = {
         status: 10,
-        page: 1
+        page: 1,
       };
 
       const noStatusParams = {
-        page: 1
+        page: 1,
       };
 
       const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
@@ -140,7 +140,7 @@ describe("Given the recordsInventorySlice", () => {
       const fakeToken = "fakeToken";
       const resValue = {
         vetted: { unauthorized: Array(20).fill(fakeToken) },
-        bestblock: 420
+        bestblock: 420,
       };
       fetchInventorySpy.mockResolvedValueOnce(resValue);
 
