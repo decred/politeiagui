@@ -78,3 +78,29 @@ export const validTicketvoteStatuses = [
   ...validStringTicketvoteStatuses,
   ...validNumberTicketvoteStatuses,
 ];
+
+/**
+ * Returns the amount of blocks left to the currentHeight
+ * @param {Number} block
+ * @param {Number} currentHeight
+ * @returns {Number} number of blocks left
+ */
+export function getVoteBlocksDiff(block, currentHeight) {
+  if (!block || !currentHeight) return 0;
+  return +block - currentHeight;
+}
+
+/**
+ * Returns the blocks difference from current block height in milliseconds
+ * @param {Number} block
+ * @param {Number} currentHeight
+ * @param {Number} blockDuration
+ * @returns {Number}
+ */
+export function getTimestampFromBlocks(block, currentHeight, blockDuration) {
+  const blocksDiff = getVoteBlocksDiff(block, currentHeight);
+  const blockTimeMinutes = blocksDiff * blockDuration;
+  const mili = blockTimeMinutes * 60000;
+  const dateMs = new Date(mili + Date.now());
+  return Math.round(dateMs / 1000); // returns unix timestamp
+}

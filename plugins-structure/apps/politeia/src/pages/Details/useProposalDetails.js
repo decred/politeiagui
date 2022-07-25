@@ -6,7 +6,7 @@ import { selectDetailsStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { recordComments } from "@politeiagui/comments/comments";
-import { piBilling, piSummaries } from "../../pi";
+import { piBilling, piSummaries, proposals } from "../../pi";
 
 function useProposalDetails({ token }) {
   const dispatch = useDispatch();
@@ -30,6 +30,15 @@ function useProposalDetails({ token }) {
   const billingStatusChange = useSelector((state) =>
     piBilling.selectLastByToken(state, fullToken)
   );
+
+  // test:
+  const proposalStatusChange = useSelector((state) =>
+    proposals.selectStatusChangeByToken(state, {
+      status: piSummary?.status,
+      token: fullToken,
+    })
+  );
+
   const recordDetailsError = useSelector(records.selectError);
   const voteSummaryError = useSelector(ticketvoteSummaries.selectError);
   const commentsError = useSelector(recordComments.selectError);
