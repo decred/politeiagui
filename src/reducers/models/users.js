@@ -116,11 +116,11 @@ const users = (state = DEFAULT_STATE, action) =>
               users,
               query: { email, username, publickey }
             } = action.payload;
-            const usersByID = users.reduce(
+            const usersByID = users?.reduce(
               (res, user) => ({ ...res, [user.id]: user }),
               {}
             );
-            const usersIds = users.map((user) => user.id);
+            const usersIds = users?.map((user) => user.id);
             const searchedByEmail = !!email;
             const searchedByUsername = !!username;
             const searchedByPublicKey = !!publickey;
@@ -145,21 +145,21 @@ const users = (state = DEFAULT_STATE, action) =>
           [act.RECEIVE_CMS_LOGOUT]: () => onReceiveCMSLogout(state),
           [act.RECEIVE_CMS_USERS]: () => {
             const { users } = action.payload;
-            const byContractorType = users.reduce((res, user) => {
+            const byContractorType = users?.reduce((res, user) => {
               const usersFromContractorType = res[user.contractortype] || [];
               return {
                 ...res,
                 [user.contractortype]: [user, ...usersFromContractorType]
               };
             }, {});
-            const byDomain = users.reduce((res, user) => {
+            const byDomain = users?.reduce((res, user) => {
               const usersFromDomain = res[user.domain] || [];
               return {
                 ...res,
                 [user.domain]: [user, ...usersFromDomain]
               };
             }, {});
-            const byID = users.reduce((res, user) => {
+            const byID = users?.reduce((res, user) => {
               return {
                 ...res,
                 [user.id]: user
