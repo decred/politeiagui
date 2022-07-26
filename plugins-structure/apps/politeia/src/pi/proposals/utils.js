@@ -4,6 +4,8 @@ import {
   getShortToken,
 } from "@politeiagui/core/records/utils";
 import {
+  RECORD_STATE_UNVETTED,
+  RECORD_STATE_VETTED,
   RECORD_STATUS_ARCHIVED,
   RECORD_STATUS_CENSORED,
   RECORD_STATUS_PUBLIC,
@@ -13,27 +15,32 @@ import {
   TICKETVOTE_STATUS_APPROVED,
   TICKETVOTE_STATUS_AUTHORIZED,
   TICKETVOTE_STATUS_FINISHED,
+  TICKETVOTE_STATUS_INELIGIBLE,
   TICKETVOTE_STATUS_REJECTED,
   TICKETVOTE_STATUS_STARTED,
   TICKETVOTE_STATUS_UNAUTHORIZED,
 } from "@politeiagui/ticketvote/constants";
-import { getTimestampFromBlocks } from "@politeiagui/ticketvote/utils";
 import {
-  PROPOSAL_SUMMARY_STATUS_ABANDONED,
-  PROPOSAL_SUMMARY_STATUS_ACTIVE,
-  PROPOSAL_SUMMARY_STATUS_APPROVED,
-  PROPOSAL_SUMMARY_STATUS_CENSORED,
-  PROPOSAL_SUMMARY_STATUS_CLOSED,
-  PROPOSAL_SUMMARY_STATUS_COMPLETED,
-  PROPOSAL_SUMMARY_STATUS_REJECTED,
-  PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW,
-  PROPOSAL_SUMMARY_STATUS_UNVETTED,
-  PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED,
-  PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED,
-  PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED,
-  PROPOSAL_SUMMARY_STATUS_VOTE_STARTED,
+  PROPOSAL_BILLING_STATUS_ACTIVE,
+  PROPOSAL_BILLING_STATUS_CLOSED,
+  PROPOSAL_BILLING_STATUS_COMPLETED,
+  PROPOSAL_STATUS_ABANDONED,
+  PROPOSAL_STATUS_ACTIVE,
+  PROPOSAL_STATUS_APPROVED,
+  PROPOSAL_STATUS_CENSORED,
+  PROPOSAL_STATUS_CLOSED,
+  PROPOSAL_STATUS_COMPLETED,
+  PROPOSAL_STATUS_REJECTED,
+  PROPOSAL_STATUS_UNDER_REVIEW,
+  PROPOSAL_STATUS_UNVETTED,
+  PROPOSAL_STATUS_UNVETTED_ABANDONED,
+  PROPOSAL_STATUS_UNVETTED_CENSORED,
+  PROPOSAL_STATUS_VOTE_AUTHORIZED,
+  PROPOSAL_STATUS_VOTE_ENDED,
+  PROPOSAL_STATUS_VOTE_STARTED,
 } from "../lib/constants";
 import isArray from "lodash/fp/isArray";
+import isEmpty from "lodash/isEmpty";
 
 const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 const PROPOSAL_INDEX_FILENAME = "index.md";
@@ -211,6 +218,7 @@ export function decodeProposalRecord(record) {
     // TODO: remove abandonmentReason
     abandonmentReason: getAbandonmentReason(userMetadata),
     attachments,
+    userMetadata,
   };
 }
 
@@ -225,10 +233,23 @@ export function findStatusMetadataFromPayloads(mdPayloads, status) {
   return publicMd;
 }
 
-export function getRecordStatusChanges(userMetadata) {
-  if (!userMetadata) return null;
+// TODO: Docs
+function getStatusMetadataPayloads(payloads) {
+  if (!payloads) return {};
+  const statusChangePayloads = payloads.filter((p) => p?.status);
+  if (isEmpty(statusChangePayloads)) {
+    // traverse payload arrays
+    return payloads.find((p) => isArray(p));
+  }
+  return statusChangePayloads;
+}
+
+// TODO: Docs
+export function getRecordStatusChangesMetadata(record) {
+  if (!record?.metadata) return;
+  const userMetadata = decodeProposalUserMetadata(record.metadata);
   const payloads = userMetadata.map((md) => md.payload);
-  return payloads.filter((p) => p?.status);
+  return getStatusMetadataPayloads(payloads);
 }
 
 // TODO: kill this
@@ -271,8 +292,6 @@ export function getPublicStatusChangeMetadata(userMetadata) {
   const payloads = userMetadata.map((md) => md.payload);
   return findStatusMetadataFromPayloads(payloads, RECORD_STATUS_PUBLIC);
 }
-
-export function getVotingTimestamps(voteSummary) {}
 
 /**
  * getProposalTimestamps returns published, censored, edited and abandoned
@@ -384,56 +403,56 @@ export const getProposalStatusTagProps = (proposalSummary) => {
     return { type: "grayNegative", text: "missing" };
 
   switch (proposalSummary.status) {
-    case PROPOSAL_SUMMARY_STATUS_UNVETTED:
+    case PROPOSAL_STATUS_UNVETTED:
       return {
         type: "yellowTime",
         text: "Unvetted",
       };
-    case PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED:
-    case PROPOSAL_SUMMARY_STATUS_ABANDONED:
+    case PROPOSAL_STATUS_UNVETTED_ABANDONED:
+    case PROPOSAL_STATUS_ABANDONED:
       return {
         type: "grayNegative",
         text: "Abandoned",
       };
 
-    case PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED:
-    case PROPOSAL_SUMMARY_STATUS_CENSORED:
+    case PROPOSAL_STATUS_UNVETTED_CENSORED:
+    case PROPOSAL_STATUS_CENSORED:
       return {
         type: "orangeNegativeCircled",
         text: "Censored",
       };
 
-    case PROPOSAL_SUMMARY_STATUS_UNDER_REVIEW:
+    case PROPOSAL_STATUS_UNDER_REVIEW:
       return {
         type: "blackTime",
         text: "Waiting for author to authorize voting",
       };
 
-    case PROPOSAL_SUMMARY_STATUS_VOTE_AUTHORIZED:
+    case PROPOSAL_STATUS_VOTE_AUTHORIZED:
       return {
         type: "yellowTime",
         text: "Waiting for admin to start voting",
       };
 
-    case PROPOSAL_SUMMARY_STATUS_VOTE_STARTED:
+    case PROPOSAL_STATUS_VOTE_STARTED:
       return { type: "bluePending", text: "Voting" };
 
-    case PROPOSAL_SUMMARY_STATUS_REJECTED:
+    case PROPOSAL_STATUS_REJECTED:
       return {
         type: "orangeNegativeCircled",
         text: "Rejected",
       };
 
-    case PROPOSAL_SUMMARY_STATUS_ACTIVE:
+    case PROPOSAL_STATUS_ACTIVE:
       return { type: "bluePending", text: "Active" };
 
-    case PROPOSAL_SUMMARY_STATUS_CLOSED:
+    case PROPOSAL_STATUS_CLOSED:
       return { type: "grayNegative", text: "Closed" };
 
-    case PROPOSAL_SUMMARY_STATUS_COMPLETED:
+    case PROPOSAL_STATUS_COMPLETED:
       return { type: "greenCheck", text: "Completed" };
 
-    case PROPOSAL_SUMMARY_STATUS_APPROVED:
+    case PROPOSAL_STATUS_APPROVED:
       return { type: "greenCheck", text: "Approved" };
 
     default:
@@ -490,4 +509,52 @@ export function getImagesByDigest(text, files) {
     imagesByDigest[digest] = file;
   }
   return imagesByDigest;
+}
+
+// TODO: Docs
+export function convertVoteStatusToProposalStatus(voteStatus, recordStatus) {
+  const voteStatusToProposalStatus = {
+    [TICKETVOTE_STATUS_UNAUTHORIZED]: PROPOSAL_STATUS_UNDER_REVIEW,
+    [TICKETVOTE_STATUS_AUTHORIZED]: PROPOSAL_STATUS_VOTE_AUTHORIZED,
+    [TICKETVOTE_STATUS_STARTED]: PROPOSAL_STATUS_VOTE_STARTED,
+    [TICKETVOTE_STATUS_APPROVED]: PROPOSAL_STATUS_APPROVED,
+    [TICKETVOTE_STATUS_REJECTED]: PROPOSAL_STATUS_REJECTED,
+    [TICKETVOTE_STATUS_FINISHED]: PROPOSAL_STATUS_VOTE_ENDED,
+    [TICKETVOTE_STATUS_INELIGIBLE]:
+      recordStatus === RECORD_STATUS_CENSORED
+        ? PROPOSAL_STATUS_CENSORED
+        : PROPOSAL_STATUS_ABANDONED,
+  };
+  return voteStatusToProposalStatus[voteStatus];
+}
+
+// TODO: Docs
+export function convertRecordStatusToProposalStatus(
+  recordStatus,
+  recordState = RECORD_STATE_VETTED
+) {
+  if (!recordStatus) return;
+  const mapStateAndStatusToProposalStatus = {
+    [RECORD_STATE_UNVETTED]: {
+      [RECORD_STATUS_UNREVIEWED]: PROPOSAL_STATUS_UNVETTED,
+      [RECORD_STATUS_ARCHIVED]: PROPOSAL_STATUS_UNVETTED_ABANDONED,
+      [RECORD_STATUS_CENSORED]: PROPOSAL_STATUS_UNVETTED_CENSORED,
+    },
+    [RECORD_STATE_VETTED]: {
+      [RECORD_STATUS_PUBLIC]: PROPOSAL_STATUS_UNDER_REVIEW,
+      [RECORD_STATUS_ARCHIVED]: PROPOSAL_STATUS_ABANDONED,
+      [RECORD_STATUS_CENSORED]: PROPOSAL_STATUS_CENSORED,
+    },
+  };
+  return mapStateAndStatusToProposalStatus[recordState][recordStatus];
+}
+
+// TODO: Docs
+export function convertBillingStatusToProposalStatus(billingStatus) {
+  const mapBillingStatusToProposalStatus = {
+    [PROPOSAL_BILLING_STATUS_ACTIVE]: PROPOSAL_STATUS_ACTIVE,
+    [PROPOSAL_BILLING_STATUS_CLOSED]: PROPOSAL_STATUS_CLOSED,
+    [PROPOSAL_BILLING_STATUS_COMPLETED]: PROPOSAL_STATUS_COMPLETED,
+  };
+  return mapBillingStatusToProposalStatus[billingStatus];
 }

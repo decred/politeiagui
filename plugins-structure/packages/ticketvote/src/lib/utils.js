@@ -94,12 +94,16 @@ export function getVoteBlocksDiff(block, currentHeight) {
  * Returns the blocks difference from current block height in milliseconds
  * @param {Number} block
  * @param {Number} currentHeight
- * @param {Number} blockDuration
+ * @param {Number} blockDurationMinutes Block duration in minutes
  * @returns {Number}
  */
-export function getTimestampFromBlocks(block, currentHeight, blockDuration) {
-  const blocksDiff = getVoteBlocksDiff(block, currentHeight);
-  const blockTimeMinutes = blocksDiff * blockDuration;
+export function getTimestampFromBlocks(
+  currentBlockHeight,
+  bestBlock,
+  blockDurationMinutes = 2 // TODO: SUPPORT MAINNET AND TESTNET.
+) {
+  const blocksDiff = getVoteBlocksDiff(currentBlockHeight, bestBlock);
+  const blockTimeMinutes = blocksDiff * blockDurationMinutes;
   const mili = blockTimeMinutes * 60000;
   const dateMs = new Date(mili + Date.now());
   return Math.round(dateMs / 1000); // returns unix timestamp

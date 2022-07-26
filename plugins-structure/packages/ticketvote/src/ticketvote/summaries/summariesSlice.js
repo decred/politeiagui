@@ -1,6 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
-import { getTicketvoteStatusCode } from "../../lib/utils";
+import {
+  getTicketvoteStatusCode,
+  getTimestampFromBlocks,
+} from "../../lib/utils";
+import {
+  TICKETVOTE_STATUS_APPROVED,
+  TICKETVOTE_STATUS_FINISHED,
+  TICKETVOTE_STATUS_REJECTED,
+  TICKETVOTE_STATUS_STARTED,
+} from "../../lib/constants";
 import { getTicketvoteError } from "../../lib/errors";
 import {
   validateTicketvoteStatus,
@@ -99,6 +108,30 @@ export const selectTicketvoteSummariesFetchedTokens = (state, tokens) => {
     ? pick(tokens)(state.ticketvoteSummaries.byToken)
     : undefined;
   return Object.keys(summariesByTokens);
+};
+
+export const selectTicketvoteSummariesStatusChangesByRecordToken = (
+  state,
+  token
+) => {
+  const voteSummary = selectTicketvoteSummariesByRecordToken(state, token);
+  if (!voteSummary) return;
+  const { bestblock, endblockheight, startblockheight, status } = voteSummary;
+  if (!endblockheight || !startblockheight) return;
+  // TODO: Support both mainnet and testnet block params
+  const start = {
+    timestamp: getTimestampFromBlocks(startblockheight, bestblock),
+    status: TICKETVOTE_STATUS_STARTED,
+  };
+  const end = {
+    timestamp: getTimestampFromBlocks(endblockheight, bestblock),
+    status:
+      status === TICKETVOTE_STATUS_APPROVED ||
+      status === TICKETVOTE_STATUS_REJECTED
+        ? status
+        : TICKETVOTE_STATUS_FINISHED,
+  };
+  return [start, end];
 };
 
 // Error

@@ -31,17 +31,13 @@ function useProposalDetails({ token }) {
     piBilling.selectLastByToken(state, fullToken)
   );
 
-  // test:
-  const proposalStatusChange = useSelector((state) =>
-    proposals.selectStatusChangeByToken(state, {
-      status: piSummary?.status,
-      token: fullToken,
-    })
-  );
-
   const recordDetailsError = useSelector(records.selectError);
   const voteSummaryError = useSelector(ticketvoteSummaries.selectError);
   const commentsError = useSelector(recordComments.selectError);
+
+  const recordStatusChanges = useSelector((state) =>
+    proposals.selectStatusChangesByToken(state, fullToken)
+  );
 
   async function onFetchRecordTimestamps({ token, version }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
@@ -66,6 +62,7 @@ function useProposalDetails({ token }) {
     record,
     voteSummary,
     billingStatusChange,
+    recordStatusChanges,
   };
 }
 

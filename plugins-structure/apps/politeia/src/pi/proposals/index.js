@@ -1,5 +1,5 @@
-import { selectProposalStatusChangeByToken } from "./selectors";
+import { selectProposalStatusChangesByToken } from "./selectors";
 
 export const proposals = {
-  selectStatusChangeByToken: selectProposalStatusChangeByToken,
+  selectStatusChangesByToken: selectProposalStatusChangesByToken,
 };
