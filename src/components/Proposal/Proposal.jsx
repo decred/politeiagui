@@ -548,9 +548,10 @@ const Proposal = React.memo(function Proposal({
                   {(isVoteActive || isVotingFinished) && !legacytoken && (
                     <ChartsLink token={fullToken} />
                   )}
-                  {(isVoteActive || isVotingFinished) && getVotesReceived(voteSummary) > 0 && (
-                    <SearchVotes onClick={openSearchVotesModal} />
-                  )}
+                  {(isVoteActive || isVotingFinished) &&
+                    getVotesReceived(voteSummary) > 0 && (
+                      <SearchVotes onClick={openSearchVotesModal} />
+                    )}
                   {extended && (
                     <MarkdownLink to={`/record/${shortToken}/raw`} />
                   )}
