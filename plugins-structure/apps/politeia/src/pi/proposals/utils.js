@@ -215,8 +215,6 @@ export function decodeProposalRecord(record) {
     proposalMetadata,
     archived: record.status === RECORD_STATUS_ARCHIVED,
     censored: record.status === RECORD_STATUS_CENSORED,
-    // TODO: remove abandonmentReason
-    abandonmentReason: getAbandonmentReason(userMetadata),
     attachments,
     userMetadata,
   };
@@ -250,18 +248,6 @@ export function getRecordStatusChangesMetadata(record) {
   const userMetadata = decodeProposalUserMetadata(record.metadata);
   const payloads = userMetadata.map((md) => md.payload);
   return getStatusMetadataPayloads(payloads);
-}
-
-// TODO: kill this
-function getAbandonmentReason(userMetadata) {
-  if (!userMetadata) return null;
-  const payloads = userMetadata.map((md) => md.payload);
-  for (const status of [RECORD_STATUS_ARCHIVED, RECORD_STATUS_CENSORED]) {
-    const { reason } = findStatusMetadataFromPayloads(payloads, status);
-    if (reason) {
-      return reason;
-    }
-  }
 }
 
 /**
