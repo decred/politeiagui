@@ -325,66 +325,12 @@ function getProposalTimestamps(record) {
 }
 
 /**
- * getProposalStatusTagPropsFromVoteSummary returns the formatted
- * `{ type, text }` props for StatusTag component for given record and
- * ticketvote summary.
- * @param {Record} record record object
- * @param {VoteSummary} voteSummary ticketvote summary object
+ * getProposalStatusTagProps returns the formatted `{ type, text }` props for
+ * StatusTag component for given proposal summary.
+ * @param {Object} proposalSummary record object
  * @returns {Object} `{ type, text }` StatusTag props
  */
-export function getProposalStatusTagPropsFromVoteSummary(record, voteSummary) {
-  const voteMetadata = decodeVoteMetadataFile(record.files);
-  const isRfpSubmission = voteMetadata?.linkto;
-  if (record.status === RECORD_STATUS_PUBLIC && !!voteSummary) {
-    switch (voteSummary.status) {
-      case TICKETVOTE_STATUS_UNAUTHORIZED:
-        return {
-          type: "blackTime",
-          text: isRfpSubmission
-            ? "Waiting for runoff vote to start"
-            : "Waiting for author to authorize voting",
-        };
-      case TICKETVOTE_STATUS_AUTHORIZED:
-        return {
-          type: "yellowTime",
-          text: "Waiting for admin to start voting",
-        };
-      case TICKETVOTE_STATUS_STARTED:
-        return { type: "bluePending", text: "Active" };
-      case TICKETVOTE_STATUS_FINISHED:
-        return {
-          type: "grayNegative",
-          text: "Finished",
-        };
-      case TICKETVOTE_STATUS_REJECTED:
-        return {
-          type: "orangeNegativeCircled",
-          text: "Rejected",
-        };
-      case TICKETVOTE_STATUS_APPROVED:
-        return { type: "greenCheck", text: "Approved" };
-      default:
-        break;
-    }
-  }
-
-  if (record.status === RECORD_STATUS_ARCHIVED) {
-    return {
-      type: "grayNegative",
-      text: "Abandoned",
-    };
-  }
-  if (record.status === RECORD_STATUS_CENSORED) {
-    return {
-      type: "orangeNegativeCircled",
-      text: "Censored",
-    };
-  }
-
-  return { type: "grayNegative", text: "missing" };
-}
-
-export const getProposalStatusTagProps = (proposalSummary) => {
+export function getProposalStatusTagProps(proposalSummary) {
   if (!proposalSummary?.status)
     return { type: "grayNegative", text: "missing" };
 
@@ -444,7 +390,7 @@ export const getProposalStatusTagProps = (proposalSummary) => {
     default:
       break;
   }
-};
+}
 
 /**
  * showVoteStatusBar returns if vote has started, finished, approved or
