@@ -80,14 +80,14 @@ export const validTicketvoteStatuses = [
 ];
 
 /**
- * Returns the amount of blocks left to the currentHeight
+ * Returns the amount of blocks from the bestBlock
  * @param {Number} block
- * @param {Number} currentHeight
+ * @param {Number} bestBlock
  * @returns {Number} number of blocks left
  */
-export function getVoteBlocksDiff(block, currentHeight) {
-  if (!block || !currentHeight) return 0;
-  return +block - currentHeight;
+export function getVoteBlocksDiff(block, bestBlock) {
+  if (!block || !bestBlock) return 0;
+  return +block - bestBlock;
 }
 
 /**
@@ -103,8 +103,7 @@ export function getTimestampFromBlocks(
   blockDurationMinutes = 2 // TODO: SUPPORT MAINNET AND TESTNET.
 ) {
   const blocksDiff = getVoteBlocksDiff(currentBlockHeight, bestBlock);
-  const blockTimeMinutes = blocksDiff * blockDurationMinutes;
-  const mili = blockTimeMinutes * 60000;
-  const dateMs = new Date(mili + Date.now());
+  const blocksDiffMs = blocksDiff * blockDurationMinutes * 60 * 1000;
+  const dateMs = blocksDiffMs + Date.now();
   return Math.round(dateMs / 1000); // returns unix timestamp
 }
