@@ -138,17 +138,12 @@ function createConfigFile({ appPath, config, pluginsConfig }) {
   }
 }
 
-function createWebpackConfigFiles({ port, baseAppPath, appPath }) {
-  const wpDev = replaceFileValuesFromMap(`${baseAppPath}/webpack.dev.js`, {
-    __PORT__: +port,
-  });
-  fs.writeFileSync(`${appPath}/webpack.dev.js`, wpDev);
-  copyFile("webpack.common.js", appPath, baseAppPath);
-  copyFile("webpack.prod.js", appPath, baseAppPath);
-}
-
 function createTestConfigFiles({ appPath, baseAppPath }) {
   copyFile("jest.config.js", appPath, baseAppPath);
+}
+
+function createBabelConfigFiles({ appPath, baseAppPath }) {
+  copyFile("babel.config.js", appPath, baseAppPath);
 }
 
 function createAppSrcFiles({ baseAppPath, appName, appPath, pluginsDeps }) {
@@ -214,7 +209,7 @@ module.exports = {
   createPackageJsonFile,
   createConfigFile,
   createAppSrcFiles,
-  createWebpackConfigFiles,
+  createBabelConfigFiles,
   createTestConfigFiles,
   getPluginsDepsAndConfig,
 };

@@ -9,7 +9,7 @@ const {
   createNewApp,
   createPackageJsonFile,
   createConfigFile,
-  createWebpackConfigFiles,
+  createBabelConfigFiles,
   createTestConfigFiles,
   getPluginsDepsAndConfig,
 } = require("./utils");
@@ -39,7 +39,7 @@ module.exports = function newApp(appName, { port, plugins, config }) {
       appPath,
     });
     createConfigFile({ appPath, config, pluginsConfig });
-    createWebpackConfigFiles({ appPath, port, baseAppPath });
+    createBabelConfigFiles({ appPath, baseAppPath });
     createTestConfigFiles({ appPath, baseAppPath });
     createAppSrcFiles({ appPath, appName, baseAppPath, pluginsDeps });
   } catch (e) {
