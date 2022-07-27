@@ -79,7 +79,7 @@ describe("Given the recordsInventorySlice", () => {
       expect(fetchInventorySpy).not.toBeCalled();
       expect(consoleErrorSpy).toBeCalled();
       let state = store.getState().ticketvoteInventory;
-      expect(state.unauthorized.tokens).toEqual([]);
+      expect(state.unauthorized.tokens).toEqual(undefined);
       expect(state.unauthorized.lastPage).toEqual(0);
       expect(state.unauthorized.status).toEqual("idle");
 
@@ -88,7 +88,7 @@ describe("Given the recordsInventorySlice", () => {
       expect(fetchInventorySpy).not.toBeCalled();
       expect(consoleErrorSpy).toBeCalledWith(Error("status is required"));
       state = store.getState().ticketvoteInventory;
-      expect(state.unauthorized.tokens).toEqual([]);
+      expect(state.unauthorized.tokens).toEqual(undefined);
       expect(state.unauthorized.lastPage).toEqual(0);
       expect(state.unauthorized.status).toEqual("idle");
 
@@ -105,7 +105,7 @@ describe("Given the recordsInventorySlice", () => {
       expect(fetchInventorySpy).not.toBeCalled();
       expect(consoleErrorSpy).toBeCalled();
       const state = store.getState().ticketvoteInventory;
-      expect(state.unauthorized.tokens).toEqual([]);
+      expect(state.unauthorized.tokens).toEqual(undefined);
       expect(state.unauthorized.lastPage).toEqual(0);
       expect(state.status).toEqual("failed");
 
@@ -118,7 +118,7 @@ describe("Given the recordsInventorySlice", () => {
 
       expect(fetchInventorySpy).toBeCalled();
       const state = store.getState().ticketvoteInventory;
-      expect(state.unauthorized.tokens).toEqual([]);
+      expect(state.unauthorized.tokens).toEqual(undefined);
       expect(state.unauthorized.lastPage).toEqual(0);
       expect(state.unauthorized.status).toEqual("loading");
     });
@@ -162,7 +162,7 @@ describe("Given the recordsInventorySlice", () => {
 
       expect(fetchInventorySpy).toBeCalled();
       const state = store.getState().ticketvoteInventory;
-      expect(state.unauthorized.tokens).toEqual([]);
+      expect(state.unauthorized.tokens).toEqual(undefined);
       expect(state.unauthorized.lastPage).toEqual(0);
       expect(state.status).toEqual("failed");
       expect(state.error).toEqual("Error!");
@@ -178,7 +178,7 @@ describe("Given the recordsInventorySlice", () => {
         await store.dispatch(fetchTicketvoteInventory(params));
         expect(fetchInventorySpy).toBeCalled();
         const state = store.getState().ticketvoteInventory;
-        expect(state.unauthorized.tokens).toEqual([]);
+        expect(state.unauthorized.tokens).toEqual(undefined);
         expect(state.unauthorized.lastPage).toEqual(0);
         expect(state.status).toEqual("failed");
         expect(state.error).toEqual(message);
@@ -195,7 +195,7 @@ describe("Given the recordsInventorySlice", () => {
         await store.dispatch(fetchTicketvoteInventory(params));
         expect(fetchInventorySpy).toBeCalled();
         const state = store.getState().ticketvoteInventory;
-        expect(state.unauthorized.tokens).toEqual([]);
+        expect(state.unauthorized.tokens).toEqual(undefined);
         expect(state.unauthorized.lastPage).toEqual(0);
         expect(state.status).toEqual("failed");
         expect(state.error).toEqual(message);

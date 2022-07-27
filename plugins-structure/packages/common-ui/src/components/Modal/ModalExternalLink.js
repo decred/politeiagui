@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button, Message, Modal, Text } from "pi-ui";
-import { MarkdownRenderer } from "@politeiagui/common-ui";
+import { MarkdownRenderer } from "../Markdown";
 import externalLinkWarning from "../../assets/copies/external-link.md";
 import styles from "./styles.module.css";
 

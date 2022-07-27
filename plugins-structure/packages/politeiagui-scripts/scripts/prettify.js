@@ -1,0 +1,46 @@
+const path = require("path");
+const spawn = require("cross-spawn");
+const yargsParser = require("yargs-parser");
+const { resolveBin, hasFile, hasLocalConfig } = require("../utils");
+
+const args = process.argv.slice(2);
+const parsedArgs = yargsParser(args);
+
+const here = (p) => path.join(__dirname, p);
+const hereRelative = (p) => here(p).replace(process.cwd(), ".");
+
+// stop search for local config on plugins-architecture root with stopDir
+const useBuiltinConfig =
+  !args.includes("--config") &&
+  !hasLocalConfig("prettier", { stopDir: path.join(__dirname, "../../..") });
+
+const config = useBuiltinConfig
+  ? ["--config", hereRelative("../config/prettier/prettierrc.js")]
+  : [];
+
+const useBuiltinIgnore =
+  !args.includes("--ignore-path") && !hasFile(".prettierignore");
+const ignore = useBuiltinIgnore
+  ? ["--ignore-path", hereRelative("../config/prettier/prettierignore")]
+  : [];
+
+const write = args.includes("--no-write") ? [] : ["--write"];
+
+// this ensures that when running format as a pre-commit hook and we get
+// the full file path, we make that non-absolute so it is treated as a glob,
+// This way the prettierignore will be applied
+const relativeArgs = args.map((a) => a.replace(`${process.cwd()}/`, ""));
+
+const filesToApply = parsedArgs._.length
+  ? []
+  : [
+      "**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|gql|graphql|mdx|vue)",
+    ];
+
+const result = spawn.sync(
+  resolveBin("prettier"),
+  [...config, ...ignore, ...write, ...filesToApply].concat(relativeArgs),
+  { stdio: "inherit" }
+);
+
+process.exit(result.status);

@@ -37,8 +37,8 @@ listener.startListening({
   actionCreator: myCustomAction,
   effect: () => {
     // will be called every time myCustomAction is dispatched
-  }
-})
+  },
+});
 ```
 
 For more details, see the [createListenerMiddleware docs](https://redux-toolkit.js.org/api/createListenerMiddleware)
