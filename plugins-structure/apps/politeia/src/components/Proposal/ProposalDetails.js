@@ -29,7 +29,7 @@ const ProposalDetails = ({
   voteSummary,
   piSummary,
   onFetchRecordTimestamps,
-  billingStatusChange,
+  proposalStatusChanges,
 }) => {
   const [open] = useModal();
 
@@ -65,17 +65,16 @@ const ProposalDetails = ({
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
 
+  const currentStatusChange = proposalStatusChanges.find(
+    (s) => s.status === piSummary.status
+  );
+
   return (
     <div>
-      {isAbandoned && (
+      {currentStatusChange?.reason && (
         <Message kind="warning">
-          Reason: {proposalDetails.abandonmentReason}
-        </Message>
-      )}
-      {billingStatusChange?.reason && (
-        <Message kind="warning">
-          <div>Proposal is {piSummary.status}.</div>
-          <div>Reason: {billingStatusChange.reason}.</div>
+          <div>Proposal is {currentStatusChange.status}.</div>
+          <div>Reason: {currentStatusChange.reason}</div>
         </Message>
       )}
       <RecordCard

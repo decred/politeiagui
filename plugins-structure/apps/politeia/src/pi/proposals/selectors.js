@@ -21,7 +21,7 @@ export function selectProposalStatusChangesByToken(state, token) {
   const voteStatusChanges =
     ticketvoteSummaries.selectStatusChangesByToken(state, token) || [];
 
-  // convert status from status change to pi-summary
+  // convert plugins status to proposal status
   const proposalVoteStatusChanges = voteStatusChanges.map(
     ({ status, ...rest }) => ({
       ...rest,

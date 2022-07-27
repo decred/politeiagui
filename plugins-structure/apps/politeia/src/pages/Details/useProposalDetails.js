@@ -35,7 +35,7 @@ function useProposalDetails({ token }) {
   const voteSummaryError = useSelector(ticketvoteSummaries.selectError);
   const commentsError = useSelector(recordComments.selectError);
 
-  const recordStatusChanges = useSelector((state) =>
+  const proposalStatusChanges = useSelector((state) =>
     proposals.selectStatusChangesByToken(state, fullToken)
   );
 
@@ -62,7 +62,7 @@ function useProposalDetails({ token }) {
     record,
     voteSummary,
     billingStatusChange,
-    recordStatusChanges,
+    proposalStatusChanges,
   };
 }
 
