@@ -63,9 +63,10 @@ const ProposalDetails = ({
     open(ModalImages, { images, activeIndex: index });
   }
 
+  // TODO: get pi status from status changes
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
 
-  const currentStatusChange = proposalStatusChanges.find(
+  const currentStatusChange = proposalStatusChanges?.find(
     (s) => s.status === piSummary.status
   );
 

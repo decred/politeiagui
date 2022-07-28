@@ -39,6 +39,18 @@ function injectCompletedOrClosedProposalEffect(effect) {
   };
 }
 
+function injectPayloadEffect(effect) {
+  return async (
+    { payload },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    await effect(state, dispatch, payload);
+    subscribe();
+  };
+}
+
 export const fetchDetailsListenerCreator = {
   type: "records/fetchDetails/fulfilled",
   injectEffect,
@@ -52,4 +64,14 @@ export const fetchProposalSummaryListenerCreator = {
 export const recordFetchDetailsListenerCreator = {
   actionCreator: fetchProposalDetails,
   injectEffect: injectRecordDetailsEffect,
+};
+
+export const fetchVoteSummaryListenerCreator = {
+  type: "ticketvoteSummaries/fetch/fulfilled",
+  injectEffect: injectPayloadEffect,
+};
+
+export const fetchBillingStatusChangesListenerCreator = {
+  type: "piBilling/fetchStatusChanges/fulfilled",
+  injectEffect: injectPayloadEffect,
 };
