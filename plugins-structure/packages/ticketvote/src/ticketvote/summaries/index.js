@@ -7,7 +7,6 @@ import {
   selectTicketvoteSummariesError,
   selectTicketvoteSummariesFetchedTokens,
   selectTicketvoteSummariesStatus,
-  selectTicketvoteSummariesStatusChangesByRecordToken,
 } from "./summariesSlice";
 
 import { useTicketvoteSummaries } from "./useSummaries";
@@ -21,7 +20,5 @@ export const ticketvoteSummaries = {
   selectByStatus: selectTicketvoteSummariesByStatus,
   selectError: selectTicketvoteSummariesError,
   selectFetchedTokens: selectTicketvoteSummariesFetchedTokens,
-  selectStatusChangesByToken:
-    selectTicketvoteSummariesStatusChangesByRecordToken,
   useFetch: useTicketvoteSummaries,
 };

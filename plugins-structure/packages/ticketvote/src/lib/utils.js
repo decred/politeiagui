@@ -100,10 +100,64 @@ export function getVoteBlocksDiff(block, bestBlock) {
 export function getTimestampFromBlocks(
   currentBlockHeight,
   bestBlock,
-  blockDurationMinutes = 2 // TODO: SUPPORT MAINNET AND TESTNET.
+  blockDurationMinutes
 ) {
   const blocksDiff = getVoteBlocksDiff(currentBlockHeight, bestBlock);
   const blocksDiffMs = blocksDiff * blockDurationMinutes * 60 * 1000;
   const dateMs = blocksDiffMs + Date.now();
   return Math.round(dateMs / 1000); // returns unix timestamp
+}
+
+function getTicketvoteSummaryStatusChanges(
+  voteSummary,
+  blockDurationMinutes = 2
+) {
+  if (!voteSummary) return;
+  const { bestblock, endblockheight, startblockheight, status } = voteSummary;
+  if (!endblockheight || !startblockheight) return;
+  const start = {
+    timestamp: getTimestampFromBlocks(
+      startblockheight,
+      bestblock,
+      blockDurationMinutes
+    ),
+    status: TICKETVOTE_STATUS_STARTED,
+  };
+  const end = {
+    timestamp: getTimestampFromBlocks(
+      endblockheight,
+      bestblock,
+      blockDurationMinutes
+    ),
+    status:
+      status === TICKETVOTE_STATUS_APPROVED ||
+      status === TICKETVOTE_STATUS_REJECTED
+        ? status
+        : TICKETVOTE_STATUS_FINISHED,
+  };
+  return [start, end];
+}
+
+/**
+ * getTicketvoteSummariesStatusChanges returns the status changes timestamps
+ * for each summary from `summaries`, using given `blockDurationMinutes` param.
+ * @param {Object} summaries Vote Summaries
+ * @param {Number} blockDurationMinutes Block duration in minutes
+ */
+export function getTicketvoteSummariesStatusChanges(
+  summaries,
+  blockDurationMinutes
+) {
+  if (!summaries) return;
+  return Object.keys(summaries).reduce((statusChanges, token) => {
+    const statusChange = getTicketvoteSummaryStatusChanges(
+      summaries[token],
+      blockDurationMinutes
+    );
+    if (!statusChange) return statusChanges;
+    return {
+      ...statusChanges,
+      [token]: statusChange,
+    };
+  }, {});
 }
