@@ -114,13 +114,16 @@ function getTicketvoteSummaryStatusChanges(
 ) {
   if (!voteSummary) return;
   const { bestblock, endblockheight, startblockheight, status } = voteSummary;
-  if (!endblockheight || !startblockheight) return;
+  if (status === TICKETVOTE_STATUS_UNAUTHORIZED) return;
+  if (status === TICKETVOTE_STATUS_AUTHORIZED)
+    return [{ timestamp: 0, status }];
   const start = {
     timestamp: getTimestampFromBlocks(
       startblockheight,
       bestblock,
       blockDurationMinutes
     ),
+    blocksCount: getVoteBlocksDiff(startblockheight, bestblock),
     status: TICKETVOTE_STATUS_STARTED,
   };
   const end = {
@@ -129,6 +132,7 @@ function getTicketvoteSummaryStatusChanges(
       bestblock,
       blockDurationMinutes
     ),
+    blocksCount: getVoteBlocksDiff(endblockheight, bestblock),
     status:
       status === TICKETVOTE_STATUS_APPROVED ||
       status === TICKETVOTE_STATUS_REJECTED
