@@ -1,3 +1,13 @@
 .version {
   color: var(--text-secondary-color);
 }
+
+.statusLabel {
+  margin-top: 0.5rem;
+  font-size: var(--font-size-small);
+}
+
+.statusLabelBlocks {
+  font-size: var(--font-size-small);
+  color: var(--text-secondary-color);
+}

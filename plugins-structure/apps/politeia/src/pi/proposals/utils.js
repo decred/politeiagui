@@ -283,51 +283,33 @@ export function getPublicStatusChangeMetadata(userMetadata) {
  * getProposalTimestamps returns published, censored, edited and abandoned
  * timestamps for given record. Default timestamps values are 0.
  * @param {Record} record record object
- * @returns {Object} `{publishedat: number, editedat: number, censoredat: number,
- *    abandonedat: number}` - Object with publishedat, censoredat, abandonedat
+ * @returns {Object} `{publishedat: number, editedat: number}`
  */
 function getProposalTimestamps(record) {
-  if (!record)
-    return { publishedat: 0, editedat: 0, censoredat: 0, abandonedat: 0 };
+  if (!record) return { publishedat: 0, editedat: 0 };
 
   let publishedat = 0,
-    censoredat = 0,
-    abandonedat = 0,
     editedat = 0;
   const { status, timestamp, version, metadata } = record;
   const userMetadata = decodeProposalUserMetadata(metadata);
-  // unreviewed
-  if (status === RECORD_STATUS_UNREVIEWED) {
-    publishedat = timestamp;
-  }
-  // publlished but not edited
-  if (status === RECORD_STATUS_PUBLIC && version <= 1) {
+
+  if (status === RECORD_STATUS_UNREVIEWED || version <= 1) {
     publishedat = timestamp;
   }
   // edited, have to grab published timestamp from metadata
-  if (status === RECORD_STATUS_PUBLIC && version > 1) {
+  if (version > 1) {
     const publishedMetadata = getPublicStatusChangeMetadata(userMetadata);
     publishedat = publishedMetadata.timestamp;
     editedat = timestamp;
   }
-  if (status === RECORD_STATUS_CENSORED) {
-    const publishedMetadata = getPublicStatusChangeMetadata(userMetadata);
-    publishedat = publishedMetadata.timestamp;
-    censoredat = timestamp;
-  }
-  if (status === RECORD_STATUS_ARCHIVED) {
-    const publishedMetadata = getPublicStatusChangeMetadata(userMetadata);
-    publishedat = publishedMetadata.timestamp;
-    abandonedat = timestamp;
-  }
 
-  return { publishedat, editedat, censoredat, abandonedat };
+  return { publishedat, editedat };
 }
 
 /**
  * getProposalStatusTagProps returns the formatted `{ type, text }` props for
  * StatusTag component for given proposal summary.
- * @param {Object} proposalSummary record object
+ * @param {Object} proposalSummary
  * @returns {Object} `{ type, text }` StatusTag props
  */
 export function getProposalStatusTagProps(proposalSummary) {
@@ -391,6 +373,34 @@ export function getProposalStatusTagProps(proposalSummary) {
       break;
   }
 }
+/**
+ * getProposalStatusEvent returns the formatted status change event description.
+ * @param {Object} statusChange proposal status change
+ * @returns {String} event description
+ */
+export function getProposalStatusEvent(statusChange) {
+  if (!statusChange?.status) return null;
+  switch (statusChange.status) {
+    case PROPOSAL_STATUS_VOTE_STARTED:
+      return "vote ends";
+    case PROPOSAL_STATUS_ACTIVE:
+    case PROPOSAL_STATUS_APPROVED:
+    case PROPOSAL_STATUS_REJECTED:
+      return "vote ended";
+    case PROPOSAL_STATUS_CLOSED:
+      return "billing closed";
+    case PROPOSAL_STATUS_COMPLETED:
+      return "billing completed";
+    case PROPOSAL_STATUS_UNVETTED_ABANDONED:
+    case PROPOSAL_STATUS_ABANDONED:
+      return "abandoned";
+    case PROPOSAL_STATUS_UNVETTED_CENSORED:
+    case PROPOSAL_STATUS_CENSORED:
+      return "censored";
+    default:
+      return null;
+  }
+}
 
 /**
  * showVoteStatusBar returns if vote has started, finished, approved or
@@ -449,7 +459,7 @@ export function convertVoteStatusToProposalStatus(voteStatus, recordStatus) {
     [TICKETVOTE_STATUS_UNAUTHORIZED]: PROPOSAL_STATUS_UNDER_REVIEW,
     [TICKETVOTE_STATUS_AUTHORIZED]: PROPOSAL_STATUS_VOTE_AUTHORIZED,
     [TICKETVOTE_STATUS_STARTED]: PROPOSAL_STATUS_VOTE_STARTED,
-    [TICKETVOTE_STATUS_APPROVED]: PROPOSAL_STATUS_APPROVED,
+    [TICKETVOTE_STATUS_APPROVED]: PROPOSAL_STATUS_ACTIVE,
     [TICKETVOTE_STATUS_REJECTED]: PROPOSAL_STATUS_REJECTED,
     [TICKETVOTE_STATUS_FINISHED]: PROPOSAL_STATUS_VOTE_ENDED,
     [TICKETVOTE_STATUS_INELIGIBLE]:

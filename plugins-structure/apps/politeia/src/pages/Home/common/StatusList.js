@@ -38,6 +38,7 @@ function StatusList({
     fetchNextBatch,
     recordsInOrder,
     areAllInventoryEntriesFetched,
+    proposalsStatusChanges,
   } = useStatusList({ inventory, inventoryStatus, status });
 
   function handleFetchMore() {
@@ -85,6 +86,7 @@ function StatusList({
               commentsCount={countComments?.[token]}
               voteSummary={voteSummaries?.[token]}
               proposalSummary={proposalSummaries?.[token]}
+              proposalStatusChanges={proposalsStatusChanges?.[token]}
             />
           );
         })}

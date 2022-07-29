@@ -75,3 +75,8 @@ export const fetchBillingStatusChangesListenerCreator = {
   type: "piBilling/fetchStatusChanges/fulfilled",
   injectEffect: injectPayloadEffect,
 };
+
+export const fetchRecordDetailsListenerCreator = {
+  type: "records/fetchDetails/fulfilled",
+  injectEffect: injectPayloadEffect,
+};

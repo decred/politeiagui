@@ -6,20 +6,25 @@ import {
   getRecordStatusChangesMetadata,
 } from "./utils";
 import { getTicketvoteSummariesStatusChanges } from "@politeiagui/ticketvote/utils";
+import keyBy from "lodash/keyBy";
 
 export const initialState = {
   statusChangesByToken: {},
 };
 
 function mergeStatusChanges(statusChanges, newStatusChanges) {
-  return Object.keys(newStatusChanges).reduce((scs, token) => {
-    const scFromState = statusChanges[token] || [];
+  const conflicting = Object.keys(newStatusChanges).reduce((scs, token) => {
+    const scFromState = statusChanges[token] || {};
     const newSc = newStatusChanges[token];
     return {
       ...scs,
-      [token]: [...scFromState, ...newSc],
+      [token]: { ...scFromState, ...keyBy(newSc, "status") },
     };
   }, {});
+  return {
+    ...statusChanges,
+    ...conflicting,
+  };
 }
 
 // TODO: Get parameter from correct env.
@@ -29,14 +34,13 @@ const proposalsSlice = createSlice({
   name: "piProposals",
   initialState,
   reducers: {
-    setVoteStatusChanges(state, action) {
+    setVoteStatusChanges: (state, action) => {
       const { summaries: voteSummariesByToken, records } = action.payload;
       if (!voteSummariesByToken) return;
       const voteStatusChangesByToken = getTicketvoteSummariesStatusChanges(
         voteSummariesByToken,
         blockTimeMinutes
       );
-
       const proposalsStatusChangesByToken = Object.keys(
         voteStatusChangesByToken
       ).reduce((proposalStatusChanges, token) => {
@@ -57,7 +61,7 @@ const proposalsSlice = createSlice({
         proposalsStatusChangesByToken
       );
     },
-    setRecordStatusChanges(state, action) {
+    setRecordStatusChanges: (state, action) => {
       const { records } = action.payload;
       const proposalsStatusChangesByToken = Object.keys(records).reduce(
         (statusChanges, token) => {
@@ -80,7 +84,7 @@ const proposalsSlice = createSlice({
         proposalsStatusChangesByToken
       );
     },
-    setBillingStatusChanges(state, action) {
+    setBillingStatusChanges: (state, action) => {
       const { billings } = action.payload;
       const proposalsStatusChangesByToken = Object.keys(billings).reduce(
         (statusChanges, token) => ({

@@ -36,27 +36,24 @@
 .headerWrapper {
   align-items: center;
   display: grid;
-  grid-template-columns: 2fr 2fr 2fr 1fr;
+  grid-template-columns: 6fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: var(--spacing-small) 0em;
   grid-template-areas:
-    "title title title rightHeader"
-    "subtitle subtitle subtitle rightHeaderSubtitle";
+    "title rightHeader"
+    "subtitle rightHeader";
 }
 
 .title {
   grid-area: title;
+  align-self: flex-start;
 }
 
 .rightHeader {
+  align-self: flex-start;
+  align-items: center;
   justify-self: end;
   grid-area: rightHeader;
-  text-align: end;
-}
-
-.rightHeaderSubtitle {
-  justify-self: end;
-  grid-area: rightHeaderSubtitle;
   text-align: end;
 }
 
@@ -74,19 +71,10 @@
     justify-self: start;
     text-align: start;
   }
-  .rightHeaderSubtitle {
-    justify-self: start;
-    text-align: start;
-  }
 
   .headerWrapper {
-    justify-content: start;
-    justify-self: start;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto;
     grid-template-rows: auto;
-    grid-template-areas:
-      "rightHeader rightHeaderSubtitle"
-      "title title"
-      "subtitle subtitle";
+    grid-template-areas: "rightHeader" "title" "subtitle ";
   }
 }

@@ -7,6 +7,7 @@ import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
 import { piSummaries } from "../../pi/summaries";
 import { piBilling } from "../../pi/billing";
+import { proposals } from "../../pi/proposals";
 
 function areAllEntriesFetched(inventoryList, records) {
   if (!inventoryList) return false;
@@ -30,6 +31,8 @@ function useStatusList({ inventory, inventoryStatus }) {
   const allRecords = useSelector(records.selectAll);
   const billingStatusChanges = useSelector(piBilling.selectAll);
 
+  const proposalsStatusChanges = useSelector(proposals.selectAllStatusChanges);
+
   const hasMoreRecords =
     recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
 
@@ -47,6 +50,7 @@ function useStatusList({ inventory, inventoryStatus }) {
     recordsPageSize,
     areAllInventoryEntriesFetched: areAllEntriesFetched(inventory, allRecords),
     billingStatusChanges,
+    proposalsStatusChanges,
   };
 }
 

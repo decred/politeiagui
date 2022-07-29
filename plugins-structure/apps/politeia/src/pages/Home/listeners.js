@@ -30,6 +30,18 @@ function injectRecordsBatchEffect(effect) {
   };
 }
 
+function injectPayloadEffect(effect) {
+  return async (
+    { payload },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    await effect(state, dispatch, payload);
+    subscribe();
+  };
+}
+
 export const fetchNextBatchCountListenerCreator = {
   actionCreator: fetchNextBatchCount,
   injectEffect,
@@ -48,6 +60,21 @@ export const fetchNextBatchRecordsListenerCreator = {
 export const fetchNextBatchBillingStatusesListenerCreator = {
   actionCreator: fetchNextBatchBillingStatuses,
   injectEffect,
+};
+
+export const fetchVoteSummariesListenerCreator = {
+  type: "ticketvoteSummaries/fetch/fulfilled",
+  injectEffect: injectPayloadEffect,
+};
+
+export const fetchRecordsListenerCreator = {
+  type: "records/fetch/fulfilled",
+  injectEffect: injectPayloadEffect,
+};
+
+export const fetchBillingStatusChangesListenerCreator = {
+  type: "piBilling/fetchStatusChanges/fulfilled",
+  injectEffect: injectPayloadEffect,
 };
 
 export const listeners = [

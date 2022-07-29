@@ -16,6 +16,7 @@ import {
   ProposalDownloads,
   ProposalMetadata,
   ProposalStatusBar,
+  ProposalStatusLabel,
   ProposalStatusTag,
   ProposalSubtitle,
 } from "./common";
@@ -27,7 +28,7 @@ import ModalProposalDiff from "./ModalProposalDiff";
 const ProposalDetails = ({
   record,
   voteSummary,
-  piSummary,
+  proposalSummary,
   onFetchRecordTimestamps,
   proposalStatusChanges,
 }) => {
@@ -63,12 +64,10 @@ const ProposalDetails = ({
     open(ModalImages, { images, activeIndex: index });
   }
 
-  // TODO: get pi status from status changes
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
 
-  const currentStatusChange = proposalStatusChanges?.find(
-    (s) => s.status === piSummary.status
-  );
+  const currentStatusChange =
+    proposalSummary && proposalStatusChanges?.[proposalSummary.status];
 
   return (
     <div>
@@ -92,7 +91,10 @@ const ProposalDetails = ({
             onChangeVersion={handleChangeVersion}
           />
         }
-        rightHeader={<ProposalStatusTag piSummary={piSummary} />}
+        rightHeader={<ProposalStatusTag proposalSummary={proposalSummary} />}
+        rightHeaderSubtitle={
+          <ProposalStatusLabel statusChange={currentStatusChange} />
+        }
         secondRow={
           <div className={styles.secondRow}>
             <RecordToken token={proposalDetails.token} isCopyable={true} />

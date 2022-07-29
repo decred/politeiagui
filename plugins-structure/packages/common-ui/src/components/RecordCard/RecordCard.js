@@ -4,13 +4,11 @@ import styles from "./styles.module.css";
 
 const TitleWrapper = ({ titleLink, children }) =>
   !titleLink ? (
-    <H2>{children}</H2>
+    children
   ) : (
-    <H2>
-      <a href={titleLink} data-link className={styles.title}>
-        {children}
-      </a>
-    </H2>
+    <a href={titleLink} data-link className={styles.title}>
+      {children}
+    </a>
   );
 
 export function RecordCard({
@@ -39,9 +37,11 @@ export function RecordCard({
         <H2 className={styles.title}>
           <TitleWrapper titleLink={titleLink}>{title}</TitleWrapper>
         </H2>
-        <div className={styles.rightHeader}>{rightHeader}</div>
+        <div className={styles.rightHeader}>
+          {rightHeader}
+          {rightHeaderSubtitle}
+        </div>
         <div className={styles.subtitle}>{subtitle}</div>
-        <div className={styles.rightHeaderSubtitle}>{rightHeaderSubtitle}</div>
       </div>
       {secondRow && <div className={styles.secondRow}>{secondRow}</div>}
       {thirdRow && <div className={styles.thirdRow}>{thirdRow}</div>}

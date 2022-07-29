@@ -24,7 +24,7 @@ function useProposalDetails({ token }) {
   const comments = useSelector((state) =>
     recordComments.selectByToken(state, fullToken)
   );
-  const piSummary = useSelector((state) =>
+  const proposalSummary = useSelector((state) =>
     piSummaries.selectByToken(state, fullToken)
   );
   const billingStatusChange = useSelector((state) =>
@@ -58,7 +58,7 @@ function useProposalDetails({ token }) {
     detailsStatus,
     fullToken,
     onFetchRecordTimestamps,
-    piSummary,
+    proposalSummary,
     record,
     voteSummary,
     billingStatusChange,

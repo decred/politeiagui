@@ -1,5 +1,3 @@
-import isArray from "lodash/isArray";
-import pick from "lodash/pick";
 import { proposals } from "./";
 
 export async function setProposalsVoteStatusChangesEffect(
@@ -13,23 +11,17 @@ export async function setProposalsVoteStatusChangesEffect(
   await dispatch(proposals.setVoteStatusChanges({ summaries, records }));
 }
 
-// Works for both single token and tokens array
+// Works for both single record or records batch
 export async function setProposalsRecordsStatusChangesEffect(
   state,
   dispatch,
   payload
 ) {
-  let tokens = [];
-  if (!payload.token && payload.tokens && isArray(payload.tokens)) {
-    tokens = payload.tokens;
-  } else if (payload.token && !payload.tokens) {
-    tokens = [payload.token];
-  }
-  const {
-    records: { records },
-  } = state;
-  const fetchedRecords = pick(records, tokens);
-  await dispatch(proposals.setRecordStatusChanges({ records: fetchedRecords }));
+  const records =
+    payload.state && payload.status
+      ? { [payload.censorshiprecord.token]: payload }
+      : payload;
+  await dispatch(proposals.setRecordStatusChanges({ records }));
 }
 
 export async function setProposalsBillingStatusChangesEffect(

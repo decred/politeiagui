@@ -5,6 +5,7 @@ import {
   fetchBillingStatusChangesListenerCreator,
   fetchDetailsListenerCreator,
   fetchProposalSummaryListenerCreator,
+  fetchRecordDetailsListenerCreator,
   fetchVoteSummaryListenerCreator,
   recordFetchDetailsListenerCreator,
 } from "./listeners";
@@ -46,7 +47,7 @@ export default App.createRoute({
     },
     {
       id: "pi/proposals/recordStatusChanges",
-      listenerCreator: fetchDetailsListenerCreator,
+      listenerCreator: fetchRecordDetailsListenerCreator,
     },
     {
       id: "pi/proposals/billingStatusChanges",
