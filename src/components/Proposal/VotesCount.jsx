@@ -7,32 +7,29 @@ const VotesCount = ({
   eligibleVotes,
   quorumVotes,
   quorumPercentage,
-  votesReceived,
-  isVoteActive
+  votesReceived
 }) => {
   const votesLeft = quorumVotes - votesReceived;
   return (
     <div className={styles.voteCount}>
       <div className={styles.quorumAndVotes}>
-        {isVoteActive && (
-          <div>
-            <Text
-              className={classNames(styles.votesLeft, styles.quorumReached)}
-              size="small"
-            >
-              {votesLeft > 0 ? (
-                `${votesLeft} votes until quorum`
-              ) : (
-                <Tooltip
-                  placement="bottom"
-                  content={`quorum of ${quorumPercentage}% (${quorumVotes} votes) has been reached!`}
-                >
-                  quorum reached!
-                </Tooltip>
-              )}
-            </Text>
-          </div>
-        )}
+        <div>
+          <Text
+            className={classNames(styles.votesLeft, styles.quorumReached)}
+            size="small"
+          >
+            {votesLeft > 0 ? (
+              `${votesLeft} votes until quorum`
+            ) : (
+              <Tooltip
+                placement="bottom"
+                content={`quorum of ${quorumPercentage}% (${quorumVotes} votes) has been reached!`}
+              >
+                quorum reached!
+              </Tooltip>
+            )}
+          </Text>
+        </div>
         <div>
           <Text className={styles.votesReceived} size="small">
             {votesReceived}
