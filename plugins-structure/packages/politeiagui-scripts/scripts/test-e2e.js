@@ -3,11 +3,17 @@ process.env.NODE_ENV = "test";
 
 const configFactory = require("../config/webpack/webpack.config");
 const cypress = require("cypress");
+const yargsParser = require("yargs-parser");
+const isString = require("lodash/isString");
 
 const config = configFactory("development", "app");
 
-cypress.run({
+const args = process.argv.slice(2);
+const parsedArgs = yargsParser(args);
+
+const e2eConfig = {
   browser: "chrome",
+  testingType: "e2e",
   config: {
     video: false,
     baseUrl: "https://localhost:8080",
@@ -23,4 +29,16 @@ cypress.run({
       },
     },
   },
-});
+};
+
+const { browser } = parsedArgs;
+
+if (!!browser) {
+  // Defaults to chrome.
+  cypress.open({
+    ...e2eConfig,
+    browser: isString(browser) ? browser : "chrome",
+  });
+} else {
+  cypress.run(e2eConfig);
+}

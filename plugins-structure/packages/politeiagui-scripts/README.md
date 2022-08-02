@@ -33,6 +33,22 @@ The page will automatically reload if you make changes to the code.
 Runs the test watcher in an interactive mode.
 By default, runs tests related to files changed since the last commit.
 
+### test-e2e
+
+Runs e2e tests using cypress. Runs headless tests by default.
+
+```bash
+$ cd apps/politeia
+# run headless tests
+$ politeiagui-scripts test-e2e
+
+# run tests on default browser (chrome)
+$ politeiagui-scripts test-e2e --browser
+
+# run tests on custom browser. Must be installed on your computer.
+$ politeiagui-scripts test-e2e --browser="firefox"
+```
+
 ### build-app
 
 Builds the app for production to the dist folder.
