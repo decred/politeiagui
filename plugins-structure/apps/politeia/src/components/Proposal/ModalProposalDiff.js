@@ -58,7 +58,7 @@ function AttachmentsDiff({ newFiles, oldFiles }) {
 
 function VersionSelector({ maxVersion, onChange, current, minVersion = 1 }) {
   const options = range(maxVersion, minVersion - 1, -1).map((v) => ({
-    label: `version ${v}`,
+    label: `v${v}`,
     value: v,
   }));
   function getValueOption(value) {
@@ -254,7 +254,7 @@ function ProposalDiff({
             setDiffView={setIsMarkdownView}
           />
         }
-        subtitle={
+        secondRow={
           <VersionsInfo
             oldProposal={oldProposal}
             newProposal={newProposal}

@@ -36,9 +36,8 @@
 .headerWrapper {
   align-items: center;
   display: grid;
-  grid-template-columns: 6fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: var(--spacing-small) 0em;
+  grid-template-columns: 5fr 2fr;
+  gap: var(--spacing-small);
   grid-template-areas:
     "title rightHeader"
     "subtitle rightHeader";

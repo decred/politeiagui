@@ -2,12 +2,27 @@
   color: var(--text-secondary-color);
 }
 
+.statusLabelWrapper {
+  position: absolute;
+  right: var(--container-padding-right);
+}
+
 .statusLabel {
-  margin-top: 0.5rem;
   font-size: var(--font-size-small);
 }
 
-.statusLabelBlocks {
+.statusLabelText {
   font-size: var(--font-size-small);
   color: var(--text-secondary-color);
+}
+
+@media screen and (max-width: 768px) {
+  .statusLabelWrapper {
+    top: 2.3rem;
+    display: flex;
+  }
+  .statusLabelText::before {
+    content: "•";
+    padding: 0 0.5rem;
+  }
 }

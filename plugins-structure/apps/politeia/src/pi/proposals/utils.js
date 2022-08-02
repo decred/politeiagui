@@ -374,31 +374,31 @@ export function getProposalStatusTagProps(proposalSummary) {
   }
 }
 /**
- * getProposalStatusEvent returns the formatted status change event description.
+ * getProposalStatusDescription returns the formatted status change event description.
  * @param {Object} statusChange proposal status change
  * @returns {String} event description
  */
-export function getProposalStatusEvent(statusChange) {
+export function getProposalStatusDescription(statusChange) {
   if (!statusChange?.status) return null;
   switch (statusChange.status) {
     case PROPOSAL_STATUS_VOTE_STARTED:
-      return "vote ends";
+      return { event: "vote ends" };
     case PROPOSAL_STATUS_ACTIVE:
     case PROPOSAL_STATUS_APPROVED:
     case PROPOSAL_STATUS_REJECTED:
-      return "vote ended";
+      return { event: "vote ended" };
     case PROPOSAL_STATUS_CLOSED:
-      return "billing closed";
+      return { event: "billing closed" };
     case PROPOSAL_STATUS_COMPLETED:
-      return "billing completed";
+      return { event: "billing completed" };
     case PROPOSAL_STATUS_UNVETTED_ABANDONED:
     case PROPOSAL_STATUS_ABANDONED:
-      return "abandoned";
+      return { event: "abandoned" };
     case PROPOSAL_STATUS_UNVETTED_CENSORED:
     case PROPOSAL_STATUS_CENSORED:
-      return "censored";
+      return { event: "censored" };
     default:
-      return null;
+      return {};
   }
 }
 
