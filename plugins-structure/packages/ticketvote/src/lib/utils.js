@@ -114,32 +114,26 @@ function getTicketvoteSummaryStatusChanges(
 ) {
   if (!voteSummary) return;
   const { bestblock, endblockheight, startblockheight, status } = voteSummary;
-  if (status === TICKETVOTE_STATUS_UNAUTHORIZED) return;
-  if (status === TICKETVOTE_STATUS_AUTHORIZED)
-    return [{ timestamp: 0, status }];
-  const start = {
-    timestamp: getTimestampFromBlocks(
-      startblockheight,
-      bestblock,
-      blockDurationMinutes
-    ),
-    blocksCount: getVoteBlocksDiff(startblockheight, bestblock),
-    status: TICKETVOTE_STATUS_STARTED,
-  };
-  const end = {
-    timestamp: getTimestampFromBlocks(
-      endblockheight,
-      bestblock,
-      blockDurationMinutes
-    ),
-    blocksCount: getVoteBlocksDiff(endblockheight, bestblock),
-    status:
-      status === TICKETVOTE_STATUS_APPROVED ||
-      status === TICKETVOTE_STATUS_REJECTED
-        ? status
-        : TICKETVOTE_STATUS_FINISHED,
-  };
-  return [start, end];
+  switch (status) {
+    case TICKETVOTE_STATUS_AUTHORIZED:
+      return { status };
+    case TICKETVOTE_STATUS_STARTED:
+    case TICKETVOTE_STATUS_REJECTED:
+    case TICKETVOTE_STATUS_APPROVED:
+      return {
+        endblockheight,
+        startblockheight,
+        timestamp: getTimestampFromBlocks(
+          endblockheight,
+          bestblock,
+          blockDurationMinutes
+        ),
+        blocksCount: getVoteBlocksDiff(endblockheight, bestblock),
+        status,
+      };
+    default:
+      return;
+  }
 }
 
 /**
