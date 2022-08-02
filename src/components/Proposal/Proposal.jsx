@@ -259,6 +259,7 @@ const Proposal = React.memo(function Proposal({
           RfpProposalLink,
           CommentsLink,
           ChartsLink,
+          SearchVotes,
           CopyLink,
           MarkdownLink,
           DownloadRecord,
@@ -433,9 +434,9 @@ const Proposal = React.memo(function Proposal({
                     <VotesCount
                       isVoteActive={isVoteActive}
                       eligibleVotes={getEligibleTickets(voteSummary)}
+                      quorumPercentage={voteSummary.quorumpercentage}
                       quorumVotes={getQuorumInVotes(voteSummary)}
                       votesReceived={getVotesReceived(voteSummary)}
-                      onSearchVotes={openSearchVotesModal}
                     />
                   }
                 />
@@ -547,6 +548,10 @@ const Proposal = React.memo(function Proposal({
                   {(isVoteActive || isVotingFinished) && !legacytoken && (
                     <ChartsLink token={fullToken} />
                   )}
+                  {(isVoteActive || isVotingFinished) &&
+                    getVotesReceived(voteSummary) > 0 && (
+                      <SearchVotes onClick={openSearchVotesModal} />
+                    )}
                   {extended && (
                     <MarkdownLink to={`/record/${shortToken}/raw`} />
                   )}

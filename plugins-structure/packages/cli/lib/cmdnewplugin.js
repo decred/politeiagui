@@ -43,15 +43,8 @@ module.exports = function newPlugin(pluginName, { port }) {
       2
     )
   );
-
-  const wpDev = replaceFileValuesFromMap(`${basePluginPath}/webpack.dev.js`, {
-    __PORT__: +port,
-  });
-
-  // create webpack config files
-  fs.writeFileSync(`${pluginPath}/webpack.dev.js`, wpDev);
-  copyFile("webpack.common.js", pluginPath, basePluginPath);
-  copyFile("webpack.prod.js", pluginPath, basePluginPath);
+  // create babel config files
+  copyFile("babel.config.js", pluginPath, basePluginPath);
   // create test config files
   copyFile("jest.config.js", pluginPath, basePluginPath);
   // create src files

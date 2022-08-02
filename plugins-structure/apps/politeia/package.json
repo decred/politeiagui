@@ -5,37 +5,26 @@
   "module": "src/index.js",
   "license": "MIT",
   "scripts": {
-    "prettier": "prettier \"src/**/*.js\"",
-    "format": "yarn prettier --write",
-    "test:format": "yarn prettier --check",
-    "test:eslint": "eslint --ext .js ./src",
-    "fix:eslint": "eslint --ext .js ./src --fix",
-    "test:ci": "npm run test:format && npm run test:eslint && cross-env jest --no-cache",
-    "test:dev": "npm run test:format && npm run test:eslint && cross-env jest --watchAll --no-cache",
-    "test": "is-ci \"test:ci\" \"test:dev\"",
-    "test:coverage": "yarn test:ci; open coverage/lcov-report/index.html",
-    "cy:run": "cypress run",
-    "test:e2e:open": "cypress open --e2e",
-    "test:e2e:chrome": "cypress open --e2e --browser=chrome",
-    "cy:run:e2e": "cypress run --e2e ",
-    "test:e2e:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test 'yarn serve' https-get://localhost:3000 cy:run:e2e",
-    "build": "webpack --config webpack.prod.js",
-    "bundle-report": "webpack-bundle-analyzer --port 4200 dist/stats.json",
-    "start": "webpack serve --config webpack.dev.js --open",
-    "serve": "webpack serve --config webpack.dev.js"
+    "prettify": "politeiagui-scripts prettify",
+    "prettify:write": "politeiagui-scripts prettify --write",
+    "prettify:check": "politeiagui-scripts prettify --check",
+    "lint:test": "politeiagui-scripts lint",
+    "lint:fix": "politeiagui-scripts lint --fix",
+    "test": "politeiagui-scripts test",
+    "build": "politeiagui-scripts build-app",
+    "analyze": "source-map-explorer 'dist/*.js'",
+    "start": "politeiagui-scripts start-app"
   },
   "dependencies": {
     "@politeiagui/comments": "1.0.0",
     "@politeiagui/common-ui": "1.0.0",
     "@politeiagui/core": "1.0.0",
-    "@politeiagui/statistics": "1.0.0",
     "@politeiagui/ticketvote": "1.0.0",
-    "js-file-download": "^0.4.12"
+    "js-file-download": "^0.4.12",
+    "politeiagui-scripts": "1.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
-    "@testing-library/jest-dom": "^5.14.1",
     "jest-extended": "^1.0.0",
-    "webpack-bundle-analyzer": "^4.4.2"
+    "source-map-explorer": "^2.5.2"
   }
 }

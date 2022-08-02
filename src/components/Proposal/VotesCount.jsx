@@ -1,51 +1,47 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Text, ButtonIcon, classNames } from "pi-ui";
+import { Text, classNames, Tooltip } from "pi-ui";
 import styles from "./Proposal.module.css";
 
 const VotesCount = ({
   eligibleVotes,
   quorumVotes,
+  quorumPercentage,
   votesReceived,
-  onSearchVotes,
   isVoteActive
 }) => {
   const votesLeft = quorumVotes - votesReceived;
   return (
     <div className={styles.voteCount}>
-      {isVoteActive && (
-        <>
-          {onSearchVotes && votesReceived > 0 && (
-            <div>
-              <ButtonIcon
-                type="search"
-                onClick={onSearchVotes}
-                className={styles.voteCountSearch}
-              />
-            </div>
-          )}
-          <div className={styles.quorumAndVotes}>
-            <div>
-              <Text
-                className={classNames(styles.votesLeft, styles.quorumReached)}
-                size="small"
-              >
-                {votesLeft > 0
-                  ? `${votesLeft} votes until quorum`
-                  : "quorum reached!"}
-              </Text>
-            </div>
-            <div>
-              <Text className={styles.votesReceived} size="small">
-                {votesReceived}
-              </Text>
-              <Text className={styles.votesQuorum} size="small">
-                /{`${eligibleVotes} votes`}
-              </Text>
-            </div>
+      <div className={styles.quorumAndVotes}>
+        {isVoteActive && (
+          <div>
+            <Text
+              className={classNames(styles.votesLeft, styles.quorumReached)}
+              size="small"
+            >
+              {votesLeft > 0 ? (
+                `${votesLeft} votes until quorum`
+              ) : (
+                <Tooltip
+                  placement="bottom"
+                  content={`quorum of ${quorumPercentage}% (${quorumVotes} votes) has been reached!`}
+                >
+                  quorum reached!
+                </Tooltip>
+              )}
+            </Text>
           </div>
-        </>
-      )}
+        )}
+        <div>
+          <Text className={styles.votesReceived} size="small">
+            {votesReceived}
+          </Text>
+          <Text className={styles.votesQuorum} size="small">
+            /{`${eligibleVotes} votes`}
+          </Text>
+        </div>
+      </div>
     </div>
   );
 };

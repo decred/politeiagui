@@ -1,5 +1,5 @@
 module.exports = {
   transform: {
-    '\\.js$': ['babel-jest', { cwd: __dirname }],
+    "\\.js$": ["babel-jest", { cwd: __dirname }],
   },
 };

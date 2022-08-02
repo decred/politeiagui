@@ -7,7 +7,7 @@ import { records } from "@politeiagui/core/records";
 import { getTokensToFetch } from "@politeiagui/core/records/utils";
 import { TicketvoteRecordVoteStatusBar } from "../Vote";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
-import { ticketvotePolicy } from "@politeiagui/ticketvote/policy";
+import { ticketvotePolicy } from "../../ticketvote/policy";
 
 export function TicketvoteRecordsList({ status }) {
   const [page, setPage] = useState(1);

@@ -14,31 +14,18 @@
     "./ui": "./src/ui/index.js",
     "./dev/mocks": "./src/dev/mocks/index.js"
   },
-  "babel": {
-    "env": {
-      "test": {
-        "plugins": [
-          "@babel/plugin-transform-modules-commonjs"
-        ],
-        "presets": [
-          "@babel/preset-react"
-        ]
-      }
-    }
-  },
   "scripts": {
-    "prettier": "prettier \"src/**/*.js\"",
-    "format": "yarn prettier --write",
-    "test:format": "yarn prettier --check",
-    "test:eslint": "eslint --ext .js ./src",
-    "test:ci": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --no-cache",
-    "test:dev": "npm run test:format && npm run test:eslint && cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll --no-cache",
-    "test": "is-ci \"test:ci\" \"test:dev\"",
-    "test:coverage": "yarn test:ci; open coverage/lcov-report/index.html",
-    "build": "webpack --config webpack.prod.js",
-    "start": "webpack serve --config webpack.dev.js --open"
+    "prettify": "politeiagui-scripts prettify",
+    "prettify:write": "politeiagui-scripts prettify --write",
+    "prettify:check": "politeiagui-scripts prettify --check",
+    "lint:test": "politeiagui-scripts lint",
+    "lint:fix": "politeiagui-scripts lint --fix",
+    "test": "politeiagui-scripts test",
+    "build": "politeiagui-scripts build-plugin",
+    "start": "politeiagui-scripts start-plugin"
   },
   "dependencies": {
+    "politeiagui-scripts": "1.0.0",
     "@politeiagui/common-ui": "1.0.0",
     "@politeiagui/core": "1.0.0",
     "js-file-download": "^0.4.12"

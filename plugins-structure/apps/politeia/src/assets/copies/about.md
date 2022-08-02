@@ -15,7 +15,6 @@ saved to Politeia is accompanied by cryptographic proof of who, what, and when.
 
 **Who** submitted the data.  
 **What** data was submitted.  
-**When** the data was submitted.  
+**When** the data was submitted.
 
 [Learn More about Politeia](https://docs.decred.org/governance/politeia/overview/)
-

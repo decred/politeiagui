@@ -221,6 +221,23 @@ export const ChartsLink = ({ token, legacytoken }) => {
   );
 };
 
+export const SearchVotes = ({ onClick }) => {
+  const { themeName } = useTheme();
+  const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
+  return (
+    <Tooltip
+      className={classNames(
+        styles.actionsTooltip,
+        isDarkTheme && styles.darkActionsTooltip
+      )}
+      placement="bottom"
+      content={"Search for proposals votes"}
+    >
+      <ButtonIcon type="search" onClick={onClick} />
+    </Tooltip>
+  );
+};
+
 export const MarkdownLink = ({ to, active = false, onClick }) => {
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
@@ -410,6 +427,7 @@ const RecordWrapper = ({ children, className }) => (
       CommentsLink,
       Link,
       ChartsLink,
+      SearchVotes,
       MarkdownLink,
       CopyLink,
       DownloadRecord,

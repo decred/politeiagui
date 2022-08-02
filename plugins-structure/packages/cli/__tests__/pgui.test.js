@@ -20,9 +20,9 @@ describe("Given the newplugin command", () => {
   it("should create new plugins correctly", () => {
     fs.existsSync.mockReturnValue(false);
     newPluginCmd("testplugin", { port: 5000 });
-    expect(fs.writeFileSync).toHaveBeenCalledTimes(4);
+    expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
     expect(fs.existsSync).toHaveBeenCalledTimes(1);
-    expect(fs.mkdirSync).toHaveBeenCalledTimes(2);
+    expect(fs.mkdirSync).toHaveBeenCalledTimes(3);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
   });
@@ -43,7 +43,7 @@ describe("Given the newapp command", () => {
   it("should create new apps correctly", () => {
     fs.existsSync.mockReturnValue(false);
     newAppCmd("my-new-app", { port: 5000 });
-    expect(fs.writeFileSync).toHaveBeenCalledTimes(5);
+    expect(fs.writeFileSync).toHaveBeenCalledTimes(6);
     expect(fs.existsSync).toHaveBeenCalledTimes(1);
     expect(fs.mkdirSync).toHaveBeenCalledTimes(3);
     expect(fs.copyFileSync).toHaveBeenCalledTimes(3);
