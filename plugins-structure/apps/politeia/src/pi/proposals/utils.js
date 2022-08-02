@@ -384,6 +384,7 @@ export function getProposalStatusDescription(statusChange) {
     case PROPOSAL_STATUS_VOTE_STARTED:
       return { event: "vote ends" };
     case PROPOSAL_STATUS_ACTIVE:
+    case PROPOSAL_STATUS_VOTE_ENDED:
     case PROPOSAL_STATUS_APPROVED:
     case PROPOSAL_STATUS_REJECTED:
       return { event: "vote ended" };

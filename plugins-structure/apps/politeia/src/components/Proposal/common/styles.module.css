@@ -5,10 +5,16 @@
 .statusLabelWrapper {
   position: absolute;
   right: var(--container-padding-right);
+  display: flex;
+  flex-flow: column;
 }
 
 .statusLabel {
   font-size: var(--font-size-small);
+}
+
+.statusLabelTooltip {
+  width: max-content;
 }
 
 .statusLabelText {
@@ -19,7 +25,7 @@
 @media screen and (max-width: 768px) {
   .statusLabelWrapper {
     top: 2.3rem;
-    display: flex;
+    flex-flow: row;
   }
   .statusLabelText::before {
     content: "•";

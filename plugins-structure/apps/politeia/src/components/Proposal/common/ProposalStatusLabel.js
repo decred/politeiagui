@@ -1,8 +1,8 @@
 import React from "react";
 import { Event } from "@politeiagui/common-ui";
+import { Tooltip } from "pi-ui";
 import styles from "./styles.module.css";
 import { getProposalStatusDescription } from "../../../pi/proposals/utils";
-import { PROPOSAL_STATUS_VOTE_STARTED } from "../../../pi/lib/constants";
 
 function ProposalStatusLabel({ statusChange }) {
   if (!statusChange) return null;
@@ -19,12 +19,16 @@ function ProposalStatusLabel({ statusChange }) {
       {description && (
         <div className={styles.statusLabelText}>{description}</div>
       )}
-      {statusChange.blocksCount &&
-        statusChange.status === PROPOSAL_STATUS_VOTE_STARTED && (
-          <div className={styles.statusLabelText}>
-            {-statusChange.blocksCount} blocks left
-          </div>
-        )}
+      {statusChange.blocksCount > 0 && (
+        <Tooltip
+          content={`${statusChange.startblockheight} to ${statusChange.endblockheight}`}
+          placement="bottom"
+          contentClassName={styles.statusLabelTooltip}
+          className={styles.statusLabelText}
+        >
+          {statusChange.blocksCount} blocks left
+        </Tooltip>
+      )}
     </div>
   );
 }

@@ -45,15 +45,19 @@ const proposalsSlice = createSlice({
         voteStatusChangesByToken
       ).reduce((proposalStatusChanges, token) => {
         const record = records[token];
+        const vsc = voteStatusChangesByToken[token];
+        if (!vsc) return proposalStatusChanges;
         return {
           ...proposalStatusChanges,
-          [token]: voteStatusChangesByToken[token].map((vsc) => ({
-            ...vsc,
-            status: convertVoteStatusToProposalStatus(
-              vsc.status,
-              record?.status
-            ),
-          })),
+          [token]: [
+            {
+              ...vsc,
+              status: convertVoteStatusToProposalStatus(
+                vsc.status,
+                record?.status
+              ),
+            },
+          ],
         };
       }, {});
       state.statusChangesByToken = mergeStatusChanges(
