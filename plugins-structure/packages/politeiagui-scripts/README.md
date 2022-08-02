@@ -10,6 +10,8 @@ This is a CLI and exposes a bin called politeiagui-scripts.
 
 politeiagui-scripts allows you to specify your own configuration for things. To have your own config, just add the config file (babel.config.js, jest.config.js, .prettierrc, .eslintrc) to your plugin or app and politeiagui-scripts will use that instead of the internal config. You can also add a config file to the workspace if you want.
 
+<!-- TODO: Add docs to install new deps/packages -->
+
 ## Commands
 
 ### start-app
