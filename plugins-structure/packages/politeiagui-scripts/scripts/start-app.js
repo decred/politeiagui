@@ -5,4 +5,7 @@ const configFactory = require("../config/webpack/webpack.config");
 const { start } = require("../utils");
 
 const config = configFactory("development", "app");
-start(config);
+const args = process.argv.slice(2);
+const isServerMode = args.includes("--serve");
+
+start(config, isServerMode);
