@@ -30,7 +30,7 @@ const config =
             (relativePath) => path.resolve(__dirname, "..", relativePath),
             path.resolve(resolveApp("src"), "..")
           )
-        )
+        ),
       ]
     : [];
 

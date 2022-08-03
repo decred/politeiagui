@@ -7,7 +7,7 @@ module.exports = {
 
     if (filename.match(/\.svg$/)) {
       const pascalCaseFilename = camelcase(path.parse(filename).name, {
-        pascalCase: true
+        pascalCase: true,
       });
       const componentName = `Svg${pascalCaseFilename}`;
       return `const React = require('react');
@@ -29,5 +29,5 @@ module.exports = {
     }
 
     return `module.exports = ${assetFilename};`;
-  }
+  },
 };

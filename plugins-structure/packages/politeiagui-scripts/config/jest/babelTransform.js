@@ -22,20 +22,20 @@ module.exports = babelJest.createTransformer({
       {
         alias: {
           "@politeiagui/core": resolveOwn("../packages/core/src"),
-          "@politeiagui/core/client": resolveOwn("../packages/core/src/client")
-        }
-      }
-    ]
+          "@politeiagui/core/client": resolveOwn("../packages/core/src/client"),
+        },
+      },
+    ],
   ],
   presets: [
     [
       require.resolve("@babel/preset-react"),
       {
-        runtime: hasJsxRuntime ? "automatic" : "classic"
-      }
+        runtime: hasJsxRuntime ? "automatic" : "classic",
+      },
     ],
-    [require.resolve("@babel/preset-env")]
+    [require.resolve("@babel/preset-env")],
   ],
   babelrc: false,
-  configFile: false
+  configFile: false,
 });

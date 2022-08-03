@@ -4,14 +4,14 @@ const plugins = (isEnvDevelopment, isApp) =>
   isApp
     ? [
         new HtmlWebpackPlugin({
-          template: resolveApp("./src/public/index.html")
-        })
+          template: resolveApp("./src/public/index.html"),
+        }),
       ]
     : isEnvDevelopment
     ? [
         new HtmlWebpackPlugin({
-          template: resolveApp("./src/dev/index.html")
-        })
+          template: resolveApp("./src/dev/index.html"),
+        }),
       ]
     : [];
 
@@ -24,9 +24,9 @@ const jsRules = [
     exclude: /node_modules/,
     options: {
       presets: ["@babel/preset-env", "@babel/preset-react"],
-      plugins: ["@babel/plugin-transform-runtime"]
-    }
-  }
+      plugins: ["@babel/plugin-transform-runtime"],
+    },
+  },
 ];
 
 const cssRules = [
@@ -38,31 +38,31 @@ const cssRules = [
         loader: "css-loader",
         options: {
           importLoaders: 1,
-          modules: true
-        }
-      }
+          modules: true,
+        },
+      },
     ],
-    include: /\.module\.css$/
+    include: /\.module\.css$/,
   },
   {
     test: /\.css$/,
     use: ["style-loader", "css-loader"],
-    exclude: /\.module\.css$/
-  }
+    exclude: /\.module\.css$/,
+  },
 ];
 
 const markdownRules = [
   {
     test: /\.md$/,
-    use: "raw-loader"
-  }
+    use: "raw-loader",
+  },
 ];
 
 const svgRules = [
   {
     test: /\.svg$/,
-    use: ["@svgr/webpack"]
-  }
+    use: ["@svgr/webpack"],
+  },
 ];
 
 module.exports = function (webpackEnv = "production", type = "app") {
@@ -84,19 +84,19 @@ module.exports = function (webpackEnv = "production", type = "app") {
       path: resolveApp("./dist"),
       library: {
         name: pkgName + ".js",
-        type: "umd"
+        type: "umd",
       },
-      clean: true
+      clean: true,
     },
     module: {
-      rules: [...jsRules, ...cssRules, ...markdownRules, ...svgRules]
+      rules: [...jsRules, ...cssRules, ...markdownRules, ...svgRules],
     },
     resolve: {
       fallback: {
         crypto: require.resolve("crypto-browserify"),
-        stream: require.resolve("stream-browserify")
-      }
+        stream: require.resolve("stream-browserify"),
+      },
     },
-    plugins: plugins(isEnvDevelopment, isApp)
+    plugins: plugins(isEnvDevelopment, isApp),
   };
 };
