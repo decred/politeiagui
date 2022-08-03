@@ -21,8 +21,7 @@
     "prettify:write": "politeiagui-scripts prettify --write",
     "prettify:check": "politeiagui-scripts prettify --check",
     "lint:test": "politeiagui-scripts lint",
-    "lint:fix": "politeiagui-scripts lint --fix",
-    "test": "politeiagui-scripts test"
+    "lint:fix": "politeiagui-scripts lint --fix"
   },
   "bin": {
     "pgui": "lib/pgui.js"
