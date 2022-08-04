@@ -14,11 +14,34 @@ const { packageJson: pkg, path: pkgPath } = readPkgUp.sync({
   cwd: fs.realpathSync(process.cwd()),
 });
 
+const moduleFileExtensions = [
+  "web.mjs",
+  "mjs",
+  "web.js",
+  "js",
+  "json",
+  "web.jsx",
+  "jsx",
+];
+
 const appDirectory = path.dirname(pkgPath);
+const resolveOwn = (relativePath) =>
+  path.resolve(__dirname, "..", relativePath);
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 const fromRoot = (...p) => path.join(appDirectory, ...p);
 const hasFile = (...p) => fs.existsSync(fromRoot(...p));
 const hasPkgProp = (props) => [...props].some((prop) => has(pkg, prop));
+const resolveModule = (resolveFn, filePath) => {
+  const extension = moduleFileExtensions.find((extension) =>
+    fs.existsSync(resolveFn(`${filePath}.${extension}`))
+  );
+
+  if (extension) {
+    return resolveFn(`${filePath}.${extension}`);
+  }
+
+  return resolveFn(`${filePath}.js`);
+};
 
 function resolveBin(
   modName,
@@ -155,4 +178,7 @@ module.exports = {
   start,
   build,
   resolveApp,
+  resolveModule,
+  resolveOwn,
+  moduleFileExtensions,
 };
