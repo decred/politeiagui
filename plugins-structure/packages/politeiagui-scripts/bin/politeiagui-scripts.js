@@ -3,31 +3,24 @@
 const path = require("path");
 const spawn = require("cross-spawn");
 const glob = require("glob");
+const chalk = require("chalk");
 
 const [executor, ignoredBin, script] = process.argv;
+
+function getScriptsList() {
+  const scriptsPath = glob.sync(path.join(__dirname, "../scripts", "*.js"));
+  // `glob.sync` returns paths with unix style path separators even on Windows.
+  // So we normalize it before attempting to strip out the scripts path.
+  return scriptsPath.map((sp) => sp.split("/").pop().split(".js")[0]);
+}
 
 if (script && script !== "--help" && script !== "help") {
   runScript();
 } else {
-  const scriptsPath = path.join(__dirname, "../scripts/");
-  const scriptsAvailable = glob.sync(path.join(__dirname, "../scripts", "*"));
-  // `glob.sync` returns paths with unix style path separators even on Windows.
-  // So we normalize it before attempting to strip out the scripts path.
-  const scriptsAvailableMessage = scriptsAvailable
-    .map(path.normalize)
-    .map((s) =>
-      s
-        .replace(scriptsPath, "")
-        .replace(/__tests__/, "")
-        .replace(/\.js$/, "")
-    )
-    .filter(Boolean)
-    .join("\n  ")
-    .trim();
   const fullMessage = `
 Usage: ${ignoredBin} [script] [--flags]
 Available Scripts:
-  ${scriptsAvailableMessage}
+  - ${getScriptsList().join("\n  - ")}
 Options:
   You can assume that the args you pass will be forwarded to the respective tool that's being run under the hood.
   `.trim();
@@ -49,6 +42,13 @@ function getEnv() {
     );
 }
 
+function UnknownScriptError(script) {
+  const validScripts = getScriptsList();
+  console.log(chalk.redBright(`Unknown script "${script}".\n`));
+  console.log(`Valid scripts are:\n- ${validScripts.join("\n- ")}`);
+  return process.exit(1);
+}
+
 function runScript() {
   const args = process.argv.slice(2);
   const scriptIndex = args.findIndex((x) =>
@@ -59,13 +59,13 @@ function runScript() {
   const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
 
   if (!buildCommand) {
-    throw new Error(`Unknown script "${script}".`);
+    throw UnknownScriptError(script);
   }
 
   const relativeScriptPath = path.join(__dirname, "../scripts", buildCommand);
   const scriptPath = attemptResolve(relativeScriptPath);
   if (!scriptPath) {
-    throw new Error(`Unknown script "${script}".`);
+    throw UnknownScriptError(script);
   }
 
   // Attempt to strt the script with the passed node arguments
