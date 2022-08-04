@@ -111,14 +111,6 @@ function createConfigFile({ appPath, config, pluginsConfig }) {
   }
 }
 
-function createTestConfigFiles({ path, basePath }) {
-  copyFile("jest.config.js", path, basePath);
-}
-
-function createBabelConfigFiles({ path, basePath }) {
-  copyFile("babel.config.js", path, basePath);
-}
-
 function getPluginsDepsAndConfig({ isDefaultApp, plugins, configFile }) {
   const pluginsDeps = {};
   const pluginsConfig = {};
@@ -158,8 +150,6 @@ module.exports = {
   loadConfigFile,
   createPackageJsonFile,
   createConfigFile,
-  createBabelConfigFiles,
-  createTestConfigFiles,
   getPluginsDepsAndConfig,
   getPluginNameFromDep
 };

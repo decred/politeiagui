@@ -4,9 +4,7 @@ const path = require("path");
 const {
   replaceFileValuesFromMap,
   validateName,
-  createPackageJsonFile,
-  createBabelConfigFiles,
-  createTestConfigFiles
+  createPackageJsonFile
 } = require("./utils");
 
 function getPluginPath(pluginName) {
@@ -69,8 +67,6 @@ module.exports = function newPlugin(pluginName) {
       basePackageJSON: basePluginPackageJSON,
       targetPath: pluginPath
     });
-    createBabelConfigFiles({ path: pluginPath, basePath: basePluginPath });
-    createTestConfigFiles({ path: pluginPath, basePath: basePluginPath });
     createPluginSrcFile({ pluginPath, basePluginPath, pluginName });
   } catch (e) {
     console.error(e);

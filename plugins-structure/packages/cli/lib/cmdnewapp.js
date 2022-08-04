@@ -9,8 +9,6 @@ const {
   loadConfigFile,
   createPackageJsonFile,
   createConfigFile,
-  createBabelConfigFiles,
-  createTestConfigFiles,
   getPluginsDepsAndConfig,
   getPluginNameFromDep
 } = require("./utils");
@@ -91,8 +89,6 @@ module.exports = function newApp(appName, { plugins, config }) {
       targetPath: appPath
     });
     createConfigFile({ appPath, config, pluginsConfig });
-    createBabelConfigFiles({ path: appPath, basePath: baseAppPath });
-    createTestConfigFiles({ path: appPath, basePath: baseAppPath });
     createAppSrcFiles({ appPath, appName, baseAppPath, pluginsDeps });
   } catch (e) {
     console.error(e);
