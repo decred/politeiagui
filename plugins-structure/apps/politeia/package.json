@@ -24,7 +24,6 @@
     "politeiagui-scripts": "1.0.0"
   },
   "devDependencies": {
-    "jest-extended": "^1.0.0",
     "source-map-explorer": "^2.5.2"
   }
 }
