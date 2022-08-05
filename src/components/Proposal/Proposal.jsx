@@ -432,7 +432,6 @@ const Proposal = React.memo(function Proposal({
                   markerTooltipClassName={styles.statusBarTooltip}
                   renderStatusInfoComponent={
                     <VotesCount
-                      isVoteActive={isVoteActive}
                       eligibleVotes={getEligibleTickets(voteSummary)}
                       quorumPercentage={voteSummary.quorumpercentage}
                       quorumVotes={getQuorumInVotes(voteSummary)}
