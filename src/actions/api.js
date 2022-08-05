@@ -1233,22 +1233,21 @@ export const onUpdateUserKey = (currentUserID) =>
     return pki
       .generateKeys()
       .then((keys) =>
-        pki.loadKeys(currentUserID, keys).then(() =>
-          api
-            .updateKeyRequest(csrf, pki.toHex(keys.publicKey))
-            .then((response) => {
-              const { verificationtoken } = response;
-              if (verificationtoken) {
-                const isTestnet = sel.isTestNet(getState());
-                if (isTestnet) {
-                  dispatch(act.SHOULD_AUTO_VERIFY_KEY(true));
-                }
+        api
+          .updateKeyRequest(csrf, pki.toHex(keys.publicKey))
+          .then((response) => {
+            const { verificationtoken } = response;
+            if (verificationtoken) {
+              const isTestnet = sel.isTestNet(getState());
+              if (isTestnet) {
+                dispatch(act.SHOULD_AUTO_VERIFY_KEY(true));
               }
-              return dispatch(
-                act.RECEIVE_UPDATED_KEY({ ...response, success: true })
-              );
-            })
-        )
+            }
+            return dispatch(
+              act.RECEIVE_UPDATED_KEY({ ...response, success: true })
+            );
+          })
+          .then(() => pki.loadKeys(currentUserID, keys))
       )
       .catch((error) => {
         dispatch(act.RECEIVE_UPDATED_KEY(null, error));
