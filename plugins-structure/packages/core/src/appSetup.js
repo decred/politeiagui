@@ -4,6 +4,7 @@ import { router } from "./router";
 import { services as recordsServices } from "./records/services";
 import { listener } from "./listeners";
 import uniq from "lodash/fp/uniq";
+import isArray from "lodash/isArray";
 
 function mergeAppAndPluginServices(services, targetServices) {
   let mergedServices = services;
@@ -19,7 +20,7 @@ function mergeAppAndPluginServices(services, targetServices) {
 }
 
 function mergeListeners(routeServices, listeners) {
-  let idListeners = [];
+  const idListeners = [];
   for (const { listenerCreator, effect } of routeServices) {
     if (listenerCreator) {
       idListeners.push({
@@ -56,13 +57,13 @@ function addRouteServicesProperties(appServices, routeServices) {
 }
 
 function registerListeners(listeners) {
-  for (let l of listeners) {
+  for (const l of listeners) {
     listener.startListening(l);
   }
 }
 
 function clearListeners(listeners) {
-  for (let l of listeners) {
+  for (const l of listeners) {
     listener.stopListening({ ...l, cancelActive: true });
   }
 }
@@ -81,6 +82,12 @@ function validateServicesIds(ids = []) {
  * @param {{ plugins: Array, listeners: Array, config: Object }}
  */
 export function appSetup({ plugins, listeners = [], config }) {
+  if (!isArray(plugins)) {
+    throw Error("'plugins' must be an array");
+  }
+  if (!isArray(listeners)) {
+    throw Error("'listeners' must be an array");
+  }
   let appServices = recordsServices;
   plugins.every(validatePlugin);
 

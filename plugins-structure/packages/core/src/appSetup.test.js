@@ -66,4 +66,18 @@ describe("Given appSetup method", () => {
       expect(effect).toBeCalled();
     });
   });
+  describe("when app config is incorrect", () => {
+    it("should throw error when plugins are invalid", () => {
+      expect(() => appSetup({ plugins: {} })).toThrow(
+        "'plugins' must be an array"
+      );
+      expect(() => appSetup({ plugins: [{}] })).toThrow();
+    });
+    it("should throw error when listeners are invalid", () => {
+      expect(() => appSetup({ plugins: [], listeners: {} })).toThrow(
+        "'listeners' must be an array"
+      );
+      expect(() => appSetup({ plugins: [], listeners: [{}] })).toThrow();
+    });
+  });
 });
