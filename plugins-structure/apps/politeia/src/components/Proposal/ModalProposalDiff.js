@@ -10,7 +10,11 @@ import {
   RecordCard,
   ThumbnailGrid,
 } from "@politeiagui/common-ui";
-import { decodeProposalRecord, getFilesDiff, getImagesByDigest } from "./utils";
+import {
+  decodeProposalRecord,
+  getFilesDiff,
+  getImagesByDigest,
+} from "../../pi/proposals/utils";
 import { ProposalDownloads } from "./common";
 import styles from "./ModalProposalDiff.module.css";
 import range from "lodash/range";
@@ -54,7 +58,7 @@ function AttachmentsDiff({ newFiles, oldFiles }) {
 
 function VersionSelector({ maxVersion, onChange, current, minVersion = 1 }) {
   const options = range(maxVersion, minVersion - 1, -1).map((v) => ({
-    label: `version ${v}`,
+    label: `v${v}`,
     value: v,
   }));
   function getValueOption(value) {
@@ -250,7 +254,7 @@ function ProposalDiff({
             setDiffView={setIsMarkdownView}
           />
         }
-        subtitle={
+        secondRow={
           <VersionsInfo
             oldProposal={oldProposal}
             newProposal={newProposal}

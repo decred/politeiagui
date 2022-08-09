@@ -8,11 +8,15 @@ import {
   ThumbnailGrid,
   useModal,
 } from "@politeiagui/common-ui";
-import { decodeProposalRecord, getImagesByDigest } from "./utils";
+import {
+  decodeProposalRecord,
+  getImagesByDigest,
+} from "../../pi/proposals/utils";
 import {
   ProposalDownloads,
   ProposalMetadata,
   ProposalStatusBar,
+  ProposalStatusLabel,
   ProposalStatusTag,
   ProposalSubtitle,
 } from "./common";
@@ -24,8 +28,9 @@ import ModalProposalDiff from "./ModalProposalDiff";
 const ProposalDetails = ({
   record,
   voteSummary,
-  piSummary,
+  proposalSummary,
   onFetchRecordTimestamps,
+  proposalStatusChanges,
 }) => {
   const [open] = useModal();
 
@@ -61,11 +66,15 @@ const ProposalDetails = ({
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
 
+  const currentStatusChange =
+    proposalSummary && proposalStatusChanges?.[proposalSummary.status];
+
   return (
     <div>
-      {isAbandoned && (
+      {currentStatusChange?.reason && (
         <Message kind="warning">
-          Reason: {proposalDetails.abandonmentReason}
+          <div>Proposal is {currentStatusChange.status}.</div>
+          <div>Reason: {currentStatusChange.reason}</div>
         </Message>
       )}
       <RecordCard
@@ -82,7 +91,10 @@ const ProposalDetails = ({
             onChangeVersion={handleChangeVersion}
           />
         }
-        rightHeader={<ProposalStatusTag piSummary={piSummary} />}
+        rightHeader={<ProposalStatusTag proposalSummary={proposalSummary} />}
+        rightHeaderSubtitle={
+          <ProposalStatusLabel statusChange={currentStatusChange} />
+        }
         secondRow={
           <div className={styles.secondRow}>
             <RecordToken token={proposalDetails.token} isCopyable={true} />

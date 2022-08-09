@@ -78,3 +78,84 @@ export const validTicketvoteStatuses = [
   ...validStringTicketvoteStatuses,
   ...validNumberTicketvoteStatuses,
 ];
+
+/**
+ * Returns the amount of blocks from the bestBlock
+ * @param {Number} block
+ * @param {Number} bestBlock
+ * @returns {Number} number of blocks left
+ */
+export function getVoteBlocksDiff(block, bestBlock) {
+  if (!block || !bestBlock) return 0;
+  return +block - bestBlock;
+}
+
+/**
+ * Returns the blocks difference from current block height in milliseconds
+ * @param {Number} block
+ * @param {Number} currentHeight
+ * @param {Number} blockDurationMinutes Block duration in minutes
+ * @returns {Number}
+ */
+export function getTimestampFromBlocks(
+  currentBlockHeight,
+  bestBlock,
+  blockDurationMinutes
+) {
+  const blocksDiff = getVoteBlocksDiff(currentBlockHeight, bestBlock);
+  const blocksDiffMs = blocksDiff * blockDurationMinutes * 60 * 1000;
+  const dateMs = blocksDiffMs + Date.now();
+  return Math.round(dateMs / 1000); // returns unix timestamp
+}
+
+function getTicketvoteSummaryStatusChanges(
+  voteSummary,
+  blockDurationMinutes = 2
+) {
+  if (!voteSummary) return;
+  const { bestblock, endblockheight, startblockheight, status } = voteSummary;
+  switch (status) {
+    case TICKETVOTE_STATUS_AUTHORIZED:
+      return { status };
+    case TICKETVOTE_STATUS_STARTED:
+    case TICKETVOTE_STATUS_REJECTED:
+    case TICKETVOTE_STATUS_APPROVED:
+      return {
+        endblockheight,
+        startblockheight,
+        timestamp: getTimestampFromBlocks(
+          endblockheight,
+          bestblock,
+          blockDurationMinutes
+        ),
+        blocksCount: getVoteBlocksDiff(endblockheight, bestblock),
+        status,
+      };
+    default:
+      return;
+  }
+}
+
+/**
+ * getTicketvoteSummariesStatusChanges returns the status changes timestamps
+ * for each summary from `summaries`, using given `blockDurationMinutes` param.
+ * @param {Object} summaries Vote Summaries
+ * @param {Number} blockDurationMinutes Block duration in minutes
+ */
+export function getTicketvoteSummariesStatusChanges(
+  summaries,
+  blockDurationMinutes
+) {
+  if (!summaries) return;
+  return Object.keys(summaries).reduce((statusChanges, token) => {
+    const statusChange = getTicketvoteSummaryStatusChanges(
+      summaries[token],
+      blockDurationMinutes
+    );
+    if (!statusChange) return statusChanges;
+    return {
+      ...statusChanges,
+      [token]: statusChange,
+    };
+  }, {});
+}
