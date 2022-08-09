@@ -22,6 +22,6 @@ export function useCommentsVotes({ token, userId }) {
   return {
     votes,
     votesError,
-    votesStatus
+    votesStatus,
   };
 }

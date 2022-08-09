@@ -26,6 +26,6 @@ export function useRecordComments({ token }) {
   return {
     comments,
     commentsError,
-    commentsStatus
+    commentsStatus,
   };
 }

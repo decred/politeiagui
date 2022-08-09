@@ -20,6 +20,6 @@ export function useCommentsPolicy() {
   return {
     policy,
     policyError,
-    policyStatus
+    policyStatus,
   };
 }
