@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { commentsPolicy } from "./";
 
@@ -10,23 +10,16 @@ export function useCommentsPolicy() {
   const policyStatus = useSelector(commentsPolicy.selectStatus);
   const policyError = useSelector(commentsPolicy.selectError);
 
-  // Actions
-  const onFetchPolicy = useCallback(
-    () => dispatch(commentsPolicy.fetch()),
-    [dispatch]
-  );
-
   // Effects
   useEffect(() => {
     if (policyStatus === "idle") {
-      onFetchPolicy();
+      dispatch(commentsPolicy.fetch());
     }
-  }, [policyStatus, onFetchPolicy]);
+  }, [policyStatus, dispatch]);
 
   return {
     policy,
     policyError,
     policyStatus,
-    onFetchPolicy,
   };
 }

@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import RecordCommentsPage from "../dev/pages/RecordComments";
+import RecordCommentsPage from "./pages/RecordComments";
 
 export const routes = [
   {
