@@ -19,3 +19,20 @@ export function validatePiSummariesPageSize(state) {
   }
   return true;
 }
+
+export function validatePiBillingStatusChangesPageSize(state) {
+  const pageSize =
+    state &&
+    state.piPolicy &&
+    state.piPolicy.policy &&
+    state.piPolicy.policy.billingstatuschangespagesize;
+
+  if (!pageSize) {
+    const error = Error(
+      "Pi policy should be loaded before fetching billing status changes"
+    );
+    console.error(error);
+    throw error;
+  }
+  return true;
+}

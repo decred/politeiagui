@@ -12,38 +12,22 @@ function ProposalSubtitle({
   timestamps = {},
   onChangeVersion,
 }) {
-  const { publishedat, editedat, abandonedat, censoredat } = timestamps;
+  const { publishedat, editedat } = timestamps;
   return (
     <Join>
-      <Link href={`user/${userid}`} data-testid="proposal-username">
-        {username}
-      </Link>
+      <Link href={`user/${userid}`}>{username}</Link>
       {publishedat && (
         <Event
           event="published"
-          timestamp={publishedat}
           data-testid="proposal-date-published"
+          timestamp={publishedat}
         />
       )}
       {editedat && (
         <Event
           event="edited"
-          timestamp={editedat}
           data-testid="proposal-date-edited"
-        />
-      )}
-      {abandonedat && (
-        <Event
-          event="abandoned"
-          timestamp={abandonedat}
-          data-testid="proposal-date-abandoned"
-        />
-      )}
-      {censoredat && (
-        <Event
-          event="censored"
-          timestamp={censoredat}
-          data-testid="proposal-date-censored"
+          timestamp={editedat}
         />
       )}
       {version > 1 &&

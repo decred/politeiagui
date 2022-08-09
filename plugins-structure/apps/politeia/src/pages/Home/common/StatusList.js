@@ -34,11 +34,13 @@ function StatusList({
     hasMoreInventory,
     homeStatus,
     countComments,
-    summaries,
+    voteSummaries,
+    proposalSummaries,
     fetchNextBatch,
     recordsInOrder,
     recordsError,
     areAllInventoryEntriesFetched,
+    proposalsStatusChanges,
   } = useStatusList({ inventory, inventoryStatus, status });
 
   function handleFetchMore() {
@@ -84,7 +86,9 @@ function StatusList({
               key={token}
               record={record}
               commentsCount={countComments?.[token]}
-              voteSummary={summaries?.[token]}
+              voteSummary={voteSummaries?.[token]}
+              proposalSummary={proposalSummaries?.[token]}
+              proposalStatusChanges={proposalsStatusChanges?.[token]}
             />
           );
         })}

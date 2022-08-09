@@ -97,7 +97,6 @@ const ProposalItem = ({
               markerTooltipClassName={styles.statusBarTooltip}
               renderStatusInfoComponent={
                 <VotesCount
-                  isVoteActive={isVoteActive}
                   quorumVotes={getQuorumInVotes(voteSummary)}
                   votesReceived={getVotesReceived(voteSummary)}
                 />

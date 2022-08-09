@@ -5,6 +5,9 @@ import { records } from "@politeiagui/core/records";
 import { recordsPolicy } from "@politeiagui/core/records/policy";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
+import { piSummaries } from "../../pi/summaries";
+import { piBilling } from "../../pi/billing";
+import { proposals } from "../../pi/proposals";
 
 function areAllEntriesFetched(inventoryList, records) {
   if (!inventoryList) return false;
@@ -17,7 +20,8 @@ function areAllEntriesFetched(inventoryList, records) {
 function useStatusList({ inventory, inventoryStatus }) {
   const homeStatus = useSelector(selectHomeStatus);
   const countComments = useSelector(commentsCount.selectAll);
-  const summaries = useSelector(ticketvoteSummaries.selectAll);
+  const voteSummaries = useSelector(ticketvoteSummaries.selectAll);
+  const proposalSummaries = useSelector(piSummaries.selectAll);
   const recordsPageSize = useSelector((state) =>
     recordsPolicy.selectRule(state, "recordspagesize")
   );
@@ -25,6 +29,9 @@ function useStatusList({ inventory, inventoryStatus }) {
     records.selectByTokensBatch(state, inventory)
   );
   const allRecords = useSelector(records.selectAll);
+  const billingStatusChanges = useSelector(piBilling.selectAll);
+
+  const proposalsStatusChanges = useSelector(proposals.selectAllStatusChanges);
 
   const hasMoreRecords =
     recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
@@ -39,12 +46,15 @@ function useStatusList({ inventory, inventoryStatus }) {
     hasMoreRecords,
     homeStatus,
     countComments,
-    summaries,
+    voteSummaries,
+    proposalSummaries,
     fetchNextBatch,
     recordsInOrder,
     recordsPageSize,
     recordsError,
     areAllInventoryEntriesFetched: areAllEntriesFetched(inventory, allRecords),
+    billingStatusChanges,
+    proposalsStatusChanges,
   };
 }
 

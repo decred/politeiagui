@@ -1,7 +1,7 @@
 import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
 import { DetailsRoute, HomeRoute, NewProposalRoute } from "../pages";
-import { decodeProposalRecord } from "../components/Proposal/utils";
+import { decodeProposalRecord } from "../pi/proposals/utils";
 import { routeCleanup } from "../utils/routeCleanup";
 
 export const routes = [

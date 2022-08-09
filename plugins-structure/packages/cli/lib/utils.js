@@ -38,9 +38,9 @@ function getPluginVersion(plugin) {
   return pluginPkg.version;
 }
 
-function validateAppName(appName) {
-  if (!appName) {
-    throw Error("Please specify the app name");
+function validateName(name) {
+  if (!name) {
+    throw Error("Please provide a name");
   }
 }
 function validatePlugins(plugins) {
@@ -54,16 +54,6 @@ function validateConfig(config) {
   }
 }
 
-function getAppPath(appName) {
-  const appShellPath = path.resolve(__dirname, "../../../apps/");
-  const appPath = path.resolve(appShellPath, appName);
-  const appExists = fs.existsSync(appPath);
-  if (appExists) {
-    throw Error(`App ${appName} already exists on ${appShellPath}`);
-  }
-  return appPath;
-}
-
 function loadConfigFile(config) {
   const configExists = fs.existsSync(path.resolve(__dirname, config));
   if (!configExists) {
@@ -73,42 +63,25 @@ function loadConfigFile(config) {
   }
 }
 
-function createNewApp(appName) {
-  let appPath;
-  try {
-    appPath = getAppPath(appName);
-    console.log(`Creating a new app: ${appName}`);
-    console.log(`Directory: ${appPath}`);
-    console.log(`\n\n`);
-    console.log("Creating app files...");
-
-    // create app dir
-    fs.mkdirSync(appPath);
-    fs.mkdirSync(`${appPath}/src`);
-    fs.mkdirSync(`${appPath}/src/public`);
-  } catch (e) {
-    throw e;
-  }
-  return appPath;
-}
-
 function createPackageJsonFile({
-  baseAppPackageJSON,
-  appName,
-  appPath,
-  pluginsDeps,
+  basePackageJSON,
+  name,
+  targetPath,
+  pluginsDeps
 }) {
   fs.writeFileSync(
-    path.join(appPath, "package.json"),
+    path.join(targetPath, "package.json"),
     JSON.stringify(
       {
-        name: appName,
-        ...baseAppPackageJSON,
-        dependencies: {
-          "@politeiagui/core": "1.0.0",
-          "@politeiagui/common-ui": "1.0.0",
-          ...pluginsDeps,
-        },
+        name,
+        ...basePackageJSON,
+        dependencies: pluginsDeps
+          ? {
+              "@politeiagui/core": "1.0.0",
+              "@politeiagui/common-ui": "1.0.0",
+              ...pluginsDeps
+            }
+          : {}
       },
       null,
       2
@@ -122,8 +95,8 @@ function createConfigFile({ appPath, config, pluginsConfig }) {
   if (!config) {
     const configJson = {
       plugins: {
-        ...pluginsConfig,
-      },
+        ...pluginsConfig
+      }
     };
     fs.writeFileSync(
       path.join(appPath, "config.json"),
@@ -136,36 +109,6 @@ function createConfigFile({ appPath, config, pluginsConfig }) {
     console.log(JSON.stringify(cfg.plugins, null, 2));
     fs.copyFileSync(config, `${appPath}/config.json`);
   }
-}
-
-function createTestConfigFiles({ appPath, baseAppPath }) {
-  copyFile("jest.config.js", appPath, baseAppPath);
-}
-
-function createBabelConfigFiles({ appPath, baseAppPath }) {
-  copyFile("babel.config.js", appPath, baseAppPath);
-}
-
-function createAppSrcFiles({ baseAppPath, appName, appPath, pluginsDeps }) {
-  const plugins = Object.keys(pluginsDeps).map(getPluginNameFromDep).join(", ");
-  const pluginsImports = Object.keys(pluginsDeps)
-    .map((dep) => `import ${getPluginNameFromDep(dep)} from "${dep}";`)
-    .join("\n");
-  const indexHtml = replaceFileValuesFromMap(
-    `${baseAppPath}/src/public/index.html`,
-    { __APP_NAME__: appName }
-  );
-  const indexJs = replaceFileValuesFromMap(`${baseAppPath}/src/index.js`, {
-    __APP_NAME__: appName,
-  });
-  const appJs = replaceFileValuesFromMap(`${baseAppPath}/src/app.js`, {
-    __APP_NAME__: appName,
-    __PLUGINS_IMPORTS__: "\n" + pluginsImports,
-    '"__PLUGINS_CONNECTED__"': plugins,
-  });
-  fs.writeFileSync(`${appPath}/src/public/index.html`, indexHtml);
-  fs.writeFileSync(`${appPath}/src/index.js`, indexJs);
-  fs.writeFileSync(`${appPath}/src/app.js`, appJs);
 }
 
 function getPluginsDepsAndConfig({ isDefaultApp, plugins, configFile }) {
@@ -201,15 +144,12 @@ module.exports = {
   replaceFileValuesFromMap,
   copyFile,
   getPluginVersion,
-  validateAppName,
+  validateName,
   validatePlugins,
   validateConfig,
-  createNewApp,
   loadConfigFile,
   createPackageJsonFile,
   createConfigFile,
-  createAppSrcFiles,
-  createBabelConfigFiles,
-  createTestConfigFiles,
   getPluginsDepsAndConfig,
+  getPluginNameFromDep
 };

@@ -2,6 +2,10 @@ import { Buffer } from "buffer";
 import { store } from "@politeiagui/core";
 import { encodeTextToFilePayload } from "@politeiagui/core/records/utils";
 import { piPolicy } from "./policy";
+import {
+  PROPOSAL_STATUS_CLOSED,
+  PROPOSAL_STATUS_COMPLETED,
+} from "./lib/constants";
 
 export function fetchPolicyIfIdle() {
   if (piPolicy.selectStatus(store.getState()) === "idle") {
@@ -35,4 +39,8 @@ export function convertProposalMetadataToFile({
       objectToBuffer({ name, amount, startdate, enddate, domain })
     ),
   };
+}
+
+export function isProposalCompleteOrClosed(status) {
+  return [PROPOSAL_STATUS_COMPLETED, PROPOSAL_STATUS_CLOSED].includes(status);
 }

@@ -12,13 +12,15 @@ const Event = ({ event, timestamp, className, size, ...props }) => (
         className={classNames(styles.eventTooltip, className)}
         truncate
         size={size}
-      >{`${event} ${timeAgo}`}</Text>
+      >
+        {event} {timeAgo}
+      </Text>
     )}
   </DateTooltip>
 );
 
 Event.propTypes = {
-  event: PropTypes.string,
+  event: PropTypes.node,
   timestamp: PropTypes.number,
   show: PropTypes.bool,
 };

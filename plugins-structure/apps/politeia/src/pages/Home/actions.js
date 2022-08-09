@@ -5,11 +5,16 @@ export const fetchNextBatchSummaries = createAction(
   "home/fetchNextBatchSummaries"
 );
 export const fetchNextBatchRecords = createAction("home/fetchNextBatchRecords");
+export const fetchNextBatchBillingStatuses = createAction(
+  "home/fetchNextBatchBillingStatuses"
+);
 
-export function fetchNextBatch(payload) {
+export function fetchNextBatch(status) {
+  const hasBillingStatus = status === "approved";
   return (dispatch) => {
-    dispatch(fetchNextBatchCount(payload));
-    dispatch(fetchNextBatchSummaries(payload));
-    dispatch(fetchNextBatchRecords(payload));
+    dispatch(fetchNextBatchCount(status));
+    dispatch(fetchNextBatchSummaries(status));
+    dispatch(fetchNextBatchRecords(status));
+    hasBillingStatus && dispatch(fetchNextBatchBillingStatuses(status));
   };
 }

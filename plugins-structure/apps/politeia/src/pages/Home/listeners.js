@@ -1,5 +1,6 @@
 import {
   fetchNextBatch,
+  fetchNextBatchBillingStatuses,
   fetchNextBatchCount,
   fetchNextBatchRecords,
   fetchNextBatchSummaries,
@@ -29,6 +30,18 @@ function injectRecordsBatchEffect(effect) {
   };
 }
 
+function injectPayloadEffect(effect) {
+  return async (
+    { payload },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    await effect(state, dispatch, payload);
+    subscribe();
+  };
+}
+
 export const fetchNextBatchCountListenerCreator = {
   actionCreator: fetchNextBatchCount,
   injectEffect,
@@ -44,12 +57,33 @@ export const fetchNextBatchRecordsListenerCreator = {
   injectEffect: injectRecordsBatchEffect,
 };
 
+export const fetchNextBatchBillingStatusesListenerCreator = {
+  actionCreator: fetchNextBatchBillingStatuses,
+  injectEffect,
+};
+
+export const fetchVoteSummariesListenerCreator = {
+  type: "ticketvoteSummaries/fetch/fulfilled",
+  injectEffect: injectPayloadEffect,
+};
+
+export const fetchRecordsListenerCreator = {
+  type: "records/fetch/fulfilled",
+  injectEffect: injectPayloadEffect,
+};
+
+export const fetchBillingStatusChangesListenerCreator = {
+  type: "piBilling/fetchStatusChanges/fulfilled",
+  injectEffect: injectPayloadEffect,
+};
+
 export const listeners = [
   {
     type: "ticketvoteInventory/fetch/fulfilled",
     effect: ({ meta, payload }, listenerApi) => {
-      if (payload.inventory[meta.arg.status].length > 0) {
-        listenerApi.dispatch(fetchNextBatch(meta.arg.status));
+      const { status } = meta.arg;
+      if (payload.inventory[status].length > 0) {
+        listenerApi.dispatch(fetchNextBatch(status));
       }
     },
   },
