@@ -47,6 +47,7 @@ export function mockProposalDetails({
   enddate,
   startdate,
   domain,
+  reason,
 } = {}) {
   return ({ token, version = customVersion }) => {
     const record = mockRecord({
@@ -54,6 +55,7 @@ export function mockProposalDetails({
       status,
       username,
       timestamp,
+      reason,
     })({
       token: customToken || `${token}${faker.random.numeric(9)}`,
       version,
@@ -61,10 +63,19 @@ export function mockProposalDetails({
     return {
       record: {
         ...record,
-        files: [
-          generateMetadataFile({ name, amount, enddate, startdate, domain }),
-          convertMarkdownToFile(body),
-        ],
+        files:
+          status !== 3
+            ? [
+                generateMetadataFile({
+                  name,
+                  amount,
+                  enddate,
+                  startdate,
+                  domain,
+                }),
+                convertMarkdownToFile(body),
+              ]
+            : [],
       },
     };
   };
@@ -131,5 +142,18 @@ export function mockPiSummaries({ status = "under-review" } = {}) {
       {}
     );
     return { summaries };
+  };
+}
+
+export function mockPiBillingStatusChanges({ status = 1, reason } = {}) {
+  return ({ tokens }) => {
+    const billingstatuschanges = tokens.reduce(
+      (res, token) => ({
+        ...res,
+        [token]: [{ token, status, reason, timestamp: 1658427460 }],
+      }),
+      {}
+    );
+    return { billingstatuschanges };
   };
 }

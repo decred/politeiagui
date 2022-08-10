@@ -1,5 +1,9 @@
 import { mockTicketvoteSummaries } from "@politeiagui/ticketvote/dev/mocks";
-import { mockPiSummaries, mockProposalDetails } from "../../src/pi/dev/mocks";
+import {
+  mockPiBillingStatusChanges,
+  mockPiSummaries,
+  mockProposalDetails,
+} from "../../src/pi/dev/mocks";
 import { mockComments } from "@politeiagui/comments/dev/mocks";
 
 const body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
@@ -106,6 +110,10 @@ describe("Given an approved proposal details page", () => {
       })
     ).as("details");
     cy.mockResponse(
+      "/api/pi/v1/billingstatuschanges",
+      mockPiBillingStatusChanges()
+    ).as("billing");
+    cy.mockResponse(
       "/api/ticketvote/v1/summaries",
       mockTicketvoteSummaries({
         type: 1,
@@ -125,15 +133,18 @@ describe("Given an approved proposal details page", () => {
         bestblock: 956278,
       })
     ).as("voteSummaries");
+  });
+  it("should render its vote status bar and active status tag", () => {
     cy.mockResponse(
       "/api/pi/v1/summaries",
       mockPiSummaries({ status: "active" })
     ).as("piSummaries");
     cy.visit("/record/fake001");
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
-  });
-  it("should render its vote status bar and active status tag", () => {
-    cy.findByTestId("record-card-right-header").should("have.text", "Active");
+    cy.findByTestId("record-card-right-header").should(
+      "contain.text",
+      "Active"
+    );
     cy.findByTestId("ticketvote-vote-status-bar").should("be.visible");
     // Other elements should be displayed as well.
     cy.findByTestId("proposal-body").should("have.text", body);
@@ -143,6 +154,81 @@ describe("Given an approved proposal details page", () => {
     cy.findByTestId("proposal-downloads").should("be.visible");
     cy.findByTestId("record-token").should("contain.text", "fake001");
     cy.findAllByTestId("comment-card").should("have.length", 5);
+  });
+  it("should render status changes reason for closed billing", () => {
+    const reason = "Closed!";
+    cy.mockResponse(
+      "/api/pi/v1/summaries",
+      mockPiSummaries({ status: "closed" })
+    ).as("piSummaries");
+    cy.mockResponse(
+      "/api/pi/v1/billingstatuschanges",
+      mockPiBillingStatusChanges({ status: 2, reason })
+    );
+    cy.visit("/record/fake001");
+    cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
+    cy.findByTestId("record-card-right-header").should(
+      "contain.text",
+      "Closed"
+    );
+    cy.findByTestId("status-change-reason").should("contain.text", reason);
+  });
+});
+
+describe("Given an abandoned proposal", () => {
+  const reason = "Abandon proposal.";
+  beforeEach(() => {
+    cy.mockResponse(
+      "/api/records/v1/details",
+      mockProposalDetails({
+        status: 4,
+        state: 2,
+        body,
+        username,
+        reason,
+      })
+    ).as("details");
+    cy.mockResponse(
+      "/api/pi/v1/summaries",
+      mockPiSummaries({ status: "abandoned" })
+    ).as("piSummaries");
+    cy.visit("/record/fake001");
+    cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
+  });
+  it("should render abandonment reason", () => {
+    cy.findByTestId("status-change-reason").should("contain.text", reason);
+  });
+  it("should render proposal body", () => {
+    cy.findByTestId("proposal-body").should("contain.text", body);
+  });
+});
+
+describe("Given a censored proposal", () => {
+  const reason = "Censor proposal.";
+  beforeEach(() => {
+    cy.mockResponse(
+      "/api/records/v1/details",
+      mockProposalDetails({
+        status: 3,
+        state: 2,
+        body,
+        username,
+        reason,
+      })
+    ).as("details");
+    cy.mockResponse(
+      "/api/pi/v1/summaries",
+      mockPiSummaries({ status: "censored" })
+    ).as("piSummaries");
+    cy.visit("/record/fake001");
+    cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
+  });
+  it("should render censorship reason", () => {
+    cy.findByTestId("status-change-reason").should("contain.text", reason);
+  });
+  it("should not render proposal body and title", () => {
+    cy.findByTestId("proposal-body").should("have.text", "");
+    cy.findByTestId("record-card-title").should("have.text", "fake001");
   });
 });
 

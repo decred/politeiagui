@@ -15,6 +15,7 @@ export function mockRecord({
   username = faker.internet.userName(),
   timestamp = Date.now() / 1000,
   userid = faker.datatype.uuid(),
+  reason = faker.lorem.words(5),
 } = {}) {
   return ({ token = recordToken(), version = 1 }) => ({
     state,
@@ -36,6 +37,16 @@ export function mockRecord({
           version - 1
         },"status":2,"publickey":"","signature":"","timestamp":1646761813}`,
       },
+      status !== ctes.RECORD_STATUS_CENSORED &&
+      status !== ctes.RECORD_STATUS_ARCHIVED
+        ? {}
+        : {
+            pluginid: "usermd",
+            streamid: 3,
+            payload: `{"token":"${token}","version":${
+              version - 1
+            },"status":${status},"publickey":"","signature":"","timestamp":1646761813, "reason": "${reason}"}`,
+          },
     ],
   });
 }

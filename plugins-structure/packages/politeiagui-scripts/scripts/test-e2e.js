@@ -5,7 +5,7 @@ const configFactory = require("../config/webpack/webpack.config");
 const cypress = require("cypress");
 const yargsParser = require("yargs-parser");
 const isString = require("lodash/isString");
-
+const webpackPreprocessor = require("@cypress/webpack-preprocessor");
 const config = configFactory("development", "app");
 
 const args = process.argv.slice(2);
@@ -16,6 +16,7 @@ const e2eConfig = {
   testingType: "e2e",
   config: {
     video: false,
+    screenshotOnRunFailure: false,
     baseUrl: "https://localhost:8080",
     e2e: {
       setupNodeEvents(on) {
@@ -33,7 +34,7 @@ const e2eConfig = {
 
 const { browser } = parsedArgs;
 
-if (!!browser) {
+if (browser) {
   // Defaults to chrome.
   cypress.open({
     ...e2eConfig,

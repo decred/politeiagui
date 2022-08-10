@@ -6,7 +6,12 @@ const TitleWrapper = ({ titleLink, children }) =>
   !titleLink ? (
     children
   ) : (
-    <a href={titleLink} data-link className={styles.title}>
+    <a
+      href={titleLink}
+      data-testid="record-card-title-link"
+      data-link
+      className={styles.title}
+    >
       {children}
     </a>
   );

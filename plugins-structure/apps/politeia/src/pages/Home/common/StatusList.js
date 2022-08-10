@@ -69,7 +69,7 @@ function StatusList({
   const hasMoreToFetch = hasMoreRecords || hasMoreInventory;
 
   return !recordsError ? (
-    <div>
+    <div data-testid="status-list">
       <RecordsList
         hasMore={hasMoreToFetch}
         onFetchMore={handleFetchMore}

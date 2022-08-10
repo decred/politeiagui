@@ -22,4 +22,5 @@ coverage
 apps/*
 !apps/politeia
 apps/*/cypress/downloads
+apps/*/cypress/screenshots
 apps/*/cypress/videos
