@@ -27,15 +27,17 @@
   height: 2.5rem;
   background-color: #2341b3;
   color: var(--color-white);
-  margin-right: var(--layout-column-gap-xs);
-  font-size: 1.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: var(--layout-column-gap-xs);
   border-radius: 0.3rem;
+  font-weight: var(--font-weight-regular);
+  font-size: 1.6rem;
 }
 
 .rfpTooltip {
+  color: var(--text-color);
   font-size: var(--font-size-small);
 }
 
