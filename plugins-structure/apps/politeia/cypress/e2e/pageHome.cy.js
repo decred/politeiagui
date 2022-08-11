@@ -195,7 +195,10 @@ describe("Given Home Under Review tab", () => {
       cy.visit("/");
       cy.wait("@started");
       cy.wrap(Array(20)).each(() => {
-        cy.scrollTo("bottom", { easing: "linear", duration: 200 });
+        cy.findAllByTestId("proposal-card").last().scrollIntoView({
+          easing: "linear",
+          duration: 200,
+        });
       });
 
       cy.get("@started.all").should("have.length", 1);
@@ -229,8 +232,11 @@ describe("Given Home Under Review tab", () => {
       // Begin tests.
       cy.visit("/");
       cy.wait("@started");
-      cy.wrap(Array(30)).each(() => {
-        cy.scrollTo("bottom", { easing: "linear", duration: 300 });
+      cy.wrap(Array(40)).each(() => {
+        cy.findAllByTestId("proposal-card").last().scrollIntoView({
+          easing: "linear",
+          duration: 200,
+        });
       });
 
       cy.get("@started.all").should("have.length", 1);
@@ -262,7 +268,10 @@ describe("Given Home Under Review tab", () => {
       cy.visit("/");
       cy.wait("@started");
       cy.wrap(Array(20)).each(() => {
-        cy.scrollTo("bottom", { easing: "linear", duration: 300 });
+        cy.findAllByTestId("proposal-card").last().scrollIntoView({
+          easing: "linear",
+          duration: 200,
+        });
       });
 
       cy.get("@started.all").should("have.length", 1);
@@ -293,7 +302,10 @@ describe("Given Home Under Review tab", () => {
       cy.visit("/");
       cy.wait("@started");
       cy.wrap(Array(15)).each(() => {
-        cy.scrollTo("bottom", { easing: "linear", duration: 200 });
+        cy.findAllByTestId("proposal-card").last().scrollIntoView({
+          easing: "linear",
+          duration: 200,
+        });
       });
 
       cy.get("@started.all").should("have.length", 1);
@@ -322,7 +334,10 @@ describe("Given Home Under Review tab", () => {
       cy.visit("/");
       cy.wait("@started");
       cy.wrap(Array(10)).each(() => {
-        cy.scrollTo("bottom", { easing: "linear", duration: 300 });
+        cy.findAllByTestId("proposal-card").last().scrollIntoView({
+          easing: "linear",
+          duration: 200,
+        });
       });
 
       cy.get("@started.all").should("have.length", 1);
@@ -346,7 +361,10 @@ describe("Given Home single status tab (approved, rejected or abandoned)", () =>
   });
   afterEach(() => {
     cy.wrap(Array(15)).each(() => {
-      cy.scrollTo("bottom", { easing: "linear", duration: 200 });
+      cy.findAllByTestId("proposal-card").last().scrollIntoView({
+        easing: "linear",
+        duration: 200,
+      });
     });
     cy.get("@records.all").should("have.length", 5);
     cy.get("@summaries.all").should("have.length", 5);
