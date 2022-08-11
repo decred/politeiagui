@@ -54,8 +54,8 @@ const ProposalItem = ({
 
   const { voteEndTimestamp } = useProposalVoteTimeInfo(voteSummary);
 
-  const mobile = useMediaQuery("(max-width: 760px)");
-  const extraSmallMobile = useMediaQuery("(max-width: 560px)");
+  const mdScreen = useMediaQuery("(max-width: 1024px)");
+  const smallMobile = useMediaQuery("(max-width: 768px)");
   const { themeName } = useTheme();
   const isDarkTheme = themeName === DEFAULT_DARK_THEME_NAME;
 
@@ -65,7 +65,7 @@ const ProposalItem = ({
       <Row
         className={styles.itemWrapper}
         justify="space-between"
-        align={extraSmallMobile ? "flex-start" : "center"}
+        align={smallMobile ? "flex-start" : "center"}
         onClick={goToFullProposal(history, proposalURL)}
         noMargin
       >
@@ -96,7 +96,7 @@ const ProposalItem = ({
             />
           </Row>
         )}
-        {(isVoteActive || isVotingFinished) && !mobile && (
+        {(isVoteActive || isVotingFinished) && !mdScreen && (
           <Row
             className={styles.timeLeftPassed}
             justify="center"
