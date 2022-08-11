@@ -1,7 +1,11 @@
 import { validateRecordsPageSize } from "../validation";
 import { store } from "../../storeSetup";
 import { fetchPolicyIfIdle } from "../utils";
-import { fetchNextRecords, fetchRecordDetails } from "./effects";
+import {
+  fetchAllRecordsInventory,
+  fetchNextRecords,
+  fetchRecordDetails,
+} from "./effects";
 
 export const services = [
   {
@@ -11,6 +15,14 @@ export const services = [
       validateRecordsPageSize(store.getState());
     },
     effect: fetchNextRecords,
+  },
+  {
+    id: "records/batch/all",
+    action: async () => {
+      await fetchPolicyIfIdle();
+      validateRecordsPageSize(store.getState());
+    },
+    effect: fetchAllRecordsInventory,
   },
   {
     id: "records/details",

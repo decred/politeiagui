@@ -1,5 +1,9 @@
 import { fetchProposalDetails } from "./actions";
-import { isProposalCompleteOrClosed } from "../../pi/utils";
+import {
+  isProposalCompleteOrClosed,
+  isRfpProposal,
+  proposalFilenames,
+} from "../../pi/proposals/utils";
 
 function injectEffect(effect) {
   return async ({ payload }, { getState, dispatch }) => {
@@ -36,6 +40,31 @@ function injectCompletedOrClosedProposalEffect(effect) {
       await effect(state, dispatch, { token });
     }
     subscribe();
+  };
+}
+
+function injectRfpProposalEffect(effect) {
+  return async (
+    { payload: record },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    if (isRfpProposal(record)) {
+      await effect(state, dispatch, { token: record.censorshiprecord.token });
+    }
+    subscribe();
+  };
+}
+
+function injectRfpSubmissionsEffect(effect) {
+  return async ({ payload }, { getState, dispatch }) => {
+    const state = getState();
+    const { submissions } = payload;
+    await effect(state, dispatch, {
+      inventoryList: submissions,
+      filenames: proposalFilenames,
+    });
   };
 }
 
@@ -79,4 +108,14 @@ export const fetchBillingStatusChangesListenerCreator = {
 export const fetchRecordDetailsListenerCreator = {
   type: "records/fetchDetails/fulfilled",
   injectEffect: injectPayloadEffect,
+};
+
+export const fetchRfpDetailsListenerCreator = {
+  type: "records/fetchDetails/fulfilled",
+  injectEffect: injectRfpProposalEffect,
+};
+
+export const fetchRfpSubmissionsListenerCreator = {
+  type: "ticketvoteSubmissions/fetch/fulfilled",
+  injectEffect: injectRfpSubmissionsEffect,
 };

@@ -6,6 +6,8 @@ import {
   fetchDetailsListenerCreator,
   fetchProposalSummaryListenerCreator,
   fetchRecordDetailsListenerCreator,
+  fetchRfpDetailsListenerCreator,
+  fetchRfpSubmissionsListenerCreator,
   fetchVoteSummaryListenerCreator,
   recordFetchDetailsListenerCreator,
 } from "./listeners";
@@ -52,6 +54,15 @@ export default App.createRoute({
     {
       id: "pi/proposals/billingStatusChanges",
       listenerCreator: fetchBillingStatusChangesListenerCreator,
+    },
+    // RFP Proposals Services
+    {
+      id: "ticketvote/submissions",
+      listenerCreator: fetchRfpDetailsListenerCreator,
+    },
+    {
+      id: "records/batch/all",
+      listenerCreator: fetchRfpSubmissionsListenerCreator,
     },
   ],
   cleanup: routeCleanup,

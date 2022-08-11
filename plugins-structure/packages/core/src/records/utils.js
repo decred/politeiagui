@@ -246,7 +246,7 @@ export function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
     if (lookupTable[token] === undefined) {
       tokensToFetch.push(token);
     }
-    if (tokensToFetch.length === pageSize) break;
+    if (pageSize && tokensToFetch.length === pageSize) break;
     pos++;
   }
   return tokensToFetch;

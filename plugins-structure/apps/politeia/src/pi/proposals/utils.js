@@ -46,6 +46,11 @@ const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 const PROPOSAL_INDEX_FILENAME = "index.md";
 const PROPOSAL_VOTE_METADATA_FILENAME = "votemetadata.json";
 
+export const proposalFilenames = [
+  PROPOSAL_METADATA_FILENAME,
+  PROPOSAL_VOTE_METADATA_FILENAME,
+];
+
 const MONTHS_LABELS = [
   "Jan",
   "Feb",
@@ -445,7 +450,7 @@ export function getImagesByDigest(text, files) {
   const markdownImageRegexParser =
     /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const inlineImagesMatches = text.matchAll(markdownImageRegexParser);
-  let imagesByDigest = {};
+  const imagesByDigest = {};
   for (const match of inlineImagesMatches) {
     const { digest } = match.groups;
     const file = files.find((f) => f.digest === digest);
@@ -500,4 +505,13 @@ export function convertBillingStatusToProposalStatus(billingStatus) {
     [PROPOSAL_BILLING_STATUS_COMPLETED]: PROPOSAL_STATUS_COMPLETED,
   };
   return mapBillingStatusToProposalStatus[billingStatus];
+}
+
+export function isProposalCompleteOrClosed(status) {
+  return [PROPOSAL_STATUS_COMPLETED, PROPOSAL_STATUS_CLOSED].includes(status);
+}
+
+export function isRfpProposal(record) {
+  const { linkby } = decodeVoteMetadataFile(record?.files);
+  return !!linkby;
 }

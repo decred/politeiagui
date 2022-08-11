@@ -6,13 +6,12 @@ import {
   fetchNextBatchSummaries,
 } from "./actions";
 import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
+import { proposalFilenames } from "../../pi/proposals/utils";
 
 function getInventoryList(payload, state) {
   const readableStatus = getHumanReadableTicketvoteStatus(payload);
   return state.ticketvoteInventory[readableStatus].tokens;
 }
-
-const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
 
 function injectEffect(effect) {
   return async (action, { getState, dispatch }) => {
@@ -26,7 +25,10 @@ function injectRecordsBatchEffect(effect) {
   return async ({ payload }, { getState, dispatch }) => {
     const state = getState();
     const inventoryList = getInventoryList(payload, state);
-    await effect(state, dispatch, { inventoryList, filenames: piFilenames });
+    await effect(state, dispatch, {
+      inventoryList,
+      filenames: proposalFilenames,
+    });
   };
 }
 
