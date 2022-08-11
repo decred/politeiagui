@@ -22,6 +22,28 @@
   color: var(--text-secondary-color);
 }
 
+.rfpTag {
+  width: 4rem;
+  height: 2.5rem;
+  background-color: #2341b3;
+  color: var(--color-white);
+  margin-right: var(--layout-column-gap-xs);
+  font-size: 1.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.3rem;
+}
+
+.rfpTooltip {
+  font-size: var(--font-size-small);
+}
+
+.proposalTitle {
+  display: flex;
+  align-items: center;
+}
+
 @media screen and (max-width: 768px) {
   .statusLabelWrapper {
     top: 2.3rem;

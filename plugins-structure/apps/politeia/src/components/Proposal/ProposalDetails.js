@@ -11,6 +11,7 @@ import {
 import {
   decodeProposalRecord,
   getImagesByDigest,
+  isRfpProposal,
 } from "../../pi/proposals/utils";
 import {
   ProposalDownloads,
@@ -19,6 +20,7 @@ import {
   ProposalStatusLabel,
   ProposalStatusTag,
   ProposalSubtitle,
+  ProposalTitle,
 } from "./common";
 import { Button, ButtonIcon, Message } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
@@ -42,10 +44,12 @@ const ProposalDetails = ({
     (f) => !imagesByDigest[f.digest]
   );
 
+  const proposalLink = `/record/${getShortToken(proposalDetails.token)}`;
+
   function handleShowRawMarkdown() {
-    router.navigateTo(`/record/${getShortToken(proposalDetails.token)}/raw`);
+    router.navigateTo(proposalLink);
   }
-  async function handleChangeVersion(version) {
+  function handleChangeVersion(version) {
     open(ModalProposalDiff, {
       oldVersion: version === proposalDetails.version ? version - 1 : version,
       currentProposal: proposalDetails,
@@ -79,7 +83,13 @@ const ProposalDetails = ({
       )}
       <RecordCard
         token={proposalDetails.token}
-        title={proposalDetails.name}
+        title={
+          <ProposalTitle
+            title={proposalDetails.name}
+            isRfp={isRfpProposal(record)}
+          />
+        }
+        titleLink={proposalLink}
         isDimmed={isAbandoned}
         subtitle={
           <ProposalSubtitle

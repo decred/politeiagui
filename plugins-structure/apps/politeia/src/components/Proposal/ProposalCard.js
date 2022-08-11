@@ -3,12 +3,13 @@ import { Button } from "pi-ui";
 import { RecordCard } from "@politeiagui/common-ui";
 import { CommentsCount } from "@politeiagui/comments/ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
-import { decodeProposalRecord } from "../../pi/proposals/utils";
+import { decodeProposalRecord, isRfpProposal } from "../../pi/proposals/utils";
 import {
   ProposalStatusBar,
   ProposalStatusLabel,
   ProposalStatusTag,
   ProposalSubtitle,
+  ProposalTitle,
 } from "./common";
 
 const ProposalCard = ({
@@ -27,7 +28,9 @@ const ProposalCard = ({
       <RecordCard
         isDimmed={proposal.archived || proposal.censored}
         titleLink={proposalLink}
-        title={proposal.name}
+        title={
+          <ProposalTitle title={proposal.name} isRfp={isRfpProposal(record)} />
+        }
         subtitle={
           <ProposalSubtitle
             userid={proposal.author.userid}
