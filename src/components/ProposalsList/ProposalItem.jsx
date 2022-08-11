@@ -7,24 +7,22 @@ import {
   Icon,
   useMediaQuery,
   useTheme,
-  DEFAULT_DARK_THEME_NAME
+  DEFAULT_DARK_THEME_NAME,
 } from "pi-ui";
-import VotesCount from "../Proposal/VotesCount";
 import { Row } from "../layout";
 import {
-  getVotesReceived,
   getQuorumInVotes,
-  goToFullProposal
+  goToFullProposal,
 } from "src/containers/Proposal/helpers";
 import {
   getProposalStatusTagProps,
-  getStatusBarData
+  getStatusBarData,
 } from "../Proposal/helpers";
 import {
   isVoteActiveProposal,
   isPublicProposal,
   isAbandonedProposal,
-  isVotingFinishedProposal
+  isVotingFinishedProposal,
 } from "src/containers/Proposal/helpers";
 import styles from "./ProposalsList.module.css";
 import { Status, Event, CommentsLink } from "../RecordWrapper";
@@ -37,7 +35,7 @@ const ProposalItem = ({
   proposal,
   proposal: { commentsCount, name, censorshiprecord },
   voteSummary,
-  proposalSummary
+  proposalSummary,
 }) => {
   const { history } = useRouter();
   const isVoteActive = isVoteActiveProposal(voteSummary);
@@ -95,12 +93,6 @@ const ProposalItem = ({
               markerPosition={`${voteSummary.passpercentage}%`}
               markerTooltipText={`${voteSummary.passpercentage}% Yes votes required for approval`}
               markerTooltipClassName={styles.statusBarTooltip}
-              renderStatusInfoComponent={
-                <VotesCount
-                  quorumVotes={getQuorumInVotes(voteSummary)}
-                  votesReceived={getVotesReceived(voteSummary)}
-                />
-              }
             />
           </Row>
         )}
@@ -153,7 +145,7 @@ const ProposalItem = ({
 
 ProposalItem.propTypes = {
   proposal: PropTypes.object.isRequired,
-  voteSummary: PropTypes.object.isRequired
+  voteSummary: PropTypes.object.isRequired,
 };
 
 export default ProposalItem;
