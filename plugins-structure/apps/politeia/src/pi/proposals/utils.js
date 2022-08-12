@@ -290,8 +290,11 @@ function getProposalTimestamps(record) {
 
   let publishedat = 0,
     editedat = 0;
-  const { status, timestamp, version, metadata } = record;
+  const { status, timestamp, version, metadata, files } = record;
   const userMetadata = decodeProposalUserMetadata(metadata);
+  const voteMetadata = decodeVoteMetadataFile(files);
+
+  const expireat = voteMetadata?.linkby;
 
   if (status === RECORD_STATUS_UNREVIEWED || version <= 1) {
     publishedat = timestamp;
@@ -303,7 +306,7 @@ function getProposalTimestamps(record) {
     editedat = timestamp;
   }
 
-  return { publishedat, editedat };
+  return { publishedat, editedat, expireat };
 }
 
 /**

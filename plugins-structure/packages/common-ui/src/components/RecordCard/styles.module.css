@@ -40,7 +40,7 @@
   gap: var(--spacing-small);
   grid-template-areas:
     "title rightHeader"
-    "subtitle rightHeader";
+    "subtitle subtitle";
 }
 
 .title {
