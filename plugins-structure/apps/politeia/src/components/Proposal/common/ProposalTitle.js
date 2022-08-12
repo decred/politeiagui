@@ -11,7 +11,7 @@ function RfpTag() {
       content={
         <span>
           <b>Request for Proposals</b>. When approved, this proposal is able to
-          receive submissions related to this topic.
+          receive submissions related to its subject.
         </span>
       }
     >
