@@ -45,7 +45,6 @@ function useProposalDetails({ token }) {
   const rfpSubmissionsTokens = useSelector((state) =>
     ticketvoteSubmissions.selectByToken(state, fullToken)
   );
-  console.log({ rfpSubmissionsTokens });
   const rfpSubmissionsRecords = useSelector((state) =>
     records.selectByTokensBatch(state, rfpSubmissionsTokens)
   );
