@@ -64,6 +64,10 @@ export default App.createRoute({
       id: "records/batch/all",
       listenerCreator: fetchRfpSubmissionsListenerCreator,
     },
+    {
+      id: "ticketvote/summaries/all",
+      listenerCreator: fetchRfpSubmissionsListenerCreator,
+    },
   ],
   cleanup: routeCleanup,
   view: createRouteView(Details),

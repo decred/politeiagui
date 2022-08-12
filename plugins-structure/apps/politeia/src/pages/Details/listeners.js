@@ -110,6 +110,7 @@ export const fetchRecordDetailsListenerCreator = {
   injectEffect: injectPayloadEffect,
 };
 
+// RFP Proposals
 export const fetchRfpDetailsListenerCreator = {
   type: "records/fetchDetails/fulfilled",
   injectEffect: injectRfpProposalEffect,

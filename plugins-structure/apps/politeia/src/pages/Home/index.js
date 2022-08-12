@@ -24,7 +24,7 @@ export default App.createRoute({
       listenerCreator: fetchNextBatchRecordsListenerCreator,
     },
     {
-      id: "ticketvote/summaries",
+      id: "ticketvote/summaries/batch",
       listenerCreator: fetchNextBatchSummariesListenerCreator,
     },
     {
