@@ -69,6 +69,10 @@ export default App.createRoute({
       listenerCreator: fetchRfpSubmissionsListenerCreator,
     },
     {
+      id: "pi/summaries/all",
+      listenerCreator: fetchRfpSubmissionsListenerCreator,
+    },
+    {
       id: "comments/count/all",
       listenerCreator: fetchRfpSubmissionsListenerCreator,
     },

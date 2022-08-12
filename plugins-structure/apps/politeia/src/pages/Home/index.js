@@ -28,7 +28,7 @@ export default App.createRoute({
       listenerCreator: fetchNextBatchSummariesListenerCreator,
     },
     {
-      id: "pi/summaries",
+      id: "pi/summaries/batch",
       listenerCreator: fetchNextBatchSummariesListenerCreator,
     },
     {
