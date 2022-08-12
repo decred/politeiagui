@@ -27,6 +27,7 @@ import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
 import { ModalProposalDiff } from "./ModalProposalDiff";
 import { ProposalsCompact } from "./ProposalsCompact";
+import { PROPOSAL_STATUS_APPROVED } from "../../pi";
 
 const ProposalDetails = ({
   record,
@@ -115,15 +116,16 @@ const ProposalDetails = ({
             <RecordToken token={proposalDetails.token} isCopyable={true} />
             <ProposalStatusBar voteSummary={voteSummary} />
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
-            {isRfpProposal(record) && (
-              <ProposalsCompact
-                title="Submitted Proposals"
-                records={rfpSubmissionsRecords}
-                voteSummaries={rfpSubmissionsVoteSummaries}
-                proposalSummaries={rfpSubmissionsProposalSummaries}
-                commentsCounts={rfpSubmissionsCommentsCounts}
-              />
-            )}
+            {isRfpProposal(record) &&
+              proposalSummary.status === PROPOSAL_STATUS_APPROVED && (
+                <ProposalsCompact
+                  title="Submitted Proposals"
+                  records={rfpSubmissionsRecords}
+                  voteSummaries={rfpSubmissionsVoteSummaries}
+                  proposalSummaries={rfpSubmissionsProposalSummaries}
+                  commentsCounts={rfpSubmissionsCommentsCounts}
+                />
+              )}
           </div>
         }
         thirdRow={
