@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../lib/api";
 import { validatePiSummariesPageSize } from "../lib/validation";
 import pick from "lodash/fp/pick";
-import compose from "lodash/fp/compose";
-import values from "lodash/fp/values";
 
 export const initialState = {
   byToken: {},
@@ -53,7 +51,7 @@ export const selectPiSummariesByToken = (state, token) =>
   state.piSummaries?.byToken[token];
 export const selectPiSummaries = (state) => state.piSummaries?.byToken;
 export const selectPiSummariesByTokensBatch = (state, tokens) =>
-  compose(values, pick(tokens))(state.piSummaries?.byToken);
+  pick(tokens)(state.piSummaries?.byToken);
 export const selectPiSummariesStatus = (state) => state.piSummaries?.status;
 
 export default piSumamriesSlice.reducer;

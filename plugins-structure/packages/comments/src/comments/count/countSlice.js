@@ -3,8 +3,6 @@ import * as api from "../../lib/api";
 import { validateCommentsCountsPageSize } from "../../lib/validation";
 import { getCommentsError } from "../../lib/errors";
 import pick from "lodash/fp/pick";
-import compose from "lodash/fp/compose";
-import values from "lodash/fp/values";
 
 export const initialState = {
   byToken: {},
@@ -56,7 +54,7 @@ const commentsCountSlice = createSlice({
 export const selectCommentsCountStatus = (state) => state.commentsCount?.status;
 export const selectCommentsCounts = (state) => state.commentsCount?.byToken;
 export const selectCommentsCountsByTokensBatch = (state, tokens) =>
-  compose(values, pick(tokens))(state.commentsCount?.byToken);
+  pick(tokens)(state.commentsCount?.byToken);
 export const selectCommentsCountError = (state) => state.commentsCount?.error;
 
 export default commentsCountSlice.reducer;

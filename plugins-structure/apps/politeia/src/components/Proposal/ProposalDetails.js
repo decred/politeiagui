@@ -35,8 +35,9 @@ const ProposalDetails = ({
   onFetchRecordTimestamps,
   proposalStatusChanges,
   rfpSubmissionsRecords,
-  // rfpSubmissionsVoteSummaries,
-  // rfpSubmissionsProposalSummaries,
+  rfpSubmissionsVoteSummaries,
+  rfpSubmissionsProposalSummaries,
+  rfpSubmissionsCommentsCounts,
 }) => {
   const [open] = useModal();
 
@@ -114,8 +115,14 @@ const ProposalDetails = ({
             <RecordToken token={proposalDetails.token} isCopyable={true} />
             <ProposalStatusBar voteSummary={voteSummary} />
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
-            {rfpSubmissionsRecords && (
-              <ProposalsCompact records={rfpSubmissionsRecords} />
+            {isRfpProposal(record) && (
+              <ProposalsCompact
+                title="Submitted Proposals"
+                records={rfpSubmissionsRecords}
+                voteSummaries={rfpSubmissionsVoteSummaries}
+                proposalSummaries={rfpSubmissionsProposalSummaries}
+                commentsCounts={rfpSubmissionsCommentsCounts}
+              />
             )}
           </div>
         }

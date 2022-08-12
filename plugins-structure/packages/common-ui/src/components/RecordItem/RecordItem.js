@@ -1,13 +1,35 @@
 import React from "react";
-import { Column, Row } from "pi-ui";
+import { classNames } from "pi-ui";
 import styles from "./styles.module.css";
 
-export function RecordItem({ title }) {
+const TitleWrapper = ({ titleLink, children }) => (
+  <div className={styles.title}>
+    {!titleLink ? (
+      children
+    ) : (
+      <a href={titleLink} data-link className={styles.titleLink}>
+        {children}
+      </a>
+    )}
+  </div>
+);
+
+export function RecordItem({
+  className,
+  title,
+  titleLink,
+  subtitle,
+  info,
+  tag,
+}) {
   return (
-    <Row className={styles.itemWrapper}>
-      <Column sm={12} md={6} lg={4}>
-        <p className={styles.itemTitle}>{title}</p>
-      </Column>
-    </Row>
+    <div className={classNames(className, styles.wrapper)}>
+      <TitleWrapper titleLink={titleLink}>
+        <p>{title}</p>
+      </TitleWrapper>
+      <div className={styles.subtitle}>{subtitle}</div>
+      <div className={styles.info}>{info}</div>
+      <div className={styles.tag}>{tag}</div>
+    </div>
   );
 }

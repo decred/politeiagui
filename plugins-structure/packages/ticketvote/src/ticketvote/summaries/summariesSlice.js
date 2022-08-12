@@ -8,8 +8,6 @@ import {
 } from "../../lib/validation";
 import isArray from "lodash/fp/isArray";
 import pick from "lodash/fp/pick";
-import compose from "lodash/fp/compose";
-import values from "lodash/fp/values";
 import isEmpty from "lodash/fp/isEmpty";
 
 export const initialState = {
@@ -84,7 +82,7 @@ export const selectTicketvoteSummariesByStatus = (state, status) => {
 };
 
 export const selectTicketvoteSummariesByTokensBatch = (state, tokens) =>
-  compose(values, pick(tokens))(state.commentsCount?.byToken);
+  pick(tokens)(state.ticketvoteSummaries?.byToken);
 
 export const selectTicketvoteSummariesFetchedTokens = (state, tokens) => {
   if (!tokens)

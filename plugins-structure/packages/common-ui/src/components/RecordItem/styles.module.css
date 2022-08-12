@@ -1,6 +1,45 @@
-/* .itemWrapper {
-  display: flex;
-} */
-.itemTitle {
+.wrapper {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 2fr 4fr 1fr;
+  column-gap: 1rem;
+  grid-template-areas: "title info tag" "subtitle info tag";
+  padding: 1rem 0;
+}
+
+.title {
   font-weight: var(--font-weight-regular);
+  padding-bottom: 0.5rem;
+  grid-area: title;
+}
+
+.subtitle {
+  font-size: var(--font-size-small) !important;
+  grid-area: subtitle;
+}
+
+.titleLink:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.info {
+  grid-area: info;
+}
+
+.tag {
+  grid-area: tag;
+  justify-content: end;
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    grid-template-columns: 3fr 1fr;
+    align-items: flex-start;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    grid-template-areas: "title tag" "info info" "subtitle subtitle";
+    padding: 1rem 0;
+  }
 }
