@@ -16,14 +16,14 @@ function ProposalSubtitle({
   return (
     <Join>
       <Link href={`user/${userid}`}>{username}</Link>
-      {publishedat && <Event event="published" timestamp={publishedat} />}
-      {editedat && <Event event="edited" timestamp={editedat} />}
       {expireat && (
         <Event
           event={Date.now() > expireat * 1000 ? "expired" : "expires"}
           timestamp={expireat}
         />
       )}
+      {publishedat && <Event event="published" timestamp={publishedat} />}
+      {editedat && <Event event="edited" timestamp={editedat} />}
       {version > 1 &&
         (onChangeVersion ? (
           <Dropdown
