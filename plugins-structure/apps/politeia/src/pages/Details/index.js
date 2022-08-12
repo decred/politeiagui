@@ -68,6 +68,10 @@ export default App.createRoute({
       id: "ticketvote/summaries/all",
       listenerCreator: fetchRfpSubmissionsListenerCreator,
     },
+    {
+      id: "comments/count/all",
+      listenerCreator: fetchRfpSubmissionsListenerCreator,
+    },
   ],
   cleanup: routeCleanup,
   view: createRouteView(Details),
