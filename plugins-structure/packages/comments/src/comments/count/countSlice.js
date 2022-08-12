@@ -2,6 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import { validateCommentsCountsPageSize } from "../../lib/validation";
 import { getCommentsError } from "../../lib/errors";
+import pick from "lodash/fp/pick";
+import compose from "lodash/fp/compose";
+import values from "lodash/fp/values";
 
 export const initialState = {
   byToken: {},
@@ -36,7 +39,7 @@ const commentsCountSlice = createSlice({
       })
       .addCase(fetchCommentsCount.fulfilled, (state, action) => {
         for (const token in action.payload) {
-          if (action.payload.hasOwnProperty(token)) {
+          if (action.payload?.[token]) {
             state.byToken[token] = action.payload[token];
           }
         }
@@ -52,7 +55,8 @@ const commentsCountSlice = createSlice({
 // Selectors
 export const selectCommentsCountStatus = (state) => state.commentsCount?.status;
 export const selectCommentsCounts = (state) => state.commentsCount?.byToken;
-
+export const selectCommentsCountsByTokensBatch = (state, tokens) =>
+  compose(values, pick(tokens))(state.commentsCount?.byToken);
 export const selectCommentsCountError = (state) => state.commentsCount?.error;
 
 export default commentsCountSlice.reducer;

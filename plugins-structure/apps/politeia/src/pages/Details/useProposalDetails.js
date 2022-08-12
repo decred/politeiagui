@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
 import { fetchProposalDetails } from "./actions";
-import { selectDetailsStatus, selectRfpSubmissionsRecords } from "./selectors";
+import { selectDetailsStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
+import { ticketvoteSubmissions } from "@politeiagui/ticketvote/submissions";
 import { recordComments } from "@politeiagui/comments/comments";
 import { piBilling, piSummaries, proposals } from "../../pi";
+import { commentsCount } from "@politeiagui/comments/count";
 
 function useProposalDetails({ token }) {
   const dispatch = useDispatch();
@@ -39,9 +41,22 @@ function useProposalDetails({ token }) {
     proposals.selectStatusChangesByToken(state, fullToken)
   );
 
-  // RFP Proposals
+  // RFP Submissions
+  const rfpSubmissionsTokens = useSelector((state) =>
+    ticketvoteSubmissions.selectByToken(state, fullToken)
+  );
+  console.log({ rfpSubmissionsTokens });
   const rfpSubmissionsRecords = useSelector((state) =>
-    selectRfpSubmissionsRecords(state, fullToken)
+    records.selectByTokensBatch(state, rfpSubmissionsTokens)
+  );
+  const rfpSumbissionsVoteSummaries = useSelector((state) =>
+    ticketvoteSummaries.selectByTokensBatch(state, rfpSubmissionsTokens)
+  );
+  const rfpSubmissionsCommentsCounts = useSelector((state) =>
+    commentsCount.selectByTokensBatch(state, rfpSubmissionsTokens)
+  );
+  const rfpSubmissionsProposalsSummaries = useSelector((state) =>
+    piSummaries.selectByTokensBatch(state, rfpSubmissionsTokens)
   );
 
   async function onFetchRecordTimestamps({ token, version }) {
@@ -73,6 +88,9 @@ function useProposalDetails({ token }) {
     billingStatusChange,
     proposalStatusChanges,
     rfpSubmissionsRecords,
+    rfpSubmissionsCommentsCounts,
+    rfpSubmissionsProposalsSummaries,
+    rfpSumbissionsVoteSummaries,
   };
 }
 
