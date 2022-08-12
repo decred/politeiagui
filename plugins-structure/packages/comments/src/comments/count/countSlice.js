@@ -37,7 +37,7 @@ const commentsCountSlice = createSlice({
       })
       .addCase(fetchCommentsCount.fulfilled, (state, action) => {
         for (const token in action.payload) {
-          if (action.payload?.[token]) {
+          if (action.payload?.[token] >= 0) {
             state.byToken[token] = action.payload[token];
           }
         }
