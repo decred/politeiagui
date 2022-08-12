@@ -4,7 +4,17 @@ import styles from "./styles.module.css";
 
 function RfpTag() {
   return (
-    <Tooltip contentClassName={styles.rfpTooltip} className={styles.rfpTag}>
+    <Tooltip
+      contentClassName={styles.rfpTooltip}
+      className={styles.rfpTag}
+      placement="bottom"
+      content={
+        <span>
+          <b>Request for Proposals</b>. When approved, this proposal is able to
+          receive submissions related to this topic.
+        </span>
+      }
+    >
       <div>RFP</div>
     </Tooltip>
   );

@@ -37,8 +37,12 @@
 }
 
 .rfpTooltip {
-  color: var(--text-color);
+  color: var(--text-secondary-color);
   font-size: var(--font-size-small);
+  line-height: var(--spacing-1);
+  width: 25rem;
+  transform: none;
+  left: 0%;
 }
 
 .proposalTitle {
