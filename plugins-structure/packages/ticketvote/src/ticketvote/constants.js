@@ -3,6 +3,7 @@ import inventory from "./inventory/inventorySlice";
 import policy from "./policy/policySlice";
 import results from "./results/resultsSlice";
 import summaries from "./summaries/summariesSlice";
+import submissions from "./submissions/submissionsSlice";
 import timestamps from "./timestamps/timestampsSlice";
 
 export const reducersArray = [
@@ -21,6 +22,10 @@ export const reducersArray = [
   {
     key: "ticketvoteResults",
     reducer: results,
+  },
+  {
+    key: "ticketvoteSubmissions",
+    reducer: submissions,
   },
   {
     key: "ticketvoteSummaries",

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
 import { fetchProposalDetails } from "./actions";
-import { selectDetailsStatus } from "./selectors";
+import { selectDetailsStatus, selectRfpSubmissionsRecords } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { recordComments } from "@politeiagui/comments/comments";
@@ -39,6 +39,11 @@ function useProposalDetails({ token }) {
     proposals.selectStatusChangesByToken(state, fullToken)
   );
 
+  // RFP Proposals
+  const rfpSubmissionsRecords = useSelector((state) =>
+    selectRfpSubmissionsRecords(state, fullToken)
+  );
+
   async function onFetchRecordTimestamps({ token, version }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
     return res.payload;
@@ -67,6 +72,7 @@ function useProposalDetails({ token }) {
     voteSummary,
     billingStatusChange,
     proposalStatusChanges,
+    rfpSubmissionsRecords,
   };
 }
 

@@ -25,7 +25,8 @@ import {
 import { Button, ButtonIcon, Message } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
-import ModalProposalDiff from "./ModalProposalDiff";
+import { ModalProposalDiff } from "./ModalProposalDiff";
+import { ProposalsCompact } from "./ProposalsCompact";
 
 const ProposalDetails = ({
   record,
@@ -33,6 +34,9 @@ const ProposalDetails = ({
   proposalSummary,
   onFetchRecordTimestamps,
   proposalStatusChanges,
+  rfpSubmissionsRecords,
+  // rfpSubmissionsVoteSummaries,
+  // rfpSubmissionsProposalSummaries,
 }) => {
   const [open] = useModal();
 
@@ -110,6 +114,9 @@ const ProposalDetails = ({
             <RecordToken token={proposalDetails.token} isCopyable={true} />
             <ProposalStatusBar voteSummary={voteSummary} />
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
+            {rfpSubmissionsRecords && (
+              <ProposalsCompact records={rfpSubmissionsRecords} />
+            )}
           </div>
         }
         thirdRow={

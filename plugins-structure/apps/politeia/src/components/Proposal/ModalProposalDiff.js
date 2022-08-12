@@ -291,7 +291,7 @@ function ProposalDiff({
   );
 }
 
-function ModalProposalDiff({
+export function ModalProposalDiff({
   onClose,
   show,
   oldVersion,
@@ -318,5 +318,3 @@ function ModalProposalDiff({
     </Modal>
   );
 }
-
-export default ModalProposalDiff;

@@ -33,6 +33,7 @@ function Details({ token }) {
     commentsError,
     billingStatusChange,
     proposalStatusChanges,
+    rfpSubmissionsRecords,
   } = useProposalDetails({ token });
   // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
@@ -55,6 +56,7 @@ function Details({ token }) {
             billingStatusChange={billingStatusChange}
             proposalStatusChanges={proposalStatusChanges}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
+            rfpSubmissionsRecords={rfpSubmissionsRecords}
           />
           {comments && (
             <Comments

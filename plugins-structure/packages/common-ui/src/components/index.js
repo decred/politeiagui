@@ -7,6 +7,7 @@ export * from "./Markdown";
 export * from "./Modal";
 export * from "./RecordCard";
 export * from "./RecordForm";
+export * from "./RecordItem";
 export * from "./RecordsList";
 export * from "./RecordToken";
 export * from "./Thumbnail";

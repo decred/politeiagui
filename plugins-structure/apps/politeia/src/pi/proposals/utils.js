@@ -105,12 +105,6 @@ const MONTHS_LABELS = [
  *   recordState: Number,
  *   recordStatus: Number,
  *   version: Number,
- *   timestamps: {
- *     publishedat: Number,
- *     editedat: Number,
- *     censoredat: Number,
- *     abandonedat: Number,
- *   },
  *   voteMetadata: {
  *     linkto: Number,
  *     linkby: Number,
@@ -124,7 +118,8 @@ const MONTHS_LABELS = [
  *   censored: Bool,
  *   archived: Bool,
  *   abandonReason: String,
- *   attachments: Array
+ *   attachments: Array,
+ *   userMetadata: Array
  * }} Proposal
  */
 

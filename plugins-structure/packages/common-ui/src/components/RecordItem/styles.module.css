@@ -1,0 +1,6 @@
+/* .itemWrapper {
+  display: flex;
+} */
+.itemTitle {
+  font-weight: var(--font-weight-regular);
+}
