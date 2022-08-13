@@ -5,6 +5,7 @@ import { ProposalCard, ProposalLoader } from "../../../components";
 import max from "lodash/max";
 import min from "lodash/min";
 import useStatusList from "../useStatusList";
+import { Message } from "pi-ui";
 
 function LoadingSkeleton({ inventory, records }) {
   if (!inventory) return [];
@@ -37,6 +38,7 @@ function StatusList({
     proposalSummaries,
     fetchNextBatch,
     recordsInOrder,
+    recordsError,
     areAllInventoryEntriesFetched,
     proposalsStatusChanges,
   } = useStatusList({ inventory, inventoryStatus, status });
@@ -66,8 +68,8 @@ function StatusList({
 
   const hasMoreToFetch = hasMoreRecords || hasMoreInventory;
 
-  return (
-    <div>
+  return !recordsError ? (
+    <div data-testid="status-list">
       <RecordsList
         hasMore={hasMoreToFetch}
         onFetchMore={handleFetchMore}
@@ -91,6 +93,10 @@ function StatusList({
           );
         })}
       </RecordsList>
+    </div>
+  ) : (
+    <div data-testid="status-list-error">
+      <Message kind="error">{recordsError}</Message>
     </div>
   );
 }

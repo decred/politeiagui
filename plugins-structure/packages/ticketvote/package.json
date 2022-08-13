@@ -18,7 +18,8 @@
     "./helpers": "./src/ticketvote/helpers.js",
     "./utils": "./src/lib/utils.js",
     "./constants": "./src/lib/constants.js",
-    "./validation": "./src/lib/validation.js"
+    "./validation": "./src/lib/validation.js",
+    "./dev/mocks": "./src/dev/mocks/index.js"
   },
   "scripts": {
     "prettify": "politeiagui-scripts prettify",

@@ -13,7 +13,10 @@
     "test": "politeiagui-scripts test",
     "build": "politeiagui-scripts build-app",
     "analyze": "source-map-explorer 'dist/*.js'",
-    "start": "politeiagui-scripts start-app"
+    "start": "politeiagui-scripts start-app",
+    "serve": "politeiagui-scripts start-app --serve",
+    "test:e2e:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test 'yarn serve' https-get://localhost:8080 'politeiagui-scripts test-e2e'",
+    "test:e2e:browser": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test 'yarn serve' https-get://localhost:8080 'politeiagui-scripts test-e2e --browser'"
   },
   "dependencies": {
     "@politeiagui/comments": "1.0.0",

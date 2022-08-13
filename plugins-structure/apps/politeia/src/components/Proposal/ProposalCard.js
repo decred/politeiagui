@@ -23,7 +23,7 @@ const ProposalCard = ({
   const currentStatusChange =
     proposalSummary && proposalStatusChanges?.[proposalSummary.status];
   return (
-    <div>
+    <div data-testid="proposal-card">
       <RecordCard
         isDimmed={proposal.archived || proposal.censored}
         titleLink={proposalLink}

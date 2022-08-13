@@ -6,6 +6,7 @@ import styles from "./Navbar.module.css";
 function HamburgerToggle({ onToggle, isActive }) {
   return (
     <div
+      data-testid="common-ui-navbar-toggle"
       className={styles.hamburgerToggleWrapper}
       onClick={() => (isActive ? onToggle(false) : onToggle(true))}
     >
@@ -23,8 +24,8 @@ export function Navbar({ logo, children, drawerContent }) {
   useLockBodyScrollOnTrue(showCollapsed);
   return (
     <>
-      <nav className={styles.navWrapper}>
-        <Row className={styles.navbar}>
+      <nav className={styles.navWrapper} data-testid="common-ui-navbar">
+        <Row className={styles.navbar} data-testid="common-ui-navbar-logo">
           <Column md={4} lg={2}>
             {logo}
           </Column>
@@ -44,12 +45,22 @@ export function Navbar({ logo, children, drawerContent }) {
           <Column xs={0} sm={5}>
             <span />
           </Column>
-          <Column xs={12} sm={7} className={styles.collapsedNav}>
+          <Column
+            xs={12}
+            sm={7}
+            className={styles.collapsedNav}
+            data-testid="common-ui-navbar-drawer"
+          >
             <div className={classNames(styles.collapsedItems, styles.navItems)}>
               {children}
             </div>
             {drawerContent && (
-              <div className={styles.drawerContent}>{drawerContent}</div>
+              <div
+                data-testid="common-ui-navbar-drawer-content"
+                className={styles.drawerContent}
+              >
+                {drawerContent}
+              </div>
             )}
           </Column>
         </Row>

@@ -307,6 +307,7 @@ function ModalProposalDiff({
       title={<ModalTitle />}
       className={styles.modalWrapper}
       contentClassName={styles.modalContent}
+      data-testid="modal-proposal-diff"
     >
       <ProposalDiff
         oldVersion={oldVersion}

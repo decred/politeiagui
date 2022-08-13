@@ -8,7 +8,13 @@ import { formatUnixTimestamp } from "../../utils";
 const getTimeAgo = (timestamp) =>
   distance(new Date(), new Date(timestamp * 1000), { addSuffix: true });
 
-const DateTooltip = ({ timestamp, placement, className, children }) => {
+const DateTooltip = ({
+  timestamp,
+  placement,
+  className,
+  children,
+  ...props
+}) => {
   const timeAgo = useMemo(() => getTimeAgo(timestamp), [timestamp]);
 
   return (
@@ -16,6 +22,7 @@ const DateTooltip = ({ timestamp, placement, className, children }) => {
       className={classNames(className, styles.dateTooltip)}
       content={formatUnixTimestamp(timestamp)}
       placement={placement}
+      {...props}
     >
       {children({ timeAgo })}
     </Tooltip>

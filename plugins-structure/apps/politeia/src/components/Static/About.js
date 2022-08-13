@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 
 export default function About() {
   return (
-    <Card paddingSize="small">
+    <Card paddingSize="small" data-testid="about-politeia">
       <MarkdownRenderer body={aboutText} className={styles.about} />
     </Card>
   );

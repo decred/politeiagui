@@ -3,7 +3,7 @@ import { H3, Link } from "pi-ui";
 import styles from "./styles.module.css";
 
 const Rules = () => (
-  <>
+  <div data-testid="proposal-form-rules">
     <H3>Rules:</H3>
     <ul className={styles.rules}>
       <li>Expenses must be denominated in USD (but will be paid in DCR)</li>
@@ -30,7 +30,7 @@ const Rules = () => (
         </Link>
       </li>
     </ul>
-  </>
+  </div>
 );
 
 export default Rules;
