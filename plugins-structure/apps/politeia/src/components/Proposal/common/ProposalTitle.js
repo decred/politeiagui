@@ -8,6 +8,7 @@ function RfpTag() {
       contentClassName={styles.rfpTooltip}
       className={styles.rfpTag}
       placement="bottom"
+      data-testid="proposal-rfp-tag"
       content={
         <span>
           <b>Request for Proposals</b>. When approved, this proposal is able to

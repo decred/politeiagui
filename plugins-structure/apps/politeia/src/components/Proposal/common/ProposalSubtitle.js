@@ -8,7 +8,7 @@ function RfpLinkedProposal({ name, link }) {
   return (
     !!name &&
     !!link && (
-      <span className={styles.rfpProposalLabel}>
+      <span className={styles.rfpProposalLabel} data-testid="proposal-rfp-link">
         Proposed for:{" "}
         <a data-link href={link} className={styles.rfpProposalLink}>
           {name}
@@ -31,10 +31,17 @@ function ProposalSubtitle({
   return (
     <div>
       <RfpLinkedProposal name={rfpLink.name} link={rfpLink.link} />
-      <Join>
+      <Join className={styles.proposalSubtitle}>
         <Link href={`user/${userid}`} data-testid="proposal-username">
           {username}
         </Link>
+        {expireat && (
+          <Event
+            event={Date.now() > expireat * 1000 ? "expired" : "expires"}
+            data-testid="proposal-date-expire"
+            timestamp={expireat}
+          />
+        )}
         {publishedat && (
           <Event
             event="published"

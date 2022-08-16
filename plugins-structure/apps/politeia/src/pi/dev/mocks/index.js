@@ -2,7 +2,8 @@ import { mockRecord } from "@politeiagui/core/dev/mocks";
 import {
   convertMarkdownToFile,
   convertProposalMetadataToFile,
-} from "../../utils";
+  convertVoteMetadataToFile,
+} from "../../proposals/utils";
 import { faker } from "@faker-js/faker";
 
 function generateMetadataFile({
@@ -21,15 +22,25 @@ function generateMetadataFile({
   });
 }
 
-export function mockProposal({ status, state, customToken } = {}) {
+export function mockProposal({
+  status,
+  state,
+  customToken,
+  linkto,
+  linkby,
+} = {}) {
   return ({ token, version }) => {
     const record = mockRecord({ state, status })({
       token: customToken || token,
       version,
     });
+    const files = [generateMetadataFile()];
+    if (linkby || linkto) {
+      files.push(convertVoteMetadataToFile({ linkto, linkby }));
+    }
     return {
       ...record,
-      files: [generateMetadataFile()],
+      files,
     };
   };
 }

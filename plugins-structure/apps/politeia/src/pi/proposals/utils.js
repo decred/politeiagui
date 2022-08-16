@@ -1,6 +1,8 @@
+import { Buffer } from "buffer";
 import {
   decodeRecordFile,
   decodeRecordMetadata,
+  encodeTextToFilePayload,
   getShortToken,
 } from "@politeiagui/core/records/utils";
 import {
@@ -532,4 +534,47 @@ export function getRfpRecordLink(record) {
 
 export function getRfpProposalsLinks(records = []) {
   return compose(uniq, compact, map(getRfpRecordLink))(records);
+}
+
+// Proposal Inputs
+const objectToBuffer = (obj) => Buffer.from(JSON.stringify(obj));
+const bufferToBase64String = (buf) => buf.toString("base64");
+
+export function convertMarkdownToFile(markdownText) {
+  return {
+    name: "index.md",
+    mime: "text/plain; charset=utf-8",
+    payload: encodeTextToFilePayload(markdownText),
+  };
+}
+
+export function convertPayloadToFile(fileName, payload) {
+  return {
+    name: fileName,
+    mime: "text/plain; charset=utf-8",
+    payload: bufferToBase64String(objectToBuffer(payload)),
+  };
+}
+
+export function convertVoteMetadataToFile({ linkby, linkto }) {
+  return convertPayloadToFile(PROPOSAL_VOTE_METADATA_FILENAME, {
+    linkto,
+    linkby,
+  });
+}
+
+export function convertProposalMetadataToFile({
+  name,
+  amount,
+  startdate,
+  enddate,
+  domain,
+}) {
+  return convertPayloadToFile(PROPOSAL_METADATA_FILENAME, {
+    name,
+    amount,
+    startdate,
+    enddate,
+    domain,
+  });
 }
