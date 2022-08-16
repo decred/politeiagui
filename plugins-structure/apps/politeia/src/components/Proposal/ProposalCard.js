@@ -14,6 +14,7 @@ import {
 
 const ProposalCard = ({
   record,
+  rfpRecord,
   voteSummary,
   commentsCount,
   proposalSummary,
@@ -21,6 +22,12 @@ const ProposalCard = ({
 }) => {
   const proposal = decodeProposalRecord(record);
   const proposalLink = `/record/${getShortToken(proposal.token)}`;
+
+  // Only RFP Submissions have a corresponding RFP Proposal
+  const rfpProposal = decodeProposalRecord(rfpRecord);
+  const rfpProposalLink =
+    rfpProposal && `/record/${getShortToken(rfpProposal.token)}`;
+
   const currentStatusChange =
     proposalSummary && proposalStatusChanges?.[proposalSummary.status];
   return (
@@ -33,6 +40,7 @@ const ProposalCard = ({
         }
         subtitle={
           <ProposalSubtitle
+            rfpLink={{ name: rfpProposal?.name, link: rfpProposalLink }}
             userid={proposal.author.userid}
             username={proposal.author.username}
             timestamps={proposal.timestamps}

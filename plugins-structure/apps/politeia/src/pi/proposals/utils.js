@@ -41,6 +41,10 @@ import {
 } from "../lib/constants";
 import isArray from "lodash/fp/isArray";
 import isEmpty from "lodash/isEmpty";
+import uniq from "lodash/fp/uniq";
+import compact from "lodash/fp/compact";
+import compose from "lodash/fp/compose";
+import map from "lodash/fp/map";
 
 const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 const PROPOSAL_INDEX_FILENAME = "index.md";
@@ -515,7 +519,16 @@ export function isProposalCompleteOrClosed(status) {
   return [PROPOSAL_STATUS_COMPLETED, PROPOSAL_STATUS_CLOSED].includes(status);
 }
 
+// RFP Proposals and Submissions
 export function isRfpProposal(record) {
   const { linkby } = decodeVoteMetadataFile(record?.files);
   return !!linkby;
+}
+
+export function getRfpProposalLink(record) {
+  return decodeVoteMetadataFile(record?.files)?.linkto;
+}
+
+export function getRfpProposalsLinks(records = []) {
+  return compose(uniq, compact, map(getRfpProposalLink))(records);
 }

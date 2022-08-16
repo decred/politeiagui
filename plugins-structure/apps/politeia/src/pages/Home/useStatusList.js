@@ -39,6 +39,7 @@ function useStatusList({ inventory, inventoryStatus }) {
   const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
 
   return {
+    allRecords,
     hasMoreInventory,
     hasMoreRecords,
     homeStatus,

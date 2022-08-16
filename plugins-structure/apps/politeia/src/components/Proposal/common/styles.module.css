@@ -45,9 +45,21 @@
   left: 0%;
 }
 
+.rfpProposalLabel {
+  font-size: var(--font-size-small);
+  color: var(--text-secondary-color);
+}
+.rfpProposalLink {
+  color: var(--link-color);
+}
+
 .proposalTitle {
   display: flex;
   align-items: center;
+}
+
+.proposalSubtitle {
+  padding-top: var(--spacing-small);
 }
 
 @media screen and (max-width: 768px) {

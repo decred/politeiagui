@@ -9,6 +9,7 @@ import {
   fetchNextBatchRecordsListenerCreator,
   fetchNextBatchSummariesListenerCreator,
   fetchRecordsListenerCreator,
+  fetchRecordsRfpSubmissionsListenerCreator,
   fetchVoteSummariesListenerCreator,
   listeners,
 } from "./listeners";
@@ -51,6 +52,11 @@ export default App.createRoute({
     {
       id: "pi/proposals/billingStatusChanges",
       listenerCreator: fetchBillingStatusChangesListenerCreator,
+    },
+    // Rfp Sumbissions
+    {
+      id: "records/batch/all",
+      listenerCreator: fetchRecordsRfpSubmissionsListenerCreator,
     },
   ],
   listeners,

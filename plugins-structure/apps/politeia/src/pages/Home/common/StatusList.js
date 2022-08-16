@@ -5,6 +5,7 @@ import { ProposalCard, ProposalLoader } from "../../../components";
 import max from "lodash/max";
 import min from "lodash/min";
 import useStatusList from "../useStatusList";
+import { getRfpProposalLink } from "../../../pi/proposals/utils";
 
 function LoadingSkeleton({ inventory, records }) {
   if (!inventory) return [];
@@ -29,6 +30,7 @@ function StatusList({
 }) {
   const dispatch = useDispatch();
   const {
+    allRecords,
     hasMoreRecords,
     hasMoreInventory,
     homeStatus,
@@ -79,10 +81,12 @@ function StatusList({
       >
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
+          const rfpLinkTo = getRfpProposalLink(record);
           return (
             <ProposalCard
               key={token}
               record={record}
+              rfpRecord={allRecords?.[rfpLinkTo]}
               commentsCount={countComments?.[token]}
               voteSummary={voteSummaries?.[token]}
               proposalSummary={proposalSummaries?.[token]}
