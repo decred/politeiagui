@@ -9,6 +9,7 @@ import { ticketvoteSubmissions } from "@politeiagui/ticketvote/submissions";
 import { recordComments } from "@politeiagui/comments/comments";
 import { piBilling, piSummaries, proposals } from "../../pi";
 import { commentsCount } from "@politeiagui/comments/count";
+import { getRfpRecordLink } from "../../pi/proposals/utils";
 
 function useProposalDetails({ token }) {
   const dispatch = useDispatch();
@@ -58,6 +59,12 @@ function useProposalDetails({ token }) {
     piSummaries.selectByTokensBatch(state, rfpSubmissionsTokens)
   );
 
+  // RFP Linked Proposal
+  const rfpLinkedRecordToken = getRfpRecordLink(record);
+  const rfpLinkedRecord = useSelector((state) =>
+    records.selectByToken(state, rfpLinkedRecordToken)
+  );
+
   async function onFetchRecordTimestamps({ token, version }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
     return res.payload;
@@ -86,6 +93,7 @@ function useProposalDetails({ token }) {
     voteSummary,
     billingStatusChange,
     proposalStatusChanges,
+    rfpLinkedRecord,
     rfpSubmissionsRecords,
     rfpSubmissionsCommentsCounts,
     rfpSubmissionsProposalsSummaries,

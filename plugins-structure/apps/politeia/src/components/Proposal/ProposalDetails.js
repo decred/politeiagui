@@ -31,6 +31,7 @@ import { PROPOSAL_STATUS_APPROVED } from "../../pi";
 
 const ProposalDetails = ({
   record,
+  rfpRecord,
   voteSummary,
   proposalSummary,
   onFetchRecordTimestamps,
@@ -44,13 +45,17 @@ const ProposalDetails = ({
 
   const proposalDetails = decodeProposalRecord(record);
   const body = proposalDetails.body;
+  const proposalLink = `/record/${getShortToken(proposalDetails.token)}`;
+
+  // RFP Linked Proposal
+  const rfpProposal = decodeProposalRecord(rfpRecord);
+  const rfpProposalLink =
+    rfpProposal && `/record/${getShortToken(rfpProposal.token)}`;
 
   const imagesByDigest = getImagesByDigest(body, proposalDetails.attachments);
   const imagesNotInText = proposalDetails.attachments.filter(
     (f) => !imagesByDigest[f.digest]
   );
-
-  const proposalLink = `/record/${getShortToken(proposalDetails.token)}`;
 
   function handleShowRawMarkdown() {
     router.navigateTo(proposalLink);
@@ -99,6 +104,7 @@ const ProposalDetails = ({
         isDimmed={isAbandoned}
         subtitle={
           <ProposalSubtitle
+            rfpLink={{ name: rfpProposal?.name, link: rfpProposalLink }}
             userid={proposalDetails.author.userid}
             username={proposalDetails.author.username}
             timestamps={proposalDetails.timestamps}

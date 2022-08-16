@@ -5,7 +5,7 @@ import { ProposalCard, ProposalLoader } from "../../../components";
 import max from "lodash/max";
 import min from "lodash/min";
 import useStatusList from "../useStatusList";
-import { getRfpProposalLink } from "../../../pi/proposals/utils";
+import { getRfpRecordLink } from "../../../pi/proposals/utils";
 
 function LoadingSkeleton({ inventory, records }) {
   if (!inventory) return [];
@@ -81,7 +81,7 @@ function StatusList({
       >
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
-          const rfpLinkTo = getRfpProposalLink(record);
+          const rfpLinkTo = getRfpRecordLink(record);
           return (
             <ProposalCard
               key={token}

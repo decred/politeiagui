@@ -1,5 +1,6 @@
 import { fetchProposalDetails } from "./actions";
 import {
+  getRfpRecordLink,
   isProposalCompleteOrClosed,
   isRfpProposal,
   proposalFilenames,
@@ -68,6 +69,24 @@ function injectRfpSubmissionsEffect(effect) {
   };
 }
 
+function injectRfpLinkedProposalEffect(effect) {
+  return async (
+    { payload: record },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    const token = getRfpRecordLink(record);
+    if (token) {
+      await effect(state, dispatch, {
+        inventoryList: [token],
+        filenames: proposalFilenames,
+      });
+    }
+    subscribe();
+  };
+}
+
 function injectPayloadEffect(effect) {
   return async (
     { payload },
@@ -110,7 +129,7 @@ export const fetchRecordDetailsListenerCreator = {
   injectEffect: injectPayloadEffect,
 };
 
-// RFP Proposals
+// RFP Proposal
 export const fetchRfpDetailsListenerCreator = {
   type: "records/fetchDetails/fulfilled",
   injectEffect: injectRfpProposalEffect,
@@ -119,4 +138,10 @@ export const fetchRfpDetailsListenerCreator = {
 export const fetchRfpSubmissionsListenerCreator = {
   type: "ticketvoteSubmissions/fetch/fulfilled",
   injectEffect: injectRfpSubmissionsEffect,
+};
+
+// RFP Submission
+export const fetchRfpLinkedProposalListenerCreator = {
+  type: "records/fetchDetails/fulfilled",
+  injectEffect: injectRfpLinkedProposalEffect,
 };

@@ -33,6 +33,7 @@ function Details({ token }) {
     commentsError,
     billingStatusChange,
     proposalStatusChanges,
+    rfpLinkedRecord,
     rfpSubmissionsRecords,
     rfpSubmissionsCommentsCounts,
     rfpSubmissionsProposalsSummaries,
@@ -54,6 +55,7 @@ function Details({ token }) {
         <>
           <ProposalDetails
             record={record}
+            rfpRecord={rfpLinkedRecord}
             voteSummary={voteSummary}
             proposalSummary={proposalSummary}
             billingStatusChange={billingStatusChange}

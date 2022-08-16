@@ -7,6 +7,7 @@ import {
   fetchProposalSummaryListenerCreator,
   fetchRecordDetailsListenerCreator,
   fetchRfpDetailsListenerCreator,
+  fetchRfpLinkedProposalListenerCreator,
   fetchRfpSubmissionsListenerCreator,
   fetchVoteSummaryListenerCreator,
   recordFetchDetailsListenerCreator,
@@ -75,6 +76,11 @@ export default App.createRoute({
     {
       id: "comments/count/all",
       listenerCreator: fetchRfpSubmissionsListenerCreator,
+    },
+    // RFP Submissions Services
+    {
+      id: "records/batch",
+      listenerCreator: fetchRfpLinkedProposalListenerCreator,
     },
   ],
   cleanup: routeCleanup,

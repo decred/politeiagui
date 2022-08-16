@@ -525,10 +525,10 @@ export function isRfpProposal(record) {
   return !!linkby;
 }
 
-export function getRfpProposalLink(record) {
+export function getRfpRecordLink(record) {
   return decodeVoteMetadataFile(record?.files)?.linkto;
 }
 
 export function getRfpProposalsLinks(records = []) {
-  return compose(uniq, compact, map(getRfpProposalLink))(records);
+  return compose(uniq, compact, map(getRfpRecordLink))(records);
 }
