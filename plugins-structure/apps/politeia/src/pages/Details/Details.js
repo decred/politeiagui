@@ -13,7 +13,12 @@ import { getURLSearchParams } from "../../utils/getURLSearchParams";
 function ErrorsMessages({ errors }) {
   return errors.reduce((acc, cur) => {
     if (cur) {
-      return [...acc, <Message kind="error">{cur}</Message>];
+      return [
+        ...acc,
+        <Message kind="error" data-testid="proposal-details-error">
+          {cur}
+        </Message>,
+      ];
     }
     return acc;
   }, []);

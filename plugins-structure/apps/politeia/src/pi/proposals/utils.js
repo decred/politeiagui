@@ -146,6 +146,7 @@ export function decodeProposalMetadataFile(files) {
  */
 export function decodeProposalBodyFile(files) {
   const body = files.find((f) => f.name === PROPOSAL_INDEX_FILENAME);
+  // TODO: Move decode payload to core records utils
   return body && decodeURIComponent(escape(window.atob(body.payload)));
 }
 

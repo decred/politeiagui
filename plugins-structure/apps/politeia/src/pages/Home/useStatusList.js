@@ -38,6 +38,9 @@ function useStatusList({ inventory, inventoryStatus }) {
 
   const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
 
+  // Errors
+  const recordsError = useSelector(records.selectError);
+
   return {
     allRecords,
     hasMoreInventory,
@@ -49,6 +52,7 @@ function useStatusList({ inventory, inventoryStatus }) {
     fetchNextBatch,
     recordsInOrder,
     recordsPageSize,
+    recordsError,
     areAllInventoryEntriesFetched: areAllEntriesFetched(inventory, allRecords),
     billingStatusChanges,
     proposalsStatusChanges,

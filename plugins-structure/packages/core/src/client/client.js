@@ -16,6 +16,13 @@ function ApiError(message, body) {
 }
 ApiError.prototype = new Error();
 
+export function getDefaultErrorMessage(code = 0, api = "") {
+  return `
+    The server encountered an unexpected error, please contact Politeia
+    administrators and inform the api/${api} error code: ${code}
+  `;
+}
+
 // export client object with functions to interact with the API
 export const client = {
   async fetchRecordsInventory(obj) {

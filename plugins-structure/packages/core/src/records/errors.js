@@ -1,3 +1,4 @@
+import { getDefaultErrorMessage } from "../client";
 export function getRecordsUserError(code, context = "") {
   const errorMap = {
     1: "Invalid inputs for request",
@@ -22,7 +23,7 @@ export function getRecordsUserError(code, context = "") {
     20: "The number of requested record tokens exceeds the page size policy.",
   };
 
-  return errorMap[code];
+  return errorMap[code] || getDefaultErrorMessage(code, "records");
 }
 
 export function getRecordsErrorMessage(

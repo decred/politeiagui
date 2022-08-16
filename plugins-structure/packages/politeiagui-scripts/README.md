@@ -10,6 +10,8 @@ This is a CLI and exposes a bin called politeiagui-scripts.
 
 politeiagui-scripts allows you to specify your own configuration for things. To have your own config, just add the config file (babel.config.js, jest.config.js, .prettierrc, .eslintrc) to your plugin or app and politeiagui-scripts will use that instead of the internal config. You can also add a config file to the workspace if you want.
 
+<!-- TODO: Add docs to install new deps/packages -->
+
 ## Commands
 
 ### start-app
@@ -30,6 +32,22 @@ The page will automatically reload if you make changes to the code.
 
 Runs the test watcher in an interactive mode.
 By default, runs tests related to files changed since the last commit.
+
+### test-e2e
+
+Runs e2e tests using cypress. Runs headless tests by default.
+
+```bash
+$ cd apps/politeia
+# run headless tests
+$ politeiagui-scripts test-e2e
+
+# run tests on default browser (chrome)
+$ politeiagui-scripts test-e2e --browser
+
+# run tests on custom browser. Must be installed on your computer.
+$ politeiagui-scripts test-e2e --browser="firefox"
+```
 
 ### build-app
 

@@ -4,17 +4,20 @@ import { commentsCount } from "@politeiagui/comments/count";
 import { ticketvoteInventory } from "@politeiagui/ticketvote/inventory";
 import { getStatusFromMultipleSlices } from "../../utils/getStatusFromMultipleSlices";
 import isEmpty from "lodash/isEmpty";
+import { piSummaries } from "../../pi";
 
 export function selectHomeStatus(state) {
   const countCommentsStatus = commentsCount.selectStatus(state);
   const summariesStatus = ticketvoteSummaries.selectStatus(state);
   const recordsStatus = records.selectStatus(state);
+  const piSummariesStatus = piSummaries.selectStatus(state);
 
   const statuses = [];
 
   if (countCommentsStatus) statuses.push(countCommentsStatus);
   if (summariesStatus) statuses.push(summariesStatus);
   if (recordsStatus) statuses.push(recordsStatus);
+  if (piSummariesStatus) statuses.push(piSummariesStatus);
 
   return getStatusFromMultipleSlices(statuses);
 }

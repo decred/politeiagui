@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Message } from "pi-ui";
 import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch } from "react-redux";
 import { ProposalCard, ProposalLoader } from "../../../components";
@@ -39,6 +40,7 @@ function StatusList({
     proposalSummaries,
     fetchNextBatch,
     recordsInOrder,
+    recordsError,
     areAllInventoryEntriesFetched,
     proposalsStatusChanges,
   } = useStatusList({ inventory, inventoryStatus, status });
@@ -68,8 +70,8 @@ function StatusList({
 
   const hasMoreToFetch = hasMoreRecords || hasMoreInventory;
 
-  return (
-    <div>
+  return !recordsError ? (
+    <div data-testid="status-list">
       <RecordsList
         hasMore={hasMoreToFetch}
         onFetchMore={handleFetchMore}
@@ -95,6 +97,10 @@ function StatusList({
           );
         })}
       </RecordsList>
+    </div>
+  ) : (
+    <div data-testid="status-list-error">
+      <Message kind="error">{recordsError}</Message>
     </div>
   );
 }

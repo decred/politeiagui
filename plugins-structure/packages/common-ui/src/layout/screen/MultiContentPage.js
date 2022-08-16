@@ -6,7 +6,11 @@ import styles from "./styles.module.css";
 export function MultiContentPage({ banner, children, sidebar }) {
   return (
     <div>
-      {banner && <Row className={styles.banner}>{banner}</Row>}
+      {banner && (
+        <Row className={styles.banner} data-testid="common-ui-page-banner">
+          {banner}
+        </Row>
+      )}
       <StaticContainer className={styles.container}>
         <Row>
           <Column sm={12} lg={8}>

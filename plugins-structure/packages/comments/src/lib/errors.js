@@ -1,3 +1,5 @@
+import { getDefaultErrorMessage } from "@politeiagui/core/client";
+
 function getCommentsUserErrorMessage(code) {
   const errorMap = {
     1: "Invalid inputs for request",
@@ -11,7 +13,7 @@ function getCommentsUserErrorMessage(code) {
     9: "No tokens found in the count votes request",
   };
 
-  return errorMap[code];
+  return errorMap[code] || getDefaultErrorMessage(code, "comments");
 }
 
 function getCommentsPluginErrorMessage(code, context) {
@@ -31,7 +33,7 @@ function getCommentsPluginErrorMessage(code, context) {
     14: context,
   };
 
-  return errorMap[code];
+  return errorMap[code] || getDefaultErrorMessage(code, "comments");
 }
 
 export function getCommentsError(

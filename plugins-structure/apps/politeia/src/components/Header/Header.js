@@ -11,7 +11,11 @@ import styles from "./styles.module.css";
 function PoliteiaLogo() {
   const themeName = useSelector(theme.select);
   return (
-    <div onClick={() => router.navigateTo("/")} className={styles.logo}>
+    <div
+      onClick={() => router.navigateTo("/")}
+      className={styles.logo}
+      data-testid="politeia-logo"
+    >
       <Text>
         {themeName === DEFAULT_DARK_THEME_NAME ? <LogoDark /> : <LogoLight />}
       </Text>

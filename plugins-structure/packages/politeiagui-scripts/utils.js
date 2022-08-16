@@ -78,7 +78,7 @@ function hasLocalConfig(moduleName, searchOptions = {}) {
   return result !== null;
 }
 
-function start(config) {
+function start(config, serverMode = false) {
   let compiler;
   try {
     compiler = webpack(config);
@@ -92,6 +92,7 @@ function start(config) {
 
   const serverConfig = {
     ...createDevServerConfig,
+    open: !serverMode,
   };
 
   const devServer = new WebpackDevServer(serverConfig, compiler);

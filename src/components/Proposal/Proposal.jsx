@@ -284,12 +284,7 @@ const Proposal = React.memo(function Proposal({
             )}
             <Header
               title={
-                <Title
-                  id={`proposal-title-${shortToken}`}
-                  truncate
-                  linesBeforeTruncate={2}
-                  url={proposalURL}
-                >
+                <Title id={`proposal-title-${shortToken}`} url={proposalURL}>
                   {name || shortToken}
                 </Title>
               }

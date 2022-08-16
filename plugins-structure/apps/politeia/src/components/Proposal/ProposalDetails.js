@@ -85,9 +85,9 @@ const ProposalDetails = ({
     proposalSummary && proposalStatusChanges?.[proposalSummary.status];
 
   return (
-    <div>
+    <div data-testid="proposal-details">
       {currentStatusChange?.reason && (
-        <Message kind="warning">
+        <Message kind="warning" data-testid="status-change-reason">
           <div>Proposal is {currentStatusChange.status}.</div>
           <div>Reason: {currentStatusChange.reason}</div>
         </Message>
@@ -135,7 +135,7 @@ const ProposalDetails = ({
           </div>
         }
         thirdRow={
-          <div className={styles.proposalBody}>
+          <div className={styles.proposalBody} data-testid="proposal-body">
             <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
             <ThumbnailGrid
               files={imagesNotInText}

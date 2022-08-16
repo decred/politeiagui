@@ -12,22 +12,24 @@ export const TicketvoteRecordVoteStatusBar = ({ ticketvoteSummary }) => {
   const votesReceived = ticketvoteHelpers.getVotesReceived(ticketvoteSummary);
   const { passpercentage } = ticketvoteSummary;
   return (
-    <StatusBar
-      max={quorum}
-      status={statusBarData}
-      markerPosition={`${passpercentage}%`}
-      markerTooltipText={`${passpercentage}% Yes votes required for approval`}
-      markerTooltipClassName={styles.statusBarTooltip}
-      renderStatusInfoComponent={
-        <TicketvoteRecordVotesCount
-          isVoteActive={true}
-          quorumVotes={quorum}
-          votesReceived={votesReceived}
-          onSearchVotes={() => {
-            console.log("SEARCHING");
-          }}
-        />
-      }
-    />
+    <div data-testid="ticketvote-vote-status-bar">
+      <StatusBar
+        max={quorum}
+        status={statusBarData}
+        markerPosition={`${passpercentage}%`}
+        markerTooltipText={`${passpercentage}% Yes votes required for approval`}
+        markerTooltipClassName={styles.statusBarTooltip}
+        renderStatusInfoComponent={
+          <TicketvoteRecordVotesCount
+            isVoteActive={true}
+            quorumVotes={quorum}
+            votesReceived={votesReceived}
+            onSearchVotes={() => {
+              console.log("SEARCHING");
+            }}
+          />
+        }
+      />
+    </div>
   );
 };

@@ -192,6 +192,16 @@ export function decodeRecordFile(file) {
 }
 
 /**
+ * encodeTextToFilePayload converts given `text` string to its encoded file
+ * payload.
+ * @param {string} text
+ * @returns {string} encoded file payload
+ */
+export function encodeTextToFilePayload(text) {
+  return window.btoa(unescape(encodeURIComponent(text)));
+}
+
+/**
  * decodeRecordMetadata returns the metadata stream with its JSON decoded
  * payload.
  * @param {MetadataStream} metadataStream record's metadata stream

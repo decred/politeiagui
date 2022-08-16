@@ -1,7 +1,12 @@
 module.exports = {
   root: true,
-  extends: ["react-app", "react-app/jest", "prettier"],
-  plugins: ["unused-imports"],
+  extends: [
+    "react-app",
+    "react-app/jest",
+    "prettier",
+    "plugin:cypress/recommended",
+  ],
+  plugins: ["unused-imports", "cypress"],
   rules: {
     "testing-library/no-dom-import": "off",
     eqeqeq: 0,

@@ -28,7 +28,7 @@ function ProposalMetadata({ metadata }) {
     enddate &&
     formatDateToInternationalString(formatUnixTimestampToObj(enddate));
   const items = getMetadataItems({ domain, amount, endDate, startDate });
-  return <LabelValueList items={items} />;
+  return <LabelValueList items={items} data-testid="proposal-metadata" />;
 }
 
 export default ProposalMetadata;

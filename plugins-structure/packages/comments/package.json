@@ -11,7 +11,8 @@
     "./policy": "./src/comments/policy/index.js",
     "./timestamps": "./src/comments/timestamps/index.js",
     "./votes": "./src/comments/votes/index.js",
-    "./ui": "./src/ui/index.js"
+    "./ui": "./src/ui/index.js",
+    "./dev/mocks": "./src/dev/mocks/index.js"
   },
   "scripts": {
     "prettify": "politeiagui-scripts prettify",

@@ -139,7 +139,7 @@ span.statusTag > span {
   cursor: pointer;
 }
 
-@media screen and (max-width: 560px) {
+@media screen and (max-width: 768px) {
   .rfpProposal {
     border-left: 1px solid #1b41b3;
   }

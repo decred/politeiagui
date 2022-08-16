@@ -31,16 +31,24 @@ function ProposalSubtitle({
   return (
     <div>
       <RfpLinkedProposal name={rfpLink.name} link={rfpLink.link} />
-      <Join className={styles.proposalSubtitle}>
-        <Link href={`user/${userid}`}>{username}</Link>
-        {expireat && (
+      <Join>
+        <Link href={`user/${userid}`} data-testid="proposal-username">
+          {username}
+        </Link>
+        {publishedat && (
           <Event
-            event={Date.now() > expireat * 1000 ? "expired" : "expires"}
-            timestamp={expireat}
+            event="published"
+            data-testid="proposal-date-published"
+            timestamp={publishedat}
           />
         )}
-        {publishedat && <Event event="published" timestamp={publishedat} />}
-        {editedat && <Event event="edited" timestamp={editedat} />}
+        {editedat && (
+          <Event
+            event="edited"
+            data-testid="proposal-date-edited"
+            timestamp={editedat}
+          />
+        )}
         {version > 1 &&
           (onChangeVersion ? (
             <Dropdown
@@ -49,6 +57,7 @@ function ProposalSubtitle({
               itemsListClassName={styles.version}
               dropdownHeaderClassName={styles.version}
               className={styles.version}
+              data-testid="proposal-version"
             >
               {range(version, 0, -1).map((v, i) => (
                 <DropdownItem key={i} onClick={() => onChangeVersion(v)}>

@@ -35,6 +35,7 @@ const ProposalDownloads = ({
 
   return (
     <Dropdown
+      data-testid="proposal-downloads"
       title={title}
       closeOnItemClick={false}
       dropdownHeaderClassName={headerClassName}
