@@ -16,7 +16,7 @@
   margin-bottom: 3rem;
 }
 
-@media screen and (max-width: 768px) {
+@media (--sm-viewport) {
   .banner {
     padding: 3rem 2.5rem 0 2.5rem;
   }

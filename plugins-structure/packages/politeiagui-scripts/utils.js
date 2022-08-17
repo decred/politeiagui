@@ -11,7 +11,7 @@ const createDevServerConfig = require("./config/webpack/webpackDevServer.config"
 const { cosmiconfigSync } = require("cosmiconfig");
 
 const { packageJson: pkg, path: pkgPath } = readPkgUp.sync({
-  cwd: fs.realpathSync(process.cwd()),
+  cwd: fs.realpathSync(process.cwd())
 });
 
 const moduleFileExtensions = [
@@ -21,12 +21,11 @@ const moduleFileExtensions = [
   "js",
   "json",
   "web.jsx",
-  "jsx",
+  "jsx"
 ];
 
 const appDirectory = path.dirname(pkgPath);
-const resolveOwn = (relativePath) =>
-  path.resolve(__dirname, "..", relativePath);
+const resolveOwn = (relativePath) => path.resolve(__dirname, ".", relativePath);
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 const fromRoot = (...p) => path.join(appDirectory, ...p);
 const hasFile = (...p) => fs.existsSync(fromRoot(...p));
@@ -92,7 +91,7 @@ function start(config, serverMode = false) {
 
   const serverConfig = {
     ...createDevServerConfig,
-    open: !serverMode,
+    open: !serverMode
   };
 
   const devServer = new WebpackDevServer(serverConfig, compiler);
@@ -136,7 +135,7 @@ function build(config, writeStatsJson) {
         const { errors, warnings } = stats.toJson({
           all: false,
           warnings: true,
-          errors: true,
+          errors: true
         });
         let msg = "";
         if (errors.length !== 0) {
@@ -155,7 +154,7 @@ function build(config, writeStatsJson) {
       }
 
       const resolveArgs = {
-        stats,
+        stats
       };
 
       if (writeStatsJson) {
@@ -181,5 +180,5 @@ module.exports = {
   resolveApp,
   resolveModule,
   resolveOwn,
-  moduleFileExtensions,
+  moduleFileExtensions
 };

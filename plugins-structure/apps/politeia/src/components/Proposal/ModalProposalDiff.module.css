@@ -94,14 +94,14 @@
   display: flex;
 }
 
-@media screen and (max-width: 560px) {
+@media (--xs-viewport) {
   .diffHeader {
     /* Stick on top without extra margin. */
     top: -5rem;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media (--sm-viewport) {
   .versionPickerWrapper {
     justify-content: space-between;
     border-bottom: 0.1px solid var(--separator-color);

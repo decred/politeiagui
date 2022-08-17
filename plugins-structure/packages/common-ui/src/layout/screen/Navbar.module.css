@@ -31,7 +31,7 @@
   height: fit-content;
   align-items: center;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   min-height: 6rem;
 
   background-color: var(--card-background);
@@ -51,7 +51,7 @@
   justify-self: end;
   align-items: center;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   /* Disable user select */
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
@@ -152,7 +152,7 @@
     display: none !important;
   }
 }
-@media screen and (max-width: 768px) {
+@media (--sm-viewport) {
   .navWrapper {
     padding: 0 2.5rem;
   }
