@@ -59,6 +59,8 @@ export function mockProposalDetails({
   startdate,
   domain,
   reason,
+  linkby,
+  linkto,
 } = {}) {
   return ({ token, version = customVersion }) => {
     const record = mockRecord({
@@ -71,22 +73,23 @@ export function mockProposalDetails({
       token: customToken || `${token}${faker.random.numeric(9)}`,
       version,
     });
+    const files = [
+      generateMetadataFile({
+        name,
+        amount,
+        enddate,
+        startdate,
+        domain,
+      }),
+      convertMarkdownToFile(body),
+    ];
+    if (linkby || linkto) {
+      files.push(convertVoteMetadataToFile({ linkto, linkby }));
+    }
     return {
       record: {
         ...record,
-        files:
-          status !== 3
-            ? [
-                generateMetadataFile({
-                  name,
-                  amount,
-                  enddate,
-                  startdate,
-                  domain,
-                }),
-                convertMarkdownToFile(body),
-              ]
-            : [],
+        files: status !== 3 ? files : [],
       },
     };
   };

@@ -23,7 +23,10 @@ export function RecordItem({
   tag,
 }) {
   return (
-    <div className={classNames(className, styles.wrapper)}>
+    <div
+      className={classNames(className, styles.wrapper)}
+      data-testid="record-item"
+    >
       <TitleWrapper titleLink={titleLink}>
         <p>{title}</p>
       </TitleWrapper>

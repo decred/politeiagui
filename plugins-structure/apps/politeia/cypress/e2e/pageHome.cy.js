@@ -418,6 +418,7 @@ describe("Given RFP Proposals and Submissions", () => {
     ).as("records");
     cy.visit("/");
     cy.findAllByTestId("proposal-rfp-tag").should("have.length", 4);
+    cy.findAllByTestId("proposal-date-expire").should("have.length", 4);
     cy.assertProposalsListLength(4);
   });
   it("should fetch all submissions for given RFP Proposals", () => {
