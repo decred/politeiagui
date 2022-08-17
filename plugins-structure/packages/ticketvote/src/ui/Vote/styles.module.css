@@ -19,7 +19,7 @@
   width: 22.5rem;
 }
 
-@media screen and (min-width: 560px) {
+@media (--bigger-than-xs-viewport) {
   .mobileOnly {
     display: none;
   }

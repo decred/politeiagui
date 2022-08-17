@@ -147,11 +147,12 @@
   z-index: var(--z-index-5);
 }
 
-@media screen and (min-width: 1001px) {
+@media (--bigger-than-md-viewport) {
   .collapsedNavWrapper {
     display: none !important;
   }
 }
+
 @media (--sm-viewport) {
   .navWrapper {
     padding: 0 2.5rem;
