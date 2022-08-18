@@ -284,7 +284,7 @@ Comment.propTypes = {
   censored: PropTypes.bool,
   censoredBy: PropTypes.string,
   reason: PropTypes.string,
-  sectionId: PropTypes.string,
+  sectionId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   highlightAuthor: PropTypes.bool,
   disableLikes: PropTypes.bool,
   likesCount: PropTypes.number,
