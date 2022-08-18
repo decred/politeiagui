@@ -81,6 +81,7 @@ const Comment = ({
   const currentTimeSec = new Date().getTime() / 1000;
   const isEditable =
     authorID === userid &&
+    !disableReply &&
     allowedits &&
     currentTimeSec < createdAt + editperiod;
   const remaining = createdAt + editperiod - currentTimeSec;
