@@ -9,8 +9,9 @@ import { Header } from "./components";
 // App
 import App from "./app";
 import { routes } from "./routes";
+import ErrorView from "./pages/Error";
 
-App.init({ routes });
+App.init({ routes, errorView: ErrorView });
 
 ReactDOM.render(
   <Provider store={store}>
