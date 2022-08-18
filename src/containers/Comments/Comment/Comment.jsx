@@ -182,7 +182,7 @@ const Comment = ({
           <DateTooltip timestamp={timestamp} placement="bottom">
             {({ timeAgo }) => (
               <Link className={styles.timeAgo} to={`${permalink}`}>
-                {version > 1 && <span>Edited </span>}
+                {version > 1 && <span>edited </span>}
                 {timeAgo}
               </Link>
             )}
