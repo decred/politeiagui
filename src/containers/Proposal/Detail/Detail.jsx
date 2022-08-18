@@ -82,6 +82,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     proposalToken || tokenFromUrl
   );
   const areCommentsAllowed =
+    !isCensoredProposal(proposal) &&
     !isVotingFinishedProposal(voteSummary) &&
     !isAbandonedProposal(proposalSummary);
   const areAuthorUpdatesAllowed = isActiveProposal(proposalSummary);
@@ -306,8 +307,7 @@ const ProposalDetail = ({ Main, match, history }) => {
                     </P>
                   </Message>
                 )}
-                {!isCensoredProposal(proposal) &&
-                  !commentsLoading &&
+                {!commentsLoading &&
                   commentsFinishedLoading &&
                   proposalComments}
               </>
