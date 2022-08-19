@@ -3,6 +3,8 @@ import isArray from "lodash/fp/isArray";
 import {
   findMatch,
   getParams,
+  isCurrentPathname,
+  isExternalLink,
   pathToRegex,
   searchSelectorElement,
 } from "./helpers";
@@ -19,9 +21,14 @@ export const router = (function () {
   let title = null;
 
   function push(url) {
+    // Avoid pushing state for external links
+    if (isExternalLink(url)) {
+      window.location.href = url;
+      return;
+    }
     if (!window.history.pushState) return;
     // Don't run if already current page
-    if (window.location.pathname === url) return;
+    if (isCurrentPathname(url)) return;
     // We are not sending a URL state (first param)
     // because we don't need it. All info we need in
     // the route is in the redux store or sent via
