@@ -1,5 +1,4 @@
 import React from "react";
-import { router } from "@politeiagui/core/router";
 import { MultiContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
 import { About } from "../../components";
@@ -16,6 +15,12 @@ const TAB_LABELS = {
 };
 
 const TAB_VALUES = Object.values(TAB_LABELS);
+
+const tabs = TAB_VALUES.map((tab) => (
+  <a href={`/?tab=${tab}`} data-link>
+    {tab}
+  </a>
+));
 
 /**
  * Returns the appropriate component to render according to the search param.
@@ -34,19 +39,13 @@ function renderChild({ tab, ...props }) {
 function Home() {
   const { tab } = getURLSearchParams();
 
-  function handleSelectTab(index) {
-    const selectedTab = TAB_VALUES[index];
-    router.navigateTo(`/?tab=${selectedTab}`);
-  }
-
   return (
     <MultiContentPage
       banner={
         <TabsBanner
-          onSelectTab={handleSelectTab}
           title="Proposals"
           activeTab={TAB_VALUES.indexOf(tab || TAB_LABELS.underReview)}
-          tabs={TAB_VALUES}
+          tabs={tabs}
         />
       }
       sidebar={<About />}
