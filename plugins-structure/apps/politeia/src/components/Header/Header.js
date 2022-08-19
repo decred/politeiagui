@@ -19,8 +19,12 @@ function Header() {
   return (
     <Navbar logo={<PoliteiaLogo />} drawerContent={<About />}>
       <ThemeToggle />
-      <a href="/user/login">Log in</a>
-      <a href="/user/signup">Sign up</a>
+      <a href="/user/login" data-link>
+        Log in
+      </a>
+      <a href="/user/signup" data-link>
+        Sign up
+      </a>
     </Navbar>
   );
 }
