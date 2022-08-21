@@ -91,11 +91,13 @@ export const isIdentityError = (error) => {
 export function formatTimestampsFromMessage(msg) {
   let newMsg = msg;
   const timestamps = msg.match(/[0-9]+/g);
-  timestamps.forEach((t) => {
-    const formattedTime = formatDateToInternationalString(
-      formatUnixTimestampToObj(t)
-    );
-    newMsg = newMsg.replace(t, formattedTime);
-  });
+  if (timestamps) {
+    timestamps.forEach((t) => {
+      const formattedTime = formatDateToInternationalString(
+        formatUnixTimestampToObj(t)
+      );
+      newMsg = newMsg.replace(t, formattedTime);
+    });
+  }
   return newMsg;
 }

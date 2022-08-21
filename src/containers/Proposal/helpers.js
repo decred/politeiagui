@@ -12,10 +12,12 @@ import {
   PROPOSAL_STATUS_CENSORED,
   PROPOSAL_STATE_VETTED,
   PROPOSAL_STATE_UNVETTED,
+  PROPOSAL_SUMMARY_STATUS_CENSORED,
   PROPOSAL_SUMMARY_STATUS_CLOSED,
   PROPOSAL_SUMMARY_STATUS_COMPLETED,
   PROPOSAL_SUMMARY_STATUS_ACTIVE,
   PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED,
+  PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED,
   PROPOSAL_SUMMARY_STATUS_ABANDONED,
   PROPOSAL_SUMMARY_STATUS_REJECTED,
   AUTHORIZED,
@@ -214,6 +216,16 @@ export const isAbandonedProposal = (proposalSummary) =>
   !!proposalSummary &&
   (proposalSummary.status === PROPOSAL_SUMMARY_STATUS_ABANDONED ||
     proposalSummary.status === PROPOSAL_SUMMARY_STATUS_UNVETTED_ABANDONED);
+
+/**
+ * Returns true if the given proposal summary is censored
+ * @param {Object} proposalSummary
+ * @returns {Boolean} isCensored
+ */
+export const isCensoredProposalSummary = (proposalSummary) =>
+  !!proposalSummary &&
+  (proposalSummary.status === PROPOSAL_SUMMARY_STATUS_UNVETTED_CENSORED ||
+    proposalSummary.status === PROPOSAL_SUMMARY_STATUS_CENSORED);
 
 /**
  * Returns true if the given proposal is approved

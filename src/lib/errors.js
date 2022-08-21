@@ -306,6 +306,7 @@ function PiPluginError(code, context) {
     11: `Proposal domain is invalid, ${context}`,
     15: `${context}`,
     16: `${context}`,
+    17: "Comment replies are only allowed on the most recent author update thread",
     18: "Author update title is missing"
   };
 

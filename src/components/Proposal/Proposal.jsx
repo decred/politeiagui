@@ -474,7 +474,6 @@ const Proposal = React.memo(function Proposal({
                     <ChartsLink token={fullToken} />
                   )}
                 </div>
-                {extended && <MarkdownLink to={`/record/${shortToken}/raw`} />}
               </Row>
             )}
             {extended && files.length > 1 && (
@@ -546,7 +545,7 @@ const Proposal = React.memo(function Proposal({
                     getVotesReceived(voteSummary) > 0 && (
                       <SearchVotes onClick={openSearchVotesModal} />
                     )}
-                  {extended && (
+                  {!isCensored && (isVetted || isAuthor || isAdmin) && (
                     <MarkdownLink to={`/record/${shortToken}/raw`} />
                   )}
                 </Row>
