@@ -187,7 +187,7 @@ describe("Given the recordsInventorySlice", () => {
     it("should return correct user error messages", async () => {
       const errorcodes = Array(9)
         .fill()
-        .map((_, i) => i);
+        .map((_, i) => i + 1);
       for (const errorcode of errorcodes) {
         const error = { body: { errorcode } };
         const message = getTicketvoteUserErrorMessage(errorcode);
