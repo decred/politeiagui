@@ -1,4 +1,5 @@
 import {
+  fetchInventory,
   fetchNextBatch,
   fetchNextBatchBillingStatuses,
   fetchNextBatchCount,
@@ -41,6 +42,11 @@ function injectPayloadEffect(effect) {
     subscribe();
   };
 }
+
+export const fetchInventoryListenerCreator = {
+  actionCreator: fetchInventory,
+  injectEffect: injectPayloadEffect,
+};
 
 export const fetchNextBatchCountListenerCreator = {
   actionCreator: fetchNextBatchCount,

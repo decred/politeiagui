@@ -1,5 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 
+export const fetchInventory = createAction("home/fetchInventory");
 export const fetchNextBatchCount = createAction("home/fetchNextBatchCount");
 export const fetchNextBatchSummaries = createAction(
   "home/fetchNextBatchSummaries"

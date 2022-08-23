@@ -4,6 +4,7 @@ import { createRouteView } from "../../utils/createRouteView";
 import Home from "./Home";
 import {
   fetchBillingStatusChangesListenerCreator,
+  fetchInventoryListenerCreator,
   fetchNextBatchBillingStatusesListenerCreator,
   fetchNextBatchCountListenerCreator,
   fetchNextBatchRecordsListenerCreator,
@@ -18,6 +19,7 @@ export default App.createRoute({
   setupServices: [
     {
       id: "ticketvote/inventory",
+      listenerCreator: fetchInventoryListenerCreator,
     },
     {
       id: "records/batch",
