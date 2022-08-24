@@ -5,8 +5,10 @@ export async function fetchTicketvoteRecordsInventory(
   dispatch,
   { status, page }
 ) {
-  const lastPage = ticketvoteInventory.selectLastPage(state, { status });
-  if (lastPage < page) {
+  const fetchStatus = ticketvoteInventory.selectStatus(state, { status });
+  const fetchFirstPage = fetchStatus === "idle" && page === 1;
+  const fetchLaterPages = fetchStatus === "succeeded/hasMore" && page > 1;
+  if (fetchFirstPage || fetchLaterPages) {
     await dispatch(ticketvoteInventory.fetch({ status, page }));
   }
 }

@@ -5,7 +5,6 @@ import {
   selectTicketvoteInventoryLastPage,
   selectTicketvoteInventoryStatus,
 } from "./inventorySlice";
-import { useTicketvoteInventory } from "./useInventory";
 
 export const ticketvoteInventory = {
   fetch: fetchTicketvoteInventory,
@@ -13,5 +12,4 @@ export const ticketvoteInventory = {
   selectError: selectTicketvoteInventoryError,
   selectLastPage: selectTicketvoteInventoryLastPage,
   selectStatus: selectTicketvoteInventoryStatus,
-  useFetch: useTicketvoteInventory,
 };

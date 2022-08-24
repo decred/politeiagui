@@ -32,14 +32,9 @@ function injectRecordsBatchEffect(effect) {
 }
 
 function injectPayloadEffect(effect) {
-  return async (
-    { payload },
-    { getState, dispatch, unsubscribe, subscribe }
-  ) => {
-    unsubscribe();
+  return async ({ payload }, { getState, dispatch }) => {
     const state = getState();
     await effect(state, dispatch, payload);
-    subscribe();
   };
 }
 
