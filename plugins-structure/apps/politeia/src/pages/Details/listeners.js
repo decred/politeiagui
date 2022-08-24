@@ -1,4 +1,4 @@
-import { fetchProposalDetails } from "./actions";
+import { fetchCommentsTimestamps, fetchProposalDetails } from "./actions";
 import { isProposalCompleteOrClosed } from "../../pi/utils";
 
 function injectEffect(effect) {
@@ -78,5 +78,10 @@ export const fetchBillingStatusChangesListenerCreator = {
 
 export const fetchRecordDetailsListenerCreator = {
   type: "records/fetchDetails/fulfilled",
+  injectEffect: injectPayloadEffect,
+};
+
+export const fetchCommentsTimestampsListenerCreator = {
+  actionCreator: fetchCommentsTimestamps,
   injectEffect: injectPayloadEffect,
 };

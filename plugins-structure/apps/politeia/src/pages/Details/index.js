@@ -3,6 +3,7 @@ import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
 import {
   fetchBillingStatusChangesListenerCreator,
+  fetchCommentsTimestampsListenerCreator,
   fetchDetailsListenerCreator,
   fetchProposalSummaryListenerCreator,
   fetchRecordDetailsListenerCreator,
@@ -19,6 +20,7 @@ export default App.createRoute({
     },
     {
       id: "comments/timestamps",
+      listenerCreator: fetchCommentsTimestampsListenerCreator,
     },
     {
       id: "records/details",

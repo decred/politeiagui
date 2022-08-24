@@ -30,6 +30,7 @@ const ProposalDetails = ({
   voteSummary,
   proposalSummary,
   onFetchRecordTimestamps,
+  onFetchCommentsTimestamps,
   proposalStatusChanges,
 }) => {
   const [open] = useModal();
@@ -123,6 +124,7 @@ const ProposalDetails = ({
             <ProposalDownloads
               record={record}
               onFetchRecordTimestamps={onFetchRecordTimestamps}
+              onFetchCommentsTimestamps={onFetchCommentsTimestamps}
             />
             <div className={styles.footerButtons}>
               <ButtonIcon

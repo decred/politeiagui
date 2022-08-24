@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
-import { fetchProposalDetails } from "./actions";
+import { fetchCommentsTimestamps, fetchProposalDetails } from "./actions";
 import { selectDetailsStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
@@ -44,6 +44,10 @@ function useProposalDetails({ token }) {
     return res.payload;
   }
 
+  function onFetchCommentsTimestamps() {
+    dispatch(fetchCommentsTimestamps({ token: fullToken }));
+  }
+
   useEffect(() => {
     if (
       recordStatus !== "loading" &&
@@ -62,6 +66,7 @@ function useProposalDetails({ token }) {
     detailsStatus,
     fullToken,
     onFetchRecordTimestamps,
+    onFetchCommentsTimestamps,
     proposalSummary,
     record,
     voteSummary,

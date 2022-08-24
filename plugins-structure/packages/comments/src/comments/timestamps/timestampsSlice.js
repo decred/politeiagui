@@ -11,9 +11,9 @@ export const initialState = {
 
 export const fetchCommentsTimestamps = createAsyncThunk(
   "commentsTimestamps/fetch",
-  async (body, { getState, rejectWithValue }) => {
+  async ({ token, commentids }, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchTimestamps(getState(), body);
+      return await api.fetchTimestamps(getState(), { token, commentids });
     } catch (error) {
       const message = getCommentsError(error.body, error.message);
       return rejectWithValue(message);

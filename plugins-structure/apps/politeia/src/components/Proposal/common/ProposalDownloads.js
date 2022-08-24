@@ -2,15 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Dropdown, DropdownItem } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
-import {
-  DownloadCommentsBundle,
-  DownloadCommentsTimestamps,
-} from "@politeiagui/comments/ui";
+import { DownloadCommentsBundle } from "@politeiagui/comments/ui";
 import fileDownload from "js-file-download";
 
 const ProposalDownloads = ({
   record,
   onFetchRecordTimestamps,
+  onFetchCommentsTimestamps,
   title,
   withoutComments,
   headerClassName,
@@ -57,13 +55,13 @@ const ProposalDownloads = ({
               label="Comments Bundle"
             />
           </DropdownItem>
-          <DropdownItem>
-            <DownloadCommentsTimestamps
-              token={token}
-              mode="text"
-              label="Comments Timestamps"
-            />
-          </DropdownItem>
+          {onFetchCommentsTimestamps && (
+            <DropdownItem>
+              <span onClick={onFetchCommentsTimestamps}>
+                Comments Timestamps
+              </span>
+            </DropdownItem>
+          )}
         </>
       )}
     </Dropdown>

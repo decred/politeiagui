@@ -30,6 +30,7 @@ function Details({ token }) {
     detailsStatus,
     fullToken,
     onFetchRecordTimestamps,
+    onFetchCommentsTimestamps,
     proposalSummary,
     record,
     voteSummary,
@@ -60,6 +61,7 @@ function Details({ token }) {
             billingStatusChange={billingStatusChange}
             proposalStatusChanges={proposalStatusChanges}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
+            onFetchCommentsTimestamps={onFetchCommentsTimestamps}
           />
           {comments && (
             <Comments
