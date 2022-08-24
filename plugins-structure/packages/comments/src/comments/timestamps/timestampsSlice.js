@@ -37,6 +37,19 @@ export const fetchCommentsTimestamps = createAsyncThunk(
 const commentsTimestampsSlice = createSlice({
   name: "commentsTimestamps",
   initialState,
+  reducers: {
+    setFetchDone(state, action) {
+      const { commentids, token } = action.payload;
+
+      const isDone =
+        state.byToken[token] &&
+        (state.byToken[token].isDone ||
+          Object.keys(state.byToken[token].timestamps).length ===
+            commentids.length);
+
+      state.byToken[token].isDone = isDone;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchCommentsTimestamps.pending, (state) => {
@@ -45,21 +58,17 @@ const commentsTimestampsSlice = createSlice({
       .addCase(fetchCommentsTimestamps.fulfilled, (state, action) => {
         const { token } = action.meta.arg;
         if (!state.byToken[token]) {
-          state.byToken[token] = {};
+          state.byToken[token] = {
+            timestamps: {},
+          };
         }
-        const pageSize = action.meta.arg.pageSize || 100;
         const { comments } = action.payload;
-        const payloadSize = Object.keys(comments).length;
-        if (payloadSize === pageSize) {
-          state.status = "succeeded/hasMore";
-        } else {
-          state.status = "succeeded/isDone";
-        }
         for (const commentid in comments) {
           if (comments.hasOwnProperty(commentid)) {
-            state.byToken[token][commentid] = comments[commentid];
+            state.byToken[token].timestamps[commentid] = comments[commentid];
           }
         }
+        state.status = "succeeded";
       })
       .addCase(fetchCommentsTimestamps.rejected, (state, action) => {
         state.status = "failed";
@@ -68,11 +77,18 @@ const commentsTimestampsSlice = createSlice({
   },
 });
 
+export const { setFetchDone } = commentsTimestampsSlice.actions;
+
 // Selectors
 export const selectCommentsTimestampsStatus = (state) =>
   state.commentsTimestamps?.status;
 export const selectCommentsTimestampsByToken = (state, token) =>
-  state.commentsTimestamps?.byToken[token];
+  state.commentsTimestamps?.byToken[token] &&
+  state.commentsTimestamps?.byToken[token].timestamps;
+
+export const selectCommentsTimestampsIsDoneByToken = (state, token) =>
+  state.commentsTimestamps?.byToken[token] &&
+  state.commentsTimestamps?.byToken[token].isDone;
 
 // Errors
 export const selectCommentsTimestampsError = (state) =>

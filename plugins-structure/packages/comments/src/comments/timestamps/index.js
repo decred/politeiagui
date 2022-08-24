@@ -3,13 +3,13 @@ import {
   selectCommentsTimestampsByToken,
   selectCommentsTimestampsError,
   selectCommentsTimestampsStatus,
+  setFetchDone,
 } from "./timestampsSlice";
-import { useCommentsTimestamps } from "./useTimestamps";
 
 export const commentsTimestamps = {
   fetch: fetchCommentsTimestamps,
+  setDone: setFetchDone,
   selectByToken: selectCommentsTimestampsByToken,
   selectError: selectCommentsTimestampsError,
   selectStatus: selectCommentsTimestampsStatus,
-  useFetch: useCommentsTimestamps,
 };

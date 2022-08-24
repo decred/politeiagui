@@ -3,7 +3,7 @@ import { recordComments } from "../comments";
 import chunk from "lodash/chunk";
 import toSafeInteger from "lodash/toSafeInteger";
 
-export function fetchRecordCommentsTimestampsEffect(
+export async function fetchRecordCommentsTimestampsEffect(
   state,
   dispatch,
   { token }
@@ -22,7 +22,12 @@ export function fetchRecordCommentsTimestampsEffect(
 
   const ids = Object.keys(comments).map(toSafeInteger);
   const pages = chunk(ids, timestampspagesize);
-  pages.forEach((page) => {
-    dispatch(commentsTimestamps.fetch({ token, commentids: page }));
-  });
+  // Fetch all timestamps first
+  await Promise.all(
+    pages.map((page) =>
+      dispatch(commentsTimestamps.fetch({ token, commentids: page }))
+    )
+  );
+  // Indicate whether all comments timestamps were fetched for given record
+  dispatch(commentsTimestamps.setDone({ token, commentids: ids }));
 }
