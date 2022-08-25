@@ -7,20 +7,20 @@ export const CommentsList = ({
   parentId = 0,
   showCensor,
   onCensor,
-  threadSchema,
+  commentsByParent,
   userVotes,
   onReply,
   disableReply,
 }) => {
-  if (!threadSchema || !threadSchema[parentId]) {
+  if (!commentsByParent || !commentsByParent[parentId]) {
     return null;
   }
-  return threadSchema[parentId].map((childId) => (
+  return commentsByParent[parentId].map((childId) => (
     <CommentCard
       key={childId}
       comment={comments[childId]}
       onCensor={onCensor}
-      threadLength={threadSchema[childId]?.length}
+      threadLength={commentsByParent[childId]?.length}
       showCensor={showCensor}
       userVote={userVotes[childId]}
       onComment={onReply}
@@ -31,7 +31,7 @@ export const CommentsList = ({
         showCensor={showCensor}
         onCensor={onCensor}
         parentId={childId}
-        threadSchema={threadSchema}
+        commentsByParent={commentsByParent}
         userVotes={userVotes}
         onReply={onReply}
         disableReply={disableReply}
@@ -45,7 +45,7 @@ CommentsList.propTypes = {
   parentId: PropTypes.number,
   showCensor: PropTypes.bool,
   onCensor: PropTypes.func,
-  threadSchema: PropTypes.object,
+  commentsByParent: PropTypes.object,
   userVotes: PropTypes.object,
 };
 
