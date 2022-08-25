@@ -1,9 +1,15 @@
 import { downloadJSON } from "@politeiagui/core/downloads";
-import { commentsTimestamps } from "@politeiagui/comments/timestamps";
+import { getShortToken } from "@politeiagui/core/records/utils";
 
-export function downloadCommentsTimestampsEffect({ payload }, { getState }) {
-  const state = getState();
-  const { token } = payload;
-  const commentsToDownload = commentsTimestamps.selectByToken(state, token);
-  downloadJSON(commentsToDownload, `comments-timestamps-${token}`);
+export function downloadCommentsTimestampsEffect({ payload, meta }) {
+  const { token } = meta.arg;
+  downloadJSON(payload, `${getShortToken(token)}-comments-timestamps`);
+}
+
+export function downloadRecordTimestampsEffect({ payload, meta }) {
+  const { token, version } = meta.arg;
+  downloadJSON(
+    payload,
+    `${getShortToken(token)}-v${version}-record-timestamps`
+  );
 }

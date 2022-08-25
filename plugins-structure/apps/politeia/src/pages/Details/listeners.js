@@ -1,6 +1,9 @@
-import { fetchCommentsTimestamps, fetchProposalDetails } from "./actions";
+import { fetchProposalDetails } from "./actions";
 import { isProposalCompleteOrClosed } from "../../pi/utils";
-import { downloadCommentsTimestampsEffect } from "./effects";
+import {
+  downloadCommentsTimestampsEffect,
+  downloadRecordTimestampsEffect,
+} from "./effects";
 
 function injectEffect(effect) {
   return async ({ payload }, { getState, dispatch }) => {
@@ -82,14 +85,13 @@ export const fetchRecordDetailsListenerCreator = {
   injectEffect: injectPayloadEffect,
 };
 
-export const fetchCommentsTimestampsListenerCreator = {
-  actionCreator: fetchCommentsTimestamps,
-  injectEffect: injectPayloadEffect,
-};
-
 export const listeners = [
   {
-    type: "commentsTimestamps/setFetchDone",
+    type: "commentsTimestamps/fetchAll/fulfilled",
     effect: downloadCommentsTimestampsEffect,
+  },
+  {
+    type: "records/fetchTimestamps/fulfilled",
+    effect: downloadRecordTimestampsEffect,
   },
 ];

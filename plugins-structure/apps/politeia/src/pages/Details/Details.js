@@ -31,6 +31,7 @@ function Details({ token }) {
     fullToken,
     onFetchRecordTimestamps,
     onFetchCommentsTimestamps,
+    onDownloadCommentsBundle,
     proposalSummary,
     record,
     voteSummary,
@@ -62,6 +63,7 @@ function Details({ token }) {
             proposalStatusChanges={proposalStatusChanges}
             onFetchRecordTimestamps={onFetchRecordTimestamps}
             onFetchCommentsTimestamps={onFetchCommentsTimestamps}
+            onDownloadCommentsBundle={onDownloadCommentsBundle}
           />
           {comments && (
             <Comments

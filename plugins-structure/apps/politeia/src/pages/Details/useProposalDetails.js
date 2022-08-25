@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
-import { fetchCommentsTimestamps, fetchProposalDetails } from "./actions";
+import { fetchProposalDetails } from "./actions";
 import { selectDetailsStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { recordComments } from "@politeiagui/comments/comments";
 import { piBilling, piSummaries, proposals } from "../../pi";
+import { downloadJSON } from "@politeiagui/core/downloads";
+import { commentsTimestamps } from "@politeiagui/comments/timestamps";
 
 function useProposalDetails({ token }) {
   const dispatch = useDispatch();
@@ -39,13 +41,22 @@ function useProposalDetails({ token }) {
     proposals.selectStatusChangesByToken(state, fullToken)
   );
 
-  async function onFetchRecordTimestamps({ token, version }) {
-    const res = await dispatch(recordsTimestamps.fetch({ token, version }));
-    return res.payload;
+  // Timestamps actions
+  function onFetchRecordTimestamps(version) {
+    dispatch(recordsTimestamps.fetch({ token, version }));
   }
 
   function onFetchCommentsTimestamps() {
-    dispatch(fetchCommentsTimestamps({ token: fullToken }));
+    // TODO: Support timestamps for separate threads and comments sections
+    const ids = Object.keys(comments).map((id) => +id);
+    dispatch(
+      commentsTimestamps.fetchAll({ token: fullToken, commentids: ids })
+    );
+  }
+
+  function onDownloadCommentsBundle() {
+    const commentsToDownload = comments && Object.values(comments);
+    downloadJSON(commentsToDownload, `${token}-comments-bundle`);
   }
 
   useEffect(() => {
@@ -67,6 +78,7 @@ function useProposalDetails({ token }) {
     fullToken,
     onFetchRecordTimestamps,
     onFetchCommentsTimestamps,
+    onDownloadCommentsBundle,
     proposalSummary,
     record,
     voteSummary,

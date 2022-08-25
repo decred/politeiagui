@@ -1,36 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Dropdown, DropdownItem } from "pi-ui";
+import { downloadJSON } from "@politeiagui/core/downloads";
 import { getShortToken } from "@politeiagui/core/records/utils";
-import { DownloadCommentsBundle } from "@politeiagui/comments/ui";
-import fileDownload from "js-file-download";
 
 const ProposalDownloads = ({
-  record,
   onFetchRecordTimestamps,
   onFetchCommentsTimestamps,
+  onDownloadCommentsBundle,
+  record,
   title,
-  withoutComments,
   headerClassName,
 }) => {
-  if (!record) return null;
+  if (!record) return;
 
-  const { token } = record.censorshiprecord;
-  const version = record.version;
-  const shortToken = getShortToken(token);
+  const {
+    version,
+    censorshiprecord: { token },
+  } = record;
 
-  function handleDownload(data, filename) {
-    return function onDownload() {
-      const dataString = JSON.stringify(data, null, 2);
-      fileDownload(dataString, `${filename}.json`);
-    };
+  function handleDownloadRecordBundle() {
+    const { detailsFetched: _, ...recordToDownload } = record;
+    downloadJSON(
+      recordToDownload,
+      `${getShortToken(token)}-v${version}-record-bundle`
+    );
   }
-
-  async function handleFetchRecordTimestamps() {
-    const timestamps = await onFetchRecordTimestamps({ token, version });
-    return handleDownload(timestamps, `${shortToken}-v${version}-timestamps`)();
-  }
-
   return (
     <Dropdown
       data-testid="proposal-downloads"
@@ -38,41 +33,32 @@ const ProposalDownloads = ({
       closeOnItemClick={false}
       dropdownHeaderClassName={headerClassName}
     >
-      <DropdownItem
-        onClick={handleDownload(record, `${shortToken}-v${version}`)}
-      >
+      <DropdownItem onClick={handleDownloadRecordBundle}>
         Proposal Bundle
       </DropdownItem>
-      <DropdownItem onClick={handleFetchRecordTimestamps}>
-        Proposal Timestamps
-      </DropdownItem>
-      {!withoutComments && (
-        <>
-          <DropdownItem>
-            <DownloadCommentsBundle
-              token={token}
-              mode="text"
-              label="Comments Bundle"
-            />
-          </DropdownItem>
-          {onFetchCommentsTimestamps && (
-            <DropdownItem>
-              <span onClick={onFetchCommentsTimestamps}>
-                Comments Timestamps
-              </span>
-            </DropdownItem>
-          )}
-        </>
+      {onFetchRecordTimestamps && (
+        <DropdownItem onClick={() => onFetchRecordTimestamps(version)}>
+          Proposal Timestamps
+        </DropdownItem>
+      )}
+      {onDownloadCommentsBundle && (
+        <DropdownItem onClick={onDownloadCommentsBundle}>
+          Comments Bundle
+        </DropdownItem>
+      )}
+      {onFetchCommentsTimestamps && (
+        <DropdownItem onClick={onFetchCommentsTimestamps}>
+          Comments Timestamps
+        </DropdownItem>
       )}
     </Dropdown>
   );
 };
 
 ProposalDownloads.propTypes = {
-  onFetchRecordTimestamps: PropTypes.func.isRequired,
-  record: PropTypes.object,
+  onFetchRecordTimestamps: PropTypes.func,
   title: PropTypes.string,
-  withoutComments: PropTypes.bool,
+  record: PropTypes.object,
 };
 
 ProposalDownloads.defaultProps = {

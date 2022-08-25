@@ -31,6 +31,8 @@ const ProposalDetails = ({
   proposalSummary,
   onFetchRecordTimestamps,
   onFetchCommentsTimestamps,
+  onDownloadRecordBundle,
+  onDownloadCommentsBundle,
   proposalStatusChanges,
 }) => {
   const [open] = useModal();
@@ -125,6 +127,8 @@ const ProposalDetails = ({
               record={record}
               onFetchRecordTimestamps={onFetchRecordTimestamps}
               onFetchCommentsTimestamps={onFetchCommentsTimestamps}
+              onDownloadRecordBundle={onDownloadRecordBundle}
+              onDownloadCommentsBundle={onDownloadCommentsBundle}
             />
             <div className={styles.footerButtons}>
               <ButtonIcon

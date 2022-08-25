@@ -157,7 +157,6 @@ function VersionsInfo({
         <Event timestamp={oldTimestamp} />
         <ProposalDownloads
           headerClassName={styles.versionDownloads}
-          withoutComments={true}
           record={oldRecord}
           onFetchRecordTimestamps={onFetchTimestamps}
         />
@@ -168,7 +167,6 @@ function VersionsInfo({
           <Event timestamp={newTimestamp} />
           <ProposalDownloads
             headerClassName={styles.versionDownloads}
-            withoutComments={true}
             record={newRecord}
             onFetchRecordTimestamps={onFetchTimestamps}
           />
