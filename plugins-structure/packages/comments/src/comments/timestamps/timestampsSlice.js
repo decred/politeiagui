@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import { validateCommentsTimestampsPageSize } from "../../lib/validation";
 import { getCommentsError } from "../../lib/errors";
+import chunk from "lodash/chunk";
 
 export const initialState = {
   byToken: {},
@@ -32,24 +33,35 @@ export const fetchCommentsTimestamps = createAsyncThunk(
     },
   }
 );
+export const fetchAllCommentsTimestamps = createAsyncThunk(
+  "commentsTimestamps/fetchAll",
+  async ({ token, commentids }, { getState, dispatch }) => {
+    const {
+      commentsPolicy: {
+        policy: { timestampspagesize },
+      },
+    } = getState();
+    const pages = chunk(commentids, timestampspagesize);
+    const responses = await Promise.all(
+      pages.map((page) =>
+        dispatch(fetchCommentsTimestamps({ token, commentids: page }))
+      )
+    );
+    return responses
+      .map((res) => res.payload.comments)
+      .reduce((acc, c) => ({ ...acc, ...c }), {});
+  },
+  {
+    condition: (_, { getState }) => {
+      return validateCommentsTimestampsPageSize(getState());
+    },
+  }
+);
 
 // Reducer
 const commentsTimestampsSlice = createSlice({
   name: "commentsTimestamps",
   initialState,
-  reducers: {
-    setFetchDone(state, action) {
-      const { commentids, token } = action.payload;
-
-      const isDone =
-        state.byToken[token] &&
-        (state.byToken[token].isDone ||
-          Object.keys(state.byToken[token].timestamps).length ===
-            commentids.length);
-
-      state.byToken[token].isDone = isDone;
-    },
-  },
   extraReducers(builder) {
     builder
       .addCase(fetchCommentsTimestamps.pending, (state) => {
@@ -58,14 +70,12 @@ const commentsTimestampsSlice = createSlice({
       .addCase(fetchCommentsTimestamps.fulfilled, (state, action) => {
         const { token } = action.meta.arg;
         if (!state.byToken[token]) {
-          state.byToken[token] = {
-            timestamps: {},
-          };
+          state.byToken[token] = {};
         }
         const { comments } = action.payload;
         for (const commentid in comments) {
           if (comments.hasOwnProperty(commentid)) {
-            state.byToken[token].timestamps[commentid] = comments[commentid];
+            state.byToken[token][commentid] = comments[commentid];
           }
         }
         state.status = "succeeded";
@@ -77,18 +87,11 @@ const commentsTimestampsSlice = createSlice({
   },
 });
 
-export const { setFetchDone } = commentsTimestampsSlice.actions;
-
 // Selectors
 export const selectCommentsTimestampsStatus = (state) =>
   state.commentsTimestamps?.status;
 export const selectCommentsTimestampsByToken = (state, token) =>
-  state.commentsTimestamps?.byToken[token] &&
-  state.commentsTimestamps?.byToken[token].timestamps;
-
-export const selectCommentsTimestampsIsDoneByToken = (state, token) =>
-  state.commentsTimestamps?.byToken[token] &&
-  state.commentsTimestamps?.byToken[token].isDone;
+  state.commentsTimestamps?.byToken[token];
 
 // Errors
 export const selectCommentsTimestampsError = (state) =>
