@@ -11,6 +11,7 @@
       "@politeiagui/core/dev/cypress": [
         "./packages/core/src/dev/cypress/index.js"
       ],
+      "@politeiagui/core/downloads": ["./packages/core/src/downloads/index.js"],
       "@politeiagui/core/localstorage": [
         "./packages/core/src/localStorage/index.js"
       ],

@@ -8,6 +8,7 @@ import {
   fetchProposalSummaryListenerCreator,
   fetchRecordDetailsListenerCreator,
   fetchVoteSummaryListenerCreator,
+  listeners,
   recordFetchDetailsListenerCreator,
 } from "./listeners";
 import Details from "./Details";
@@ -56,6 +57,7 @@ export default App.createRoute({
       listenerCreator: fetchBillingStatusChangesListenerCreator,
     },
   ],
+  listeners,
   cleanup: routeCleanup,
   view: createRouteView(Details),
 });
