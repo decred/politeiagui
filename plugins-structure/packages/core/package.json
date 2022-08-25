@@ -14,7 +14,6 @@
     "./records/timestamps": "./src/records/timestamps/index.js",
     "./records/policy": "./src/records/policy/index.js",
     "./router": "./src/router/index.js",
-    "./routes": "./src/routes/index.js",
     "./listeners": "./src/listeners/index.js",
     "./localstorage": "./src/localStorage/index.js",
     "./downloads": "./src/downloads/index.js",

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { createAction } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { recordsInventory } from "../inventory";
-import { records } from "../records";
+import { recordsInventory } from "../../records/inventory";
+import { records } from "../../records/records";
 import { listener } from "../../listeners";
 import {
   getHumanReadableRecordState,
   getHumanReadableRecordStatus,
   getTokensToFetch,
-} from "../utils";
+} from "../../records/utils";
 
 const fetchNextBatch = createAction("records/fetchNextBatch");
 

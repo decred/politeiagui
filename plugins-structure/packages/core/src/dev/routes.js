@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import Home from "../records/pages/Home";
-import Records from "../records/pages/Records";
-import Record from "../records/pages/Record";
+import Home from "./pages/Home";
+import Records from "./pages/Records";
+import Record from "./pages/Record";
 import { store } from "../storeSetup";
 
 export const routes = [

@@ -1,6 +1,6 @@
 import React from "react";
 import Records from "./Records";
-import { recordsPolicy } from "../policy";
+import { recordsPolicy } from "../../records/policy";
 
 function Home() {
   const { policyStatus } = recordsPolicy.useFetch();
