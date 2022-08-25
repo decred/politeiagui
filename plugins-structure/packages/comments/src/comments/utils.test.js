@@ -1,4 +1,4 @@
-import { getCommentsByParent } from "../ui/Comments/utils";
+import { getCommentsByParent } from "./utils";
 import { random, range } from "lodash";
 
 describe("Given getCommentsByParent util", () => {
