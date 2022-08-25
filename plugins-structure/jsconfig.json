@@ -113,6 +113,9 @@
         "./packages/comments/src/comments/votes/index.js"
       ],
       "@politeiagui/comments/ui": ["./packages/comments/src/ui/index.js"],
+      "@politeiagui/comments/utils": [
+        "./packages/comments/src/comments/utils.js"
+      ],
       "@politeiagui/comments/dev/mocks": [
         "./packages/comments/src/dev/mocks/index.js"
       ]

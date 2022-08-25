@@ -12,6 +12,7 @@
     "./timestamps": "./src/comments/timestamps/index.js",
     "./votes": "./src/comments/votes/index.js",
     "./ui": "./src/ui/index.js",
+    "./utils": "./src/comments/utils.js",
     "./dev/mocks": "./src/dev/mocks/index.js"
   },
   "scripts": {
@@ -25,9 +26,8 @@
     "start": "politeiagui-scripts start-plugin"
   },
   "dependencies": {
-    "politeiagui-scripts": "1.0.0",
     "@politeiagui/common-ui": "1.0.0",
     "@politeiagui/core": "1.0.0",
-    "js-file-download": "^0.4.12"
+    "politeiagui-scripts": "1.0.0"
   }
 }
