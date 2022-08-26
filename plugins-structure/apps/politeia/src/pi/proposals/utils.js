@@ -522,6 +522,16 @@ export function isProposalCompleteOrClosed(status) {
   return [PROPOSAL_STATUS_COMPLETED, PROPOSAL_STATUS_CLOSED].includes(status);
 }
 
+export function showStatusChangeReason(status) {
+  return [
+    PROPOSAL_STATUS_CLOSED,
+    PROPOSAL_STATUS_CENSORED,
+    PROPOSAL_STATUS_UNVETTED_CENSORED,
+    PROPOSAL_STATUS_ABANDONED,
+    PROPOSAL_STATUS_UNVETTED_ABANDONED,
+  ].includes(status);
+}
+
 // RFP Proposals and Submissions
 export function isRfpProposal(record) {
   const { linkby } = decodeVoteMetadataFile(record?.files);

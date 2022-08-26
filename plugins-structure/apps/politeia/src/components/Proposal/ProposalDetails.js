@@ -12,6 +12,7 @@ import {
   decodeProposalRecord,
   getImagesByDigest,
   isRfpProposal,
+  showStatusChangeReason,
 } from "../../pi/proposals/utils";
 import {
   ProposalDownloads,
@@ -86,12 +87,13 @@ const ProposalDetails = ({
 
   return (
     <div data-testid="proposal-details">
-      {currentStatusChange?.reason && (
-        <Message kind="warning" data-testid="status-change-reason">
-          <div>Proposal is {currentStatusChange.status}.</div>
-          <div>Reason: {currentStatusChange.reason}</div>
-        </Message>
-      )}
+      {currentStatusChange?.reason &&
+        showStatusChangeReason(proposalSummary?.status) && (
+          <Message kind="warning" data-testid="status-change-reason">
+            <div>Proposal is {currentStatusChange.status}.</div>
+            <div>Reason: {currentStatusChange.reason}</div>
+          </Message>
+        )}
       <RecordCard
         token={proposalDetails.token}
         title={
