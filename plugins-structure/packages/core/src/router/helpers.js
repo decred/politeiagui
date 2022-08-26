@@ -124,3 +124,22 @@ export function isExternalLink(url) {
   tmp.href = url;
   return tmp.hostname && tmp.hostname !== window.top.location.hostname;
 }
+
+/**
+ * isCurrentPathname returns if given `url` corresponds to current window
+ * location pathname for same origin
+ * @param {String} url
+ * @returns {String} pathname
+ */
+export function isCurrentPathname(url) {
+  try {
+    const { origin, pathname, search } = new URL(url);
+    return (
+      window.location.origin === origin &&
+      window.location.pathname === pathname &&
+      window.location.search === search
+    );
+  } catch (_) {
+    return url === window.location.pathname;
+  }
+}

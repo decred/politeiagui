@@ -82,6 +82,7 @@ const ProposalDetail = ({ Main, match, history }) => {
     proposalToken || tokenFromUrl
   );
   const areCommentsAllowed =
+    !isCensoredProposal(proposal) &&
     !isVotingFinishedProposal(voteSummary) &&
     !isAbandonedProposal(proposalSummary);
   const areAuthorUpdatesAllowed = isActiveProposal(proposalSummary);
@@ -172,7 +173,12 @@ const ProposalDetail = ({ Main, match, history }) => {
   const proposalComments = useMemo(
     () => (
       <>
-        {!(currentUser && isSingleThread) && (
+        {readOnly && (
+          <Message kind="blocked" title="Comments are not allowed">
+            {readOnlyReason}
+          </Message>
+        )}
+        {!(currentUser && isSingleThread) && !readOnly && (
           <Card
             className={classNames("container", styles.commentsHeaderWrapper)}
           >
@@ -185,11 +191,6 @@ const ProposalDetail = ({ Main, match, history }) => {
               }
             >
               <Or>
-                {readOnly && (
-                  <Message kind="blocked" title="Comments are not allowed">
-                    {readOnlyReason}
-                  </Message>
-                )}
                 {!isPaid && paywallEnabled && currentUser && (
                   <Message kind="error">
                     <P>
@@ -200,7 +201,7 @@ const ProposalDetail = ({ Main, match, history }) => {
                     </P>
                   </Message>
                 )}
-                {!readOnly && !!identityError && <IdentityMessageError />}
+                {!!identityError && <IdentityMessageError />}
                 {areAuthorUpdatesAllowed && !isCurrentUserProposalAuthor && (
                   <Message>
                     Replies & upvotes/downvotes are allowed only on the latest
@@ -306,8 +307,7 @@ const ProposalDetail = ({ Main, match, history }) => {
                     </P>
                   </Message>
                 )}
-                {!isCensoredProposal(proposal) &&
-                  !commentsLoading &&
+                {!commentsLoading &&
                   commentsFinishedLoading &&
                   proposalComments}
               </>

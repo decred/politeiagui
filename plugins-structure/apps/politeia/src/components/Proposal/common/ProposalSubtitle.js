@@ -32,7 +32,7 @@ function ProposalSubtitle({
     <div>
       <RfpLinkedProposal name={rfpLink.name} link={rfpLink.link} />
       <Join className={styles.proposalSubtitle}>
-        <Link href={`user/${userid}`} data-testid="proposal-username">
+        <Link data-link href={`user/${userid}`} data-testid="proposal-username">
           {username}
         </Link>
         {expireat && (

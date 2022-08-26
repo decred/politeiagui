@@ -2,7 +2,8 @@ import {
   isAbandonedProposal,
   isRejectedProposal,
   isClosedProposal,
-  isCompletedProposal
+  isCompletedProposal,
+  isCensoredProposalSummary
 } from "../helpers";
 
 export const getCommentBlockedReason = (proposalSummary) => {
@@ -12,6 +13,10 @@ export const getCommentBlockedReason = (proposalSummary) => {
 
   if (isRejectedProposal(proposalSummary)) {
     return "Voting has finished for this proposal. No additional changes are allowed.";
+  }
+
+  if (isCensoredProposalSummary(proposalSummary)) {
+    return "This proposal has been censored. No additional changes are allowed.";
   }
 
   if (isClosedProposal(proposalSummary)) {

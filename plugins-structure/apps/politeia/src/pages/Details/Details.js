@@ -36,7 +36,6 @@ function Details({ token }) {
     recordDetailsError,
     voteSummaryError,
     commentsError,
-    billingStatusChange,
     proposalStatusChanges,
     rfpLinkedRecord,
     rfpSubmissionsRecords,
@@ -56,33 +55,35 @@ function Details({ token }) {
           errors={[recordDetailsError, voteSummaryError, commentsError]}
         />
       )}
-      {fullToken && record && detailsStatus === "succeeded" && (
-        <>
-          <ProposalDetails
-            record={record}
-            rfpRecord={rfpLinkedRecord}
-            voteSummary={voteSummary}
-            proposalSummary={proposalSummary}
-            billingStatusChange={billingStatusChange}
-            proposalStatusChanges={proposalStatusChanges}
-            onFetchRecordTimestamps={onFetchRecordTimestamps}
-            rfpSubmissionsRecords={rfpSubmissionsRecords}
-            rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
-            rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
-            rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
-          />
-          {comments && (
-            <Comments
-              comments={comments}
-              // Mocking onReply until user layer is done.
-              onReply={(comment, parentid) => {
-                console.log(`Replying ${parentid}:`, comment);
-              }}
-              scrollOnLoad={shouldScrollToComments}
+      {fullToken &&
+        record &&
+        detailsStatus === "succeeded" &&
+        record.detailsFetched && (
+          <>
+            <ProposalDetails
+              record={record}
+              rfpRecord={rfpLinkedRecord}
+              voteSummary={voteSummary}
+              proposalSummary={proposalSummary}
+              proposalStatusChanges={proposalStatusChanges}
+              onFetchRecordTimestamps={onFetchRecordTimestamps}
+              rfpSubmissionsRecords={rfpSubmissionsRecords}
+              rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
+              rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
+              rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
             />
-          )}
-        </>
-      )}
+            {comments && (
+              <Comments
+                comments={comments}
+                // Mocking onReply until user layer is done.
+                onReply={(comment, parentid) => {
+                  console.log(`Replying ${parentid}:`, comment);
+                }}
+                scrollOnLoad={shouldScrollToComments}
+              />
+            )}
+          </>
+        )}
     </SingleContentPage>
   );
 }
