@@ -5,7 +5,6 @@ import {
   selectRecordsPolicyRule,
   selectRecordsPolicyStatus,
 } from "./policySlice";
-import { useFetchRecordsPolicy } from "./useFetchPolicy";
 
 export const recordsPolicy = {
   select: selectRecordsPolicy,
@@ -13,5 +12,4 @@ export const recordsPolicy = {
   selectError: selectRecordsPolicyError,
   selectRule: selectRecordsPolicyRule,
   fetch: fetchRecordsPolicy,
-  useFetch: useFetchRecordsPolicy,
 };
