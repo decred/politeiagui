@@ -1,28 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import Home from "./pages/Home";
 import Records from "./pages/Records";
 import Record from "./pages/Record";
 import { store } from "../storeSetup";
+import App from "./app";
+import { fetchNextBatchListenerCreator } from "./listeners";
+
+const cleanup = () =>
+  ReactDOM.unmountComponentAtNode(document.querySelector("#root"));
 
 export const routes = [
-  {
+  App.createRoute({
     path: "/",
-    title: "Home",
-    view: () =>
-      ReactDOM.render(
-        <Provider store={store}>
-          <Home />
-        </Provider>,
-        document.querySelector("#root")
-      ),
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
-  },
-  {
-    path: "/records",
-    title: "Records",
     view: () =>
       ReactDOM.render(
         <Provider store={store}>
@@ -30,16 +20,18 @@ export const routes = [
         </Provider>,
         document.querySelector("#root")
       ),
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
-  },
+    cleanup,
+    setupServices: [
+      { id: "records/batch", listenerCreator: fetchNextBatchListenerCreator },
+      { id: "records/inventory" },
+    ],
+  }),
   {
     path: "/record/:id",
     title: "Record",
     view: (params) =>
       ReactDOM.render(<Record {...params} />, document.querySelector("#root")),
-    cleanup: () =>
-      ReactDOM.unmountComponentAtNode(document.querySelector("#root")),
+    cleanup,
   },
   { path: "/settings", view: () => console.log("view settings") },
 ];

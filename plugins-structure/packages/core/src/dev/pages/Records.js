@@ -1,47 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { createAction } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { recordsInventory } from "../../records/inventory";
 import { records } from "../../records/records";
-import { listener } from "../../listeners";
-import {
-  getHumanReadableRecordState,
-  getHumanReadableRecordStatus,
-  getTokensToFetch,
-} from "../../records/utils";
-
-const fetchNextBatch = createAction("records/fetchNextBatch");
-
-listener.startListening({
-  actionCreator: fetchNextBatch,
-  effect: async ({ payload: { recordsState, status } }, listenerApi) => {
-    const readableRecordsState = getHumanReadableRecordState(recordsState);
-    const readableStatus = getHumanReadableRecordStatus(status);
-    const {
-      recordsInventory,
-      records: recordsObj,
-      recordsPolicy,
-    } = listenerApi.getState();
-    const pageSize = recordsPolicy.policy.recordspagesize;
-    const inventoryList =
-      recordsInventory[readableRecordsState][readableStatus].tokens;
-    const recordsToFetch = getTokensToFetch({
-      inventoryList,
-      pageSize,
-      lookupTable: recordsObj.records,
-    });
-    await listenerApi.dispatch(records.fetch({ tokens: recordsToFetch }));
-  },
-});
+import { fetchNextBatch } from "../listeners";
 
 // fetch inventory and pass it down
 export function RecordsList({ recordsState, status }) {
   const [page, setPage] = useState(1);
-  const { status: inventoryStatus, inventory } = recordsInventory.useFetch({
-    recordsState,
-    status,
-    page,
-  });
+  const dispatch = useDispatch();
+  const inventory = useSelector((state) =>
+    recordsInventory.selectByStateAndStatus(state, { recordsState, status })
+  );
+  const inventoryStatus = useSelector((state) =>
+    recordsInventory.selectStatus(state, { recordsState, status })
+  );
+
+  useEffect(() => {
+    if (inventoryStatus === "idle" || inventoryStatus === "succeeded/hasMore") {
+      dispatch(recordsInventory.fetch({ recordsState, status, page }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recordsState, status, dispatch, page]);
 
   function fetchOneMoreInventoryPage() {
     setPage(page + 1);
@@ -99,7 +78,13 @@ function RecordsListAux({
       <ul>
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
-          return <li key={token}>Record: {token}</li>;
+          return (
+            <li key={token}>
+              <a data-link href={`/record/${token}`}>
+                Record: {token}
+              </a>
+            </li>
+          );
         })}
       </ul>
       <button
