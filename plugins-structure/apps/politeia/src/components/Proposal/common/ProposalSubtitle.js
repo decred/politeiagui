@@ -15,7 +15,7 @@ function ProposalSubtitle({
   const { publishedat, editedat } = timestamps;
   return (
     <Join>
-      <Link href={`user/${userid}`} data-testid="proposal-username">
+      <Link data-link href={`user/${userid}`} data-testid="proposal-username">
         {username}
       </Link>
       {publishedat && (

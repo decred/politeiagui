@@ -38,7 +38,6 @@ function Details({ token }) {
     recordDetailsError,
     voteSummaryError,
     commentsError,
-    billingStatusChange,
     proposalStatusChanges,
   } = useProposalDetails({ token });
   // TODO: this can be moved somewhere else
@@ -53,30 +52,32 @@ function Details({ token }) {
           errors={[recordDetailsError, voteSummaryError, commentsError]}
         />
       )}
-      {fullToken && record && detailsStatus === "succeeded" && (
-        <>
-          <ProposalDetails
-            record={record}
-            voteSummary={voteSummary}
-            proposalSummary={proposalSummary}
-            billingStatusChange={billingStatusChange}
-            proposalStatusChanges={proposalStatusChanges}
-            onFetchRecordTimestamps={onFetchRecordTimestamps}
-            onFetchCommentsTimestamps={onFetchCommentsTimestamps}
-            onDownloadCommentsBundle={onDownloadCommentsBundle}
-          />
-          {comments && (
-            <Comments
-              comments={comments}
-              // Mocking onReply until user layer is done.
-              onReply={(comment, parentid) => {
-                console.log(`Replying ${parentid}:`, comment);
-              }}
-              scrollOnLoad={shouldScrollToComments}
+      {fullToken &&
+        record &&
+        detailsStatus === "succeeded" &&
+        record.detailsFetched && (
+          <>
+            <ProposalDetails
+              record={record}
+              voteSummary={voteSummary}
+              proposalSummary={proposalSummary}
+              proposalStatusChanges={proposalStatusChanges}
+              onFetchRecordTimestamps={onFetchRecordTimestamps}
+              onFetchCommentsTimestamps={onFetchCommentsTimestamps}
+              onDownloadCommentsBundle={onDownloadCommentsBundle}
             />
-          )}
-        </>
-      )}
+            {comments && (
+              <Comments
+                comments={comments}
+                // Mocking onReply until user layer is done.
+                onReply={(comment, parentid) => {
+                  console.log(`Replying ${parentid}:`, comment);
+                }}
+                scrollOnLoad={shouldScrollToComments}
+              />
+            )}
+          </>
+        )}
     </SingleContentPage>
   );
 }
