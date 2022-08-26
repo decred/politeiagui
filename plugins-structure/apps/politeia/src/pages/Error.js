@@ -5,7 +5,7 @@ import { createRouteView } from "../utils/createRouteView";
 const ErrorPage = ({ error }) => {
   return (
     error && (
-      <StaticContainer>
+      <StaticContainer style={{ marginTop: "3rem" }}>
         <Message kind="error">{error.toString()}</Message>
       </StaticContainer>
     )
