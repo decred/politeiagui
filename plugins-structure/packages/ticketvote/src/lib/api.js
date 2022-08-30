@@ -55,7 +55,7 @@ export async function fetchSubmissions(state, { token }) {
   const csrf = await getCsrf(state);
   const response = await fetch(
     getTicketvoteRoute(ROUTE_SUBMISSIONS),
-    fetchOptions(csrf, { token })
+    fetchOptions(csrf, { token }, "POST")
   );
   return await parseResponse(response);
 }

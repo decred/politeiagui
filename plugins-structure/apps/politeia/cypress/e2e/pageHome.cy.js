@@ -38,6 +38,7 @@ Cypress.Commands.add("mockPiSummaries", (status, matcherParams = {}) =>
 // Mock comments counts, ticketvote summaries and records, with aliases.
 beforeEach(() => {
   cy.mockResponse("/api/comments/v1/count", mockCommentsCount()).as("counts");
+  cy.mockInventory(0);
   // considering all proposals are public on home page.
   cy.mockResponse(
     "/api/records/v1/records",
@@ -159,7 +160,7 @@ describe("Given Home Under Review tab", () => {
       cy.wrap(Array(50)).each(() => {
         cy.findAllByTestId("proposal-card").last().scrollIntoView({
           easing: "linear",
-          duration: 200,
+          duration: 500,
         });
       });
       // Assert all inventory requests. 2 of each status.
@@ -197,7 +198,7 @@ describe("Given Home Under Review tab", () => {
       cy.wrap(Array(20)).each(() => {
         cy.findAllByTestId("proposal-card").last().scrollIntoView({
           easing: "linear",
-          duration: 200,
+          duration: 300,
         });
       });
 
@@ -235,7 +236,7 @@ describe("Given Home Under Review tab", () => {
       cy.wrap(Array(40)).each(() => {
         cy.findAllByTestId("proposal-card").last().scrollIntoView({
           easing: "linear",
-          duration: 200,
+          duration: 300,
         });
       });
 
@@ -270,7 +271,7 @@ describe("Given Home Under Review tab", () => {
       cy.wrap(Array(20)).each(() => {
         cy.findAllByTestId("proposal-card").last().scrollIntoView({
           easing: "linear",
-          duration: 200,
+          duration: 300,
         });
       });
 
@@ -304,7 +305,7 @@ describe("Given Home Under Review tab", () => {
       cy.wrap(Array(15)).each(() => {
         cy.findAllByTestId("proposal-card").last().scrollIntoView({
           easing: "linear",
-          duration: 200,
+          duration: 300,
         });
       });
 
@@ -336,7 +337,7 @@ describe("Given Home Under Review tab", () => {
       cy.wrap(Array(10)).each(() => {
         cy.findAllByTestId("proposal-card").last().scrollIntoView({
           easing: "linear",
-          duration: 200,
+          duration: 300,
         });
       });
 
@@ -363,7 +364,7 @@ describe("Given Home single status tab (approved, rejected or abandoned)", () =>
     cy.wrap(Array(15)).each(() => {
       cy.findAllByTestId("proposal-card").last().scrollIntoView({
         easing: "linear",
-        duration: 200,
+        duration: 300,
       });
     });
     cy.get("@records.all").should("have.length", 5);
@@ -403,6 +404,32 @@ describe("Given Home single status tab (approved, rejected or abandoned)", () =>
       cy.visit("/?tab=Abandoned");
       cy.wait("@records");
     });
+  });
+});
+
+describe("Given RFP Proposals and Submissions", () => {
+  it("should display tags for all RFP Proposals", () => {
+    cy.mockInventory(4, { times: 1 }).as("inventory");
+    cy.mockResponse(
+      { url: "/api/records/v1/records", times: 1 },
+      mockRecordsBatch(
+        mockProposal({ state: 2, status: 2, linkby: Date.now() / 1000 })
+      )
+    ).as("records");
+    cy.visit("/");
+    cy.findAllByTestId("proposal-rfp-tag").should("have.length", 4);
+    cy.findAllByTestId("proposal-date-expire").should("have.length", 4);
+    cy.assertProposalsListLength(4);
+  });
+  it("should fetch all submissions for given RFP Proposals", () => {
+    cy.mockInventory(4, { times: 1 }).as("inventory");
+    cy.mockResponse(
+      { url: "/api/records/v1/records", times: 1 },
+      mockRecordsBatch(mockProposal({ state: 2, status: 2, linkto: "abcdefg" }))
+    ).as("records");
+    cy.visit("/");
+    cy.findAllByTestId("proposal-rfp-link").should("have.length", 4);
+    cy.assertProposalsListLength(4);
   });
 });
 

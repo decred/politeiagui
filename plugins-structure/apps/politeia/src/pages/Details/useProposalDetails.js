@@ -5,7 +5,10 @@ import { fetchProposalDetails } from "./actions";
 import { selectDetailsStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
+import { ticketvoteSubmissions } from "@politeiagui/ticketvote/submissions";
 import { recordComments } from "@politeiagui/comments/comments";
+import { commentsCount } from "@politeiagui/comments/count";
+import { getRfpRecordLink } from "../../pi/proposals/utils";
 import { piSummaries, proposals } from "../../pi";
 
 function useProposalDetails({ token }) {
@@ -36,6 +39,29 @@ function useProposalDetails({ token }) {
     proposals.selectStatusChangesByToken(state, fullToken)
   );
 
+  // RFP Submissions
+  const rfpSubmissionsTokens = useSelector((state) =>
+    ticketvoteSubmissions.selectByToken(state, fullToken)
+  );
+  const rfpSubmissionsRecords = useSelector((state) =>
+    records.selectByTokensBatch(state, rfpSubmissionsTokens)
+  );
+  const rfpSumbissionsVoteSummaries = useSelector((state) =>
+    ticketvoteSummaries.selectByTokensBatch(state, rfpSubmissionsTokens)
+  );
+  const rfpSubmissionsCommentsCounts = useSelector((state) =>
+    commentsCount.selectByTokensBatch(state, rfpSubmissionsTokens)
+  );
+  const rfpSubmissionsProposalsSummaries = useSelector((state) =>
+    piSummaries.selectByTokensBatch(state, rfpSubmissionsTokens)
+  );
+
+  // RFP Linked Proposal
+  const rfpLinkedRecordToken = getRfpRecordLink(record);
+  const rfpLinkedRecord = useSelector((state) =>
+    records.selectByToken(state, rfpLinkedRecordToken)
+  );
+
   async function onFetchRecordTimestamps({ token, version }) {
     const res = await dispatch(recordsTimestamps.fetch({ token, version }));
     return res.payload;
@@ -63,6 +89,11 @@ function useProposalDetails({ token }) {
     record,
     voteSummary,
     proposalStatusChanges,
+    rfpLinkedRecord,
+    rfpSubmissionsRecords,
+    rfpSubmissionsCommentsCounts,
+    rfpSubmissionsProposalsSummaries,
+    rfpSumbissionsVoteSummaries,
   };
 }
 

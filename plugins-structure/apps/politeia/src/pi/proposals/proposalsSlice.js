@@ -4,6 +4,7 @@ import {
   convertRecordStatusToProposalStatus,
   convertVoteStatusToProposalStatus,
   getRecordStatusChangesMetadata,
+  isRfpProposal,
 } from "./utils";
 import { getTicketvoteSummariesStatusChanges } from "@politeiagui/ticketvote/utils";
 import keyBy from "lodash/keyBy";
@@ -47,6 +48,7 @@ const proposalsSlice = createSlice({
         const record = records[token];
         const vsc = voteStatusChangesByToken[token];
         if (!vsc) return proposalStatusChanges;
+
         return {
           ...proposalStatusChanges,
           [token]: [
@@ -54,7 +56,8 @@ const proposalsSlice = createSlice({
               ...vsc,
               status: convertVoteStatusToProposalStatus(
                 vsc.status,
-                record?.status
+                record?.status,
+                isRfpProposal(record)
               ),
             },
           ],

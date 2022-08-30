@@ -6,13 +6,15 @@ import {
   fetchNextBatchSummaries,
 } from "./actions";
 import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
+import {
+  getRfpProposalsLinks,
+  proposalFilenames,
+} from "../../pi/proposals/utils";
 
 function getInventoryList(payload, state) {
   const readableStatus = getHumanReadableTicketvoteStatus(payload);
   return state.ticketvoteInventory[readableStatus].tokens;
 }
-
-const piFilenames = ["proposalmetadata.json", "votemetadata.json"];
 
 function injectEffect(effect) {
   return async (action, { getState, dispatch }) => {
@@ -26,7 +28,10 @@ function injectRecordsBatchEffect(effect) {
   return async ({ payload }, { getState, dispatch }) => {
     const state = getState();
     const inventoryList = getInventoryList(payload, state);
-    await effect(state, dispatch, { inventoryList, filenames: piFilenames });
+    await effect(state, dispatch, {
+      inventoryList,
+      filenames: proposalFilenames,
+    });
   };
 }
 
@@ -38,6 +43,22 @@ function injectPayloadEffect(effect) {
     unsubscribe();
     const state = getState();
     await effect(state, dispatch, payload);
+    subscribe();
+  };
+}
+
+function injectRfpSubmissionsEffect(effect) {
+  return async (
+    { payload },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    const links = getRfpProposalsLinks(Object.values(payload));
+    await effect(state, dispatch, {
+      inventoryList: links,
+      filenames: proposalFilenames,
+    });
     subscribe();
   };
 }
@@ -75,6 +96,11 @@ export const fetchRecordsListenerCreator = {
 export const fetchBillingStatusChangesListenerCreator = {
   type: "piBilling/fetchStatusChanges/fulfilled",
   injectEffect: injectPayloadEffect,
+};
+
+export const fetchRecordsRfpSubmissionsListenerCreator = {
+  type: "records/fetch/fulfilled",
+  injectEffect: injectRfpSubmissionsEffect,
 };
 
 export const listeners = [
