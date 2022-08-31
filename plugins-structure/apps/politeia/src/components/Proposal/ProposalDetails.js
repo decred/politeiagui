@@ -125,11 +125,12 @@ const ProposalDetails = ({
               onFetchRecordTimestamps={onFetchRecordTimestamps}
             />
             <div className={styles.footerButtons}>
-              <ButtonIcon
-                type="markdown"
-                onClick={handleShowRawMarkdown}
-                viewBox="0 0 208 128"
-              />
+              <a
+                href={`/record/${getShortToken(proposalDetails.token)}/raw`}
+                data-link
+              >
+                <ButtonIcon type="markdown" viewBox="0 0 208 128" />
+              </a>
               <ButtonIcon type="link" onClick={handleShowRawMarkdown} />
             </div>
           </>

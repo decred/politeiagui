@@ -81,6 +81,7 @@ const Comment = ({
   const currentTimeSec = new Date().getTime() / 1000;
   const isEditable =
     authorID === userid &&
+    !disableReply &&
     allowedits &&
     currentTimeSec < createdAt + editperiod;
   const remaining = createdAt + editperiod - currentTimeSec;
@@ -182,7 +183,7 @@ const Comment = ({
           <DateTooltip timestamp={timestamp} placement="bottom">
             {({ timeAgo }) => (
               <Link className={styles.timeAgo} to={`${permalink}`}>
-                {version > 1 && <span>Edited </span>}
+                {version > 1 && <span>edited </span>}
                 {timeAgo}
               </Link>
             )}
@@ -284,7 +285,7 @@ Comment.propTypes = {
   censored: PropTypes.bool,
   censoredBy: PropTypes.string,
   reason: PropTypes.string,
-  sectionId: PropTypes.string,
+  sectionId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   highlightAuthor: PropTypes.bool,
   disableLikes: PropTypes.bool,
   likesCount: PropTypes.number,
