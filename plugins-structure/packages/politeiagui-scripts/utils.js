@@ -25,8 +25,7 @@ const moduleFileExtensions = [
 ];
 
 const appDirectory = path.dirname(pkgPath);
-const resolveOwn = (relativePath) =>
-  path.resolve(__dirname, "..", relativePath);
+const resolveOwn = (relativePath) => path.resolve(__dirname, ".", relativePath);
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 const fromRoot = (...p) => path.join(appDirectory, ...p);
 const hasFile = (...p) => fs.existsSync(fromRoot(...p));

@@ -10,7 +10,7 @@ const {
   createPackageJsonFile,
   createConfigFile,
   getPluginsDepsAndConfig,
-  getPluginNameFromDep
+  getPluginNameFromDep,
 } = require("./utils");
 
 function getAppPath(appName) {
@@ -52,12 +52,12 @@ function createAppSrcFiles({ baseAppPath, appName, appPath, pluginsDeps }) {
     { __APP_NAME__: appName }
   );
   const indexJs = replaceFileValuesFromMap(`${baseAppPath}/src/index.js`, {
-    __APP_NAME__: appName
+    __APP_NAME__: appName,
   });
   const appJs = replaceFileValuesFromMap(`${baseAppPath}/src/app.js`, {
     __APP_NAME__: appName,
     __PLUGINS_IMPORTS__: "\n" + pluginsImports,
-    '"__PLUGINS_CONNECTED__"': plugins
+    '"__PLUGINS_CONNECTED__"': plugins,
   });
   fs.writeFileSync(`${appPath}/src/public/index.html`, indexHtml);
   fs.writeFileSync(`${appPath}/src/index.js`, indexJs);
@@ -79,14 +79,14 @@ module.exports = function newApp(appName, { plugins, config }) {
     const { pluginsDeps, pluginsConfig } = getPluginsDepsAndConfig({
       isDefaultApp,
       plugins,
-      configFile
+      configFile,
     });
     const appPath = createNewApp(appName);
     createPackageJsonFile({
       name: appName,
       basePackageJSON: baseAppPackageJSON,
       pluginsDeps,
-      targetPath: appPath
+      targetPath: appPath,
     });
     createConfigFile({ appPath, config, pluginsConfig });
     createAppSrcFiles({ appPath, appName, baseAppPath, pluginsDeps });

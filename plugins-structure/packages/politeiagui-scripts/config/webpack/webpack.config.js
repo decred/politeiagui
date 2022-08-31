@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { resolveApp } = require("../../utils");
+
+const { resolveApp, resolveOwn } = require("../../utils");
 const plugins = (isEnvDevelopment, isApp) =>
   isApp
     ? [
@@ -38,16 +39,17 @@ const cssRules = [
         loader: "css-loader",
         options: {
           importLoaders: 1,
-          modules: true,
+        },
+      },
+      {
+        loader: "postcss-loader",
+        options: {
+          postcssOptions: {
+            config: resolveOwn("./config/postcss/postcss.config.js"),
+          },
         },
       },
     ],
-    include: /\.module\.css$/,
-  },
-  {
-    test: /\.css$/,
-    use: ["style-loader", "css-loader"],
-    exclude: /\.module\.css$/,
   },
 ];
 
@@ -97,6 +99,17 @@ module.exports = function (webpackEnv = "production", type = "app") {
         stream: require.resolve("stream-browserify"),
       },
     },
+    // Uncomment to see postcss-loader warnings
+    // TODO: Remove when the new solution is implemented and warning is removed
+    // ignore: postcss-custom-properties: "importFrom" and "exportTo" will be removed in a future version of postcss-custom-properties.
+    // We are looking for insights and anecdotes on how these features are used so that we can design the best alternative.
+    // Please let us know if our proposal will work for you.
+    // Visit the discussion on github for more details. https://github.com/csstools/postcss-plugins/discussions/192
+    ignoreWarnings: [
+      {
+        module: /postcss-loader\/dist\/cjs\.js/,
+      },
+    ],
     plugins: plugins(isEnvDevelopment, isApp),
   };
 };

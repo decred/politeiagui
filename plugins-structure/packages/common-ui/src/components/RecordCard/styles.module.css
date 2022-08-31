@@ -25,7 +25,7 @@
 
 .fourthRow {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   width: 100%;
   padding: var(--spacing-2) 0;
   border-width: 0 0 1px 0;
@@ -60,7 +60,7 @@
   grid-area: subtitle;
 }
 
-@media screen and (max-width: 768px) {
+@media (--sm-viewport) {
   .firstRow {
     flex-direction: column-reverse;
     justify-content: flex-end;

@@ -8,7 +8,7 @@
   color: var(--color-gray);
 }
 
-@media screen and (max-width: 560px) {
+@media (--xs-viewport) {
   .join {
     flex-flow: column;
     max-width: 100%;

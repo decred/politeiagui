@@ -62,7 +62,7 @@
   padding-top: var(--spacing-small);
 }
 
-@media screen and (max-width: 768px) {
+@media (--sm-viewport) {
   .statusLabelWrapper {
     top: 2.3rem;
     flex-flow: row;
