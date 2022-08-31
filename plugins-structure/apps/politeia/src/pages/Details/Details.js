@@ -30,6 +30,8 @@ function Details({ token }) {
     detailsStatus,
     fullToken,
     onFetchRecordTimestamps,
+    onFetchCommentsTimestamps,
+    onDownloadCommentsBundle,
     proposalSummary,
     record,
     voteSummary,
@@ -67,6 +69,8 @@ function Details({ token }) {
               proposalSummary={proposalSummary}
               proposalStatusChanges={proposalStatusChanges}
               onFetchRecordTimestamps={onFetchRecordTimestamps}
+              onFetchCommentsTimestamps={onFetchCommentsTimestamps}
+              onDownloadCommentsBundle={onDownloadCommentsBundle}
               rfpSubmissionsRecords={rfpSubmissionsRecords}
               rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
               rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}

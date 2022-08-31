@@ -14,9 +14,9 @@
     "./records/timestamps": "./src/records/timestamps/index.js",
     "./records/policy": "./src/records/policy/index.js",
     "./router": "./src/router/index.js",
-    "./routes": "./src/routes/index.js",
     "./listeners": "./src/listeners/index.js",
     "./localstorage": "./src/localStorage/index.js",
+    "./downloads": "./src/downloads/index.js",
     "./dev/mocks": "./src/dev/mocks/index.js",
     "./dev/cypress": "./src/dev/cypress/index.js"
   },
@@ -31,6 +31,7 @@
     "start": "politeiagui-scripts start-plugin"
   },
   "dependencies": {
+    "js-file-download": "^0.4.12",
     "politeiagui-scripts": "1.0.0"
   }
 }

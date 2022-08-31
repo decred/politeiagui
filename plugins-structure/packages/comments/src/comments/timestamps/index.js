@@ -1,15 +1,15 @@
 import {
+  fetchAllCommentsTimestamps,
   fetchCommentsTimestamps,
   selectCommentsTimestampsByToken,
   selectCommentsTimestampsError,
   selectCommentsTimestampsStatus,
 } from "./timestampsSlice";
-import { useCommentsTimestamps } from "./useTimestamps";
 
 export const commentsTimestamps = {
   fetch: fetchCommentsTimestamps,
+  fetchAll: fetchAllCommentsTimestamps,
   selectByToken: selectCommentsTimestampsByToken,
   selectError: selectCommentsTimestampsError,
   selectStatus: selectCommentsTimestampsStatus,
-  useFetch: useCommentsTimestamps,
 };

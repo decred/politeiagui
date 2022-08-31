@@ -10,6 +10,8 @@ import { recordComments } from "@politeiagui/comments/comments";
 import { commentsCount } from "@politeiagui/comments/count";
 import { getRfpRecordLink } from "../../pi/proposals/utils";
 import { piSummaries, proposals } from "../../pi";
+import { downloadJSON } from "@politeiagui/core/downloads";
+import { commentsTimestamps } from "@politeiagui/comments/timestamps";
 
 function useProposalDetails({ token }) {
   const dispatch = useDispatch();
@@ -62,9 +64,22 @@ function useProposalDetails({ token }) {
     records.selectByToken(state, rfpLinkedRecordToken)
   );
 
-  async function onFetchRecordTimestamps({ token, version }) {
-    const res = await dispatch(recordsTimestamps.fetch({ token, version }));
-    return res.payload;
+  // Timestamps actions
+  function onFetchRecordTimestamps(version) {
+    dispatch(recordsTimestamps.fetch({ token, version }));
+  }
+
+  function onFetchCommentsTimestamps() {
+    // TODO: Support timestamps for separate threads and comments sections
+    const ids = Object.keys(comments).map((id) => +id);
+    dispatch(
+      commentsTimestamps.fetchAll({ token: fullToken, commentids: ids })
+    );
+  }
+
+  function onDownloadCommentsBundle() {
+    const commentsToDownload = comments && Object.values(comments);
+    downloadJSON(commentsToDownload, `${token}-comments-bundle`);
   }
 
   useEffect(() => {
@@ -85,6 +100,8 @@ function useProposalDetails({ token }) {
     detailsStatus,
     fullToken,
     onFetchRecordTimestamps,
+    onFetchCommentsTimestamps,
+    onDownloadCommentsBundle,
     proposalSummary,
     record,
     voteSummary,

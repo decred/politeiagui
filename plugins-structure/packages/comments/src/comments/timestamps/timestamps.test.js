@@ -55,7 +55,7 @@ describe("Given the timestampsSlice", () => {
       expect(state.commentsTimestamps.status).toEqual("loading");
     });
   });
-  describe("when fetchCommentsTimestamps succeeds with a complete page", () => {
+  describe("when fetchCommentsTimestamps succeeds", () => {
     it("should update byToken and status", async () => {
       const resValue = { comments: {} };
       fetchTimestampsSpy.mockResolvedValueOnce(resValue);
@@ -67,7 +67,7 @@ describe("Given the timestampsSlice", () => {
       expect(state.commentsTimestamps.byToken).toEqual({
         fakeToken: {},
       });
-      expect(state.commentsTimestamps.status).toEqual("succeeded/isDone");
+      expect(state.commentsTimestamps.status).toEqual("succeeded");
     });
   });
   describe("when fetchCommentsTimestamps succeeds with an incomplete page", () => {
@@ -85,7 +85,7 @@ describe("Given the timestampsSlice", () => {
       expect(state.commentsTimestamps.byToken).toEqual({
         fakeToken: incompletePage,
       });
-      expect(state.commentsTimestamps.status).toEqual("succeeded/hasMore");
+      expect(state.commentsTimestamps.status).toEqual("succeeded");
     });
   });
   describe("when fetchCommentsTimestamps fails", () => {

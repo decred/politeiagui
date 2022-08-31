@@ -1,7 +1,7 @@
-import { getThreadSchema } from "./utils";
+import { getCommentsByParent } from "./utils";
 import { random, range } from "lodash";
 
-describe("Given getThreadSchema util", () => {
+describe("Given getCommentsByParent util", () => {
   describe("when using a list with 3 comments", () => {
     it("should return the correct thread", () => {
       const comments = [
@@ -10,9 +10,9 @@ describe("Given getThreadSchema util", () => {
         { commentid: 3, parentid: 1 },
       ];
       let expectedThread = { 0: [1], 1: [2, 3] };
-      const threadSchema = getThreadSchema(comments, false);
-      expect(threadSchema).toEqual(expectedThread);
-      const flatThreadSchema = getThreadSchema(comments, true);
+      const commentsByParent = getCommentsByParent(comments, false);
+      expect(commentsByParent).toEqual(expectedThread);
+      const flatThreadSchema = getCommentsByParent(comments, true);
       expectedThread = { 0: [1, 2, 3] };
       expect(flatThreadSchema).toEqual(expectedThread);
     });
@@ -28,9 +28,9 @@ describe("Given getThreadSchema util", () => {
         { commentid: 6, parentid: 0 },
       ];
       let expectedThread = { 0: [1, 2, 3, 4, 5, 6] };
-      const threadSchema = getThreadSchema(comments, false);
-      expect(threadSchema).toEqual(expectedThread);
-      const flatThreadSchema = getThreadSchema(comments, true);
+      const commentsByParent = getCommentsByParent(comments, false);
+      expect(commentsByParent).toEqual(expectedThread);
+      const flatThreadSchema = getCommentsByParent(comments, true);
       expectedThread = { 0: [1, 2, 3, 4, 5, 6] };
       expect(flatThreadSchema).toEqual(expectedThread);
     });
@@ -46,9 +46,9 @@ describe("Given getThreadSchema util", () => {
         { commentid: 6, parentid: 5 },
       ];
       let expectedThread = { 0: [1], 1: [2], 2: [3], 3: [4], 4: [5], 5: [6] };
-      const threadSchema = getThreadSchema(comments, false);
-      expect(threadSchema).toEqual(expectedThread);
-      const flatThreadSchema = getThreadSchema(comments, true);
+      const commentsByParent = getCommentsByParent(comments, false);
+      expect(commentsByParent).toEqual(expectedThread);
+      const flatThreadSchema = getCommentsByParent(comments, true);
       expectedThread = { 0: [1, 2, 3, 4, 5, 6] };
       expect(flatThreadSchema).toEqual(expectedThread);
     });
@@ -58,7 +58,7 @@ describe("Given getThreadSchema util", () => {
       const comments = Array(20)
         .fill({})
         .map((_, i) => ({ commentid: i + 1, parentid: random(0, i) }));
-      const flatThreadSchema = getThreadSchema(comments, true);
+      const flatThreadSchema = getCommentsByParent(comments, true);
       const expectedThread = { 0: range(1, 21) };
       expect(flatThreadSchema).toEqual(expectedThread);
     });

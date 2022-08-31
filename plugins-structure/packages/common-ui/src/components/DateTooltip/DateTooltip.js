@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
-import distance from "date-fns/distance_in_words";
+import formatDistance from "date-fns/formatDistance";
 import { Tooltip, classNames } from "pi-ui";
 import styles from "./styles.module.css";
 import { formatUnixTimestamp } from "../../utils";
 
 const getTimeAgo = (timestamp) =>
-  distance(new Date(), new Date(timestamp * 1000), { addSuffix: true });
+  formatDistance(new Date(timestamp * 1000), new Date(), { addSuffix: true });
 
 const DateTooltip = ({
   timestamp,

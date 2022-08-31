@@ -11,6 +11,7 @@
       "@politeiagui/core/dev/cypress": [
         "./packages/core/src/dev/cypress/index.js"
       ],
+      "@politeiagui/core/downloads": ["./packages/core/src/downloads/index.js"],
       "@politeiagui/core/localstorage": [
         "./packages/core/src/localStorage/index.js"
       ],
@@ -112,6 +113,9 @@
         "./packages/comments/src/comments/votes/index.js"
       ],
       "@politeiagui/comments/ui": ["./packages/comments/src/ui/index.js"],
+      "@politeiagui/comments/utils": [
+        "./packages/comments/src/comments/utils.js"
+      ],
       "@politeiagui/comments/dev/mocks": [
         "./packages/comments/src/dev/mocks/index.js"
       ]

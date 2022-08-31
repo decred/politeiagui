@@ -1,10 +1,6 @@
-import { appSetup } from "@politeiagui/core";
-import TicketvotePlugin from "../";
-import { routes } from "../routes";
+import app from "./app";
+import AllStatuses from "./pages/AllStatuses";
 
-const TicketvoteApp = appSetup({
-  plugins: [TicketvotePlugin],
-  config: { name: "Ticketvote App Showcase" },
-});
+const routes = [AllStatuses];
 
-TicketvoteApp.init({ routes });
+app.init({ routes });

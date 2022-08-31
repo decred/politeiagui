@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import { validateCommentsTimestampsPageSize } from "../../lib/validation";
 import { getCommentsError } from "../../lib/errors";
+import chunk from "lodash/chunk";
 
 export const initialState = {
   byToken: {},
@@ -11,9 +12,9 @@ export const initialState = {
 
 export const fetchCommentsTimestamps = createAsyncThunk(
   "commentsTimestamps/fetch",
-  async (body, { getState, rejectWithValue }) => {
+  async ({ token, commentids }, { getState, rejectWithValue }) => {
     try {
-      return await api.fetchTimestamps(getState(), body);
+      return await api.fetchTimestamps(getState(), { token, commentids });
     } catch (error) {
       const message = getCommentsError(error.body, error.message);
       return rejectWithValue(message);
@@ -32,6 +33,30 @@ export const fetchCommentsTimestamps = createAsyncThunk(
     },
   }
 );
+export const fetchAllCommentsTimestamps = createAsyncThunk(
+  "commentsTimestamps/fetchAll",
+  async ({ token, commentids }, { getState, dispatch }) => {
+    const {
+      commentsPolicy: {
+        policy: { timestampspagesize },
+      },
+    } = getState();
+    const pages = chunk(commentids, timestampspagesize);
+    const responses = await Promise.all(
+      pages.map((page) =>
+        dispatch(fetchCommentsTimestamps({ token, commentids: page }))
+      )
+    );
+    return responses
+      .map((res) => res.payload.comments)
+      .reduce((acc, c) => ({ ...acc, ...c }), {});
+  },
+  {
+    condition: (_, { getState }) => {
+      return validateCommentsTimestampsPageSize(getState());
+    },
+  }
+);
 
 // Reducer
 const commentsTimestampsSlice = createSlice({
@@ -47,19 +72,13 @@ const commentsTimestampsSlice = createSlice({
         if (!state.byToken[token]) {
           state.byToken[token] = {};
         }
-        const pageSize = action.meta.arg.pageSize || 100;
         const { comments } = action.payload;
-        const payloadSize = Object.keys(comments).length;
-        if (payloadSize === pageSize) {
-          state.status = "succeeded/hasMore";
-        } else {
-          state.status = "succeeded/isDone";
-        }
         for (const commentid in comments) {
           if (comments.hasOwnProperty(commentid)) {
             state.byToken[token][commentid] = comments[commentid];
           }
         }
+        state.status = "succeeded";
       })
       .addCase(fetchCommentsTimestamps.rejected, (state, action) => {
         state.status = "failed";

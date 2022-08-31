@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { CommentsFilter, CommentsList } from "./";
 import { Card, H2 } from "pi-ui";
 import styles from "./styles.module.css";
-import { getThreadSchema } from "./utils";
+import { getCommentsByParent } from "../../comments/utils";
 import { useScrollTo } from "@politeiagui/common-ui/layout";
 
 export const Comments = ({
@@ -18,7 +18,7 @@ export const Comments = ({
   disableReply,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
-  const [threadSchema, setThreadSchema] = useState();
+  const [commentsByParent, setCommentsByParent] = useState();
   const [isFlat, setFlat] = useState(isFlatMode);
   // flat mode handler
   function handleToggleFlatMode() {
@@ -32,8 +32,8 @@ export const Comments = ({
 
   // Update schema for every filter change
   useEffect(() => {
-    const schema = getThreadSchema(sortedComments, isFlat);
-    setThreadSchema(schema);
+    const schema = getCommentsByParent(sortedComments, isFlat);
+    setCommentsByParent(schema);
   }, [sortedComments, isFlat]);
 
   const commentsCount = Object.keys(comments).length;
@@ -63,7 +63,7 @@ export const Comments = ({
           comments={comments}
           userVotes={userVotes}
           showCensor={showCensor}
-          threadSchema={threadSchema}
+          commentsByParent={commentsByParent}
           parentId={parentId}
           onCensor={onCensor}
           onReply={onReply}
