@@ -4,19 +4,19 @@ const mockRoutes = [
   {
     path: "/test-url",
     view: () =>
-      (document.querySelector("#root").innerHTML = "hello from test url")
+      (document.querySelector("#root").innerHTML = "hello from test url"),
   },
   {
     path: "/test-url/:id/test/:id2",
     view: ({ id, id2 }) =>
       (document.querySelector(
         "#root"
-      ).innerHTML = `hello from test url id1-${id} id2-${id2}`)
+      ).innerHTML = `hello from test url id1-${id} id2-${id2}`),
   },
   {
     path: "/",
-    view: () => (document.querySelector("#root").innerHTML = "hello from home")
-  }
+    view: () => (document.querySelector("#root").innerHTML = "hello from home"),
+  },
 ];
 
 function getGoodDOM() {
@@ -32,7 +32,7 @@ function getGoodDOM() {
 const routerArg = {
   routes: [],
   clickHandler: () => {},
-  popStateHandler: () => {}
+  popStateHandler: () => {},
 };
 
 describe("Given the router", () => {

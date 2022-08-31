@@ -4,7 +4,7 @@ const path = require("path");
 const {
   replaceFileValuesFromMap,
   validateName,
-  createPackageJsonFile
+  createPackageJsonFile,
 } = require("./utils");
 
 function getPluginPath(pluginName) {
@@ -44,11 +44,11 @@ function createPluginSrcFile({ basePluginPath, pluginName, pluginPath }) {
   const indexDevJs = replaceFileValuesFromMap(
     `${basePluginPath}/src/dev/index.js`,
     {
-      __PLUGIN_NAME__: pluginName
+      __PLUGIN_NAME__: pluginName,
     }
   );
   const indexJs = replaceFileValuesFromMap(`${basePluginPath}/src/index.js`, {
-    __PLUGIN_NAME__: pluginName
+    __PLUGIN_NAME__: pluginName,
   });
   fs.writeFileSync(`${pluginPath}/src/dev/index.html`, indexDevHtml);
   fs.writeFileSync(`${pluginPath}/src/dev/index.js`, indexDevJs);
@@ -65,7 +65,7 @@ module.exports = function newPlugin(pluginName) {
     createPackageJsonFile({
       name: pluginName,
       basePackageJSON: basePluginPackageJSON,
-      targetPath: pluginPath
+      targetPath: pluginPath,
     });
     createPluginSrcFile({ pluginPath, basePluginPath, pluginName });
   } catch (e) {

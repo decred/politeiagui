@@ -67,7 +67,7 @@ function createPackageJsonFile({
   basePackageJSON,
   name,
   targetPath,
-  pluginsDeps
+  pluginsDeps,
 }) {
   fs.writeFileSync(
     path.join(targetPath, "package.json"),
@@ -79,9 +79,9 @@ function createPackageJsonFile({
           ? {
               "@politeiagui/core": "1.0.0",
               "@politeiagui/common-ui": "1.0.0",
-              ...pluginsDeps
+              ...pluginsDeps,
             }
-          : {}
+          : {},
       },
       null,
       2
@@ -95,8 +95,8 @@ function createConfigFile({ appPath, config, pluginsConfig }) {
   if (!config) {
     const configJson = {
       plugins: {
-        ...pluginsConfig
-      }
+        ...pluginsConfig,
+      },
     };
     fs.writeFileSync(
       path.join(appPath, "config.json"),
@@ -151,5 +151,5 @@ module.exports = {
   createPackageJsonFile,
   createConfigFile,
   getPluginsDepsAndConfig,
-  getPluginNameFromDep
+  getPluginNameFromDep,
 };
