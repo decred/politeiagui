@@ -36,6 +36,12 @@ export function mockTicketvotePolicy({
   });
 }
 
+export function mockTicketvoteSubmissions(amount = 1) {
+  return () => ({
+    submissions: getTokensArray(amount),
+  });
+}
+
 export function mockTicketvoteSummaries({
   status = 0, // Missing status by default
   type = 0,

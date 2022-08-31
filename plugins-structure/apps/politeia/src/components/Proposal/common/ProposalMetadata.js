@@ -7,12 +7,13 @@ import {
 } from "@politeiagui/common-ui/utils";
 
 function getMetadataItems({ domain, amount, endDate, startDate }) {
-  return [
-    { label: "Domain", value: domain },
-    { label: "Amount", value: usdFormatter.format(amount / 100) },
-    { label: "Start Date", value: startDate },
-    { label: "End Date", value: endDate },
-  ];
+  const items = [];
+  if (domain) items.push({ label: "Domain", value: domain });
+  if (amount)
+    items.push({ label: "Amount", value: usdFormatter.format(amount / 100) });
+  if (startDate) items.push({ label: "Start Date", value: startDate });
+  if (endDate) items.push({ label: "End Date", value: endDate });
+  return items;
 }
 
 function ProposalMetadata({ metadata }) {
@@ -20,12 +21,12 @@ function ProposalMetadata({ metadata }) {
   const metadataAvailable = !!amount || !!domain || !!startdate || !!enddate;
   if (!metadataAvailable) return null;
 
-  const startDate = formatDateToInternationalString(
-    (startdate && formatUnixTimestampToObj(startdate)) || {}
-  );
-  const endDate = formatDateToInternationalString(
-    (enddate && formatUnixTimestampToObj(enddate)) || {}
-  );
+  const startDate =
+    startdate &&
+    formatDateToInternationalString(formatUnixTimestampToObj(startdate));
+  const endDate =
+    enddate &&
+    formatDateToInternationalString(formatUnixTimestampToObj(enddate));
   const items = getMetadataItems({ domain, amount, endDate, startDate });
   return <LabelValueList items={items} data-testid="proposal-metadata" />;
 }

@@ -1,9 +1,14 @@
 import { fetchProposalDetails } from "./actions";
-import { isProposalCompleteOrClosed } from "../../pi/utils";
 import {
   downloadCommentsTimestampsEffect,
   downloadRecordTimestampsEffect,
 } from "./effects";
+import {
+  getRfpRecordLink,
+  isProposalCompleteOrClosed,
+  isRfpProposal,
+  proposalFilenames,
+} from "../../pi/proposals/utils";
 
 function injectEffect(effect) {
   return async ({ payload }, { getState, dispatch }) => {
@@ -38,6 +43,49 @@ function injectCompletedOrClosedProposalEffect(effect) {
 
     if (isProposalCompleteOrClosed(status)) {
       await effect(state, dispatch, { token });
+    }
+    subscribe();
+  };
+}
+
+function injectRfpProposalEffect(effect) {
+  return async (
+    { payload: record },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    if (isRfpProposal(record)) {
+      await effect(state, dispatch, { token: record.censorshiprecord.token });
+    }
+    subscribe();
+  };
+}
+
+function injectRfpSubmissionsEffect(effect) {
+  return async ({ payload }, { getState, dispatch }) => {
+    const state = getState();
+    const { submissions } = payload;
+    await effect(state, dispatch, {
+      inventoryList: submissions,
+      filenames: proposalFilenames,
+    });
+  };
+}
+
+function injectRfpLinkedProposalEffect(effect) {
+  return async (
+    { payload: record },
+    { getState, dispatch, unsubscribe, subscribe }
+  ) => {
+    unsubscribe();
+    const state = getState();
+    const token = getRfpRecordLink(record);
+    if (token) {
+      await effect(state, dispatch, {
+        inventoryList: [token],
+        filenames: proposalFilenames,
+      });
     }
     subscribe();
   };
@@ -85,6 +133,24 @@ export const fetchRecordDetailsListenerCreator = {
   injectEffect: injectPayloadEffect,
 };
 
+// RFP Proposal
+export const fetchRfpDetailsListenerCreator = {
+  type: "records/fetchDetails/fulfilled",
+  injectEffect: injectRfpProposalEffect,
+};
+
+export const fetchRfpSubmissionsListenerCreator = {
+  type: "ticketvoteSubmissions/fetch/fulfilled",
+  injectEffect: injectRfpSubmissionsEffect,
+};
+
+// RFP Submission
+export const fetchRfpLinkedProposalListenerCreator = {
+  type: "records/fetchDetails/fulfilled",
+  injectEffect: injectRfpLinkedProposalEffect,
+};
+
+// Listeners
 export const listeners = [
   {
     type: "commentsTimestamps/fetchAll/fulfilled",

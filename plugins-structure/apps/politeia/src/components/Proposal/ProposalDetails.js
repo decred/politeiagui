@@ -11,6 +11,8 @@ import {
 import {
   decodeProposalRecord,
   getImagesByDigest,
+  isRfpProposal,
+  showStatusChangeReason,
 } from "../../pi/proposals/utils";
 import {
   ProposalDownloads,
@@ -19,14 +21,18 @@ import {
   ProposalStatusLabel,
   ProposalStatusTag,
   ProposalSubtitle,
+  ProposalTitle,
 } from "./common";
 import { Button, ButtonIcon, Message } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
-import ModalProposalDiff from "./ModalProposalDiff";
+import { ModalProposalDiff } from "./ModalProposalDiff";
+import { ProposalsCompact } from "./ProposalsCompact";
+import { PROPOSAL_STATUS_APPROVED } from "../../pi";
 
 const ProposalDetails = ({
   record,
+  rfpRecord,
   voteSummary,
   proposalSummary,
   onFetchRecordTimestamps,
@@ -34,11 +40,21 @@ const ProposalDetails = ({
   onDownloadRecordBundle,
   onDownloadCommentsBundle,
   proposalStatusChanges,
+  rfpSubmissionsRecords,
+  rfpSubmissionsVoteSummaries,
+  rfpSubmissionsProposalSummaries,
+  rfpSubmissionsCommentsCounts,
 }) => {
   const [open] = useModal();
 
   const proposalDetails = decodeProposalRecord(record);
   const body = proposalDetails.body;
+  const proposalLink = `/record/${getShortToken(proposalDetails.token)}`;
+
+  // RFP Linked Proposal
+  const rfpProposal = decodeProposalRecord(rfpRecord);
+  const rfpProposalLink =
+    rfpProposal && `/record/${getShortToken(rfpProposal.token)}`;
 
   const imagesByDigest = getImagesByDigest(body, proposalDetails.attachments);
   const imagesNotInText = proposalDetails.attachments.filter(
@@ -46,7 +62,7 @@ const ProposalDetails = ({
   );
 
   function handleShowRawMarkdown() {
-    router.navigateTo(`/record/${getShortToken(proposalDetails.token)}/raw`);
+    router.navigateTo(proposalLink);
   }
   function handleChangeVersion(version) {
     open(ModalProposalDiff, {
@@ -74,18 +90,26 @@ const ProposalDetails = ({
 
   return (
     <div data-testid="proposal-details">
-      {currentStatusChange?.reason && (
-        <Message kind="warning" data-testid="status-change-reason">
-          <div>Proposal is {currentStatusChange.status}.</div>
-          <div>Reason: {currentStatusChange.reason}</div>
-        </Message>
-      )}
+      {currentStatusChange?.reason &&
+        showStatusChangeReason(proposalSummary?.status) && (
+          <Message kind="warning" data-testid="status-change-reason">
+            <div>Proposal is {currentStatusChange.status}.</div>
+            <div>Reason: {currentStatusChange.reason}</div>
+          </Message>
+        )}
       <RecordCard
         token={proposalDetails.token}
-        title={proposalDetails.name}
+        title={
+          <ProposalTitle
+            title={proposalDetails.name}
+            isRfp={isRfpProposal(record)}
+          />
+        }
+        titleLink={proposalLink}
         isDimmed={isAbandoned}
         subtitle={
           <ProposalSubtitle
+            rfpLink={{ name: rfpProposal?.name, link: rfpProposalLink }}
             userid={proposalDetails.author.userid}
             username={proposalDetails.author.username}
             timestamps={proposalDetails.timestamps}
@@ -103,6 +127,16 @@ const ProposalDetails = ({
             <RecordToken token={proposalDetails.token} isCopyable={true} />
             <ProposalStatusBar voteSummary={voteSummary} />
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
+            {isRfpProposal(record) &&
+              proposalSummary.status === PROPOSAL_STATUS_APPROVED && (
+                <ProposalsCompact
+                  title="Submitted Proposals"
+                  records={rfpSubmissionsRecords}
+                  voteSummaries={rfpSubmissionsVoteSummaries}
+                  proposalSummaries={rfpSubmissionsProposalSummaries}
+                  commentsCounts={rfpSubmissionsCommentsCounts}
+                />
+              )}
           </div>
         }
         thirdRow={

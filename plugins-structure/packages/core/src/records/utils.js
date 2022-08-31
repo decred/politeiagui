@@ -1,5 +1,6 @@
 import invert from "lodash/fp/invert";
 import isEmpty from "lodash/fp/isEmpty";
+import chunk from "lodash/chunk";
 import {
   RECORD_STATE_UNVETTED,
   RECORD_STATE_VETTED,
@@ -243,7 +244,7 @@ export function getShortToken(token) {
  * getTokensToFetch traverses the inventoryList of tokens and add them to a new
  * array if they are not in the lookupTable. If the new array reachs the length
  * of pageSize or the inventoryList comes to an end the loop will break and the
- * array will be returned
+ * array will be returned. If no
  * @param {TokensToFetchObjectParam} param
  * @returns {Array}
  */
@@ -256,10 +257,19 @@ export function getTokensToFetch({ inventoryList, lookupTable, pageSize }) {
     if (lookupTable[token] === undefined) {
       tokensToFetch.push(token);
     }
-    if (tokensToFetch.length === pageSize) break;
+    if (pageSize && tokensToFetch.length === pageSize) break;
     pos++;
   }
   return tokensToFetch;
+}
+
+export function getTokensBatchesToFetch({
+  inventoryList,
+  lookupTable,
+  pageSize,
+}) {
+  const tokensToFetch = getTokensToFetch({ inventoryList, lookupTable });
+  return chunk(tokensToFetch, pageSize);
 }
 
 export function fetchPolicyIfIdle() {

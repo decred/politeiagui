@@ -39,6 +39,11 @@ function Details({ token }) {
     voteSummaryError,
     commentsError,
     proposalStatusChanges,
+    rfpLinkedRecord,
+    rfpSubmissionsRecords,
+    rfpSubmissionsCommentsCounts,
+    rfpSubmissionsProposalsSummaries,
+    rfpSumbissionsVoteSummaries,
   } = useProposalDetails({ token });
   // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
@@ -59,12 +64,17 @@ function Details({ token }) {
           <>
             <ProposalDetails
               record={record}
+              rfpRecord={rfpLinkedRecord}
               voteSummary={voteSummary}
               proposalSummary={proposalSummary}
               proposalStatusChanges={proposalStatusChanges}
               onFetchRecordTimestamps={onFetchRecordTimestamps}
               onFetchCommentsTimestamps={onFetchCommentsTimestamps}
               onDownloadCommentsBundle={onDownloadCommentsBundle}
+              rfpSubmissionsRecords={rfpSubmissionsRecords}
+              rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
+              rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
+              rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
             />
             {comments && (
               <Comments

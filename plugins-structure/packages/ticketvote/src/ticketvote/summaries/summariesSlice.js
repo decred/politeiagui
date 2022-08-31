@@ -51,7 +51,7 @@ const ticketvoteSummariesSlice = createSlice({
       .addCase(fetchTicketvoteSummaries.fulfilled, (state, action) => {
         state.status = "succeeded";
         for (const token in action.payload) {
-          if (action.payload.hasOwnProperty(token)) {
+          if (action.payload?.[token]) {
             state.byToken[token] = action.payload[token];
           }
         }
@@ -81,14 +81,8 @@ export const selectTicketvoteSummariesByStatus = (state, status) => {
   }
 };
 
-export const selectTicketvoteSummariesByTokensBatch = (state, tokens) => {
-  if (!isArray(tokens))
-    throw new TypeError("the parameter 'tokens' must be an array");
-  const summariesByTokens = state.ticketvoteSummaries
-    ? pick(tokens)(state.ticketvoteSummaries.byToken)
-    : undefined;
-  return summariesByTokens;
-};
+export const selectTicketvoteSummariesByTokensBatch = (state, tokens) =>
+  pick(tokens)(state.ticketvoteSummaries?.byToken);
 
 export const selectTicketvoteSummariesFetchedTokens = (state, tokens) => {
   if (!tokens)
