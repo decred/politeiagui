@@ -33,7 +33,7 @@
   display: flex;
 }
 
-@media screen and (max-width: 768px) {
+@media (--sm-viewport) {
   .wrapper {
     grid-template-columns: 3fr 1fr;
     align-items: flex-start;
