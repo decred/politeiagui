@@ -3,16 +3,18 @@ import { Button } from "pi-ui";
 import { RecordCard } from "@politeiagui/common-ui";
 import { CommentsCount } from "@politeiagui/comments/ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
-import { decodeProposalRecord } from "../../pi/proposals/utils";
+import { decodeProposalRecord, isRfpProposal } from "../../pi/proposals/utils";
 import {
   ProposalStatusBar,
   ProposalStatusLabel,
   ProposalStatusTag,
   ProposalSubtitle,
+  ProposalTitle,
 } from "./common";
 
 const ProposalCard = ({
   record,
+  rfpRecord,
   voteSummary,
   commentsCount,
   proposalSummary,
@@ -20,6 +22,12 @@ const ProposalCard = ({
 }) => {
   const proposal = decodeProposalRecord(record);
   const proposalLink = `/record/${getShortToken(proposal.token)}`;
+
+  // Only RFP Submissions have a corresponding RFP Proposal
+  const rfpProposal = decodeProposalRecord(rfpRecord);
+  const rfpProposalLink =
+    rfpProposal && `/record/${getShortToken(rfpProposal.token)}`;
+
   const currentStatusChange =
     proposalSummary && proposalStatusChanges?.[proposalSummary.status];
   return (
@@ -27,9 +35,12 @@ const ProposalCard = ({
       <RecordCard
         isDimmed={proposal.archived || proposal.censored}
         titleLink={proposalLink}
-        title={proposal.name}
+        title={
+          <ProposalTitle title={proposal.name} isRfp={isRfpProposal(record)} />
+        }
         subtitle={
           <ProposalSubtitle
+            rfpLink={{ name: rfpProposal?.name, link: rfpProposalLink }}
             userid={proposal.author.userid}
             username={proposal.author.username}
             timestamps={proposal.timestamps}

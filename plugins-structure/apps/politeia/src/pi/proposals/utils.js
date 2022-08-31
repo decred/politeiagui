@@ -1,6 +1,8 @@
+import { Buffer } from "buffer";
 import {
   decodeRecordFile,
   decodeRecordMetadata,
+  encodeTextToFilePayload,
   getShortToken,
 } from "@politeiagui/core/records/utils";
 import {
@@ -41,10 +43,19 @@ import {
 } from "../lib/constants";
 import isArray from "lodash/fp/isArray";
 import isEmpty from "lodash/isEmpty";
+import uniq from "lodash/fp/uniq";
+import compact from "lodash/fp/compact";
+import compose from "lodash/fp/compose";
+import map from "lodash/fp/map";
 
 const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 const PROPOSAL_INDEX_FILENAME = "index.md";
 const PROPOSAL_VOTE_METADATA_FILENAME = "votemetadata.json";
+
+export const proposalFilenames = [
+  PROPOSAL_METADATA_FILENAME,
+  PROPOSAL_VOTE_METADATA_FILENAME,
+];
 
 const MONTHS_LABELS = [
   "Jan",
@@ -100,12 +111,6 @@ const MONTHS_LABELS = [
  *   recordState: Number,
  *   recordStatus: Number,
  *   version: Number,
- *   timestamps: {
- *     publishedat: Number,
- *     editedat: Number,
- *     censoredat: Number,
- *     abandonedat: Number,
- *   },
  *   voteMetadata: {
  *     linkto: Number,
  *     linkby: Number,
@@ -119,7 +124,8 @@ const MONTHS_LABELS = [
  *   censored: Bool,
  *   archived: Bool,
  *   abandonReason: String,
- *   attachments: Array
+ *   attachments: Array,
+ *   userMetadata: Array
  * }} Proposal
  */
 
@@ -291,8 +297,11 @@ function getProposalTimestamps(record) {
 
   let publishedat = 0,
     editedat = 0;
-  const { status, timestamp, version, metadata } = record;
+  const { status, timestamp, version, metadata, files } = record;
   const userMetadata = decodeProposalUserMetadata(metadata);
+  const voteMetadata = decodeVoteMetadataFile(files);
+
+  const expireat = voteMetadata?.linkby;
 
   if (status === RECORD_STATUS_UNREVIEWED || version <= 1) {
     publishedat = timestamp;
@@ -304,7 +313,7 @@ function getProposalTimestamps(record) {
     editedat = timestamp;
   }
 
-  return { publishedat, editedat };
+  return { publishedat, editedat, expireat };
 }
 
 /**
@@ -446,7 +455,7 @@ export function getImagesByDigest(text, files) {
   const markdownImageRegexParser =
     /!\[[^\]]*\]\((?<digest>.*?)(?="|\))(?<optionalpart>".*")?\)/g;
   const inlineImagesMatches = text.matchAll(markdownImageRegexParser);
-  let imagesByDigest = {};
+  const imagesByDigest = {};
   for (const match of inlineImagesMatches) {
     const { digest } = match.groups;
     const file = files.find((f) => f.digest === digest);
@@ -456,12 +465,18 @@ export function getImagesByDigest(text, files) {
 }
 
 // TODO: Docs
-export function convertVoteStatusToProposalStatus(voteStatus, recordStatus) {
+export function convertVoteStatusToProposalStatus(
+  voteStatus,
+  recordStatus,
+  isRfp
+) {
   const voteStatusToProposalStatus = {
     [TICKETVOTE_STATUS_UNAUTHORIZED]: PROPOSAL_STATUS_UNDER_REVIEW,
     [TICKETVOTE_STATUS_AUTHORIZED]: PROPOSAL_STATUS_VOTE_AUTHORIZED,
     [TICKETVOTE_STATUS_STARTED]: PROPOSAL_STATUS_VOTE_STARTED,
-    [TICKETVOTE_STATUS_APPROVED]: PROPOSAL_STATUS_ACTIVE,
+    [TICKETVOTE_STATUS_APPROVED]: isRfp
+      ? PROPOSAL_STATUS_APPROVED
+      : PROPOSAL_STATUS_ACTIVE,
     [TICKETVOTE_STATUS_REJECTED]: PROPOSAL_STATUS_REJECTED,
     [TICKETVOTE_STATUS_FINISHED]: PROPOSAL_STATUS_VOTE_ENDED,
     [TICKETVOTE_STATUS_INELIGIBLE]:
@@ -501,4 +516,75 @@ export function convertBillingStatusToProposalStatus(billingStatus) {
     [PROPOSAL_BILLING_STATUS_COMPLETED]: PROPOSAL_STATUS_COMPLETED,
   };
   return mapBillingStatusToProposalStatus[billingStatus];
+}
+
+export function isProposalCompleteOrClosed(status) {
+  return [PROPOSAL_STATUS_COMPLETED, PROPOSAL_STATUS_CLOSED].includes(status);
+}
+
+export function showStatusChangeReason(status) {
+  return [
+    PROPOSAL_STATUS_CLOSED,
+    PROPOSAL_STATUS_CENSORED,
+    PROPOSAL_STATUS_UNVETTED_CENSORED,
+    PROPOSAL_STATUS_ABANDONED,
+    PROPOSAL_STATUS_UNVETTED_ABANDONED,
+  ].includes(status);
+}
+
+// RFP Proposals and Submissions
+export function isRfpProposal(record) {
+  const { linkby } = decodeVoteMetadataFile(record?.files);
+  return !!linkby;
+}
+
+export function getRfpRecordLink(record) {
+  return decodeVoteMetadataFile(record?.files)?.linkto;
+}
+
+export function getRfpProposalsLinks(records = []) {
+  return compose(uniq, compact, map(getRfpRecordLink))(records);
+}
+
+// Proposal Inputs
+const objectToBuffer = (obj) => Buffer.from(JSON.stringify(obj));
+const bufferToBase64String = (buf) => buf.toString("base64");
+
+export function convertMarkdownToFile(markdownText) {
+  return {
+    name: "index.md",
+    mime: "text/plain; charset=utf-8",
+    payload: encodeTextToFilePayload(markdownText),
+  };
+}
+
+export function convertPayloadToFile(fileName, payload) {
+  return {
+    name: fileName,
+    mime: "text/plain; charset=utf-8",
+    payload: bufferToBase64String(objectToBuffer(payload)),
+  };
+}
+
+export function convertVoteMetadataToFile({ linkby, linkto }) {
+  return convertPayloadToFile(PROPOSAL_VOTE_METADATA_FILENAME, {
+    linkto,
+    linkby,
+  });
+}
+
+export function convertProposalMetadataToFile({
+  name,
+  amount,
+  startdate,
+  enddate,
+  domain,
+}) {
+  return convertPayloadToFile(PROPOSAL_METADATA_FILENAME, {
+    name,
+    amount,
+    startdate,
+    enddate,
+    domain,
+  });
 }

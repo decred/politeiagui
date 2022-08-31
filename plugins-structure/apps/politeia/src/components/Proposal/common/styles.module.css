@@ -22,6 +22,46 @@
   color: var(--text-secondary-color);
 }
 
+.rfpTag {
+  width: 4rem;
+  height: 2.5rem;
+  background-color: #2341b3;
+  color: var(--color-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: var(--layout-column-gap-xs);
+  border-radius: 0.3rem;
+  font-weight: var(--font-weight-regular);
+  font-size: 1.6rem;
+}
+
+.rfpTooltip {
+  color: var(--text-secondary-color);
+  font-size: var(--font-size-small);
+  line-height: var(--spacing-1);
+  width: 25rem;
+  transform: none;
+  left: 0%;
+}
+
+.rfpProposalLabel {
+  font-size: var(--font-size-small);
+  color: var(--text-secondary-color);
+}
+.rfpProposalLink {
+  color: var(--link-color);
+}
+
+.proposalTitle {
+  display: flex;
+  align-items: center;
+}
+
+.proposalSubtitle {
+  padding-top: var(--spacing-small);
+}
+
 @media (--sm-viewport) {
   .statusLabelWrapper {
     top: 2.3rem;

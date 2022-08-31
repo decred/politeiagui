@@ -1,6 +1,7 @@
 import { store } from "@politeiagui/core";
 import { fetchPolicyIfIdle } from "../utils";
 import {
+  fetchAllRecordsPiSummaries,
   fetchRecordsPiSummaries,
   fetchSingleRecordPiSummaries,
 } from "./effects";
@@ -16,11 +17,19 @@ export const services = [
     effect: fetchSingleRecordPiSummaries,
   },
   {
-    id: "pi/summaries",
+    id: "pi/summaries/batch",
     action: async () => {
       await fetchPolicyIfIdle();
       validatePiSummariesPageSize(store.getState());
     },
     effect: fetchRecordsPiSummaries,
+  },
+  {
+    id: "pi/summaries/all",
+    action: async () => {
+      await fetchPolicyIfIdle();
+      validatePiSummariesPageSize(store.getState());
+    },
+    effect: fetchAllRecordsPiSummaries,
   },
 ];

@@ -19,6 +19,10 @@ export const router = (function () {
   let settings = routerInitialSettings;
   let cleanup = null;
   let title = null;
+  let onErrorView = ({ error }) =>
+    (document.querySelector(
+      "#root"
+    ).innerHTML = `<h1>${error?.toString()}</h1>`);
 
   function push(url) {
     // Avoid pushing state for external links
@@ -47,7 +51,9 @@ export const router = (function () {
         route: {
           path: "/404",
           view: () =>
-            (document.querySelector("#root").innerHTML = "<h1>Not found!</h1>"),
+            onErrorView({
+              error: Error(`${window.location.pathname} not found`),
+            }),
         },
         title: "Not found",
         result: [window.location.pathname],
@@ -58,11 +64,15 @@ export const router = (function () {
     title = match.route.title;
     if (title) document.title = title;
 
-    // Call view cb and pass query params as parameter
-    await match.route.view(getParams(match));
+    try {
+      // Call view cb and pass query params as parameter
+      await match.route.view(getParams(match));
 
-    // Set cleanup
-    cleanup = match.route.cleanup;
+      // Set cleanup
+      cleanup = match.route.cleanup;
+    } catch (error) {
+      onErrorView({ error });
+    }
   }
 
   function onClickHandler(e) {
@@ -160,6 +170,7 @@ export const router = (function () {
       options,
       clickHandler = onClickHandler,
       popStateHandler = onPopStateHandler,
+      errorView,
     } = {}) {
       if (this.getIsInitialized()) return;
       if (!routes || !isArray(routes))
@@ -173,6 +184,9 @@ export const router = (function () {
         if (options.hasOwnProperty(key)) {
           settings[key] = options[key];
         }
+      }
+      if (errorView && isFunction(errorView)) {
+        onErrorView = errorView;
       }
 
       settings.routes = routes;

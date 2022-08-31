@@ -42,6 +42,7 @@ function useStatusList({ inventory, inventoryStatus }) {
   const recordsError = useSelector(records.selectError);
 
   return {
+    allRecords,
     hasMoreInventory,
     hasMoreRecords,
     homeStatus,

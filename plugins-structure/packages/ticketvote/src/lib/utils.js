@@ -113,7 +113,7 @@ function getTicketvoteSummaryStatusChanges(
   blockDurationMinutes = 2
 ) {
   if (!voteSummary) return;
-  const { bestblock, endblockheight, startblockheight, status } = voteSummary;
+  const { bestblock, endblockheight, status } = voteSummary;
   switch (status) {
     case TICKETVOTE_STATUS_AUTHORIZED:
       return { status };
@@ -121,15 +121,13 @@ function getTicketvoteSummaryStatusChanges(
     case TICKETVOTE_STATUS_REJECTED:
     case TICKETVOTE_STATUS_APPROVED:
       return {
-        endblockheight,
-        startblockheight,
+        ...voteSummary,
         timestamp: getTimestampFromBlocks(
           endblockheight,
           bestblock,
           blockDurationMinutes
         ),
         blocksCount: getVoteBlocksDiff(endblockheight, bestblock),
-        status,
       };
     default:
       return;

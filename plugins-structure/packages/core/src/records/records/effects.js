@@ -1,5 +1,5 @@
 import { records } from "./";
-import { getTokensToFetch } from "../utils";
+import { getTokensBatchesToFetch, getTokensToFetch } from "../utils";
 import isEmpty from "lodash/isEmpty";
 
 export async function fetchRecordDetails(state, dispatch, { token }) {
@@ -9,7 +9,7 @@ export async function fetchRecordDetails(state, dispatch, { token }) {
   }
 }
 
-export async function fetchNextRecords(
+export function fetchNextRecords(
   state,
   dispatch,
   { inventoryList, filenames }
@@ -35,4 +35,27 @@ export async function fetchNextRecords(
       })
     );
   }
+}
+
+export function fetchAllRecordsInventory(
+  state,
+  dispatch,
+  { inventoryList, filenames }
+) {
+  const {
+    records: { records: recordsObj },
+    recordsPolicy: {
+      policy: { recordspagesize },
+    },
+  } = state;
+
+  const tokensBatches = getTokensBatchesToFetch({
+    inventoryList,
+    lookupTable: recordsObj,
+    pageSize: recordspagesize,
+  });
+
+  tokensBatches.forEach((batch) => {
+    dispatch(records.fetch({ tokens: batch, filenames }));
+  });
 }

@@ -2,7 +2,8 @@ import { mockRecord } from "@politeiagui/core/dev/mocks";
 import {
   convertMarkdownToFile,
   convertProposalMetadataToFile,
-} from "../../utils";
+  convertVoteMetadataToFile,
+} from "../../proposals/utils";
 import { faker } from "@faker-js/faker";
 
 function generateMetadataFile({
@@ -21,15 +22,25 @@ function generateMetadataFile({
   });
 }
 
-export function mockProposal({ status, state, customToken } = {}) {
+export function mockProposal({
+  status,
+  state,
+  customToken,
+  linkto,
+  linkby,
+} = {}) {
   return ({ token, version }) => {
     const record = mockRecord({ state, status })({
       token: customToken || token,
       version,
     });
+    const files = [generateMetadataFile()];
+    if (linkby || linkto) {
+      files.push(convertVoteMetadataToFile({ linkto, linkby }));
+    }
     return {
       ...record,
-      files: [generateMetadataFile()],
+      files,
     };
   };
 }
@@ -48,6 +59,8 @@ export function mockProposalDetails({
   startdate,
   domain,
   reason,
+  linkby,
+  linkto,
 } = {}) {
   return ({ token, version = customVersion }) => {
     const record = mockRecord({
@@ -60,22 +73,23 @@ export function mockProposalDetails({
       token: customToken || `${token}${faker.random.numeric(9)}`,
       version,
     });
+    const files = [
+      generateMetadataFile({
+        name,
+        amount,
+        enddate,
+        startdate,
+        domain,
+      }),
+      convertMarkdownToFile(body),
+    ];
+    if (linkby || linkto) {
+      files.push(convertVoteMetadataToFile({ linkto, linkby }));
+    }
     return {
       record: {
         ...record,
-        files:
-          status !== 3
-            ? [
-                generateMetadataFile({
-                  name,
-                  amount,
-                  enddate,
-                  startdate,
-                  domain,
-                }),
-                convertMarkdownToFile(body),
-              ]
-            : [],
+        files: status !== 3 ? files : [],
       },
     };
   };

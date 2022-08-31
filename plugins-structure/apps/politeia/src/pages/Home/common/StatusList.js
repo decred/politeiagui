@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
+import { Message } from "pi-ui";
 import { RecordsList } from "@politeiagui/common-ui";
 import { useDispatch } from "react-redux";
 import { ProposalCard, ProposalLoader } from "../../../components";
 import max from "lodash/max";
 import min from "lodash/min";
 import useStatusList from "../useStatusList";
-import { Message } from "pi-ui";
+import { getRfpRecordLink } from "../../../pi/proposals/utils";
 
 function LoadingSkeleton({ inventory, records }) {
   if (!inventory) return [];
@@ -30,6 +31,7 @@ function StatusList({
 }) {
   const dispatch = useDispatch();
   const {
+    allRecords,
     hasMoreRecords,
     hasMoreInventory,
     homeStatus,
@@ -81,10 +83,12 @@ function StatusList({
       >
         {recordsInOrder.map((record) => {
           const { token } = record.censorshiprecord;
+          const rfpLinkTo = getRfpRecordLink(record);
           return (
             <ProposalCard
               key={token}
               record={record}
+              rfpRecord={allRecords?.[rfpLinkTo]}
               commentsCount={countComments?.[token]}
               voteSummary={voteSummaries?.[token]}
               proposalSummary={proposalSummaries?.[token]}

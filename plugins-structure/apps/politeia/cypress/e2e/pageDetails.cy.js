@@ -1,13 +1,38 @@
-import { mockTicketvoteSummaries } from "@politeiagui/ticketvote/dev/mocks";
+import {
+  mockTicketvoteSubmissions,
+  mockTicketvoteSummaries,
+} from "@politeiagui/ticketvote/dev/mocks";
 import {
   mockPiBillingStatusChanges,
   mockPiSummaries,
+  mockProposal,
   mockProposalDetails,
 } from "../../src/pi/dev/mocks";
-import { mockComments } from "@politeiagui/comments/dev/mocks";
+import {
+  mockComments,
+  mockCommentsCount,
+} from "@politeiagui/comments/dev/mocks";
+import { mockRecordsBatch } from "@politeiagui/core/dev/mocks";
 
 const body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 const username = "FakeTester";
+const approvedVoteSummary = {
+  type: 1,
+  status: 5,
+  duration: 10,
+  startblockheight: 883357,
+  startblockhash:
+    "0000000094f39c5495faad40a6554f6996c9912d378afa19b971055ebe505382",
+  endblockheight: 883374,
+  eligibletickets: 5589,
+  quorumpercentage: 0,
+  passpercentage: 60,
+  results: [
+    { id: "yes", votes: 500 },
+    { id: "no", votes: 50 },
+  ],
+  bestblock: 956278,
+};
 
 beforeEach(() => {
   cy.mockResponse("/api/comments/v1/comments", mockComments({ amount: 5 })).as(
@@ -115,23 +140,7 @@ describe("Given an approved proposal details page", () => {
     ).as("billing");
     cy.mockResponse(
       "/api/ticketvote/v1/summaries",
-      mockTicketvoteSummaries({
-        type: 1,
-        status: 5,
-        duration: 10,
-        startblockheight: 883357,
-        startblockhash:
-          "0000000094f39c5495faad40a6554f6996c9912d378afa19b971055ebe505382",
-        endblockheight: 883374,
-        eligibletickets: 5589,
-        quorumpercentage: 0,
-        passpercentage: 60,
-        results: [
-          { id: "yes", votes: 500 },
-          { id: "no", votes: 50 },
-        ],
-        bestblock: 956278,
-      })
+      mockTicketvoteSummaries(approvedVoteSummary)
     ).as("voteSummaries");
   });
   it("should render its vote status bar and active status tag", () => {
@@ -229,6 +238,97 @@ describe("Given a censored proposal", () => {
   it("should not render proposal body and title", () => {
     cy.findByTestId("proposal-body").should("have.text", "");
     cy.findByTestId("record-card-title").should("have.text", "fake001");
+  });
+});
+
+describe("Given an RFP Proposal", () => {
+  beforeEach(() => {
+    cy.mockResponse(
+      "/api/records/v1/details",
+      mockProposalDetails({
+        state: 2,
+        status: 2,
+        body,
+        username,
+        linkby: Date.now() / 1000,
+      })
+    ).as("details");
+    cy.mockResponse(
+      "/api/pi/v1/summaries",
+      mockPiSummaries({ status: "approved" })
+    ).as("piSummaries");
+    cy.mockResponse(
+      "/api/ticketvote/v1/summaries",
+      mockTicketvoteSummaries(approvedVoteSummary)
+    ).as("voteSummaries");
+    cy.mockResponse(
+      "/api/ticketvote/v1/submissions",
+      mockTicketvoteSubmissions(4)
+    ).as("submissions");
+    cy.mockResponse("/api/comments/v1/count", mockCommentsCount()).as("counts");
+    cy.mockResponse(
+      "/api/records/v1/records",
+      mockRecordsBatch(mockProposal({ status: 2, state: 2 }))
+    ).as("records");
+  });
+  it("should load RFP Tag", () => {
+    cy.visit("/record/fake001");
+    cy.wait([
+      "@details",
+      "@comments",
+      "@voteSummaries",
+      "@piSummaries",
+      "@submissions",
+    ]);
+    cy.findByTestId("proposal-rfp-tag").should("be.visible");
+  });
+  it("should load RFP Submissions list", () => {
+    cy.visit("/record/fake001");
+    cy.wait([
+      "@details",
+      "@comments",
+      "@voteSummaries",
+      "@piSummaries",
+      "@submissions",
+    ]);
+    cy.findByText(/submitted proposals/i).should("be.visible");
+    cy.findAllByTestId("record-item").should("have.length", 4);
+  });
+  it("should render all RFP submissions despite list length", () => {
+    cy.mockResponse(
+      "/api/ticketvote/v1/submissions",
+      mockTicketvoteSubmissions(20)
+    ).as("submissions");
+    cy.visit("/record/fake001");
+    cy.wait([
+      "@details",
+      "@comments",
+      "@voteSummaries",
+      "@piSummaries",
+      "@submissions",
+    ]);
+    cy.findByText(/submitted proposals/i).should("be.visible");
+    cy.findAllByTestId("record-item").should("have.length", 20);
+    cy.get("@records.all").should("have.length", 4);
+  });
+});
+
+describe("Given an RFP submission", () => {
+  it("should load its linked RFP Proposal title", () => {
+    cy.mockResponse(
+      "/api/records/v1/details",
+      mockProposalDetails({
+        state: 2,
+        status: 2,
+        linkto: "abcdefghijlmnopq",
+      })
+    ).as("details");
+    cy.mockResponse(
+      "/api/records/v1/records",
+      mockRecordsBatch(mockProposal({ status: 2, state: 2 }))
+    ).as("records");
+    cy.visit("/record/fake001");
+    cy.findByTestId("proposal-rfp-link").should("be.visible");
   });
 });
 
