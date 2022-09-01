@@ -10,6 +10,7 @@
     "lint:test": "politeiagui-scripts lint",
     "lint:fix": "politeiagui-scripts lint --fix",
     "test": "politeiagui-scripts test",
+    "test:no:watch": "politeiagui-scripts test --no-watch",
     "build": "politeiagui-scripts build-app",
     "start": "politeiagui-scripts start-app"
   },
