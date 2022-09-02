@@ -1,9 +1,10 @@
 import { appSetup } from "./appSetup";
 import { pluginSetup } from "./pluginSetup";
-import { store } from "./storeSetup";
+import { configureCustomStore } from "./storeSetup";
 import { router } from "./router";
 
 const reducer = () => ({});
+const store = configureCustomStore({}, { key: "dumb", reducer });
 const action = jest.fn();
 jest.spyOn(console, "error").mockImplementation();
 
@@ -20,7 +21,7 @@ describe("Given appSetup method", () => {
   describe("when only app plugins are defined", () => {
     let myApp;
     beforeEach(() => {
-      myApp = appSetup({ plugins: [plugin] });
+      myApp = appSetup({ plugins: [plugin], store });
     });
     it("should setup app correctly", () => {
       expect(myApp).toHaveProperty(
@@ -48,6 +49,7 @@ describe("Given appSetup method", () => {
     const effect = jest.fn();
     const myApp = appSetup({
       plugins: [plugin],
+      store,
       listeners: [{ type: "customReducer/fetch", effect }],
     });
     it("should listen to customReducer/fetch", async () => {
@@ -68,16 +70,16 @@ describe("Given appSetup method", () => {
   });
   describe("when app config is incorrect", () => {
     it("should throw error when plugins are invalid", () => {
-      expect(() => appSetup({ plugins: {} })).toThrow(
+      expect(() => appSetup({ plugins: {}, store })).toThrow(
         "'plugins' must be an array"
       );
-      expect(() => appSetup({ plugins: [{}] })).toThrow();
+      expect(() => appSetup({ plugins: [{}], store })).toThrow();
     });
     it("should throw error when listeners are invalid", () => {
-      expect(() => appSetup({ plugins: [], listeners: {} })).toThrow(
+      expect(() => appSetup({ plugins: [], listeners: {}, store })).toThrow(
         "'listeners' must be an array"
       );
-      expect(() => appSetup({ plugins: [], listeners: [{}] })).toThrow();
+      expect(() => appSetup({ plugins: [], listeners: [{}], store })).toThrow();
     });
   });
 });

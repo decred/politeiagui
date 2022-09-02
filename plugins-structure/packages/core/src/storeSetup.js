@@ -18,18 +18,18 @@ const staticReducers = {
   recordsTimestamps: recordsTimestampsReducer,
 };
 
-function createReducer(asyncReducers) {
+function createReducer(reducers, asyncReducers) {
   return combineReducers({
-    ...staticReducers,
+    ...reducers,
     ...asyncReducers,
   });
 }
 
 // Configure the store
-function configureCustomStore(initialState) {
+export function configureCustomStore(initialState, reducers = staticReducers) {
   const store = configureStore(
     {
-      reducer: { ...staticReducers },
+      reducer: { ...reducers },
       middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
           // This will make the client available in the 'extra' argument
@@ -50,11 +50,12 @@ function configureCustomStore(initialState) {
   // Useful for plugins to create new reducers
   store.injectReducer = (key, asyncReducer) => {
     store.asyncReducers[key] = asyncReducer;
-    store.replaceReducer(createReducer(store.asyncReducers));
+    store.replaceReducer(createReducer(reducers, store.asyncReducers));
   };
 
   // Return the modified store
   return store;
 }
 
-export const store = configureCustomStore();
+export const store =
+  process.env.NODE_ENV === "test" ? {} : configureCustomStore();

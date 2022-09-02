@@ -1,4 +1,4 @@
-import { connectReducers, store, validatePlugin } from "./";
+import { connectReducers, store as defaultStore, validatePlugin } from "./";
 import { api } from "./api";
 import { router } from "./router";
 import { services as recordsServices } from "./records/services";
@@ -81,7 +81,12 @@ function validateServicesIds(ids = []) {
  * store, connects all plugins services and register app level listeners
  * @param {{ plugins: Array, listeners: Array, config: Object }}
  */
-export function appSetup({ plugins, listeners = [], config }) {
+export function appSetup({
+  plugins,
+  listeners = [],
+  config,
+  store = defaultStore,
+}) {
   if (!isArray(plugins)) {
     throw Error("'plugins' must be an array");
   }
@@ -93,7 +98,7 @@ export function appSetup({ plugins, listeners = [], config }) {
 
   // Connect plugins reducers and services
   for (const plugin of plugins) {
-    if (plugin.reducers) connectReducers(plugin.reducers);
+    if (plugin.reducers) connectReducers(plugin.reducers, store);
     if (plugin.services) {
       appServices = mergeAppAndPluginServices(appServices, plugin.services);
     }
