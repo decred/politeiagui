@@ -9,3 +9,9 @@
 .detailsWrapper > *:last-child {
   margin-bottom: 0;
 }
+
+@media (--sm-viewport) {
+  .detailsWrapper {
+    max-width: 100%;
+  }
+}
