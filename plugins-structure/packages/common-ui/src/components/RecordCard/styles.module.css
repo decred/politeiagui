@@ -53,6 +53,7 @@
   align-items: center;
   justify-self: end;
   grid-area: rightHeader;
+  margin-top: 0.5rem;
   text-align: end;
 }
 
@@ -68,6 +69,8 @@
 
   .rightHeader {
     justify-self: start;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
     text-align: start;
   }
 
