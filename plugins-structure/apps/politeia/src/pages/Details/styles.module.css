@@ -8,6 +8,7 @@
 
 .detailsWrapper > *:last-child {
   margin-bottom: 0;
+  padding-bottom: 1rem;
 }
 
 @media (--sm-viewport) {
