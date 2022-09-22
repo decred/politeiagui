@@ -1,6 +1,7 @@
 .censor {
   color: var(--color-orange);
 }
+
 .censor:hover {
   color: var(--color-orange-alt);
   cursor: pointer;
@@ -34,6 +35,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
 .summary {
