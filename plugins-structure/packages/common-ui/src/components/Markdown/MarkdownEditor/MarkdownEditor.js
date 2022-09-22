@@ -6,6 +6,39 @@ import { MarkdownRenderer } from "../MarkdownRenderer";
 import { commands } from "./commands";
 import { useMarkdownEditor } from "./hooks";
 
+function EditorTabs({ isSplitView, onChange }) {
+  function handleShowPreview() {
+    onChange(true);
+  }
+
+  function handleShowWrite() {
+    onChange(false);
+  }
+  return (
+    <div className={classNames(isSplitView && styles.hide, styles.tabs)}>
+      <div onClick={handleShowWrite}>Write</div>
+      <div onClick={handleShowPreview}>Preview</div>
+    </div>
+  );
+}
+
+function EditorCommands({ commands, onClick }) {
+  return (
+    <div className={styles.actionButtons}>
+      {commands.map(
+        ({ command, Button, offset }, i) =>
+          Button && (
+            <Button
+              key={i}
+              className={styles.buttonIcon}
+              onClick={() => onClick(command, { offset })}
+            />
+          )
+      )}
+    </div>
+  );
+}
+
 export function MarkdownEditor({
   onChange,
   wrapperClassName,
@@ -34,15 +67,7 @@ export function MarkdownEditor({
     onEditorChange(e.target.value);
   }
 
-  function handleShowPreview() {
-    setShowPreview(true);
-  }
-
-  function handleShowWrite() {
-    setShowPreview(false);
-  }
-
-  const handleCommand = (command) => () => {
+  const handleCommand = (command) => {
     const content = editorRef.current.value;
     const selectionStart = editorRef.current.selectionStart;
     const selectionEnd = editorRef.current.selectionEnd;
@@ -93,23 +118,12 @@ export function MarkdownEditor({
   return (
     <div className={classNames(styles.editorWrapper, wrapperClassName)}>
       <div className={styles.headers}>
-        <div className={classNames(isSplitView && styles.hide, styles.tabs)}>
-          <div onClick={handleShowWrite}>Write</div>
-          <div onClick={handleShowPreview}>Preview</div>
-        </div>
+        <EditorTabs isSplitView={isSplitView} onChange={setShowPreview} />
         {!hideButtonsMenu && (
-          <div className={styles.actionButtons}>
-            {availableCommands.map(
-              ({ command, Button, offset }, i) =>
-                Button && (
-                  <Button
-                    key={i}
-                    className={styles.buttonIcon}
-                    onClick={handleCommand(command, { offset })}
-                  />
-                )
-            )}
-          </div>
+          <EditorCommands
+            commands={availableCommands}
+            onClick={handleCommand}
+          />
         )}
       </div>
       <div
