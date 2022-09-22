@@ -8,17 +8,17 @@
 }
 
 .secondRow {
-  margin-top: var(--spacing-medium);
+  padding-top: var(--spacing-medium);
 }
 
 .thirdRow {
-  margin-top: var(--spacing-medium);
+  padding-top: var(--spacing-medium);
 }
 
 .footer {
   display: flex;
   width: 100%;
-  margin-top: var(--spacing-medium);
+  padding-top: var(--spacing-medium);
   justify-content: space-between;
   align-items: center;
 }
@@ -78,5 +78,9 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     grid-template-areas: "rightHeader" "title" "subtitle ";
+  }
+
+  .title {
+    padding-top: 1rem;
   }
 }
