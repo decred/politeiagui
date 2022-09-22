@@ -15,3 +15,10 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+@media (--sm-viewport) {
+  :root {
+    --container-padding-left: 2.5rem;
+    --container-padding-right: 2.5rem;
+  }
+}
