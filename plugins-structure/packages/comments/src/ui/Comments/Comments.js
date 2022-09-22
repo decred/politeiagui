@@ -16,6 +16,7 @@ export const Comments = ({
   scrollOnLoad,
   onReply,
   disableReply,
+  recordOwner,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [commentsByParent, setCommentsByParent] = useState();
@@ -46,7 +47,7 @@ export const Comments = ({
       id="comments-wrapper"
       data-testid="comments-section"
     >
-      <Card paddingSize="small" className={styles.header}>
+      <Card className={styles.header}>
         <H2 className={styles.title}>
           Comments <span className={styles.count}>({commentsCount})</span>
         </H2>
@@ -68,6 +69,7 @@ export const Comments = ({
           onCensor={onCensor}
           onReply={onReply}
           disableReply={disableReply}
+          recordOwner={recordOwner}
         />
       </div>
     </div>
@@ -83,6 +85,7 @@ Comments.propTypes = {
   parentId: PropTypes.number,
   onReply: PropTypes.func,
   disableReply: PropTypes.bool,
+  recordOwner: PropTypes.string,
 };
 
 Comments.defaultProps = {

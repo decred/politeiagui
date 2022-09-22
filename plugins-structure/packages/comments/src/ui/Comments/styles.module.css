@@ -5,9 +5,11 @@
 .filters {
   display: flex;
 }
+
 .filters > * {
   margin-right: 2rem;
 }
+
 .filters > *:last-child {
   margin-right: 0px;
 }
@@ -17,8 +19,8 @@
 }
 
 .commentsList {
-  margin-left: 3rem;
-  margin-right: 3rem;
+  padding: 2rem var(--container-padding-right) 2rem
+    var(--container-padding-left);
 }
 
 span.flatButtonText {
@@ -49,6 +51,11 @@ div.flatModeActive {
 
 span.flatModeActive {
   color: var(--color-white);
+}
+
+.header {
+  padding: 2rem var(--container-padding-right) 2rem
+    var(--container-padding-left);
 }
 
 .title {
