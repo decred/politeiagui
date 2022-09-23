@@ -1,3 +1,8 @@
+.card {
+  padding: 2rem var(--container-padding-right) 2rem
+    var(--container-padding-left);
+}
+
 .currency {
   position: relative;
 }
