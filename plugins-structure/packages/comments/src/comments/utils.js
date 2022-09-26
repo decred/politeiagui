@@ -1,5 +1,7 @@
 import { comments } from "../comments";
 import { store } from "@politeiagui/core";
+import groupBy from "lodash/groupBy";
+import keyBy from "lodash/keyBy";
 
 export function fetchPolicyIfIdle() {
   if (comments.policy.selectStatus(store.getState()) === "idle") {
@@ -39,4 +41,37 @@ export function getCommentsByParent(comments, isFlatMode) {
     };
   }, {});
   return commentsByParent;
+}
+
+function getRootParentId(comments, comment, rootIteratee) {
+  if (!comment) return;
+  if (comment.parentid === 0) return rootIteratee(comment);
+  return getRootParentId(comments, comments[comment.parentid], rootIteratee);
+}
+
+function groupCommentsByParentIds(comments, rootIteratee) {
+  return groupBy(Object.values(comments), (comment) =>
+    getRootParentId(comments, comment, rootIteratee)
+  );
+}
+
+/**
+ * keyCommentsThreadsBy returns the parent comments organized by
+ * `extradatahint` thread hint.
+ * @param {Array} commentsById
+ * @param {function} rootIteratee callback iteratee to be applied on thread
+ * parents
+ */
+export function keyCommentsThreadsBy(
+  commentsById,
+  rootIteratee = (comment) => comment.commentid
+) {
+  if (!commentsById) return {};
+  const commentsGroups = groupCommentsByParentIds(commentsById, rootIteratee);
+  return Object.keys(commentsGroups).reduce((acc, groupId) => {
+    return {
+      ...acc,
+      [groupId]: keyBy(commentsGroups[groupId], "commentid"),
+    };
+  }, {});
 }

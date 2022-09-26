@@ -16,6 +16,7 @@ export const Comments = ({
   scrollOnLoad,
   onReply,
   disableReply,
+  title,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [commentsByParent, setCommentsByParent] = useState();
@@ -48,7 +49,7 @@ export const Comments = ({
     >
       <Card paddingSize="small" className={styles.header}>
         <H2 className={styles.title}>
-          Comments <span className={styles.count}>({commentsCount})</span>
+          {title} <span className={styles.count}>({commentsCount})</span>
         </H2>
         {!!commentsCount && (
           <CommentsFilter
@@ -83,9 +84,11 @@ Comments.propTypes = {
   parentId: PropTypes.number,
   onReply: PropTypes.func,
   disableReply: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 Comments.defaultProps = {
   parentId: 0,
   onReply: () => {},
+  title: "Comments",
 };
