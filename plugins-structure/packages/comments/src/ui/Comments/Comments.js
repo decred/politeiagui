@@ -69,6 +69,7 @@ export const Comments = ({
           onCensor={onCensor}
           onReply={onReply}
           disableReply={disableReply}
+          isFlat={isFlat}
         />
       </div>
     </div>
@@ -91,4 +92,5 @@ Comments.defaultProps = {
   parentId: 0,
   onReply: () => {},
   title: "Comments",
+  isFlatMode: false,
 };

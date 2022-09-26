@@ -56,9 +56,9 @@ function groupCommentsByParentIds(comments, rootIteratee) {
 }
 
 /**
- * keyCommentsThreadsBy returns the parent comments organized by
- * `extradatahint` thread hint.
- * @param {Array} commentsById
+ * keyCommentsThreadsBy returns comments threads organized by their root parent
+ * ids, according to `rootIteratee` iteratee callback.
+ * @param {{ [commentid]: Comment }} commentsById
  * @param {function} rootIteratee callback iteratee to be applied on thread
  * parents
  */

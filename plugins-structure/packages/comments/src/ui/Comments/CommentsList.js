@@ -11,6 +11,7 @@ export const CommentsList = ({
   userVotes,
   onReply,
   disableReply,
+  isFlat,
 }) => {
   if (!commentsByParent || !commentsByParent[parentId]) {
     return null;
@@ -25,6 +26,8 @@ export const CommentsList = ({
       userVote={userVotes[childId]}
       onComment={onReply}
       disableReply={disableReply}
+      showParentCommentPreview={isFlat}
+      parentComment={comments[comments[childId].parentid]}
     >
       <CommentsList
         comments={comments}
@@ -35,6 +38,7 @@ export const CommentsList = ({
         userVotes={userVotes}
         onReply={onReply}
         disableReply={disableReply}
+        isFlat={isFlat}
       />
     </CommentCard>
   ));
@@ -47,6 +51,9 @@ CommentsList.propTypes = {
   onCensor: PropTypes.func,
   commentsByParent: PropTypes.object,
   userVotes: PropTypes.object,
+  onReply: PropTypes.func,
+  disableReply: PropTypes.bool,
+  isFlat: PropTypes.bool,
 };
 
 CommentsList.defaultProps = {

@@ -5,6 +5,7 @@ import { Event, Join, MarkdownRenderer } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 import { CommentVotes } from "./CommentVotes";
 import { CommentForm } from "../CommentForm";
+import truncate from "lodash/truncate";
 
 const CensorButton = ({ onCensor }) => (
   <span
@@ -16,6 +17,19 @@ const CensorButton = ({ onCensor }) => (
   </span>
 );
 
+const ParentPreview = ({ parentComment }) => {
+  const truncatedComment = truncate(parentComment.comment, {
+    length: 50,
+    separator: " ",
+    omission: " [...]",
+  });
+  return (
+    <div className={styles.parentContext}>
+      @{parentComment.username}: {truncatedComment}
+    </div>
+  );
+};
+
 export const CommentCard = ({
   comment,
   showCensor,
@@ -26,6 +40,8 @@ export const CommentCard = ({
   userVote,
   onComment,
   disableReply,
+  showParentCommentPreview,
+  parentComment,
 }) => {
   const [showThread, setShowThread] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -47,6 +63,9 @@ export const CommentCard = ({
           comment.deleted && styles.censoredComment
         )}
       >
+        {showParentCommentPreview && parentComment && (
+          <ParentPreview parentComment={parentComment} />
+        )}
         <div className={styles.header}>
           <div className={styles.summary}>
             <Join>

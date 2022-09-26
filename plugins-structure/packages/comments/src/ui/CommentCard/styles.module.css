@@ -101,3 +101,14 @@
 .hasVoted > svg > g > path {
   fill: var(--color-primary-dark) !important;
 }
+
+/* Parent Comment */
+.parentContext {
+  display: inline-block;
+  font-size: var(--font-size-small);
+  color: var(--text-color-light);
+  border-left: 0.3rem solid var(--text-color-light);
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
