@@ -9,6 +9,7 @@ import { ProposalDetails, ProposalLoader } from "../../components";
 import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
+import { keyCommentsThreadsBy } from "@politeiagui/comments/utils";
 
 function ErrorsMessages({ errors }) {
   return errors.reduce((acc, cur) => {
@@ -49,6 +50,13 @@ function Details({ token }) {
   const params = getURLSearchParams();
   const shouldScrollToComments = !!params?.scrollToComments;
   useScrollToTop(shouldScrollToComments);
+
+  const { main, ...authorUpdates } = keyCommentsThreadsBy(comments, (root) =>
+    root.extradatahint === "proposalupdate"
+      ? JSON.parse(root.extradata).title
+      : "main"
+  );
+
   return (
     <SingleContentPage className={styles.detailsWrapper}>
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
@@ -76,9 +84,16 @@ function Details({ token }) {
               rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
               rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
             />
-            {comments && (
+            {Object.keys(authorUpdates).map((update) => (
               <Comments
-                comments={comments}
+                comments={authorUpdates[update]}
+                title={update}
+                key={update}
+              />
+            ))}
+            {main && (
+              <Comments
+                comments={main}
                 // Mocking onReply until user layer is done.
                 onReply={(comment, parentid) => {
                   console.log(`Replying ${parentid}:`, comment);
