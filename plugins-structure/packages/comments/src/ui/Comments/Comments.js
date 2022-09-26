@@ -17,6 +17,7 @@ export const Comments = ({
   onReply,
   disableReply,
   title,
+  id,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [commentsByParent, setCommentsByParent] = useState();
@@ -39,12 +40,12 @@ export const Comments = ({
 
   const commentsCount = Object.keys(comments).length;
 
-  useScrollTo("comments-wrapper", scrollOnLoad);
+  useScrollTo(id, scrollOnLoad);
 
   return (
     <div
       className={styles.commentsWrapper}
-      id="comments-wrapper"
+      id={id}
       data-testid="comments-section"
     >
       <Card paddingSize="small" className={styles.header}>
@@ -93,4 +94,5 @@ Comments.defaultProps = {
   onReply: () => {},
   title: "Comments",
   isFlatMode: false,
+  id: "comments-wrapper",
 };

@@ -84,11 +84,12 @@ function Details({ token }) {
               rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
               rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
             />
-            {Object.keys(authorUpdates).map((update) => (
+            {Object.keys(authorUpdates).map((update, i) => (
               <Comments
                 comments={authorUpdates[update]}
                 title={update}
                 key={update}
+                id={`author-update-${i + 1}`}
               />
             ))}
             {main && (
