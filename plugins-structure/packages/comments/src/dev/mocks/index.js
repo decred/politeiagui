@@ -3,11 +3,6 @@ import { faker } from "@faker-js/faker";
 export * from "./comments";
 export * from "./userVotes";
 
-function getThreadParent(id) {
-  if (id < 2) return id;
-  return Math.floor(id / 2);
-}
-
 export function mockCommentsCount() {
   return ({ tokens = [] }) => {
     const res = tokens.reduce(
@@ -43,28 +38,45 @@ export function mockCommentsPolicy({
   });
 }
 
-export function mockComments({ amount = 0, thread = false } = {}) {
+const baseCommentMock = {
+  userid: "1baadc76-3c9d-46be-8aac-15c944bab958",
+  username: "user_8a13d2b07b",
+  state: 2,
+  parentid: 0,
+  version: 1,
+  createdat: 1650381215,
+  timestamp: 1650381215,
+  upvotes: 0,
+  downvoted: 0,
+};
+
+export function mockComments({
+  amount = 0,
+  customCommentData = {},
+  additionalComments = [],
+} = {}) {
   return ({ token }) => {
     const comments = Array(amount)
       .fill({
-        userid: "1baadc76-3c9d-46be-8aac-15c944bab958",
-        username: "user_8a13d2b07b",
-        state: 2,
+        ...baseCommentMock,
+        ...customCommentData,
         token,
-        parentid: 0,
-        comment: "31efb976ac702977dddd56d52e03a2d7",
-        version: 1,
-        createdat: 1650381215,
-        timestamp: 1650381215,
-        upvotes: 0,
-        downvoted: 0,
+        comment: faker.lorem.paragraph(),
       })
       .map((comment, i) => ({
         ...comment,
         commentid: i + 1,
         comment: `Comment ${i + 1}: ${comment.comment}`,
-        parentid: thread ? getThreadParent(i + 1) : comment.parentid,
+        parentid: comment.parentid,
       }));
-    return { comments };
+    const moreComments = additionalComments.map((ac, i) => ({
+      ...baseCommentMock,
+      ...customCommentData,
+      ...ac,
+      comment: `Addidional Comment ${i + 1}: ${faker.lorem.paragraph()}`,
+      token,
+      commentid: amount + i + 1,
+    }));
+    return { comments: [...comments, ...moreComments] };
   };
 }

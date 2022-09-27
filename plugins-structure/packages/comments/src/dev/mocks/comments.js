@@ -1,3 +1,4 @@
+// TODO: Deprecate this hardcoded mock and use the new approach.
 export const commentsMock = {
   1: {
     userid: "0612f387-3777-4003-8f40-87b183f89032",

@@ -332,6 +332,46 @@ describe("Given an RFP submission", () => {
   });
 });
 
+describe("Given a proposal author update", () => {
+  beforeEach(() => {
+    cy.mockResponse(
+      "/api/comments/v1/comments",
+      mockComments({
+        amount: 5,
+        additionalComments: [
+          {
+            extradata: JSON.stringify({
+              title: "Author update 1",
+            }),
+            extradatahint: "proposalupdate",
+            parentid: 0,
+          },
+          {
+            extradata: JSON.stringify({
+              title: "Author update 2",
+            }),
+            extradatahint: "proposalupdate",
+            parentid: 0,
+          },
+        ],
+      })
+    ).as("comments");
+    cy.mockResponse(
+      "/api/pi/v1/summaries",
+      mockPiSummaries({ status: "approved" })
+    ).as("piSummaries");
+    cy.mockResponse(
+      "/api/ticketvote/v1/summaries",
+      mockTicketvoteSummaries(approvedVoteSummary)
+    ).as("voteSummaries");
+  });
+  it("should display author updates on separate threads", () => {
+    cy.visit("/record/fake001");
+    cy.wait(["@details", "@comments"]);
+    cy.findAllByTestId("comments-section").should("have.length", 3);
+  });
+});
+
 describe("Given requests errors on Details page", () => {
   function errorMock() {
     return {
