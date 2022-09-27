@@ -12,6 +12,7 @@ export const CommentsList = ({
   onReply,
   disableReply,
   isFlat,
+  depth = 0,
 }) => {
   if (!commentsByParent || !commentsByParent[parentId]) {
     return null;
@@ -19,6 +20,7 @@ export const CommentsList = ({
   return commentsByParent[parentId].map((childId) => (
     <CommentCard
       key={childId}
+      depth={depth}
       comment={comments[childId]}
       onCensor={onCensor}
       threadLength={commentsByParent[childId]?.length}
@@ -39,6 +41,7 @@ export const CommentsList = ({
         onReply={onReply}
         disableReply={disableReply}
         isFlat={isFlat}
+        depth={depth + 1}
       />
     </CommentCard>
   ));

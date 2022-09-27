@@ -42,8 +42,9 @@ export const CommentCard = ({
   disableReply,
   showParentCommentPreview,
   parentComment,
+  depth,
 }) => {
-  const [showThread, setShowThread] = useState(true);
+  const [showThread, setShowThread] = useState(depth !== 6);
   const [showForm, setShowForm] = useState(false);
   function handleCensorComment() {
     onCensor(comment);
