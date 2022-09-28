@@ -49,7 +49,7 @@ export const Comments = ({
       data-testid="comments-section"
     >
       <Card paddingSize="small" className={styles.header}>
-        <H2 className={styles.title}>
+        <H2 className={styles.title} data-testid="comments-section-title">
           {title} <span className={styles.count}>({commentsCount})</span>
         </H2>
         {!!commentsCount && (

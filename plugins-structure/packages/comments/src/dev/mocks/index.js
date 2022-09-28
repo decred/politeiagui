@@ -38,17 +38,22 @@ export function mockCommentsPolicy({
   });
 }
 
-const baseCommentMock = {
-  userid: "1baadc76-3c9d-46be-8aac-15c944bab958",
-  username: "user_8a13d2b07b",
-  state: 2,
-  parentid: 0,
-  version: 1,
-  createdat: 1650381215,
-  timestamp: 1650381215,
-  upvotes: 0,
-  downvoted: 0,
-};
+export function mockComment(customData = {}) {
+  return {
+    userid: faker.datatype.uuid(),
+    username: faker.internet.userName(),
+    state: 2,
+    parentid: 0,
+    version: 1,
+    createdat: Date.now() / 1000,
+    timestamp: Date.now() / 1000,
+    upvotes: 0,
+    downvoted: 0,
+    comment: faker.lorem.paragraph(),
+    token: faker.git.shortSha(),
+    ...customData,
+  };
+}
 
 export function mockComments({
   amount = 0,
@@ -57,25 +62,18 @@ export function mockComments({
 } = {}) {
   return ({ token }) => {
     const comments = Array(amount)
-      .fill({
-        ...baseCommentMock,
-        ...customCommentData,
+      .fill({})
+      .map((_, i) => ({
+        ...mockComment(customCommentData),
         token,
-        comment: faker.lorem.paragraph(),
-      })
-      .map((comment, i) => ({
-        ...comment,
         commentid: i + 1,
-        comment: `Comment ${i + 1}: ${comment.comment}`,
-        parentid: comment.parentid,
       }));
     const moreComments = additionalComments.map((ac, i) => ({
-      ...baseCommentMock,
-      ...customCommentData,
-      ...ac,
+      ...mockComment(customCommentData),
       comment: `Addidional Comment ${i + 1}: ${faker.lorem.paragraph()}`,
       token,
       commentid: amount + i + 1,
+      ...ac,
     }));
     return { comments: [...comments, ...moreComments] };
   };
