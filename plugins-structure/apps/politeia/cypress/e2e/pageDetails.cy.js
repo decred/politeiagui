@@ -333,28 +333,29 @@ describe("Given an RFP submission", () => {
 });
 
 describe("Given a proposal author update", () => {
+  const authorUpdates = [
+    {
+      extradata: JSON.stringify({
+        title: "Author update 1",
+      }),
+      extradatahint: "proposalupdate",
+      parentid: 0,
+      username,
+      timestamp: Date.now() / 1000 - 300,
+    },
+    {
+      extradata: JSON.stringify({
+        title: "Author update 2",
+      }),
+      extradatahint: "proposalupdate",
+      parentid: 0,
+      username,
+    },
+  ];
   beforeEach(() => {
     cy.mockResponse(
       "/api/comments/v1/comments",
-      mockComments({
-        amount: 5,
-        additionalComments: [
-          {
-            extradata: JSON.stringify({
-              title: "Author update 1",
-            }),
-            extradatahint: "proposalupdate",
-            parentid: 0,
-          },
-          {
-            extradata: JSON.stringify({
-              title: "Author update 2",
-            }),
-            extradatahint: "proposalupdate",
-            parentid: 0,
-          },
-        ],
-      })
+      mockComments({ amount: 5, additionalComments: authorUpdates })
     ).as("comments");
     cy.mockResponse(
       "/api/pi/v1/summaries",
@@ -365,10 +366,18 @@ describe("Given a proposal author update", () => {
       mockTicketvoteSummaries(approvedVoteSummary)
     ).as("voteSummaries");
   });
-  it("should display author updates on separate threads", () => {
+  it("should display author updates on separate threads ordered by timestamp", () => {
     cy.visit("/record/fake001");
     cy.wait(["@details", "@comments"]);
     cy.findAllByTestId("comments-section").should("have.length", 3);
+    const expectedThreadsTitlesOrder = [
+      "Author update 2",
+      "Author update 1",
+      "Comments",
+    ];
+    cy.findAllByTestId("comments-section-title").each((thread, i) => {
+      expect(thread).to.contain.text(expectedThreadsTitlesOrder[i]);
+    });
   });
 });
 

@@ -12,17 +12,27 @@ import { getURLSearchParams } from "../../utils/getURLSearchParams";
 import { keyCommentsThreadsBy } from "@politeiagui/comments/utils";
 
 function ErrorsMessages({ errors }) {
-  return errors.reduce((acc, cur) => {
+  return errors.reduce((acc, cur, i) => {
     if (cur) {
       return [
         ...acc,
-        <Message kind="error" data-testid="proposal-details-error">
+        <Message kind="error" key={i} data-testid="proposal-details-error">
           {cur}
         </Message>,
       ];
     }
     return acc;
   }, []);
+}
+
+function sortAuthorUpdatesKeysByTimestamp(authorUpdates) {
+  const getRootAuthorUpdate = (updateThread) =>
+    Object.values(updateThread).find((c) => c.parentid === 0);
+  return Object.keys(authorUpdates).sort(
+    (a, b) =>
+      getRootAuthorUpdate(authorUpdates[b]).timestamp -
+      getRootAuthorUpdate(authorUpdates[a]).timestamp
+  );
 }
 
 function Details({ token }) {
@@ -57,6 +67,9 @@ function Details({ token }) {
       : "main"
   );
 
+  const orderedAuthorUpdatesKeys =
+    sortAuthorUpdatesKeysByTimestamp(authorUpdates);
+
   return (
     <SingleContentPage className={styles.detailsWrapper}>
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
@@ -84,7 +97,7 @@ function Details({ token }) {
               rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
               rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
             />
-            {Object.keys(authorUpdates).map((update, i) => (
+            {orderedAuthorUpdatesKeys.map((update, i) => (
               <Comments
                 comments={authorUpdates[update]}
                 title={update}
