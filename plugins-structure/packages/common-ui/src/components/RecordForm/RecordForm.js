@@ -141,7 +141,7 @@ function Warning({ children }) {
 export function RecordForm({ initialValues, children, onSubmit }) {
   const formProps = useForm({ defaultValues: initialValues });
   return (
-    <Card paddingSize="small">
+    <Card className={styles.card}>
       <FormProvider {...formProps}>
         <form
           onSubmit={formProps.handleSubmit(onSubmit)}

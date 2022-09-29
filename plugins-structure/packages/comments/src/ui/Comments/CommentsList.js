@@ -11,6 +11,7 @@ export const CommentsList = ({
   userVotes,
   onReply,
   disableReply,
+  recordOwner,
 }) => {
   if (!commentsByParent || !commentsByParent[parentId]) {
     return null;
@@ -25,6 +26,7 @@ export const CommentsList = ({
       userVote={userVotes[childId]}
       onComment={onReply}
       disableReply={disableReply}
+      recordOwner={recordOwner}
     >
       <CommentsList
         comments={comments}
@@ -35,6 +37,7 @@ export const CommentsList = ({
         userVotes={userVotes}
         onReply={onReply}
         disableReply={disableReply}
+        recordOwner={recordOwner}
       />
     </CommentCard>
   ));
