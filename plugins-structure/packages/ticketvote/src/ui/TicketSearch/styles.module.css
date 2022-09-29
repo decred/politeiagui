@@ -1,3 +1,33 @@
 .searchForm {
   padding: 0 !important;
 }
+
+.loading {
+  width: 50%;
+  height: 0.3rem;
+  background-color: var(--color-primary);
+  top: 0;
+  left: 0;
+  position: fixed;
+  animation: slide 2s linear infinite;
+  overflow: hidden;
+}
+
+@keyframes slide {
+  0% {
+    left: 0;
+    width: 0%;
+  }
+  25% {
+    left: 0%;
+    width: 33%;
+  }
+  75% {
+    left: 67%;
+    width: 33%;
+  }
+  100% {
+    left: 100%;
+    width: 0%;
+  }
+}

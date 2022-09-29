@@ -132,9 +132,23 @@ function SaveButton({
 
 function Warning({ children }) {
   return (
-    <Message kind="warning" className={styles.warning}>
+    <Message kind="warning" className={styles.message}>
       {children}
     </Message>
+  );
+}
+
+function ErrorMessage({ error }) {
+  return (
+    error && (
+      <Message
+        kind="error"
+        data-testid="record-form-error-message"
+        className={styles.message}
+      >
+        {error.toString()}
+      </Message>
+    )
   );
 }
 
@@ -152,6 +166,7 @@ export function RecordForm({ initialValues, children, onSubmit, className }) {
             formProps,
             CurrencyInput,
             DatePickerInput,
+            ErrorMessage,
             MarkdownInput,
             SaveButton,
             SelectInput,
