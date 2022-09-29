@@ -3,6 +3,7 @@
   min-height: var(--font-size-xxlarge);
   background-color: var(--dimmed-card-background);
   min-width: 10rem;
+  margin-top: 1rem;
   animation: fadeIn linear 1s alternate infinite;
   -webkit-animation: fadeIn linear 1s alternate infinite;
   -moz-animation: fadeIn linear 1s alternate infinite;
@@ -12,8 +13,10 @@
 
 .footerButtons {
   display: flex;
-  width: 6rem;
-  justify-content: space-between;
+}
+
+.footerButtons > * {
+  margin-left: 1rem;
 }
 
 .formButtons {
