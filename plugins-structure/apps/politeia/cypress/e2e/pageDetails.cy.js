@@ -1,4 +1,5 @@
 import {
+  mockTicketvoteResults,
   mockTicketvoteSubmissions,
   mockTicketvoteSummaries,
 } from "@politeiagui/ticketvote/dev/mocks";
@@ -181,6 +182,20 @@ describe("Given an approved proposal details page", () => {
       "Closed"
     );
     cy.findByTestId("status-change-reason").should("contain.text", reason);
+  });
+  it("should allow votes search by ticket token", () => {
+    const ticket = "fakeTicketToken";
+    cy.mockResponse(
+      "/api/ticketvote/v1/results",
+      mockTicketvoteResults({ yes: 500, no: 50, result: { ticket } })
+    ).as("results");
+    cy.visit("/record/fake001");
+    cy.findByTestId("proposal-search-votes-button").click();
+    cy.wait("@results");
+    cy.findByTestId("ticketvote-modal-ticket-search-input")
+      .type(ticket)
+      .type("{enter}");
+    cy.findByTestId("ticketvote-modal-ticket-search-table").should("exist");
   });
 });
 

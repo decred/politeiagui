@@ -1,5 +1,6 @@
 import { getTokensArray } from "@politeiagui/core/dev/mocks";
 import { getHumanReadableTicketvoteStatus } from "../../lib/utils";
+import { faker } from "@faker-js/faker";
 
 const bestblock = 420;
 
@@ -75,5 +76,29 @@ export function mockTicketvoteSummaries({
       {}
     );
     return { summaries };
+  };
+}
+
+export function mockTicketvoteResults({ yes = 10, no = 10, result = {} } = {}) {
+  return ({ token }) => {
+    const voteData = {
+      token,
+      ticket: faker.random.numeric(64),
+      address: faker.random.numeric(35),
+      signature: "",
+      receipt: "",
+      timestamp: Date.now() / 1000,
+    };
+    const yesVotes = Array(yes).fill({
+      ...voteData,
+      ...result,
+      votebit: "2",
+    });
+    const noVotes = Array(no).fill({
+      ...voteData,
+      ...result,
+      votebit: "1",
+    });
+    return { votes: [...yesVotes, ...noVotes] };
   };
 }
