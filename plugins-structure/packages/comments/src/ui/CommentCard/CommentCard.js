@@ -43,6 +43,7 @@ export const CommentCard = ({
   showParentCommentPreview,
   parentComment,
   depth,
+  recordOwner,
 }) => {
   const [showThread, setShowThread] = useState(depth !== 6);
   const [showForm, setShowForm] = useState(false);
@@ -55,6 +56,8 @@ export const CommentCard = ({
   function toggleDisplayForm() {
     setShowForm(!showForm);
   }
+
+  const isRecordOwner = recordOwner === comment.username;
 
   return (
     <div data-testid="comment-card">
@@ -70,7 +73,11 @@ export const CommentCard = ({
         <div className={styles.header}>
           <div className={styles.summary}>
             <Join>
-              <Link href={userLink} data-testid="comment-author">
+              <Link
+                href={userLink}
+                data-testid="comment-author"
+                className={classNames(isRecordOwner && styles.recordOwner)}
+              >
                 {comment.username}
               </Link>
               <Event event="" timestamp={comment.timestamp} />
@@ -113,15 +120,15 @@ export const CommentCard = ({
             </span>
           )}
         </div>
+        {showForm && (
+          <CommentForm onComment={onComment} parentId={comment.commentid} />
+        )}
+        {showThread && (
+          <div className={styles.thread} data-testid="comment-thread">
+            {children}
+          </div>
+        )}
       </Card>
-      {showForm && (
-        <CommentForm onComment={onComment} parentId={comment.commentid} />
-      )}
-      {showThread && (
-        <div className={styles.thread} data-testid="comment-thread">
-          {children}
-        </div>
-      )}
     </div>
   );
 };

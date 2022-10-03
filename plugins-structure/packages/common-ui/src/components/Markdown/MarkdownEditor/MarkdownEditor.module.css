@@ -6,13 +6,16 @@
 .actionButtons {
   cursor: pointer;
 }
+
 .actionButtons > button {
   margin-left: 0.5rem;
   display: inline-flex;
 }
+
 .actionButtons > button:first-child {
   margin-left: 0rem;
 }
+
 .actionButtons > button:not(:hover) {
   box-shadow: none !important;
 }
@@ -21,12 +24,14 @@
   display: flex;
   color: var(--text-input-color);
 }
+
 .headers {
   display: flex;
   padding-bottom: 0.5rem;
   align-items: center;
   justify-content: space-between;
 }
+
 .tabs > div {
   margin-left: 0.5rem;
   padding-left: 0.5rem;
@@ -34,11 +39,13 @@
   cursor: pointer;
   border-left: 1px solid var(--separator-color);
 }
+
 .tabs > div:first-child {
   margin-left: 0rem;
   padding-left: 0rem;
   border: 0px;
 }
+
 .hide {
   visibility: hidden;
 }
@@ -47,6 +54,7 @@
   width: 100%;
   display: grid;
 }
+
 .editor {
   resize: vertical;
   min-height: 20rem;
@@ -55,6 +63,7 @@
   background-color: var(--card-background);
   color: var(--text-color);
 }
+
 .preview {
   padding: 1rem;
   border: 1px solid var(--separator-color);
@@ -69,6 +78,7 @@
 .hideEditor {
   grid-template-columns: 0 1fr;
 }
+
 .hideEditor > .editor {
   width: 0px !important;
   border: 0px !important;
@@ -80,6 +90,7 @@
 .hidePreview {
   grid-template-columns: 1fr 0;
 }
+
 .hidePreview > .preview {
   width: 0px !important;
   border: 0px !important;
@@ -88,4 +99,11 @@
   white-space: nowrap;
   height: 0px;
   min-height: 100%;
+}
+
+@media (--xs-viewport) {
+  .headers {
+    flex-flow: column;
+    align-items: flex-start;
+  }
 }

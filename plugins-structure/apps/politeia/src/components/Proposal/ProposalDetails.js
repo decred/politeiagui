@@ -13,6 +13,7 @@ import {
   getImagesByDigest,
   isRfpProposal,
   showStatusChangeReason,
+  showVoteStatusBar,
 } from "../../pi/proposals/utils";
 import {
   ProposalDownloads,
@@ -125,7 +126,9 @@ const ProposalDetails = ({
         secondRow={
           <div className={styles.secondRow}>
             <RecordToken token={proposalDetails.token} isCopyable={true} />
-            <ProposalStatusBar voteSummary={voteSummary} />
+            {showVoteStatusBar(voteSummary) && (
+              <ProposalStatusBar voteSummary={voteSummary} />
+            )}
             <ProposalMetadata metadata={proposalDetails.proposalMetadata} />
             {isRfpProposal(record) &&
               proposalSummary.status === PROPOSAL_STATUS_APPROVED && (

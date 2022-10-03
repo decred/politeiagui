@@ -18,6 +18,7 @@ export const Comments = ({
   disableReply,
   title,
   id,
+  recordOwner,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [commentsByParent, setCommentsByParent] = useState();
@@ -71,6 +72,7 @@ export const Comments = ({
           onReply={onReply}
           disableReply={disableReply}
           isFlat={isFlat}
+          recordOwner={recordOwner}
         />
       </div>
     </div>
@@ -87,6 +89,7 @@ Comments.propTypes = {
   onReply: PropTypes.func,
   disableReply: PropTypes.bool,
   title: PropTypes.string,
+  recordOwner: PropTypes.string,
 };
 
 Comments.defaultProps = {

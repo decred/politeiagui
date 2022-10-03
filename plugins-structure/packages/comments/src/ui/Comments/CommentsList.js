@@ -13,6 +13,7 @@ export const CommentsList = ({
   disableReply,
   isFlat,
   depth = 0,
+  recordOwner,
 }) => {
   if (!commentsByParent || !commentsByParent[parentId]) {
     return null;
@@ -30,6 +31,7 @@ export const CommentsList = ({
       disableReply={disableReply}
       showParentCommentPreview={isFlat}
       parentComment={comments[comments[childId].parentid]}
+      recordOwner={recordOwner}
     >
       <CommentsList
         comments={comments}
@@ -42,6 +44,7 @@ export const CommentsList = ({
         disableReply={disableReply}
         isFlat={isFlat}
         depth={depth + 1}
+        recordOwner={recordOwner}
       />
     </CommentCard>
   ));
