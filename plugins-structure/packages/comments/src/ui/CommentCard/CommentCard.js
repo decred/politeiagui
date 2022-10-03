@@ -6,6 +6,7 @@ import styles from "./styles.module.css";
 import { CommentVotes } from "./CommentVotes";
 import { CommentForm } from "../CommentForm";
 import truncate from "lodash/truncate";
+import { generatePath } from "@politeiagui/core/router";
 
 const CensorButton = ({ onCensor }) => (
   <span
@@ -44,20 +45,18 @@ export const CommentCard = ({
   parentComment,
   depth,
   recordOwner,
+  commentPath,
 }) => {
-  const [showThread, setShowThread] = useState(depth !== 6);
   const [showForm, setShowForm] = useState(false);
   function handleCensorComment() {
     onCensor(comment);
-  }
-  function toggleDisplayThread() {
-    setShowThread(!showThread);
   }
   function toggleDisplayForm() {
     setShowForm(!showForm);
   }
 
   const isRecordOwner = recordOwner === comment.username;
+  const showThread = depth !== 6;
 
   return (
     <div data-testid="comment-card">
@@ -104,22 +103,24 @@ export const CommentCard = ({
             />
           )}
         </div>
-        <div className={styles.footer}>
-          {!disableReply && !comment.deleted && (
-            <span
-              className={styles.reply}
-              data-testid="comment-reply"
-              onClick={toggleDisplayForm}
+        <Join inline className={styles.reply}>
+          {threadLength > 0 && !showThread && (
+            <a
+              data-link
+              href={generatePath(commentPath, {
+                token: comment.token,
+                commentid: comment.commentid,
+              })}
             >
-              Reply
+              {threadLength} more repl{threadLength > 1 ? "ies" : "y"}
+            </a>
+          )}
+          {!disableReply && !comment.deleted && (
+            <span data-testid="comment-reply" onClick={toggleDisplayForm}>
+              reply
             </span>
           )}
-          {threadLength > 0 && (
-            <span className={styles.collapse} onClick={toggleDisplayThread}>
-              {showThread ? "-" : `+${threadLength}`}
-            </span>
-          )}
-        </div>
+        </Join>
         {showForm && (
           <CommentForm onComment={onComment} parentId={comment.commentid} />
         )}
@@ -144,10 +145,12 @@ CommentCard.propTypes = {
   onComment: PropTypes.func,
   parentId: PropTypes.number,
   disableReply: PropTypes.bool,
+  commentPath: PropTypes.string,
 };
 
 CommentCard.defaultProps = {
   threadLength: 0,
   userLink: "/#user",
   onComment: () => {},
+  commentPath: "/record/:token/comment/:commentid",
 };

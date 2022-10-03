@@ -19,6 +19,7 @@ export const Comments = ({
   title,
   id,
   recordOwner,
+  commentPath,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [commentsByParent, setCommentsByParent] = useState();
@@ -73,6 +74,7 @@ export const Comments = ({
           disableReply={disableReply}
           isFlat={isFlat}
           recordOwner={recordOwner}
+          commentPath={commentPath}
         />
       </div>
     </div>

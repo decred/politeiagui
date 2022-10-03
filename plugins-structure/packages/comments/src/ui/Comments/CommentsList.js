@@ -14,6 +14,7 @@ export const CommentsList = ({
   isFlat,
   depth = 0,
   recordOwner,
+  commentPath,
 }) => {
   if (!commentsByParent || !commentsByParent[parentId]) {
     return null;
@@ -32,6 +33,7 @@ export const CommentsList = ({
       showParentCommentPreview={isFlat}
       parentComment={comments[comments[childId].parentid]}
       recordOwner={recordOwner}
+      commentPath={commentPath}
     >
       <CommentsList
         comments={comments}
@@ -45,6 +47,7 @@ export const CommentsList = ({
         isFlat={isFlat}
         depth={depth + 1}
         recordOwner={recordOwner}
+        commentPath={commentPath}
       />
     </CommentCard>
   ));

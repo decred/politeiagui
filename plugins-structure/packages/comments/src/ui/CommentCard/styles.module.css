@@ -47,8 +47,7 @@
 
 .reply {
   cursor: pointer;
-  margin-right: 1rem;
-  color: var(--tab-text-color) !important;
+  color: var(--text-color-light) !important;
 }
 
 .thread {
