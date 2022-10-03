@@ -40,6 +40,31 @@
   padding-top: 2rem;
 }
 
+.collapse > .proposalBody {
+  overflow: hidden;
+  max-height: 10rem;
+}
+
+.collapseMarker {
+  width: 100%;
+  height: 4rem;
+  padding-top: 3rem;
+  position: relative;
+  top: -2rem;
+  background: linear-gradient(
+    0deg,
+    var(--card-background) 49%,
+    var(--color-shadow-light) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  text-align: center;
+  color: var(--text-color-light);
+}
+
+.collapseMarker:hover {
+  text-decoration: underline;
+}
+
 .rules > li {
   margin-top: 1rem;
 }

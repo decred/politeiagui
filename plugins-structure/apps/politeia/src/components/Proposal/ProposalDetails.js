@@ -24,7 +24,7 @@ import {
   ProposalSubtitle,
   ProposalTitle,
 } from "./common";
-import { Button, ButtonIcon, Message } from "pi-ui";
+import { Button, ButtonIcon, Message, classNames } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
 import { ModalProposalDiff } from "./ModalProposalDiff";
@@ -45,6 +45,7 @@ const ProposalDetails = ({
   rfpSubmissionsVoteSummaries,
   rfpSubmissionsProposalSummaries,
   rfpSubmissionsCommentsCounts,
+  hideBody,
 }) => {
   const [open] = useModal();
 
@@ -143,13 +144,22 @@ const ProposalDetails = ({
           </div>
         }
         thirdRow={
-          <div className={styles.proposalBody} data-testid="proposal-body">
-            <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
-            <ThumbnailGrid
-              files={imagesNotInText}
-              readOnly
-              onClick={handleOpenImageModal}
-            />
+          <div className={classNames(hideBody && styles.collapse)}>
+            <div className={styles.proposalBody} data-testid="proposal-body">
+              <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
+              <ThumbnailGrid
+                files={imagesNotInText}
+                readOnly
+                onClick={handleOpenImageModal}
+              />
+            </div>
+            {hideBody && (
+              <div className={styles.collapseMarker}>
+                <a data-link href={proposalLink}>
+                  see full proposal
+                </a>
+              </div>
+            )}
           </div>
         }
         fourthRow={

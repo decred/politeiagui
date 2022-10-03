@@ -35,7 +35,7 @@ function sortAuthorUpdatesKeysByTimestamp(authorUpdates) {
   );
 }
 
-function Details({ token }) {
+function Details({ token, commentid }) {
   const {
     comments,
     detailsStatus,
@@ -58,7 +58,7 @@ function Details({ token }) {
   } = useProposalDetails({ token });
   // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
-  const shouldScrollToComments = !!params?.scrollToComments;
+  const shouldScrollToComments = !!params?.scrollToComments || !!commentid;
   useScrollToTop(shouldScrollToComments);
 
   const { main, ...authorUpdates } = keyCommentsThreadsBy(comments, (root) =>
@@ -96,6 +96,7 @@ function Details({ token }) {
               rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
               rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
               rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
+              hideBody={!!commentid}
             />
             {orderedAuthorUpdatesKeys.map((update, i) => (
               <Comments
@@ -107,6 +108,7 @@ function Details({ token }) {
             ))}
             {main && (
               <Comments
+                parentId={commentid}
                 comments={main}
                 recordOwner={record.username}
                 // Mocking onReply until user layer is done.
