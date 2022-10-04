@@ -114,8 +114,7 @@ function Details({ token, commentid = 0 }) {
               comments={authorUpdates[update]}
               parentId={+commentid}
               title={update}
-              key={update}
-              id={`author-update-${i + 1}`}
+              key={i}
               recordOwner={record.username}
             />
           ))}
@@ -128,7 +127,6 @@ function Details({ token, commentid = 0 }) {
               onReply={(comment, parentid) => {
                 console.log(`Replying ${parentid}:`, comment);
               }}
-              scrollOnLoad={shouldScrollToComments}
             />
           )}
         </>
