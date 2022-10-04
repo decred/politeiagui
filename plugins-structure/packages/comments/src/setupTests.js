@@ -12,6 +12,13 @@ jest.mock(
   { virtual: true }
 );
 jest.mock(
+  "@politeiagui/core/router",
+  () => ({
+    generatePath: () => "/path/",
+  }),
+  { virtual: true }
+);
+jest.mock(
   "@politeiagui/core/records",
   () => ({
     records: {
@@ -25,6 +32,7 @@ jest.mock(
   "@politeiagui/core",
   () => ({
     RECORDS_PAGE_SIZE: 5,
+    getShortToken: () => jest.fn(),
   }),
   { virtual: true }
 );
