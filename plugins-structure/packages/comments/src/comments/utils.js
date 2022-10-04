@@ -38,6 +38,7 @@ export function getCommentsByParent(comments, isFlatMode) {
     return {
       ...acc,
       [parentid]: [...(acc[parentid] || []), comment.commentid],
+      [comment.commentid]: acc[comment.commentid] || [],
     };
   }, {});
   return commentsByParent;
