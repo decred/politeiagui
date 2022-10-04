@@ -2,6 +2,7 @@ import React from "react";
 import { Message } from "pi-ui";
 import {
   SingleContentPage,
+  useScrollTo,
   useScrollToTop,
 } from "@politeiagui/common-ui/layout";
 import { Comments } from "@politeiagui/comments/ui";
@@ -35,7 +36,7 @@ function sortAuthorUpdatesKeysByTimestamp(authorUpdates) {
   );
 }
 
-function Details({ token, commentid }) {
+function Details({ token, commentid = 0 }) {
   const {
     comments,
     detailsStatus,
@@ -59,12 +60,24 @@ function Details({ token, commentid }) {
   // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
   const shouldScrollToComments = !!params?.scrollToComments || !!commentid;
-  useScrollToTop(shouldScrollToComments);
+  const detailsLoadedSucessfully =
+    fullToken &&
+    record &&
+    detailsStatus === "succeeded" &&
+    record.detailsFetched;
 
-  const { main, ...authorUpdates } = keyCommentsThreadsBy(comments, (root) =>
-    root.extradatahint === "proposalupdate"
-      ? JSON.parse(root.extradata).title
-      : "main"
+  useScrollToTop(shouldScrollToComments);
+  useScrollTo(
+    "proposal-comments",
+    shouldScrollToComments && detailsLoadedSucessfully
+  );
+
+  const { mainCommentsThread, ...authorUpdates } = keyCommentsThreadsBy(
+    comments,
+    (root) =>
+      root.extradatahint === "proposalupdate"
+        ? JSON.parse(root.extradata).title
+        : "mainCommentsThread"
   );
 
   const orderedAuthorUpdatesKeys =
@@ -78,48 +91,48 @@ function Details({ token, commentid }) {
           errors={[recordDetailsError, voteSummaryError, commentsError]}
         />
       )}
-      {fullToken &&
-        record &&
-        detailsStatus === "succeeded" &&
-        record.detailsFetched && (
-          <>
-            <ProposalDetails
-              record={record}
-              rfpRecord={rfpLinkedRecord}
-              voteSummary={voteSummary}
-              proposalSummary={proposalSummary}
-              proposalStatusChanges={proposalStatusChanges}
-              onFetchRecordTimestamps={onFetchRecordTimestamps}
-              onFetchCommentsTimestamps={onFetchCommentsTimestamps}
-              onDownloadCommentsBundle={onDownloadCommentsBundle}
-              rfpSubmissionsRecords={rfpSubmissionsRecords}
-              rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
-              rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
-              rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
-              hideBody={!!commentid}
+      {detailsLoadedSucessfully && (
+        <>
+          <ProposalDetails
+            record={record}
+            rfpRecord={rfpLinkedRecord}
+            voteSummary={voteSummary}
+            proposalSummary={proposalSummary}
+            proposalStatusChanges={proposalStatusChanges}
+            onFetchRecordTimestamps={onFetchRecordTimestamps}
+            onFetchCommentsTimestamps={onFetchCommentsTimestamps}
+            onDownloadCommentsBundle={onDownloadCommentsBundle}
+            rfpSubmissionsRecords={rfpSubmissionsRecords}
+            rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
+            rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
+            rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
+            hideBody={!!commentid}
+          />
+          <span id="proposal-comments" />
+          {orderedAuthorUpdatesKeys.map((update, i) => (
+            <Comments
+              comments={authorUpdates[update]}
+              parentId={+commentid}
+              title={update}
+              key={update}
+              id={`author-update-${i + 1}`}
+              recordOwner={record.username}
             />
-            {orderedAuthorUpdatesKeys.map((update, i) => (
-              <Comments
-                comments={authorUpdates[update]}
-                title={update}
-                key={update}
-                id={`author-update-${i + 1}`}
-              />
-            ))}
-            {main && (
-              <Comments
-                parentId={commentid}
-                comments={main}
-                recordOwner={record.username}
-                // Mocking onReply until user layer is done.
-                onReply={(comment, parentid) => {
-                  console.log(`Replying ${parentid}:`, comment);
-                }}
-                scrollOnLoad={shouldScrollToComments}
-              />
-            )}
-          </>
-        )}
+          ))}
+          {mainCommentsThread && (
+            <Comments
+              parentId={+commentid}
+              comments={mainCommentsThread}
+              recordOwner={record.username}
+              // Mocking onReply until user layer is done.
+              onReply={(comment, parentid) => {
+                console.log(`Replying ${parentid}:`, comment);
+              }}
+              scrollOnLoad={shouldScrollToComments}
+            />
+          )}
+        </>
+      )}
     </SingleContentPage>
   );
 }
