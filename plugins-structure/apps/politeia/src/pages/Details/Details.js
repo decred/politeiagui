@@ -116,6 +116,7 @@ function Details({ token, commentid = 0 }) {
               title={update}
               key={i}
               recordOwner={record.username}
+              fullThreadUrl={`/record/${token}`}
             />
           ))}
           {mainCommentsThread && (
@@ -123,6 +124,7 @@ function Details({ token, commentid = 0 }) {
               parentId={+commentid}
               comments={mainCommentsThread}
               recordOwner={record.username}
+              fullThreadUrl={`/record/${token}`}
               // Mocking onReply until user layer is done.
               onReply={(comment, parentid) => {
                 console.log(`Replying ${parentid}:`, comment);
