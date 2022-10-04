@@ -4,7 +4,6 @@ import { CommentsFilter, CommentsList } from "./";
 import { Card, H2 } from "pi-ui";
 import styles from "./styles.module.css";
 import { getCommentsByParent } from "../../comments/utils";
-import { useScrollTo } from "@politeiagui/common-ui/layout";
 
 export const Comments = ({
   comments,
@@ -13,11 +12,9 @@ export const Comments = ({
   onCensor,
   showCensor,
   parentId,
-  scrollOnLoad,
   onReply,
   disableReply,
   title,
-  id,
   recordOwner,
   commentPath,
 }) => {
@@ -41,15 +38,10 @@ export const Comments = ({
   }, [sortedComments, isFlat]);
 
   const commentsCount = Object.keys(comments).length;
+  const currentComment = comments[parentId];
 
-  useScrollTo(id, scrollOnLoad);
-
-  return (
-    <div
-      className={styles.commentsWrapper}
-      id={id}
-      data-testid="comments-section"
-    >
+  return parentId === 0 || currentComment ? (
+    <div className={styles.commentsWrapper} data-testid="comments-section">
       <Card paddingSize="small" className={styles.header}>
         <H2 className={styles.title} data-testid="comments-section-title">
           {title} <span className={styles.count}>({commentsCount})</span>
@@ -59,6 +51,7 @@ export const Comments = ({
             isFlat={isFlat}
             onSort={handleSortComments}
             onToggleFlatMode={handleToggleFlatMode}
+            hideFlatModeButton={!!currentComment}
           />
         )}
       </Card>
@@ -73,12 +66,13 @@ export const Comments = ({
           onReply={onReply}
           disableReply={disableReply}
           isFlat={isFlat}
+          previewId={currentComment?.commentid}
           recordOwner={recordOwner}
           commentPath={commentPath}
         />
       </div>
     </div>
-  );
+  ) : null;
 };
 
 Comments.propTypes = {
@@ -99,5 +93,4 @@ Comments.defaultProps = {
   onReply: () => {},
   title: "Comments",
   isFlatMode: false,
-  id: "comments-wrapper",
 };

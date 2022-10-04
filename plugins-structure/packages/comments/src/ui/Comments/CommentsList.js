@@ -15,42 +15,47 @@ export const CommentsList = ({
   depth = 0,
   recordOwner,
   commentPath,
+  previewId,
 }) => {
   if (!commentsByParent || !commentsByParent[parentId]) {
     return null;
   }
-  return commentsByParent[parentId].map((childId) => (
+  const comment = comments[parentId];
+
+  return (
     <CommentCard
-      key={childId}
       depth={depth}
-      comment={comments[childId]}
+      comment={comment}
       onCensor={onCensor}
-      threadLength={commentsByParent[childId]?.length}
+      threadLength={commentsByParent[parentId]?.length}
       showCensor={showCensor}
-      userVote={userVotes[childId]}
+      userVote={userVotes[parentId]}
       onComment={onReply}
       disableReply={disableReply}
-      showParentCommentPreview={isFlat}
-      parentComment={comments[comments[childId].parentid]}
+      showParentCommentPreview={isFlat || previewId === parentId}
+      parentComment={comments[comment?.parentid]}
       recordOwner={recordOwner}
       commentPath={commentPath}
     >
-      <CommentsList
-        comments={comments}
-        showCensor={showCensor}
-        onCensor={onCensor}
-        parentId={childId}
-        commentsByParent={commentsByParent}
-        userVotes={userVotes}
-        onReply={onReply}
-        disableReply={disableReply}
-        isFlat={isFlat}
-        depth={depth + 1}
-        recordOwner={recordOwner}
-        commentPath={commentPath}
-      />
+      {commentsByParent[parentId].map((childId) => (
+        <CommentsList
+          key={childId}
+          comments={comments}
+          showCensor={showCensor}
+          onCensor={onCensor}
+          parentId={childId}
+          commentsByParent={commentsByParent}
+          userVotes={userVotes}
+          onReply={onReply}
+          disableReply={disableReply}
+          isFlat={isFlat}
+          depth={depth + 1}
+          recordOwner={recordOwner}
+          commentPath={commentPath}
+        />
+      ))}
     </CommentCard>
-  ));
+  );
 };
 
 CommentsList.propTypes = {

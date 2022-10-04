@@ -27,6 +27,18 @@
 }
 
 .footer {
+  color: var(--text-color-light) !important;
+  display: flex;
+  align-items: center;
+}
+
+.footer > * {
+  cursor: pointer;
+}
+
+.footer .discussion {
+  justify-self: flex-end;
+  margin-left: auto;
   display: flex;
   align-items: center;
 }
@@ -43,11 +55,6 @@
 
 .recordOwner {
   color: var(--color-gold) !important;
-}
-
-.reply {
-  cursor: pointer;
-  color: var(--text-color-light) !important;
 }
 
 .thread {

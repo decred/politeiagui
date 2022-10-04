@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Card, Link, classNames } from "pi-ui";
+import { ButtonIcon, Card, Link, classNames } from "pi-ui";
 import { Event, Join, MarkdownRenderer } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 import { CommentVotes } from "./CommentVotes";
 import { CommentForm } from "../CommentForm";
 import truncate from "lodash/truncate";
 import { generatePath } from "@politeiagui/core/router";
+import { getShortToken } from "@politeiagui/core";
 
 const CensorButton = ({ onCensor }) => (
   <span
@@ -18,18 +19,44 @@ const CensorButton = ({ onCensor }) => (
   </span>
 );
 
-const ParentPreview = ({ parentComment }) => {
+const ParentPreview = ({ parentComment, link }) => {
   const truncatedComment = truncate(parentComment.comment, {
     length: 50,
     separator: " ",
     omission: " [...]",
   });
   return (
-    <div className={styles.parentContext}>
+    <a className={styles.parentContext} data-link href={link}>
       @{parentComment.username}: {truncatedComment}
-    </div>
+    </a>
   );
 };
+
+const CommentFooter = ({
+  threadLength,
+  disableReply,
+  link,
+  showThread,
+  toggleDisplayForm,
+}) => (
+  <div className={styles.footer}>
+    <Join inline>
+      {threadLength > 0 && !showThread && (
+        <a data-link href={link}>
+          {threadLength} more repl{threadLength > 1 ? "ies" : "y"}
+        </a>
+      )}
+      {!disableReply && (
+        <span data-testid="comment-reply" onClick={toggleDisplayForm}>
+          reply
+        </span>
+      )}
+    </Join>
+    <a href={link} data-link className={styles.discussion}>
+      <ButtonIcon type="link" />
+    </a>
+  </div>
+);
 
 export const CommentCard = ({
   comment,
@@ -48,6 +75,7 @@ export const CommentCard = ({
   commentPath,
 }) => {
   const [showForm, setShowForm] = useState(false);
+  if (!comment) return children;
   function handleCensorComment() {
     onCensor(comment);
   }
@@ -58,6 +86,11 @@ export const CommentCard = ({
   const isRecordOwner = recordOwner === comment.username;
   const showThread = depth !== 6;
 
+  const commentLink = generatePath(commentPath, {
+    token: getShortToken(comment.token),
+    commentid: comment.commentid,
+  });
+
   return (
     <div data-testid="comment-card">
       <Card
@@ -67,7 +100,13 @@ export const CommentCard = ({
         )}
       >
         {showParentCommentPreview && parentComment && (
-          <ParentPreview parentComment={parentComment} />
+          <ParentPreview
+            parentComment={parentComment}
+            link={generatePath(commentPath, {
+              token: getShortToken(comment.token),
+              commentid: parentComment.commentid,
+            })}
+          />
         )}
         <div className={styles.header}>
           <div className={styles.summary}>
@@ -103,24 +142,13 @@ export const CommentCard = ({
             />
           )}
         </div>
-        <Join inline className={styles.reply}>
-          {threadLength > 0 && !showThread && (
-            <a
-              data-link
-              href={generatePath(commentPath, {
-                token: comment.token,
-                commentid: comment.commentid,
-              })}
-            >
-              {threadLength} more repl{threadLength > 1 ? "ies" : "y"}
-            </a>
-          )}
-          {!disableReply && !comment.deleted && (
-            <span data-testid="comment-reply" onClick={toggleDisplayForm}>
-              reply
-            </span>
-          )}
-        </Join>
+        <CommentFooter
+          threadLength={threadLength}
+          disableReply={disableReply || comment.deleted}
+          link={commentLink}
+          showThread={showThread}
+          toggleDisplayForm={toggleDisplayForm}
+        />
         {showForm && (
           <CommentForm onComment={onComment} parentId={comment.commentid} />
         )}
@@ -135,7 +163,7 @@ export const CommentCard = ({
 };
 
 CommentCard.propTypes = {
-  comment: PropTypes.object.isRequired,
+  comment: PropTypes.object,
   showCensor: PropTypes.bool,
   onCensor: PropTypes.func,
   children: PropTypes.node,
