@@ -11,7 +11,7 @@ export function fetchPolicyIfIdle() {
 
 /**
  * getCommentsByParent returns an object tree with comment ids ordered by parent
- * ids. If thread is flat, all parent ids are 0.
+ * ids.
  * ****
  * Example:
  * ```javascript
@@ -20,25 +20,19 @@ export function fetchPolicyIfIdle() {
  *   { commentid: 2, parentid: 1, ... },
  *   { commentid: 3, parentid: 1, ... },
  * ];
- * const commentsByParent = getCommentsByParent(comments, false);
- * // { 0: [1], 1: [2, 3] }
- * const flatThreadSchema = getCommentsByParent(comments, true);
- * // { 0: [1, 2, 3] }
+ * const commentsByParent = getCommentsByParent(comments);
+ * // { 0: [1], 1: [2, 3], 2: [], 3: [] }
  * ```
  * @param {Array} comments comments array
- * @param {Boolean} isFlatMode
  * @returns {Object} thread schema
  */
-export function getCommentsByParent(comments, isFlatMode) {
+export function getCommentsByParent(comments) {
   const commentsByParent = comments.reduce((acc, comment) => {
-    let parentid = comment.parentid;
-    if (isFlatMode) {
-      parentid = 0;
-    }
+    const { parentid, commentid } = comment;
     return {
       ...acc,
-      [parentid]: [...(acc[parentid] || []), comment.commentid],
-      [comment.commentid]: acc[comment.commentid] || [],
+      [parentid]: [...(acc[parentid] || []), commentid],
+      [commentid]: acc[commentid] || [],
     };
   }, {});
   return commentsByParent;

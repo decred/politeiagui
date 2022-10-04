@@ -19,12 +19,7 @@ const options = [
   },
 ];
 
-export const CommentsFilter = ({
-  onSort,
-  onToggleFlatMode,
-  isFlat,
-  hideFlatModeButton,
-}) => {
+export const CommentsFilter = ({ onSort, onToggleFlatMode, isFlat }) => {
   const [selected, setSelected] = useState(options[0]);
 
   function handleFilterChanges(option) {
@@ -52,24 +47,22 @@ export const CommentsFilter = ({
         onChange={handleFilterChanges}
         customStyles={{ container: () => ({ padding: "0" }) }}
       />
-      {!hideFlatModeButton && (
-        <div
+      <div
+        className={classNames(
+          styles.flatButtonWrapper,
+          isFlat && styles.flatModeActive
+        )}
+        onClick={onToggleFlatMode}
+      >
+        <Text
           className={classNames(
-            styles.flatButtonWrapper,
+            styles.flatButtonText,
             isFlat && styles.flatModeActive
           )}
-          onClick={onToggleFlatMode}
         >
-          <Text
-            className={classNames(
-              styles.flatButtonText,
-              isFlat && styles.flatModeActive
-            )}
-          >
-            Flat mode
-          </Text>
-        </div>
-      )}
+          Flat mode
+        </Text>
+      </div>
     </div>
   );
 };

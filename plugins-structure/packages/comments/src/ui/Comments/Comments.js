@@ -34,9 +34,9 @@ export const Comments = ({
 
   // Update schema for every filter change
   useEffect(() => {
-    const schema = getCommentsByParent(sortedComments, isFlat);
+    const schema = getCommentsByParent(sortedComments);
     setCommentsByParent(schema);
-  }, [sortedComments, isFlat]);
+  }, [sortedComments]);
 
   const commentsCount = Object.keys(comments).length;
   const currentComment = comments[parentId];
@@ -52,7 +52,6 @@ export const Comments = ({
             isFlat={isFlat}
             onSort={handleSortComments}
             onToggleFlatMode={handleToggleFlatMode}
-            hideFlatModeButton={!!currentComment}
           />
         )}
         {currentComment && fullThreadUrl && (

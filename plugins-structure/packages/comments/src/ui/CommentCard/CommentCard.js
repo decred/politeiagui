@@ -73,6 +73,7 @@ export const CommentCard = ({
   depth,
   recordOwner,
   commentPath,
+  isFlat,
 }) => {
   const [showForm, setShowForm] = useState(false);
   if (!comment) return children;
@@ -92,73 +93,76 @@ export const CommentCard = ({
   });
 
   return (
-    <div data-testid="comment-card">
-      <Card
-        className={classNames(
-          styles.commentCard,
-          comment.deleted && styles.censoredComment
-        )}
-      >
-        {showParentCommentPreview && parentComment && (
-          <ParentPreview
-            parentComment={parentComment}
-            link={generatePath(commentPath, {
-              token: getShortToken(comment.token),
-              commentid: parentComment.commentid,
-            })}
-          />
-        )}
-        <div className={styles.header}>
-          <div className={styles.summary}>
-            <Join>
-              <Link
-                href={userLink}
-                data-testid="comment-author"
-                className={classNames(isRecordOwner && styles.recordOwner)}
-              >
-                {comment.username}
-              </Link>
-              <Event event="" timestamp={comment.timestamp} />
-              {showCensor && !comment.deleted && (
-                <CensorButton onCensor={handleCensorComment} />
-              )}
-            </Join>
-          </div>
-          <CommentVotes
-            hide={comment.deleted}
-            upvotes={comment.upvotes}
-            userVote={userVote?.vote}
-            downvotes={comment.downvotes}
-          />
-        </div>
-        {/* TODO: get comment censorship user */}
-        <div className={styles.body} data-testid="comment-body">
-          {comment.deleted ? (
-            `Censored. Reason: ${comment.reason}`
-          ) : (
-            <MarkdownRenderer
-              body={comment.comment}
-              disallowedElements={["h1", "h2", "h3", "h4", "h5", "h6"]}
+    <>
+      <div data-testid="comment-card">
+        <Card
+          className={classNames(
+            styles.commentCard,
+            comment.deleted && styles.censoredComment
+          )}
+        >
+          {showParentCommentPreview && parentComment && (
+            <ParentPreview
+              parentComment={parentComment}
+              link={generatePath(commentPath, {
+                token: getShortToken(comment.token),
+                commentid: parentComment.commentid,
+              })}
             />
           )}
-        </div>
-        <CommentFooter
-          threadLength={threadLength}
-          disableReply={disableReply || comment.deleted}
-          url={commentUrl}
-          showThread={showThread}
-          toggleDisplayForm={toggleDisplayForm}
-        />
-        {showForm && (
-          <CommentForm onComment={onComment} parentId={comment.commentid} />
-        )}
-        {showThread && (
-          <div className={styles.thread} data-testid="comment-thread">
-            {children}
+          <div className={styles.header}>
+            <div className={styles.summary}>
+              <Join>
+                <Link
+                  href={userLink}
+                  data-testid="comment-author"
+                  className={classNames(isRecordOwner && styles.recordOwner)}
+                >
+                  {comment.username}
+                </Link>
+                <Event event="" timestamp={comment.timestamp} />
+                {showCensor && !comment.deleted && (
+                  <CensorButton onCensor={handleCensorComment} />
+                )}
+              </Join>
+            </div>
+            <CommentVotes
+              hide={comment.deleted}
+              upvotes={comment.upvotes}
+              userVote={userVote?.vote}
+              downvotes={comment.downvotes}
+            />
           </div>
-        )}
-      </Card>
-    </div>
+          {/* TODO: get comment censorship user */}
+          <div className={styles.body} data-testid="comment-body">
+            {comment.deleted ? (
+              `Censored. Reason: ${comment.reason}`
+            ) : (
+              <MarkdownRenderer
+                body={comment.comment}
+                disallowedElements={["h1", "h2", "h3", "h4", "h5", "h6"]}
+              />
+            )}
+          </div>
+          <CommentFooter
+            threadLength={threadLength}
+            disableReply={disableReply || comment.deleted}
+            url={commentUrl}
+            showThread={showThread}
+            toggleDisplayForm={toggleDisplayForm}
+          />
+          {showForm && (
+            <CommentForm onComment={onComment} parentId={comment.commentid} />
+          )}
+          {showThread && !isFlat && (
+            <div className={styles.thread} data-testid="comment-thread">
+              {children}
+            </div>
+          )}
+        </Card>
+      </div>
+      {isFlat && children}
+    </>
   );
 };
 

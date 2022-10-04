@@ -36,6 +36,7 @@ export const CommentsList = ({
       parentComment={comments[comment?.parentid]}
       recordOwner={recordOwner}
       commentPath={commentPath}
+      isFlat={isFlat}
     >
       {commentsByParent[parentId].map((childId) => (
         <CommentsList
