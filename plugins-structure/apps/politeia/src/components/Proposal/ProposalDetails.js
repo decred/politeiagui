@@ -24,12 +24,18 @@ import {
   ProposalSubtitle,
   ProposalTitle,
 } from "./common";
-import { Button, ButtonIcon, Message, classNames } from "pi-ui";
+import { Button, ButtonIcon, Icon, Message, classNames } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
 import { ModalProposalDiff } from "./ModalProposalDiff";
 import { ProposalsCompact } from "./ProposalsCompact";
 import { PROPOSAL_STATUS_APPROVED } from "../../pi";
+
+const ExpandIcon = ({ link }) => (
+  <a data-link href={link}>
+    <Icon type="expand" viewBox="0 0 450 450" height={60} width={60} />
+  </a>
+);
 
 const ProposalDetails = ({
   record,
@@ -153,13 +159,7 @@ const ProposalDetails = ({
                 onClick={handleOpenImageModal}
               />
             </div>
-            {hideBody && (
-              <div className={styles.collapseMarker}>
-                <a data-link href={proposalLink}>
-                  see full proposal
-                </a>
-              </div>
-            )}
+            {hideBody && <ExpandIcon link={proposalLink} />}
           </div>
         }
         fourthRow={
