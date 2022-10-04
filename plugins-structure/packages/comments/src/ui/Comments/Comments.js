@@ -17,6 +17,7 @@ export const Comments = ({
   title,
   recordOwner,
   commentPath,
+  fullThreadUrl,
 }) => {
   const [sortedComments, setSortedComments] = useState(Object.values(comments));
   const [commentsByParent, setCommentsByParent] = useState();
@@ -54,6 +55,13 @@ export const Comments = ({
             hideFlatModeButton={!!currentComment}
           />
         )}
+        {currentComment && fullThreadUrl && (
+          <div className={styles.fullThreadLink}>
+            <a data-link href={fullThreadUrl}>
+              view all comments
+            </a>
+          </div>
+        )}
       </Card>
       <div className={styles.commentsList}>
         <CommentsList
@@ -86,6 +94,8 @@ Comments.propTypes = {
   disableReply: PropTypes.bool,
   title: PropTypes.string,
   recordOwner: PropTypes.string,
+  commentPath: PropTypes.string,
+  fullThreadUrl: PropTypes.string,
 };
 
 Comments.defaultProps = {

@@ -35,14 +35,14 @@ const ParentPreview = ({ parentComment, link }) => {
 const CommentFooter = ({
   threadLength,
   disableReply,
-  link,
+  url,
   showThread,
   toggleDisplayForm,
 }) => (
   <div className={styles.footer}>
     <Join inline>
       {threadLength > 0 && !showThread && (
-        <a data-link href={link}>
+        <a data-link href={url}>
           {threadLength} more repl{threadLength > 1 ? "ies" : "y"}
         </a>
       )}
@@ -52,7 +52,7 @@ const CommentFooter = ({
         </span>
       )}
     </Join>
-    <a href={link} data-link className={styles.discussion}>
+    <a href={url} data-link className={styles.discussion}>
       <ButtonIcon type="link" />
     </a>
   </div>
@@ -86,7 +86,7 @@ export const CommentCard = ({
   const isRecordOwner = recordOwner === comment.username;
   const showThread = depth !== 6;
 
-  const commentLink = generatePath(commentPath, {
+  const commentUrl = generatePath(commentPath, {
     token: getShortToken(comment.token),
     commentid: comment.commentid,
   });
@@ -145,7 +145,7 @@ export const CommentCard = ({
         <CommentFooter
           threadLength={threadLength}
           disableReply={disableReply || comment.deleted}
-          link={commentLink}
+          url={commentUrl}
           showThread={showThread}
           toggleDisplayForm={toggleDisplayForm}
         />
