@@ -33,7 +33,7 @@ import { PROPOSAL_STATUS_APPROVED } from "../../pi";
 
 const ExpandIcon = ({ link }) => (
   <a data-link href={link}>
-    <Icon type="expand" viewBox="0 0 450 450" height={60} width={60} />
+    <Icon type="expand" viewBox="0 0 450 450" height={30} width={30} />
   </a>
 );
 
