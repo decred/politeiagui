@@ -26,7 +26,12 @@ const ParentPreview = ({ parentComment, link }) => {
     omission: " [...]",
   });
   return (
-    <a className={styles.parentContext} data-link href={link}>
+    <a
+      className={styles.parentContext}
+      data-testid="comment-card-parent-preview"
+      data-link
+      href={link}
+    >
       @{parentComment.username}: {truncatedComment}
     </a>
   );

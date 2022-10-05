@@ -5,6 +5,14 @@ import { Card, H2 } from "pi-ui";
 import styles from "./styles.module.css";
 import { getCommentsByParent } from "../../comments/utils";
 
+const ViewAllLink = ({ url }) => (
+  <div className={styles.fullThreadLink}>
+    <a data-link data-testid="comments-view-all-link" href={url}>
+      view all comments
+    </a>
+  </div>
+);
+
 export const Comments = ({
   comments,
   isFlatMode,
@@ -54,13 +62,7 @@ export const Comments = ({
             onToggleFlatMode={handleToggleFlatMode}
           />
         )}
-        {currentComment && fullThreadUrl && (
-          <div className={styles.fullThreadLink}>
-            <a data-link href={fullThreadUrl}>
-              view all comments
-            </a>
-          </div>
-        )}
+        {currentComment && fullThreadUrl && <ViewAllLink url={fullThreadUrl} />}
       </Card>
       <div className={styles.commentsList}>
         <CommentsList

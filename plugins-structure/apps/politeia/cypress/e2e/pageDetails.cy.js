@@ -316,7 +316,12 @@ describe("Given a proposal with comments", () => {
       piStatus: "active",
     });
   });
-  describe("when some comments are proposal author updates", () => {
+  describe("when details page view is full", () => {
+    it("should display the main comments thread", () => {
+      cy.visit("/record/fake001");
+      cy.wait(["@details", "@comments"]);
+      cy.findAllByTestId("comments-section").should("have.length", 1);
+    });
     it("should display author updates on separate threads ordered by timestamp", () => {
       cy.mockProposalCommentsRequest({ additionalComments: authorUpdates });
       cy.visit("/record/fake001");
@@ -330,6 +335,36 @@ describe("Given a proposal with comments", () => {
       cy.findAllByTestId("comments-section-title").each((thread, i) => {
         expect(thread).to.contain.text(expectedThreadsTitlesOrder[i]);
       });
+    });
+  });
+  describe("when details page view displays only a single thread", () => {
+    it("should display only one comments thread", () => {
+      cy.visit("/record/fake001/comment/1");
+      cy.wait(["@details", "@comments"]);
+      cy.findAllByTestId("comments-section").should("have.length", 1);
+      cy.findByTestId("comments-view-all-link")
+        .should("have.text", "view all comments")
+        .invoke("attr", "href")
+        .should("eq", "/record/fake001");
+    });
+    it("should display parent comment preview for reply subthread", () => {
+      cy.mockProposalCommentsRequest({
+        additionalComments: [{ parentid: 1 }, { parentid: 6 }],
+      });
+      cy.visit("/record/fake001/comment/6");
+      cy.wait(["@details", "@comments"]);
+      cy.findAllByTestId("comments-section").should("have.length", 1);
+      cy.findAllByTestId("comment-card-parent-preview").should(
+        "have.length",
+        1
+      );
+    });
+    it("should redirect to full proposal view when clicking on 'view all comments'", () => {
+      cy.mockProposalCommentsRequest({ amount: 10 });
+      cy.visit("/record/fake001/comment/1");
+      cy.wait(["@details", "@comments"]);
+      cy.findByTestId("comments-view-all-link").click();
+      cy.findAllByTestId("comment-card").should("have.length", 10);
     });
   });
 });
