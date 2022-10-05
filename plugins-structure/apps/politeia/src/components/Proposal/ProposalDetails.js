@@ -38,8 +38,9 @@ const ProposalDetails = ({
   proposalSummary,
   onFetchRecordTimestamps,
   onFetchCommentsTimestamps,
-  onDownloadRecordBundle,
+  onFetchVotesTimestamps,
   onDownloadCommentsBundle,
+  onDownloadVotesBundle,
   proposalStatusChanges,
   rfpSubmissionsRecords,
   rfpSubmissionsVoteSummaries,
@@ -164,8 +165,9 @@ const ProposalDetails = ({
               record={record}
               onFetchRecordTimestamps={onFetchRecordTimestamps}
               onFetchCommentsTimestamps={onFetchCommentsTimestamps}
-              onDownloadRecordBundle={onDownloadRecordBundle}
+              onFetchVotesTimestamps={onFetchVotesTimestamps}
               onDownloadCommentsBundle={onDownloadCommentsBundle}
+              onDownloadVotesBundle={onDownloadVotesBundle}
             />
             <div className={styles.footerButtons}>
               <a

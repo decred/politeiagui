@@ -7,7 +7,9 @@ import { getShortToken } from "@politeiagui/core/records/utils";
 const ProposalDownloads = ({
   onFetchRecordTimestamps,
   onFetchCommentsTimestamps,
+  onFetchVotesTimestamps,
   onDownloadCommentsBundle,
+  onDownloadVotesBundle,
   record,
   title,
   headerClassName,
@@ -49,6 +51,16 @@ const ProposalDownloads = ({
       {onFetchCommentsTimestamps && (
         <DropdownItem onClick={onFetchCommentsTimestamps}>
           Comments Timestamps
+        </DropdownItem>
+      )}
+      {onDownloadVotesBundle && (
+        <DropdownItem onClick={onDownloadVotesBundle}>
+          Votes Bundle
+        </DropdownItem>
+      )}
+      {onFetchVotesTimestamps && (
+        <DropdownItem onClick={onFetchVotesTimestamps}>
+          Votes Timestamps
         </DropdownItem>
       )}
     </Dropdown>

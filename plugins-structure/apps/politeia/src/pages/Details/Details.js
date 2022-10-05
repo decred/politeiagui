@@ -31,7 +31,9 @@ function Details({ token }) {
     fullToken,
     onFetchRecordTimestamps,
     onFetchCommentsTimestamps,
+    onFetchVotesTimestamps,
     onDownloadCommentsBundle,
+    onDownloadVotesBundle,
     proposalSummary,
     record,
     voteSummary,
@@ -71,6 +73,8 @@ function Details({ token }) {
               onFetchRecordTimestamps={onFetchRecordTimestamps}
               onFetchCommentsTimestamps={onFetchCommentsTimestamps}
               onDownloadCommentsBundle={onDownloadCommentsBundle}
+              onFetchVotesTimestamps={onFetchVotesTimestamps}
+              onDownloadVotesBundle={onDownloadVotesBundle}
               rfpSubmissionsRecords={rfpSubmissionsRecords}
               rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
               rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}

@@ -77,9 +77,17 @@ function useProposalDetails({ token }) {
     );
   }
 
+  function onFetchVotesTimestamps() {
+    console.log("Fetching votes timestamps...");
+  }
+
   function onDownloadCommentsBundle() {
     const commentsToDownload = comments && Object.values(comments);
     downloadJSON(commentsToDownload, `${token}-comments-bundle`);
+  }
+
+  function onDownloadVotesBundle() {
+    console.log("fetching results and detais before download...");
   }
 
   useEffect(() => {
@@ -101,7 +109,9 @@ function useProposalDetails({ token }) {
     fullToken,
     onFetchRecordTimestamps,
     onFetchCommentsTimestamps,
+    onFetchVotesTimestamps,
     onDownloadCommentsBundle,
+    onDownloadVotesBundle,
     proposalSummary,
     record,
     voteSummary,
