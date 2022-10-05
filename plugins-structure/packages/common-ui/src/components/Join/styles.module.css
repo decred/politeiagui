@@ -13,8 +13,8 @@
     flex-flow: column;
     max-width: 100%;
   }
-  .join > * {
-    padding: 1rem 0;
+  .join > *:not(:first-child) {
+    padding-top: 1rem;
   }
   .separator {
     display: none;

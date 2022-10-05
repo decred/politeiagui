@@ -155,7 +155,7 @@ function ErrorMessage({ error }) {
 export function RecordForm({ initialValues, children, onSubmit, className }) {
   const formProps = useForm({ defaultValues: initialValues });
   return (
-    <Card paddingSize="small" className={className}>
+    <Card className={classNames(styles.card, className)}>
       <FormProvider {...formProps}>
         <form
           onSubmit={formProps.handleSubmit(onSubmit)}

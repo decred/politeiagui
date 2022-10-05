@@ -8,17 +8,17 @@
 }
 
 .secondRow {
-  margin-top: var(--spacing-medium);
+  padding-top: var(--spacing-medium);
 }
 
 .thirdRow {
-  margin-top: var(--spacing-medium);
+  padding-top: var(--spacing-medium);
 }
 
 .footer {
   display: flex;
   width: 100%;
-  margin-top: var(--spacing-medium);
+  padding-top: var(--spacing-medium);
   justify-content: space-between;
   align-items: center;
 }
@@ -53,6 +53,7 @@
   align-items: center;
   justify-self: end;
   grid-area: rightHeader;
+  margin-top: 0.5rem;
   text-align: end;
 }
 
@@ -68,6 +69,8 @@
 
   .rightHeader {
     justify-self: start;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
     text-align: start;
   }
 
@@ -75,5 +78,9 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     grid-template-areas: "rightHeader" "title" "subtitle ";
+  }
+
+  .title {
+    padding-top: 1rem;
   }
 }

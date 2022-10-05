@@ -3,7 +3,11 @@ import { Button } from "pi-ui";
 import { RecordCard } from "@politeiagui/common-ui";
 import { CommentsCount } from "@politeiagui/comments/ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
-import { decodeProposalRecord, isRfpProposal } from "../../pi/proposals/utils";
+import {
+  decodeProposalRecord,
+  isRfpProposal,
+  showVoteStatusBar,
+} from "../../pi/proposals/utils";
 import {
   ProposalStatusBar,
   ProposalStatusLabel,
@@ -52,7 +56,11 @@ const ProposalCard = ({
         rightHeaderSubtitle={
           <ProposalStatusLabel statusChange={currentStatusChange} />
         }
-        secondRow={<ProposalStatusBar voteSummary={voteSummary} />}
+        secondRow={
+          showVoteStatusBar(voteSummary) && (
+            <ProposalStatusBar voteSummary={voteSummary} />
+          )
+        }
         footer={
           <>
             <CommentsCount

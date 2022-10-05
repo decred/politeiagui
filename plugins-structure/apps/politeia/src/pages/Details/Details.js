@@ -79,6 +79,7 @@ function Details({ token }) {
             {comments && (
               <Comments
                 comments={comments}
+                recordOwner={record.username}
                 // Mocking onReply until user layer is done.
                 onReply={(comment, parentid) => {
                   console.log(`Replying ${parentid}:`, comment);
