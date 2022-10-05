@@ -47,7 +47,7 @@ const CommentFooter = ({
   <div className={styles.footer}>
     <Join inline>
       {threadLength > 0 && !showThread && (
-        <a data-link href={url}>
+        <a data-link href={url} data-testid="comment-card-footer-more-replies">
           {threadLength} more repl{threadLength > 1 ? "ies" : "y"}
         </a>
       )}

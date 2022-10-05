@@ -367,6 +367,31 @@ describe("Given a proposal with comments", () => {
       cy.findAllByTestId("comment-card").should("have.length", 10);
     });
   });
+  describe("when comments thread is deep", () => {
+    const amount = 1;
+    const deepThread = Array(20)
+      .fill({ parentid: amount })
+      .map((c, i) => ({ parentid: c.parentid + i }));
+    beforeEach(() => {
+      cy.mockProposalCommentsRequest({
+        amount,
+        additionalComments: deepThread,
+      });
+      cy.visit("record/fake001");
+      cy.wait(["@details", "@comments"]);
+    });
+    it("should hide thread on depth == 6", () => {
+      cy.findAllByTestId("comment-card").should("have.length", 6);
+      cy.findByTestId("comment-card-footer-more-replies")
+        .should("include.text", "more reply")
+        .invoke("attr", "href")
+        .should("eq", "/record/fake001/comment/6");
+    });
+    it("should display all comments on flat mode", () => {
+      cy.findByTestId("comments-filter-flat-mode-button").click();
+      cy.findAllByTestId("comment-card").should("have.length", 21);
+    });
+  });
 });
 
 describe("Given requests errors on Details page", () => {
