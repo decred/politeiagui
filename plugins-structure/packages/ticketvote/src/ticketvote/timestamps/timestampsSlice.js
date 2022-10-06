@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import { getTicketvoteError } from "../../lib/errors";
 import { validateTicketvoteTimestampsPageSize } from "../../lib/validation";
-import merge from "lodash/merge";
 import range from "lodash/range";
 
 export const initialState = {
@@ -47,9 +46,17 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
         dispatch(fetchTicketvoteTimestamps({ token, votesPage: page }))
       )
     );
-    return responses
+    const res = responses
       .map((res) => res.payload)
-      .reduce((acc, t) => ({ ...acc, ...t }), {});
+      .reduce(
+        (acc, t) => ({
+          details: { ...(acc.details || {}), ...(t.details || {}) },
+          auths: [...(acc.auths || []), ...(t.auths || [])],
+          votes: [...(acc.votes || []), ...(t.votes || [])],
+        }),
+        {}
+      );
+    return res;
   }
 );
 
@@ -70,11 +77,7 @@ const ticketvoteTimestampsSlice = createSlice({
       .addCase(fetchTicketvoteTimestamps.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchTicketvoteTimestamps.fulfilled, (state, action) => {
-        const { token } = action.meta.arg;
-        const oldTimestamps = state.byToken[token] || {};
-        const newTimestamps = action.payload;
-        state.byToken[token] = merge(oldTimestamps, newTimestamps);
+      .addCase(fetchTicketvoteTimestamps.fulfilled, (state) => {
         state.status = "succeeded";
       })
       .addCase(fetchTicketvoteTimestamps.rejected, (state, action) => {
