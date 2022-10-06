@@ -2,6 +2,7 @@ import { fetchProposalDetails } from "./actions";
 import {
   downloadCommentsTimestampsEffect,
   downloadRecordTimestampsEffect,
+  downloadTicketvoteTimestampsEffect,
 } from "./effects";
 import {
   getRfpRecordLink,
@@ -159,5 +160,9 @@ export const listeners = [
   {
     type: "records/fetchTimestamps/fulfilled",
     effect: downloadRecordTimestampsEffect,
+  },
+  {
+    type: "ticketvoteTimestamps/fetchAll/fulfilled",
+    effect: downloadTicketvoteTimestampsEffect,
   },
 ];

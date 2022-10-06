@@ -13,3 +13,8 @@ export function downloadRecordTimestampsEffect({ payload, meta }) {
     `${getShortToken(token)}-v${version}-record-timestamps`
   );
 }
+
+export function downloadTicketvoteTimestampsEffect({ payload, meta }) {
+  const { token } = meta.arg;
+  downloadJSON(payload, `${getShortToken(token)}-vote-timestamps`);
+}

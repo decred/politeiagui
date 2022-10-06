@@ -1,5 +1,6 @@
 import { getTokensArray } from "@politeiagui/core/dev/mocks";
 import { getHumanReadableTicketvoteStatus } from "../../lib/utils";
+import { faker } from "@faker-js/faker";
 
 const bestblock = 420;
 
@@ -75,5 +76,21 @@ export function mockTicketvoteSummaries({
       {}
     );
     return { summaries };
+  };
+}
+
+export function mockTicketvoteTimestamps({ votesCount = 100 } = {}) {
+  return ({ votespage }) => {
+    const ts = {
+      data: faker.datatype.json(),
+      digest: faker.datatype.hexadecimal(64),
+      txid: faker.datatype.hexadecimal(64),
+      merkleroot: faker.datatype.hexadecimal(64),
+      proofs: [],
+    };
+    if (!votespage) {
+      return { auths: [ts], details: ts };
+    }
+    return { votes: Array(votesCount).fill(ts) };
   };
 }

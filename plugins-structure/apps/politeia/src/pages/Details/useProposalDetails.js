@@ -6,6 +6,8 @@ import { selectDetailsStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { ticketvoteSubmissions } from "@politeiagui/ticketvote/submissions";
+import { ticketvoteTimestamps } from "@politeiagui/ticketvote/timestamps";
+import { ticketvoteGetVotesReceived } from "@politeiagui/ticketvote/helpers";
 import { recordComments } from "@politeiagui/comments/comments";
 import { commentsCount } from "@politeiagui/comments/count";
 import { getRfpRecordLink } from "../../pi/proposals/utils";
@@ -78,7 +80,8 @@ function useProposalDetails({ token }) {
   }
 
   function onFetchVotesTimestamps() {
-    console.log("Fetching votes timestamps...");
+    const votesCount = ticketvoteGetVotesReceived(voteSummary);
+    dispatch(ticketvoteTimestamps.fetchAll({ token: fullToken, votesCount }));
   }
 
   function onDownloadCommentsBundle() {

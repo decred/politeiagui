@@ -1,4 +1,5 @@
 import {
+  fetchAllTicketvoteTimestamps,
   fetchTicketvoteTimestamps,
   selectTicketvoteTimestampsByToken,
   selectTicketvoteTimestampsError,
@@ -7,6 +8,7 @@ import {
 
 export const ticketvoteTimestamps = {
   fetch: fetchTicketvoteTimestamps,
+  fetchAll: fetchAllTicketvoteTimestamps,
   selectByToken: selectTicketvoteTimestampsByToken,
   selectError: selectTicketvoteTimestampsError,
   selectStatus: selectTicketvoteTimestampsStatus,
