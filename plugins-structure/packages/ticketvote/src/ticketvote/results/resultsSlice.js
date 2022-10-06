@@ -35,7 +35,7 @@ const ticketvoteResultsSlice = createSlice({
       })
       .addCase(fetchTicketvoteResults.fulfilled, (state, action) => {
         const { token } = action.meta.arg;
-        state.byToken[token] = action.payload;
+        state.byToken[token] = action.payload.votes;
         state.status = "succeeded";
       })
       .addCase(fetchTicketvoteResults.rejected, (state, action) => {

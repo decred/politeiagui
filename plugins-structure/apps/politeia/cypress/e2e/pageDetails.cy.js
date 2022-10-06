@@ -1,4 +1,5 @@
 import {
+  mockTicketvoteResults,
   mockTicketvoteSubmissions,
   mockTicketvoteSummaries,
 } from "@politeiagui/ticketvote/dev/mocks";
@@ -182,6 +183,34 @@ describe("Given an approved proposal details page", () => {
     );
     cy.findByTestId("status-change-reason").should("contain.text", reason);
   });
+  describe("when searching for proposal votes", () => {
+    const ticket = "fakeTicketToken";
+    it("should allow votes search by ticket token", () => {
+      cy.mockResponse(
+        "/api/ticketvote/v1/results",
+        mockTicketvoteResults({ yes: 500, no: 50, result: { ticket } })
+      ).as("results");
+      cy.visit("/record/fake001");
+      cy.findByTestId("proposal-search-votes-button").click();
+      cy.wait("@results");
+      cy.findByTestId("ticketvote-modal-ticket-search-input")
+        .type(ticket)
+        .type("{enter}");
+      cy.findByTestId("ticketvote-modal-ticket-search-table").should("exist");
+    });
+    it("should display loading indicator when loading proposal votes", () => {
+      cy.mockResponse(
+        "/api/ticketvote/v1/results",
+        mockTicketvoteResults({ yes: 500, no: 50, result: { ticket } }),
+        { delay: 5000 }
+      ).as("results");
+      cy.visit("/record/fake001");
+      cy.findByTestId("proposal-search-votes-button").click();
+      cy.findByTestId("ticketvote-modal-ticket-search-loading").should(
+        "be.visible"
+      );
+    });
+  });
 });
 
 describe("Given an abandoned proposal", () => {
@@ -362,6 +391,17 @@ describe("Given requests errors on Details page", () => {
     });
     cy.visit("/record/1234567");
     cy.findByTestId("proposal-details-error").should(
+      "include.text",
+      "1658261424"
+    );
+  });
+  it("should display error when ticketvote results request fails", () => {
+    cy.mockResponse("/api/ticketvote/v1/results", errorMock, {
+      statusCode: 500,
+    }).as("results");
+    cy.visit("/record/fake001");
+    cy.findByTestId("proposal-search-votes-button").click();
+    cy.findByTestId("record-form-error-message").should(
       "include.text",
       "1658261424"
     );

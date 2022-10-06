@@ -10,18 +10,9 @@ export const TicketvoteRecordVotesCount = ({
   tooltipClassName,
 }) => {
   const votesLeft = quorumVotes - votesReceived;
-  // const displaySearchIcon = onSearchVotes && votesReceived > 0;
   return (
     <div>
       <div className={styles.mobileOnly}>
-        {/* TODO: Make Icons Work */}
-        {/* {displaySearchIcon && (
-          <Icon
-            type="search"
-            onClick={onSearchVotes}
-            className={styles.voteCountSearch}
-          />
-        )} */}
         <Tooltip
           className={
             !tooltipClassName
@@ -47,9 +38,7 @@ export const TicketvoteRecordVotesCount = ({
 TicketvoteRecordVotesCount.propTypes = {
   quorumVotes: PropTypes.number,
   votesReceived: PropTypes.number,
-  onSearchVotes: PropTypes.func,
   isVoteActive: PropTypes.bool,
-  searchIconColor: PropTypes.string,
   tooltipClassName: PropTypes.string,
 };
 

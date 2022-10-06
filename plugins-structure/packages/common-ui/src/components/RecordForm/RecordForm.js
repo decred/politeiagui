@@ -132,16 +132,30 @@ function SaveButton({
 
 function Warning({ children }) {
   return (
-    <Message kind="warning" className={styles.warning}>
+    <Message kind="warning" className={styles.message}>
       {children}
     </Message>
   );
 }
 
-export function RecordForm({ initialValues, children, onSubmit }) {
+function ErrorMessage({ error }) {
+  return (
+    error && (
+      <Message
+        kind="error"
+        data-testid="record-form-error-message"
+        className={styles.message}
+      >
+        {error.toString()}
+      </Message>
+    )
+  );
+}
+
+export function RecordForm({ initialValues, children, onSubmit, className }) {
   const formProps = useForm({ defaultValues: initialValues });
   return (
-    <Card className={styles.card}>
+    <Card className={classNames(styles.card, className)}>
       <FormProvider {...formProps}>
         <form
           onSubmit={formProps.handleSubmit(onSubmit)}
@@ -152,6 +166,7 @@ export function RecordForm({ initialValues, children, onSubmit }) {
             formProps,
             CurrencyInput,
             DatePickerInput,
+            ErrorMessage,
             MarkdownInput,
             SaveButton,
             SelectInput,
