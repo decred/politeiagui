@@ -3,6 +3,9 @@ import * as api from "../../lib/api";
 import { getTicketvoteError } from "../../lib/errors";
 import { validateTicketvoteTimestampsPageSize } from "../../lib/validation";
 import range from "lodash/range";
+import chunk from "lodash/chunk";
+
+const REQUESTS_BATCH_AMOUNT = 5;
 
 export const initialState = {
   byToken: {},
@@ -41,12 +44,19 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
       },
     } = getState();
     const pages = range(0, Math.ceil(votesCount / timestampspagesize) + 1);
-    const responses = await Promise.all(
-      pages.map((page) =>
-        dispatch(fetchTicketvoteTimestamps({ token, votesPage: page }))
-      )
-    );
-    const res = responses
+    const batches = chunk(pages, REQUESTS_BATCH_AMOUNT);
+
+    let responses = [];
+    for (const pages of batches) {
+      const pageResponses = await Promise.all(
+        pages.map((page) =>
+          dispatch(fetchTicketvoteTimestamps({ token, votesPage: page }))
+        )
+      );
+      responses = [...responses, ...pageResponses];
+    }
+
+    return responses
       .map((res) => res.payload)
       .reduce(
         (acc, t) => ({
@@ -56,7 +66,6 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
         }),
         {}
       );
-    return res;
   }
 );
 
