@@ -81,17 +81,19 @@ export function mockTicketvoteSummaries({
 
 export function mockTicketvoteTimestamps({ votesCount = 100 } = {}) {
   return ({ votespage }) => {
-    const ts = {
-      data: faker.datatype.json(),
-      digest: faker.datatype.hexadecimal(64),
-      txid: faker.datatype.hexadecimal(64),
-      merkleroot: faker.datatype.hexadecimal(64),
-      proofs: [],
-    };
-    if (!votespage) {
-      return { auths: [ts], details: ts };
+    function getTimestampData() {
+      return {
+        data: faker.datatype.json(),
+        digest: faker.datatype.hexadecimal(64),
+        txid: faker.datatype.hexadecimal(64),
+        merkleroot: faker.datatype.hexadecimal(64),
+        proofs: [],
+      };
     }
-    return { votes: Array(votesCount).fill(ts) };
+    if (!votespage) {
+      return { auths: [getTimestampData()], details: getTimestampData() };
+    }
+    return { votes: Array(votesCount).fill({}).map(getTimestampData) };
   };
 }
 

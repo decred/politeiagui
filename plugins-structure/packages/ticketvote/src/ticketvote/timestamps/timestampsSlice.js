@@ -66,6 +66,17 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
         }),
         {}
       );
+  },
+  {
+    getPendingMeta: ({ arg }, { getState }) => {
+      const {
+        ticketvotePolicy: {
+          policy: { timestampspagesize },
+        },
+      } = getState();
+      const amount = Math.ceil(arg.votesCount / timestampspagesize);
+      return { amount };
+    },
   }
 );
 
