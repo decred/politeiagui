@@ -27,6 +27,7 @@ function mergeListeners(routeServices, listeners) {
         actionCreator: listenerCreator.actionCreator,
         type: listenerCreator.type,
         effect: listenerCreator.injectEffect(effect),
+        matcher: listenerCreator.matcher,
       });
     }
   }
