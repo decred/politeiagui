@@ -87,6 +87,7 @@ export function appSetup({
   listeners = [],
   config,
   store = defaultStore,
+  setupServices = [],
 }) {
   if (!isArray(plugins)) {
     throw Error("'plugins' must be an array");
@@ -94,6 +95,7 @@ export function appSetup({
   if (!isArray(listeners)) {
     throw Error("'listeners' must be an array");
   }
+
   let appServices = recordsServices;
   plugins.every(validatePlugin);
 
@@ -105,7 +107,12 @@ export function appSetup({
     }
   }
 
-  registerListeners(listeners);
+  // Connect app global services setup
+  validateServicesIds(setupServices);
+  const globalServices = addRouteServicesProperties(appServices, setupServices);
+  const globalListeners = mergeListeners(globalServices, listeners);
+
+  registerListeners(globalListeners);
 
   return {
     config,
