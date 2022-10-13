@@ -29,11 +29,6 @@ function Details({ token }) {
     comments,
     detailsStatus,
     fullToken,
-    onFetchRecordTimestamps,
-    onFetchCommentsTimestamps,
-    onFetchVotesTimestamps,
-    onDownloadCommentsBundle,
-    onDownloadVotesBundle,
     proposalSummary,
     record,
     voteSummary,
@@ -47,6 +42,7 @@ function Details({ token }) {
     rfpSubmissionsProposalsSummaries,
     rfpSumbissionsVoteSummaries,
   } = useProposalDetails({ token });
+
   // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
   const shouldScrollToComments = !!params?.scrollToComments;
@@ -70,11 +66,6 @@ function Details({ token }) {
               voteSummary={voteSummary}
               proposalSummary={proposalSummary}
               proposalStatusChanges={proposalStatusChanges}
-              onFetchRecordTimestamps={onFetchRecordTimestamps}
-              onFetchCommentsTimestamps={onFetchCommentsTimestamps}
-              onDownloadCommentsBundle={onDownloadCommentsBundle}
-              onFetchVotesTimestamps={onFetchVotesTimestamps}
-              onDownloadVotesBundle={onDownloadVotesBundle}
               rfpSubmissionsRecords={rfpSubmissionsRecords}
               rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
               rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
