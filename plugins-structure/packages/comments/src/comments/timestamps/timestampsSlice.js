@@ -55,6 +55,15 @@ export const fetchAllCommentsTimestamps = createAsyncThunk(
     condition: (_, { getState }) => {
       return validateCommentsTimestampsPageSize(getState());
     },
+    getPendingMeta: ({ arg }, { getState }) => {
+      const {
+        commentsPolicy: {
+          policy: { timestampspagesize },
+        },
+      } = getState();
+      const total = Math.ceil(arg.commentids.length / timestampspagesize);
+      return { total };
+    },
   }
 );
 

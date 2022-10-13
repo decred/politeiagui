@@ -68,14 +68,17 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
       );
   },
   {
+    condition: (_, { getState }) =>
+      validateTicketvoteTimestampsPageSize(getState()),
     getPendingMeta: ({ arg }, { getState }) => {
       const {
         ticketvotePolicy: {
           policy: { timestampspagesize },
         },
       } = getState();
-      const amount = Math.ceil(arg.votesCount / timestampspagesize);
-      return { amount };
+      // fetch timestamps for N votes batch + 1 for auths and details
+      const total = Math.ceil(arg.votesCount / timestampspagesize) + 1;
+      return { total };
     },
   }
 );
