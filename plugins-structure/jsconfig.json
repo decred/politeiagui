@@ -90,6 +90,9 @@
       "@politeiagui/common-ui/layout": [
         "./packages/common-ui/src/layout/index.js"
       ],
+      "@politeiagui/common-ui/services": [
+        "./packages/common-ui/src/services/index.js"
+      ],
       "@politeiagui/common-ui/theme": [
         "./packages/common-ui/src/layout/theme/index.js"
       ],
