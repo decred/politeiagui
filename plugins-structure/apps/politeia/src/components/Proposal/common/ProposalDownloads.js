@@ -1,33 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Dropdown, DropdownItem } from "pi-ui";
-import { downloadJSON } from "@politeiagui/core/downloads";
-import { getShortToken } from "@politeiagui/core/records/utils";
+import { useProposalDownloads } from "../../../pi/downloads/useProposalDownloads";
 
-const ProposalDownloads = ({
-  onFetchRecordTimestamps,
-  onFetchCommentsTimestamps,
-  onFetchVotesTimestamps,
-  onDownloadCommentsBundle,
-  onDownloadVotesBundle,
-  record,
-  title,
-  headerClassName,
-}) => {
-  if (!record) return;
-
+const ProposalDownloads = ({ token, version, title, headerClassName }) => {
   const {
-    version,
-    censorshiprecord: { token },
-  } = record;
+    onDownloadCommentsBundle,
+    onDownloadRecordBundle,
+    onDownloadVotesBundle,
+    onFetchCommentsTimestamps,
+    onFetchRecordTimestamps,
+    onFetchVotesTimestamps,
+  } = useProposalDownloads({ token });
 
-  function handleDownloadRecordBundle() {
-    const { detailsFetched: _, ...recordToDownload } = record;
-    downloadJSON(
-      recordToDownload,
-      `${getShortToken(token)}-v${version}-record-bundle`
-    );
-  }
   return (
     <Dropdown
       data-testid="proposal-downloads"
@@ -35,31 +20,49 @@ const ProposalDownloads = ({
       closeOnItemClick={false}
       dropdownHeaderClassName={headerClassName}
     >
-      <DropdownItem onClick={handleDownloadRecordBundle}>
+      <DropdownItem
+        data-testid="proposal-downloads-record-bundle"
+        onClick={onDownloadRecordBundle}
+      >
         Proposal Bundle
       </DropdownItem>
       {onFetchRecordTimestamps && (
-        <DropdownItem onClick={() => onFetchRecordTimestamps(version)}>
+        <DropdownItem
+          data-testid="proposal-downloads-record-timestamps"
+          onClick={() => onFetchRecordTimestamps(version)}
+        >
           Proposal Timestamps
         </DropdownItem>
       )}
       {onDownloadCommentsBundle && (
-        <DropdownItem onClick={onDownloadCommentsBundle}>
+        <DropdownItem
+          data-testid="proposal-downloads-comments-bundle"
+          onClick={onDownloadCommentsBundle}
+        >
           Comments Bundle
         </DropdownItem>
       )}
       {onFetchCommentsTimestamps && (
-        <DropdownItem onClick={onFetchCommentsTimestamps}>
+        <DropdownItem
+          data-testid="proposal-downloads-comments-timestamps"
+          onClick={onFetchCommentsTimestamps}
+        >
           Comments Timestamps
         </DropdownItem>
       )}
       {onDownloadVotesBundle && (
-        <DropdownItem onClick={onDownloadVotesBundle}>
+        <DropdownItem
+          data-testid="proposal-downloads-votes-bundle"
+          onClick={() => onDownloadVotesBundle()}
+        >
           Votes Bundle
         </DropdownItem>
       )}
       {onFetchVotesTimestamps && (
-        <DropdownItem onClick={onFetchVotesTimestamps}>
+        <DropdownItem
+          data-testid="proposal-downloads-votes-timestamps"
+          onClick={onFetchVotesTimestamps}
+        >
           Votes Timestamps
         </DropdownItem>
       )}

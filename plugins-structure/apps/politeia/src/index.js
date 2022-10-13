@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "@politeiagui/core";
 // Theme
 import { UiTheme } from "@politeiagui/common-ui/layout";
+import { ProgressBar } from "@politeiagui/common-ui";
 // Components
 import { Header } from "./components";
 // App
@@ -17,6 +18,7 @@ ReactDOM.render(
   <Provider store={store}>
     <UiTheme>
       <Header />
+      <ProgressBar />
       <div id="root" />
     </UiTheme>
   </Provider>,
