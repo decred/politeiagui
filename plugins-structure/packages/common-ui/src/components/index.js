@@ -5,6 +5,7 @@ export * from "./Join";
 export * from "./LabelValueList";
 export * from "./Markdown";
 export * from "./Modal";
+export * from "./ProgressBar";
 export * from "./RecordCard";
 export * from "./RecordForm";
 export * from "./RecordItem";
