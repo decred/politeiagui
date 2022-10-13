@@ -6,6 +6,10 @@ import styles from "./styles.module.css";
 export const ProgressBar = () => {
   const value = useSelector(progress.select);
   return (
-    <div className={styles.progressBar} style={{ width: `${+value * 100}%` }} />
+    <div
+      data-testid="common-ui-progress-bar"
+      className={styles.progressBar}
+      style={{ width: `${+value * 100}%` }}
+    />
   );
 };
