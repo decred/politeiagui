@@ -7,11 +7,15 @@ import { ticketvoteGetVotesReceived } from "@politeiagui/ticketvote/helpers";
 import { recordComments } from "@politeiagui/comments/comments";
 import { downloadJSON } from "@politeiagui/core/downloads";
 import { commentsTimestamps } from "@politeiagui/comments/timestamps";
+import { ticketvoteResults } from "@politeiagui/ticketvote/results";
+import { ticketvoteDetails } from "@politeiagui/ticketvote/details";
 
-export function useProposalDownloads({ token }) {
+export function useProposalDownloads({ token, version }) {
   const dispatch = useDispatch();
 
-  const record = useSelector((state) => records.selectByToken(state, token));
+  const record = useSelector((state) =>
+    records.selectVersionByToken(state, { token, version })
+  );
   const voteSummary = useSelector((state) =>
     ticketvoteSummaries.selectByToken(state, token)
   );
@@ -20,7 +24,7 @@ export function useProposalDownloads({ token }) {
   );
 
   // Timestamps downloads
-  async function onFetchRecordTimestamps(version) {
+  async function onFetchRecordTimestamps() {
     const { payload } = await dispatch(
       recordsTimestamps.fetch({ token, version })
     );
@@ -41,7 +45,7 @@ export function useProposalDownloads({ token }) {
     const { payload } = await dispatch(
       ticketvoteTimestamps.fetchAll({ token, votesCount })
     );
-    downloadJSON(payload, `${token}-vote-timestamps`);
+    downloadJSON(payload, `${token}-votes-timestamps`);
   }
 
   // Bundle download
@@ -50,13 +54,20 @@ export function useProposalDownloads({ token }) {
     downloadJSON(commentsToDownload, `${token}-comments-bundle`);
   }
 
-  function onDownloadVotesBundle() {
-    console.log("fetching results and detais before download...");
+  async function onDownloadVotesBundle() {
+    const responses = await Promise.all([
+      dispatch(ticketvoteResults.fetch({ token })),
+      dispatch(ticketvoteDetails.fetch({ token })),
+    ]);
+    const bundleToDownload = responses
+      .map((r) => r.payload)
+      .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+    downloadJSON(bundleToDownload, `${token}-votes-bundle`);
   }
 
   function onDownloadRecordBundle() {
     const { detailsFetched: _, ...recordToDownload } = record;
-    downloadJSON(recordToDownload, `${token}-v${record.version}-record-bundle`);
+    downloadJSON(recordToDownload, `${token}-v${version}-record-bundle`);
   }
 
   return {

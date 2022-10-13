@@ -11,7 +11,7 @@ const ProposalDownloads = ({ token, version, title, headerClassName }) => {
     onFetchCommentsTimestamps,
     onFetchRecordTimestamps,
     onFetchVotesTimestamps,
-  } = useProposalDownloads({ token });
+  } = useProposalDownloads({ token, version });
 
   return (
     <Dropdown
@@ -29,7 +29,7 @@ const ProposalDownloads = ({ token, version, title, headerClassName }) => {
       {onFetchRecordTimestamps && (
         <DropdownItem
           data-testid="proposal-downloads-record-timestamps"
-          onClick={() => onFetchRecordTimestamps(version)}
+          onClick={onFetchRecordTimestamps}
         >
           Proposal Timestamps
         </DropdownItem>
@@ -53,7 +53,7 @@ const ProposalDownloads = ({ token, version, title, headerClassName }) => {
       {onDownloadVotesBundle && (
         <DropdownItem
           data-testid="proposal-downloads-votes-bundle"
-          onClick={() => onDownloadVotesBundle()}
+          onClick={onDownloadVotesBundle}
         >
           Votes Bundle
         </DropdownItem>
