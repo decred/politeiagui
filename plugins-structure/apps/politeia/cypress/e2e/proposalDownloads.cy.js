@@ -1,5 +1,7 @@
 import {
+  mockTicketvoteDetails,
   mockTicketvotePolicy,
+  mockTicketvoteResults,
   mockTicketvoteSummaries,
   mockTicketvoteTimestamps,
 } from "@politeiagui/ticketvote/dev/mocks";
@@ -86,6 +88,14 @@ beforeEach(() => {
   cy.mockResponse("/api/records/v1/timestamps", mockRecordTimestamps()).as(
     "recordTimestamps"
   );
+  // Mock bundle requests
+  cy.mockResponse(
+    "/api/ticketvote/v1/results",
+    mockTicketvoteResults({ yes: yesVotes, no: noVotes })
+  ).as("voteResults");
+  cy.mockResponse("/api/ticketvote/v1/details", mockTicketvoteDetails()).as(
+    "voteDetails"
+  );
 });
 
 describe("Given a proposal with votes", () => {
@@ -106,7 +116,7 @@ describe("Given a proposal with votes", () => {
     );
     // All votes timestamps were downloaded
     cy.readFile(
-      path.join(downloadsFolder, `${customToken}-vote-timestamps.json`)
+      path.join(downloadsFolder, `${customToken}-votes-timestamps.json`)
     )
       .should("exist")
       .should("have.keys", ["auths", "votes", "details"])
@@ -114,7 +124,14 @@ describe("Given a proposal with votes", () => {
       .should("have.length", yesVotes + noVotes);
   });
   it("should download votes bundle", () => {
-    // TODO: TEST CASE
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-votes-bundle").click();
+    cy.wait(["@voteDetails", "@voteResults"]);
+    cy.readFile(path.join(downloadsFolder, `${customToken}-votes-bundle.json`))
+      .should("exist")
+      .should("have.keys", ["auths", "votes", "vote"])
+      .its("votes")
+      .should("have.length", yesVotes + noVotes);
   });
   it("should display progress bar when download is in progress", () => {
     cy.findByTestId("proposal-downloads").click();
@@ -157,6 +174,15 @@ describe("Given a proposal with comments", () => {
           .map((_, i) => `${i + 1}`)
       );
   });
+  it("should download comments bundle", () => {
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-comments-bundle").click();
+    cy.readFile(
+      path.join(downloadsFolder, `${customToken}-comments-bundle.json`)
+    )
+      .should("exist")
+      .should("have.length", amount);
+  });
   it("should display progress bar when download is in progress", () => {
     cy.findByTestId("proposal-downloads").click();
     cy.findByTestId("proposal-downloads-comments-timestamps").click();
@@ -185,5 +211,26 @@ describe("Given a proposal with record data", () => {
     )
       .should("exist")
       .should("have.keys", ["recordmetadata", "metadata", "files"]);
+  });
+  it("should download record bundle", () => {
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-record-bundle").click();
+    cy.readFile(
+      path.join(
+        downloadsFolder,
+        `${customToken}-v${customVersion}-record-bundle.json`
+      )
+    )
+      .should("exist")
+      .should("have.keys", [
+        "state",
+        "status",
+        "version",
+        "timestamp",
+        "username",
+        "metadata",
+        "files",
+        "censorshiprecord",
+      ]);
   });
 });
