@@ -21,6 +21,7 @@ import {
 import {
   mockRecordTimestamps,
   mockRecordsBatch,
+  recordToken,
 } from "@politeiagui/core/dev/mocks";
 import path from "path";
 
@@ -67,7 +68,7 @@ beforeEach(() => {
     mockProposalDetails({
       status: 2,
       state: 2,
-      customToken: "fake001234567891",
+      customToken,
       customVersion,
     })
   ).as("details");
@@ -242,19 +243,33 @@ describe("Given a proposal with record data", () => {
 });
 
 describe("Given some download in progress", () => {
+  const amount = 200;
+  const newToken = recordToken();
   beforeEach(() => {
+    cy.mockResponse(
+      "/api/records/v1/details",
+      mockProposalDetails({
+        status: 2,
+        state: 2,
+        customToken: newToken,
+        customVersion,
+      })
+    ).as("details");
     // Mock requests for home page
     cy.mockResponse("/api/ticketvote/v1/inventory", mockTicketvoteInventory(3));
     cy.mockResponse(
       "/api/records/v1/records",
       mockRecordsBatch(mockProposal({ state: 2, status: 2 }))
     ).as("records");
+    cy.mockResponse("/api/comments/v1/comments", mockComments({ amount })).as(
+      "comments"
+    );
     cy.mockResponse("/api/comments/v1/count", mockCommentsCount()).as("counts");
     // Visit proposal details page
-    cy.visit(`/record/${customToken.substring(0, 7)}`);
+    cy.visit(`/record/${newToken.substring(0, 7)}`);
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
   });
-  it("should not automatically stop downloads while navigating on app", () => {
+  it("should continue votes downloads on route change", () => {
     cy.findByTestId("proposal-downloads").click();
     cy.findByTestId("proposal-downloads-votes-timestamps").click();
     // Navigate to app using app links
@@ -264,12 +279,94 @@ describe("Given some download in progress", () => {
     );
     // Requests should continue on background
     cy.wait("@votesTimestamps");
-    cy.readFile(
-      path.join(downloadsFolder, `${customToken}-votes-timestamps.json`)
-    )
+    cy.readFile(path.join(downloadsFolder, `${newToken}-votes-timestamps.json`))
       .should("exist")
       .should("have.keys", ["auths", "votes", "details"])
       .its("votes")
       .should("have.length", yesVotes + noVotes);
+  });
+  it("should continue comments downloads on route change", () => {
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-comments-timestamps").click();
+    // Navigate to app using app links
+    cy.findByTestId("politeia-logo").click();
+    cy.findByTestId("common-ui-progress-bar", { timeout: 10000 }).should(
+      "be.visible"
+    );
+    // Requests should continue on background
+    cy.wait("@commentsTimestamps");
+    // All comments timestamps were fetched
+    cy.readFile(
+      path.join(downloadsFolder, `${newToken}-comments-timestamps.json`)
+    )
+      .should("exist")
+      .should(
+        "have.keys",
+        Array(amount)
+          .fill("")
+          .map((_, i) => `${i + 1}`)
+      );
+  });
+});
+
+describe("Given some failed download", () => {
+  const failedToken = recordToken();
+  const amount = 300;
+  beforeEach(() => {
+    cy.mockResponse("/api/comments/v1/comments", mockComments({ amount })).as(
+      "comments"
+    );
+    cy.mockResponse(
+      "/api/records/v1/details",
+      mockProposalDetails({
+        status: 2,
+        state: 2,
+        customToken: failedToken,
+        customVersion,
+      })
+    ).as("details");
+    // Vote Timestamps error
+    cy.mockResponse(
+      "/api/ticketvote/v1/timestamps",
+      () => ({
+        errorcode: 123123123,
+      }),
+      { statusCode: 500 }
+    ).as("votesTimestamps");
+    cy.mockResponse(
+      { url: "/api/ticketvote/v1/timestamps", times: 2 },
+      mockTicketvoteTimestamps()
+    ).as("votesTimestamps");
+    // Comments timestamps error
+    cy.mockResponse(
+      "/api/comments/v1/timestamps",
+      () => ({
+        errorcode: 123123123,
+      }),
+      { statusCode: 500 }
+    ).as("commentsTimestamps");
+    cy.mockResponse(
+      { url: "/api/comments/v1/timestamps", times: 2 },
+      mockCommentsTimestamps()
+    ).as("commentsTimestamps");
+    // Visit page
+    cy.visit(`/record/${failedToken.substring(0, 7)}`);
+    cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
+  });
+  it("should cancel votes timestamps downloads", () => {
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-votes-timestamps").click();
+    // Assert download canceled
+    cy.readFile(
+      path.join(downloadsFolder, `${failedToken}-votes-timestamps.json`)
+    ).should("not.exist");
+  });
+  it("should cancel comments timestamps downloads", () => {
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-comments-timestamps").click();
+    // Assert download canceled
+    cy.readFile(
+      path.join(downloadsFolder, `${failedToken}-comments-timestamps.json`)
+    ).should("not.exist");
   });
 });
