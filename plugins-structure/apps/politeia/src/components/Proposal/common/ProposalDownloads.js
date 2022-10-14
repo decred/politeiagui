@@ -15,11 +15,10 @@ const DownloadItem = ({ onDownload, children, ...props }) => {
     <DropdownItem
       onClick={handleDownload}
       className={styles.downloadItem}
-      disabled={isLoading}
       {...props}
     >
       <div className={styles.downloadLabel}>{children}</div>
-      <div className={styles.downloadSpinner}>
+      <div className={styles.downloadIcon}>
         {isLoading && <Spinner invert />}
       </div>
     </DropdownItem>

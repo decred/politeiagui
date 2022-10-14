@@ -2,9 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-left: 4rem;
 }
 
-.downloadSpinner {
+.downloadIcon {
   padding-left: 1rem;
   width: 3rem;
   display: flex;
