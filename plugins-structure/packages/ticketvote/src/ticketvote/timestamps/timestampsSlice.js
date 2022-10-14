@@ -47,12 +47,17 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
     const batches = chunk(pages, REQUESTS_BATCH_AMOUNT);
 
     let responses = [];
+
     for (const pages of batches) {
       const pageResponses = await Promise.all(
         pages.map((page) =>
           dispatch(fetchTicketvoteTimestamps({ token, votesPage: page }))
         )
       );
+      const responseError = pageResponses.find((r) => r.error);
+      if (responseError) {
+        throw Error(responseError.error);
+      }
       responses = [...responses, ...pageResponses];
     }
 

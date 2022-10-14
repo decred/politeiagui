@@ -47,6 +47,10 @@ export const fetchAllCommentsTimestamps = createAsyncThunk(
         dispatch(fetchCommentsTimestamps({ token, commentids: page }))
       )
     );
+    const responseError = responses.find((r) => r.error);
+    if (responseError) {
+      throw Error(responseError.error);
+    }
     return responses
       .map((res) => res.payload.comments)
       .reduce((acc, c) => ({ ...acc, ...c }), {});
