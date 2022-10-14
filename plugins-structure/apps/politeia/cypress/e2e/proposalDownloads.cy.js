@@ -18,7 +18,7 @@ import {
 import { mockRecordTimestamps } from "@politeiagui/core/dev/mocks";
 import path from "path";
 
-const yesVotes = 250;
+const yesVotes = 650;
 const noVotes = 50;
 const timestampspagesize = 100;
 const customVersion = 2;
