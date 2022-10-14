@@ -34,18 +34,18 @@ export function useProposalDownloads({ token, version }) {
   async function onFetchCommentsTimestamps() {
     // TODO: Support timestamps for separate threads and comments sections
     const ids = Object.keys(comments).map((id) => +id);
-    const { payload } = await dispatch(
+    const { payload, error } = await dispatch(
       commentsTimestamps.fetchAll({ token, commentids: ids })
     );
-    downloadJSON(payload, `${token}-comments-timestamps`);
+    if (!error) downloadJSON(payload, `${token}-comments-timestamps`);
   }
 
   async function onFetchVotesTimestamps() {
     const votesCount = ticketvoteGetVotesReceived(voteSummary);
-    const { payload } = await dispatch(
+    const { payload, error } = await dispatch(
       ticketvoteTimestamps.fetchAll({ token, votesCount })
     );
-    downloadJSON(payload, `${token}-votes-timestamps`);
+    if (!error) downloadJSON(payload, `${token}-votes-timestamps`);
   }
 
   // Bundle download

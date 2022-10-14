@@ -29,7 +29,11 @@ const updateDownloadProgressListenerCreator = {
 const endDownloadProgressListenerCreator = {
   matcher: isAnyOf(
     ticketvoteTimestamps.fetchAll.fulfilled,
-    commentsTimestamps.fetchAll.fulfilled
+    ticketvoteTimestamps.fetchAll.rejected,
+    ticketvoteTimestamps.fetch.rejected,
+    commentsTimestamps.fetchAll.fulfilled,
+    commentsTimestamps.fetchAll.rejected,
+    commentsTimestamps.fetch.rejected
   ),
   injectEffect,
 };
