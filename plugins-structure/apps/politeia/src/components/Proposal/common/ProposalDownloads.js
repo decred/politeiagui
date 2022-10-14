@@ -1,7 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, DropdownItem } from "pi-ui";
+import { Dropdown, DropdownItem, Spinner } from "pi-ui";
 import { useProposalDownloads } from "../../../pi/downloads/useProposalDownloads";
+import styles from "./styles.module.css";
+
+const DownloadItem = ({ onDownload, children, ...props }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  async function handleDownload() {
+    setIsLoading(true);
+    await onDownload();
+    setIsLoading(false);
+  }
+  return (
+    <DropdownItem
+      onClick={handleDownload}
+      className={styles.downloadItem}
+      disabled={isLoading}
+      {...props}
+    >
+      <div className={styles.downloadLabel}>{children}</div>
+      <div className={styles.downloadSpinner}>
+        {isLoading && <Spinner invert />}
+      </div>
+    </DropdownItem>
+  );
+};
 
 const ProposalDownloads = ({ token, version, title, headerClassName }) => {
   const {
@@ -20,58 +43,59 @@ const ProposalDownloads = ({ token, version, title, headerClassName }) => {
       closeOnItemClick={false}
       dropdownHeaderClassName={headerClassName}
     >
-      <DropdownItem
+      <DownloadItem
         data-testid="proposal-downloads-record-bundle"
-        onClick={onDownloadRecordBundle}
+        onDownload={onDownloadRecordBundle}
       >
         Proposal Bundle
-      </DropdownItem>
+      </DownloadItem>
       {onFetchRecordTimestamps && (
-        <DropdownItem
+        <DownloadItem
           data-testid="proposal-downloads-record-timestamps"
-          onClick={onFetchRecordTimestamps}
+          onDownload={onFetchRecordTimestamps}
         >
           Proposal Timestamps
-        </DropdownItem>
+        </DownloadItem>
       )}
       {onDownloadCommentsBundle && (
-        <DropdownItem
+        <DownloadItem
           data-testid="proposal-downloads-comments-bundle"
-          onClick={onDownloadCommentsBundle}
+          onDownload={onDownloadCommentsBundle}
         >
           Comments Bundle
-        </DropdownItem>
+        </DownloadItem>
       )}
       {onFetchCommentsTimestamps && (
-        <DropdownItem
+        <DownloadItem
           data-testid="proposal-downloads-comments-timestamps"
-          onClick={onFetchCommentsTimestamps}
+          onDownload={onFetchCommentsTimestamps}
         >
           Comments Timestamps
-        </DropdownItem>
+        </DownloadItem>
       )}
       {onDownloadVotesBundle && (
-        <DropdownItem
+        <DownloadItem
           data-testid="proposal-downloads-votes-bundle"
-          onClick={onDownloadVotesBundle}
+          onDownload={onDownloadVotesBundle}
         >
           Votes Bundle
-        </DropdownItem>
+        </DownloadItem>
       )}
       {onFetchVotesTimestamps && (
-        <DropdownItem
+        <DownloadItem
           data-testid="proposal-downloads-votes-timestamps"
-          onClick={onFetchVotesTimestamps}
+          onDownload={onFetchVotesTimestamps}
         >
           Votes Timestamps
-        </DropdownItem>
+        </DownloadItem>
       )}
     </Dropdown>
   );
 };
 
 ProposalDownloads.propTypes = {
-  onFetchRecordTimestamps: PropTypes.func,
+  token: PropTypes.string.isRequired,
+  version: PropTypes.number,
   title: PropTypes.string,
   record: PropTypes.object,
 };
