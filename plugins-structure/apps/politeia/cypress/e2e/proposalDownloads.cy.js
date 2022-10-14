@@ -1,5 +1,6 @@
 import {
   mockTicketvoteDetails,
+  mockTicketvoteInventory,
   mockTicketvotePolicy,
   mockTicketvoteResults,
   mockTicketvoteSummaries,
@@ -8,14 +9,19 @@ import {
 import {
   mockPiBillingStatusChanges,
   mockPiSummaries,
+  mockProposal,
   mockProposalDetails,
 } from "../../src/pi/dev/mocks";
 import {
   mockComments,
+  mockCommentsCount,
   mockCommentsPolicy,
   mockCommentsTimestamps,
 } from "@politeiagui/comments/dev/mocks";
-import { mockRecordTimestamps } from "@politeiagui/core/dev/mocks";
+import {
+  mockRecordTimestamps,
+  mockRecordsBatch,
+} from "@politeiagui/core/dev/mocks";
 import path from "path";
 
 const yesVotes = 650;
@@ -232,5 +238,38 @@ describe("Given a proposal with record data", () => {
         "files",
         "censorshiprecord",
       ]);
+  });
+});
+
+describe("Given some download in progress", () => {
+  beforeEach(() => {
+    // Mock requests for home page
+    cy.mockResponse("/api/ticketvote/v1/inventory", mockTicketvoteInventory(3));
+    cy.mockResponse(
+      "/api/records/v1/records",
+      mockRecordsBatch(mockProposal({ state: 2, status: 2 }))
+    ).as("records");
+    cy.mockResponse("/api/comments/v1/count", mockCommentsCount()).as("counts");
+    // Visit proposal details page
+    cy.visit(`/record/${customToken.substring(0, 7)}`);
+    cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
+  });
+  it("should not automatically stop downloads while navigating on app", () => {
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-votes-timestamps").click();
+    // Navigate to app using app links
+    cy.findByTestId("politeia-logo").click();
+    cy.findByTestId("common-ui-progress-bar", { timeout: 10000 }).should(
+      "be.visible"
+    );
+    // Requests should continue on background
+    cy.wait("@votesTimestamps");
+    cy.readFile(
+      path.join(downloadsFolder, `${customToken}-votes-timestamps.json`)
+    )
+      .should("exist")
+      .should("have.keys", ["auths", "votes", "details"])
+      .its("votes")
+      .should("have.length", yesVotes + noVotes);
   });
 });
