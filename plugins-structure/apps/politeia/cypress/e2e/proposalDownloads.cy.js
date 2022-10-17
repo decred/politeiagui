@@ -151,7 +151,7 @@ describe("Given a proposal with votes", () => {
 });
 
 describe("Given a proposal with comments", () => {
-  const amount = 60;
+  const amount = 100;
   const timestampspagesize = 10;
   beforeEach(() => {
     // Change page size so we can dispatch multiple requests without increasing
