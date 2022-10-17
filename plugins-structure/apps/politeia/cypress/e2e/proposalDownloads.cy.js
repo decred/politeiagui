@@ -151,8 +151,16 @@ describe("Given a proposal with votes", () => {
 });
 
 describe("Given a proposal with comments", () => {
-  const amount = 300;
+  const amount = 60;
+  const timestampspagesize = 10;
   beforeEach(() => {
+    // Change page size so we can dispatch multiple requests without increasing
+    // the comments number.
+    cy.mockResponse(
+      "/api/comments/v1/policy",
+      mockCommentsPolicy({ timestampspagesize })
+    );
+
     cy.mockResponse("/api/comments/v1/comments", mockComments({ amount })).as(
       "comments"
     );
@@ -243,9 +251,16 @@ describe("Given a proposal with record data", () => {
 });
 
 describe("Given some download in progress", () => {
-  const amount = 200;
+  const amount = 60;
   const newToken = recordToken();
+  const timestampspagesize = 10;
   beforeEach(() => {
+    // Change page size so we can dispatch multiple requests without increasing
+    // the comments number.
+    cy.mockResponse(
+      "/api/comments/v1/policy",
+      mockCommentsPolicy({ timestampspagesize })
+    );
     cy.mockResponse(
       "/api/records/v1/details",
       mockProposalDetails({
