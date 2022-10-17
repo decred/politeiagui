@@ -1,7 +1,6 @@
 import {
   fetchAllCommentsTimestamps,
   fetchCommentsTimestamps,
-  selectCommentsTimestampsByToken,
   selectCommentsTimestampsError,
   selectCommentsTimestampsStatus,
 } from "./timestampsSlice";
@@ -9,7 +8,6 @@ import {
 export const commentsTimestamps = {
   fetch: fetchCommentsTimestamps,
   fetchAll: fetchAllCommentsTimestamps,
-  selectByToken: selectCommentsTimestampsByToken,
   selectError: selectCommentsTimestampsError,
   selectStatus: selectCommentsTimestampsStatus,
 };

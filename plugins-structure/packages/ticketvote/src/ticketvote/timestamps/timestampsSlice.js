@@ -8,7 +8,6 @@ import chunk from "lodash/chunk";
 const REQUESTS_BATCH_AMOUNT = 5;
 
 export const initialState = {
-  byToken: {},
   status: "idle",
   error: false,
 };
@@ -118,8 +117,6 @@ const ticketvoteTimestampsSlice = createSlice({
 // Selectors
 export const selectTicketvoteTimestampsStatus = (state) =>
   state.ticketvoteTimestamps?.status;
-export const selectTicketvoteTimestampsByToken = (state, token) =>
-  state.ticketvoteTimestamps?.byToken[token];
 
 // Errors
 export const selectTicketvoteTimestampsError = (state) =>
