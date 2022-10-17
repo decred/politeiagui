@@ -24,9 +24,6 @@ export const TicketvoteRecordVoteStatusBar = ({ ticketvoteSummary }) => {
             isVoteActive={true}
             quorumVotes={quorum}
             votesReceived={votesReceived}
-            onSearchVotes={() => {
-              console.log("SEARCHING");
-            }}
           />
         }
       />

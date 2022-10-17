@@ -30,6 +30,7 @@ import styles from "./styles.module.css";
 import { ModalProposalDiff } from "./ModalProposalDiff";
 import { ProposalsCompact } from "./ProposalsCompact";
 import { PROPOSAL_STATUS_APPROVED } from "../../pi";
+import { ModalTicketSearch } from "@politeiagui/ticketvote/ui";
 
 const ExpandIcon = ({ link }) => (
   <a data-link href={link}>
@@ -89,6 +90,12 @@ const ProposalDetails = ({
         alt: file.name,
       }));
     open(ModalImages, { images, activeIndex: index });
+  }
+
+  function handleOpenSearchVotesModal() {
+    open(ModalTicketSearch, {
+      token: proposalDetails.token,
+    });
   }
 
   const isAbandoned = proposalDetails.archived || proposalDetails.censored;
@@ -185,6 +192,11 @@ const ProposalDetails = ({
                 <ButtonIcon type="markdown" viewBox="0 0 208 128" />
               </a>
               <ButtonIcon type="link" onClick={handleShowRawMarkdown} />
+              <ButtonIcon
+                type="search"
+                onClick={handleOpenSearchVotesModal}
+                data-testid="proposal-search-votes-button"
+              />
             </div>
           </>
         }
