@@ -52,6 +52,7 @@ export const CommentsFilter = ({ onSort, onToggleFlatMode, isFlat }) => {
           styles.flatButtonWrapper,
           isFlat && styles.flatModeActive
         )}
+        data-testid="comments-filter-flat-mode-button"
         onClick={onToggleFlatMode}
       >
         <Text

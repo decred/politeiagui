@@ -5,10 +5,12 @@ import styles from "./styles.module.css";
 
 const DefaultSeparator = () => <span className={styles.separator}>•</span>;
 
-export const Join = ({ children, SeparatorComponent, className }) => {
+export const Join = ({ children, SeparatorComponent, className, inline }) => {
   const childrenArray = React.Children.toArray(children).filter((c) => !!c);
   return (
-    <div className={classNames(styles.join, className)}>
+    <div
+      className={classNames(styles.join, inline && styles.inline, className)}
+    >
       {childrenArray.map((child, idx) => (
         <React.Fragment key={`join-${idx}`}>
           {React.cloneElement(child)}

@@ -39,11 +39,11 @@ describe("Given CommentCard component", () => {
     });
     it("should display the reply button", () => {
       render(<CommentCard comment={comment} />);
-      expect(screen.getByTestId("comment-reply")).toHaveTextContent("Reply");
+      expect(screen.getByTestId("comment-reply")).toHaveTextContent(/reply/i);
     });
     it("should display the censor button", () => {
       render(<CommentCard comment={comment} showCensor={true} />);
-      expect(screen.getByTestId("comment-censor")).toHaveTextContent("Censor");
+      expect(screen.getByTestId("comment-censor")).toHaveTextContent(/censor/i);
     });
   });
   describe("given some censored comment", () => {

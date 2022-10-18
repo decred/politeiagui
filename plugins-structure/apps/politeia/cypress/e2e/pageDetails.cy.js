@@ -2,6 +2,7 @@ import {
   mockTicketvoteResults,
   mockTicketvoteSubmissions,
   mockTicketvoteSummaries,
+  ticketvoteSummariesByStatus,
 } from "@politeiagui/ticketvote/dev/mocks";
 import {
   mockPiBillingStatusChanges,
@@ -17,47 +18,71 @@ import { mockRecordsBatch } from "@politeiagui/core/dev/mocks";
 
 const body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 const username = "FakeTester";
-const approvedVoteSummary = {
-  type: 1,
-  status: 5,
-  duration: 10,
-  startblockheight: 883357,
-  startblockhash:
-    "0000000094f39c5495faad40a6554f6996c9912d378afa19b971055ebe505382",
-  endblockheight: 883374,
-  eligibletickets: 5589,
-  quorumpercentage: 0,
-  passpercentage: 60,
-  results: [
-    { id: "yes", votes: 500 },
-    { id: "no", votes: 50 },
-  ],
-  bestblock: 956278,
-};
+
+Cypress.Commands.add(
+  "mockProposalDetailsRequests",
+  ({
+    recordState = 2,
+    recordStatus = 2,
+    recordReason,
+    version = 1,
+    voteStatus = "unauthorized",
+    piStatus = "under-review",
+    billingStatus = 1,
+    billingReason,
+    linkby,
+    linkto,
+  } = {}) => {
+    cy.mockResponse(
+      "/api/records/v1/details",
+      mockProposalDetails({
+        status: recordStatus,
+        state: recordState,
+        body,
+        username,
+        customVersion: version,
+        reason: recordReason,
+        linkby,
+        linkto,
+      })
+    ).as("details");
+    cy.mockResponse(
+      "/api/ticketvote/v1/summaries",
+      mockTicketvoteSummaries(ticketvoteSummariesByStatus[voteStatus])
+    ).as("voteSummaries");
+    cy.mockResponse(
+      "/api/pi/v1/billingstatuschanges",
+      mockPiBillingStatusChanges({
+        reason: billingReason,
+        status: billingStatus,
+      })
+    ).as("billing");
+    cy.mockResponse(
+      "/api/pi/v1/summaries",
+      mockPiSummaries({ status: piStatus })
+    ).as("piSummaries");
+  }
+);
+
+Cypress.Commands.add(
+  "mockProposalCommentsRequest",
+  ({ amount = 5, additionalComments } = {}) =>
+    cy
+      .mockResponse(
+        "/api/comments/v1/comments",
+        mockComments({ amount, additionalComments })
+      )
+      .as("comments")
+);
 
 beforeEach(() => {
-  cy.mockResponse("/api/comments/v1/comments", mockComments({ amount: 5 })).as(
-    "comments"
-  );
-  cy.mockResponse(
-    "/api/records/v1/details",
-    mockProposalDetails({
-      status: 2,
-      state: 2,
-      body,
-      username,
-      customVersion: 2,
-    })
-  ).as("details");
-  cy.mockResponse(
-    "/api/ticketvote/v1/summaries",
-    mockTicketvoteSummaries({ status: 1 })
-  ).as("voteSummaries");
-  cy.mockResponse("/api/pi/v1/summaries", mockPiSummaries()).as("piSummaries");
+  cy.mockProposalCommentsRequest();
+  cy.mockProposalDetailsRequests();
 });
 
 describe("Given an unauthorized and edited Proposal Details page", () => {
   beforeEach(() => {
+    cy.mockProposalDetailsRequests({ version: 2 });
     cy.visit("/record/fake001");
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
   });
@@ -92,15 +117,7 @@ describe("Given an unauthorized and edited Proposal Details page", () => {
 
 describe("Given an unauthorized and unedited Proposal Details page", () => {
   beforeEach(() => {
-    cy.mockResponse(
-      "/api/records/v1/details",
-      mockProposalDetails({
-        status: 2,
-        state: 2,
-        body,
-        username,
-      })
-    ).as("details");
+    cy.mockProposalDetailsRequests();
     cy.visit("/record/fake001");
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
   });
@@ -125,30 +142,11 @@ describe("Given an unauthorized and unedited Proposal Details page", () => {
 });
 
 describe("Given an approved proposal details page", () => {
-  beforeEach(() => {
-    cy.mockResponse(
-      "/api/records/v1/details",
-      mockProposalDetails({
-        status: 2,
-        state: 2,
-        body,
-        username,
-      })
-    ).as("details");
-    cy.mockResponse(
-      "/api/pi/v1/billingstatuschanges",
-      mockPiBillingStatusChanges()
-    ).as("billing");
-    cy.mockResponse(
-      "/api/ticketvote/v1/summaries",
-      mockTicketvoteSummaries(approvedVoteSummary)
-    ).as("voteSummaries");
-  });
   it("should render its vote status bar and active status tag", () => {
-    cy.mockResponse(
-      "/api/pi/v1/summaries",
-      mockPiSummaries({ status: "active" })
-    ).as("piSummaries");
+    cy.mockProposalDetailsRequests({
+      voteStatus: "approved",
+      piStatus: "active",
+    });
     cy.visit("/record/fake001");
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
     cy.findByTestId("record-card-right-header").should(
@@ -167,14 +165,12 @@ describe("Given an approved proposal details page", () => {
   });
   it("should render status changes reason for closed billing", () => {
     const reason = "Closed!";
-    cy.mockResponse(
-      "/api/pi/v1/summaries",
-      mockPiSummaries({ status: "closed" })
-    ).as("piSummaries");
-    cy.mockResponse(
-      "/api/pi/v1/billingstatuschanges",
-      mockPiBillingStatusChanges({ status: 2, reason })
-    );
+    cy.mockProposalDetailsRequests({
+      voteStatus: "approved",
+      piStatus: "closed",
+      billingReason: reason,
+      billingStatus: 2,
+    });
     cy.visit("/record/fake001");
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
     cy.findByTestId("record-card-right-header").should(
@@ -216,20 +212,11 @@ describe("Given an approved proposal details page", () => {
 describe("Given an abandoned proposal", () => {
   const reason = "Abandon proposal.";
   beforeEach(() => {
-    cy.mockResponse(
-      "/api/records/v1/details",
-      mockProposalDetails({
-        status: 4,
-        state: 2,
-        body,
-        username,
-        reason,
-      })
-    ).as("details");
-    cy.mockResponse(
-      "/api/pi/v1/summaries",
-      mockPiSummaries({ status: "abandoned" })
-    ).as("piSummaries");
+    cy.mockProposalDetailsRequests({
+      recordStatus: 4,
+      recordReason: reason,
+      piStatus: "abandoned",
+    });
     cy.visit("/record/fake001");
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
   });
@@ -244,20 +231,11 @@ describe("Given an abandoned proposal", () => {
 describe("Given a censored proposal", () => {
   const reason = "Censor proposal.";
   beforeEach(() => {
-    cy.mockResponse(
-      "/api/records/v1/details",
-      mockProposalDetails({
-        status: 3,
-        state: 2,
-        body,
-        username,
-        reason,
-      })
-    ).as("details");
-    cy.mockResponse(
-      "/api/pi/v1/summaries",
-      mockPiSummaries({ status: "censored" })
-    ).as("piSummaries");
+    cy.mockProposalDetailsRequests({
+      recordStatus: 3,
+      recordReason: reason,
+      piStatus: "censored",
+    });
     cy.visit("/record/fake001");
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
   });
@@ -272,24 +250,11 @@ describe("Given a censored proposal", () => {
 
 describe("Given an RFP Proposal", () => {
   beforeEach(() => {
-    cy.mockResponse(
-      "/api/records/v1/details",
-      mockProposalDetails({
-        state: 2,
-        status: 2,
-        body,
-        username,
-        linkby: Date.now() / 1000,
-      })
-    ).as("details");
-    cy.mockResponse(
-      "/api/pi/v1/summaries",
-      mockPiSummaries({ status: "approved" })
-    ).as("piSummaries");
-    cy.mockResponse(
-      "/api/ticketvote/v1/summaries",
-      mockTicketvoteSummaries(approvedVoteSummary)
-    ).as("voteSummaries");
+    cy.mockProposalDetailsRequests({
+      voteStatus: "approved",
+      piStatus: "approved",
+      linkby: Date.now() / 1000,
+    });
     cy.mockResponse(
       "/api/ticketvote/v1/submissions",
       mockTicketvoteSubmissions(4)
@@ -344,20 +309,117 @@ describe("Given an RFP Proposal", () => {
 
 describe("Given an RFP submission", () => {
   it("should load its linked RFP Proposal title", () => {
-    cy.mockResponse(
-      "/api/records/v1/details",
-      mockProposalDetails({
-        state: 2,
-        status: 2,
-        linkto: "abcdefghijlmnopq",
-      })
-    ).as("details");
+    cy.mockProposalDetailsRequests({ linkto: "abcdefghijklmnopq" });
     cy.mockResponse(
       "/api/records/v1/records",
       mockRecordsBatch(mockProposal({ status: 2, state: 2 }))
     ).as("records");
     cy.visit("/record/fake001");
     cy.findByTestId("proposal-rfp-link").should("be.visible");
+  });
+});
+
+describe("Given a proposal with comments", () => {
+  const authorUpdates = [
+    {
+      extradata: JSON.stringify({
+        title: "Author update 1",
+      }),
+      extradatahint: "proposalupdate",
+      parentid: 0,
+      username,
+      timestamp: Date.now() / 1000 - 300,
+    },
+    {
+      extradata: JSON.stringify({
+        title: "Author update 2",
+      }),
+      extradatahint: "proposalupdate",
+      parentid: 0,
+      username,
+    },
+  ];
+  beforeEach(() => {
+    cy.mockProposalDetailsRequests({
+      voteStatus: "approved",
+      piStatus: "active",
+    });
+  });
+  describe("when details page view is full", () => {
+    it("should display the main comments thread", () => {
+      cy.visit("/record/fake001");
+      cy.wait(["@details", "@comments"]);
+      cy.findAllByTestId("comments-section").should("have.length", 1);
+    });
+    it("should display author updates on separate threads ordered by timestamp", () => {
+      cy.mockProposalCommentsRequest({ additionalComments: authorUpdates });
+      cy.visit("/record/fake001");
+      cy.wait(["@details", "@comments"]);
+      cy.findAllByTestId("comments-section").should("have.length", 3);
+      const expectedThreadsTitlesOrder = [
+        "Author update 2",
+        "Author update 1",
+        "Comments",
+      ];
+      cy.findAllByTestId("comments-section-title").each((thread, i) => {
+        expect(thread).to.contain.text(expectedThreadsTitlesOrder[i]);
+      });
+    });
+  });
+  describe("when details page view displays only a single thread", () => {
+    it("should display only one comments thread", () => {
+      cy.visit("/record/fake001/comment/1");
+      cy.wait(["@details", "@comments"]);
+      cy.findAllByTestId("comments-section").should("have.length", 1);
+      cy.findByTestId("comments-view-all-link")
+        .should("have.text", "view all comments")
+        .invoke("attr", "href")
+        .should("eq", "/record/fake001");
+    });
+    it("should display parent comment preview for reply subthread", () => {
+      cy.mockProposalCommentsRequest({
+        additionalComments: [{ parentid: 1 }, { parentid: 6 }],
+      });
+      cy.visit("/record/fake001/comment/6");
+      cy.wait(["@details", "@comments"]);
+      cy.findAllByTestId("comments-section").should("have.length", 1);
+      cy.findAllByTestId("comment-card-parent-preview").should(
+        "have.length",
+        1
+      );
+    });
+    it("should redirect to full proposal view when clicking on 'view all comments'", () => {
+      cy.mockProposalCommentsRequest({ amount: 10 });
+      cy.visit("/record/fake001/comment/1");
+      cy.wait(["@details", "@comments"]);
+      cy.findByTestId("comments-view-all-link").click();
+      cy.findAllByTestId("comment-card").should("have.length", 10);
+    });
+  });
+  describe("when comments thread is deep", () => {
+    const amount = 1;
+    const deepThread = Array(20)
+      .fill({ parentid: amount })
+      .map((c, i) => ({ parentid: c.parentid + i }));
+    beforeEach(() => {
+      cy.mockProposalCommentsRequest({
+        amount,
+        additionalComments: deepThread,
+      });
+      cy.visit("record/fake001");
+      cy.wait(["@details", "@comments"]);
+    });
+    it("should hide thread on depth == 6", () => {
+      cy.findAllByTestId("comment-card").should("have.length", 6);
+      cy.findByTestId("comment-card-footer-more-replies")
+        .should("include.text", "more reply")
+        .invoke("attr", "href")
+        .should("eq", "/record/fake001/comment/6");
+    });
+    it("should display all comments on flat mode", () => {
+      cy.findByTestId("comments-filter-flat-mode-button").click();
+      cy.findAllByTestId("comment-card").should("have.length", 21);
+    });
   });
 });
 
