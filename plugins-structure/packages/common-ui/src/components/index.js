@@ -1,6 +1,7 @@
 export * from "./Diff";
 export * from "./DateTooltip";
 export * from "./Event";
+export * from "./GoBackLink";
 export * from "./Join";
 export * from "./LabelValueList";
 export * from "./Markdown";
