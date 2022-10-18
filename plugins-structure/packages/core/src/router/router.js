@@ -105,6 +105,8 @@ export const router = (function () {
       if (!this.getIsInitialized()) {
         throw Error("router is not initialized. Use the init method");
       }
+      // Don't navigate if already current page
+      if (isCurrentPathname(url)) return;
       cleanup && cleanup();
       push(url);
       // Call verifyMatch to update our router state after
