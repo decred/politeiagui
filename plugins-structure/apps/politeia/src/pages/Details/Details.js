@@ -9,6 +9,7 @@ import { ProposalDetails, ProposalLoader } from "../../components";
 import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
+import { GoBackLink } from "@politeiagui/common-ui";
 
 function ErrorsMessages({ errors }) {
   return errors.reduce((acc, cur) => {
@@ -51,6 +52,7 @@ function Details({ token }) {
   useScrollToTop(shouldScrollToComments);
   return (
     <SingleContentPage className={styles.detailsWrapper}>
+      <GoBackLink />
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
       {detailsStatus === "failed" && (
         <ErrorsMessages
