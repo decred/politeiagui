@@ -4,11 +4,14 @@ import {
   downloadRecordTimestampsEffect,
 } from "./effects";
 import {
+  decodeProposalMetadataFile,
   getRfpRecordLink,
   isProposalCompleteOrClosed,
   isRfpProposal,
   proposalFilenames,
 } from "../../pi/proposals/utils";
+import app from "../../app";
+import { records } from "@politeiagui/core/records";
 
 function injectEffect(effect) {
   return async ({ payload }, { getState, dispatch }) => {
@@ -103,6 +106,21 @@ function injectPayloadEffect(effect) {
   };
 }
 
+function injectRecordTitleEffect(effect) {
+  return async ({ payload: record }, { getState, dispatch }) => {
+    if (!record?.files) return;
+    const { name } = decodeProposalMetadataFile(record.files);
+    await effect(getState(), dispatch, { title: app.createRouteTitle(name) });
+  };
+}
+
+// Navigation listener creators
+export const fetchRecordTitleListenerCreator = {
+  type: "records/fetchDetails/fulfilled",
+  injectEffect: injectRecordTitleEffect,
+};
+
+// Proposal details listener creators
 export const fetchDetailsListenerCreator = {
   type: "records/fetchDetails/fulfilled",
   injectEffect,
@@ -161,3 +179,12 @@ export const listeners = [
     effect: downloadRecordTimestampsEffect,
   },
 ];
+
+// Action payloads setters
+export function setRecordTitlePayload(state, { token }) {
+  const recordToken = records.selectFullToken(state, token);
+  if (!recordToken) return;
+  const record = records.selectByToken(state, recordToken);
+  const { name } = decodeProposalMetadataFile(record.files);
+  return { title: app.createRouteTitle(name) };
+}
