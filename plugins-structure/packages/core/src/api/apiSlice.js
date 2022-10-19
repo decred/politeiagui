@@ -9,7 +9,7 @@ export const initialState = {
   api: {},
   csrf: "",
   status: "idle",
-  error: null
+  error: null,
 };
 
 // Thunks
@@ -39,7 +39,7 @@ const apiSlice = createSlice({
         state.status = "failed";
         state.error = "Cannot fetch `/api`. Is politeiawww running?";
       });
-  }
+  },
 });
 
 // Selectors

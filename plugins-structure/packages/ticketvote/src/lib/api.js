@@ -7,7 +7,7 @@ import {
   ROUTE_SUMMARIES,
   ROUTE_TIMESTAMPS,
   TICKETVOTE_API_ROUTE,
-  VERSION
+  VERSION,
 } from "./constants";
 import { fetchOptions, getCsrf, parseResponse } from "@politeiagui/core/client";
 

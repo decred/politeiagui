@@ -4,7 +4,7 @@ import {
   ROUTE_INVENTORY,
   ROUTE_POLICY,
   ROUTE_RECORDS,
-  ROUTE_TIMESTAMPS
+  ROUTE_TIMESTAMPS,
 } from "./constants";
 
 const VERSION = "v1";
@@ -43,8 +43,8 @@ export const client = {
     const body = {
       requests: records.map((token) => ({
         token,
-        filenames
-      }))
+        filenames,
+      })),
     };
     const response = await fetch(
       `${RECORDS_API_ROUTE}${VERSION}${ROUTE_RECORDS}`,
@@ -83,7 +83,7 @@ export const client = {
       fetchOptions(csrf, {}, "POST")
     );
     return await parseResponse(response);
-  }
+  },
 };
 
 export async function getCsrf(state) {
@@ -107,16 +107,16 @@ export async function parseResponse(response) {
 export function fetchOptions(csrf, json, method) {
   const headers = {
     Accept: "application/json",
-    "Content-Type": "application/json; charset=utf-8"
+    "Content-Type": "application/json; charset=utf-8",
   };
   const headersWithCsrf = {
     ...headers,
-    "X-Csrf-Token": csrf
+    "X-Csrf-Token": csrf,
   };
   return {
     headers: csrf ? headersWithCsrf : headers,
     credentials: "include", // Include cookies
     method,
-    body: JSON.stringify(json)
+    body: JSON.stringify(json),
   };
 }
