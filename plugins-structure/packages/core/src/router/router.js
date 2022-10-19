@@ -153,6 +153,33 @@ export const router = (function () {
     },
 
     /**
+     * getCurrentLocation returns the current match location data for current
+     * pathname, if match exists.
+     *
+     * @returns {{
+     *   pathname: String,
+     *   path: string,
+     *   params: Object,
+     *   search: String,
+     *   href: String
+     * }}
+     */
+    getCurrentLocation() {
+      if (!this.getIsInitialized()) {
+        throw Error("router is not initialized. Use the init method");
+      }
+      const match = findMatch(settings.routes, window.location.pathname);
+      if (!match) return;
+      return {
+        pathname: window.location.pathname,
+        path: match.route.path,
+        params: getParams(match),
+        search: window.location.search,
+        href: window.location.href,
+      };
+    },
+
+    /**
      * reset is used for resetting the router to default settings. Restores the
      * router state, `click` and `popstate` handlers.
      */
