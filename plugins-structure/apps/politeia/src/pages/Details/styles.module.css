@@ -10,3 +10,9 @@
   margin-bottom: 0;
   padding-bottom: 1rem;
 }
+
+@media (--sm-viewport) {
+  .goBackLink {
+    padding-left: var(--container-padding-left);
+  }
+}

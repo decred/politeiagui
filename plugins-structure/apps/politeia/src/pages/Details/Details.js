@@ -52,7 +52,7 @@ function Details({ token }) {
   useScrollToTop(shouldScrollToComments);
   return (
     <SingleContentPage className={styles.detailsWrapper}>
-      <GoBackLink />
+      <GoBackLink className={styles.goBackLink} />
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
       {detailsStatus === "failed" && (
         <ErrorsMessages
