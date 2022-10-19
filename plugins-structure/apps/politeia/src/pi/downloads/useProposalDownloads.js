@@ -32,7 +32,6 @@ export function useProposalDownloads({ token, version }) {
   }
 
   async function onFetchCommentsTimestamps() {
-    // TODO: Support timestamps for separate threads and comments sections
     const ids = Object.keys(comments).map((id) => +id);
     const { payload, error } = await dispatch(
       commentsTimestamps.fetchAll({ token, commentids: ids })
