@@ -22,12 +22,7 @@ export function validateTicketvoteStatus(recordStatus, isRequired = true) {
  * @param {Object} state
  */
 export function validateTicketvoteSummariesPageSize(state) {
-  // TODO: allow use of ?. operator with jest transpilers.
-  const pageSize =
-    state &&
-    state.ticketvotePolicy &&
-    state.ticketvotePolicy.policy &&
-    state.ticketvotePolicy.policy.summariespagesize;
+  const pageSize = state.recordsPolicy?.policy?.summariespagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {
@@ -46,12 +41,7 @@ export function validateTicketvoteSummariesPageSize(state) {
  * @param {Object} state
  */
 export function validateTicketvoteInventoryPageSize(state) {
-  // TODO: allow use of ?. operator with jest transpilers.
-  const pageSize =
-    state &&
-    state.ticketvotePolicy &&
-    state.ticketvotePolicy.policy &&
-    state.ticketvotePolicy.policy.inventorypagesize;
+  const pageSize = state.recordsPolicy?.policy?.inventorypagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {
@@ -70,12 +60,7 @@ export function validateTicketvoteInventoryPageSize(state) {
  * @param {Object} state
  */
 export function validateTicketvoteTimestampsPageSize(state) {
-  // TODO: allow use of ?. operator with jest transpilers.
-  const pageSize =
-    state &&
-    state.ticketvotePolicy &&
-    state.ticketvotePolicy.policy &&
-    state.ticketvotePolicy.policy.timestampspagesize;
+  const pageSize = state.recordsPolicy?.policy?.timestampspagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {

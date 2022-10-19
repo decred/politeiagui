@@ -4,7 +4,7 @@ import {
   ROUTE_INVENTORY,
   ROUTE_POLICY,
   ROUTE_RECORDS,
-  ROUTE_TIMESTAMPS,
+  ROUTE_TIMESTAMPS
 } from "./constants";
 
 const VERSION = "v1";
@@ -43,8 +43,8 @@ export const client = {
     const body = {
       requests: records.map((token) => ({
         token,
-        filenames,
-      })),
+        filenames
+      }))
     };
     const response = await fetch(
       `${RECORDS_API_ROUTE}${VERSION}${ROUTE_RECORDS}`,
@@ -72,8 +72,8 @@ export const client = {
   },
   async fetchApi() {
     const response = await fetch("/api");
-    const csrf = response.headers.get("X-Csrf-Token");
     const api = await parseResponse(response);
+    const csrf = response.headers.get("X-Csrf-Token");
     return { api, csrf };
   },
   async fetchRecordsPolicy(state) {
@@ -83,7 +83,7 @@ export const client = {
       fetchOptions(csrf, {}, "POST")
     );
     return await parseResponse(response);
-  },
+  }
 };
 
 export async function getCsrf(state) {
@@ -97,24 +97,26 @@ export async function getCsrf(state) {
 
 export async function parseResponse(response) {
   const { status, statusText } = response;
+  if (status < 200 || status > 299) {
+    throw new ApiError(statusText, json);
+  }
   const json = await response.json();
-  if ([200, 201].includes(status)) return json;
-  throw new ApiError(statusText, json);
+  return json;
 }
 
 export function fetchOptions(csrf, json, method) {
   const headers = {
     Accept: "application/json",
-    "Content-Type": "application/json; charset=utf-8",
+    "Content-Type": "application/json; charset=utf-8"
   };
   const headersWithCsrf = {
     ...headers,
-    "X-Csrf-Token": csrf,
+    "X-Csrf-Token": csrf
   };
   return {
     headers: csrf ? headersWithCsrf : headers,
     credentials: "include", // Include cookies
     method,
-    body: JSON.stringify(json),
+    body: JSON.stringify(json)
   };
 }

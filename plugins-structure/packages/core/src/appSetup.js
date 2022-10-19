@@ -26,7 +26,7 @@ function mergeListeners(routeServices, listeners) {
       idListeners.push({
         actionCreator: listenerCreator.actionCreator,
         type: listenerCreator.type,
-        effect: listenerCreator.injectEffect(effect),
+        effect: listenerCreator.injectEffect(effect)
       });
     }
   }
@@ -47,8 +47,8 @@ function addRouteServicesProperties(appServices, routeServices) {
         ...newAppServicesArray,
         {
           ...appService,
-          ...routeService,
-        },
+          ...routeService
+        }
       ];
     }
     return newAppServicesArray;
@@ -85,7 +85,7 @@ export function appSetup({
   plugins,
   listeners = [],
   config,
-  store = defaultStore,
+  store = defaultStore
 }) {
   if (!isArray(plugins)) {
     throw Error("'plugins' must be an array");
@@ -114,6 +114,10 @@ export function appSetup({
      */
     async init({ routes, routerOptions, errorView } = {}) {
       await store.dispatch(api.fetch());
+      const apiStatus = api.selectStatus(store.getState());
+      if (apiStatus == "failed") {
+        throw Error(api.selectError(store.getState()));
+      }
       await router.init({ routes, options: routerOptions, errorView });
     },
     /**
@@ -138,7 +142,7 @@ export function appSetup({
       view,
       setupServices = [],
       listeners = [],
-      cleanup,
+      cleanup
     } = {}) {
       validateServicesIds(setupServices);
       const routeServices = addRouteServicesProperties(
@@ -161,8 +165,8 @@ export function appSetup({
             }
           }
           return await view(routeParams);
-        },
+        }
       };
-    },
+    }
   };
 }

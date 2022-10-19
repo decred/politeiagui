@@ -33,12 +33,7 @@ export function validateRecordStatus(recordStatus, isRequired = true) {
 }
 
 export function validateRecordsPageSize(state) {
-  // TODO: allow use of ?. operator with jest transpilers.
-  const pageSize =
-    state &&
-    state.recordsPolicy &&
-    state.recordsPolicy.policy &&
-    state.recordsPolicy.policy.recordspagesize;
+  const pageSize = state.recordsPolicy?.policy?.recordspagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {
@@ -52,12 +47,7 @@ export function validateRecordsPageSize(state) {
 }
 
 export function validateInventoryPageSize(state) {
-  // TODO: allow use of ?. operator with jest transpilers.
-  const pageSize =
-    state &&
-    state.recordsPolicy &&
-    state.recordsPolicy.policy &&
-    state.recordsPolicy.policy.inventorypagesize;
+  const pageSize = state.recordsPolicy?.policy?.inventorypagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {
