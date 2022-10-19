@@ -81,6 +81,8 @@ describe("Given the timestampsSlice", () => {
   });
   describe("when fetchTicketvoteTimestamps dispatches with valid params", () => {
     it("should update the status to loading", () => {
+      fetchTimestampsSpy.mockResolvedValueOnce(mockAuthDetails);
+
       store.dispatch(fetchTicketvoteTimestamps({ token: "fakeToken" }));
 
       expect(fetchTimestampsSpy).toBeCalled();

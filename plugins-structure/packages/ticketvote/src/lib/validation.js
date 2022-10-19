@@ -22,7 +22,7 @@ export function validateTicketvoteStatus(recordStatus, isRequired = true) {
  * @param {Object} state
  */
 export function validateTicketvoteSummariesPageSize(state) {
-  const pageSize = state.recordsPolicy?.policy?.summariespagesize;
+  const pageSize = state.ticketvotePolicy?.policy?.summariespagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {
@@ -41,7 +41,7 @@ export function validateTicketvoteSummariesPageSize(state) {
  * @param {Object} state
  */
 export function validateTicketvoteInventoryPageSize(state) {
-  const pageSize = state.recordsPolicy?.policy?.inventorypagesize;
+  const pageSize = state.ticketvotePolicy?.policy?.inventorypagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {
@@ -60,7 +60,7 @@ export function validateTicketvoteInventoryPageSize(state) {
  * @param {Object} state
  */
 export function validateTicketvoteTimestampsPageSize(state) {
-  const pageSize = state.recordsPolicy?.policy?.timestampspagesize;
+  const pageSize = state.ticketvotePolicy?.policy?.timestampspagesize;
 
   // throw if there is no policy loaded
   if (!pageSize) {
