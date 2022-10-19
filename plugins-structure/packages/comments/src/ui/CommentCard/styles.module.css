@@ -27,6 +27,18 @@
 }
 
 .footer {
+  color: var(--text-color-light) !important;
+  display: flex;
+  align-items: center;
+}
+
+.footer > * {
+  cursor: pointer;
+}
+
+.footer .discussion {
+  justify-self: flex-end;
+  margin-left: auto;
   display: flex;
   align-items: center;
 }
@@ -43,12 +55,6 @@
 
 .recordOwner {
   color: var(--color-gold) !important;
-}
-
-.reply {
-  cursor: pointer;
-  margin-right: 1rem;
-  color: var(--tab-text-color) !important;
 }
 
 .thread {
@@ -105,4 +111,15 @@
 
 .hasVoted > svg > g > path {
   fill: var(--color-primary-dark) !important;
+}
+
+/* Parent Comment */
+.parentContext {
+  display: inline-block;
+  font-size: var(--font-size-small);
+  color: var(--text-color-light);
+  border-left: 0.3rem solid var(--text-color-light);
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
 }

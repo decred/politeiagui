@@ -24,13 +24,19 @@ import {
   ProposalSubtitle,
   ProposalTitle,
 } from "./common";
-import { Button, ButtonIcon, Message } from "pi-ui";
+import { Button, ButtonIcon, Icon, Message, classNames } from "pi-ui";
 import { getShortToken } from "@politeiagui/core/records/utils";
 import styles from "./styles.module.css";
 import { ModalProposalDiff } from "./ModalProposalDiff";
 import { ProposalsCompact } from "./ProposalsCompact";
 import { PROPOSAL_STATUS_APPROVED } from "../../pi";
 import { ModalTicketSearch } from "@politeiagui/ticketvote/ui";
+
+const ExpandIcon = ({ link }) => (
+  <a data-link href={link}>
+    <Icon type="expand" viewBox="0 0 450 450" height={30} width={30} />
+  </a>
+);
 
 const ProposalDetails = ({
   record,
@@ -42,6 +48,7 @@ const ProposalDetails = ({
   rfpSubmissionsVoteSummaries,
   rfpSubmissionsProposalSummaries,
   rfpSubmissionsCommentsCounts,
+  hideBody,
 }) => {
   const [open] = useModal();
 
@@ -145,13 +152,16 @@ const ProposalDetails = ({
           </div>
         }
         thirdRow={
-          <div className={styles.proposalBody} data-testid="proposal-body">
-            <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
-            <ThumbnailGrid
-              files={imagesNotInText}
-              readOnly
-              onClick={handleOpenImageModal}
-            />
+          <div className={classNames(hideBody && styles.collapse)}>
+            <div className={styles.proposalBody} data-testid="proposal-body">
+              <MarkdownRenderer body={body} filesBySrc={imagesByDigest} />
+              <ThumbnailGrid
+                files={imagesNotInText}
+                readOnly
+                onClick={handleOpenImageModal}
+              />
+            </div>
+            {hideBody && <ExpandIcon link={proposalLink} />}
           </div>
         }
         fourthRow={

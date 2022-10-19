@@ -63,3 +63,9 @@ span.flatModeActive {
   margin-bottom: 1rem;
   font-weight: var(--font-weight-regular);
 }
+
+.fullThreadLink {
+  margin-top: 1rem;
+  color: var(--link-color);
+  cursor: pointer;
+}

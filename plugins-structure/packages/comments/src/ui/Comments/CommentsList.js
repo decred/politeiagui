@@ -11,36 +11,52 @@ export const CommentsList = ({
   userVotes,
   onReply,
   disableReply,
+  isFlat,
+  depth = 0,
   recordOwner,
+  commentPath,
+  previewId,
 }) => {
   if (!commentsByParent || !commentsByParent[parentId]) {
     return null;
   }
-  return commentsByParent[parentId].map((childId) => (
+  const comment = comments[parentId];
+
+  return (
     <CommentCard
-      key={childId}
-      comment={comments[childId]}
+      depth={depth}
+      comment={comment}
       onCensor={onCensor}
-      threadLength={commentsByParent[childId]?.length}
+      threadLength={commentsByParent[parentId]?.length}
       showCensor={showCensor}
-      userVote={userVotes[childId]}
+      userVote={userVotes[parentId]}
       onComment={onReply}
       disableReply={disableReply}
+      showParentCommentPreview={isFlat || previewId === parentId}
+      parentComment={comments[comment?.parentid]}
       recordOwner={recordOwner}
+      commentPath={commentPath}
+      isFlat={isFlat}
     >
-      <CommentsList
-        comments={comments}
-        showCensor={showCensor}
-        onCensor={onCensor}
-        parentId={childId}
-        commentsByParent={commentsByParent}
-        userVotes={userVotes}
-        onReply={onReply}
-        disableReply={disableReply}
-        recordOwner={recordOwner}
-      />
+      {commentsByParent[parentId].map((childId) => (
+        <CommentsList
+          key={childId}
+          comments={comments}
+          showCensor={showCensor}
+          onCensor={onCensor}
+          parentId={childId}
+          commentsByParent={commentsByParent}
+          userVotes={userVotes}
+          onReply={onReply}
+          disableReply={disableReply}
+          isFlat={isFlat}
+          depth={depth + 1}
+          recordOwner={recordOwner}
+          commentPath={commentPath}
+        />
+      ))}
     </CommentCard>
-  ));
+  );
 };
 
 CommentsList.propTypes = {
@@ -50,6 +66,9 @@ CommentsList.propTypes = {
   onCensor: PropTypes.func,
   commentsByParent: PropTypes.object,
   userVotes: PropTypes.object,
+  onReply: PropTypes.func,
+  disableReply: PropTypes.bool,
+  isFlat: PropTypes.bool,
 };
 
 CommentsList.defaultProps = {
