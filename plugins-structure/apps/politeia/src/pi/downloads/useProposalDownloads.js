@@ -25,10 +25,10 @@ export function useProposalDownloads({ token, version }) {
 
   // Timestamps downloads
   async function onFetchRecordTimestamps() {
-    const { payload } = await dispatch(
+    const { payload, error } = await dispatch(
       recordsTimestamps.fetch({ token, version })
     );
-    downloadJSON(payload, `${token}-v${version}-record-timestamps`);
+    if (!error) downloadJSON(payload, `${token}-v${version}-record-timestamps`);
   }
 
   async function onFetchCommentsTimestamps() {
