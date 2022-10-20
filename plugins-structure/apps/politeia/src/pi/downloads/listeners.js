@@ -2,11 +2,21 @@ import { isAnyOf } from "@reduxjs/toolkit";
 
 import { ticketvoteTimestamps } from "@politeiagui/ticketvote/timestamps";
 import { commentsTimestamps } from "@politeiagui/comments/timestamps";
+import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
 
 function injectEffect(effect) {
   return async ({ meta }, { getState, dispatch }) => {
     const state = getState();
     await effect(state, dispatch, meta.total);
+  };
+}
+
+function injectErrorEffect(effect) {
+  return async ({ payload }, { getState, dispatch }) => {
+    await effect(getState(), dispatch, {
+      title: "Download failed",
+      body: payload,
+    });
   };
 }
 
@@ -36,6 +46,15 @@ const endDownloadProgressListenerCreator = {
   injectEffect,
 };
 
+const failedDownloadProgressListenerCreator = {
+  matcher: isAnyOf(
+    ticketvoteTimestamps.fetchAll.rejected,
+    commentsTimestamps.fetchAll.rejected,
+    recordsTimestamps.fetch.rejected
+  ),
+  injectEffect: injectErrorEffect,
+};
+
 export const downloadServicesSetup = [
   {
     id: "global/progress/init",
@@ -48,5 +67,9 @@ export const downloadServicesSetup = [
   {
     id: "global/progress/update",
     listenerCreator: updateDownloadProgressListenerCreator,
+  },
+  {
+    id: "global/message/set",
+    listenerCreator: failedDownloadProgressListenerCreator,
   },
 ];
