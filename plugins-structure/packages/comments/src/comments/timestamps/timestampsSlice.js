@@ -48,7 +48,7 @@ export const fetchAllCommentsTimestamps = createAsyncThunk(
     );
     const responseError = responses.find((r) => r.error);
     if (responseError) {
-      return rejectWithValue(responseError);
+      return rejectWithValue(responseError.payload);
     }
     return responses
       .map((res) => res.payload.comments)

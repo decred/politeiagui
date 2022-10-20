@@ -55,7 +55,7 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
       );
       const responseError = pageResponses.find((r) => r.error);
       if (responseError) {
-        return rejectWithValue(responseError.error);
+        return rejectWithValue(responseError.payload);
       }
       responses = [...responses, ...pageResponses];
     }
