@@ -15,6 +15,9 @@
       "@politeiagui/core/localstorage": [
         "./packages/core/src/localStorage/index.js"
       ],
+      "@politeiagui/core/globalServices": [
+        "./packages/core/src/globalServices/index.js"
+      ],
       "@politeiagui/core/listeners": ["./packages/core/src/listeners/index.js"],
       "@politeiagui/core/records": [
         "./packages/core/src/records/records/index.js"
@@ -89,9 +92,6 @@
       "@politeiagui/common-ui/utils": ["./packages/common-ui/src/utils.js"],
       "@politeiagui/common-ui/layout": [
         "./packages/common-ui/src/layout/index.js"
-      ],
-      "@politeiagui/common-ui/services": [
-        "./packages/common-ui/src/services/index.js"
       ],
       "@politeiagui/common-ui/theme": [
         "./packages/common-ui/src/layout/theme/index.js"

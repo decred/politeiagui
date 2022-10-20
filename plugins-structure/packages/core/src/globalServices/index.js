@@ -5,6 +5,12 @@ import {
   selectProgress,
   updateProgress,
 } from "./progress";
+import {
+  clearMessage,
+  services as messageServices,
+  selectMessage,
+  setMessage,
+} from "./message";
 
 export const progress = {
   end: endProgress,
@@ -13,4 +19,10 @@ export const progress = {
   update: updateProgress,
 };
 
-export const services = [...progressServices];
+export const message = {
+  clear: clearMessage,
+  select: selectMessage,
+  set: setMessage,
+};
+
+export const services = [...progressServices, ...messageServices];
