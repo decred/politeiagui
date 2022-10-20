@@ -7,8 +7,7 @@
   "exports": {
     ".": "./src/index.js",
     "./layout": "./src/layout/index.js",
-    "./utils": "./src/utils.js",
-    "./services": "./src/services/index.js"
+    "./utils": "./src/utils.js"
   },
   "scripts": {
     "prettify": "politeiagui-scripts prettify",

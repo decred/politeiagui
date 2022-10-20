@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { progress } from "../../services";
+import { progress } from "@politeiagui/core/globalServices";
 import styles from "./styles.module.css";
 
 export const ProgressBar = () => {

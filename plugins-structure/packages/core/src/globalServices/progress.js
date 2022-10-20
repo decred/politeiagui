@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const progressSlice = createSlice({
-  name: "uiProgress",
+  name: "globalProgress",
   initialState,
   reducers: {
     initProgress: (state, action) => {
@@ -25,15 +25,15 @@ const progressSlice = createSlice({
 export const { initProgress, updateProgress, endProgress } =
   progressSlice.actions;
 
-export const selectUiProgress = (state) => {
-  const { total, value } = state.uiProgress;
+export const selectProgress = (state) => {
+  const { total, value } = state.globalProgress || {};
   if (!total || isNaN(total) || !value) return 0;
   return (value / total).toFixed(2);
 };
 
 export const services = [
   {
-    id: "ui/progress/init",
+    id: "global/progress/init",
     effect: (_, dispatch, payload) => {
       if (!isNaN(payload)) {
         dispatch(initProgress(payload));
@@ -41,13 +41,13 @@ export const services = [
     },
   },
   {
-    id: "ui/progress/update",
+    id: "global/progress/update",
     effect: (_, dispatch) => {
       dispatch(updateProgress());
     },
   },
   {
-    id: "ui/progress/end",
+    id: "global/progress/end",
     effect: (_, dispatch) => {
       dispatch(endProgress());
     },

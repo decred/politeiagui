@@ -1,13 +1,16 @@
 import {
   endProgress,
   initProgress,
-  selectUiProgress,
+  services as progressServices,
+  selectProgress,
   updateProgress,
 } from "./progress";
 
 export const progress = {
   end: endProgress,
   init: initProgress,
-  select: selectUiProgress,
+  select: selectProgress,
   update: updateProgress,
 };
+
+export const services = [...progressServices];

@@ -30,25 +30,23 @@ const endDownloadProgressListenerCreator = {
   matcher: isAnyOf(
     ticketvoteTimestamps.fetchAll.fulfilled,
     ticketvoteTimestamps.fetchAll.rejected,
-    ticketvoteTimestamps.fetch.rejected,
     commentsTimestamps.fetchAll.fulfilled,
-    commentsTimestamps.fetchAll.rejected,
-    commentsTimestamps.fetch.rejected
+    commentsTimestamps.fetchAll.rejected
   ),
   injectEffect,
 };
 
 export const downloadServicesSetup = [
   {
-    id: "ui/progress/init",
+    id: "global/progress/init",
     listenerCreator: initDownloadProgressListenerCreator,
   },
   {
-    id: "ui/progress/end",
+    id: "global/progress/end",
     listenerCreator: endDownloadProgressListenerCreator,
   },
   {
-    id: "ui/progress/update",
+    id: "global/progress/update",
     listenerCreator: updateDownloadProgressListenerCreator,
   },
 ];
