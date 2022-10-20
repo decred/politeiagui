@@ -58,6 +58,10 @@ export function useProposalDownloads({ token, version }) {
       dispatch(ticketvoteResults.fetch({ token })),
       dispatch(ticketvoteDetails.fetch({ token })),
     ]);
+
+    const error = responses.find((r) => r.error);
+    if (error) return;
+
     const bundleToDownload = responses
       .map((r) => r.payload)
       .reduce((acc, curr) => ({ ...acc, ...curr }), {});

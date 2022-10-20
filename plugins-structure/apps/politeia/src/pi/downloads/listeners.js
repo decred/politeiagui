@@ -3,6 +3,8 @@ import { isAnyOf } from "@reduxjs/toolkit";
 import { ticketvoteTimestamps } from "@politeiagui/ticketvote/timestamps";
 import { commentsTimestamps } from "@politeiagui/comments/timestamps";
 import { recordsTimestamps } from "@politeiagui/core/records/timestamps";
+import { ticketvoteDetails } from "@politeiagui/ticketvote/details";
+import { ticketvoteResults } from "@politeiagui/ticketvote/results";
 
 function injectEffect(effect) {
   return async ({ meta }, { getState, dispatch }) => {
@@ -50,7 +52,9 @@ const failedDownloadProgressListenerCreator = {
   matcher: isAnyOf(
     ticketvoteTimestamps.fetchAll.rejected,
     commentsTimestamps.fetchAll.rejected,
-    recordsTimestamps.fetch.rejected
+    recordsTimestamps.fetch.rejected,
+    ticketvoteDetails.fetch.rejected,
+    ticketvoteResults.fetch.rejected
   ),
   injectEffect: injectErrorEffect,
 };
