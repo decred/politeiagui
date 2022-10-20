@@ -34,7 +34,7 @@ export const fetchCommentsTimestamps = createAsyncThunk(
 );
 export const fetchAllCommentsTimestamps = createAsyncThunk(
   "commentsTimestamps/fetchAll",
-  async ({ token, commentids }, { getState, dispatch }) => {
+  async ({ token, commentids }, { getState, dispatch, rejectWithValue }) => {
     const {
       commentsPolicy: {
         policy: { timestampspagesize },
@@ -48,7 +48,7 @@ export const fetchAllCommentsTimestamps = createAsyncThunk(
     );
     const responseError = responses.find((r) => r.error);
     if (responseError) {
-      throw Error(responseError.error);
+      return rejectWithValue(responseError);
     }
     return responses
       .map((res) => res.payload.comments)

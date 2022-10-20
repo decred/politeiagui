@@ -36,7 +36,7 @@ export const fetchTicketvoteTimestamps = createAsyncThunk(
 
 export const fetchAllTicketvoteTimestamps = createAsyncThunk(
   "ticketvoteTimestamps/fetchAll",
-  async ({ votesCount, token }, { getState, dispatch }) => {
+  async ({ votesCount, token }, { getState, dispatch, rejectWithValue }) => {
     const {
       ticketvotePolicy: {
         policy: { timestampspagesize },
@@ -55,7 +55,7 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
       );
       const responseError = pageResponses.find((r) => r.error);
       if (responseError) {
-        throw Error(responseError.error);
+        return rejectWithValue(responseError.error);
       }
       responses = [...responses, ...pageResponses];
     }
