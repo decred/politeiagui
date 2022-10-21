@@ -9,6 +9,7 @@ import { downloadJSON } from "@politeiagui/core/downloads";
 import { commentsTimestamps } from "@politeiagui/comments/timestamps";
 import { ticketvoteResults } from "@politeiagui/ticketvote/results";
 import { ticketvoteDetails } from "@politeiagui/ticketvote/details";
+import isEmpty from "lodash/isEmpty";
 
 export function useProposalDownloads({ token, version }) {
   const dispatch = useDispatch();
@@ -74,11 +75,13 @@ export function useProposalDownloads({ token, version }) {
   }
 
   return {
-    onFetchCommentsTimestamps,
+    onFetchCommentsTimestamps: !isEmpty(comments) && onFetchCommentsTimestamps,
+    onDownloadCommentsBundle: !isEmpty(comments) && onDownloadCommentsBundle,
     onFetchRecordTimestamps,
-    onFetchVotesTimestamps,
-    onDownloadCommentsBundle,
     onDownloadRecordBundle,
-    onDownloadVotesBundle,
+    onFetchVotesTimestamps:
+      !isEmpty(voteSummary?.results) && onFetchVotesTimestamps,
+    onDownloadVotesBundle:
+      !isEmpty(voteSummary?.results) && onDownloadVotesBundle,
   };
 }
