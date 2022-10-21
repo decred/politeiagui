@@ -326,10 +326,18 @@ describe("Given some download in progress", () => {
 
 describe("Given some failed download", () => {
   const failedToken = recordToken();
-  const amount = 300;
+  const amount = 30;
+  const timestampspagesize = 10;
+  const errorFn = () => ({
+    errorcode: 123123123,
+  });
   beforeEach(() => {
     cy.mockResponse("/api/comments/v1/comments", mockComments({ amount })).as(
       "comments"
+    );
+    cy.mockResponse(
+      "/api/comments/v1/policy",
+      mockCommentsPolicy({ timestampspagesize })
     );
     cy.mockResponse(
       "/api/records/v1/details",
@@ -341,29 +349,29 @@ describe("Given some failed download", () => {
       })
     ).as("details");
     // Vote Timestamps error
-    cy.mockResponse(
-      "/api/ticketvote/v1/timestamps",
-      () => ({
-        errorcode: 123123123,
-      }),
-      { statusCode: 500 }
-    ).as("votesTimestamps");
+    cy.mockResponse("/api/ticketvote/v1/timestamps", errorFn, {
+      statusCode: 500,
+    }).as("votesTimestamps");
     cy.mockResponse(
       { url: "/api/ticketvote/v1/timestamps", times: 2 },
       mockTicketvoteTimestamps()
     ).as("votesTimestamps");
     // Comments timestamps error
-    cy.mockResponse(
-      "/api/comments/v1/timestamps",
-      () => ({
-        errorcode: 123123123,
-      }),
-      { statusCode: 500 }
-    ).as("commentsTimestamps");
+    cy.mockResponse("/api/comments/v1/timestamps", errorFn, {
+      statusCode: 500,
+    }).as("commentsTimestamps");
     cy.mockResponse(
       { url: "/api/comments/v1/timestamps", times: 2 },
       mockCommentsTimestamps()
     ).as("commentsTimestamps");
+    // Records timestamps error
+    cy.mockResponse("/api/records/v1/timestamps", errorFn, {
+      statusCode: 500,
+    }).as("recordTimestamps");
+    // Votes bundle error
+    cy.mockResponse("/api/ticketvote/v1/details", errorFn, {
+      statusCode: 500,
+    }).as("voteDetails");
     // Visit page
     cy.visit(`/record/${failedToken.substring(0, 7)}`);
     cy.wait(["@details", "@comments", "@voteSummaries", "@piSummaries"]);
@@ -375,6 +383,16 @@ describe("Given some failed download", () => {
     cy.readFile(
       path.join(downloadsFolder, `${failedToken}-votes-timestamps.json`)
     ).should("not.exist");
+    cy.findByTestId("common-ui-toast").should("be.visible");
+  });
+  it("should cancel votes bundle downloads", () => {
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-votes-bundle").click();
+    // Assert download canceled
+    cy.readFile(
+      path.join(downloadsFolder, `${failedToken}-votes-bundle.json`)
+    ).should("not.exist");
+    cy.findByTestId("common-ui-toast").should("be.visible");
   });
   it("should cancel comments timestamps downloads", () => {
     cy.findByTestId("proposal-downloads").click();
@@ -383,5 +401,18 @@ describe("Given some failed download", () => {
     cy.readFile(
       path.join(downloadsFolder, `${failedToken}-comments-timestamps.json`)
     ).should("not.exist");
+    cy.findByTestId("common-ui-toast").should("be.visible");
+  });
+  it("should cancel record timestamps downloads", () => {
+    cy.findByTestId("proposal-downloads").click();
+    cy.findByTestId("proposal-downloads-record-timestamps").click();
+    // Assert download canceled
+    cy.readFile(
+      path.join(
+        downloadsFolder,
+        `${failedToken}-record-v${customVersion}-timestamps.json`
+      )
+    ).should("not.exist");
+    cy.findByTestId("common-ui-toast").should("be.visible");
   });
 });
