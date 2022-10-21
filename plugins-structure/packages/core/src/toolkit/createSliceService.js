@@ -41,7 +41,7 @@
  */
 
 /**
- * @typedef {Object.<string, ServiceParams>} ServicesDictionary
+ * @typedef {Object.<string, ServiceParams>} ServicesDictionaryType
  */
 
 /**
@@ -55,7 +55,7 @@ function setSliceId(sliceName, id) {
 
 /**
  * getServicesSetups
- * @param {ServicesDictionary} services
+ * @param {ServicesDictionaryType} services
  * @param {string} sliceName
  * @returns {ServicesSetups}
  */
@@ -73,7 +73,7 @@ export function getServicesSetups(services, sliceName) {
 
 /**
  *
- * @param {ServicesDictionary} services
+ * @param {ServicesDictionaryType} services
  * @param {string} sliceName
  * @returns {Service[]}
  */
@@ -93,15 +93,15 @@ export function formatServicesToPlugin(services, sliceName) {
 
 /**
  * createSliceServices is an interface for creating slice services.
- * @template {ServicesDictionary} sd
+ * @template {ServicesDictionaryType} ServicesDictionary
  * @param {{
  *  name: String,
- *  services: sd
+ *  services: ServicesDictionary
  * }} sliceServiceParams
  * @returns {{
  *  pluginServices: Service[],
  *  setups: ServicesSetups,
- *  services: sd
+ *  services: ServicesDictionary
  * }}
  */
 export function createSliceServices({ name: sliceName, services }) {
