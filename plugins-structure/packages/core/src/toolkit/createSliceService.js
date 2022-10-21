@@ -9,13 +9,13 @@
  * @returns {Promise}
  */
 /**
- * Service is an `action` that will setup the plugin for usage in some given
+ * PluginService is an `action` that will setup the plugin for usage in some given
  * `id` case.
  * @typedef {{
  *  id: string,
  *  action: ServiceAction,
  *  effect: Effect
- * }} Service
+ * }} PluginService
  */
 /**
  * ServiceParams - TODO: description
@@ -33,7 +33,7 @@
  */
 /**
  * @callback Connect
- * @param {Service} service
+ * @param {PluginService} service
  */
 /**
  * @callback ServicesBuilder
@@ -41,7 +41,13 @@
  */
 
 /**
- * @typedef {Object.<string, ServiceParams>} ServicesDictionaryType
+ * @typedef {string} ServiceId
+ */
+
+// * @typedef {Object.<string, ServiceParams>} ServicesMapType
+
+/**
+ * @typedef {{ [id:string]: ServiceParams }} ServicesMapType
  */
 
 /**
@@ -55,7 +61,7 @@ function setSliceId(sliceName, id) {
 
 /**
  * getServicesSetups
- * @param {ServicesDictionaryType} services
+ * @param {ServicesMapType} services
  * @param {string} sliceName
  * @returns {ServicesSetups}
  */
@@ -73,9 +79,9 @@ export function getServicesSetups(services, sliceName) {
 
 /**
  *
- * @param {ServicesDictionaryType} services
+ * @param {ServicesMapType} services
  * @param {string} sliceName
- * @returns {Service[]}
+ * @returns {PluginService[]}
  */
 export function formatServicesToPlugin(services, sliceName) {
   return Object.keys(services).reduce(
@@ -93,22 +99,19 @@ export function formatServicesToPlugin(services, sliceName) {
 
 /**
  * createSliceServices is an interface for creating slice services.
- * @template {ServicesDictionaryType} ServicesDictionary
+ * @template {ServicesMapType} ServicesMap
  * @param {{
  *  name: String,
- *  services: ServicesDictionary
+ *  services: ServicesMap
  * }} sliceServiceParams
  * @returns {{
- *  pluginServices: Service[],
- *  setups: ServicesSetups,
- *  services: ServicesDictionary
+ *  pluginServices: PluginService[],
+ *  setups: { [id in keyof ServicesMap]: ServiceSetupParams }
  * }}
  */
 export function createSliceServices({ name: sliceName, services }) {
   const pluginServices = formatServicesToPlugin(services, sliceName);
   const setups = getServicesSetups(services, sliceName);
 
-  console.log("createSliceServices", { setups });
-
-  return { pluginServices, setups, services };
+  return { pluginServices, setups };
 }
