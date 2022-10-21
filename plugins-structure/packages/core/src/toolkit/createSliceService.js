@@ -41,12 +41,6 @@
  */
 
 /**
- * @typedef {string} ServiceId
- */
-
-// * @typedef {Object.<string, ServiceParams>} ServicesMapType
-
-/**
  * @typedef {{ [id:string]: ServiceParams }} ServicesMapType
  */
 
@@ -106,7 +100,7 @@ export function formatServicesToPlugin(services, sliceName) {
  * }} sliceServiceParams
  * @returns {{
  *  pluginServices: PluginService[],
- *  setups: { [id in keyof ServicesMap]: ServiceSetupParams }
+ *  setups: { [serviceId in keyof ServicesMap]: ServiceSetupParams }
  * }}
  */
 export function createSliceServices({ name: sliceName, services }) {
