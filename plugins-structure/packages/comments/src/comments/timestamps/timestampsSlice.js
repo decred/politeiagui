@@ -5,7 +5,6 @@ import { getCommentsError } from "../../lib/errors";
 import chunk from "lodash/chunk";
 
 export const initialState = {
-  byToken: {},
   status: "idle",
   error: false,
 };
@@ -35,7 +34,7 @@ export const fetchCommentsTimestamps = createAsyncThunk(
 );
 export const fetchAllCommentsTimestamps = createAsyncThunk(
   "commentsTimestamps/fetchAll",
-  async ({ token, commentids }, { getState, dispatch }) => {
+  async ({ token, commentids }, { getState, dispatch, rejectWithValue }) => {
     const {
       commentsPolicy: {
         policy: { timestampspagesize },
@@ -47,6 +46,10 @@ export const fetchAllCommentsTimestamps = createAsyncThunk(
         dispatch(fetchCommentsTimestamps({ token, commentids: page }))
       )
     );
+    const responseError = responses.find((r) => r.error);
+    if (responseError) {
+      return rejectWithValue(responseError.payload);
+    }
     return responses
       .map((res) => res.payload.comments)
       .reduce((acc, c) => ({ ...acc, ...c }), {});
@@ -54,6 +57,15 @@ export const fetchAllCommentsTimestamps = createAsyncThunk(
   {
     condition: (_, { getState }) => {
       return validateCommentsTimestampsPageSize(getState());
+    },
+    getPendingMeta: ({ arg }, { getState }) => {
+      const {
+        commentsPolicy: {
+          policy: { timestampspagesize },
+        },
+      } = getState();
+      const total = Math.ceil(arg.commentids.length / timestampspagesize);
+      return { total };
     },
   }
 );
@@ -67,17 +79,7 @@ const commentsTimestampsSlice = createSlice({
       .addCase(fetchCommentsTimestamps.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchCommentsTimestamps.fulfilled, (state, action) => {
-        const { token } = action.meta.arg;
-        if (!state.byToken[token]) {
-          state.byToken[token] = {};
-        }
-        const { comments } = action.payload;
-        for (const commentid in comments) {
-          if (comments.hasOwnProperty(commentid)) {
-            state.byToken[token][commentid] = comments[commentid];
-          }
-        }
+      .addCase(fetchCommentsTimestamps.fulfilled, (state) => {
         state.status = "succeeded";
       })
       .addCase(fetchCommentsTimestamps.rejected, (state, action) => {
@@ -90,8 +92,6 @@ const commentsTimestampsSlice = createSlice({
 // Selectors
 export const selectCommentsTimestampsStatus = (state) =>
   state.commentsTimestamps?.status;
-export const selectCommentsTimestampsByToken = (state, token) =>
-  state.commentsTimestamps?.byToken[token];
 
 // Errors
 export const selectCommentsTimestampsError = (state) =>

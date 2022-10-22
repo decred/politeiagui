@@ -1,0 +1,25 @@
+.toast {
+  box-shadow: 0 0 1rem 0.2rem var(--color-shadow-light);
+  background-color: var(--card-background);
+  width: 50%;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  z-index: 10000;
+  transform: translateX(50%);
+  transition: all 1s ease;
+}
+
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+@media (--xs-viewport) {
+  .toast {
+    transform: none;
+    width: 100%;
+  }
+}

@@ -74,3 +74,42 @@ export function mockRecordsPolicy({
     inventorypagesize,
   });
 }
+
+export function mockRecordTimestamps() {
+  return () => ({
+    recordmetadata: {
+      data: faker.datatype.json(),
+      digest: faker.datatype.hexadecimal(64),
+      txid: faker.datatype.hexadecimal(64),
+      merkleroot: faker.datatype.hexadecimal(64),
+      proofs: [],
+    },
+    metadata: {
+      usermd: {
+        1: {
+          data: faker.datatype.json(),
+          digest: faker.datatype.hexadecimal(64),
+          txid: faker.datatype.hexadecimal(64),
+          merkleroot: faker.datatype.hexadecimal(64),
+          proofs: [],
+        },
+      },
+    },
+    files: {
+      "index.md": {
+        data: faker.datatype.json(),
+        digest: faker.datatype.hexadecimal(64),
+        txid: faker.datatype.hexadecimal(64),
+        merkleroot: faker.datatype.hexadecimal(64),
+        proofs: [],
+      },
+      "proposalmetadata.json": {
+        data: faker.datatype.json(),
+        digest: faker.datatype.hexadecimal(64),
+        txid: faker.datatype.hexadecimal(64),
+        merkleroot: faker.datatype.hexadecimal(64),
+        proofs: [],
+      },
+    },
+  });
+}

@@ -1,0 +1,33 @@
+.progressBar {
+  width: 100%;
+  height: 0.5rem;
+  background-color: var(--color-primary);
+}
+
+.progressBarWrapper {
+  background-color: var(--color-gray-light);
+  z-index: 100;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.5rem;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5rem,
+    var(--color-gray-lighter) 5rem,
+    var(--color-gray-lighter) 10rem
+  );
+  animation: slide 5s linear infinite;
+}
+
+@keyframes slide {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 100vw;
+  }
+}
