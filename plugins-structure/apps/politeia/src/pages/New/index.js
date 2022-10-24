@@ -9,5 +9,5 @@ export default App.createRoute({
   cleanup: routeCleanup,
   view: createRouteView(
     lazy(() => import(/* webpackChunkName: "new_proposal_page" */ "./New"))
-  )
+  ),
 });

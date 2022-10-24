@@ -6,18 +6,18 @@ const plugins = (isEnvDevelopment, isApp) =>
   isApp
     ? [
         new HtmlWebpackPlugin({
-          template: resolveApp("./src/public/index.html")
+          template: resolveApp("./src/public/index.html"),
         }),
         new CompressionPlugin({
           algorithm: "gzip",
-          test: /\.js(\?.*)?$/i
-        })
+          test: /\.js(\?.*)?$/i,
+        }),
       ]
     : isEnvDevelopment
     ? [
         new HtmlWebpackPlugin({
-          template: resolveApp("./src/dev/index.html")
-        })
+          template: resolveApp("./src/dev/index.html"),
+        }),
       ]
     : [];
 
@@ -30,9 +30,9 @@ const jsRules = [
     exclude: /node_modules/,
     options: {
       presets: ["@babel/preset-env", "@babel/preset-react"],
-      plugins: ["@babel/plugin-transform-runtime"]
-    }
-  }
+      plugins: ["@babel/plugin-transform-runtime"],
+    },
+  },
 ];
 
 const cssRules = [
@@ -43,33 +43,33 @@ const cssRules = [
       {
         loader: "css-loader",
         options: {
-          importLoaders: 1
-        }
+          importLoaders: 1,
+        },
       },
       {
         loader: "postcss-loader",
         options: {
           postcssOptions: {
-            config: resolveOwn("./config/postcss/postcss.config.js")
-          }
-        }
-      }
-    ]
-  }
+            config: resolveOwn("./config/postcss/postcss.config.js"),
+          },
+        },
+      },
+    ],
+  },
 ];
 
 const markdownRules = [
   {
     test: /\.md$/,
-    use: "raw-loader"
-  }
+    use: "raw-loader",
+  },
 ];
 
 const svgRules = [
   {
     test: /\.svg$/,
-    use: ["@svgr/webpack"]
-  }
+    use: ["@svgr/webpack"],
+  },
 ];
 
 module.exports = function (webpackEnv = "production", type = "app") {
@@ -94,16 +94,16 @@ module.exports = function (webpackEnv = "production", type = "app") {
           vendors: {
             test: /node_modules\/(?!pi-ui\/).*/,
             name: "vendors",
-            chunks: "all"
+            chunks: "all",
           },
           // This can be your own design library.
           "pi-ui": {
             test: /node_modules\/(pi-ui\/).*/,
             name: "pi-ui",
-            chunks: "all"
-          }
-        }
-      }
+            chunks: "all",
+          },
+        },
+      },
     },
     output: {
       publicPath: "/",
@@ -111,18 +111,18 @@ module.exports = function (webpackEnv = "production", type = "app") {
       filename: "[name].[chunkhash].bundle.js",
       library: {
         name: pkgName + ".js",
-        type: "umd"
+        type: "umd",
       },
-      clean: true
+      clean: true,
     },
     module: {
-      rules: [...jsRules, ...cssRules, ...markdownRules, ...svgRules]
+      rules: [...jsRules, ...cssRules, ...markdownRules, ...svgRules],
     },
     resolve: {
       fallback: {
         crypto: require.resolve("crypto-browserify"),
-        stream: require.resolve("stream-browserify")
-      }
+        stream: require.resolve("stream-browserify"),
+      },
     },
     // Uncomment to see postcss-loader warnings
     // TODO: Remove when the new solution is implemented and warning is removed
@@ -132,9 +132,9 @@ module.exports = function (webpackEnv = "production", type = "app") {
     // Visit the discussion on github for more details. https://github.com/csstools/postcss-plugins/discussions/192
     ignoreWarnings: [
       {
-        module: /postcss-loader\/dist\/cjs\.js/
-      }
+        module: /postcss-loader\/dist\/cjs\.js/,
+      },
     ],
-    plugins: plugins(isEnvDevelopment, isApp)
+    plugins: plugins(isEnvDevelopment, isApp),
   };
 };
