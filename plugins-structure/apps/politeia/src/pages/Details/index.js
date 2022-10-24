@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
@@ -10,80 +11,80 @@ import {
   fetchRfpLinkedProposalListenerCreator,
   fetchRfpSubmissionsListenerCreator,
   fetchVoteSummaryListenerCreator,
-  recordFetchDetailsListenerCreator,
+  recordFetchDetailsListenerCreator
 } from "./listeners";
-
-import Details from "./Details";
 
 export default App.createRoute({
   path: "/record/:token",
   setupServices: [
     {
-      id: "ticketvote/timestamps",
+      id: "ticketvote/timestamps"
     },
     {
-      id: "comments/timestamps",
+      id: "comments/timestamps"
     },
     {
       id: "records/details",
-      listenerCreator: recordFetchDetailsListenerCreator,
+      listenerCreator: recordFetchDetailsListenerCreator
     },
     {
       id: "ticketvote/summaries/single",
-      listenerCreator: fetchDetailsListenerCreator,
+      listenerCreator: fetchDetailsListenerCreator
     },
     {
       id: "comments",
-      listenerCreator: fetchDetailsListenerCreator,
+      listenerCreator: fetchDetailsListenerCreator
     },
     {
       id: "pi/summaries/single",
-      listenerCreator: fetchDetailsListenerCreator,
+      listenerCreator: fetchDetailsListenerCreator
     },
     {
       id: "pi/billingStatusChanges/single",
-      listenerCreator: fetchProposalSummaryListenerCreator,
+      listenerCreator: fetchProposalSummaryListenerCreator
     },
     // Proposal status changes services
     {
       id: "pi/proposals/voteStatusChanges",
-      listenerCreator: fetchVoteSummaryListenerCreator,
+      listenerCreator: fetchVoteSummaryListenerCreator
     },
     {
       id: "pi/proposals/recordStatusChanges",
-      listenerCreator: fetchRecordDetailsListenerCreator,
+      listenerCreator: fetchRecordDetailsListenerCreator
     },
     {
       id: "pi/proposals/billingStatusChanges",
-      listenerCreator: fetchBillingStatusChangesListenerCreator,
+      listenerCreator: fetchBillingStatusChangesListenerCreator
     },
     // RFP Proposals Services
     {
       id: "ticketvote/submissions",
-      listenerCreator: fetchRfpDetailsListenerCreator,
+      listenerCreator: fetchRfpDetailsListenerCreator
     },
     {
       id: "records/batch/all",
-      listenerCreator: fetchRfpSubmissionsListenerCreator,
+      listenerCreator: fetchRfpSubmissionsListenerCreator
     },
     {
       id: "ticketvote/summaries/all",
-      listenerCreator: fetchRfpSubmissionsListenerCreator,
+      listenerCreator: fetchRfpSubmissionsListenerCreator
     },
     {
       id: "pi/summaries/all",
-      listenerCreator: fetchRfpSubmissionsListenerCreator,
+      listenerCreator: fetchRfpSubmissionsListenerCreator
     },
     {
       id: "comments/count/all",
-      listenerCreator: fetchRfpSubmissionsListenerCreator,
+      listenerCreator: fetchRfpSubmissionsListenerCreator
     },
     // RFP Submissions Services
     {
       id: "records/batch",
-      listenerCreator: fetchRfpLinkedProposalListenerCreator,
-    },
+      listenerCreator: fetchRfpLinkedProposalListenerCreator
+    }
   ],
   cleanup: routeCleanup,
-  view: createRouteView(Details),
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "details_page" */ "./Details"))
+  )
 });

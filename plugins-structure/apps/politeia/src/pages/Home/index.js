@@ -1,7 +1,8 @@
+import { lazy } from "react";
 import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
-import Home from "./Home";
+
 import {
   fetchBillingStatusChangesListenerCreator,
   fetchInventoryListenerCreator,
@@ -12,7 +13,7 @@ import {
   fetchRecordsListenerCreator,
   fetchRecordsRfpSubmissionsListenerCreator,
   fetchVoteSummariesListenerCreator,
-  listeners,
+  listeners
 } from "./listeners";
 
 export default App.createRoute({
@@ -20,48 +21,50 @@ export default App.createRoute({
   setupServices: [
     {
       id: "ticketvote/inventory",
-      listenerCreator: fetchInventoryListenerCreator,
+      listenerCreator: fetchInventoryListenerCreator
     },
     {
       id: "records/batch",
-      listenerCreator: fetchNextBatchRecordsListenerCreator,
+      listenerCreator: fetchNextBatchRecordsListenerCreator
     },
     {
       id: "ticketvote/summaries/batch",
-      listenerCreator: fetchNextBatchSummariesListenerCreator,
+      listenerCreator: fetchNextBatchSummariesListenerCreator
     },
     {
       id: "pi/summaries/batch",
-      listenerCreator: fetchNextBatchSummariesListenerCreator,
+      listenerCreator: fetchNextBatchSummariesListenerCreator
     },
     {
       id: "pi/billingStatusChanges",
-      listenerCreator: fetchNextBatchBillingStatusesListenerCreator,
+      listenerCreator: fetchNextBatchBillingStatusesListenerCreator
     },
     {
       id: "comments/count",
-      listenerCreator: fetchNextBatchCountListenerCreator,
+      listenerCreator: fetchNextBatchCountListenerCreator
     },
     // Proposals Status changes
     {
       id: "pi/proposals/voteStatusChanges",
-      listenerCreator: fetchVoteSummariesListenerCreator,
+      listenerCreator: fetchVoteSummariesListenerCreator
     },
     {
       id: "pi/proposals/recordStatusChanges",
-      listenerCreator: fetchRecordsListenerCreator,
+      listenerCreator: fetchRecordsListenerCreator
     },
     {
       id: "pi/proposals/billingStatusChanges",
-      listenerCreator: fetchBillingStatusChangesListenerCreator,
+      listenerCreator: fetchBillingStatusChangesListenerCreator
     },
     // Rfp Sumbissions
     {
       id: "records/batch/all",
-      listenerCreator: fetchRecordsRfpSubmissionsListenerCreator,
-    },
+      listenerCreator: fetchRecordsRfpSubmissionsListenerCreator
+    }
   ],
   listeners,
   cleanup: routeCleanup,
-  view: createRouteView(Home),
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "home_page" */ "./Home"))
+  )
 });
