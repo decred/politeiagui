@@ -2,6 +2,7 @@ import { connectReducers, store as defaultStore, validatePlugin } from "./";
 import { api } from "./api";
 import { router } from "./router";
 import { services as recordsServices } from "./records/services";
+import { services as globalServices } from "./globalServices";
 import { listener } from "./listeners";
 import uniq from "lodash/fp/uniq";
 import isArray from "lodash/isArray";
@@ -27,6 +28,7 @@ function mergeListeners(routeServices, listeners) {
         actionCreator: listenerCreator.actionCreator,
         type: listenerCreator.type,
         effect: listenerCreator.injectEffect(effect),
+        matcher: listenerCreator.matcher,
       });
     }
   }
@@ -86,6 +88,7 @@ export function appSetup({
   listeners = [],
   config,
   store = defaultStore,
+  setupServices = [],
 }) {
   if (!isArray(plugins)) {
     throw Error("'plugins' must be an array");
@@ -93,7 +96,8 @@ export function appSetup({
   if (!isArray(listeners)) {
     throw Error("'listeners' must be an array");
   }
-  let appServices = recordsServices;
+
+  let appServices = [...recordsServices, ...globalServices];
   plugins.every(validatePlugin);
 
   // Connect plugins reducers and services
@@ -104,7 +108,15 @@ export function appSetup({
     }
   }
 
-  registerListeners(listeners);
+  // Connect app global services setup
+  validateServicesIds(setupServices);
+  const globalAppServices = addRouteServicesProperties(
+    appServices,
+    setupServices
+  );
+  const globalListeners = mergeListeners(globalAppServices, listeners);
+
+  registerListeners(globalListeners);
 
   return {
     config,

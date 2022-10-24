@@ -1,13 +1,13 @@
 import {
+  fetchAllTicketvoteTimestamps,
   fetchTicketvoteTimestamps,
-  selectTicketvoteTimestampsByToken,
   selectTicketvoteTimestampsError,
   selectTicketvoteTimestampsStatus,
 } from "./timestampsSlice";
 
 export const ticketvoteTimestamps = {
   fetch: fetchTicketvoteTimestamps,
-  selectByToken: selectTicketvoteTimestampsByToken,
+  fetchAll: fetchAllTicketvoteTimestamps,
   selectError: selectTicketvoteTimestampsError,
   selectStatus: selectTicketvoteTimestampsStatus,
 };

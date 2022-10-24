@@ -78,3 +78,26 @@ export function mockComments({
     return { comments: [...comments, ...moreComments] };
   };
 }
+
+export function mockCommentsTimestamps() {
+  return ({ commentids }) => {
+    const comments = commentids.reduce(
+      (acc, cid) => ({
+        ...acc,
+        [cid]: {
+          adds: [
+            {
+              data: faker.datatype.json(),
+              digest: faker.datatype.hexadecimal(64),
+              txid: faker.datatype.hexadecimal(64),
+              merkleroot: faker.datatype.hexadecimal(64),
+              proofs: [],
+            },
+          ],
+        },
+      }),
+      {}
+    );
+    return { comments };
+  };
+}
