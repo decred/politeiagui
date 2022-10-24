@@ -10,9 +10,9 @@ import {
   fetchRfpLinkedProposalListenerCreator,
   fetchRfpSubmissionsListenerCreator,
   fetchVoteSummaryListenerCreator,
-  listeners,
   recordFetchDetailsListenerCreator,
 } from "./listeners";
+
 import Details from "./Details";
 
 export default App.createRoute({
@@ -84,7 +84,6 @@ export default App.createRoute({
       listenerCreator: fetchRfpLinkedProposalListenerCreator,
     },
   ],
-  listeners,
   cleanup: routeCleanup,
   view: createRouteView(Details),
 });

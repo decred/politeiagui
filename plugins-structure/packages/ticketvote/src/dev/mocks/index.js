@@ -149,6 +149,24 @@ export function mockTicketvoteSummaries({
   };
 }
 
+export function mockTicketvoteTimestamps({ votesCount = 100 } = {}) {
+  return ({ votespage }) => {
+    function getTimestampData() {
+      return {
+        data: faker.datatype.json(),
+        digest: faker.datatype.hexadecimal(64),
+        txid: faker.datatype.hexadecimal(64),
+        merkleroot: faker.datatype.hexadecimal(64),
+        proofs: [],
+      };
+    }
+    if (!votespage) {
+      return { auths: [getTimestampData()], details: getTimestampData() };
+    }
+    return { votes: Array(votesCount).fill({}).map(getTimestampData) };
+  };
+}
+
 export function mockTicketvoteResults({ yes = 10, no = 10, result = {} } = {}) {
   return ({ token }) => {
     const voteData = {
@@ -171,4 +189,11 @@ export function mockTicketvoteResults({ yes = 10, no = 10, result = {} } = {}) {
     });
     return { votes: [...yesVotes, ...noVotes] };
   };
+}
+
+export function mockTicketvoteDetails() {
+  return () => ({
+    auths: [JSON.parse(faker.datatype.json())],
+    vote: JSON.parse(faker.datatype.json()),
+  });
 }

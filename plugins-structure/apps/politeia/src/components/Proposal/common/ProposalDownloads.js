@@ -1,31 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Dropdown, DropdownItem } from "pi-ui";
-import { downloadJSON } from "@politeiagui/core/downloads";
-import { getShortToken } from "@politeiagui/core/records/utils";
+import { Dropdown, DropdownItem, Spinner } from "pi-ui";
+import { useProposalDownloads } from "../../../pi/downloads/useProposalDownloads";
+import styles from "./styles.module.css";
 
-const ProposalDownloads = ({
-  onFetchRecordTimestamps,
-  onFetchCommentsTimestamps,
-  onDownloadCommentsBundle,
-  record,
-  title,
-  headerClassName,
-}) => {
-  if (!record) return;
-
-  const {
-    version,
-    censorshiprecord: { token },
-  } = record;
-
-  function handleDownloadRecordBundle() {
-    const { detailsFetched: _, ...recordToDownload } = record;
-    downloadJSON(
-      recordToDownload,
-      `${getShortToken(token)}-v${version}-record-bundle`
-    );
+const DownloadItem = ({ onDownload, children, ...props }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  async function handleDownload() {
+    setIsLoading(true);
+    await onDownload();
+    setIsLoading(false);
   }
+  return (
+    <DropdownItem
+      onClick={handleDownload}
+      className={styles.downloadItem}
+      {...props}
+    >
+      <div className={styles.downloadLabel}>{children}</div>
+      <div className={styles.downloadIcon}>
+        {isLoading && <Spinner invert />}
+      </div>
+    </DropdownItem>
+  );
+};
+
+const ProposalDownloads = ({ token, version, title, headerClassName }) => {
+  const {
+    onDownloadCommentsBundle,
+    onDownloadRecordBundle,
+    onDownloadVotesBundle,
+    onFetchCommentsTimestamps,
+    onFetchRecordTimestamps,
+    onFetchVotesTimestamps,
+  } = useProposalDownloads({ token, version });
+
   return (
     <Dropdown
       data-testid="proposal-downloads"
@@ -33,30 +42,59 @@ const ProposalDownloads = ({
       closeOnItemClick={false}
       dropdownHeaderClassName={headerClassName}
     >
-      <DropdownItem onClick={handleDownloadRecordBundle}>
+      <DownloadItem
+        data-testid="proposal-downloads-record-bundle"
+        onDownload={onDownloadRecordBundle}
+      >
         Proposal Bundle
-      </DropdownItem>
+      </DownloadItem>
       {onFetchRecordTimestamps && (
-        <DropdownItem onClick={() => onFetchRecordTimestamps(version)}>
+        <DownloadItem
+          data-testid="proposal-downloads-record-timestamps"
+          onDownload={onFetchRecordTimestamps}
+        >
           Proposal Timestamps
-        </DropdownItem>
+        </DownloadItem>
       )}
       {onDownloadCommentsBundle && (
-        <DropdownItem onClick={onDownloadCommentsBundle}>
+        <DownloadItem
+          data-testid="proposal-downloads-comments-bundle"
+          onDownload={onDownloadCommentsBundle}
+        >
           Comments Bundle
-        </DropdownItem>
+        </DownloadItem>
       )}
       {onFetchCommentsTimestamps && (
-        <DropdownItem onClick={onFetchCommentsTimestamps}>
+        <DownloadItem
+          data-testid="proposal-downloads-comments-timestamps"
+          onDownload={onFetchCommentsTimestamps}
+        >
           Comments Timestamps
-        </DropdownItem>
+        </DownloadItem>
+      )}
+      {onDownloadVotesBundle && (
+        <DownloadItem
+          data-testid="proposal-downloads-votes-bundle"
+          onDownload={onDownloadVotesBundle}
+        >
+          Votes Bundle
+        </DownloadItem>
+      )}
+      {onFetchVotesTimestamps && (
+        <DownloadItem
+          data-testid="proposal-downloads-votes-timestamps"
+          onDownload={onFetchVotesTimestamps}
+        >
+          Votes Timestamps
+        </DownloadItem>
       )}
     </Dropdown>
   );
 };
 
 ProposalDownloads.propTypes = {
-  onFetchRecordTimestamps: PropTypes.func,
+  token: PropTypes.string.isRequired,
+  version: PropTypes.number,
   title: PropTypes.string,
   record: PropTypes.object,
 };

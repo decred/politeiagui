@@ -1,9 +1,5 @@
 import { fetchProposalDetails } from "./actions";
 import {
-  downloadCommentsTimestampsEffect,
-  downloadRecordTimestampsEffect,
-} from "./effects";
-import {
   getRfpRecordLink,
   isProposalCompleteOrClosed,
   isRfpProposal,
@@ -149,15 +145,3 @@ export const fetchRfpLinkedProposalListenerCreator = {
   type: "records/fetchDetails/fulfilled",
   injectEffect: injectRfpLinkedProposalEffect,
 };
-
-// Listeners
-export const listeners = [
-  {
-    type: "commentsTimestamps/fetchAll/fulfilled",
-    effect: downloadCommentsTimestampsEffect,
-  },
-  {
-    type: "records/fetchTimestamps/fulfilled",
-    effect: downloadRecordTimestampsEffect,
-  },
-];

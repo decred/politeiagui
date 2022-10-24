@@ -43,10 +43,6 @@ const ProposalDetails = ({
   rfpRecord,
   voteSummary,
   proposalSummary,
-  onFetchRecordTimestamps,
-  onFetchCommentsTimestamps,
-  onDownloadRecordBundle,
-  onDownloadCommentsBundle,
   proposalStatusChanges,
   rfpSubmissionsRecords,
   rfpSubmissionsVoteSummaries,
@@ -79,7 +75,6 @@ const ProposalDetails = ({
       currentProposal: proposalDetails,
       newVersion: proposalDetails.version,
       token: proposalDetails.token,
-      onFetchTimestamps: onFetchRecordTimestamps,
     });
   }
   function handleOpenImageModal(index) {
@@ -178,11 +173,8 @@ const ProposalDetails = ({
         footer={
           <>
             <ProposalDownloads
-              record={record}
-              onFetchRecordTimestamps={onFetchRecordTimestamps}
-              onFetchCommentsTimestamps={onFetchCommentsTimestamps}
-              onDownloadRecordBundle={onDownloadRecordBundle}
-              onDownloadCommentsBundle={onDownloadCommentsBundle}
+              token={proposalDetails.token}
+              version={proposalDetails.version}
             />
             <div className={styles.footerButtons}>
               <a

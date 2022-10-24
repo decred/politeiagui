@@ -132,16 +132,11 @@ function VersionsPickers({
   );
 }
 
-function VersionsInfo({
-  oldProposal,
-  newProposal,
-  onFetchTimestamps,
-  oldRecord,
-  newRecord,
-}) {
+function VersionsInfo({ oldProposal, newProposal }) {
   if (!oldProposal || !newProposal) return null;
   const oldVersion = oldProposal.version;
   const newVersion = newProposal.version;
+  const token = oldProposal.token;
   const oldTimestamp =
     oldVersion !== 1
       ? oldProposal.timestamps.editedat
@@ -157,8 +152,8 @@ function VersionsInfo({
         <Event timestamp={oldTimestamp} />
         <ProposalDownloads
           headerClassName={styles.versionDownloads}
-          record={oldRecord}
-          onFetchRecordTimestamps={onFetchTimestamps}
+          token={token}
+          version={oldVersion}
         />
       </Join>
       {oldVersion !== newVersion && (
@@ -166,9 +161,9 @@ function VersionsInfo({
           <Text className={styles.subtitle}>Version {newVersion}</Text>
           <Event timestamp={newTimestamp} />
           <ProposalDownloads
+            token={token}
+            version={newVersion}
             headerClassName={styles.versionDownloads}
-            record={newRecord}
-            onFetchRecordTimestamps={onFetchTimestamps}
           />
         </Join>
       )}
@@ -176,13 +171,7 @@ function VersionsInfo({
   );
 }
 
-function ProposalDiff({
-  currentProposal,
-  oldVersion,
-  newVersion,
-  token,
-  onFetchTimestamps,
-}) {
+function ProposalDiff({ currentProposal, oldVersion, newVersion, token }) {
   const dispatch = useDispatch();
   const [oldV, setOldV] = useState(oldVersion);
   const [newV, setNewV] = useState(newVersion);
@@ -253,13 +242,7 @@ function ProposalDiff({
           />
         }
         secondRow={
-          <VersionsInfo
-            oldProposal={oldProposal}
-            newProposal={newProposal}
-            oldRecord={oldRecord}
-            newRecord={newRecord}
-            onFetchTimestamps={onFetchTimestamps}
-          />
+          <VersionsInfo oldProposal={oldProposal} newProposal={newProposal} />
         }
         thirdRow={
           oldStatus === "succeeded" &&
@@ -296,7 +279,6 @@ export function ModalProposalDiff({
   newVersion,
   currentProposal,
   token,
-  onFetchTimestamps,
 }) {
   return (
     <Modal
@@ -312,7 +294,6 @@ export function ModalProposalDiff({
         newVersion={newVersion}
         currentProposal={currentProposal}
         token={token}
-        onFetchTimestamps={onFetchTimestamps}
       />
     </Modal>
   );
