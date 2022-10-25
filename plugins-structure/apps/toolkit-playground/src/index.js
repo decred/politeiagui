@@ -3,48 +3,61 @@ import ReactDOM from "react-dom";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "@politeiagui/core";
 import App from "./app";
+import { createAction } from "@reduxjs/toolkit";
 import { services } from "./playground";
 
-import { createAction } from "@reduxjs/toolkit";
 const root = document.querySelector("#root");
+function cleanup() {
+  return ReactDOM.unmountComponentAtNode(root);
+}
 
-const trigger = createAction("trigger");
-const withoutPrepare = createAction("withoutPrepare");
+// Actions to test against playground services
+const prepareFetchRecord = createAction("prepareFetchRecord");
+const withoutCustomEffect = createAction("withoutCustomEffect");
 
 const Home = () => {
   const dispatch = useDispatch();
   return (
     <div>
       <h1>toolkit-playground HOME PAGE</h1>
-      <button onClick={() => dispatch(trigger("37558e28902ec56a"))}>
-        Trigger
+      <button
+        onClick={() =>
+          dispatch(prepareFetchRecord({ token: "37558e28902ec56a" }))
+        }
+      >
+        Fetch Record
       </button>
       <button
-        onClick={() => dispatch(withoutPrepare("PAYLOAD Without prepare"))}
+        onClick={() =>
+          dispatch(withoutCustomEffect("PAYLOAD Without customization"))
+        }
       >
-        Without Prepare
+        Without Customization
       </button>
     </div>
   );
 };
 
-function cleanup() {
-  return ReactDOM.unmountComponentAtNode(root);
-}
+// Get services setup
+const { foo, create, effectWithoutCustomization } = services.setups;
 
-const { foo, create, effectWithoutPrepare } = services.setups;
-
+// Setup service foo
 const serviceFoo = foo
-  .listenTo({ actionCreator: trigger })
+  .listenTo({ actionCreator: prepareFetchRecord })
+  // Add custom effect to our service
   .customizeEffect((effect, { payload }, { dispatch, getState }) => {
-    effect(getState(), dispatch, { token: payload });
+    effect(getState(), dispatch, payload);
   });
 
-const serviceEffectWithoutPrepare = effectWithoutPrepare.listenTo({
-  actionCreator: withoutPrepare,
+// Setup service without custom effects. This will pass the action payload
+// to our service effect.
+const serviceEffectWithoutCustomization = effectWithoutCustomization.listenTo({
+  actionCreator: withoutCustomEffect,
 });
 
-console.log({ serviceEffectWithoutPrepare });
+// this service will not have any listeners, but this will trigger the service
+// `action` to execute on service match.
+const serviceCreate = create;
 
 const appRoutes = [
   App.createRoute({
@@ -57,8 +70,13 @@ const appRoutes = [
         root
       ),
     cleanup,
-    setupServices: [serviceEffectWithoutPrepare, serviceFoo, create],
+    setupServices: [
+      serviceEffectWithoutCustomization,
+      serviceFoo,
+      serviceCreate,
+    ],
   }),
 ];
 
+// Initialize our app
 App.init({ routes: appRoutes });
