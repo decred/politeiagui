@@ -72,8 +72,8 @@ export const client = {
   },
   async fetchApi() {
     const response = await fetch("/api");
-    const csrf = response.headers.get("X-Csrf-Token");
     const api = await parseResponse(response);
+    const csrf = response.headers.get("X-Csrf-Token");
     return { api, csrf };
   },
   async fetchRecordsPolicy(state) {
@@ -97,9 +97,11 @@ export async function getCsrf(state) {
 
 export async function parseResponse(response) {
   const { status, statusText } = response;
+  if (status < 200 || status > 299) {
+    throw new ApiError(statusText, json);
+  }
   const json = await response.json();
-  if ([200, 201].includes(status)) return json;
-  throw new ApiError(statusText, json);
+  return json;
 }
 
 export function fetchOptions(csrf, json, method) {

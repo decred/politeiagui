@@ -111,5 +111,8 @@ module.exports = function (webpackEnv = "production", type = "app") {
       },
     ],
     plugins: plugins(isEnvDevelopment, isApp),
+    experiments: {
+      topLevelAwait: true,
+    },
   };
 };

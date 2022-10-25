@@ -143,7 +143,6 @@ describe("Given the recordsInventorySlice", () => {
         bestblock: 420,
       };
       fetchInventorySpy.mockResolvedValueOnce(resValue);
-
       await store.dispatch(fetchTicketvoteInventory(params));
 
       expect(fetchInventorySpy).toBeCalled();

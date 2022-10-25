@@ -35,9 +35,9 @@ const apiSlice = createSlice({
         // Assign csrf return to the state
         state.csrf = action.payload.csrf;
       })
-      .addCase(fetchApi.rejected, (state, action) => {
+      .addCase(fetchApi.rejected, (state) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = "Cannot fetch `/api`. Is politeiawww running?";
       });
   },
 });
@@ -45,6 +45,7 @@ const apiSlice = createSlice({
 // Selectors
 export const selectApi = (state) => state.api.api;
 export const selectApiStatus = (state) => state.api.status;
+export const selectApiError = (state) => state.api.error;
 
 // Export default reducer
 export default apiSlice.reducer;

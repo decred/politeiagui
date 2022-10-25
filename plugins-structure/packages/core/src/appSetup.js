@@ -126,6 +126,10 @@ export function appSetup({
      */
     async init({ routes, routerOptions, errorView } = {}) {
       await store.dispatch(api.fetch());
+      const apiStatus = api.selectStatus(store.getState());
+      if (apiStatus == "failed") {
+        throw Error(api.selectError(store.getState()));
+      }
       await router.init({ routes, options: routerOptions, errorView });
     },
     /**
