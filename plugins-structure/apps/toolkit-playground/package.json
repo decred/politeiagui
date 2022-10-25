@@ -1,0 +1,22 @@
+{
+  "name": "toolkit-playground",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "module": "src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "prettify": "politeiagui-scripts prettify",
+    "prettify:write": "politeiagui-scripts prettify --write",
+    "prettify:check": "politeiagui-scripts prettify --check",
+    "lint:test": "politeiagui-scripts lint",
+    "lint:fix": "politeiagui-scripts lint --fix",
+    "test": "politeiagui-scripts test",
+    "test:no:watch": "politeiagui-scripts test --no-watch",
+    "build": "politeiagui-scripts build-app",
+    "start": "politeiagui-scripts start-app"
+  },
+  "dependencies": {
+    "@politeiagui/core": "1.0.0",
+    "@politeiagui/common-ui": "1.0.0"
+  }
+}
