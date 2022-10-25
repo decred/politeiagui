@@ -1,4 +1,4 @@
-import { curry } from "lodash";
+import curry from "lodash/fp/curry";
 /**
  * PluginService is an `action` that will setup the plugin for usage in some given
  * `id` case.
@@ -7,6 +7,16 @@ import { curry } from "lodash";
  *  action: Function,
  *  effect: Function
  * }} PluginService
+ */
+/**
+ * @typedef {{
+ *  actionCreator?: string,
+ *  type?: string,
+ *  matcher?: Function
+ * }} ListenerMatch
+ */
+/**
+ * @typedef {ListenerMatch & {injectEffect: onCustomizeListenerEffect}} ListenerCreator
  */
 /**
  * @callback ListenerEffect
@@ -21,7 +31,7 @@ import { curry } from "lodash";
  * @param {import("@reduxjs/toolkit").ListenerEffectAPI} listenerApi
  */
 /**
- * @callback onListenerEffect
+ * @callback onCustomizeListenerEffect
  * @param {CurriedListenerEffect} curriedEffectListerner
  */
 /**
@@ -34,7 +44,8 @@ import { curry } from "lodash";
 /**
  * @typedef {{
  *  id: string,
- *  addEffect: onListenerEffect
+ *  listenerCreator: ListenerCreator
+ *  customizeEffect: onCustomizeListenerEffect
  * }} ServiceListener
  */
 /**
@@ -49,7 +60,7 @@ import { curry } from "lodash";
  */
 /**
  * @callback onServiceListener
- * @param {{ actionCreator?: string, type?: string, matcher?: Function }} params
+ * @param {ListenerMatch} params
  * @returns {ServiceListener}
  */
 
@@ -64,19 +75,33 @@ function setSliceId(sliceName, id) {
 }
 
 /**
+ * @type {CurriedListenerEffect}
+ */
+function defaultInjectEffect(effect, action, { getState, dispatch }) {
+  effect(getState(), dispatch, action);
+}
+
+/**
  * createServiceListener
  * @param {string} id
  * @return {onServiceListener}
  */
 const createServiceListener =
   (id) =>
-  ({ actionCreator, type }) => {
+  ({ actionCreator, type, matcher }) => {
     return {
       id,
-      addEffect: (injectEffect) => ({
+      listenerCreator: {
+        actionCreator,
+        type,
+        matcher,
+        injectEffect: curry(defaultInjectEffect),
+      },
+      customizeEffect: (injectEffect) => ({
         listenerCreator: {
           type,
           actionCreator,
+          matcher,
           injectEffect: curry(injectEffect),
         },
         id,
