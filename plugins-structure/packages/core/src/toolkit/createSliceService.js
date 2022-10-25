@@ -9,27 +9,27 @@ import { curry } from "lodash";
  * }} PluginService
  */
 /**
- * ServiceParams - TODO: description
- * @typedef {{
- *  onSetup: Function,
- *  effect: Function
- * }} ServiceParams
- */
-/**
  * @callback ListenerEffect
  * @param {Object} state
- * @param {Function} dispatch
+ * @param {import("@reduxjs/toolkit").Dispatch} dispatch
  * @param {Object} effectPayload
  */
 /**
  * @callback CurriedListenerEffect
  * @param {ListenerEffect} effect
- * @param {Object} action
- * @param {Object} listenerApi
+ * @param {import("@reduxjs/toolkit").PayloadAction} action
+ * @param {import("@reduxjs/toolkit").ListenerEffectAPI} listenerApi
  */
 /**
  * @callback onListenerEffect
  * @param {CurriedListenerEffect} curriedEffectListerner
+ */
+/**
+ * ServiceParams - TODO: description
+ * @typedef {{
+ *  onSetup?: Function,
+ *  effect?: ListenerEffect
+ * }} ServiceParams
  */
 /**
  * @typedef {{
