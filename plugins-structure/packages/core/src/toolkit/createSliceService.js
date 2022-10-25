@@ -1,71 +1,104 @@
-/**
- * ServiceAction is the method to be executed by an intializer.
- * @callback ServiceAction
- * @returns {Promise}
- */
-/**
- * Effect is the function to be executed when the action triggers.
- * @callback Effect
- * @returns {Promise}
- */
+import { curry } from "lodash";
 /**
  * PluginService is an `action` that will setup the plugin for usage in some given
  * `id` case.
  * @typedef {{
  *  id: string,
- *  action: ServiceAction,
- *  effect: Effect
+ *  action: Function,
+ *  effect: Function
  * }} PluginService
  */
 /**
  * ServiceParams - TODO: description
  * @typedef {{
- *  onSetup: ServiceAction,
- *  effect: Effect
+ *  onSetup: Function,
+ *  effect: Function
  * }} ServiceParams
+ */
+/**
+ * @callback ListenerEffect
+ * @param {Object} state
+ * @param {Function} dispatch
+ * @param {Object} effectPayload
+ */
+/**
+ * @callback CurriedListenerEffect
+ * @param {ListenerEffect} effect
+ * @param {Object} action
+ * @param {Object} listenerApi
+ */
+/**
+ * @callback onListenerEffect
+ * @param {CurriedListenerEffect} curriedEffectListerner
+ */
+/**
+ * @typedef {{
+ *  id: string,
+ *  addEffect: onListenerEffect
+ * }} ServiceListener
  */
 /**
  * ServiceSetupParams - TODO: description
  * @typedef {{
  *  id: String,
- *  listenerCreator: Function
+ *  listenTo: onServiceListener
  * }} ServiceSetupParams
  */
 /**
- * @callback Connect
- * @param {PluginService} service
- */
-/**
- * @callback ServicesBuilder
- * @param {Connect} connect
- */
-
-/**
  * @typedef {{ [id:string]: ServiceParams }} ServicesMapType
  */
-
 /**
- *
- * @typedef {Object.<string, ServiceSetupParams>} ServicesSetups
+ * @callback onServiceListener
+ * @param {{ actionCreator?: string, type?: string, matcher?: Function }} params
+ * @returns {ServiceListener}
  */
 
+/**
+ * setSliceId
+ * @param {string} sliceName
+ * @param {string} id
+ * @returns {string} `${sliceName}/${id}`
+ */
 function setSliceId(sliceName, id) {
   return `${sliceName}/${id}`;
 }
 
 /**
+ * createServiceListener
+ * @param {string} id
+ * @return {onServiceListener}
+ */
+const createServiceListener =
+  (id) =>
+  ({ actionCreator, type }) => {
+    return {
+      id,
+      addEffect: (injectEffect) => ({
+        listenerCreator: {
+          type,
+          actionCreator,
+          injectEffect: curry(injectEffect),
+        },
+        id,
+      }),
+    };
+  };
+
+/**
  * getServicesSetups
- * @param {ServicesMapType} services
+ * @template {ServicesMapType} ServicesMap
+ * @param {ServicesMap} services
  * @param {string} sliceName
- * @returns {ServicesSetups}
+ * @returns {{[serviceId in keyof ServicesMap]: ServiceSetupParams }}
  */
 export function getServicesSetups(services, sliceName) {
   return Object.keys(services).reduce((acc, serviceId) => {
+    const id = setSliceId(sliceName, serviceId);
     return {
       ...acc,
       [serviceId]: {
-        id: setSliceId(sliceName, serviceId),
-        listenerCreator: () => {},
+        id,
+        listenTo: createServiceListener(id),
       },
     };
   }, {});
