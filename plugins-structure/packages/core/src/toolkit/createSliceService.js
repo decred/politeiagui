@@ -35,7 +35,6 @@ import curry from "lodash/fp/curry";
  * @param {CurriedListenerEffect} curriedEffectListerner
  */
 /**
- * ServiceParams - TODO: description
  * @typedef {{
  *  onSetup?: Function,
  *  effect?: ListenerEffect
@@ -49,7 +48,6 @@ import curry from "lodash/fp/curry";
  * }} ServiceListener
  */
 /**
- * ServiceSetupParams - TODO: description
  * @typedef {{
  *  id: String,
  *  listenTo: onServiceListener
@@ -64,12 +62,6 @@ import curry from "lodash/fp/curry";
  * @returns {ServiceListener}
  */
 
-/**
- * setSliceId
- * @param {string} sliceName
- * @param {string} id
- * @returns {string} `${sliceName}/${id}`
- */
 function setSliceId(sliceName, id) {
   return `${sliceName}/${id}`;
 }
@@ -82,13 +74,12 @@ function defaultInjectEffect(effect, action, { getState, dispatch }) {
 }
 
 /**
- * createServiceListener
+ * @type createServiceListener
  * @param {string} id
  * @return {onServiceListener}
  */
-const createServiceListener =
-  (id) =>
-  ({ actionCreator, type, matcher }) => {
+function createServiceListener(id) {
+  return function serviceListener({ actionCreator, type, matcher }) {
     return {
       id,
       listenerCreator: {
@@ -108,9 +99,11 @@ const createServiceListener =
       }),
     };
   };
+}
 
 /**
- * getServicesSetups
+ * getServicesSetups returns a services setup map, where each setup can declare
+ * a ServiceListener to some Redux Action.
  * @template {ServicesMapType} ServicesMap
  * @param {ServicesMap} services
  * @param {string} sliceName
@@ -130,7 +123,8 @@ export function getServicesSetups(services, sliceName) {
 }
 
 /**
- *
+ * formatServicesToPlugin returns an array of plugin services, which is used to
+ * connect to some plugin setup.
  * @param {ServicesMapType} services
  * @param {string} sliceName
  * @returns {PluginService[]}
@@ -151,6 +145,58 @@ export function formatServicesToPlugin(services, sliceName) {
 
 /**
  * createSliceServices is an interface for creating slice services.
+ *
+ * Each service is composed by an `id`, used to identify the service among our
+ * plugins and apps, an `onSetup` function to be executed when our service is
+ * setup, and an `effect` that will be executed for each Service Listener.
+ *
+ * Example:
+ * ```javascript
+ * import { createSliceServices } from "@politeiagui/core/toolkit";
+ * import { createAction } from "@reduxjs/toolkit";
+ *
+ * const services = createSliceServices({
+ *   name: "my/test",
+ *   services: {
+ *     // `foo` is the service id
+ *     foo: {
+ *       effect: async (state, dispatch, { token }) => {
+ *         // Do something here to be executed on listener match
+ *       },
+ *       onSetup: () => {
+ *         // Do something here to be executed when listener is initialized
+ *       },
+ *     },
+ *   },
+ * });
+ *
+ * // Action to listen to.
+ * const myAction = createAction("myAction")
+ *
+ * const { foo } = services.setup;
+ *
+ * // setup foo without listeners. This return the serviceId, and once it's
+ * // connected to our app, the `onSetup` action will be executed.
+ * const fooWithoutListeners = foo;
+ *
+ * // setup foo without any effect customization. This will execute the effect
+ * // using the listened action payload as argument. Works for any Redux Toolkit
+ * // listener action matcher.
+ * const fooWithoutEffectCustomizationType = foo.listenTo({ type: "myAction" });
+ * // or
+ * const fooWithoutEffectCustomizationActionCreator = foo.listenTo({
+ *   actionCreator: myAction
+ * });
+ *
+ * // setup foo with custom effect. This allows service's effect parameters
+ * // customization, as well as the addition of a new listener handler.
+ * const fooCustomized = foo
+ *   .listenTo({ type: "myAction" })
+ *   .customizeEffect((effect, { payload }, { dispatch, getState }) => {
+ *     effect(getState(), dispatch, { token: payload });
+ *   });
+ * ```
+ *
  * @template {ServicesMapType} ServicesMap
  * @param {{
  *  name: String,

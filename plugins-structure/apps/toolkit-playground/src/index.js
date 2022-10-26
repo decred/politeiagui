@@ -41,13 +41,9 @@ const Home = () => {
 // Get services setup
 const { foo, create, effectWithoutCustomization } = services.setups;
 
-// Setup service foo
-const serviceFoo = foo
-  .listenTo({ actionCreator: prepareFetchRecord })
-  // Add custom effect to our service
-  .customizeEffect((effect, { payload }, { dispatch, getState }) => {
-    effect(getState(), dispatch, payload);
-  });
+// this service will not have any listeners, but this will trigger the service
+// `action` to execute on service match.
+const serviceCreate = create;
 
 // Setup service without custom effects. This will pass the action payload
 // to our service effect.
@@ -55,9 +51,13 @@ const serviceEffectWithoutCustomization = effectWithoutCustomization.listenTo({
   actionCreator: withoutCustomEffect,
 });
 
-// this service will not have any listeners, but this will trigger the service
-// `action` to execute on service match.
-const serviceCreate = create;
+// Setup service foo
+const serviceFoo = foo
+  .listenTo({ actionCreator: prepareFetchRecord })
+  // Add custom effect to our service
+  .customizeEffect((effect, { payload }, { dispatch, getState }) => {
+    effect(getState(), dispatch, payload);
+  });
 
 const appRoutes = [
   App.createRoute({
