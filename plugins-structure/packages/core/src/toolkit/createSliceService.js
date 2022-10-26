@@ -160,7 +160,7 @@ export function formatServicesToPlugin(services, sliceName) {
  *   services: {
  *     // `foo` is the service id
  *     foo: {
- *       effect: async (state, dispatch, { token }) => {
+ *       effect: async (state, dispatch, payload) => {
  *         // Do something here to be executed on listener match
  *       },
  *       onSetup: () => {
