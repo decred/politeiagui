@@ -1,7 +1,7 @@
 import React from "react";
 import { classNames } from "pi-ui";
 import { useSelector } from "react-redux";
-import { navigation } from "../../services";
+import { navigation } from "@politeiagui/core/globalServices";
 import startsWith from "lodash/startsWith";
 import findLast from "lodash/findLast";
 import styles from "./styles.module.css";

@@ -7,11 +7,11 @@ const initialState = {
   history: [],
 };
 
-export const pushNavigation = createAction("uiNavigation/push");
-export const popNavigation = createAction("uiNavigation/pop");
+export const pushNavigation = createAction("globalNavigation/push");
+export const popNavigation = createAction("globalNavigation/pop");
 
 const navigationSlice = createSlice({
-  name: "uiNavigation",
+  name: "globalNavigation",
   initialState,
   extraReducers(builder) {
     builder
@@ -27,9 +27,10 @@ const navigationSlice = createSlice({
   },
 });
 
-export const selectNavigationHistory = (state) => state.uiNavigation?.history;
+export const selectNavigationHistory = (state) =>
+  state.globalNavigation.history;
 export const selectNavigationHistoryLastItem = (state) =>
-  last(state.uiNavigation?.history);
+  last(state.globalNavigation.history);
 
 function updateDocumentTitle(title) {
   if (title && isString(title)) document.title = title;
@@ -37,7 +38,7 @@ function updateDocumentTitle(title) {
 
 export const services = [
   {
-    id: "ui/navigation/updateTitle",
+    id: "global/navigation/updateTitle",
     effect: (_, __, { title }) => {
       updateDocumentTitle(title);
     },
