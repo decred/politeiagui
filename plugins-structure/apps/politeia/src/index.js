@@ -6,14 +6,13 @@ import { store } from "@politeiagui/core";
 import { UiTheme } from "@politeiagui/common-ui/layout";
 import { ProgressBar, Toast } from "@politeiagui/common-ui";
 // Components
-import { Header, Error } from "./components";
+import { Error, Header } from "./components";
 // App
 import App from "./app";
 import { routes } from "./routes";
 import ErrorView from "./pages/Error";
 
 try {
-  await App.init({ routes, errorView: ErrorView });
   ReactDOM.render(
     <Provider store={store}>
       <UiTheme>
@@ -25,6 +24,7 @@ try {
     </Provider>,
     document.querySelector("#app-root")
   );
+  await App.init({ routes, errorView: ErrorView });
 } catch (e) {
   ReactDOM.render(<Error error={e} />, document.querySelector("#app-root"));
 }
