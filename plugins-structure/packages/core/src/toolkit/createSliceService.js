@@ -152,6 +152,7 @@ export function formatServicesToPlugin(services, sliceName) {
  *
  * Example:
  * ```javascript
+ * import { pluginSetup } from "@politeiagui/core";
  * import { createSliceServices } from "@politeiagui/core/toolkit";
  * import { createAction } from "@reduxjs/toolkit";
  *
@@ -195,6 +196,13 @@ export function formatServicesToPlugin(services, sliceName) {
  *   .customizeEffect((effect, { payload }, { dispatch, getState }) => {
  *     effect(getState(), dispatch, { token: payload });
  *   });
+ *
+ * // Use on plugin
+ * const plugin = pluginSetup({
+ *   name: "playground",
+ *   reducers: [],
+ *   services: services.pluginServices
+ * })
  * ```
  *
  * @template {ServicesMapType} ServicesMap
