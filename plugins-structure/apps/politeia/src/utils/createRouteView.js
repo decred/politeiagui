@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { store } from "@politeiagui/core";
 import { Provider } from "react-redux";
@@ -11,7 +11,9 @@ export function createRouteView(Component) {
       <Provider store={store}>
         <ModalProvider>
           <UiTheme>
-            <Component {...params} />
+            <Suspense fallback={React.Component}>
+              <Component {...params} />
+            </Suspense>
           </UiTheme>
         </ModalProvider>
       </Provider>,

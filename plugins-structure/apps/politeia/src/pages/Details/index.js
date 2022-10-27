@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
@@ -12,8 +13,6 @@ import {
   fetchVoteSummaryListenerCreator,
   recordFetchDetailsListenerCreator,
 } from "./listeners";
-
-import Details from "./Details";
 
 export default App.createRoute({
   path: "/record/:token",
@@ -85,5 +84,7 @@ export default App.createRoute({
     },
   ],
   cleanup: routeCleanup,
-  view: createRouteView(Details),
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "details_page" */ "./Details"))
+  ),
 });

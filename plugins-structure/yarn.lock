@@ -5589,6 +5589,14 @@ compressible@~2.0.16:
   dependencies:
     mime-db ">= 1.43.0 < 2"
 
+compression-webpack-plugin@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/compression-webpack-plugin/-/compression-webpack-plugin-10.0.0.tgz#3496af1b0dc792e13efc474498838dbff915c823"
+  integrity sha512-wLXLIBwpul/ALcm7Aj+69X0pYT3BYt6DdPn3qrgBIh9YejV9Bju9ShhlAsjujLyWMo6SAweFIWaUoFmXZNuNrg==
+  dependencies:
+    schema-utils "^4.0.0"
+    serialize-javascript "^6.0.0"
+
 compression@^1.7.4:
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/compression/-/compression-1.7.4.tgz#95523eff170ca57c29a0ca41e6fe131f41e5bb8f"
@@ -10597,15 +10605,15 @@ performance-now@^2.1.0:
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
 "pi-ui@https://github.com/decred/pi-ui":
-  version "1.0.0"
-  resolved "https://github.com/decred/pi-ui#8d54b8070a72f974ea8730e279add4290370c4f2"
+  version "1.1.0"
+  resolved "https://github.com/decred/pi-ui#6a024e4769ae1508f1c5e7a19f75d4a287a13467"
   dependencies:
     clamp-js-main "^0.11.5"
     lodash "^4.17.15"
     prop-types "^15.8.1"
-    react-select "^5.2.1"
-    react-select-event "^5.5.0"
-    react-spring "^9.4.5"
+    react-select "5.4.0"
+    react-select-event "^5.5.1"
+    react-spring "^9.5.5"
     react-tapper "^0.1.23"
 
 picocolors@^1.0.0:
@@ -11346,14 +11354,14 @@ react-redux@^7.2.4:
     prop-types "^15.7.2"
     react-is "^16.13.1"
 
-react-select-event@^5.5.0:
+react-select-event@^5.5.1:
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/react-select-event/-/react-select-event-5.5.1.tgz#d67e04a6a51428b1534b15ecb1b82afbe5edddcb"
   integrity sha512-goAx28y0+iYrbqZA2FeRTreHHs/ZtSuKxtA+J5jpKT5RHPCbVZJ4MqACfPnWyFXsEec+3dP5bCrNTxIX8oYe9A==
   dependencies:
     "@testing-library/dom" ">=7"
 
-react-select@^5.2.1:
+react-select@5.4.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.4.0.tgz#81f6ac73906126706f104751ee14437bd16798f4"
   integrity sha512-CjE9RFLUvChd5SdlfG4vqxZd55AZJRrLrHzkQyTYeHlpOztqcgnyftYAolJ0SGsBev6zAs6qFrjm6KU3eo2hzg==
@@ -11366,7 +11374,7 @@ react-select@^5.2.1:
     prop-types "^15.6.0"
     react-transition-group "^4.3.0"
 
-react-spring@^9.4.5:
+react-spring@^9.5.5:
   version "9.5.5"
   resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-9.5.5.tgz#314009a65efc04d0ef157d3d60590dbb9de65f3c"
   integrity sha512-vMGVd2yjgxWcRCzoLn9AD1d24+WpunHBRg5DoehcRdiBocaOH6qgle0xN9C5LPplXfv4yIpS5QWGN5MKrWxSZg==
