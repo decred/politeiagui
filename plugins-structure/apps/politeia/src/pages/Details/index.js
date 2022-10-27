@@ -22,7 +22,7 @@ export default App.createRoute({
   setupServices: [
     // Navigation services
     {
-      id: "ui/navigation/updateTitle",
+      id: "global/navigation/updateTitle",
       setActionPayload: setRecordTitlePayload,
       listenerCreator: fetchRecordTitleListenerCreator,
     },
