@@ -2,6 +2,7 @@ import React from "react";
 import { Message } from "pi-ui";
 import {
   SingleContentPage,
+  useScrollTo,
   useScrollToTop,
 } from "@politeiagui/common-ui/layout";
 import { Comments } from "@politeiagui/comments/ui";
@@ -10,13 +11,14 @@ import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
 import { GoBackLink } from "@politeiagui/common-ui";
+import { keyCommentsThreadsBy } from "@politeiagui/comments/utils";
 
 function ErrorsMessages({ errors }) {
-  return errors.reduce((acc, cur) => {
+  return errors.reduce((acc, cur, i) => {
     if (cur) {
       return [
         ...acc,
-        <Message kind="error" data-testid="proposal-details-error">
+        <Message kind="error" key={i} data-testid="proposal-details-error">
           {cur}
         </Message>,
       ];
@@ -25,14 +27,21 @@ function ErrorsMessages({ errors }) {
   }, []);
 }
 
-function Details({ token }) {
+function sortAuthorUpdatesKeysByTimestamp(authorUpdates) {
+  const getRootAuthorUpdate = (updateThread) =>
+    Object.values(updateThread).find((c) => c.parentid === 0);
+  return Object.keys(authorUpdates).sort(
+    (a, b) =>
+      getRootAuthorUpdate(authorUpdates[b]).timestamp -
+      getRootAuthorUpdate(authorUpdates[a]).timestamp
+  );
+}
+
+function Details({ token, commentid = 0 }) {
   const {
     comments,
     detailsStatus,
     fullToken,
-    onFetchRecordTimestamps,
-    onFetchCommentsTimestamps,
-    onDownloadCommentsBundle,
     proposalSummary,
     record,
     voteSummary,
@@ -46,10 +55,33 @@ function Details({ token }) {
     rfpSubmissionsProposalsSummaries,
     rfpSumbissionsVoteSummaries,
   } = useProposalDetails({ token });
+
   // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
-  const shouldScrollToComments = !!params?.scrollToComments;
+  const shouldScrollToComments = !!params?.scrollToComments || !!commentid;
+  const detailsLoadedSucessfully =
+    fullToken &&
+    record &&
+    detailsStatus === "succeeded" &&
+    record.detailsFetched;
+
   useScrollToTop(shouldScrollToComments);
+  useScrollTo(
+    "proposal-comments",
+    shouldScrollToComments && detailsLoadedSucessfully
+  );
+
+  const { mainCommentsThread, ...authorUpdates } = keyCommentsThreadsBy(
+    comments,
+    (root) =>
+      root.extradatahint === "proposalupdate"
+        ? JSON.parse(root.extradata).title
+        : "mainCommentsThread"
+  );
+
+  const orderedAuthorUpdatesKeys =
+    sortAuthorUpdatesKeysByTimestamp(authorUpdates);
+
   return (
     <SingleContentPage className={styles.detailsWrapper}>
       <GoBackLink className={styles.goBackLink} />
@@ -59,38 +91,45 @@ function Details({ token }) {
           errors={[recordDetailsError, voteSummaryError, commentsError]}
         />
       )}
-      {fullToken &&
-        record &&
-        detailsStatus === "succeeded" &&
-        record.detailsFetched && (
-          <>
-            <ProposalDetails
-              record={record}
-              rfpRecord={rfpLinkedRecord}
-              voteSummary={voteSummary}
-              proposalSummary={proposalSummary}
-              proposalStatusChanges={proposalStatusChanges}
-              onFetchRecordTimestamps={onFetchRecordTimestamps}
-              onFetchCommentsTimestamps={onFetchCommentsTimestamps}
-              onDownloadCommentsBundle={onDownloadCommentsBundle}
-              rfpSubmissionsRecords={rfpSubmissionsRecords}
-              rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
-              rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
-              rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
+      {detailsLoadedSucessfully && (
+        <>
+          <ProposalDetails
+            record={record}
+            rfpRecord={rfpLinkedRecord}
+            voteSummary={voteSummary}
+            proposalSummary={proposalSummary}
+            proposalStatusChanges={proposalStatusChanges}
+            rfpSubmissionsRecords={rfpSubmissionsRecords}
+            rfpSubmissionsCommentsCounts={rfpSubmissionsCommentsCounts}
+            rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
+            rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
+            hideBody={!!commentid}
+          />
+          <span id="proposal-comments" />
+          {orderedAuthorUpdatesKeys.map((update, i) => (
+            <Comments
+              comments={authorUpdates[update]}
+              parentId={+commentid}
+              title={update}
+              key={i}
+              recordOwner={record.username}
+              fullThreadUrl={`/record/${token}`}
             />
-            {comments && (
-              <Comments
-                comments={comments}
-                recordOwner={record.username}
-                // Mocking onReply until user layer is done.
-                onReply={(comment, parentid) => {
-                  console.log(`Replying ${parentid}:`, comment);
-                }}
-                scrollOnLoad={shouldScrollToComments}
-              />
-            )}
-          </>
-        )}
+          ))}
+          {mainCommentsThread && (
+            <Comments
+              parentId={+commentid}
+              comments={mainCommentsThread}
+              recordOwner={record.username}
+              fullThreadUrl={`/record/${token}`}
+              // Mocking onReply until user layer is done.
+              onReply={(comment, parentid) => {
+                console.log(`Replying ${parentid}:`, comment);
+              }}
+            />
+          )}
+        </>
+      )}
     </SingleContentPage>
   );
 }

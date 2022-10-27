@@ -16,6 +16,7 @@
     "./router": "./src/router/index.js",
     "./listeners": "./src/listeners/index.js",
     "./localstorage": "./src/localStorage/index.js",
+    "./globalServices": "./src/globalServices/index.js",
     "./downloads": "./src/downloads/index.js",
     "./dev/mocks": "./src/dev/mocks/index.js",
     "./dev/cypress": "./src/dev/cypress/index.js"

@@ -21,8 +21,8 @@ module.exports = babelJest.createTransformer({
       "module-resolver",
       {
         alias: {
-          "@politeiagui/core": resolveOwn("../packages/core/src"),
-          "@politeiagui/core/client": resolveOwn("../packages/core/src/client"),
+          "@politeiagui/core": resolveOwn("../core/src"),
+          "@politeiagui/core/client": resolveOwn("../core/src/client"),
         },
       },
     ],

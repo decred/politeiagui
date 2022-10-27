@@ -15,6 +15,9 @@
       "@politeiagui/core/localstorage": [
         "./packages/core/src/localStorage/index.js"
       ],
+      "@politeiagui/core/globalServices": [
+        "./packages/core/src/globalServices/index.js"
+      ],
       "@politeiagui/core/listeners": ["./packages/core/src/listeners/index.js"],
       "@politeiagui/core/records": [
         "./packages/core/src/records/records/index.js"

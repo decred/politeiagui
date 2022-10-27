@@ -43,6 +43,10 @@
   padding-top: 2rem;
 }
 
+.collapse > .proposalBody {
+  display: none;
+}
+
 .rules > li {
   margin-top: 1rem;
 }

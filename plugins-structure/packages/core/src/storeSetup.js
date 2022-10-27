@@ -6,6 +6,8 @@ import recordsReducer from "./records/records/recordsSlice";
 import policyReducer from "./records/policy/policySlice";
 import recordsTimestampsReducer from "./records/timestamps/timestampsSlice";
 import apiReducer from "./api/apiSlice";
+import progressReducer from "./globalServices/progress";
+import messageReducer from "./globalServices/message";
 
 import { listenerMiddleware } from "./listeners";
 
@@ -16,6 +18,8 @@ const staticReducers = {
   records: recordsReducer,
   recordsPolicy: policyReducer,
   recordsTimestamps: recordsTimestampsReducer,
+  globalProgress: progressReducer,
+  globalMessage: messageReducer,
 };
 
 function createReducer(reducers, asyncReducers) {

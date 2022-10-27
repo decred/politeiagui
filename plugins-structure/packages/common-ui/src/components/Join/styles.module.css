@@ -9,14 +9,14 @@
 }
 
 @media (--xs-viewport) {
-  .join {
+  .join:not(.inline) {
     flex-flow: column;
     max-width: 100%;
   }
-  .join > *:not(:first-child) {
+  .join:not(.inline) > *:not(:first-child) {
     padding-top: 1rem;
   }
-  .separator {
+  .join:not(.inline) > .separator {
     display: none;
   }
 }

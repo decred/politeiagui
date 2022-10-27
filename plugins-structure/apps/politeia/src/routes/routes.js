@@ -8,6 +8,7 @@ export const routes = [
   HomeRoute,
   NewProposalRoute,
   DetailsRoute,
+  { ...DetailsRoute, path: "/record/:token/comment/:commentid" },
   {
     path: "/record/:token/raw",
     view: async ({ token }) => {
