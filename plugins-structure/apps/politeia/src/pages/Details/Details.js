@@ -84,7 +84,10 @@ function Details({ token, commentid = 0 }) {
 
   return (
     <SingleContentPage className={styles.detailsWrapper}>
-      <GoBackLink className={styles.goBackLink} />
+      <GoBackLink
+        className={styles.goBackLink}
+        data-testid="proposal-go-back"
+      />
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
       {detailsStatus === "failed" && (
         <ErrorsMessages
