@@ -1,7 +1,6 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import last from "lodash/last";
 import isEqual from "lodash/isEqual";
-import isString from "lodash/isString";
 
 const initialState = {
   history: [],
@@ -31,21 +30,5 @@ export const selectNavigationHistory = (state) =>
   state.globalNavigation.history;
 export const selectNavigationHistoryLastItem = (state) =>
   last(state.globalNavigation.history);
-
-function updateDocumentTitle(title) {
-  if (title && isString(title)) document.title = title;
-}
-
-export const services = [
-  {
-    id: "global/navigation/updateTitle",
-    effect: (_, __, { title }) => {
-      updateDocumentTitle(title);
-    },
-    action: ({ title } = {}) => {
-      updateDocumentTitle(title);
-    },
-  },
-];
 
 export default navigationSlice.reducer;

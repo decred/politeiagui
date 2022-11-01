@@ -6,13 +6,11 @@ import {
   fetchDetailsListenerCreator,
   fetchProposalSummaryListenerCreator,
   fetchRecordDetailsListenerCreator,
-  fetchRecordTitleListenerCreator,
   fetchRfpDetailsListenerCreator,
   fetchRfpLinkedProposalListenerCreator,
   fetchRfpSubmissionsListenerCreator,
   fetchVoteSummaryListenerCreator,
   recordFetchDetailsListenerCreator,
-  setRecordTitlePayload,
 } from "./listeners";
 
 import Details from "./Details";
@@ -20,12 +18,6 @@ import Details from "./Details";
 export default App.createRoute({
   path: "/record/:token",
   setupServices: [
-    // Navigation services
-    {
-      id: "global/navigation/updateTitle",
-      setActionPayload: setRecordTitlePayload,
-      listenerCreator: fetchRecordTitleListenerCreator,
-    },
     // Proposal details services
     {
       id: "ticketvote/timestamps",

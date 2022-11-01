@@ -12,7 +12,6 @@ import {
   setMessage,
 } from "./message";
 import {
-  services as navigationServices,
   popNavigation,
   pushNavigation,
   selectNavigationHistory,
@@ -39,8 +38,4 @@ export const progress = {
   update: updateProgress,
 };
 
-export const services = [
-  ...progressServices,
-  ...messageServices,
-  ...navigationServices,
-];
+export const services = [...progressServices, ...messageServices];

@@ -6,6 +6,7 @@ import { services as globalServices } from "./globalServices";
 import { listener } from "./listeners";
 import uniq from "lodash/fp/uniq";
 import isArray from "lodash/isArray";
+import isString from "lodash/isString";
 
 function getRouteTitle(appTitle, title) {
   if (!title && appTitle) return appTitle;
@@ -161,6 +162,17 @@ export function appSetup({
       return getRouteTitle(config.title, title);
     },
     /**
+     * setDocumentTitle receives and updates the document title with given
+     * `title` param.
+     * @param {string} title
+     */
+    setDocumentTitle(title) {
+      if (title && isString(title)) {
+        const routeTitle = this.createRouteTitle(title);
+        document.title = routeTitle;
+      }
+    },
+    /**
      * createRoute is an interface for creating app routes. Before rendering
      * some route view, execute all services actions for given `service`.
      * @param {{ path: string,
@@ -196,15 +208,7 @@ export function appSetup({
           registerListeners(allListeners);
           for (const service of routeServices) {
             if (service.action) {
-              // Allow services to setup its own action parameters
-              let params = routeParams;
-              if (service.setActionPayload) {
-                params = service.setActionPayload(
-                  store.getState(),
-                  routeParams
-                );
-              }
-              await service.action(params);
+              await service.action();
             }
           }
           return await view(routeParams);
