@@ -120,9 +120,7 @@ describe("Given Politeia app navigation", () => {
     // navigate to record details and go to some comment page
     cy.visit(`/record/${shortToken}`);
     cy.findAllByTestId("comment-card-footer-link").first().click();
-    cy.findByTestId("proposal-go-back").should("be.visible").click();
-    // return to full details page
-    cy.location("pathname").should("eq", `/record/${shortToken}`);
+    cy.findByTestId("proposal-go-back").should("not.exist");
   });
 
   it("should update page title with proposal name", () => {
