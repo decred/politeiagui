@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import { useSelector } from "react-redux";
 import { navigation } from "@politeiagui/core/globalServices";
-import findLastIndex from "lodash/findLastIndex";
-import last from "lodash/last";
 import isEmpty from "lodash/isEmpty";
 import styles from "./styles.module.css";
 
@@ -13,18 +11,17 @@ const backArrow = <>&#8592;</>;
 function getPreviousRoute(history, breakpointPathname) {
   if (isEmpty(history)) return;
 
-  const breakpoint = findLastIndex(
-    history,
-    (hs) => hs.pathname === breakpointPathname
-  );
-
-  if (breakpoint === -1) return last(history);
-  return history[breakpoint - 1];
+  let targetRoute;
+  for (const route of history) {
+    if (route?.href && !route.href.includes(breakpointPathname)) {
+      targetRoute = route;
+    }
+  }
+  return targetRoute;
 }
 
 export const GoBackLink = ({ className, backFromPathname, ...props }) => {
   const history = useSelector(navigation.selectHistory);
-
   const route = getPreviousRoute(history, backFromPathname);
 
   return route ? (
@@ -40,5 +37,5 @@ export const GoBackLink = ({ className, backFromPathname, ...props }) => {
 };
 
 GoBackLink.propTypes = {
-  backFromPathname: PropTypes.string,
+  backFromPathname: PropTypes.string.isRequired,
 };
