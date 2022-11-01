@@ -5,7 +5,9 @@ function Error({ error }) {
   return (
     error && (
       <StaticContainer style={{ marginTop: "3rem" }}>
-        <Message kind="error">{error.toString()}</Message>
+        <Message kind="error" data-testid="politeia-error-message">
+          {error.toString()}
+        </Message>
       </StaticContainer>
     )
   );
