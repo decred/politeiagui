@@ -1,26 +1,35 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import { useSelector } from "react-redux";
 import { navigation } from "@politeiagui/core/globalServices";
-import startsWith from "lodash/startsWith";
-import findLast from "lodash/findLast";
+import findLastIndex from "lodash/findLastIndex";
+import last from "lodash/last";
+import isEmpty from "lodash/isEmpty";
 import styles from "./styles.module.css";
 
 const backArrow = <>&#8592;</>;
 
-export const GoBackLink = ({ className, ...props }) => {
-  const history = useSelector(navigation.selectHistory);
+function getPreviousRoute(history, breakpointPathname) {
+  if (isEmpty(history)) return;
 
-  const parent = findLast(
+  const breakpoint = findLastIndex(
     history,
-    (hs) =>
-      startsWith(window.location.pathname, hs.pathname) &&
-      hs.pathname !== window.location.pathname
+    (hs) => hs.pathname === breakpointPathname
   );
 
-  return parent ? (
+  if (breakpoint === -1) return last(history);
+  return history[breakpoint - 1];
+}
+
+export const GoBackLink = ({ className, backFromPathname, ...props }) => {
+  const history = useSelector(navigation.selectHistory);
+
+  const route = getPreviousRoute(history, backFromPathname);
+
+  return route ? (
     <a
-      href={parent.href}
+      href={route.href}
       data-link
       className={classNames(styles.link, className)}
       {...props}
@@ -28,4 +37,8 @@ export const GoBackLink = ({ className, ...props }) => {
       {backArrow} Go Back
     </a>
   ) : null;
+};
+
+GoBackLink.propTypes = {
+  backFromPathname: PropTypes.string,
 };

@@ -87,6 +87,7 @@ function Details({ token, commentid = 0 }) {
       <GoBackLink
         className={styles.goBackLink}
         data-testid="proposal-go-back"
+        backFromPathname={`/record/${token}`}
       />
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
       {detailsStatus === "failed" && (
