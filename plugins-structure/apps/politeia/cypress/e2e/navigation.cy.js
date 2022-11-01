@@ -121,6 +121,20 @@ describe("Given Politeia app navigation", () => {
     cy.visit(`/record/${shortToken}`);
     cy.findAllByTestId("comment-card-footer-link").first().click();
     cy.findByTestId("proposal-go-back").should("not.exist");
+    cy.findByTestId("comments-view-all-link").click();
+    cy.findByTestId("proposal-go-back").should("not.exist");
+  });
+
+  it("should allow 'go back link' navigation to home page tabs", () => {
+    const tabs = ["Under Review", "Approved", "Rejected", "Abandoned"];
+    for (const tab of tabs) {
+      cy.visit(`/?tab=${tab}`);
+      cy.findAllByTestId("record-card-title-link").first().click();
+      cy.findByTestId("proposal-go-back").should("be.visible").click();
+      cy.findAllByTestId("record-card-title-link").should("be.visible");
+      cy.location("pathname").should("eq", "/");
+      cy.location("search").should("eq", `?tab=${encodeURI(tab)}`);
+    }
   });
 
   it("should update page title with proposal name", () => {
