@@ -2,11 +2,24 @@ import { appSetup } from "./appSetup";
 import { pluginSetup } from "./pluginSetup";
 import { configureCustomStore } from "./storeSetup";
 import { router } from "./router";
+import apiReducer from "./api/apiSlice";
+import { client } from "./client/client";
 
 const reducer = () => ({});
-const store = configureCustomStore({}, { key: "dumb", reducer });
+const store = configureCustomStore({}, { dumb: reducer, api: apiReducer });
 const action = jest.fn();
+const mockApiReturn = {
+  version: 1,
+  route: "/v1",
+  pubkey: "fake_pubkey",
+  testnet: true,
+  mode: "piwww",
+  activeusersession: true,
+};
+const mockCsrfToken = "fake_csrf";
+
 jest.spyOn(console, "error").mockImplementation();
+const fetchApiSpy = jest.spyOn(client, "fetchApi");
 
 const plugin = pluginSetup({
   services: [{ id: "custom/service1", action }],
@@ -15,6 +28,13 @@ const plugin = pluginSetup({
     { key: "customReducer2", reducer },
   ],
   name: "custom",
+});
+
+beforeEach(() => {
+  fetchApiSpy.mockResolvedValueOnce({
+    api: mockApiReturn,
+    csrf: mockCsrfToken,
+  });
 });
 
 describe("Given appSetup method", () => {
