@@ -92,7 +92,7 @@ export function MarkdownEditor({
       if (cmd) {
         event.preventDefault();
         const { command } = cmd;
-        handleCommand(command)();
+        handleCommand(command);
       }
     }
   }
