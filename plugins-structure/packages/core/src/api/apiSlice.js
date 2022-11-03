@@ -2,6 +2,7 @@
 // createAsyncThunk gnerate thunks that automatically dispatch
 // start/success/failure actions
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getApiErrorMessage } from "./errors";
 
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
 // Possible error types: string | null
@@ -15,7 +16,14 @@ export const initialState = {
 // Thunks
 export const fetchApi = createAsyncThunk(
   "api/fetch",
-  async (_, { extra }) => await extra.fetchApi()
+  async (_, { extra, rejectWithValue }) => {
+    try {
+      return await extra.fetchApi();
+    } catch (error) {
+      const message = getApiErrorMessage(error.body, error.message);
+      throw rejectWithValue(message);
+    }
+  }
 );
 
 // Reducer
@@ -35,9 +43,9 @@ const apiSlice = createSlice({
         // Assign csrf return to the state
         state.csrf = action.payload.csrf;
       })
-      .addCase(fetchApi.rejected, (state) => {
+      .addCase(fetchApi.rejected, (state, action) => {
         state.status = "failed";
-        state.error = "Cannot fetch `/api`. Is politeiawww running?";
+        state.error = action.payload;
       });
   },
 });

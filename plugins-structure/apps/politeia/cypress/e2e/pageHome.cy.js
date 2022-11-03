@@ -1,6 +1,7 @@
 import {
   mockTicketvoteInventory,
   mockTicketvoteSummaries,
+  ticketvoteSummariesByStatus,
 } from "@politeiagui/ticketvote/dev/mocks";
 import { mockCommentsCount } from "@politeiagui/comments/dev/mocks";
 import { mockRecordsBatch } from "@politeiagui/core/dev/mocks";
@@ -21,11 +22,13 @@ Cypress.Commands.add("mockInventory", (amount, matcherParams = {}) =>
   )
 );
 
-Cypress.Commands.add("mockVoteSummaries", (status, matcherParams = {}) =>
-  cy.mockResponse(
-    { url: "/api/ticketvote/v1/summaries", ...matcherParams },
-    mockTicketvoteSummaries({ status })
-  )
+Cypress.Commands.add(
+  "mockVoteSummaries",
+  (status = "unauthorized", matcherParams = {}) =>
+    cy.mockResponse(
+      { url: "/api/ticketvote/v1/summaries", ...matcherParams },
+      mockTicketvoteSummaries(ticketvoteSummariesByStatus[status])
+    )
 );
 
 Cypress.Commands.add("mockPiSummaries", (status, matcherParams = {}) =>
@@ -139,17 +142,17 @@ describe("Given Home Under Review tab", () => {
     it("should load all proposals from list", () => {
       // Orders are reverse due to intercept stack behavior (FILO).
       // 25 Unauthorized.
-      cy.mockVoteSummaries(1).as("summaries");
+      cy.mockVoteSummaries("unauthorized").as("summaries");
       cy.mockPiSummaries("under-review").as("piSummaries");
       cy.mockInventory(5).as("unauthorized");
       cy.mockInventory(20, { times: 1 }).as("unauthorized");
       // 25 Authorized.
-      cy.mockVoteSummaries(2, { times: 5 }).as("summaries");
+      cy.mockVoteSummaries("authorized", { times: 5 }).as("summaries");
       cy.mockPiSummaries("vote-authorized", { times: 5 }).as("piSummaries");
       cy.mockInventory(5, { times: 1 }).as("authorized");
       cy.mockInventory(20, { times: 1 }).as("authorized");
       // 25 Started.
-      cy.mockVoteSummaries(3, { times: 5 }).as("summaries");
+      cy.mockVoteSummaries("started", { times: 5 }).as("summaries");
       cy.mockPiSummaries("vote-started", { times: 5 }).as("piSummaries");
       cy.mockInventory(5, { times: 1 }).as("started");
       cy.mockInventory(20, { times: 1 }).as("started");
@@ -181,15 +184,15 @@ describe("Given Home Under Review tab", () => {
     it("should load all proposals from list", () => {
       // Orders are reverse due to intercept stack behavior (FILO).
       // 10 Unauthorized.
-      cy.mockVoteSummaries(1).as("summaries");
+      cy.mockVoteSummaries("unauthorized").as("summaries");
       cy.mockPiSummaries("under-review").as("piSummaries");
       cy.mockInventory(10).as("unauthorized");
       // 10 Authorized.
-      cy.mockVoteSummaries(2, { times: 2 }).as("summaries");
+      cy.mockVoteSummaries("authorized", { times: 2 }).as("summaries");
       cy.mockPiSummaries("vote-authorized", { times: 1 }).as("piSummaries");
       cy.mockInventory(10, { times: 1 }).as("authorized");
       // 10 Started.
-      cy.mockVoteSummaries(3, { times: 2 }).as("summaries");
+      cy.mockVoteSummaries("started", { times: 2 }).as("summaries");
       cy.mockPiSummaries("vote-started", { times: 2 }).as("piSummaries");
       cy.mockInventory(10, { times: 1 }).as("started");
       // Begin tests.
@@ -219,12 +222,12 @@ describe("Given Home Under Review tab", () => {
     it("should load all proposals from list", () => {
       // Orders are reverse due to intercept stack behavior (FILO).
       // 25 Unauthorized.
-      cy.mockVoteSummaries(1).as("summaries");
+      cy.mockVoteSummaries("unauthorized").as("summaries");
       cy.mockPiSummaries("under-review").as("piSummaries");
       cy.mockInventory(5).as("unauthorized");
       cy.mockInventory(20, { times: 1 }).as("unauthorized");
       // 25 Authorized.
-      cy.mockVoteSummaries(2, { times: 5 }).as("summaries");
+      cy.mockVoteSummaries("authorized", { times: 5 }).as("summaries");
       cy.mockPiSummaries("vote-authorized", { times: 5 }).as("piSummaries");
       cy.mockInventory(5, { times: 1 }).as("authorized");
       cy.mockInventory(20, { times: 1 }).as("authorized");
@@ -256,11 +259,11 @@ describe("Given Home Under Review tab", () => {
   describe("when 0 started, 10 authorized, 25 unauthorized", () => {
     it("should load all proposals from list", () => {
       // 25 Unauthorized.
-      cy.mockVoteSummaries(1).as("summaries");
+      cy.mockVoteSummaries("unauthorized").as("summaries");
       cy.mockInventory(5).as("unauthorized");
       cy.mockInventory(20, { times: 1 }).as("unauthorized");
       // 10 Authorized.
-      cy.mockVoteSummaries(2, { times: 2 }).as("summaries");
+      cy.mockVoteSummaries("authorized", { times: 2 }).as("summaries");
       cy.mockPiSummaries("vote-authorized", { times: 2 }).as("piSummaries");
       cy.mockInventory(10, { times: 1 }).as("authorized");
       // 0 Started.
@@ -292,7 +295,7 @@ describe("Given Home Under Review tab", () => {
     it("should load all proposals from list", () => {
       // Orders are reverse due to intercept stack behavior (FILO).
       // 5 Unauthorized.
-      cy.mockVoteSummaries(1).as("summaries");
+      cy.mockVoteSummaries("unauthorized").as("summaries");
       cy.mockInventory(5).as("unauthorized");
       cy.mockInventory(20, { times: 1 }).as("unauthorized");
       // 0 Authorized.
@@ -325,7 +328,7 @@ describe("Given Home Under Review tab", () => {
     it("should load all proposals from list", () => {
       // Orders are reverse due to intercept stack behavior (FILO).
       // 10 Unauthorized.
-      cy.mockVoteSummaries(1).as("summaries");
+      cy.mockVoteSummaries("unauthorized").as("summaries");
       cy.mockInventory(10).as("unauthorized");
       // 0 Authorized.
       cy.mockInventory(0, { times: 1 }).as("authorized");
@@ -374,7 +377,7 @@ describe("Given Home single status tab (approved, rejected or abandoned)", () =>
   });
   describe("when on Approved tab", () => {
     it("should render all Approved proposals", () => {
-      cy.mockVoteSummaries(5).as("summaries");
+      cy.mockVoteSummaries("approved").as("summaries");
       cy.mockResponse(
         { url: "/api/pi/v1/billingstatuschanges" },
         mockPiBillingStatusChanges({ status: 3 })
@@ -393,14 +396,14 @@ describe("Given Home single status tab (approved, rejected or abandoned)", () =>
   });
   describe("when on Rejected tab", () => {
     it("should render all Rejected proposals", () => {
-      cy.mockVoteSummaries(6).as("summaries");
+      cy.mockVoteSummaries("rejected").as("summaries");
       cy.visit("/?tab=Rejected");
       cy.wait("@records");
     });
   });
   describe("when on Abandoned tab", () => {
     it("should render all Abandoned proposals", () => {
-      cy.mockVoteSummaries(7).as("summaries");
+      cy.mockVoteSummaries("ineligible").as("summaries");
       cy.visit("/?tab=Abandoned");
       cy.wait("@records");
     });
@@ -417,6 +420,7 @@ describe("Given RFP Proposals and Submissions", () => {
       )
     ).as("records");
     cy.visit("/");
+    cy.wait("@records");
     cy.findAllByTestId("proposal-rfp-tag").should("have.length", 4);
     cy.findAllByTestId("proposal-date-expire").should("have.length", 4);
     cy.assertProposalsListLength(4);
@@ -428,6 +432,7 @@ describe("Given RFP Proposals and Submissions", () => {
       mockRecordsBatch(mockProposal({ state: 2, status: 2, linkto: "abcdefg" }))
     ).as("records");
     cy.visit("/");
+    cy.wait(["@records", "@records"]);
     cy.findAllByTestId("proposal-rfp-link").should("have.length", 4);
     cy.assertProposalsListLength(4);
   });
