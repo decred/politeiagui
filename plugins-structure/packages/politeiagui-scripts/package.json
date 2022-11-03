@@ -52,6 +52,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "html-webpack-plugin": "^5.3.2",
     "jest": "^27.0.6",
+    "jest-watch-typeahead": "0.6.5",
     "prettier": "^2.3.2",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
