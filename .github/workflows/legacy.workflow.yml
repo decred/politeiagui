@@ -1,11 +1,11 @@
 name: Build and Test Legacy App
 on:
   push:
-    paths:
-      - !plugins-structure/**
+    paths-ignore:
+      - plugins-structure/**
   pull_request:
-    paths:
-      - !plugins-structure/**
+    paths-ignore:
+      - plugins-structure/**
 
 jobs:
   build:
