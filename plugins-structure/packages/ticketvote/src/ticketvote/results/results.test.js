@@ -57,7 +57,9 @@ describe("Given the resultsSlice", () => {
 
       expect(fetchResultsSpy).toBeCalled();
       const state = store.getState();
-      expect(state.ticketvoteResults.byToken).toEqual({ fakeToken: resValue });
+      expect(state.ticketvoteResults.byToken).toEqual({
+        fakeToken: resValue.votes,
+      });
       expect(state.ticketvoteResults.status).toEqual("succeeded");
     });
   });

@@ -87,14 +87,6 @@ export const fetchAllTicketvoteTimestamps = createAsyncThunk(
   }
 );
 
-export const fetchTicketvoteTimestampsFirstPage = createAsyncThunk(
-  "ticketvoteTimestamps/fetchFirstPage",
-  async ({ token }, { dispatch }) => {
-    await dispatch(fetchTicketvoteTimestamps({ token }));
-    await dispatch(fetchTicketvoteTimestamps({ token, votesPage: 1 }));
-  }
-);
-
 // Reducer
 const ticketvoteTimestampsSlice = createSlice({
   name: "ticketvoteTimestamps",

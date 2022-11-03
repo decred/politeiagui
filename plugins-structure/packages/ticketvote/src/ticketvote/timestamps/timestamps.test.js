@@ -5,11 +5,13 @@ import {
   getTicketvoteUserErrorMessage,
 } from "../../lib/errors";
 import reducer, {
+  fetchAllTicketvoteTimestamps,
   fetchTicketvoteTimestamps,
-  fetchTicketvoteTimestampsFirstPage,
   initialState,
 } from "./timestampsSlice";
 import policyReducer from "../policy/policySlice";
+
+const timestampspagesize = 100;
 
 describe("Given the timestampsSlice", () => {
   let store;
@@ -25,8 +27,6 @@ describe("Given the timestampsSlice", () => {
       data: "tokens",
     },
   };
-  const mockVotes = { votes: Array(100).fill({ data: "vote" }) };
-  const mockVotesIncompletePage = { votes: Array(20).fill({ data: "vote" }) };
   beforeEach(() => {
     // mock a minimal store with extra argument
     // re-create the store before each test
@@ -38,7 +38,7 @@ describe("Given the timestampsSlice", () => {
       preloadedState: {
         ticketvotePolicy: {
           policy: {
-            timestampspagesize: 100,
+            timestampspagesize,
           },
         },
       },
@@ -60,7 +60,6 @@ describe("Given the timestampsSlice", () => {
       await store.dispatch(fetchTicketvoteTimestamps(invalidParams));
       expect(fetchTimestampsSpy).not.toBeCalled();
       const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({});
       expect(state.ticketvoteTimestamps.status).toEqual("idle");
     });
   });
@@ -73,7 +72,6 @@ describe("Given the timestampsSlice", () => {
       expect(fetchTimestampsSpy).not.toBeCalled();
       expect(consoleErrorSpy).toBeCalled();
       const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({});
       expect(state.ticketvoteTimestamps.status).toEqual("failed");
 
       consoleErrorSpy.mockRestore();
@@ -87,84 +85,26 @@ describe("Given the timestampsSlice", () => {
 
       expect(fetchTimestampsSpy).toBeCalled();
       const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({});
       expect(state.ticketvoteTimestamps.status).toEqual("loading");
     });
   });
-  describe("when fetchTicketvoteTimestamps is called with votesPage, without auth and details fetched", () => {
-    it("should log error and update the state to failed", async () => {
-      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-      await store.dispatch(
-        fetchTicketvoteTimestamps({ token: "fakeToken", votesPage: 1 })
-      );
-
-      expect(fetchTimestampsSpy).not.toBeCalled();
-      const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({});
-      expect(state.ticketvoteTimestamps.status).toEqual("failed");
-
-      consoleErrorSpy.mockRestore();
-    });
-  });
   describe("when fetchTicketvoteTimestamps succeeds", () => {
-    it("should update byToken and status to succeeded/needsVotes if votesPage is undefined", async () => {
+    it("should update status to succeeded", async () => {
       fetchTimestampsSpy.mockResolvedValueOnce(mockAuthDetails);
 
       await store.dispatch(fetchTicketvoteTimestamps({ token: "fakeToken" }));
 
       expect(fetchTimestampsSpy).toBeCalled();
       const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({
-        fakeToken: mockAuthDetails,
-      });
-      expect(state.ticketvoteTimestamps.status).toEqual("succeeded/needsVotes");
+      expect(state.ticketvoteTimestamps.status).toEqual("succeeded");
     });
-  });
-  describe("when fetchTicketvoteTimestamps succeeds with votesPage", () => {
-    beforeEach(() => {
-      store = configureStore({
-        reducer: {
-          ticketvoteTimestamps: reducer,
-          ticketvotePolicy: policyReducer,
-        },
-        preloadedState: {
-          ticketvotePolicy: {
-            policy: {
-              timestampspagesize: 100,
-            },
-          },
-          ticketvoteTimestamps: {
-            byToken: { fakeToken: mockAuthDetails },
-            status: "succeeded/needsVotes",
-          },
-        },
-      });
-    });
-    it("should include votes and update status (succeeded/hasMore if votes.length == timestampspagesize)", async () => {
-      fetchTimestampsSpy.mockResolvedValueOnce(mockVotes);
+    it("should fetch N+1 requests when votesPage is N", async () => {
+      fetchTimestampsSpy.mockResolvedValueOnce(mockAuthDetails);
 
-      await store.dispatch(
-        fetchTicketvoteTimestamps({ token: "fakeToken", votesPage: 1 })
-      );
+      await store.dispatch(fetchTicketvoteTimestamps({ token: "fakeToken" }));
       expect(fetchTimestampsSpy).toBeCalled();
       const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({
-        fakeToken: { ...mockAuthDetails, ...mockVotes },
-      });
-      expect(state.ticketvoteTimestamps.status).toEqual("succeeded/hasMore");
-    });
-    it("should include votes and update status (succeeded/isDone if votes.length != timestampspagesize)", async () => {
-      fetchTimestampsSpy.mockResolvedValueOnce(mockVotesIncompletePage);
-
-      await store.dispatch(
-        fetchTicketvoteTimestamps({ token: "fakeToken", votesPage: 2 })
-      );
-      expect(fetchTimestampsSpy).toBeCalled();
-      const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({
-        fakeToken: { ...mockAuthDetails, ...mockVotesIncompletePage },
-      });
-      expect(state.ticketvoteTimestamps.status).toEqual("succeeded/isDone");
+      expect(state.ticketvoteTimestamps.status).toEqual("succeeded");
     });
   });
   describe("when fetchTicketvoteTimestamps fails", () => {
@@ -210,84 +150,35 @@ describe("Given the timestampsSlice", () => {
       }
     });
   });
-  describe("when invalid token is passed to fetchTicketvoteTimestampsFirstPage", () => {
-    it("should not fetch nor fire actions", async () => {
-      const invalidParams = {};
-
-      await store.dispatch(fetchTicketvoteTimestampsFirstPage(invalidParams));
-      expect(fetchTimestampsSpy).not.toBeCalled();
-      const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({});
-      expect(state.ticketvoteTimestamps.status).toEqual("idle");
-    });
-  });
-  describe("when fetchTicketvoteTimestampsFirstPage dispatches without policy", () => {
-    it("should update the status to failed and log error", async () => {
-      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-      store = configureStore({ reducer: { ticketvoteTimestamps: reducer } });
+  describe("when fetchAllTicketvoteTimestamps is called with votesCount", () => {
+    it("should be called `votesCount/timestampsPageSize`+1 times", async () => {
+      fetchTimestampsSpy.mockResolvedValue(mockAuthDetails);
+      const votesCount = 10 * timestampspagesize;
 
       await store.dispatch(
-        fetchTicketvoteTimestampsFirstPage({ token: "fakeToken" })
+        fetchAllTicketvoteTimestamps({ token: "fakeToken", votesCount })
       );
-      expect(fetchTimestampsSpy).not.toBeCalled();
-      expect(consoleErrorSpy).toBeCalled();
+
+      expect(fetchTimestampsSpy).toBeCalledTimes(
+        votesCount / timestampspagesize + 1
+      );
       const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({});
+      expect(state.ticketvoteTimestamps.status).toEqual("succeeded");
+    });
+  });
+  describe("when fetchAllTicketvoteTimestamps fails", () => {
+    it("should only call first batch", async () => {
+      const error = new Error("ERROR");
+      fetchTimestampsSpy.mockRejectedValue(error);
+      const votesCount = 10 * timestampspagesize;
+
+      await store.dispatch(
+        fetchAllTicketvoteTimestamps({ token: "fakeToken", votesCount })
+      );
+
+      expect(fetchTimestampsSpy).toBeCalledTimes(5);
+      const state = store.getState();
       expect(state.ticketvoteTimestamps.status).toEqual("failed");
-
-      consoleErrorSpy.mockRestore();
-    });
-  });
-  describe("when fetchTicketvoteTimestampsFirstPage dispatches with valid params", () => {
-    let consoleErrorSpy;
-    beforeEach(() => {
-      consoleErrorSpy = jest
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-    });
-    afterEach(() => {
-      consoleErrorSpy.mockRestore();
-    });
-    it("should update the status to loading", () => {
-      store.dispatch(
-        fetchTicketvoteTimestampsFirstPage({ token: "fakeToken" })
-      );
-      expect(fetchTimestampsSpy).toBeCalled();
-      const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({});
-      expect(state.ticketvoteTimestamps.status).toEqual("loading");
-    });
-  });
-  describe("when fetchTicketvoteTimestampsFirstPage succeeds", () => {
-    it("should update the status to succeeded/hasMore if first page length is 100", async () => {
-      fetchTimestampsSpy
-        .mockResolvedValueOnce(mockAuthDetails)
-        .mockResolvedValueOnce(mockVotes);
-
-      await store.dispatch(
-        fetchTicketvoteTimestampsFirstPage({ token: "fakeToken" })
-      );
-      expect(fetchTimestampsSpy).toBeCalled();
-      const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({
-        fakeToken: { ...mockAuthDetails, ...mockVotes },
-      });
-      expect(state.ticketvoteTimestamps.status).toEqual("succeeded/hasMore");
-    });
-    it("should update the status to succeeded/isDone if first page length is < 100", async () => {
-      fetchTimestampsSpy
-        .mockResolvedValueOnce(mockAuthDetails)
-        .mockResolvedValueOnce(mockVotesIncompletePage);
-
-      await store.dispatch(
-        fetchTicketvoteTimestampsFirstPage({ token: "fakeToken" })
-      );
-      expect(fetchTimestampsSpy).toBeCalled();
-      const state = store.getState();
-      expect(state.ticketvoteTimestamps.byToken).toEqual({
-        fakeToken: { ...mockAuthDetails, ...mockVotesIncompletePage },
-      });
-      expect(state.ticketvoteTimestamps.status).toEqual("succeeded/isDone");
     });
   });
 });
