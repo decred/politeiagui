@@ -3,11 +3,9 @@ on:
   push:
     paths:
       - plugins-structure/**
-      - .github/**
   pull_request:
     paths:
       - plugins-structure/**
-      - .github/**
 
 jobs:
   build:
