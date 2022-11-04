@@ -17,6 +17,7 @@ import {
 export default App.createRoute({
   path: "/record/:token",
   setupServices: [
+    // Proposal details services
     {
       id: "ticketvote/timestamps",
     },

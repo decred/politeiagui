@@ -99,6 +99,7 @@ function injectPayloadEffect(effect) {
   };
 }
 
+// Proposal details listener creators
 export const fetchDetailsListenerCreator = {
   type: "records/fetchDetails/fulfilled",
   injectEffect,

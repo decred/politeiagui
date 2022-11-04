@@ -7,8 +7,12 @@ import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { ticketvoteSubmissions } from "@politeiagui/ticketvote/submissions";
 import { recordComments } from "@politeiagui/comments/comments";
 import { commentsCount } from "@politeiagui/comments/count";
-import { getRfpRecordLink } from "../../pi/proposals/utils";
+import {
+  decodeProposalMetadataFile,
+  getRfpRecordLink,
+} from "../../pi/proposals/utils";
 import { piSummaries, proposals } from "../../pi";
+import app from "../../app";
 
 function useProposalDetails({ token }) {
   const dispatch = useDispatch();
@@ -70,6 +74,13 @@ function useProposalDetails({ token }) {
       dispatch(fetchProposalDetails(token));
     }
   }, [token, dispatch, recordStatus, record]);
+
+  useEffect(() => {
+    if (record?.files) {
+      const { name } = decodeProposalMetadataFile(record.files);
+      app.setDocumentTitle(name);
+    }
+  }, [record]);
 
   return {
     comments,

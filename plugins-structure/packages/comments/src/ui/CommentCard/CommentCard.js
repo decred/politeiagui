@@ -57,7 +57,12 @@ const CommentFooter = ({
         </span>
       )}
     </Join>
-    <a href={url} data-link className={styles.discussion}>
+    <a
+      href={url}
+      data-link
+      className={styles.discussion}
+      data-testid="comment-card-footer-link"
+    >
       <ButtonIcon type="link" />
     </a>
   </div>
