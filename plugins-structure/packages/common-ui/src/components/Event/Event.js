@@ -4,6 +4,11 @@ import styles from "./styles.module.css";
 import { DateTooltip } from "../DateTooltip";
 import { Text, classNames } from "pi-ui";
 
+function getEventText(event, timeago) {
+  if (!event && timeago) return timeago;
+  return [event, timeago].join(" ");
+}
+
 const Event = ({ event, timestamp, className, size, ...props }) => (
   <DateTooltip timestamp={timestamp} placement="bottom" {...props}>
     {({ timeAgo }) => (
@@ -13,7 +18,7 @@ const Event = ({ event, timestamp, className, size, ...props }) => (
         truncate
         size={size}
       >
-        {event} {timeAgo}
+        {getEventText(event, timeAgo)}
       </Text>
     )}
   </DateTooltip>
@@ -21,7 +26,7 @@ const Event = ({ event, timestamp, className, size, ...props }) => (
 
 Event.propTypes = {
   event: PropTypes.node,
-  timestamp: PropTypes.number,
+  timestamp: PropTypes.number.isRequired,
   show: PropTypes.bool,
 };
 
