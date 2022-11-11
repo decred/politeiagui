@@ -9,4 +9,6 @@ module.exports = defineConfig({
       webpackConfig: configFactory("development", "plugin"),
     },
   },
+  screenshotOnRunFailure: false,
+  video: false,
 });
