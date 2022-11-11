@@ -1,7 +1,5 @@
 import React from "react";
 import { DateTooltip } from "../../src/components/DateTooltip";
-// Import pi-ui styles to test tooltip hover
-import "pi-ui/dist/index.css";
 
 const now = new Date(2021, 3, 14); // month is 0-indexed
 const relativeDate = new Date(2021, 3, 10);
@@ -22,8 +20,6 @@ describe("Given <DateTooltip />", () => {
       </DateTooltip>
     );
     cy.get("[data-testid=timeago]").should("have.text", "4 days ago");
-    cy.get(".test").should("not.be.visible");
-    cy.get("[data-testid=date]").click();
     cy.get(".test")
       .should("be.visible")
       .and("have.text", relativeDate.toUTCString());
