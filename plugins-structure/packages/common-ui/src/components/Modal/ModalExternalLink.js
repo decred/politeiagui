@@ -38,7 +38,12 @@ export function ModalExternalLink({ show, onClose, link, title, onConfirm }) {
         <Text weight="semibold">Are you sure you want to open this link?</Text>
       </div>
       <div className={styles.right}>
-        <Button onClick={onProceed}>Yes, proceed</Button>
+        <Button
+          data-testid="modal-external-link-confirm-button"
+          onClick={onProceed}
+        >
+          Yes, proceed
+        </Button>
       </div>
     </Modal>
   );

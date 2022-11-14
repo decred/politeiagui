@@ -8,7 +8,7 @@ export const RecordToken = ({ token, isCopyable }) => {
     <div className={styles.recordToken}>
       {isCopyable && (
         <CopyableText
-          id={`proposal-token-${token}`}
+          id={`record-token-${token}`}
           data-testid="record-token"
           truncate
           tooltipPlacement={shouldPlaceTooltipLeft ? "left" : "bottom"}
@@ -19,7 +19,7 @@ export const RecordToken = ({ token, isCopyable }) => {
       {!isCopyable && (
         <>
           <Icon type="sign" className="margin-right-xs" />
-          <Text id={`proposal-token-${token}`} truncate>
+          <Text id={`record-token-${token}`} truncate>
             {token}
           </Text>
         </>
