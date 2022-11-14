@@ -9,7 +9,6 @@ const reducer = createReducer(
   (builder) => {
     builder.addCase(increase, (state, action) => {
       state.globalProgress = action.payload;
-      console.log(state.globalProgress);
     });
   }
 );
