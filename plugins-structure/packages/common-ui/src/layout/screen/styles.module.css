@@ -1,19 +1,13 @@
 .banner {
   background-color: var(--topbanner-color);
-  min-height: 14rem;
+  min-height: 10rem;
   padding: 3rem 6rem 0 6rem;
   margin-bottom: 3rem;
 }
 
 .banner > .tabs {
   align-self: end;
-}
-
-.singlePageBanner {
-  background-color: var(--topbanner-color);
-  min-height: 10rem;
-  padding: 3rem 6rem 0 6rem;
-  margin-bottom: 3rem;
+  margin-top: 4rem;
 }
 
 @media (--sm-viewport) {
