@@ -5,7 +5,7 @@ import {
   fetchNextBatchCount,
   fetchNextBatchRecords,
   fetchNextBatchSummaries,
-} from "../../pi/proposals/actions";
+} from "../../pi/proposalsList/actions";
 import { getHumanReadableTicketvoteStatus } from "@politeiagui/ticketvote/utils";
 import {
   getRfpProposalsLinks,

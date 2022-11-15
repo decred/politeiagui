@@ -24,16 +24,15 @@ function LoadingSkeleton({ inventory, records }) {
 function ProposalInventoryList({
   status,
   inventory,
-  inventoryStatus,
   onFetchNextInventoryPage,
   onRenderNextStatus,
   recordsPageSize,
-  listFetchStatus,
+  hasMoreInventory,
+  isInventoryFetchDone,
 }) {
   const {
     allRecords,
     hasMoreRecords,
-    hasMoreInventory,
     countComments,
     voteSummaries,
     proposalSummaries,
@@ -42,7 +41,8 @@ function ProposalInventoryList({
     recordsError,
     areAllInventoryEntriesFetched,
     proposalsStatusChanges,
-  } = useProposalsList({ inventory, inventoryStatus });
+    listFetchStatus,
+  } = useProposalsList({ inventory });
 
   function handleFetchMore() {
     if (hasMoreRecords) {
@@ -54,7 +54,7 @@ function ProposalInventoryList({
 
   useEffect(() => {
     if (
-      inventoryStatus === "succeeded/isDone" &&
+      isInventoryFetchDone &&
       areAllInventoryEntriesFetched &&
       onRenderNextStatus
     ) {
@@ -63,8 +63,8 @@ function ProposalInventoryList({
   }, [
     hasMoreInventory,
     onRenderNextStatus,
-    inventoryStatus,
     areAllInventoryEntriesFetched,
+    isInventoryFetchDone,
   ]);
 
   const hasMoreToFetch = hasMoreRecords || hasMoreInventory;

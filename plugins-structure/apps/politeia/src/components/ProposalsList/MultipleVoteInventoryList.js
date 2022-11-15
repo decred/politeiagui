@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ProposalsVoteInventoryList from "./VoteInventoryList";
 
-function ProposalListMultipleVoteInventory({ statuses, listFetchStatus }) {
+function ProposalListMultipleVoteInventory({ statuses }) {
   const [statusIndex, setStatusIndex] = useState(0);
 
   const statusesToRender = statuses.slice(0, statusIndex + 1);
@@ -17,7 +17,6 @@ function ProposalListMultipleVoteInventory({ statuses, listFetchStatus }) {
     <ul key={key} data-testid="multiple-statuses-list">
       <ProposalsVoteInventoryList
         status={status}
-        listFetchStatus={listFetchStatus}
         onRenderNextStatus={
           key === statusesToRender.length - 1 ? handleRenderNextStatus : null
         }

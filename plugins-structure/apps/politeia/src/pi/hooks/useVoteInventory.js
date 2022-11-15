@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ticketvoteInventory } from "@politeiagui/ticketvote/inventory";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInventory } from "../proposals/actions";
+import { fetchInventory } from "../proposalsList/actions";
 
 function useVoteInventory({ status }) {
   const dispatch = useDispatch();

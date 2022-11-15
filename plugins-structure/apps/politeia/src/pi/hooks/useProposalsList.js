@@ -6,7 +6,8 @@ import { commentsCount } from "@politeiagui/comments/count";
 import { piSummaries } from "../summaries";
 import { piBilling } from "../billing";
 import { proposals } from "../proposals";
-import { fetchNextBatch } from "../proposals/actions";
+import { fetchNextBatch } from "../proposalsList/actions";
+import { selectListFetchStatus } from "../proposalsList/selectors";
 
 function areAllEntriesFetched(inventoryList, records) {
   if (!inventoryList) return false;
@@ -16,7 +17,7 @@ function areAllEntriesFetched(inventoryList, records) {
   return true;
 }
 
-function useProposalsList({ inventory, inventoryStatus }) {
+function useProposalsList({ inventory }) {
   const dispatch = useDispatch();
   const countComments = useSelector(commentsCount.selectAll);
   const voteSummaries = useSelector(ticketvoteSummaries.selectAll);
@@ -35,8 +36,6 @@ function useProposalsList({ inventory, inventoryStatus }) {
   const hasMoreRecords =
     recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
 
-  const hasMoreInventory = inventoryStatus === "succeeded/hasMore";
-
   // Errors
   const recordsError = useSelector(records.selectError);
 
@@ -44,9 +43,10 @@ function useProposalsList({ inventory, inventoryStatus }) {
     return dispatch(fetchNextBatch(status));
   }
 
+  const listFetchStatus = useSelector(selectListFetchStatus);
+
   return {
     allRecords,
-    hasMoreInventory,
     hasMoreRecords,
     countComments,
     voteSummaries,
@@ -58,6 +58,7 @@ function useProposalsList({ inventory, inventoryStatus }) {
     areAllInventoryEntriesFetched: areAllEntriesFetched(inventory, allRecords),
     billingStatusChanges,
     proposalsStatusChanges,
+    listFetchStatus,
   };
 }
 

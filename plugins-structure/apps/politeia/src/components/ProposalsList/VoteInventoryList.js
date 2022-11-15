@@ -7,7 +7,6 @@ function ProposalsListVoteInventory({
   status,
   onRenderNextStatus,
   hasBillingStatus,
-  listFetchStatus,
 }) {
   const {
     inventory,
@@ -24,7 +23,8 @@ function ProposalsListVoteInventory({
       inventory={inventory}
       onRenderNextStatus={onRenderNextStatus}
       hasBillingStatus={hasBillingStatus}
-      listFetchStatus={listFetchStatus}
+      hasMoreInventory={inventoryStatus === "succeeded/hasMore"}
+      isInventoryFetchDone={inventoryStatus === "succeeded/isDone"}
     />
   ) : (
     <div data-testid="proposals-list-error">
