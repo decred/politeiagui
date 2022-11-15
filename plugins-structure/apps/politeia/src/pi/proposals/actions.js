@@ -1,13 +1,17 @@
 import { createAction } from "@reduxjs/toolkit";
 
-export const fetchInventory = createAction("home/fetchInventory");
-export const fetchNextBatchCount = createAction("home/fetchNextBatchCount");
-export const fetchNextBatchSummaries = createAction(
-  "home/fetchNextBatchSummaries"
+export const fetchInventory = createAction("proposals/fetchInventory");
+export const fetchNextBatchCount = createAction(
+  "proposals/fetchNextBatchCount"
 );
-export const fetchNextBatchRecords = createAction("home/fetchNextBatchRecords");
+export const fetchNextBatchSummaries = createAction(
+  "proposals/fetchNextBatchSummaries"
+);
+export const fetchNextBatchRecords = createAction(
+  "proposals/fetchNextBatchRecords"
+);
 export const fetchNextBatchBillingStatuses = createAction(
-  "home/fetchNextBatchBillingStatuses"
+  "proposals/fetchNextBatchBillingStatuses"
 );
 
 export function fetchNextBatch(status) {

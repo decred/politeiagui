@@ -1,19 +1,25 @@
 import React from "react";
-import MultipleStatusesRecordsList from "../common/MultipleStatusesRecordsList";
-import EmptyMessage from "../common/EmptyList";
+import {
+  ProposalListEmpty,
+  ProposalListMultipleVoteInventory,
+} from "../../../components";
 import { useSelector } from "react-redux";
-import { selectIsMultiStatusListEmpty } from "../selectors";
+import { selectHomeStatus, selectIsMultiStatusListEmpty } from "../selectors";
 
 function UnderReviewPage() {
   const statuses = ["started", "authorized", "unauthorized"];
   const isListEmpty = useSelector((state) =>
     selectIsMultiStatusListEmpty(state, statuses)
   );
+  const listFetchStatus = useSelector(selectHomeStatus);
   return isListEmpty ? (
-    <EmptyMessage status="under review" />
+    <ProposalListEmpty status="under review" />
   ) : (
     <div data-testid="proposals-under-review-list">
-      <MultipleStatusesRecordsList statuses={statuses} />
+      <ProposalListMultipleVoteInventory
+        statuses={statuses}
+        listFetchStatus={listFetchStatus}
+      />
     </div>
   );
 }

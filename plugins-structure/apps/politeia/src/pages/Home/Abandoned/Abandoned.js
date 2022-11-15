@@ -1,17 +1,24 @@
 import React from "react";
-import RecordsStatusList from "../common/RecordsStatusList";
 import { useSelector } from "react-redux";
-import { selectIsStatusListEmpty } from "../selectors";
-import EmptyList from "../common/EmptyList";
+import {
+  ProposalListEmpty,
+  ProposalListVoteInventory,
+} from "../../../components";
+import { selectHomeStatus, selectIsStatusListEmpty } from "../selectors";
 
 function Abandoned() {
   const isListEmpty = useSelector((state) =>
     selectIsStatusListEmpty(state, "ineligible")
   );
+  const listFetchStatus = useSelector(selectHomeStatus);
   return isListEmpty ? (
-    <EmptyList status="abandoned" />
+    <ProposalListEmpty status="abandoned" />
   ) : (
-    <RecordsStatusList status={"ineligible"} />
+    <ProposalListVoteInventory
+      status="ineligible"
+      hasBillingStatus
+      listFetchStatus={listFetchStatus}
+    />
   );
 }
 

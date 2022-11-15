@@ -1,17 +1,24 @@
 import React from "react";
-import RecordsStatusList from "../common/RecordsStatusList";
+import {
+  ProposalListEmpty,
+  ProposalListVoteInventory,
+} from "../../../components";
 import { useSelector } from "react-redux";
-import EmptyList from "../common/EmptyList";
-import { selectIsStatusListEmpty } from "../selectors";
+import { selectHomeStatus, selectIsStatusListEmpty } from "../selectors";
 
 function Rejected() {
   const isListEmpty = useSelector((state) =>
     selectIsStatusListEmpty(state, "rejected")
   );
+  const listFetchStatus = useSelector(selectHomeStatus);
   return isListEmpty ? (
-    <EmptyList status="rejected" />
+    <ProposalListEmpty status="rejected" />
   ) : (
-    <RecordsStatusList status={"rejected"} />
+    <ProposalListVoteInventory
+      status="rejected"
+      hasBillingStatus
+      listFetchStatus={listFetchStatus}
+    />
   );
 }
 

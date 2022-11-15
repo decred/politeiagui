@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import RecordsStatusList from "./RecordsStatusList";
+import ProposalsVoteInventoryList from "./VoteInventoryList";
 
-function MultipleStatusesRecordsList({ statuses }) {
+function ProposalListMultipleVoteInventory({ statuses, listFetchStatus }) {
   const [statusIndex, setStatusIndex] = useState(0);
 
   const statusesToRender = statuses.slice(0, statusIndex + 1);
@@ -15,8 +15,9 @@ function MultipleStatusesRecordsList({ statuses }) {
 
   return statusesToRender.map((status, key) => (
     <ul key={key} data-testid="multiple-statuses-list">
-      <RecordsStatusList
+      <ProposalsVoteInventoryList
         status={status}
+        listFetchStatus={listFetchStatus}
         onRenderNextStatus={
           key === statusesToRender.length - 1 ? handleRenderNextStatus : null
         }
@@ -25,4 +26,4 @@ function MultipleStatusesRecordsList({ statuses }) {
   ));
 }
 
-export default MultipleStatusesRecordsList;
+export default ProposalListMultipleVoteInventory;

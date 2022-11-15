@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { Message } from "pi-ui";
 import { RecordsList } from "@politeiagui/common-ui";
-import { useDispatch } from "react-redux";
-import { ProposalCard, ProposalLoader } from "../../../components";
+import { ProposalCard, ProposalLoader } from "..";
 import max from "lodash/max";
 import min from "lodash/min";
-import useStatusList from "../useStatusList";
-import { getRfpRecordLink } from "../../../pi/proposals/utils";
+// import useStatusList from "../useStatusList";
+import useProposalsList from "../../pi/hooks/useProposalsList";
+import { getRfpRecordLink } from "../../pi/proposals/utils";
 
 function LoadingSkeleton({ inventory, records }) {
   if (!inventory) return [];
@@ -21,33 +21,32 @@ function LoadingSkeleton({ inventory, records }) {
   return loadersArray;
 }
 
-function StatusList({
+function ProposalInventoryList({
   status,
   inventory,
   inventoryStatus,
   onFetchNextInventoryPage,
   onRenderNextStatus,
   recordsPageSize,
+  listFetchStatus,
 }) {
-  const dispatch = useDispatch();
   const {
     allRecords,
     hasMoreRecords,
     hasMoreInventory,
-    homeStatus,
     countComments,
     voteSummaries,
     proposalSummaries,
-    fetchNextBatch,
+    onFetchNextBatch,
     recordsInOrder,
     recordsError,
     areAllInventoryEntriesFetched,
     proposalsStatusChanges,
-  } = useStatusList({ inventory, inventoryStatus, status });
+  } = useProposalsList({ inventory, inventoryStatus });
 
   function handleFetchMore() {
     if (hasMoreRecords) {
-      dispatch(fetchNextBatch(status));
+      onFetchNextBatch(status);
     } else if (hasMoreInventory) {
       onFetchNextInventoryPage();
     }
@@ -71,11 +70,11 @@ function StatusList({
   const hasMoreToFetch = hasMoreRecords || hasMoreInventory;
 
   return !recordsError ? (
-    <div data-testid="status-list">
+    <div data-testid="proposals-list">
       <RecordsList
         hasMore={hasMoreToFetch}
         onFetchMore={handleFetchMore}
-        isLoading={homeStatus === "loading"}
+        isLoading={listFetchStatus === "loading"}
         childrenThreshold={recordsPageSize}
         loadingSkeleton={
           <LoadingSkeleton inventory={inventory} records={recordsInOrder} />
@@ -99,10 +98,10 @@ function StatusList({
       </RecordsList>
     </div>
   ) : (
-    <div data-testid="status-list-error">
+    <div data-testid="proposals-list-error">
       <Message kind="error">{recordsError}</Message>
     </div>
   );
 }
 
-export default StatusList;
+export default ProposalInventoryList;
