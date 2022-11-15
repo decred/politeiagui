@@ -3,7 +3,7 @@ import ProposalInventoryList from "./InventoryList";
 import { Message } from "pi-ui";
 import useVoteInventory from "../../pi/hooks/useVoteInventory";
 
-function ProposalListVoteInventory({
+function ProposalsListVoteInventory({
   status,
   onRenderNextStatus,
   hasBillingStatus,
@@ -33,4 +33,4 @@ function ProposalListVoteInventory({
   );
 }
 
-export default ProposalListVoteInventory;
+export default ProposalsListVoteInventory;

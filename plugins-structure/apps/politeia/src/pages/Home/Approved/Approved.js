@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  ProposalListEmpty,
-  ProposalListVoteInventory,
+  ProposalsListEmpty,
+  ProposalsListVoteInventory,
 } from "../../../components";
 import { selectHomeStatus, selectIsStatusListEmpty } from "../selectors";
 import { useSelector } from "react-redux";
@@ -12,9 +12,9 @@ function Approved() {
   );
   const listFetchStatus = useSelector(selectHomeStatus);
   return isListEmpty ? (
-    <ProposalListEmpty status="approved" />
+    <ProposalsListEmpty status="approved" />
   ) : (
-    <ProposalListVoteInventory
+    <ProposalsListVoteInventory
       status="approved"
       hasBillingStatus
       listFetchStatus={listFetchStatus}

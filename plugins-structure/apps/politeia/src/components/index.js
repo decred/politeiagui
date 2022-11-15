@@ -5,10 +5,10 @@ import ProposalCard from "./Proposal/ProposalCard";
 import ProposalDetails from "./Proposal/ProposalDetails";
 import ProposalLoader from "./Proposal/ProposalLoader";
 // Proposal Lists
-import ProposalListEmpty from "./ProposalList/EmptyList";
-import ProposalListInventory from "./ProposalList/InventoryList";
-import ProposalListMultipleVoteInventory from "./ProposalList/MultipleVoteInventoryList";
-import ProposalListVoteInventory from "./ProposalList/VoteInventoryList";
+import ProposalsListEmpty from "./ProposalsList/EmptyList";
+import ProposalsListInventory from "./ProposalsList/InventoryList";
+import ProposalsListMultipleVoteInventory from "./ProposalsList/MultipleVoteInventoryList";
+import ProposalsListVoteInventory from "./ProposalsList/VoteInventoryList";
 
 export {
   About,
@@ -17,8 +17,8 @@ export {
   ProposalCard,
   ProposalDetails,
   ProposalLoader,
-  ProposalListEmpty,
-  ProposalListInventory,
-  ProposalListMultipleVoteInventory,
-  ProposalListVoteInventory,
+  ProposalsListEmpty,
+  ProposalsListInventory,
+  ProposalsListMultipleVoteInventory,
+  ProposalsListVoteInventory,
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  ProposalListEmpty,
-  ProposalListMultipleVoteInventory,
+  ProposalsListEmpty,
+  ProposalsListMultipleVoteInventory,
 } from "../../../components";
 import { useSelector } from "react-redux";
 import { selectHomeStatus, selectIsMultiStatusListEmpty } from "../selectors";
@@ -13,10 +13,10 @@ function UnderReviewPage() {
   );
   const listFetchStatus = useSelector(selectHomeStatus);
   return isListEmpty ? (
-    <ProposalListEmpty status="under review" />
+    <ProposalsListEmpty status="under review" />
   ) : (
     <div data-testid="proposals-under-review-list">
-      <ProposalListMultipleVoteInventory
+      <ProposalsListMultipleVoteInventory
         statuses={statuses}
         listFetchStatus={listFetchStatus}
       />
