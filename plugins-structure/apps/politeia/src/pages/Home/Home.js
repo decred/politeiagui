@@ -27,7 +27,7 @@ function renderListByTab({ tab, ...props }) {
   };
   const statuses =
     mapTabStatuses[tab] || mapTabStatuses[TAB_LABELS.underReview];
-  const listName = mapTabStatuses[tab] ? tab.toLowerCase() : "";
+  const listName = mapTabStatuses[tab] ? tab.toLowerCase() : "under review";
   return (
     <ProposalsListMultipleVoteInventory
       statuses={statuses}

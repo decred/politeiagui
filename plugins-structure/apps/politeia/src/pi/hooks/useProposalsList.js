@@ -39,8 +39,8 @@ function useProposalsList({ inventory }) {
   // Errors
   const recordsError = useSelector(records.selectError);
 
-  function onFetchNextBatch(status) {
-    return dispatch(fetchNextBatch(status));
+  function onFetchNextBatch(status, recordsState) {
+    return dispatch(fetchNextBatch({ status, recordsState }));
   }
 
   const listFetchStatus = useSelector(selectListFetchStatus);

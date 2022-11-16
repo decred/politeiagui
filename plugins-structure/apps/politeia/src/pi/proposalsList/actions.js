@@ -14,12 +14,13 @@ export const fetchNextBatchBillingStatuses = createAction(
   "proposals/fetchNextBatchBillingStatuses"
 );
 
-export function fetchNextBatch(status) {
+export function fetchNextBatch({ status, recordsState }) {
   const hasBillingStatus = status === "approved";
   return (dispatch) => {
-    dispatch(fetchNextBatchCount(status));
-    dispatch(fetchNextBatchSummaries(status));
-    dispatch(fetchNextBatchRecords(status));
-    hasBillingStatus && dispatch(fetchNextBatchBillingStatuses(status));
+    dispatch(fetchNextBatchCount({ status, recordsState }));
+    dispatch(fetchNextBatchSummaries({ status, recordsState }));
+    dispatch(fetchNextBatchRecords({ status, recordsState }));
+    hasBillingStatus &&
+      dispatch(fetchNextBatchBillingStatuses({ status, recordsState }));
   };
 }
