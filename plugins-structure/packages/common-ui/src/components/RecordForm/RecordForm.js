@@ -132,7 +132,11 @@ function SaveButton({
 
 function Warning({ children }) {
   return (
-    <Message kind="warning" className={styles.message}>
+    <Message
+      kind="warning"
+      data-testid="record-form-warning-message"
+      className={styles.message}
+    >
       {children}
     </Message>
   );
