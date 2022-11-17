@@ -1,5 +1,5 @@
-import userDetailsRoute from "./Details";
+import userDetailsRoutes from "./Details";
 
-const userRoutes = [userDetailsRoute];
+const userRoutes = [...userDetailsRoutes];
 
 export default userRoutes;

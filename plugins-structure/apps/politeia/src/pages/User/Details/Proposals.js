@@ -1,5 +1,13 @@
 import React from "react";
+import UserDetails from "./Details";
+import { ProposalsListMultipleVoteInventory } from "../../../components";
 
-export function UserProposals() {
-  return <div>User proposals</div>;
+function UserProposals() {
+  return (
+    <UserDetails tab={"proposals"}>
+      <ProposalsListMultipleVoteInventory statuses={["unauthorized"]} />
+    </UserDetails>
+  );
 }
+
+export default UserProposals;
