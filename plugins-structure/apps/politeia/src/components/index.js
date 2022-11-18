@@ -6,9 +6,7 @@ import ProposalDetails from "./Proposal/ProposalDetails";
 import ProposalLoader from "./Proposal/ProposalLoader";
 // Proposal Lists
 import ProposalsListEmpty from "./ProposalsList/EmptyList";
-import ProposalsListInventory from "./ProposalsList/InventoryList";
-import ProposalsListMultipleVoteInventory from "./ProposalsList/MultipleVoteInventoryList";
-import ProposalsListVoteInventory from "./ProposalsList/VoteInventoryList";
+import ProposalsList from "./ProposalsList/ProposalsList";
 
 export {
   About,
@@ -18,7 +16,5 @@ export {
   ProposalDetails,
   ProposalLoader,
   ProposalsListEmpty,
-  ProposalsListInventory,
-  ProposalsListMultipleVoteInventory,
-  ProposalsListVoteInventory,
+  ProposalsList,
 };

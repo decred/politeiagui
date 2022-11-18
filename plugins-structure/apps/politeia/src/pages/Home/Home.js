@@ -1,7 +1,8 @@
 import React from "react";
 import { MultiContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
-import { About, ProposalsListMultipleVoteInventory } from "../../components";
+import { About } from "../../components";
+import HomeProposals from "./HomeProposals";
 
 const TAB_LABELS = {
   underReview: "Under Review",
@@ -18,7 +19,7 @@ const tabs = TAB_VALUES.map((tab) => (
   </a>
 ));
 
-function renderListByTab({ tab, ...props }) {
+function getListPropsByTab(tab) {
   const mapTabStatuses = {
     [TAB_LABELS.underReview]: ["started", "authorized", "unauthorized"],
     [TAB_LABELS.approved]: ["approved"],
@@ -28,18 +29,12 @@ function renderListByTab({ tab, ...props }) {
   const statuses =
     mapTabStatuses[tab] || mapTabStatuses[TAB_LABELS.underReview];
   const listName = mapTabStatuses[tab] ? tab.toLowerCase() : "under review";
-  return (
-    <ProposalsListMultipleVoteInventory
-      statuses={statuses}
-      listName={listName}
-      {...props}
-    />
-  );
+  return { statuses, listName };
 }
 
 function Home() {
   const { tab } = getURLSearchParams();
-
+  const { statuses, listName } = getListPropsByTab(tab);
   return (
     <MultiContentPage
       banner={
@@ -51,7 +46,7 @@ function Home() {
       }
       sidebar={<About />}
     >
-      {renderListByTab({ tab })}
+      <HomeProposals statuses={statuses} listName={listName} />
     </MultiContentPage>
   );
 }
