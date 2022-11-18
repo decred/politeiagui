@@ -1,9 +1,8 @@
 import { records } from "@politeiagui/core/records";
+import { recordsPolicy } from "@politeiagui/core/records/policy";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { commentsCount } from "@politeiagui/comments/count";
-import { ticketvoteInventory } from "@politeiagui/ticketvote/inventory";
 import { getStatusFromMultipleSlices } from "../../utils/getStatusFromMultipleSlices";
-import isEmpty from "lodash/isEmpty";
 import { piSummaries } from "../summaries";
 
 export function selectListFetchStatus(state) {
@@ -22,14 +21,6 @@ export function selectListFetchStatus(state) {
   return getStatusFromMultipleSlices(statuses);
 }
 
-export function selectIsVoteInventoryListEmpty(state, status) {
-  const tokens = ticketvoteInventory.selectByStatus(state, status);
-  const fetchStatus = ticketvoteInventory.selectStatus(state, { status });
-  return isEmpty(tokens) && fetchStatus === "succeeded/isDone";
-}
-
-export function selectIsMultiVoteInventoryListEmpty(state, statuses) {
-  return statuses.every((status) =>
-    selectIsVoteInventoryListEmpty(state, status)
-  );
+export function selectListPageSize(state) {
+  return recordsPolicy.selectRule(state, "recordspagesize");
 }

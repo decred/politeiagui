@@ -1,64 +1,34 @@
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { records } from "@politeiagui/core/records";
-import { recordsPolicy } from "@politeiagui/core/records/policy";
-import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
-import { commentsCount } from "@politeiagui/comments/count";
-import { piSummaries } from "../summaries";
-import { piBilling } from "../billing";
-import { proposals } from "../proposals";
-import { fetchNextBatch } from "../proposalsList/actions";
-import { selectListFetchStatus } from "../proposalsList/selectors";
+import { fetchInventory, fetchNextBatch } from "../proposalsList/actions";
+import {
+  selectListFetchStatus,
+  selectListPageSize,
+} from "../proposalsList/selectors";
 
-function areAllEntriesFetched(inventoryList, records) {
-  if (!inventoryList) return false;
-  for (const inventory of inventoryList) {
-    if (!records[inventory]) return false;
-  }
-  return true;
-}
-
-function useProposalsList({ inventory }) {
+function useProposalsList({ status, recordsState }) {
   const dispatch = useDispatch();
-  const countComments = useSelector(commentsCount.selectAll);
-  const voteSummaries = useSelector(ticketvoteSummaries.selectAll);
-  const proposalSummaries = useSelector(piSummaries.selectAll);
-  const recordsPageSize = useSelector((state) =>
-    recordsPolicy.selectRule(state, "recordspagesize")
-  );
-  const recordsInOrder = useSelector((state) =>
-    records.selectByTokensBatch(state, inventory)
-  );
-  const allRecords = useSelector(records.selectAll);
-  const billingStatusChanges = useSelector(piBilling.selectAll);
-
-  const proposalsStatusChanges = useSelector(proposals.selectAllStatusChanges);
-
-  const hasMoreRecords =
-    recordsInOrder.length !== 0 && recordsInOrder.length < inventory.length;
-
-  // Errors
-  const recordsError = useSelector(records.selectError);
-
-  function onFetchNextBatch(status, recordsState) {
-    return dispatch(fetchNextBatch({ status, recordsState }));
+  const [page, setPage] = useState(1);
+  function onFetchNextInventoryPage() {
+    setPage(page + 1);
   }
 
   const listFetchStatus = useSelector(selectListFetchStatus);
+  const listPageSize = useSelector(selectListPageSize);
+
+  function onFetchNextBatch() {
+    dispatch(fetchNextBatch({ status, recordsState }));
+  }
+
+  useEffect(() => {
+    dispatch(fetchInventory({ status, recordsState, page }));
+  }, [status, recordsState, page, dispatch]);
 
   return {
-    allRecords,
-    hasMoreRecords,
-    countComments,
-    voteSummaries,
-    proposalSummaries,
+    onFetchNextInventoryPage,
     onFetchNextBatch,
-    recordsInOrder,
-    recordsPageSize,
-    recordsError,
-    areAllInventoryEntriesFetched: areAllEntriesFetched(inventory, allRecords),
-    billingStatusChanges,
-    proposalsStatusChanges,
     listFetchStatus,
+    listPageSize,
   };
 }
 
