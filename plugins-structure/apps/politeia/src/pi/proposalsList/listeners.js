@@ -146,6 +146,8 @@ export const listenToRecordsInventoryFetch = {
   actionCreator: recordsInventory.fetch.fulfilled,
   effect: ({ meta, payload }, { dispatch }) => {
     const { recordsState, status } = meta.arg;
-    console.log(payload);
+    if (payload.recordsInventory[recordsState][status].length > 0) {
+      dispatch(fetchNextBatch({ status, recordsState }));
+    }
   },
 };

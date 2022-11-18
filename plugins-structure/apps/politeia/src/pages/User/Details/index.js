@@ -4,8 +4,8 @@ import { routeCleanup } from "../../../utils/routeCleanup";
 import { createRouteView } from "../../../utils/createRouteView";
 import { router } from "@politeiagui/core/router";
 
-import { voteInventorySetupServices } from "../../../pi/proposalsList/servicesSetup";
-import { listenToVoteInventoryFetch } from "../../../pi/proposalsList/listeners";
+import { recordsInventorySetupServices } from "../../../pi/proposalsList/servicesSetup";
+import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listeners";
 
 const baseRoute = App.createRoute({
   path: "/user/:userid",
@@ -20,8 +20,8 @@ const userProposalsRoute = App.createRoute({
   title: "User Proposals",
   cleanup: routeCleanup,
   // TODO: Use user proposals inventory & listeners
-  setupServices: voteInventorySetupServices,
-  listeners: [listenToVoteInventoryFetch],
+  setupServices: recordsInventorySetupServices,
+  listeners: [listenToRecordsInventoryFetch],
   view: createRouteView(
     lazy(() =>
       import(/* webpackChunkName: "user_details_page" */ "./Proposals")
