@@ -1,5 +1,9 @@
 import { faker } from "@faker-js/faker";
 import * as ctes from "../../records/constants";
+import {
+  getHumanReadableRecordState,
+  getHumanReadableRecordStatus,
+} from "../../records/utils";
 
 export function recordToken() {
   return faker.random.numeric(16);
@@ -49,6 +53,22 @@ export function mockRecord({
           },
     ],
   });
+}
+
+export function mockRecordsInventory(amount, customTokens = []) {
+  const amountToGenerate = amount - customTokens.length;
+  return ({ status, state }) => {
+    const readableState = getHumanReadableRecordState(state);
+    const readableStatus = getHumanReadableRecordStatus(status);
+    return {
+      [readableState]: {
+        [readableStatus]: [
+          ...customTokens,
+          ...getTokensArray(amountToGenerate),
+        ],
+      },
+    };
+  };
 }
 
 export function mockRecordsBatch(mockRecordFn = mockRecord) {
