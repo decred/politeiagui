@@ -62,14 +62,5 @@ export function validatePlugin({ services, reducers, name }) {
  */
 export function pluginSetup({ services, reducers, name }) {
   validatePlugin({ services, reducers, name });
-  return {
-    reducers,
-    services,
-    name,
-    initialize: async (id) => {
-      const service = services.find((init) => init.id === id);
-      if (!service) return;
-      return await service.action();
-    },
-  };
+  return { reducers, services, name };
 }
