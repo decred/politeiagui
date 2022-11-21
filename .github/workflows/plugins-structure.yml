@@ -30,7 +30,7 @@ jobs:
           Xvfb :99.0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
         working-directory: ./plugins-structure
       - name: yarn install
-        run: yarn install --network-concurrency 1
+        run: yarn install
         working-directory: ./plugins-structure
       - name: linter checks
         run: yarn lint:test
