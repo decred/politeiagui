@@ -1,4 +1,5 @@
 import curry from "lodash/fp/curry";
+import { validateSliceServices } from "./validation";
 /**
  * PluginService is an `action` that will setup the plugin for usage in some given
  * `id` case.
@@ -216,6 +217,7 @@ export function formatServicesToPlugin(services, sliceName) {
  * }}
  */
 export function createSliceServices({ name: sliceName, services }) {
+  validateSliceServices({ name: sliceName, services });
   const pluginServices = formatServicesToPlugin(services, sliceName);
   const setups = getServicesSetups(services, sliceName);
 
