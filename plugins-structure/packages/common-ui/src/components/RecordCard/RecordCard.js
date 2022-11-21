@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 
 const TitleWrapper = ({ titleLink, children }) =>
   !titleLink ? (
-    children
+    children || null
   ) : (
     <a
       href={titleLink}
@@ -32,6 +32,7 @@ export function RecordCard({
 }) {
   return (
     <Card
+      data-testid="record-card"
       className={classNames(
         styles.card,
         isDimmed && styles.dimmedCard,
@@ -53,10 +54,24 @@ export function RecordCard({
           {subtitle}
         </div>
       </div>
-      {secondRow && <div className={styles.secondRow}>{secondRow}</div>}
-      {thirdRow && <div className={styles.thirdRow}>{thirdRow}</div>}
-      {fourthRow && <div className={styles.fourthRow}>{fourthRow}</div>}
-      <div className={styles.footer}>{footer}</div>
+      {secondRow && (
+        <div className={styles.secondRow} data-testid="record-card-second-row">
+          {secondRow}
+        </div>
+      )}
+      {thirdRow && (
+        <div className={styles.thirdRow} data-testid="record-card-third-row">
+          {thirdRow}
+        </div>
+      )}
+      {fourthRow && (
+        <div className={styles.fourthRow} data-testid="record-card-fourth-row">
+          {fourthRow}
+        </div>
+      )}
+      <div className={styles.footer} data-testid="record-card-footer">
+        {footer}
+      </div>
     </Card>
   );
 }
