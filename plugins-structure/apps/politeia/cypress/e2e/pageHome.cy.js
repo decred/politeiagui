@@ -11,10 +11,6 @@ import {
   mockProposal,
 } from "../../src/pi/dev/mocks";
 
-Cypress.Commands.add("assertProposalsListLength", (length) =>
-  cy.findAllByTestId("proposal-card").should("have.length", length)
-);
-
 Cypress.Commands.add("mockInventory", (amount, matcherParams = {}) =>
   cy.mockResponse(
     { url: "/api/ticketvote/v1/inventory", ...matcherParams },

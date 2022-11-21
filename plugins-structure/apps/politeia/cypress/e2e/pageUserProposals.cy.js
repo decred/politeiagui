@@ -1,14 +1,4 @@
-import { mockCommentsCount } from "@politeiagui/comments/dev/mocks";
-import {
-  mockRecordsBatch,
-  mockRecordsInventory,
-} from "@politeiagui/core/dev/mocks";
-import { mockTicketvoteSummaries } from "@politeiagui/ticketvote/dev/mocks";
-import {
-  mockPiBillingStatusChanges,
-  mockPiSummaries,
-  mockProposal,
-} from "../../src/pi/dev/mocks";
+import { mockRecordsInventory } from "@politeiagui/core/dev/mocks";
 
 Cypress.Commands.add("mockInventory", (amount, matcherParams = {}) =>
   cy.mockResponse(
@@ -18,19 +8,7 @@ Cypress.Commands.add("mockInventory", (amount, matcherParams = {}) =>
 );
 
 beforeEach(() => {
-  cy.mockResponse("/api/comments/v1/count", mockCommentsCount()).as("counts");
-  cy.mockResponse(
-    "/api/records/v1/records",
-    mockRecordsBatch(mockProposal({ state: 2, status: 2 }))
-  ).as("records");
-  cy.mockResponse("/api/ticketvote/v1/summaries", mockTicketvoteSummaries()).as(
-    "summaries"
-  );
-  cy.mockResponse("/api/pi/v1/summaries", mockPiSummaries()).as("piSummaries");
-  cy.mockResponse(
-    "/api/pi/v1/billingstatuschanges",
-    mockPiBillingStatusChanges()
-  ).as("billingstatuschanges");
+  cy.mockProposalsBatch("unauthorized");
   cy.mockInventory(0);
 });
 
@@ -38,5 +16,18 @@ describe("Given User Proposals page", () => {
   it("should load user proposals", () => {
     cy.mockInventory(10);
     cy.visit("/user/user-test-id/proposals");
+    cy.waitProposalsBatch();
+    cy.findAllByTestId("proposal-card").last().scrollIntoView({
+      easing: "linear",
+      duration: 500,
+    });
+    cy.waitProposalsBatch({ hasCounts: false });
+    cy.assertProposalsListLength(10);
+  });
+  it("should show empty list message when inventory is empty", () => {
+    cy.mockInventory(0);
+    cy.visit("/user/user-test-id/proposals");
+    cy.assertProposalsListLength(0);
+    cy.findByTestId("proposals-list-empty").should("be.visible");
   });
 });
