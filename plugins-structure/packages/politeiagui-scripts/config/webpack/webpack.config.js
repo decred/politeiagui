@@ -1,3 +1,4 @@
+const CompressionPlugin = require("compression-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const { resolveApp, resolveOwn } = require("../../utils");
@@ -6,6 +7,10 @@ const plugins = (isEnvDevelopment, isApp) =>
     ? [
         new HtmlWebpackPlugin({
           template: resolveApp("./src/public/index.html"),
+        }),
+        new CompressionPlugin({
+          algorithm: "gzip",
+          test: /\.js(\?.*)?$/i,
         }),
       ]
     : isEnvDevelopment
@@ -81,9 +86,29 @@ module.exports = function (webpackEnv = "production", type = "app") {
     bail: !isEnvDevelopment,
     devtool: isEnvDevelopment ? "cheap-module-source-map" : "source-map",
     mode: isEnvDevelopment ? "development" : "production",
+    optimization: {
+      moduleIds: "deterministic",
+      runtimeChunk: "single",
+      splitChunks: {
+        cacheGroups: {
+          vendors: {
+            test: /node_modules\/(?!pi-ui\/).*/,
+            name: "vendors",
+            chunks: "all",
+          },
+          // This can be your own design library.
+          "pi-ui": {
+            test: /node_modules\/(pi-ui\/).*/,
+            name: "pi-ui",
+            chunks: "all",
+          },
+        },
+      },
+    },
     output: {
       publicPath: "/",
       path: resolveApp("./dist"),
+      filename: "[name].[chunkhash].bundle.js",
       library: {
         name: pkgName + ".js",
         type: "umd",
@@ -111,5 +136,8 @@ module.exports = function (webpackEnv = "production", type = "app") {
       },
     ],
     plugins: plugins(isEnvDevelopment, isApp),
+    experiments: {
+      topLevelAwait: true,
+    },
   };
 };

@@ -11,6 +11,7 @@ const PoliteiaApp = appSetup({
   plugins: [TicketvotePlugin, UiPlugin, CommentsPlugin, PiPlugin],
   config: {
     name: "Politeia - Decred's Proposals System",
+    title: "Politeia",
     description:
       "Politeia is the proposal system that is used to request funding from Decred's network treasury. The Decred stakeholders decide how treasury funds are allocated.",
   },

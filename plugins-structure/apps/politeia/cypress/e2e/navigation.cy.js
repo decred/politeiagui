@@ -14,6 +14,7 @@ import {
 } from "../../src/pi/dev/mocks";
 
 const customToken = "abcdefghijklmnop";
+const shortToken = customToken.slice(0, 7);
 const mockPublicProposal = mockProposal({ state: 2, status: 2 });
 
 function assertRequestsNotDuplicated(res) {
@@ -107,5 +108,47 @@ describe("Given Politeia app navigation", () => {
     cy.get("@details.all").should("have.length", 1);
     cy.get("@piSummaries.all").should("have.length", 1);
     cy.get("@comments.all").should("have.length", 1);
+  });
+
+  it("should allow 'go back link' navigation on details page", () => {
+    cy.visit("/");
+    cy.findAllByTestId("record-card-title-link").first().click();
+    cy.findByTestId("proposal-go-back").should("be.visible").click();
+    // navigate back to home
+    cy.findAllByTestId("record-card-title-link").should("be.visible");
+    cy.location("pathname").should("eq", "/");
+    // navigate to record details and go to some comment page
+    cy.visit(`/record/${shortToken}`);
+    cy.findAllByTestId("comment-card-footer-link").first().click();
+    cy.findByTestId("proposal-go-back").should("not.exist");
+    cy.findByTestId("comments-view-all-link").click();
+    cy.findByTestId("proposal-go-back").should("not.exist");
+  });
+
+  it("should allow 'go back link' navigation to home page tabs", () => {
+    const tabs = ["Under Review", "Approved", "Rejected", "Abandoned"];
+    for (const tab of tabs) {
+      cy.visit(`/?tab=${tab}`);
+      cy.findAllByTestId("record-card-title-link").first().click();
+      cy.findByTestId("proposal-go-back").should("be.visible").click();
+      cy.findAllByTestId("record-card-title-link").should("be.visible");
+      cy.location("pathname").should("eq", "/");
+      cy.location("search").should("eq", `?tab=${encodeURI(tab)}`);
+    }
+  });
+
+  it("should update page title with proposal name", () => {
+    const customName = "Custom Proposal Name";
+    cy.mockResponse(
+      "/api/records/v1/details",
+      mockProposalDetails({
+        status: 2,
+        state: 2,
+        customToken,
+        name: customName,
+      })
+    ).as("details");
+    cy.visit(`/record/${shortToken}`);
+    cy.title().should("include", customName);
   });
 });

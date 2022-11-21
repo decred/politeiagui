@@ -1,7 +1,8 @@
+import { lazy } from "react";
 import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
-import Home from "./Home";
+
 import {
   fetchBillingStatusChangesListenerCreator,
   fetchInventoryListenerCreator,
@@ -63,5 +64,7 @@ export default App.createRoute({
   ],
   listeners,
   cleanup: routeCleanup,
-  view: createRouteView(Home),
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "home_page" */ "./Home"))
+  ),
 });

@@ -10,6 +10,7 @@ import { ProposalDetails, ProposalLoader } from "../../components";
 import styles from "./styles.module.css";
 import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
+import { GoBackLink } from "@politeiagui/common-ui";
 import { keyCommentsThreadsBy } from "@politeiagui/comments/utils";
 
 function ErrorsMessages({ errors }) {
@@ -83,6 +84,11 @@ function Details({ token, commentid = 0 }) {
 
   return (
     <SingleContentPage className={styles.detailsWrapper}>
+      <GoBackLink
+        className={styles.goBackLink}
+        data-testid="proposal-go-back"
+        backFromPathname={`/record/${token}`}
+      />
       {detailsStatus === "loading" && <ProposalLoader isDetails />}
       {detailsStatus === "failed" && (
         <ErrorsMessages

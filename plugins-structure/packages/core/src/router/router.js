@@ -105,6 +105,8 @@ export const router = (function () {
       if (!this.getIsInitialized()) {
         throw Error("router is not initialized. Use the init method");
       }
+      // Don't navigate if already current page
+      if (isCurrentPathname(url)) return;
       cleanup && cleanup();
       push(url);
       // Call verifyMatch to update our router state after
@@ -148,6 +150,33 @@ export const router = (function () {
      */
     getHistory() {
       return window.history;
+    },
+
+    /**
+     * getCurrentLocation returns the current match location data for current
+     * pathname, if match exists.
+     *
+     * @returns {{
+     *   pathname: String,
+     *   path: string,
+     *   params: Object,
+     *   search: String,
+     *   href: String
+     * }}
+     */
+    getCurrentLocation() {
+      if (!this.getIsInitialized()) {
+        throw Error("router is not initialized. Use the init method");
+      }
+      const match = findMatch(settings.routes, window.location.pathname);
+      if (!match) return;
+      return {
+        pathname: window.location.pathname,
+        path: match.route.path,
+        params: getParams(match),
+        search: window.location.search,
+        href: window.location.href,
+      };
     },
 
     /**

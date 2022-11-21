@@ -58,16 +58,28 @@ export const ModalConfirm = ({
       {error && <Message kind="error">{error.toString()}</Message>}
       {!success ? (
         <div className={styles.modalContent}>
-          <Text>{message}</Text>
+          <Text data-testid="modal-confirm-message">{message}</Text>
           <div className={styles.modalButtons}>
-            <Button onClick={handleSubmit}>Confirm</Button>
+            <Button
+              data-testid="modal-confirm-submit-button"
+              onClick={handleSubmit}
+            >
+              Confirm
+            </Button>
           </div>
         </div>
       ) : (
         <div className={styles.modalContent}>
-          <Text>{successMessage}</Text>
+          <Text data-testid="modal-confirm-success-message">
+            {successMessage}
+          </Text>
           <div className={styles.modalButtons}>
-            <Button onClick={handleCloseSuccess}>Ok</Button>
+            <Button
+              data-testid="modal-confirm-ok-button"
+              onClick={handleCloseSuccess}
+            >
+              Ok
+            </Button>
           </div>
         </div>
       )}

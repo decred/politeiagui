@@ -6,6 +6,13 @@ import { services as globalServices } from "./globalServices";
 import { listener } from "./listeners";
 import uniq from "lodash/fp/uniq";
 import isArray from "lodash/isArray";
+import isString from "lodash/isString";
+
+function getRouteTitle(appTitle, title) {
+  if (!title && appTitle) return appTitle;
+  if (title && !appTitle) return title;
+  return [title, appTitle].join(" | ");
+}
 
 function mergeAppAndPluginServices(services, targetServices) {
   let mergedServices = services;
@@ -86,7 +93,7 @@ function validateServicesIds(ids = []) {
 export function appSetup({
   plugins,
   listeners = [],
-  config,
+  config = {},
   store = defaultStore,
   setupServices = [],
 }) {
@@ -126,6 +133,10 @@ export function appSetup({
      */
     async init({ routes, routerOptions, errorView } = {}) {
       await store.dispatch(api.fetch());
+      const apiStatus = api.selectStatus(store.getState());
+      if (apiStatus == "failed") {
+        throw Error(api.selectError(store.getState()));
+      }
       await router.init({ routes, options: routerOptions, errorView });
     },
     /**
@@ -134,6 +145,32 @@ export function appSetup({
      */
     getConfig() {
       return config;
+    },
+    /**
+     * createRouteTitle returns the route title in the following format:
+     * `{title} | {app-title}`.
+     *
+     * Ex:
+     * ```
+     * createRouteTitle("my title")
+     * // "my title | My App"
+     * ```
+     * @param {String} title
+     * @returns {String}
+     */
+    createRouteTitle(title) {
+      return getRouteTitle(config.title, title);
+    },
+    /**
+     * setDocumentTitle receives and updates the document title with given
+     * `title` param.
+     * @param {string} title
+     */
+    setDocumentTitle(title) {
+      if (title && isString(title)) {
+        const routeTitle = this.createRouteTitle(title);
+        document.title = routeTitle;
+      }
     },
     /**
      * createRoute is an interface for creating app routes. Before rendering
@@ -151,6 +188,7 @@ export function appSetup({
       setupServices = [],
       listeners = [],
       cleanup,
+      title,
     } = {}) {
       validateServicesIds(setupServices);
       const routeServices = addRouteServicesProperties(
@@ -160,6 +198,7 @@ export function appSetup({
       const allListeners = mergeListeners(routeServices, listeners);
 
       return {
+        title: this.createRouteTitle(title),
         path,
         cleanup: () => {
           cleanup();

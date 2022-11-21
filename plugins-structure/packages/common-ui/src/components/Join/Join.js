@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import { classNames } from "pi-ui";
 import styles from "./styles.module.css";
 
-const DefaultSeparator = () => <span className={styles.separator}>•</span>;
+const DefaultSeparator = () => (
+  <span data-testid="join-default-separator" className={styles.separator}>
+    •
+  </span>
+);
 
 export const Join = ({ children, SeparatorComponent, className, inline }) => {
   const childrenArray = React.Children.toArray(children).filter((c) => !!c);

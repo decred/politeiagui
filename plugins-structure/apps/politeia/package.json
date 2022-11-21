@@ -14,6 +14,7 @@
     "test:no:watch": "politeiagui-scripts test --no-watch",
     "build": "politeiagui-scripts build-app",
     "analyze": "source-map-explorer 'dist/*.js'",
+    "analyze:gzip": "source-map-explorer 'dist/*.js' --gzip",
     "start": "politeiagui-scripts start-app",
     "serve": "politeiagui-scripts start-app --serve",
     "test:e2e:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test 'yarn serve' https-get://localhost:8080 'politeiagui-scripts test-e2e'",
@@ -24,10 +25,10 @@
     "@politeiagui/common-ui": "1.0.0",
     "@politeiagui/core": "1.0.0",
     "@politeiagui/ticketvote": "1.0.0",
-    "js-file-download": "^0.4.12",
-    "politeiagui-scripts": "1.0.0"
+    "js-file-download": "^0.4.12"
   },
   "devDependencies": {
+    "politeiagui-scripts": "1.0.0",
     "source-map-explorer": "^2.5.2"
   }
 }

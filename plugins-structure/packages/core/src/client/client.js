@@ -9,6 +9,11 @@ import {
 
 const VERSION = "v1";
 
+function ClientError(url) {
+  this.message = `Cannot fetch "${url}". Is politeiawww running?`;
+}
+ClientError.prototype = new Error();
+
 function ApiError(message, body) {
   this.message = message;
   this.body = body;
@@ -72,8 +77,8 @@ export const client = {
   },
   async fetchApi() {
     const response = await fetch("/api");
-    const csrf = response.headers.get("X-Csrf-Token");
     const api = await parseResponse(response);
+    const csrf = response.headers.get("X-Csrf-Token");
     return { api, csrf };
   },
   async fetchRecordsPolicy(state) {
@@ -97,9 +102,19 @@ export async function getCsrf(state) {
 
 export async function parseResponse(response) {
   const { status, statusText } = response;
-  const json = await response.json();
-  if ([200, 201].includes(status)) return json;
-  throw new ApiError(statusText, json);
+  let json;
+  try {
+    // Decode response body
+    json = await response.json();
+  } catch (_) {
+    // Response has no JSON body, hence it cannot be decoded.
+    const url = new URL(response.url);
+    throw new ClientError(url.pathname);
+  }
+  if (status < 200 || status > 299) {
+    throw new ApiError(statusText, json);
+  }
+  return json;
 }
 
 export function fetchOptions(csrf, json, method) {

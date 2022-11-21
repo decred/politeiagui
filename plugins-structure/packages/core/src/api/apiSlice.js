@@ -2,6 +2,7 @@
 // createAsyncThunk gnerate thunks that automatically dispatch
 // start/success/failure actions
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getApiErrorMessage } from "./errors";
 
 // Possible status: 'idle' | 'loading' | 'succeeded' | 'failed'
 // Possible error types: string | null
@@ -15,7 +16,14 @@ export const initialState = {
 // Thunks
 export const fetchApi = createAsyncThunk(
   "api/fetch",
-  async (_, { extra }) => await extra.fetchApi()
+  async (_, { extra, rejectWithValue }) => {
+    try {
+      return await extra.fetchApi();
+    } catch (error) {
+      const message = getApiErrorMessage(error.body, error.message);
+      throw rejectWithValue(message);
+    }
+  }
 );
 
 // Reducer
@@ -37,7 +45,7 @@ const apiSlice = createSlice({
       })
       .addCase(fetchApi.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload;
       });
   },
 });
@@ -45,6 +53,7 @@ const apiSlice = createSlice({
 // Selectors
 export const selectApi = (state) => state.api.api;
 export const selectApiStatus = (state) => state.api.status;
+export const selectApiError = (state) => state.api.error;
 
 // Export default reducer
 export default apiSlice.reducer;
