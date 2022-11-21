@@ -21,7 +21,6 @@ coverage
 !apps/
 apps/*
 !apps/politeia
-!apps/toolkit-playground
 apps/*/cypress/downloads
 apps/*/cypress/screenshots
 apps/*/cypress/videos
