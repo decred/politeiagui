@@ -29,6 +29,65 @@ const userProposalsRoute = App.createRoute({
   ),
 });
 
-const userDetailsRoutes = [baseRoute, userProposalsRoute];
+// TODO: Implement routes views
+const userIdentityRoute = App.createRoute({
+  path: "/user/:userid/identity",
+  title: "User Identity",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+  ),
+});
+const userAccountRoute = App.createRoute({
+  path: "/user/:userid/account",
+  title: "User Account",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+  ),
+});
+const userPreferencesRoute = App.createRoute({
+  path: "/user/:userid/preferences",
+  title: "User Preferences",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+  ),
+});
+const userCreditsRoute = App.createRoute({
+  path: "/user/:userid/credits",
+  title: "User Credits",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+  ),
+});
+const userDraftsRoute = App.createRoute({
+  path: "/user/:userid/drafts",
+  title: "User Drafts",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+  ),
+});
+const user2faRoute = App.createRoute({
+  path: "/user/:userid/2fa",
+  title: "User 2FA",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+  ),
+});
+
+const userDetailsRoutes = [
+  baseRoute,
+  userProposalsRoute,
+  userIdentityRoute,
+  userAccountRoute,
+  userPreferencesRoute,
+  userCreditsRoute,
+  userDraftsRoute,
+  user2faRoute,
+];
 
 export default userDetailsRoutes;
