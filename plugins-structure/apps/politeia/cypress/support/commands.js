@@ -9,7 +9,6 @@ import {
   mockProposal,
 } from "../../src/pi/dev/mocks";
 import {
-  mockTicketvoteInventory,
   mockTicketvoteSummaries,
   ticketvoteSummariesByStatus,
 } from "@politeiagui/ticketvote/dev/mocks";
