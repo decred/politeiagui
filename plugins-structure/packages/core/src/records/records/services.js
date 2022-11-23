@@ -7,6 +7,9 @@ import {
   fetchRecordDetails,
 } from "./effects";
 
+import { createSliceServices } from "../../toolkit";
+
+// TODO: remove this and use slice services.
 export const services = [
   {
     id: "records/batch",
@@ -29,3 +32,26 @@ export const services = [
     effect: fetchRecordDetails,
   },
 ];
+
+export const sliceServices = createSliceServices({
+  name: "records",
+  services: {
+    batch: {
+      onSetup: async () => {
+        await fetchPolicyIfIdle();
+        validateRecordsPageSize(store.getState());
+      },
+      effect: fetchNextRecords,
+    },
+    batchAll: {
+      onSetup: async () => {
+        await fetchPolicyIfIdle();
+        validateRecordsPageSize(store.getState());
+      },
+      effect: fetchAllRecordsInventory,
+    },
+    details: {
+      effect: fetchRecordDetails,
+    },
+  },
+});
