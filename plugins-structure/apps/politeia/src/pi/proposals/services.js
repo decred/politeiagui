@@ -1,3 +1,4 @@
+import { createSliceServices } from "@politeiagui/core/toolkit";
 import {
   setProposalsBillingStatusChangesEffect,
   setProposalsRecordsStatusChangesEffect,
@@ -18,3 +19,12 @@ export const services = [
     effect: setProposalsBillingStatusChangesEffect,
   },
 ];
+
+export const sliceServices = createSliceServices({
+  name: "piProposals",
+  services: {
+    voteStatusChanges: { effect: setProposalsVoteStatusChangesEffect },
+    recordStatusChanges: { effect: setProposalsRecordsStatusChangesEffect },
+    billingStatusChanges: { effect: setProposalsBillingStatusChangesEffect },
+  },
+});

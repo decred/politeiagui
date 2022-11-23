@@ -6,6 +6,12 @@ import {
   fetchSingleRecordPiSummaries,
 } from "./effects";
 import { validatePiSummariesPageSize } from "../lib/validation";
+import { createSliceServices } from "@politeiagui/core/toolkit";
+
+async function onSetup() {
+  await fetchPolicyIfIdle();
+  validatePiSummariesPageSize(store.getState());
+}
 
 export const services = [
   {
@@ -33,3 +39,12 @@ export const services = [
     effect: fetchAllRecordsPiSummaries,
   },
 ];
+
+export const sliceServices = createSliceServices({
+  name: "piSummaries",
+  services: {
+    all: { onSetup, effect: fetchAllRecordsPiSummaries },
+    batch: { onSetup, effect: fetchRecordsPiSummaries },
+    single: { onSetup, effect: fetchSingleRecordPiSummaries },
+  },
+});
