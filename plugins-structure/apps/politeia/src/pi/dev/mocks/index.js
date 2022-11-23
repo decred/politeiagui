@@ -24,8 +24,8 @@ function generateMetadataFile({
 }
 
 export function mockProposal({
-  status,
-  state,
+  status = 2,
+  state = 2,
   customToken,
   linkto,
   linkby,
