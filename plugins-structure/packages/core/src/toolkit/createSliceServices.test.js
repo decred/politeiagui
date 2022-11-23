@@ -1,4 +1,4 @@
-import { createSliceServices } from "./createSliceService";
+import { createSliceServices } from "./createSliceServices";
 
 const validServices = {
   foo: {
