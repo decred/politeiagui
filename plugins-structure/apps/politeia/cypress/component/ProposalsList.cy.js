@@ -2,7 +2,12 @@
 import React from "react";
 import { Provider, useSelector } from "react-redux";
 import { ProposalsList } from "../../src/components";
-import { actions, asyncActions, store, withDispatch } from "../support/helpers";
+import {
+  actions,
+  asyncActions,
+  store,
+  withDispatch,
+} from "../../src/pi/dev/mocks/store";
 
 const List = (props = {}) => {
   const inventoryFetchStatus = useSelector((state) => state.inventoryStatus);

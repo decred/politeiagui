@@ -82,7 +82,9 @@ describe("Given Politeia app navigation", () => {
       });
     cy.wait("@inventory");
     // Render under review tab
-    cy.findByTestId("proposals-under-review-list").should("be.visible");
+    cy.findByTestId("tab-0")
+      .should("be.visible")
+      .and("have.css", "border-color");
     // Summaries from details shouldn't be fetched again
     cy.get("@voteSummaries.all")
       .should("have.length", 2)
@@ -96,7 +98,9 @@ describe("Given Politeia app navigation", () => {
     cy.findByTestId("proposal-details").should("be.visible");
     // Back to home
     cy.findByTestId("politeia-logo").click();
-    cy.findByTestId("proposals-under-review-list").should("be.visible");
+    cy.findByTestId("tab-0")
+      .should("be.visible")
+      .and("have.css", "border-color");
     // Assert home requests aren't duplicated
     cy.get("@inventory.all").should("have.length", 1);
     cy.get("@records.all").should("have.length", 1);
@@ -129,6 +133,7 @@ describe("Given Politeia app navigation", () => {
     const tabs = ["Under Review", "Approved", "Rejected", "Abandoned"];
     for (const tab of tabs) {
       cy.visit(`/?tab=${tab}`);
+      cy.wait("@records");
       cy.findAllByTestId("record-card-title-link").first().click();
       cy.findByTestId("proposal-go-back").should("be.visible").click();
       cy.findAllByTestId("record-card-title-link").should("be.visible");

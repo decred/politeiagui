@@ -85,16 +85,15 @@ beforeEach(() => {
     mockPiBillingStatusChanges()
   ).as("billing");
   // Mock timestamps
-  cy.mockResponse(
-    "/api/ticketvote/v1/timestamps",
-    mockTicketvoteTimestamps()
-  ).as("votesTimestamps");
-  cy.mockResponse("/api/comments/v1/timestamps", mockCommentsTimestamps()).as(
-    "commentsTimestamps"
-  );
-  cy.mockResponse("/api/records/v1/timestamps", mockRecordTimestamps()).as(
-    "recordTimestamps"
-  );
+  cy.mockResponse("/api/ticketvote/v1/timestamps", mockTicketvoteTimestamps(), {
+    delay: 100,
+  }).as("votesTimestamps");
+  cy.mockResponse("/api/comments/v1/timestamps", mockCommentsTimestamps(), {
+    delay: 100,
+  }).as("commentsTimestamps");
+  cy.mockResponse("/api/records/v1/timestamps", mockRecordTimestamps(), {
+    delay: 100,
+  }).as("recordTimestamps");
   // Mock bundle requests
   cy.mockResponse(
     "/api/ticketvote/v1/results",

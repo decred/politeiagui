@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 
 import { getTokensArray, mockRecordsBatch } from "@politeiagui/core/dev/mocks";
-import { mockPiSummaries, mockProposal } from "../../src/pi/dev/mocks";
+import { mockPiSummaries, mockProposal } from "./";
 import {
   mockTicketvoteSummaries,
   ticketvoteSummariesByStatus,
