@@ -1,6 +1,5 @@
 import React from "react";
 import { SingleContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
-import { H1 } from "pi-ui";
 import { router } from "@politeiagui/core/router";
 
 export const TAB_LABELS = {
@@ -22,14 +21,6 @@ const getTabs = (userid) =>
     </a>
   ));
 
-// TODO: improve this title
-const UserTitle = ({ title, subtitle }) => (
-  <div>
-    <H1>{title}</H1>
-    <span>{subtitle}</span>
-  </div>
-);
-
 function UserDetails({ children }) {
   const location = router.getCurrentLocation();
   const activeTab = location.pathname.split("/")[3];
@@ -37,7 +28,8 @@ function UserDetails({ children }) {
     <SingleContentPage
       banner={
         <TabsBanner
-          title={<UserTitle title={"My User"} subtitle={"myuser@email.com"} />}
+          title={"admin"}
+          subtitle={"admin@example.com"}
           activeTab={TAB_KEYS.indexOf(activeTab || "identity")}
           tabs={getTabs("user-id-test")}
         />
