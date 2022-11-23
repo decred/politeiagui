@@ -6,6 +6,12 @@ import {
 import { fetchPolicyIfIdle } from "../utils";
 import { validateTicketvoteSummariesPageSize } from "../../lib/validation";
 import { store } from "@politeiagui/core";
+import { createSliceServices } from "@politeiagui/core/toolkit";
+
+async function onSetup() {
+  await fetchPolicyIfIdle();
+  validateTicketvoteSummariesPageSize(store.getState());
+}
 
 export const services = [
   {
@@ -33,3 +39,12 @@ export const services = [
     effect: fetchAllTicketvoteSummaries,
   },
 ];
+
+export const sliceServices = createSliceServices({
+  name: "ticketvoteSummaries",
+  services: {
+    batch: { onSetup, effect: fetchNextTicketvoteSummaries },
+    single: { onSetup, effect: fetchRecordTicketvoteSummaries },
+    all: { onSetup, effect: fetchAllTicketvoteSummaries },
+  },
+});
