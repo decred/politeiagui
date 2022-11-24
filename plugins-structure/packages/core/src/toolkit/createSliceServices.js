@@ -1,3 +1,4 @@
+import { store } from "../storeSetup";
 import curry from "lodash/fp/curry";
 import { validateSliceServices } from "./validation";
 /**
@@ -36,8 +37,15 @@ import { validateSliceServices } from "./validation";
  * @param {CurriedListenerEffect} curriedEffectListerner
  */
 /**
+ * @callback ServiceOnSetup
+ * @param {{
+ *  getState: Function,
+ *  dispatch: import("@reduxjs/toolkit").Dispatch
+ * }}
+ */
+/**
  * @typedef {{
- *  onSetup?: Function,
+ *  onSetup?: ServiceOnSetup,
  *  effect?: ListenerEffect
  * }} ServiceParams
  */
@@ -136,7 +144,13 @@ export function formatServicesToPlugin(services, sliceName) {
       ...acc,
       {
         id: setSliceId(sliceName, id),
-        action: services[id].onSetup,
+        action: services[id].onSetup
+          ? () =>
+              services[id].onSetup({
+                getState: store.getState,
+                dispatch: store.dispatch,
+              })
+          : null,
         effect: services[id].effect,
       },
     ],
@@ -213,13 +227,13 @@ export function formatServicesToPlugin(services, sliceName) {
  * }} sliceServiceParams
  * @returns {{
  *  pluginServices: PluginService[],
- *  setups: { [serviceId in keyof ServicesMap]: ServiceSetupParams }
+ *  serviceSetups: { [serviceId in keyof ServicesMap]: ServiceSetupParams }
  * }}
  */
 export function createSliceServices({ name: sliceName, services }) {
   validateSliceServices({ name: sliceName, services });
   const pluginServices = formatServicesToPlugin(services, sliceName);
-  const setups = getServicesSetups(services, sliceName);
+  const serviceSetups = getServicesSetups(services, sliceName);
 
-  return { pluginServices, setups };
+  return { pluginServices, serviceSetups };
 }
