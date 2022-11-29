@@ -4,7 +4,6 @@ import { router } from "./router";
 import { services as recordsServices } from "./records/services";
 import { services as globalServices } from "./globalServices";
 import { listener } from "./listeners";
-import uniq from "lodash/fp/uniq";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
 
@@ -77,10 +76,17 @@ function clearListeners(listeners) {
   }
 }
 
-function validateServicesIds(ids = []) {
-  const uniqIds = uniq(ids);
-  if (uniqIds.length !== ids.length) {
-    throw Error("services ids must be an array of uniq values");
+function validatServicesSetups(setups) {
+  const ids = setups.map((s) => s.id);
+  const uniqIds = [];
+  for (const id of ids) {
+    if (uniqIds.indexOf(id) === -1) {
+      uniqIds.push(id);
+    } else {
+      throw Error(
+        `You tried to setup the ${id} service twice on the same 'setupServices' config. Please consider using a more generic effect customizer.`
+      );
+    }
   }
   return true;
 }
@@ -116,7 +122,7 @@ export function appSetup({
   }
 
   // Connect app global services setup
-  validateServicesIds(setupServices);
+  validatServicesSetups(setupServices);
   const globalAppServices = addRouteServicesProperties(
     appServices,
     setupServices
@@ -190,7 +196,7 @@ export function appSetup({
       cleanup,
       title,
     } = {}) {
-      validateServicesIds(setupServices);
+      validatServicesSetups(setupServices);
       const routeServices = addRouteServicesProperties(
         appServices,
         setupServices
