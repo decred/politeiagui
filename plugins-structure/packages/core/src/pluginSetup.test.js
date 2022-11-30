@@ -47,14 +47,4 @@ describe("Given pluginSetup method", () => {
       })
     ).toThrowError("`name` is required and must be a string");
   });
-  it("should initialize some service and execute its action", async () => {
-    const customPlugin = pluginSetup(validSetup);
-    await customPlugin.initialize("custom/service1");
-    expect(action).toBeCalledTimes(1);
-  });
-  it("should not execute actions when id does not match a plugin service", async () => {
-    const customPlugin = pluginSetup(validSetup);
-    await customPlugin.initialize("custom/notMatch");
-    expect(action).not.toHaveBeenCalled();
-  });
 });
