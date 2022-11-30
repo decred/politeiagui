@@ -5,15 +5,13 @@
   margin-bottom: 3rem;
 }
 
-.banner > .tabs {
+.banner .tabs {
   align-self: end;
 }
 
-.singlePageBanner {
-  background-color: var(--topbanner-color);
-  min-height: 10rem;
-  padding: 3rem 6rem 0 6rem;
-  margin-bottom: 3rem;
+.banner .subtitle {
+  color: var(--subtitle-color);
+  font-size: var(--font-size-small);
 }
 
 @media (--sm-viewport) {

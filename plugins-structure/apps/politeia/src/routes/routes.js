@@ -1,6 +1,11 @@
 import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
-import { DetailsRoute, HomeRoute, NewProposalRoute } from "../pages";
+import {
+  DetailsRoute,
+  HomeRoute,
+  NewProposalRoute,
+  UserRoutes,
+} from "../pages";
 import { decodeProposalRecord } from "../pi/proposals/utils";
 import { routeCleanup } from "../utils/routeCleanup";
 
@@ -8,6 +13,7 @@ export const routes = [
   HomeRoute,
   NewProposalRoute,
   DetailsRoute,
+  ...UserRoutes,
   { ...DetailsRoute, path: "/record/:token/comment/:commentid" },
   {
     path: "/record/:token/raw",

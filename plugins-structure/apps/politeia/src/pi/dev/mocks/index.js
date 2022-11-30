@@ -5,6 +5,7 @@ import {
   convertVoteMetadataToFile,
 } from "../../proposals/utils";
 import { faker } from "@faker-js/faker";
+import { getRecordStateCode, getRecordStatusCode } from "@politeiagui/core";
 
 function generateMetadataFile({
   name = faker.commerce.productName(),
@@ -23,14 +24,16 @@ function generateMetadataFile({
 }
 
 export function mockProposal({
-  status,
-  state,
+  status = 2,
+  state = 2,
   customToken,
   linkto,
   linkby,
 } = {}) {
   return ({ token, version }) => {
-    const record = mockRecord({ state, status })({
+    const statusCode = getRecordStatusCode(status);
+    const stateCode = getRecordStateCode(state);
+    const record = mockRecord({ state: stateCode, status: statusCode })({
       token: customToken || token,
       version,
     });
@@ -63,9 +66,11 @@ export function mockProposalDetails({
   linkto,
 } = {}) {
   return ({ token, version = customVersion }) => {
+    const statusCode = getRecordStatusCode(status);
+    const stateCode = getRecordStateCode(state);
     const record = mockRecord({
-      state,
-      status,
+      state: stateCode,
+      status: statusCode,
       username,
       timestamp,
       reason,

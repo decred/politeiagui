@@ -1,33 +1,16 @@
 import { records } from "@politeiagui/core/records";
-import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
-import { commentsCount } from "@politeiagui/comments/count";
 import { ticketvoteInventory } from "@politeiagui/ticketvote/inventory";
-import { getStatusFromMultipleSlices } from "../../utils/getStatusFromMultipleSlices";
-import isEmpty from "lodash/isEmpty";
-import { piSummaries } from "../../pi";
+import { selectIsVoteInventoryListEmpty } from "../../pi/proposalsList/selectors";
 
-export function selectHomeStatus(state) {
-  const countCommentsStatus = commentsCount.selectStatus(state);
-  const summariesStatus = ticketvoteSummaries.selectStatus(state);
-  const recordsStatus = records.selectStatus(state);
-  const piSummariesStatus = piSummaries.selectStatus(state);
-
-  const statuses = [];
-
-  if (countCommentsStatus) statuses.push(countCommentsStatus);
-  if (summariesStatus) statuses.push(summariesStatus);
-  if (recordsStatus) statuses.push(recordsStatus);
-  if (piSummariesStatus) statuses.push(piSummariesStatus);
-
-  return getStatusFromMultipleSlices(statuses);
+export function selectIsMultiVoteInventoryListEmpty(state, statuses) {
+  return statuses.every((status) =>
+    selectIsVoteInventoryListEmpty(state, status)
+  );
 }
 
-export function selectIsStatusListEmpty(state, status) {
-  const tokens = ticketvoteInventory.selectByStatus(state, status);
-  const fetchStatus = ticketvoteInventory.selectStatus(state, { status });
-  return isEmpty(tokens) && fetchStatus === "succeeded/isDone";
-}
-
-export function selectIsMultiStatusListEmpty(state, statuses) {
-  return statuses.every((status) => selectIsStatusListEmpty(state, status));
+export function selectHomeError(state) {
+  const inv = ticketvoteInventory.selectError(state);
+  const recs = records.selectError(state);
+  const error = [inv, recs].find((e) => !!e);
+  return error;
 }

@@ -2,11 +2,28 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Column as Col, H1, Tab, Tabs } from "pi-ui";
 import styles from "./styles.module.css";
+import isString from "lodash/isString";
 
-export function TabsBanner({ tabs, title, onSelectTab, activeTab }) {
+const Subtitle = ({ subtitle }) => {
+  if (!subtitle) return null;
+  return isString(subtitle) ? (
+    <span className={styles.subtitle}>{subtitle}</span>
+  ) : (
+    subtitle
+  );
+};
+const Title = ({ title }) => {
+  if (!title) return null;
+  return isString(title) ? <H1>{title}</H1> : title;
+};
+
+export function TabsBanner({ tabs, title, subtitle, onSelectTab, activeTab }) {
   return (
     <>
-      <Col xs={12}>{typeof title === "string" ? <H1>{title}</H1> : title}</Col>
+      <Col xs={12}>
+        <Title title={title} />
+        <Subtitle subtitle={subtitle} />
+      </Col>
       <Col xs={12} className={styles.tabs}>
         <Tabs activeTabIndex={activeTab} onSelectTab={onSelectTab}>
           {tabs.map((tab, i) => (
@@ -20,7 +37,6 @@ export function TabsBanner({ tabs, title, onSelectTab, activeTab }) {
 
 TabsBanner.defaultProps = {
   tabs: [],
-  title: "Title",
   onSelectTab: () => {},
   activeTab: 0,
 };
@@ -28,6 +44,7 @@ TabsBanner.defaultProps = {
 TabsBanner.propTypes = {
   tabs: PropTypes.arrayOf(PropTypes.node),
   title: PropTypes.node,
+  subtitle: PropTypes.node,
   onSelectTab: PropTypes.func,
   activeTab: PropTypes.number,
 };

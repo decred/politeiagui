@@ -12,7 +12,7 @@ const MediumBlock = () => (
 
 function ProposalLoader({ isDetails }) {
   return (
-    <div className={styles.loaderWrapper}>
+    <div className={styles.loaderWrapper} data-testid="proposal-loader">
       <RecordCard
         title={<Block />}
         rightHeader={<Block />}

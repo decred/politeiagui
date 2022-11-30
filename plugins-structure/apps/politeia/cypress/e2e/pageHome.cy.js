@@ -11,10 +11,6 @@ import {
   mockProposal,
 } from "../../src/pi/dev/mocks";
 
-Cypress.Commands.add("assertProposalsListLength", (length) =>
-  cy.findAllByTestId("proposal-card").should("have.length", length)
-);
-
 Cypress.Commands.add("mockInventory", (amount, matcherParams = {}) =>
   cy.mockResponse(
     { url: "/api/ticketvote/v1/inventory", ...matcherParams },
@@ -70,7 +66,7 @@ describe("Given Home page presentation", () => {
     it("should render 'empty proposals' message", () => {
       cy.mockInventory(0);
       cy.visit("/");
-      cy.findByTestId("home-empty-list").should("exist");
+      cy.findByTestId("proposals-list-empty").should("exist");
     });
   });
   describe("when switching tabs", () => {
@@ -471,7 +467,7 @@ describe("when Home page fails", () => {
     cy.visit("/");
     cy.wait("@failedRecords");
 
-    cy.findByTestId("status-list-error")
+    cy.findByTestId("proposals-list-error")
       .should("be.visible")
       .should("include.text", "1658261424");
 

@@ -279,6 +279,9 @@ describe("Given some download in progress", () => {
     cy.mockResponse("/api/comments/v1/comments", mockComments({ amount })).as(
       "comments"
     );
+    cy.mockResponse("/api/comments/v1/timestamps", mockCommentsTimestamps(), {
+      delay: 1000,
+    }).as("commentsTimestamps");
     cy.mockResponse("/api/comments/v1/count", mockCommentsCount()).as("counts");
     // Visit proposal details page
     cy.visit(`/record/${newToken.substring(0, 7)}`);
@@ -326,8 +329,8 @@ describe("Given some download in progress", () => {
 
 describe("Given some failed download", () => {
   const failedToken = recordToken();
-  const amount = 30;
-  const timestampspagesize = 10;
+  const amount = 20;
+  const timestampspagesize = 5;
   const errorFn = () => ({
     errorcode: 123123123,
   });
@@ -359,11 +362,8 @@ describe("Given some failed download", () => {
     // Comments timestamps error
     cy.mockResponse("/api/comments/v1/timestamps", errorFn, {
       statusCode: 500,
+      delay: 300,
     }).as("commentsTimestamps");
-    cy.mockResponse(
-      { url: "/api/comments/v1/timestamps", times: 2 },
-      mockCommentsTimestamps()
-    ).as("commentsTimestamps");
     // Records timestamps error
     cy.mockResponse("/api/records/v1/timestamps", errorFn, {
       statusCode: 500,

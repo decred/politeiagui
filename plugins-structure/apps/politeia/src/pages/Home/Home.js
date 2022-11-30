@@ -2,10 +2,7 @@ import React from "react";
 import { MultiContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
 import { About } from "../../components";
-import UnderReview from "./UnderReview/UnderReview";
-import Approved from "./Approved/Approved";
-import Rejected from "./Rejected/Rejected";
-import Abandoned from "./Abandoned/Abandoned";
+import HomeProposals from "./HomeProposals";
 
 const TAB_LABELS = {
   underReview: "Under Review",
@@ -22,23 +19,22 @@ const tabs = TAB_VALUES.map((tab) => (
   </a>
 ));
 
-/**
- * Returns the appropriate component to render according to the search param.
- * Defaults to <UnderReview />
- */
-function renderChild({ tab, ...props }) {
-  const mapTabComponent = {
-    [TAB_LABELS.underReview]: <UnderReview {...props} />,
-    [TAB_LABELS.approved]: <Approved {...props} />,
-    [TAB_LABELS.rejected]: <Rejected {...props} />,
-    [TAB_LABELS.abandoned]: <Abandoned {...props} />,
+function getListPropsByTab(tab) {
+  const mapTabStatuses = {
+    [TAB_LABELS.underReview]: ["started", "authorized", "unauthorized"],
+    [TAB_LABELS.approved]: ["approved"],
+    [TAB_LABELS.rejected]: ["rejected"],
+    [TAB_LABELS.abandoned]: ["ineligible"],
   };
-  return mapTabComponent[tab] || <UnderReview {...props} />;
+  const statuses =
+    mapTabStatuses[tab] || mapTabStatuses[TAB_LABELS.underReview];
+  const listName = mapTabStatuses[tab] ? tab.toLowerCase() : "under review";
+  return { statuses, listName };
 }
 
 function Home() {
   const { tab } = getURLSearchParams();
-
+  const { statuses, listName } = getListPropsByTab(tab);
   return (
     <MultiContentPage
       banner={
@@ -50,7 +46,7 @@ function Home() {
       }
       sidebar={<About />}
     >
-      {renderChild({ tab })}
+      <HomeProposals statuses={statuses} listName={listName} />
     </MultiContentPage>
   );
 }
