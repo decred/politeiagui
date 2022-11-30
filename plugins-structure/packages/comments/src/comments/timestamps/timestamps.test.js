@@ -1,10 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import * as api from "../../lib/api";
 import reducer, {
+  fetchAllCommentsTimestamps,
   fetchCommentsTimestamps,
   initialState,
 } from "./timestampsSlice";
 import policyReducer from "../policy/policySlice";
+
+const timestampspagesize = 10;
 
 describe("Given the timestampsSlice", () => {
   let store;
@@ -20,7 +23,7 @@ describe("Given the timestampsSlice", () => {
       reducer: { commentsTimestamps: reducer, commentsPolicy: policyReducer },
       preloadedState: {
         commentsPolicy: {
-          policy: { timestampspagesize: 10 },
+          policy: { timestampspagesize },
         },
       },
     });
@@ -41,7 +44,6 @@ describe("Given the timestampsSlice", () => {
       await store.dispatch(fetchCommentsTimestamps(invalidParams));
       expect(fetchTimestampsSpy).not.toBeCalled();
       const state = store.getState();
-      expect(state.commentsTimestamps.byToken).toEqual({});
       expect(state.commentsTimestamps.status).toEqual("idle");
     });
   });
@@ -51,7 +53,6 @@ describe("Given the timestampsSlice", () => {
 
       expect(fetchTimestampsSpy).toBeCalled();
       const state = store.getState();
-      expect(state.commentsTimestamps.byToken).toEqual({});
       expect(state.commentsTimestamps.status).toEqual("loading");
     });
   });
@@ -64,27 +65,6 @@ describe("Given the timestampsSlice", () => {
 
       expect(fetchTimestampsSpy).toBeCalled();
       const state = store.getState();
-      expect(state.commentsTimestamps.byToken).toEqual({
-        fakeToken: {},
-      });
-      expect(state.commentsTimestamps.status).toEqual("succeeded");
-    });
-  });
-  describe("when fetchCommentsTimestamps succeeds with an incomplete page", () => {
-    it("should update byToken and status", async () => {
-      const incompletePage = Array(100)
-        .fill("")
-        .reduce((acc, _, i) => ({ ...acc, [i]: {} }), {});
-      const resValue = { comments: incompletePage };
-      fetchTimestampsSpy.mockResolvedValueOnce(resValue);
-
-      await store.dispatch(fetchCommentsTimestamps(params));
-
-      expect(fetchTimestampsSpy).toBeCalled();
-      const state = store.getState();
-      expect(state.commentsTimestamps.byToken).toEqual({
-        fakeToken: incompletePage,
-      });
       expect(state.commentsTimestamps.status).toEqual("succeeded");
     });
   });
@@ -96,6 +76,42 @@ describe("Given the timestampsSlice", () => {
       await store.dispatch(fetchCommentsTimestamps(params));
 
       expect(fetchTimestampsSpy).toBeCalled();
+      const state = store.getState();
+      expect(state.commentsTimestamps.status).toEqual("failed");
+      expect(state.commentsTimestamps.error).toEqual("ERROR");
+    });
+  });
+  describe("when fetchAllCommentsTimestamps is called with N commentids", () => {
+    it("should call fetchCommentsTimestamps N/timestampspagesize times", async () => {
+      const resValue = { comments: {} };
+      const count = 200;
+      const commentids = Array(count)
+        .fill("")
+        .map((_, i) => i);
+      fetchTimestampsSpy.mockResolvedValue(resValue);
+      await store.dispatch(
+        fetchAllCommentsTimestamps({ ...params, commentids })
+      );
+
+      expect(fetchTimestampsSpy).toBeCalledTimes(count / timestampspagesize);
+      const state = store.getState();
+      expect(state.commentsTimestamps.status).toEqual("succeeded");
+    });
+  });
+  describe("when fetchAllCommentsTimestamps fails with N commentids", () => {
+    it("should call N/timestampspagesize times", async () => {
+      const error = new Error("ERROR");
+      const count = 200;
+      const commentids = Array(count)
+        .fill("")
+        .map((_, i) => i);
+      fetchTimestampsSpy.mockRejectedValue(error);
+
+      await store.dispatch(
+        fetchAllCommentsTimestamps({ ...params, commentids })
+      );
+
+      expect(fetchTimestampsSpy).toBeCalledTimes(count / timestampspagesize);
       const state = store.getState();
       expect(state.commentsTimestamps.status).toEqual("failed");
       expect(state.commentsTimestamps.error).toEqual("ERROR");

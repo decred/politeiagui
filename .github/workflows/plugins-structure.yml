@@ -1,0 +1,45 @@
+name: Build and Test Plugins-structure App
+on:
+  push:
+    paths:
+      - plugins-structure/**
+  pull_request:
+    paths:
+      - plugins-structure/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./plugins-structure
+    strategy:
+      matrix:
+        node-version: [18.x, 19.x]
+
+    steps:
+      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 #v3.1.0
+      - name: Use nodejs ${{ matrix.node-version }}
+        uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516 #v3.5.1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: xvfb run
+        run: |
+          export DISPLAY=:99.0
+          Xvfb :99.0 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+        working-directory: ./plugins-structure
+      - name: yarn install
+        run: yarn install --network-concurrency 1
+        working-directory: ./plugins-structure
+      - name: linter checks
+        run: yarn lint:test
+        working-directory: ./plugins-structure
+      - name: pretty check
+        run: yarn prettify:check
+        working-directory: ./plugins-structure
+      - name: tests
+        run: yarn test
+        working-directory: ./plugins-structure
+        env:
+          CI: true
