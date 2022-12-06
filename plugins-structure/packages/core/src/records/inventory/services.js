@@ -3,6 +3,7 @@ import { fetchRecordsInventoryEffect } from "./effects";
 
 import { createSliceServices } from "../../toolkit";
 
+// TODO: remove this
 export const services = [
   {
     id: "records/inventory",
@@ -13,7 +14,7 @@ export const services = [
   },
 ];
 
-export const sliceServices = createSliceServices({
+export const { pluginServices, serviceSetups } = createSliceServices({
   name: "recordsInventory",
   services: {
     fetch: {

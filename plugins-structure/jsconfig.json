@@ -23,8 +23,8 @@
       "@politeiagui/core/records": [
         "./packages/core/src/records/records/index.js"
       ],
-      "@politeiagui/core/records/effects": [
-        "./packages/core/src/records/effects/index.js"
+      "@politeiagui/core/records/services": [
+        "./packages/core/src/records/records/services.js"
       ],
       "@politeiagui/core/records/utils": [
         "./packages/core/src/records/utils.js"
@@ -37,6 +37,9 @@
       ],
       "@politeiagui/core/records/inventory": [
         "./packages/core/src/records/inventory/index.js"
+      ],
+      "@politeiagui/core/records/inventory/services": [
+        "./packages/core/src/records/inventory/services.js"
       ],
       "@politeiagui/core/records/timestamps": [
         "./packages/core/src/records/timestamps/index.js"
