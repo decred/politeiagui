@@ -12,7 +12,7 @@ export const services = [
   },
 ];
 
-export const sliceServices = createSliceServices({
+export const { pluginServices, serviceSetups } = createSliceServices({
   name: "ticketvoteInventory",
   services: {
     fetch: {
