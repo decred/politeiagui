@@ -19,8 +19,8 @@ export const sliceServices = createSliceServices({
     fetch: {
       onSetup: async () => {
         await fetchPolicyIfIdle();
-        validateInventoryPageSize(store.getState());
       },
+      effect: fetchRecordsInventoryEffect,
     },
   },
 });
