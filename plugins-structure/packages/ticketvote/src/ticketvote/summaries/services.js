@@ -13,6 +13,7 @@ async function onSetup() {
   validateTicketvoteSummariesPageSize(store.getState());
 }
 
+// TODO: remove this
 export const services = [
   {
     id: "ticketvote/summaries/batch",
