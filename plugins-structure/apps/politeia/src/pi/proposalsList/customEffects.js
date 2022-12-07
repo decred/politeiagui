@@ -25,6 +25,19 @@ export async function onVoteInventoryFetch(
   });
 }
 
+export async function onRecordsInventoryFetch(
+  effect,
+  action,
+  { getState, dispatch }
+) {
+  const state = getState();
+  const inventoryList = getRecordsInventoryList(action.payload, state);
+  await effect(state, dispatch, {
+    inventoryList,
+    filenames: proposalFilenames,
+  });
+}
+
 export async function onRfpSubmissionFetch(
   effect,
   { payload },
