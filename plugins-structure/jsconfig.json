@@ -116,8 +116,14 @@
       "@politeiagui/comments/comments": [
         "./packages/comments/src/comments/comments/index.js"
       ],
+      "@politeiagui/comments/comments/services": [
+        "./packages/comments/src/comments/comments/services.js"
+      ],
       "@politeiagui/comments/count": [
         "./packages/comments/src/comments/count/index.js"
+      ],
+      "@politeiagui/comments/count/services": [
+        "./packages/comments/src/comments/count/services.js"
       ],
       "@politeiagui/comments/policy": [
         "./packages/comments/src/comments/policy/index.js"
@@ -127,6 +133,9 @@
       ],
       "@politeiagui/comments/timestamps": [
         "./packages/comments/src/comments/timestamps/index.js"
+      ],
+      "@politeiagui/comments/timestamps/services": [
+        "./packages/comments/src/comments/timestamps/services.js"
       ],
       "@politeiagui/comments/votes": [
         "./packages/comments/src/comments/votes/index.js"
