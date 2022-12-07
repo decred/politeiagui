@@ -79,7 +79,8 @@ function setSliceId(sliceName, id) {
  * @type {CurriedListenerEffect}
  */
 function defaultInjectEffect(effect, action, { getState, dispatch }) {
-  effect(getState(), dispatch, action);
+  const { payload, ...rest } = action;
+  effect(getState(), dispatch, payload, rest);
 }
 
 /**
