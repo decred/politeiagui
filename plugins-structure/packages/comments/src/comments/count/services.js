@@ -32,6 +32,6 @@ export const { pluginServices, serviceSetups } = createSliceServices({
   name: "commentsCount",
   services: {
     fetch: { onSetup, effect: fetchNextCommentsCount },
-    fetchAll: { onSetup, effect: fetchAllCommentsCounts },
+    all: { onSetup, effect: fetchAllCommentsCounts },
   },
 });
