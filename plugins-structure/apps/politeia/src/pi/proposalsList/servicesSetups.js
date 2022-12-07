@@ -1,16 +1,18 @@
 import {
-  billingStatusChangesListener,
   commentsCountListener,
   proposalsBillingListener,
   proposalsSummariesBatchListener,
   recordsBatchListener,
   recordsInventoryFetchListener,
-  recordsStatusChangesListener,
   rfpSubmissionsFetchListener,
   voteInventoryFetchListener,
-  voteStatusChangesListener,
   voteSummariesBatchListener,
 } from "./servicesListeners";
+import {
+  billingStatusChangesListener,
+  recordsStatusChangesListener,
+  voteStatusChangesListener,
+} from "../proposals/servicesListeners";
 import {
   onRecordsInventoryFetch,
   onRfpSubmissionFetch,
