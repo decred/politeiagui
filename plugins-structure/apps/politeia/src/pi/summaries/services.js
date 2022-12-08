@@ -13,33 +13,6 @@ async function onSetup() {
   validatePiSummariesPageSize(store.getState());
 }
 
-export const services = [
-  {
-    id: "pi/summaries/single",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validatePiSummariesPageSize(store.getState());
-    },
-    effect: fetchSingleRecordPiSummaries,
-  },
-  {
-    id: "pi/summaries/batch",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validatePiSummariesPageSize(store.getState());
-    },
-    effect: fetchRecordsPiSummaries,
-  },
-  {
-    id: "pi/summaries/all",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validatePiSummariesPageSize(store.getState());
-    },
-    effect: fetchAllRecordsPiSummaries,
-  },
-];
-
 export const { pluginServices, serviceSetups } = createSliceServices({
   name: "piSummaries",
   services: {
