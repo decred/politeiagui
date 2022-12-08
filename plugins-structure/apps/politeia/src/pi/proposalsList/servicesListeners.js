@@ -9,47 +9,47 @@ import {
 // Plugins Actions
 import { records } from "@politeiagui/core/records";
 // Using Toolkit
-import { serviceListeners as voteSummariesSetups } from "@politeiagui/ticketvote/summaries/services";
-import { serviceListeners as voteInventorySetups } from "@politeiagui/ticketvote/inventory/services";
-import { serviceListeners as recordsSetups } from "@politeiagui/core/records/services";
-import { serviceListeners as recordsInventorySetups } from "@politeiagui/core/records/inventory/services";
-import { serviceListeners as countsSetups } from "@politeiagui/comments/count/services";
-import { serviceListeners as proposalsSummariesSetups } from "../summaries/services";
-import { serviceListeners as proposalsBillingSetups } from "../billing/services";
+import { serviceListeners as voteSummariesListeners } from "@politeiagui/ticketvote/summaries/services";
+import { serviceListeners as voteInventoryListeners } from "@politeiagui/ticketvote/inventory/services";
+import { serviceListeners as recordsListeners } from "@politeiagui/core/records/services";
+import { serviceListeners as recordsInventoryListeners } from "@politeiagui/core/records/inventory/services";
+import { serviceListeners as countsListeners } from "@politeiagui/comments/count/services";
+import { serviceListeners as proposalsSummariesListeners } from "../summaries/services";
+import { serviceListeners as proposalsBillingListeners } from "../billing/services";
 
 // Listeners to be customized
-export const recordsBatchListener = recordsSetups.batch.listenTo({
+export const recordsBatchListener = recordsListeners.batch.listenTo({
   actionCreator: fetchNextBatchRecords,
 });
 
-export const voteSummariesBatchListener = voteSummariesSetups.batch.listenTo({
-  actionCreator: fetchNextBatchSummaries,
-});
+export const voteSummariesBatchListener = voteSummariesListeners.batch.listenTo(
+  { actionCreator: fetchNextBatchSummaries }
+);
 
 export const proposalsSummariesBatchListener =
-  proposalsSummariesSetups.batch.listenTo({
+  proposalsSummariesListeners.batch.listenTo({
     actionCreator: fetchNextBatchSummaries,
   });
 
 export const proposalsBillingListener =
-  proposalsBillingSetups.statusChanges.listenTo({
+  proposalsBillingListeners.statusChanges.listenTo({
     actionCreator: fetchNextBatchBillingStatuses,
   });
 
-export const commentsCountListener = countsSetups.fetch.listenTo({
+export const commentsCountListener = countsListeners.fetch.listenTo({
   actionCreator: fetchNextBatchCount,
 });
 
 // Inventory fetch listeners
 export const recordsInventoryFetchListener =
-  recordsInventorySetups.fetch.listenTo({
+  recordsInventoryListeners.fetch.listenTo({
     actionCreator: fetchInventory,
   });
 
-export const voteInventoryFetchListener = voteInventorySetups.fetch.listenTo({
-  actionCreator: fetchInventory,
-});
+export const voteInventoryFetchListener = voteInventoryListeners.fetch.listenTo(
+  { actionCreator: fetchInventory }
+);
 
-export const rfpSubmissionsFetchListener = recordsSetups.batchAll.listenTo({
+export const rfpSubmissionsFetchListener = recordsListeners.batchAll.listenTo({
   actionCreator: records.fetch.fulfilled,
 });

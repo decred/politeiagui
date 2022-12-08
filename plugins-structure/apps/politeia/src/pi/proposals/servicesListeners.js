@@ -1,22 +1,22 @@
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { piBilling } from "../billing";
-import { serviceListeners as proposalsSetups } from "./services";
+import { serviceListeners as proposalsListeners } from "./services";
 
 import { isAnyOf } from "@reduxjs/toolkit";
 
 // Proposals Listeners
 export const voteStatusChangesListener =
-  proposalsSetups.voteStatusChanges.listenTo({
+  proposalsListeners.voteStatusChanges.listenTo({
     actionCreator: ticketvoteSummaries.fetch.fulfilled,
   });
 
 export const recordsStatusChangesListener =
-  proposalsSetups.recordStatusChanges.listenTo({
+  proposalsListeners.recordStatusChanges.listenTo({
     matcher: isAnyOf(records.fetch.fulfilled, records.fetchDetails.fulfilled),
   });
 
 export const billingStatusChangesListener =
-  proposalsSetups.billingStatusChanges.listenTo({
+  proposalsListeners.billingStatusChanges.listenTo({
     actionCreator: piBilling.fetch.fulfilled,
   });

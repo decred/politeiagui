@@ -4,7 +4,7 @@ import { endProgress, initProgress, updateProgress } from "./progress";
 
 export const {
   pluginServices: messageServices,
-  serviceListeners: messageSetups,
+  serviceListeners: messageListeners,
 } = createSliceServices({
   name: "globalMessage",
   services: {
@@ -23,7 +23,7 @@ export const {
 
 export const {
   pluginServices: progressServices,
-  serviceListeners: progressSetups,
+  serviceListeners: progressListeners,
 } = createSliceServices({
   name: "globalProgress",
   services: {

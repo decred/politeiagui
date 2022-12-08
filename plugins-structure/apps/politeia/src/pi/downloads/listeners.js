@@ -7,8 +7,8 @@ import { ticketvoteDetails } from "@politeiagui/ticketvote/details";
 import { ticketvoteResults } from "@politeiagui/ticketvote/results";
 
 import {
-  messageSetups,
-  progressSetups,
+  messageListeners,
+  progressListeners,
 } from "@politeiagui/core/globalServices";
 
 async function onUpdateProgress(effect, { meta }, { getState, dispatch }) {
@@ -48,17 +48,17 @@ const isDownloadFailed = isAnyOf(
   ticketvoteResults.fetch.rejected
 );
 
-export const downloadServicesSetups = [
-  progressSetups.init
+export const downloadServicesListeners = [
+  progressListeners.init
     .listenTo({ matcher: isDownloadPending })
     .customizeEffect(onUpdateProgress),
-  progressSetups.end
+  progressListeners.end
     .listenTo({ matcher: isDownloadFinished })
     .customizeEffect(onUpdateProgress),
-  progressSetups.update
+  progressListeners.update
     .listenTo({ matcher: isDownloadBatchFinished })
     .customizeEffect(onUpdateProgress),
-  messageSetups.set
+  messageListeners.set
     .listenTo({ matcher: isDownloadFailed })
     .customizeEffect(onDownloadError),
 ];

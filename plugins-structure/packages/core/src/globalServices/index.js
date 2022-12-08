@@ -13,7 +13,7 @@ import {
 } from "./navigation";
 import { messageServices, progressServices } from "./services";
 
-export { messageSetups, progressSetups } from "./services";
+export { messageListeners, progressListeners } from "./services";
 
 export const message = {
   clear: clearMessage,
