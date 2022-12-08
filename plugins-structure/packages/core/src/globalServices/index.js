@@ -1,13 +1,13 @@
 import {
   endProgress,
   initProgress,
-  services as progressServices,
+  pluginServices as progressServices,
   selectProgress,
   updateProgress,
 } from "./progress";
 import {
   clearMessage,
-  services as messageServices,
+  pluginServices as messageServices,
   selectMessage,
   setMessage,
 } from "./message";
@@ -17,6 +17,9 @@ import {
   selectNavigationHistory,
   selectNavigationHistoryLastItem,
 } from "./navigation";
+
+export { serviceSetups as messageSetups } from "./message";
+export { serviceSetups as progressSetups } from "./progress";
 
 export const message = {
   clear: clearMessage,

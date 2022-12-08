@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createSliceServices } from "../toolkit";
 
 const initialState = {
   title: null,
@@ -24,19 +25,20 @@ export const { setMessage, clearMessage } = messageSlice.actions;
 
 export const selectMessage = (state) => state.globalMessage;
 
-export const services = [
-  {
-    id: "global/message/set",
-    effect: (_, dispatch, { title, body } = {}) => {
-      dispatch(setMessage({ title, body }));
+export const { pluginServices, serviceSetups } = createSliceServices({
+  name: "globalMessage",
+  services: {
+    set: {
+      effect: (_, dispatch, { title, body } = {}) => {
+        dispatch(setMessage({ title, body }));
+      },
+    },
+    clear: {
+      effect: (_, dispatch) => {
+        dispatch(clearMessage());
+      },
     },
   },
-  {
-    id: "global/message/clear",
-    effect: (_, dispatch) => {
-      dispatch(clearMessage());
-    },
-  },
-];
+});
 
 export default messageSlice.reducer;
