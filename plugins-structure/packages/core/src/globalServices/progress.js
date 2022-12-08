@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createSliceServices } from "../toolkit";
 
 const initialState = {
   value: 0,
@@ -31,28 +30,5 @@ export const selectProgress = (state) => {
   if (!total || isNaN(total) || !value) return 0;
   return (value / total).toFixed(2);
 };
-
-export const { pluginServices, serviceSetups } = createSliceServices({
-  name: "globalProgress",
-  services: {
-    init: {
-      effect: (_, dispatch, payload) => {
-        if (!isNaN(payload)) {
-          dispatch(initProgress(payload));
-        }
-      },
-    },
-    update: {
-      effect: (_, dispatch) => {
-        dispatch(updateProgress());
-      },
-    },
-    end: {
-      effect: (_, dispatch) => {
-        dispatch(endProgress());
-      },
-    },
-  },
-});
 
 export default progressSlice.reducer;
