@@ -9,25 +9,6 @@ async function onSetup() {
   validateCommentsCountsPageSize(store.getState());
 }
 
-export const services = [
-  {
-    id: "comments/count",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validateCommentsCountsPageSize(store.getState());
-    },
-    effect: fetchNextCommentsCount,
-  },
-  {
-    id: "comments/count/all",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validateCommentsCountsPageSize(store.getState());
-    },
-    effect: fetchAllCommentsCounts,
-  },
-];
-
 export const { pluginServices, serviceSetups } = createSliceServices({
   name: "commentsCount",
   services: {
