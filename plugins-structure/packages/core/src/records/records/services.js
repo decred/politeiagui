@@ -9,30 +9,6 @@ import {
 
 import { createSliceServices } from "../../toolkit";
 
-// TODO: remove this and use slice services.
-export const services = [
-  {
-    id: "records/batch",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validateRecordsPageSize(store.getState());
-    },
-    effect: fetchNextRecords,
-  },
-  {
-    id: "records/batch/all",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validateRecordsPageSize(store.getState());
-    },
-    effect: fetchAllRecordsInventory,
-  },
-  {
-    id: "records/details",
-    effect: fetchRecordDetails,
-  },
-];
-
 export const { pluginServices, serviceSetups } = createSliceServices({
   name: "records",
   services: {
