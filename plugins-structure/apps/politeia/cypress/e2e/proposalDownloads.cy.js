@@ -280,7 +280,7 @@ describe("Given some download in progress", () => {
       "comments"
     );
     cy.mockResponse("/api/comments/v1/timestamps", mockCommentsTimestamps(), {
-      delay: 1000,
+      delay: 2000,
     }).as("commentsTimestamps");
     cy.mockResponse("/api/comments/v1/count", mockCommentsCount()).as("counts");
     // Visit proposal details page
