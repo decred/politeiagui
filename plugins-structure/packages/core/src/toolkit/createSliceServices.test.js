@@ -9,7 +9,7 @@ const validServices = {
 
 describe("Given createSliceService tool", () => {
   it("should create slices services correctly", () => {
-    const { pluginServices, serviceSetups } = createSliceServices({
+    const { pluginServices, serviceListeners } = createSliceServices({
       name: "test",
       services: validServices,
     });
@@ -17,33 +17,33 @@ describe("Given createSliceService tool", () => {
     expect(pluginServices).toHaveLength(1);
     expect(pluginServices[0]).toHaveProperty("id", "test/foo");
     // Services Setups
-    expect(serviceSetups).toHaveProperty("foo");
-    expect(serviceSetups.foo).toHaveProperty("id", "test/foo");
-    expect(serviceSetups.foo).toHaveProperty("listenTo");
+    expect(serviceListeners).toHaveProperty("foo");
+    expect(serviceListeners.foo).toHaveProperty("id", "test/foo");
+    expect(serviceListeners.foo).toHaveProperty("listenTo");
   });
   it("should be able to setup listeners and effects", () => {
-    const { serviceSetups } = createSliceServices({
+    const { serviceListeners } = createSliceServices({
       name: "test",
       services: validServices,
     });
     // Listeners
-    expect(serviceSetups.foo.listenTo({ type: "action/foo" })).toHaveProperty(
-      "listenerCreator"
-    );
-    expect(serviceSetups.foo.listenTo({ type: "action/foo" })).toHaveProperty(
-      "id"
-    );
-    expect(serviceSetups.foo.listenTo({ type: "action/foo" })).toHaveProperty(
-      "customizeEffect"
-    );
+    expect(
+      serviceListeners.foo.listenTo({ type: "action/foo" })
+    ).toHaveProperty("listenerCreator");
+    expect(
+      serviceListeners.foo.listenTo({ type: "action/foo" })
+    ).toHaveProperty("id");
+    expect(
+      serviceListeners.foo.listenTo({ type: "action/foo" })
+    ).toHaveProperty("customizeEffect");
     // Customize effect
     expect(
-      serviceSetups.foo
+      serviceListeners.foo
         .listenTo({ type: "action/foo" })
         .customizeEffect(() => {})
     ).toHaveProperty("listenerCreator");
     expect(
-      serviceSetups.foo
+      serviceListeners.foo
         .listenTo({ type: "action/foo" })
         .customizeEffect(() => {})
     ).toHaveProperty("id");

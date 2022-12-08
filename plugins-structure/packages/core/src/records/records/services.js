@@ -9,7 +9,7 @@ import {
 
 import { createSliceServices } from "../../toolkit";
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "records",
   services: {
     batch: {

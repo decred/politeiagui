@@ -3,13 +3,13 @@ import { records } from "@politeiagui/core/records";
 import { ticketvoteSubmissions } from "@politeiagui/ticketvote/submissions";
 import { piSummaries } from "../../pi/summaries";
 // Services Setups
-import { serviceSetups as recordsSetups } from "@politeiagui/core/records/services";
-import { serviceSetups as voteSummariesSetups } from "@politeiagui/ticketvote/summaries/services";
-import { serviceSetups as voteSubmissionsSetups } from "@politeiagui/ticketvote/submissions/services";
-import { serviceSetups as commentsSetups } from "@politeiagui/comments/comments/services";
-import { serviceSetups as commentsCountSetups } from "@politeiagui/comments/count/services";
-import { serviceSetups as proposalSummariesSetups } from "../../pi/summaries/services";
-import { serviceSetups as billingSetups } from "../../pi/billing/services";
+import { serviceListeners as recordsSetups } from "@politeiagui/core/records/services";
+import { serviceListeners as voteSummariesSetups } from "@politeiagui/ticketvote/summaries/services";
+import { serviceListeners as voteSubmissionsSetups } from "@politeiagui/ticketvote/submissions/services";
+import { serviceListeners as commentsSetups } from "@politeiagui/comments/comments/services";
+import { serviceListeners as commentsCountSetups } from "@politeiagui/comments/count/services";
+import { serviceListeners as proposalSummariesSetups } from "../../pi/summaries/services";
+import { serviceListeners as billingSetups } from "../../pi/billing/services";
 // Custom effects
 import {
   onCompletedOrClosedProposalFetch,

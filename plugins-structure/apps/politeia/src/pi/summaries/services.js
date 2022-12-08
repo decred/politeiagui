@@ -13,7 +13,7 @@ async function onSetup() {
   validatePiSummariesPageSize(store.getState());
 }
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "piSummaries",
   services: {
     all: { onSetup, effect: fetchAllRecordsPiSummaries },

@@ -2,26 +2,28 @@ import { createSliceServices } from "../toolkit";
 import { clearMessage, setMessage } from "./message";
 import { endProgress, initProgress, updateProgress } from "./progress";
 
-export const { pluginServices: messageServices, serviceSetups: messageSetups } =
-  createSliceServices({
-    name: "globalMessage",
-    services: {
-      set: {
-        effect: (_, dispatch, { title, body } = {}) => {
-          dispatch(setMessage({ title, body }));
-        },
-      },
-      clear: {
-        effect: (_, dispatch) => {
-          dispatch(clearMessage());
-        },
+export const {
+  pluginServices: messageServices,
+  serviceListeners: messageSetups,
+} = createSliceServices({
+  name: "globalMessage",
+  services: {
+    set: {
+      effect: (_, dispatch, { title, body } = {}) => {
+        dispatch(setMessage({ title, body }));
       },
     },
-  });
+    clear: {
+      effect: (_, dispatch) => {
+        dispatch(clearMessage());
+      },
+    },
+  },
+});
 
 export const {
   pluginServices: progressServices,
-  serviceSetups: progressSetups,
+  serviceListeners: progressSetups,
 } = createSliceServices({
   name: "globalProgress",
   services: {

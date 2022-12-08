@@ -2,7 +2,7 @@ import { fetchPolicyIfIdle } from "../utils";
 import { fetchTicketvoteRecordsInventory } from "./effects";
 import { createSliceServices } from "@politeiagui/core/toolkit";
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "ticketvoteInventory",
   services: {
     fetch: {

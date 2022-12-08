@@ -4,7 +4,7 @@ import { store } from "@politeiagui/core";
 import { fetchRecordComments } from "./effects";
 import { createSliceServices } from "@politeiagui/core/toolkit";
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "comments",
   services: {
     fetch: {

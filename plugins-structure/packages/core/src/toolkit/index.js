@@ -1,1 +1,1 @@
-export * from "./createSliceServices";
+export { createSliceServices } from "./createSliceServices";

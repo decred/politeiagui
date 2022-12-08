@@ -13,7 +13,7 @@ async function onSetup() {
   validateTicketvoteSummariesPageSize(store.getState());
 }
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "ticketvoteSummaries",
   services: {
     batch: { onSetup, effect: fetchNextTicketvoteSummaries },

@@ -13,7 +13,7 @@ export const services = [
   },
 ];
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "commentsTimestamps",
   services: {
     fetch: {

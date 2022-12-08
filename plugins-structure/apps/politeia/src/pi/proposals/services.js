@@ -5,7 +5,7 @@ import {
   setProposalsVoteStatusChangesEffect,
 } from "./effects";
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "piProposals",
   services: {
     voteStatusChanges: { effect: setProposalsVoteStatusChangesEffect },

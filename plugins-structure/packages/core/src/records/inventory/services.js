@@ -2,7 +2,7 @@ import { fetchPolicyIfIdle } from "../utils";
 import { fetchRecordsInventoryEffect } from "./effects";
 import { createSliceServices } from "../../toolkit";
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "recordsInventory",
   services: {
     fetch: {

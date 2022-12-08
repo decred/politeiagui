@@ -1,7 +1,7 @@
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
 import { piBilling } from "../billing";
-import { serviceSetups as proposalsSetups } from "./services";
+import { serviceListeners as proposalsSetups } from "./services";
 
 import { isAnyOf } from "@reduxjs/toolkit";
 

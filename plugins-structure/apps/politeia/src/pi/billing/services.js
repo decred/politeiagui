@@ -9,7 +9,7 @@ async function onSetup() {
   await fetchPolicyIfIdle();
 }
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "piBilling",
   services: {
     statusChanges: {

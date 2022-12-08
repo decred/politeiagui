@@ -9,7 +9,7 @@ async function onSetup() {
   validateCommentsCountsPageSize(store.getState());
 }
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "commentsCount",
   services: {
     fetch: { onSetup, effect: fetchNextCommentsCount },

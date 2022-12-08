@@ -3,7 +3,7 @@ import { validateTicketvoteTimestampsPageSize } from "../../lib/validation";
 import { store } from "@politeiagui/core";
 import { createSliceServices } from "@politeiagui/core/toolkit";
 
-export const { pluginServices, serviceSetups } = createSliceServices({
+export const { pluginServices, serviceListeners } = createSliceServices({
   name: "ticketvoteTimestamps",
   services: {
     fetch: {

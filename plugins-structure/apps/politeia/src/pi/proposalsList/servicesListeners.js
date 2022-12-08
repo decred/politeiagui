@@ -9,13 +9,13 @@ import {
 // Plugins Actions
 import { records } from "@politeiagui/core/records";
 // Using Toolkit
-import { serviceSetups as voteSummariesSetups } from "@politeiagui/ticketvote/summaries/services";
-import { serviceSetups as voteInventorySetups } from "@politeiagui/ticketvote/inventory/services";
-import { serviceSetups as recordsSetups } from "@politeiagui/core/records/services";
-import { serviceSetups as recordsInventorySetups } from "@politeiagui/core/records/inventory/services";
-import { serviceSetups as countsSetups } from "@politeiagui/comments/count/services";
-import { serviceSetups as proposalsSummariesSetups } from "../summaries/services";
-import { serviceSetups as proposalsBillingSetups } from "../billing/services";
+import { serviceListeners as voteSummariesSetups } from "@politeiagui/ticketvote/summaries/services";
+import { serviceListeners as voteInventorySetups } from "@politeiagui/ticketvote/inventory/services";
+import { serviceListeners as recordsSetups } from "@politeiagui/core/records/services";
+import { serviceListeners as recordsInventorySetups } from "@politeiagui/core/records/inventory/services";
+import { serviceListeners as countsSetups } from "@politeiagui/comments/count/services";
+import { serviceListeners as proposalsSummariesSetups } from "../summaries/services";
+import { serviceListeners as proposalsBillingSetups } from "../billing/services";
 
 // Listeners to be customized
 export const recordsBatchListener = recordsSetups.batch.listenTo({
