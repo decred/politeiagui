@@ -35,7 +35,7 @@ const userIdentityRoute = App.createRoute({
   title: "User Identity",
   cleanup: routeCleanup,
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Identity"))
   ),
 });
 const userAccountRoute = App.createRoute({

@@ -1,0 +1,13 @@
+.userCard > div > *:not(:last-child) {
+  display: flex;
+  flex-flow: column;
+  margin-bottom: var(--spacing-1);
+}
+
+.userCard > *:not(:last-child) {
+  margin-bottom: var(--spacing-large);
+}
+
+.textHighlight {
+  width: fit-content;
+}
