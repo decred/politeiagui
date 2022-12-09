@@ -1,6 +1,14 @@
 import { INVALID_DATE_LABEL, MONTHS_LABELS } from "./constants";
 
 /**
+ * Converts atoms to DCR
+ *
+ * @param {number} atoms - amount in atoms
+ * @return {number} dcr - amount in dcr
+ */
+export const convertAtomsToDcr = (atoms) => atoms / 100000000;
+
+/**
  * Formats unix seconds timestamp to a UTC string date
  *
  * @param {number} unixtimestamp - unix timestamp

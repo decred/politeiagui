@@ -1,3 +1,8 @@
+.userCard {
+  padding: 2rem var(--container-padding-right) 2rem
+    var(--container-padding-left);
+}
+
 .userCard > div > *:not(:last-child) {
   display: flex;
   flex-flow: column;
@@ -10,4 +15,13 @@
 
 .textHighlight {
   width: fit-content;
+}
+
+.section {
+  display: flex;
+  flex-flow: column;
+}
+
+.section > *:not(:last-child) {
+  padding-bottom: 1rem;
 }

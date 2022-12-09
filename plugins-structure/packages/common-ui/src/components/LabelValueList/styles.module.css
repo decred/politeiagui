@@ -1,7 +1,9 @@
 .item {
   margin-top: var(--spacing-medium);
   display: flex;
+  align-items: center;
 }
+
 .wrapper > div:first-child {
   margin-top: 0;
 }
@@ -17,4 +19,18 @@
 .wrapper {
   display: flex;
   flex-direction: column;
+}
+
+.align {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+
+@media (--sm-viewport) {
+  .align {
+    display: block;
+  }
+  .align .value {
+    padding: 0;
+  }
 }
