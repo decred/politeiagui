@@ -14,6 +14,18 @@ export function Warning({ children }) {
   );
 }
 
+export function InfoMessage({ children }) {
+  return (
+    <Message
+      kind="info"
+      data-testid="record-form-info-message"
+      className={styles.message}
+    >
+      {children}
+    </Message>
+  );
+}
+
 export function ErrorMessage({ error }) {
   return (
     error && (

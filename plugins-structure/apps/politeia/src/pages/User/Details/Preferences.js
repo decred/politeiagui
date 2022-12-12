@@ -3,7 +3,12 @@ import { Card, Text } from "pi-ui";
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
 import { user } from "./_mock";
-import { Checkbox, RecordForm, SubmitButton } from "@politeiagui/common-ui";
+import {
+  Checkbox,
+  InfoMessage,
+  RecordForm,
+  SubmitButton,
+} from "@politeiagui/common-ui";
 
 function CheckboxSection({ title, items }) {
   return (
@@ -27,7 +32,16 @@ function UserPreferences() {
 
   return (
     <UserDetails tab="Preferences">
-      <RecordForm className={styles.reset} onSubmit={handleSavePreferences}>
+      <RecordForm
+        className={styles.reset}
+        formClassName={styles.form}
+        onSubmit={handleSavePreferences}
+      >
+        <InfoMessage>
+          Currently, only one attempt is made to send each notification email.
+          Politeia will not try to resend an email if, for whatever reason, it
+          cannot be delivered.
+        </InfoMessage>
         <CheckboxSection
           title="Email notifications for my proposals"
           items={[
