@@ -51,7 +51,9 @@ const userPreferencesRoute = App.createRoute({
   title: "User Preferences",
   cleanup: routeCleanup,
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+    lazy(() =>
+      import(/* webpackChunkName: "user_details_page" */ "./Preferences")
+    )
   ),
 });
 const userCreditsRoute = App.createRoute({
