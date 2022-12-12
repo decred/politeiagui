@@ -22,7 +22,7 @@ export function LabelValueList({ items, alignValues, ...props }) {
 LabelValueList.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string.isRequired,
+      label: PropTypes.node.isRequired,
       value: PropTypes.node.isRequired,
     })
   ).isRequired,

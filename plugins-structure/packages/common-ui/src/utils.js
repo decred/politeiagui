@@ -32,6 +32,19 @@ export const formatUnixTimestampToObj = (unixtimestamp) => {
 };
 
 /**
+ * Formats unix seconds timestamp to a short UTC string date
+ *
+ * @param {number} unixtimestamp - unix seconds timestamp
+ * @return {string} date - date formated in dd mmm yyyy
+ */
+export const formatShortUnixTimestamp = (unixtimestamp) => {
+  const currentdate = new Date(unixtimestamp * 1000);
+  return `${currentdate.getUTCDate()} ${
+    MONTHS_LABELS[currentdate.getUTCMonth()]
+  } ${currentdate.getUTCFullYear()}`;
+};
+
+/**
  * formatDateToInternationalString accepts an object of day, month and year.
  * It returns a string of human viewable international date from the result
  * of DatePicker or BackEnd and supposes they are correct.
