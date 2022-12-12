@@ -4,7 +4,7 @@ import UserDetails from "./Details";
 import styles from "./styles.module.css";
 
 const Label = ({ text }) => (
-  <Text weight="semibold" color="grayDark">
+  <Text weight="semibold" color="gray">
     {text}
   </Text>
 );
@@ -39,36 +39,34 @@ function UserIdentity({ userid }) {
   const pubkey = "MOCK-810c5396d21e1b43ccc1cb796ee68bcc";
   return (
     <UserDetails tab={"identity"}>
-      <Card paddingSize="small" className={styles.userCard}>
+      <Card className={styles.userCard}>
+        <Label text="Public Key" />
+        <Text>
+          Your public and private keys constitute your identity. The private key
+          is used to sign your proposals, comments and any up/down votes on
+          Politeia. You can have only one identity active at a time. Your keys
+          are stored in your browser by default, so if you use Politeia on
+          multiple machines you will need to import your keys before you can
+          participate.
+        </Text>
+        <TextHighlighted text={pubkey} />
         <div>
-          <Label text="Public Key" />
-          <Text>
-            Your public and private keys constitute your identity. The private
-            key is used to sign your proposals, comments and any up/down votes
-            on Politeia. You can have only one identity active at a time. Your
-            keys are stored in your browser by default, so if you use Politeia
-            on multiple machines you will need to import your keys before you
-            can participate.
-          </Text>
-          <TextHighlighted text={pubkey} />
-          <div>
-            <Button size="sm">Create new Identity</Button>
-            <Button size="sm">Import Identity</Button>
-            <Button size="sm">Download Identity</Button>
-          </div>
+          <Button size="sm">Create new Identity</Button>
+          <Button size="sm">Import Identity</Button>
+          <Button size="sm">Download Identity</Button>
         </div>
-        <div>
-          <Label text="Past Public Keys" />
-          <Text>
-            List of inactive public keys your account has had in the past.
-          </Text>
-          <Button size="sm">Show All</Button>
-        </div>
-        <div>
-          <Label text="User ID" />
-          <TextUuidMessage />
-          <TextHighlighted text={userid} />
-        </div>
+      </Card>
+      <Card className={styles.userCard}>
+        <Label text="Past Public Keys" />
+        <Text>
+          List of inactive public keys your account has had in the past.
+        </Text>
+        <Button size="sm">Show All</Button>
+      </Card>
+      <Card className={styles.userCard}>
+        <Label text="User ID" />
+        <TextUuidMessage />
+        <TextHighlighted text={userid} />
       </Card>
     </UserDetails>
   );

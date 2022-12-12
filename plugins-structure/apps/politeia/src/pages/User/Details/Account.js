@@ -74,26 +74,24 @@ function UserAccount() {
 
   return (
     <UserDetails tab="Account">
-      <Card paddingSize="small" className={styles.userCard}>
-        <div>
-          <Text weight="semibold" color="grayDark">
-            Account Details
-          </Text>
-          <LabelValueList alignValues items={formatItemsList(accountItems)} />
-        </div>
-        <div>
-          <Text weight="semibold" color="grayDark">
-            Paywall
-          </Text>
-          <LabelValueList alignValues items={formatItemsList(paywallItems)} />
-        </div>
-        <div>
-          <Text weight="semibold" color="grayDark">
-            Security
-          </Text>
-          <LabelValueList alignValues items={formatItemsList(securityItems)} />
-          <Button size="sm">Deactivate Account</Button>
-        </div>
+      <Card className={styles.userCard}>
+        <Text weight="semibold" color="gray">
+          Account Details
+        </Text>
+        <LabelValueList alignValues items={formatItemsList(accountItems)} />
+      </Card>
+      <Card className={styles.userCard}>
+        <Text weight="semibold" color="gray">
+          Paywall
+        </Text>
+        <LabelValueList alignValues items={formatItemsList(paywallItems)} />
+      </Card>
+      <Card className={styles.userCard}>
+        <Text weight="semibold" color="gray">
+          Security
+        </Text>
+        <LabelValueList alignValues items={formatItemsList(securityItems)} />
+        <Button size="sm">Deactivate Account</Button>
       </Card>
     </UserDetails>
   );
