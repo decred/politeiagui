@@ -28,3 +28,101 @@ export const user = {
   proposalcredits: 9994,
   emailnotifications: 0,
 };
+
+export const registration = {
+  haspaid: true,
+  paywalladdress: "",
+  paywallamount: 0,
+  paywalltxnotbefore: 0,
+};
+
+export const credits = {
+  unspentcredits: [
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351999,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351999,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351999,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351999,
+      txid: "fake-tx-id",
+    },
+  ],
+  spentcredits: [
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+    {
+      paywallid: 2,
+      price: 10000000,
+      datepurchased: 1618351868,
+      txid: "fake-tx-id",
+    },
+  ],
+};

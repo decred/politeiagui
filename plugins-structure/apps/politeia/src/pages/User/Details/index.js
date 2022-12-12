@@ -61,7 +61,7 @@ const userCreditsRoute = App.createRoute({
   title: "User Credits",
   cleanup: routeCleanup,
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Credits"))
   ),
 });
 const userDraftsRoute = App.createRoute({

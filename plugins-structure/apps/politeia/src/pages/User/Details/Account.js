@@ -7,32 +7,9 @@ import {
 } from "@politeiagui/common-ui/utils";
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
-
-import isEmpty from "lodash/isEmpty";
-import isBoolean from "lodash/isBoolean";
+import { formatItemsList } from "./helpers";
 
 import { user } from "./_mock";
-
-function formatItemValue(value) {
-  return isBoolean(value) ? (
-    value ? (
-      "Yes"
-    ) : (
-      "No"
-    )
-  ) : isEmpty(value) ? (
-    <Text color="gray">No information provided</Text>
-  ) : (
-    value
-  );
-}
-
-function formatItemsList(items) {
-  return items.map(({ label, value }) => ({
-    label,
-    value: formatItemValue(value),
-  }));
-}
 
 const PersonalData = ({ onClear }) => (
   <div className={styles.section}>

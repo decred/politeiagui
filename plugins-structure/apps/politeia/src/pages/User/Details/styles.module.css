@@ -27,6 +27,33 @@
   flex-flow: column;
 }
 
+.column {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.column > *:not(:first-child) {
+  margin-top: var(--spacing-small);
+}
+
 .section > *:not(:last-child) {
   padding-bottom: 1rem;
+}
+
+.horizontalSection {
+  flex-flow: row !important;
+  align-items: center;
+}
+.horizontalSection > *:not(:first-child) {
+  margin-left: var(--spacing-1);
+}
+
+@media (--sm-viewport) {
+  .column:not(:first-child) {
+    margin-top: var(--spacing-large);
+  }
+  .column {
+    align-items: flex-start;
+  }
 }
