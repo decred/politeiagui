@@ -1,7 +1,7 @@
 .item {
   margin-top: var(--spacing-medium);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .wrapper > div:first-child {
