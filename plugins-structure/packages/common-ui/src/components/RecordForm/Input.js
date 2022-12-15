@@ -9,6 +9,7 @@ import {
 } from "pi-ui";
 import styles from "./styles.module.css";
 import { MarkdownEditor } from "../Markdown";
+import { DigitsField } from "../DigitsField";
 
 export function TextInput({ name = "name", placeholder, ...props }) {
   return (
@@ -106,6 +107,17 @@ export function Checkbox({ name, description, label, ...props }) {
             {...props}
           />
         </div>
+      )}
+    />
+  );
+}
+
+export function DigitsInput({ name, ...props }) {
+  return (
+    <Controller
+      name={name}
+      render={({ field: { onChange, value } }) => (
+        <DigitsField code={value} onChange={onChange} {...props} />
       )}
     />
   );

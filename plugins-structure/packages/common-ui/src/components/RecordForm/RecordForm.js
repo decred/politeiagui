@@ -8,6 +8,7 @@ import { SaveButton, SubmitButton } from "./Button";
 import {
   Checkbox,
   CurrencyInput,
+  DigitsInput,
   MarkdownInput,
   SelectInput,
   TextInput,
@@ -20,8 +21,9 @@ export function RecordForm({
   onSubmit,
   className,
   formClassName,
+  ...props
 }) {
-  const formProps = useForm({ defaultValues: initialValues });
+  const formProps = useForm({ defaultValues: initialValues, ...props });
   return (
     <Card className={classNames(styles.card, className)}>
       <FormProvider {...formProps}>
@@ -36,6 +38,7 @@ export function RecordForm({
                 Checkbox,
                 CurrencyInput,
                 DatePickerInput,
+                DigitsInput,
                 ErrorMessage,
                 MarkdownInput,
                 SaveButton,
