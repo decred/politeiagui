@@ -77,7 +77,7 @@ const user2faRoute = App.createRoute({
   title: "User 2FA",
   cleanup: routeCleanup,
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./TwoFA"))
   ),
 });
 

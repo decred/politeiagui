@@ -45,6 +45,7 @@
   flex-flow: row !important;
   align-items: center;
 }
+
 .horizontalSection > *:not(:first-child) {
   margin-left: var(--spacing-1);
 }
@@ -52,6 +53,24 @@
 .tableCell * {
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.totp {
+  display: flex;
+}
+
+.totp > *:not(:first-child) {
+  margin-left: var(--spacing-medium);
+}
+
+.totp > img {
+  width: 200px;
+  height: 200px;
+  border: 0.1rem var(--input-border-color) solid;
+}
+
+.totp > .instructions > *:not(:first-child) {
+  margin-bottom: var(--spacing-1);
 }
 
 @media (--sm-viewport) {
