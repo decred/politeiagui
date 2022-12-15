@@ -125,7 +125,7 @@ function UserCredits() {
   const username = user.username;
 
   return (
-    <UserDetails tab="Credits">
+    <UserDetails>
       <CreditsBalanceAndFee
         isPaid={isPaid}
         unspentCredits={unspentCredits}

@@ -38,7 +38,7 @@ const TextUuidMessage = () => (
 function UserIdentity({ userid }) {
   const pubkey = "MOCK-810c5396d21e1b43ccc1cb796ee68bcc";
   return (
-    <UserDetails tab={"identity"}>
+    <UserDetails>
       <Card className={styles.userCard}>
         <Label text="Public Key" />
         <Text>

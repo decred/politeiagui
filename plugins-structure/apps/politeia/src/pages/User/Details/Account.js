@@ -50,7 +50,7 @@ function UserAccount() {
   ];
 
   return (
-    <UserDetails tab="Account">
+    <UserDetails>
       <Card className={styles.userCard}>
         <Text weight="semibold" color="gray">
           Account Details

@@ -31,7 +31,7 @@ function UserPreferences() {
   }
 
   return (
-    <UserDetails tab="Preferences">
+    <UserDetails>
       <RecordForm
         className={styles.reset}
         formClassName={styles.form}

@@ -27,7 +27,7 @@ function UserProposals() {
   );
 
   return (
-    <UserDetails tab={"proposals"}>
+    <UserDetails>
       {isEmpty ? (
         <ProposalsListEmpty listName="from user" />
       ) : (
