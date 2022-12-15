@@ -38,6 +38,10 @@
   margin-left: var(--spacing-1);
 }
 
+.table {
+  padding: 0;
+}
+
 .tableCell * {
   text-overflow: ellipsis;
   overflow: hidden;

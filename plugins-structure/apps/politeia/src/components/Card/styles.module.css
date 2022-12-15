@@ -8,6 +8,8 @@
   margin-bottom: var(--spacing-1);
   color: var(--text-heading-color);
   font-weight: var(--font-weight-bold);
+  display: flex;
+  justify-content: space-between;
 }
 
 .body {

@@ -87,16 +87,18 @@ const PaymentsHistory = ({
   return (
     <>
       <InfoCard
-        title="Payments History"
-        footer={
-          <ButtonIcon
-            // TODO: onClick and download csv data from credits table
-            type="down"
-            text="Export to .csv"
-            iconBackgroundColor="#8997a5"
-            iconColor="#ffffff"
-            onClick={handleDownload}
-          />
+        title={
+          <>
+            Payments History
+            <ButtonIcon
+              // TODO: onClick and download csv data from credits table
+              type="down"
+              text="Export to .csv"
+              iconBackgroundColor="#8997a5"
+              iconColor="#ffffff"
+              onClick={handleDownload}
+            />
+          </>
         }
       >
         <Table
