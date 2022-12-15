@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { client } from "./client/client";
 import recordsInventoryReducer from "./records/inventory/recordsInventorySlice";
 import recordsReducer from "./records/records/recordsSlice";
+import recordsDraftsReducer from "./records/drafts/recordsDraftsSlice";
 import policyReducer from "./records/policy/policySlice";
 import recordsTimestampsReducer from "./records/timestamps/timestampsSlice";
 import apiReducer from "./api/apiSlice";
@@ -17,6 +18,7 @@ const staticReducers = {
   api: apiReducer,
   recordsInventory: recordsInventoryReducer,
   records: recordsReducer,
+  recordsDrafts: recordsDraftsReducer,
   recordsPolicy: policyReducer,
   recordsTimestamps: recordsTimestampsReducer,
   globalProgress: progressReducer,
