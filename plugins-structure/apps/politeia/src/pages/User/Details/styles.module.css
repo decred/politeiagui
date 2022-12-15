@@ -1,15 +1,3 @@
-.userCard {
-  padding: 2rem var(--container-padding-right) 2rem
-    var(--container-padding-left);
-  margin-bottom: var(--spacing-large);
-}
-
-.userCard > *:not(:last-child) {
-  display: flex;
-  flex-flow: column;
-  margin-bottom: var(--spacing-1);
-}
-
 .reset {
   all: unset;
 }

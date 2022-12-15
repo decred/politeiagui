@@ -1,16 +1,9 @@
 import React from "react";
-import {
-  Button,
-  ButtonIcon,
-  Card,
-  Column,
-  Row,
-  StatusTag,
-  Table,
-  Text,
-} from "pi-ui";
+import { Button, ButtonIcon, Column, Row, StatusTag, Table, Text } from "pi-ui";
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
 import { downloadCSV } from "@politeiagui/core/downloads";
+
+import { InfoCard } from "../../../components";
 
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
@@ -33,10 +26,10 @@ const CreditsBalanceAndFee = ({
     ? { text: "Paid", type: "greenCheck" }
     : { text: "Not Paid", type: "grayNegative" };
   return (
-    <Card className={styles.userCard}>
+    <InfoCard>
       <Row>
         <Column xs={12} md={6} className={styles.column}>
-          <Text color="gray" weight="semibold">
+          <Text color="grayDark" weight="semibold">
             Registration Fee
           </Text>
           <StatusTag {...statusTagProps} />
@@ -47,10 +40,12 @@ const CreditsBalanceAndFee = ({
           {!isPaid && <Button size="sm">Pay Registration Fee</Button>}
         </Column>
         <Column xs={12} md={6} className={styles.column}>
-          <Text color="gray" weight="semibold">
+          <Text color="grayDark" weight="semibold">
             Proposal Credits
           </Text>
-          <Text weight="bold">{unspentCredits || 0}</Text>
+          <Text color="grayDark" weight="bold">
+            {unspentCredits || 0}
+          </Text>
           <Text size="small" color="gray">
             Each proposal submission requires 1 proposal credit which costs{" "}
             {creditPriceDCR} DCR
@@ -62,7 +57,7 @@ const CreditsBalanceAndFee = ({
           </div>
         </Column>
       </Row>
-    </Card>
+    </InfoCard>
   );
 };
 
@@ -91,11 +86,9 @@ const PaymentsHistory = ({
   }
   return (
     <>
-      <Card className={styles.userCard}>
-        <div className={styles.horizontalSection}>
-          <Text color="gray" weight="semibold">
-            Payments History
-          </Text>
+      <InfoCard
+        title="Payments History"
+        footer={
           <ButtonIcon
             // TODO: onClick and download csv data from credits table
             type="down"
@@ -104,13 +97,14 @@ const PaymentsHistory = ({
             iconColor="#ffffff"
             onClick={handleDownload}
           />
-        </div>
+        }
+      >
         <Table
           bodyCellClassName={styles.tableCell}
           data={formattedData}
           headers={headers}
         />
-      </Card>
+      </InfoCard>
     </>
   );
 };

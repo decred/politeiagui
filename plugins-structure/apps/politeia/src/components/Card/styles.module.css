@@ -1,0 +1,34 @@
+.infoCard {
+  padding: 2rem var(--container-padding-right) 2rem
+    var(--container-padding-left);
+  margin-bottom: var(--spacing-large);
+}
+
+.title {
+  margin-bottom: var(--spacing-1);
+  color: var(--text-heading-color);
+  font-weight: var(--font-weight-bold);
+}
+
+.body {
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.body > button {
+  width: fit-content;
+}
+
+.body > *:not(:first-child) {
+  margin-top: var(--spacing-1);
+}
+
+.footer {
+  justify-content: flex-end;
+  display: flex;
+}
+
+.noPadding {
+  padding: 0;
+}

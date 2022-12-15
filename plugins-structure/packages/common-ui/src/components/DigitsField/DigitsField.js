@@ -111,6 +111,5 @@ DigitsField.defaultProps = {
   tabIndex: 1,
   length: 6,
   onChange: () => {},
-  onFill: () => {},
   autoFocus: false,
 };

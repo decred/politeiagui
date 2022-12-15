@@ -1,13 +1,8 @@
 import React from "react";
-import { Button, Card, Link, Text } from "pi-ui";
+import { Button, Link, Text } from "pi-ui";
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
-
-const Label = ({ text }) => (
-  <Text weight="semibold" color="gray">
-    {text}
-  </Text>
-);
+import { InfoCard } from "../../../components";
 
 const TextHighlighted = ({ text }) => (
   <Text
@@ -39,8 +34,7 @@ function UserIdentity({ userid }) {
   const pubkey = "MOCK-810c5396d21e1b43ccc1cb796ee68bcc";
   return (
     <UserDetails>
-      <Card className={styles.userCard}>
-        <Label text="Public Key" />
+      <InfoCard title="Public Key">
         <Text>
           Your public and private keys constitute your identity. The private key
           is used to sign your proposals, comments and any up/down votes on
@@ -55,19 +49,19 @@ function UserIdentity({ userid }) {
           <Button size="sm">Import Identity</Button>
           <Button size="sm">Download Identity</Button>
         </div>
-      </Card>
-      <Card className={styles.userCard}>
-        <Label text="Past Public Keys" />
+      </InfoCard>
+      <InfoCard title="Past Public Keys">
         <Text>
           List of inactive public keys your account has had in the past.
         </Text>
-        <Button size="sm">Show All</Button>
-      </Card>
-      <Card className={styles.userCard}>
-        <Label text="User ID" />
+        <div>
+          <Button size="sm">Show All</Button>
+        </div>
+      </InfoCard>
+      <InfoCard title="User ID">
         <TextUuidMessage />
         <TextHighlighted text={userid} />
-      </Card>
+      </InfoCard>
     </UserDetails>
   );
 }

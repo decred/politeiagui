@@ -1,11 +1,14 @@
 import React from "react";
-import { Button, Card, Text } from "pi-ui";
+import { Button, Text } from "pi-ui";
 import { LabelValueList } from "@politeiagui/common-ui";
 import {
   convertAtomsToDcr,
   formatUnixTimestamp,
 } from "@politeiagui/common-ui/utils";
 import UserDetails from "./Details";
+
+import { InfoCard } from "../../../components";
+
 import styles from "./styles.module.css";
 import { formatItemsList } from "./helpers";
 
@@ -51,25 +54,16 @@ function UserAccount() {
 
   return (
     <UserDetails>
-      <Card className={styles.userCard}>
-        <Text weight="semibold" color="gray">
-          Account Details
-        </Text>
+      <InfoCard title="Account Details">
         <LabelValueList alignValues items={formatItemsList(accountItems)} />
-      </Card>
-      <Card className={styles.userCard}>
-        <Text weight="semibold" color="gray">
-          Paywall
-        </Text>
+      </InfoCard>
+      <InfoCard title="Paywall">
         <LabelValueList alignValues items={formatItemsList(paywallItems)} />
-      </Card>
-      <Card className={styles.userCard}>
-        <Text weight="semibold" color="gray">
-          Security
-        </Text>
+      </InfoCard>
+      <InfoCard title="Security">
         <LabelValueList alignValues items={formatItemsList(securityItems)} />
         <Button size="sm">Deactivate Account</Button>
-      </Card>
+      </InfoCard>
     </UserDetails>
   );
 }

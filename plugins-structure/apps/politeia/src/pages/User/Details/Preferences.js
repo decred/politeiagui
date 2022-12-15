@@ -1,25 +1,23 @@
 import React from "react";
-import { Card, Text } from "pi-ui";
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
-import { user } from "./_mock";
 import {
   Checkbox,
   InfoMessage,
   RecordForm,
   SubmitButton,
 } from "@politeiagui/common-ui";
+import { InfoCard } from "../../../components";
+
+import { user } from "./_mock";
 
 function CheckboxSection({ title, items }) {
   return (
-    <Card className={styles.userCard}>
-      <Text weight="semibold" color="gray">
-        {title}
-      </Text>
+    <InfoCard title={title}>
       {items.map((item, i) => (
         <Checkbox id={item.name} name={item.name} label={item.label} key={i} />
       ))}
-    </Card>
+    </InfoCard>
   );
 }
 
