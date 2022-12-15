@@ -87,7 +87,7 @@ const PaymentsHistory = ({
   const formattedData = formatDataToTable(data);
 
   function handleDownload() {
-    downloadCSV(data, headers, `${username}-payments-${Date.now()}`);
+    downloadCSV(data, headers, `${username}-payments`, { datePrefix: true });
   }
   return (
     <>
