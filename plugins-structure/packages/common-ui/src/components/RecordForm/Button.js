@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useFormState } from "react-hook-form";
 import { Button, classNames } from "pi-ui";
 import styles from "./styles.module.css";
 
@@ -25,9 +25,19 @@ export function SaveButton({
   );
 }
 
-export function SubmitButton({ children = "Submit", ...props }) {
+export function SubmitButton({
+  children = "Submit",
+  kind = "primary",
+  ...props
+}) {
+  const { isValid } = useFormState();
   return (
-    <Button type="submit" className={styles.button} {...props}>
+    <Button
+      type="submit"
+      className={styles.button}
+      kind={isValid ? kind : "disabled"}
+      {...props}
+    >
       {children}
     </Button>
   );
