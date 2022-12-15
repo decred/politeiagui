@@ -9,13 +9,26 @@ import {
   Table,
   Text,
 } from "pi-ui";
+import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
+import { downloadCSV } from "@politeiagui/core/downloads";
+
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
-import { getCreditsTableData, getCreditsTableHeaders } from "./helpers";
+import {
+  formatDataToTable,
+  getCreditsTableData,
+  getCreditsTableHeaders,
+  getFeeTableData,
+} from "./helpers";
 // MOCK DATA
-import { credits, registration } from "./_mock";
+import { credits, paywall, registration, user } from "./_mock";
 
-const CreditsAndFee = ({ isPaid, unspentCredits }) => {
+const CreditsBalanceAndFee = ({
+  isPaid,
+  unspentCredits,
+  creditPriceDCR,
+  feePriceDCR,
+}) => {
   const statusTagProps = isPaid
     ? { text: "Paid", type: "greenCheck" }
     : { text: "Not Paid", type: "grayNegative" };
@@ -28,7 +41,7 @@ const CreditsAndFee = ({ isPaid, unspentCredits }) => {
           </Text>
           <StatusTag {...statusTagProps} />
           <Text size="small" color="gray">
-            Politeia requires a small registration fee of exactly 0.1 DCR.
+            Politeia requires a small registration fee of {feePriceDCR} DCR
           </Text>
           {/* TODO: onClick */}
           {!isPaid && <Button size="sm">Pay Registration Fee</Button>}
@@ -40,7 +53,7 @@ const CreditsAndFee = ({ isPaid, unspentCredits }) => {
           <Text weight="bold">{unspentCredits || 0}</Text>
           <Text size="small" color="gray">
             Each proposal submission requires 1 proposal credit which costs{" "}
-            exactly 0.1 DCR.
+            {creditPriceDCR} DCR
           </Text>
           <div>
             {/* TODO: onClick */}
@@ -53,14 +66,35 @@ const CreditsAndFee = ({ isPaid, unspentCredits }) => {
   );
 };
 
-const CreditsHistory = ({ credits }) => {
-  const data = getCreditsTableData(credits);
+const PaymentsHistory = ({
+  credits,
+  creditPriceDCR,
+  feePriceDCR,
+  feeTx,
+  feeTimestamp,
+  username,
+}) => {
+  const creditsData = getCreditsTableData(credits, creditPriceDCR);
+  const feeData = getFeeTableData({
+    feePriceDCR,
+    timestamp: feeTimestamp,
+    txid: feeTx,
+  });
+
+  const headers = getCreditsTableHeaders();
+  const data = [...creditsData, feeData];
+
+  const formattedData = formatDataToTable(data);
+
+  function handleDownload() {
+    downloadCSV(data, headers, `${username}-payments-${Date.now()}`);
+  }
   return (
     <>
       <Card className={styles.userCard}>
         <div className={styles.horizontalSection}>
           <Text color="gray" weight="semibold">
-            Credit History
+            Payments History
           </Text>
           <ButtonIcon
             // TODO: onClick and download csv data from credits table
@@ -68,9 +102,14 @@ const CreditsHistory = ({ credits }) => {
             text="Export to .csv"
             iconBackgroundColor="#8997a5"
             iconColor="#ffffff"
+            onClick={handleDownload}
           />
         </div>
-        <Table data={data} headers={getCreditsTableHeaders()} />
+        <Table
+          bodyCellClassName={styles.tableCell}
+          data={formattedData}
+          headers={headers}
+        />
       </Card>
     </>
   );
@@ -79,12 +118,27 @@ const CreditsHistory = ({ credits }) => {
 function UserCredits() {
   const isPaid = registration.haspaid;
   const unspentCredits = credits.unspentcredits.length;
+  const creditPriceDCR = convertAtomsToDcr(paywall.creditprice);
+  const feePriceDCR = convertAtomsToDcr(user.newuserpaywallamount);
+  const feeTx = user.newuserpaywalltx;
+  const feeTimestamp = user.newuserpaywalltxnotbefore;
+  const username = user.username;
 
   return (
     <UserDetails tab="Credits">
-      <CreditsAndFee isPaid={isPaid} unspentCredits={unspentCredits} />
-      <CreditsHistory
+      <CreditsBalanceAndFee
+        isPaid={isPaid}
+        unspentCredits={unspentCredits}
+        creditPriceDCR={creditPriceDCR}
+        feePriceDCR={feePriceDCR}
+      />
+      <PaymentsHistory
+        username={username}
+        creditPriceDCR={creditPriceDCR}
         credits={[...credits.spentcredits, ...credits.unspentcredits]}
+        feePriceDCR={feePriceDCR}
+        feeTimestamp={feeTimestamp}
+        feeTx={feeTx}
       />
     </UserDetails>
   );

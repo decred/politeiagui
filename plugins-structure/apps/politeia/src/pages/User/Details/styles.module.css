@@ -49,11 +49,19 @@
   margin-left: var(--spacing-1);
 }
 
+.tableCell * {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 @media (--sm-viewport) {
   .column:not(:first-child) {
     margin-top: var(--spacing-large);
   }
   .column {
     align-items: flex-start;
+  }
+  .tableCell::before {
+    padding-right: 1rem;
   }
 }
