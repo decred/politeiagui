@@ -51,14 +51,18 @@ export function CurrencyInput({ name = "amount", placeholder, ...props }) {
 
 export function SelectInput({ name = "select", options, ...props }) {
   const { theme } = useTheme();
+  const handleChange = (onChange) => (option) => {
+    onChange(option.value);
+  };
+  const getValue = (value) => options.find((o) => o.value === value);
   return (
     <Controller
       name={name}
       render={({ field: { onChange, value } }) => (
         <Select
           options={options}
-          value={value}
-          onChange={onChange}
+          value={getValue(value)}
+          onChange={handleChange(onChange)}
           className={styles.select}
           customStyles={{
             control: (_, { isFocused }) => ({
