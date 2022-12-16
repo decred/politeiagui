@@ -30,6 +30,13 @@ export const formatUnixTimestampToObj = (unixtimestamp) => {
     year: date.getFullYear(),
   };
 };
+/**
+ * Formats a date object `{ day, month, year }` to seconds timestamp
+ * @param {{ day: number, month: number, year: number }} DateObj
+ * @returns
+ */
+export const formatDateObjToTimestamp = ({ day, month, year } = {}) =>
+  Math.floor(new Date(year, month - 1, day).getTime() / 1000);
 
 /**
  * Formats unix seconds timestamp to a short UTC string date

@@ -51,7 +51,6 @@ import uniq from "lodash/fp/uniq";
 import compact from "lodash/fp/compact";
 import compose from "lodash/fp/compose";
 import map from "lodash/fp/map";
-import { formatUnixTimestampToObj } from "@politeiagui/common-ui/utils";
 
 const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 const PROPOSAL_INDEX_FILENAME = "index.md";
@@ -277,7 +276,7 @@ export function decodeProposalDraftForm(draft) {
     endDate: proposalMetadata.enddate,
     startDate: proposalMetadata.startdate,
     type: decodeProposalType(voteMetadata),
-    deadline: formatUnixTimestampToObj(voteMetadata.linkby),
+    deadline: voteMetadata.linkby,
     rfpToken: voteMetadata.linkto,
   };
 }
@@ -670,10 +669,7 @@ export function convertProposalFormToRecordFiles({
 
   // votemetadata.json
   if (type === PROPOSAL_TYPE_RFP && deadline) {
-    const linkby = Math.ceil(
-      new Date(deadline.year, deadline.month - 1, deadline.day).getTime() / 1000
-    );
-    files.push(convertVoteMetadataToFile({ linkby }));
+    files.push(convertVoteMetadataToFile({ linkby: deadline }));
   }
   if (type === PROPOSAL_TYPE_SUBMISSION && rfpToken) {
     files.push(convertVoteMetadataToFile({ linkto: rfpToken }));
