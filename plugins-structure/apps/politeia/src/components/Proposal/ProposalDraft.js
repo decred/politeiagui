@@ -1,9 +1,9 @@
 import React from "react";
-import { Event, RecordCard } from "@politeiagui/common-ui";
+import { Event, Join, RecordCard } from "@politeiagui/common-ui";
 import { decodeProposalDraftForm } from "../../pi/proposals/utils";
 import { ProposalTitle } from "./common";
 import { PROPOSAL_TYPE_RFP } from "../../pi";
-import { StatusTag } from "pi-ui";
+import { Link, StatusTag } from "pi-ui";
 
 function DraftCard({ draft, draftid }) {
   const { name, type } = decodeProposalDraftForm(draft.record);
@@ -18,7 +18,14 @@ function DraftCard({ draft, draftid }) {
             isRfp={type === PROPOSAL_TYPE_RFP}
           />
         }
-        subtitle={<Event timestamp={draft.timestamp} />}
+        subtitle={
+          <Join inline>
+            <Link data-link href={`/record/new?draft=${draftid}`}>
+              edit draft
+            </Link>
+            <Event timestamp={draft.timestamp} />
+          </Join>
+        }
         rightHeader={<StatusTag text="Draft" type="blueTime" />}
       />
     </div>
