@@ -76,6 +76,10 @@
   padding-top: var(--spacing-small);
 }
 
+.disabled {
+  color: var(--color-gray-light);
+}
+
 @media (--sm-viewport) {
   .statusLabelWrapper {
     top: 2.3rem;

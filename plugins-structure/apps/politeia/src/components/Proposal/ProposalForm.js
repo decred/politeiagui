@@ -8,6 +8,7 @@ import {
   PROPOSAL_TYPE_RFP,
   PROPOSAL_TYPE_SUBMISSION,
 } from "../../pi";
+import { convertProposalFormToRecordFiles } from "../../pi/proposals/utils";
 
 const PROPOSAL_TYPE_OPTIONS = [
   { label: "Regular Proposal", value: PROPOSAL_TYPE_REGULAR },
@@ -32,8 +33,13 @@ export function ProposalForm({
   const minTimestamp = now + minStartDate * 1000;
   const maxTimestamp = now + maxEndDate * 1000;
 
+  const handleSubmit = (fn) => (values) => {
+    const files = convertProposalFormToRecordFiles(values);
+    fn(files);
+  };
+
   return (
-    <RecordForm onSubmit={onSubmit} initialValues={initialValues}>
+    <RecordForm onSubmit={handleSubmit(onSubmit)} initialValues={initialValues}>
       {({
         CurrencyInput,
         DatePickerInput,
@@ -46,8 +52,8 @@ export function ProposalForm({
         formProps,
       }) => {
         const proposalType = formProps.watch("type");
-        const isRfpProposal = proposalType?.value === PROPOSAL_TYPE_RFP;
-        const isSubmission = proposalType?.value === PROPOSAL_TYPE_SUBMISSION;
+        const isRfpProposal = proposalType === PROPOSAL_TYPE_RFP;
+        const isSubmission = proposalType === PROPOSAL_TYPE_SUBMISSION;
         const isRfp = isRfpProposal || isSubmission;
 
         return (
@@ -161,7 +167,7 @@ export function ProposalForm({
             <div className={styles.formButtons}>
               <SaveButton
                 tabIndex={1}
-                onSave={onSave}
+                onSave={handleSubmit(onSave)}
                 data-testid="proposal-form-save-draft-button"
               >
                 Save Draft

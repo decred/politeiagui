@@ -40,6 +40,10 @@ import {
   PROPOSAL_STATUS_VOTE_AUTHORIZED,
   PROPOSAL_STATUS_VOTE_ENDED,
   PROPOSAL_STATUS_VOTE_STARTED,
+  PROPOSAL_TYPE_INVALID,
+  PROPOSAL_TYPE_REGULAR,
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_SUBMISSION,
 } from "../lib/constants";
 import isArray from "lodash/fp/isArray";
 import isEmpty from "lodash/isEmpty";
@@ -47,6 +51,7 @@ import uniq from "lodash/fp/uniq";
 import compact from "lodash/fp/compact";
 import compose from "lodash/fp/compose";
 import map from "lodash/fp/map";
+import { formatUnixTimestampToObj } from "@politeiagui/common-ui/utils";
 
 const PROPOSAL_METADATA_FILENAME = "proposalmetadata.json";
 const PROPOSAL_INDEX_FILENAME = "index.md";
@@ -130,6 +135,16 @@ const MONTHS_LABELS = [
  */
 
 /**
+ * decodeProposalType returns proposal type for given voteMetadata
+ * @param {{ linkto: ?String, linkby: ?Number  }} voteMetadata
+ */
+export function decodeProposalType({ linkto, linkby } = {}) {
+  if (linkto && linkby) return PROPOSAL_TYPE_INVALID;
+  if (linkby) return PROPOSAL_TYPE_RFP;
+  if (linkto) return PROPOSAL_TYPE_SUBMISSION;
+  return PROPOSAL_TYPE_REGULAR;
+}
+/**
  * decodeProposalMetadataFile returns the decoded "proposalmetadata.json" file
  * for given record's files array.
  * @param {Array} files record's files
@@ -189,6 +204,29 @@ export function decodeProposalAttachments(files) {
 }
 
 /**
+ * decodeProposalRecordFiles returns the decoded human readable proposal files.
+ * @param {Array} files
+ * @returns {{
+ *   name: string,
+ *   proposalMetadata: Object,
+ *   voteMetadata: {
+ *     linkto: String,
+ *     linkby: Number
+ *   },
+ *   body: string,
+ *   attachments: Array
+ * }}
+ */
+export function decodeProposalRecordFiles(files) {
+  if (!files) return {};
+  const { name, ...proposalMetadata } = decodeProposalMetadataFile(files);
+  const voteMetadata = decodeVoteMetadataFile(files);
+  const body = decodeProposalBodyFile(files);
+  const attachments = decodeProposalAttachments(files);
+  return { name, proposalMetadata, voteMetadata, body, attachments };
+}
+
+/**
  * decodeProposalRecord returns a formatted proposal object for given record.
  * It decodes all proposal-related data from records and converts it into a
  * readable proposal object.
@@ -197,14 +235,13 @@ export function decodeProposalAttachments(files) {
  */
 export function decodeProposalRecord(record) {
   if (!record) return;
-  const { name, ...proposalMetadata } = decodeProposalMetadataFile(
-    record.files
-  );
+
+  const { name, attachments, body, proposalMetadata, voteMetadata } =
+    decodeProposalRecordFiles(record.files);
+
   const userMetadata = decodeProposalUserMetadata(record.metadata);
-  const voteMetadata = decodeVoteMetadataFile(record.files);
-  const body = decodeProposalBodyFile(record.files);
-  const attachments = decodeProposalAttachments(record.files);
   const useridMd = userMetadata.find((md) => md && md.payload.userid);
+
   const { token } = record.censorshiprecord;
   return {
     name: name ? name : getShortToken(token),
@@ -224,6 +261,24 @@ export function decodeProposalRecord(record) {
     censored: record.status === RECORD_STATUS_CENSORED,
     attachments,
     userMetadata,
+  };
+}
+
+export function decodeProposalDraftForm(draft) {
+  if (!draft) return;
+  const { name, proposalMetadata, voteMetadata, body, attachments } =
+    decodeProposalRecordFiles(draft.files);
+  return {
+    name,
+    body,
+    attachments,
+    amount: proposalMetadata.amount,
+    domain: proposalMetadata.domain,
+    endDate: proposalMetadata.enddate,
+    startDate: proposalMetadata.startdate,
+    type: decodeProposalType(voteMetadata),
+    deadline: formatUnixTimestampToObj(voteMetadata.linkby),
+    rfpToken: voteMetadata.linkto,
   };
 }
 
@@ -550,9 +605,9 @@ export function getRfpProposalsLinks(records = []) {
 const objectToBuffer = (obj) => Buffer.from(JSON.stringify(obj));
 const bufferToBase64String = (buf) => buf.toString("base64");
 
-export function convertMarkdownToFile(markdownText) {
+export function convertMarkdownToFile(markdownText, name = "index.md") {
   return {
-    name: "index.md",
+    name,
     mime: "text/plain; charset=utf-8",
     payload: encodeTextToFilePayload(markdownText),
   };
@@ -587,4 +642,42 @@ export function convertProposalMetadataToFile({
     enddate,
     domain,
   });
+}
+
+export function convertProposalFormToRecordFiles({
+  amount,
+  body,
+  domain,
+  endDate,
+  startDate,
+  name,
+  type,
+  rfpToken,
+  deadline,
+}) {
+  // index.md
+  const markdownFile = convertMarkdownToFile(body);
+
+  // proposalmetadata.json
+  const proposalMetadataFile = convertProposalMetadataToFile({
+    amount,
+    domain,
+    enddate: endDate,
+    startdate: startDate,
+    name,
+  });
+  const files = [markdownFile, proposalMetadataFile];
+
+  // votemetadata.json
+  if (type === PROPOSAL_TYPE_RFP && deadline) {
+    const linkby = Math.ceil(
+      new Date(deadline.year, deadline.month - 1, deadline.day).getTime() / 1000
+    );
+    files.push(convertVoteMetadataToFile({ linkby }));
+  }
+  if (type === PROPOSAL_TYPE_SUBMISSION && rfpToken) {
+    files.push(convertVoteMetadataToFile({ linkto: rfpToken }));
+  }
+
+  return { files };
 }

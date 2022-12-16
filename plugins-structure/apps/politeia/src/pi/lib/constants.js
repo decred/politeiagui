@@ -28,6 +28,7 @@ export const PROPOSAL_BILLING_STATUS_CLOSED = 2;
 export const PROPOSAL_BILLING_STATUS_COMPLETED = 3;
 
 // Proposal Types
+export const PROPOSAL_TYPE_INVALID = 0;
 export const PROPOSAL_TYPE_REGULAR = 1;
 export const PROPOSAL_TYPE_RFP = 2;
 export const PROPOSAL_TYPE_SUBMISSION = 3;
