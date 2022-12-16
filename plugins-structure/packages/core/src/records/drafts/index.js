@@ -1,11 +1,13 @@
 import {
   loadRecordDrafts,
   saveRecordDraft,
+  selectUserDraftById,
   selectUserDrafts,
 } from "./recordsDraftsSlice";
 
 export const recordsDrafts = {
   load: loadRecordDrafts,
   save: saveRecordDraft,
-  selectUserDrafts,
+  selectByUser: selectUserDrafts,
+  selectById: selectUserDraftById,
 };

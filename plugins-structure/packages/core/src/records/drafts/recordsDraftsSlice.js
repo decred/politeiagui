@@ -24,7 +24,7 @@ export const saveRecordDraft = createAction(
       RECORD_DRAFT_LS_KEY,
       {
         ...(drafts || {}),
-        [draftid]: record,
+        [draftid]: { record, timestamp: Math.floor(Date.now() / 1000) },
       },
       userid
     );
@@ -64,5 +64,8 @@ const recordsDraftsSlice = createSlice({
 // Selectors
 export const selectUserDrafts = (state, userid) =>
   state.recordsDrafts.byUserId[userid];
+export const selectUserDraftById = (state, { draftid, userid }) => {
+  return state.recordsDrafts.byUserId[userid]?.[draftid];
+};
 
 export default recordsDraftsSlice.reducer;
