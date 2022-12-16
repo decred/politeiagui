@@ -59,6 +59,7 @@
 
 .subtitle {
   grid-area: subtitle;
+  color: var(--text-secondary-color);
 }
 
 @media (--sm-viewport) {

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import formatDistance from "date-fns/formatDistance";
-import { Tooltip, classNames } from "pi-ui";
+import { Tooltip } from "pi-ui";
 import styles from "./styles.module.css";
 import { formatUnixTimestamp } from "../../utils";
 
@@ -18,14 +18,17 @@ const DateTooltip = ({
   const timeAgo = useMemo(() => getTimeAgo(timestamp), [timestamp]);
 
   return (
-    <Tooltip
-      className={classNames(className, styles.dateTooltip)}
-      content={formatUnixTimestamp(timestamp)}
-      placement={placement}
-      {...props}
-    >
-      {children({ timeAgo })}
-    </Tooltip>
+    <span>
+      <Tooltip
+        contentClassName={styles.content}
+        className={className}
+        content={formatUnixTimestamp(timestamp)}
+        placement={placement}
+        {...props}
+      >
+        {children({ timeAgo })}
+      </Tooltip>
+    </span>
   );
 };
 
