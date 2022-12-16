@@ -3,7 +3,7 @@ import App from "../../../app";
 import { routeCleanup } from "../../../utils/routeCleanup";
 import { createRouteView } from "../../../utils/createRouteView";
 import { router } from "@politeiagui/core/router";
-
+import { serviceListeners as draftsListeners } from "@politeiagui/core/records/drafts/services";
 import { recordsInventorySetupServices } from "../../../pi/proposalsList/servicesSetup";
 import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listeners";
 
@@ -29,7 +29,6 @@ const userProposalsRoute = App.createRoute({
   ),
 });
 
-// TODO: Implement routes views
 const userIdentityRoute = App.createRoute({
   path: "/user/:userid/identity",
   title: "User Identity",
@@ -38,6 +37,7 @@ const userIdentityRoute = App.createRoute({
     lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Identity"))
   ),
 });
+
 const userAccountRoute = App.createRoute({
   path: "/user/:userid/account",
   title: "User Account",
@@ -46,6 +46,7 @@ const userAccountRoute = App.createRoute({
     lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Account"))
   ),
 });
+
 const userPreferencesRoute = App.createRoute({
   path: "/user/:userid/preferences",
   title: "User Preferences",
@@ -56,6 +57,7 @@ const userPreferencesRoute = App.createRoute({
     )
   ),
 });
+
 const userCreditsRoute = App.createRoute({
   path: "/user/:userid/credits",
   title: "User Credits",
@@ -64,14 +66,17 @@ const userCreditsRoute = App.createRoute({
     lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Credits"))
   ),
 });
+
 const userDraftsRoute = App.createRoute({
   path: "/user/:userid/drafts",
   title: "User Drafts",
   cleanup: routeCleanup,
+  setupServices: [draftsListeners.load],
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Details"))
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Drafts"))
   ),
 });
+
 const user2faRoute = App.createRoute({
   path: "/user/:userid/2fa",
   title: "User 2FA",
