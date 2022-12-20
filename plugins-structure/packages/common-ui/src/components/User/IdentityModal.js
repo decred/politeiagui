@@ -61,15 +61,13 @@ export const IdentityImportModal = ({
         onSubmit={({ publicKey, secretKey }) =>
           onSubmit({ publicKey, secretKey })
         }
-        className={styles.identityForm}
+        className={styles.form}
         autoComplete="off"
       >
         <UploadIdentityButton />
         <Input name="publicKey" label="Public Key" id="pubkey-input" />
         <Input name="secretKey" label="Private Key" id="privkey-input" />
-        <div>
-          <SubmitButton>Update Identity</SubmitButton>
-        </div>
+        <SubmitButton>Update Identity</SubmitButton>
       </RecordForm>
     </Modal>
   );

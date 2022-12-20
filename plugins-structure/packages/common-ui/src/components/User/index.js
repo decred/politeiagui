@@ -1,2 +1,3 @@
+export * from "./AccountModal";
 export * from "./IdentityModal";
-export * from "./IdentityMessages";
+export * from "./Messages";

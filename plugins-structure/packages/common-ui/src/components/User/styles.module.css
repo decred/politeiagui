@@ -1,5 +1,10 @@
-.identityForm {
+.form {
   padding: 0;
+}
+
+.form button[type="submit"] {
+  width: fit-content;
+  align-self: end;
 }
 
 .identityFile {
