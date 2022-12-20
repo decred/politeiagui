@@ -1,8 +1,9 @@
 import React from "react";
-import { Modal } from "pi-ui";
+import { Modal, Text } from "pi-ui";
 import { Input, RecordForm, SubmitButton } from "../RecordForm";
 import styles from "./styles.module.css";
 import { ModalConfirm } from "../Modal";
+import { Payment } from "../Payment";
 
 export const AccountPasswordChangeModal = ({
   onClose,
@@ -33,3 +34,21 @@ export const AccountClearDataModal = ({
     successMessage="Data Cleared"
   />
 );
+
+export const UserRegistrationFeeModal = ({
+  onClose,
+  title = "Complete your registration",
+  show,
+  address,
+}) => {
+  return (
+    <Modal {...{ onClose, title, show }} className={styles.modal}>
+      <Text>
+        Politeia requires you to pay a small registration fee of exactly 0.1
+        DCR. This helps keep Politeia free of things like spam and comment
+        manipulation.
+      </Text>
+      <Payment address={address} value={0.1} />
+    </Modal>
+  );
+};
