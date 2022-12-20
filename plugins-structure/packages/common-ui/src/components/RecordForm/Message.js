@@ -27,15 +27,13 @@ export function InfoMessage({ children }) {
 }
 
 export function ErrorMessage({ error }) {
-  return (
-    error && (
-      <Message
-        kind="error"
-        data-testid="record-form-error-message"
-        className={styles.message}
-      >
-        {error.toString()}
-      </Message>
-    )
-  );
+  return error ? (
+    <Message
+      kind="error"
+      data-testid="record-form-error-message"
+      className={styles.message}
+    >
+      {error.toString()}
+    </Message>
+  ) : null;
 }

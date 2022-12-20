@@ -9,6 +9,8 @@ import {
   Checkbox,
   CurrencyInput,
   DigitsInput,
+  FileInput,
+  Input,
   MarkdownInput,
   SelectInput,
   TextInput,
@@ -21,6 +23,7 @@ export function RecordForm({
   onSubmit,
   className,
   formClassName,
+  autoComplete = "on",
   ...props
 }) {
   const formProps = useForm({ defaultValues: initialValues, ...props });
@@ -31,6 +34,7 @@ export function RecordForm({
           onSubmit={formProps.handleSubmit(onSubmit)}
           className={classNames(styles.form, formClassName)}
           data-testid="record-form"
+          autoComplete={autoComplete}
         >
           {isFunction(children)
             ? children({
@@ -45,6 +49,8 @@ export function RecordForm({
                 SelectInput,
                 SubmitButton,
                 TextInput,
+                FileInput,
+                Input,
                 Warning,
               })
             : children}

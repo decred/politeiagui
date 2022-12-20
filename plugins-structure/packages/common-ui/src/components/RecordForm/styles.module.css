@@ -125,3 +125,16 @@
 .info {
   margin-left: 1rem;
 }
+
+.fileInput label {
+  cursor: pointer;
+}
+
+.fileInput > input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}

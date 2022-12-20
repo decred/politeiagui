@@ -1,9 +1,11 @@
 import React from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import {
   BoxTextInput,
+  Button,
   Checkbox as CheckboxUI,
   Select,
+  TextInput as TextInputUI,
   classNames,
   useTheme,
 } from "pi-ui";
@@ -25,6 +27,41 @@ export function TextInput({ name = "name", placeholder, ...props }) {
         />
       )}
     />
+  );
+}
+
+export function Input({ name = "name", placeholder, label, error, ...props }) {
+  return (
+    <Controller
+      name={name}
+      render={({ field: { onChange, value } }) => (
+        <TextInputUI
+          onChange={onChange}
+          value={value || ""}
+          placeholder={placeholder}
+          label={label}
+          error={error}
+          {...props}
+        />
+      )}
+    />
+  );
+}
+
+export function FileInput({
+  name = "file",
+  placeholder = "Upload File",
+  buttonKind = "primary",
+  ...props
+}) {
+  const { register } = useFormContext();
+  return (
+    <div className={styles.fileInput}>
+      <input type="file" {...register(name)} id={name} {...props} />
+      <Button size="sm" kind={buttonKind}>
+        <label htmlFor={name}>{placeholder}</label>
+      </Button>
+    </div>
   );
 }
 

@@ -5,6 +5,11 @@
 
 .modalContent > *:not(.modalButtons) {
   padding: 1rem 0;
+  margin-bottom: var(--spacing-2);
+}
+
+.modalConfirmWrapper {
+  width: 70% !important;
 }
 
 .modalButtons {
@@ -38,4 +43,10 @@
 
 .modalImage {
   max-width: 100%;
+}
+
+@media (--xl-viewport) {
+  .modalConfirmWrapper {
+    width: 50% !important;
+  }
 }
