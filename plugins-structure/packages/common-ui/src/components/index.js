@@ -17,3 +17,4 @@ export * from "./Thumbnail";
 export * from "./Toast";
 
 export * from "./User";
+export * from "./Payment";
