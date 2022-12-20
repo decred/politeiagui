@@ -1,6 +1,12 @@
 import React from "react";
 import { Button, Text } from "pi-ui";
-import { LabelValueList } from "@politeiagui/common-ui";
+import {
+  AccountClearDataModal,
+  AccountPasswordChangeModal,
+  LabelValueList,
+  ModalConfirmWithReason,
+  useModal,
+} from "@politeiagui/common-ui";
 import {
   convertAtomsToDcr,
   formatUnixTimestamp,
@@ -30,11 +36,45 @@ const PersonalData = ({ onClear }) => (
 );
 
 function UserAccount() {
+  const [open] = useModal();
+  function handleChangePassword() {
+    open(AccountPasswordChangeModal, {
+      onSubmit: (values) => {
+        console.log("Password Changed", values);
+      },
+    });
+  }
+  function handleClearData() {
+    open(AccountClearDataModal, {
+      onSubmit: () => {
+        console.log("Data Cleared");
+      },
+    });
+  }
+  function handleDeactivate() {
+    open(ModalConfirmWithReason, {
+      onSubmit: (values) => {
+        console.log("Deactivating account", values);
+      },
+      successMessage: "Account Deactivated. You'll be logged out.",
+    });
+  }
+
   const accountItems = [
     { label: "Admin", value: user.isadmin },
     { label: "Verified Email", value: !user.newuserverificationtoken },
-    { label: "Password", value: <Button size="sm">Change Password</Button> },
-    { label: "Personal Data", value: <PersonalData onClear={() => {}} /> },
+    {
+      label: "Password",
+      value: (
+        <Button size="sm" onClick={handleChangePassword}>
+          Change Password
+        </Button>
+      ),
+    },
+    {
+      label: "Personal Data",
+      value: <PersonalData onClear={handleClearData} />,
+    },
   ];
   const paywallItems = [
     { label: "Address", value: user.newuserpaywalladdress },
@@ -62,7 +102,9 @@ function UserAccount() {
       </InfoCard>
       <InfoCard title="Security">
         <LabelValueList alignValues items={formatItemsList(securityItems)} />
-        <Button size="sm">Deactivate Account</Button>
+        <Button size="sm" onClick={handleDeactivate}>
+          Deactivate Account
+        </Button>
       </InfoCard>
     </UserDetails>
   );
