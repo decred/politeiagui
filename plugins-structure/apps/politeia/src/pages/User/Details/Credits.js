@@ -2,6 +2,7 @@ import React from "react";
 import { Button, ButtonIcon, Column, Row, StatusTag, Table, Text } from "pi-ui";
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
 import { downloadCSV } from "@politeiagui/core/downloads";
+import { UserRegistrationFeeModal, useModal } from "@politeiagui/common-ui";
 
 import { InfoCard } from "../../../components";
 
@@ -21,10 +22,18 @@ const CreditsBalanceAndFee = ({
   unspentCredits,
   creditPriceDCR,
   feePriceDCR,
+  address,
 }) => {
+  const [open] = useModal();
+
   const statusTagProps = isPaid
     ? { text: "Paid", type: "greenCheck" }
     : { text: "Not Paid", type: "grayNegative" };
+
+  function handlePayFee() {
+    open(UserRegistrationFeeModal, { address });
+  }
+
   return (
     <InfoCard>
       <Row>
@@ -37,7 +46,11 @@ const CreditsBalanceAndFee = ({
             Politeia requires a small registration fee of {feePriceDCR} DCR
           </Text>
           {/* TODO: onClick */}
-          {!isPaid && <Button size="sm">Pay Registration Fee</Button>}
+          {!isPaid && (
+            <Button size="sm" onClick={handlePayFee}>
+              Pay Registration Fee
+            </Button>
+          )}
         </Column>
         <Column xs={12} md={6} className={styles.column}>
           <Text color="grayDark" weight="semibold">
@@ -127,6 +140,7 @@ function UserCredits() {
         unspentCredits={unspentCredits}
         creditPriceDCR={creditPriceDCR}
         feePriceDCR={feePriceDCR}
+        address={user.newuserpaywalladdress}
       />
       <PaymentsHistory
         username={username}
