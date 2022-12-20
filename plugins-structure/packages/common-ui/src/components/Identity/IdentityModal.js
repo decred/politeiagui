@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { Modal } from "pi-ui";
+import { Modal, TextHighlighted } from "pi-ui";
 import {
   ErrorMessage,
   FileInput,
@@ -92,3 +92,20 @@ export const IdentityCreateModal = ({ onClose, show, onSubmit = () => {} }) => {
     />
   );
 };
+
+export const IdentityInactivePubkeysModal = ({
+  onClose,
+  show,
+  keys,
+  title = "Inactive Public Keys",
+}) => (
+  <Modal onClose={onClose} show={show} title={title}>
+    <ol className={styles.inactivePubkeys}>
+      {keys.map((k, i) => (
+        <li key={i}>
+          <TextHighlighted id={k.pubkey}>{k.pubkey}</TextHighlighted>
+        </li>
+      ))}
+    </ol>
+  </Modal>
+);

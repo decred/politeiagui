@@ -12,6 +12,10 @@
   width: 70%;
 }
 
+.inactivePubkeys > li:not(:first-child) {
+  padding-top: var(--spacing-1);
+}
+
 @media (--xl-viewport) {
   .modal {
     width: 50%;
