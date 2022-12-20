@@ -21,8 +21,23 @@ export const user = {
   identities: [
     {
       pubkey:
-        "b3687e5d6a22c33b85268394e8d874eb77c0e91a16c3264d547a929445548f3b",
+        "4e0d248935f52b3f50a05fbbd5f127f49e9b684c9cc9c6ca8aa3947c35f09641",
       isactive: false,
+    },
+    {
+      pubkey:
+        "4e0d248935f52b3f50a05fbbd5f127f49e9b684c9cc9c6ca8aa3947c35f09641",
+      isactive: false,
+    },
+    {
+      pubkey:
+        "4e0d248935f52b3f50a05fbbd5f127f49e9b684c9cc9c6ca8aa3947c35f09641",
+      isactive: false,
+    },
+    {
+      pubkey:
+        "ef513bca01d4093b6e7a7d082a4113f10b0cad98afc816f1de0b3a9f32b00f47",
+      isactive: true,
     },
   ],
   proposalcredits: 9994,

@@ -3,6 +3,16 @@ import { Button, Link, Text } from "pi-ui";
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
 import { InfoCard } from "../../../components";
+import {
+  IdentityCreateModal,
+  IdentityDescription,
+  IdentityImportModal,
+  IdentityInactivePubkeysModal,
+  useModal,
+} from "@politeiagui/common-ui";
+import { downloadJSON } from "@politeiagui/core/downloads";
+// Mock User
+import { user } from "./_mock";
 
 const TextHighlighted = ({ text }) => (
   <Text
@@ -31,31 +41,65 @@ const TextUuidMessage = () => (
 );
 
 function UserIdentity({ userid }) {
-  const pubkey = "MOCK-810c5396d21e1b43ccc1cb796ee68bcc";
+  const activePubkey = user.identities.find((i) => i.isactive).pubkey;
+  const inactivePubkeys = user.identities.filter((i) => !i.isactive);
+
+  const [open] = useModal();
+
+  function handleCreateIdentity() {
+    open(IdentityCreateModal, {
+      onSubmit: () => {
+        console.log("Create Identity...");
+      },
+    });
+  }
+  function handleImportIdentity() {
+    open(IdentityImportModal, {
+      onSubmit: ({ publicKey, secretKey }) => {
+        console.log("Import Identity...", { publicKey, secretKey });
+      },
+    });
+  }
+  function handleDownloadIdentity() {
+    const mockIdentity = {
+      publicKey: "abcdefghik",
+      secretKey: "secret.abdoaibsoi",
+    };
+    downloadJSON(mockIdentity, "politeia-pki");
+  }
+  function handleShowPastPubkeys() {
+    open(IdentityInactivePubkeysModal, { keys: inactivePubkeys });
+  }
+
   return (
     <UserDetails>
-      <InfoCard title="Public Key">
-        <Text>
-          Your public and private keys constitute your identity. The private key
-          is used to sign your proposals, comments and any up/down votes on
-          Politeia. You can have only one identity active at a time. Your keys
-          are stored in your browser by default, so if you use Politeia on
-          multiple machines you will need to import your keys before you can
-          participate.
-        </Text>
-        <TextHighlighted text={pubkey} />
+      <InfoCard title="Manage Identity">
+        <IdentityDescription />
         <div>
-          <Button size="sm">Create new Identity</Button>
-          <Button size="sm">Import Identity</Button>
-          <Button size="sm">Download Identity</Button>
+          <Button size="sm" onClick={handleCreateIdentity}>
+            Create new Identity
+          </Button>
+          <Button size="sm" onClick={handleImportIdentity}>
+            Import Identity
+          </Button>
+          <Button size="sm" onClick={handleDownloadIdentity}>
+            Download Identity
+          </Button>
         </div>
       </InfoCard>
+      {activePubkey && (
+        <InfoCard title="Active Public Key">
+          <TextHighlighted text={activePubkey} />
+        </InfoCard>
+      )}
       <InfoCard title="Past Public Keys">
         <Text>
           List of inactive public keys your account has had in the past.
         </Text>
         <div>
-          <Button size="sm">Show All</Button>
+          <Button size="sm" onClick={handleShowPastPubkeys}>
+            Show All
+          </Button>
         </div>
       </InfoCard>
       <InfoCard title="User ID">
