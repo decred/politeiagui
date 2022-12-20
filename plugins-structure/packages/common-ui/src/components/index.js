@@ -3,7 +3,6 @@ export * from "./Diff";
 export * from "./DigitsField";
 export * from "./Event";
 export * from "./GoBackLink";
-export * from "./Identity";
 export * from "./Join";
 export * from "./LabelValueList";
 export * from "./Markdown";
@@ -16,3 +15,5 @@ export * from "./RecordsList";
 export * from "./RecordToken";
 export * from "./Thumbnail";
 export * from "./Toast";
+
+export * from "./User";
