@@ -45,6 +45,10 @@
   max-width: 100%;
 }
 
+.form {
+  padding: 0 !important;
+}
+
 @media (--xl-viewport) {
   .modalConfirmWrapper {
     width: 50% !important;

@@ -4,6 +4,7 @@ import { Button, Icon, Message, Modal } from "pi-ui";
 import { useModal } from "./ModalProvider";
 import styles from "./styles.module.css";
 import { MarkdownRenderer } from "../Markdown";
+import isString from "lodash/isString";
 
 export const ModalConfirm = ({
   show,
@@ -62,7 +63,7 @@ export const ModalConfirm = ({
       {!success ? (
         <div className={styles.modalContent}>
           <div data-testid="modal-confirm-message">
-            <MarkdownRenderer body={message} />
+            {isString(message) ? <MarkdownRenderer body={message} /> : message}
           </div>
           <div className={styles.modalButtons}>
             <Button
@@ -76,7 +77,11 @@ export const ModalConfirm = ({
       ) : (
         <div className={styles.modalContent}>
           <div data-testid="modal-confirm-success-message">
-            <MarkdownRenderer body={successMessage} />
+            {isString(successMessage) ? (
+              <MarkdownRenderer body={successMessage} />
+            ) : (
+              successMessage
+            )}
           </div>
           <div className={styles.modalButtons}>
             <Button
@@ -94,13 +99,13 @@ export const ModalConfirm = ({
 
 ModalConfirm.propTypes = {
   title: PropTypes.string,
-  message: PropTypes.string,
+  message: PropTypes.node,
   show: PropTypes.bool,
   onClose: PropTypes.func,
   onCloseSuccess: PropTypes.func,
   onSubmit: PropTypes.func,
   successTitle: PropTypes.string,
-  successMessage: PropTypes.string,
+  successMessage: PropTypes.node,
   confirmButtonText: PropTypes.string,
 };
 
