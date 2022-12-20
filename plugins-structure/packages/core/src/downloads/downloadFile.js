@@ -31,3 +31,14 @@ export function downloadCSV(
   }
   fileDownload(csvData, `${filename}.csv`);
 }
+
+export function decodeFileText(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      resolve(e.target.result);
+    };
+    reader.readAsText(file);
+  });
+}
