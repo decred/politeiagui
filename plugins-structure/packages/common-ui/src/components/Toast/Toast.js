@@ -1,28 +1,26 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { ButtonIcon, H5, Message, Text } from "pi-ui";
-import { message } from "@politeiagui/core/globalServices";
 import styles from "./styles.module.css";
+import useToast from "../../hooks/useToast";
 
-export const Toast = ({ timeout = 5000, kind = "error" }) => {
-  const dispatch = useDispatch();
-  const msg = useSelector(message.select);
+export const Toast = ({ timeout = 5000 }) => {
+  const { title, body, kind, clearToast } = useToast();
   useEffect(() => {
     setTimeout(() => {
-      dispatch(message.clear());
+      clearToast();
     }, timeout);
-  }, [msg, dispatch, timeout]);
+  }, [title, body, clearToast, timeout]);
   return (
-    (msg.title || msg.body) && (
+    (title || body) && (
       <div className={styles.toast} data-testid="common-ui-toast">
         <ButtonIcon
           type="cancel"
           className={styles.close}
-          onClick={() => dispatch(message.clear())}
+          onClick={clearToast}
         />
         <Message kind={kind}>
-          {msg.title && <H5>{msg.title}</H5>}
-          {msg.body && <Text>{msg.body}</Text>}
+          {title && <H5>{title}</H5>}
+          {body && <Text>{body}</Text>}
         </Message>
       </div>
     )
