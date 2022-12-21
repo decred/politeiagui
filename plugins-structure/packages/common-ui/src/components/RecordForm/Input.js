@@ -4,6 +4,7 @@ import {
   BoxTextInput,
   Button,
   Checkbox as CheckboxUI,
+  NumberInput as NumberInputUI,
   Select,
   TextInput as TextInputUI,
   classNames,
@@ -159,6 +160,23 @@ export function DigitsInput({ name, ...props }) {
       name={name}
       render={({ field: { onChange, value } }) => (
         <DigitsField code={value} onChange={onChange} {...props} />
+      )}
+    />
+  );
+}
+
+export function NumberInput({ name, min, max, ...props }) {
+  return (
+    <Controller
+      name={name}
+      render={({ field: { onChange, value } }) => (
+        <NumberInputUI
+          value={value}
+          min={min}
+          max={max}
+          onChange={onChange}
+          {...props}
+        />
       )}
     />
   );
