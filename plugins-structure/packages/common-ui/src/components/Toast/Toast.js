@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { ButtonIcon, H5, Message, Text } from "pi-ui";
 import styles from "./styles.module.css";
-import useToast from "../../hooks/useToast";
+import useToast from "./useToast";
 
 export const Toast = ({ timeout = 5000 }) => {
   const { title, body, kind, clearToast } = useToast();
