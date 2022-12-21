@@ -8,6 +8,7 @@ import {
   MarkdownRenderer,
   RecordForm,
   SubmitButton,
+  useToast,
 } from "@politeiagui/common-ui";
 import { InfoCard } from "../../../components";
 import instructions from "../../../assets/copies/2fa-instructions.md";
@@ -17,14 +18,24 @@ const QrCode = ({ image, totpKey }) => {
 };
 
 function User2FA() {
+  const { openToast } = useToast();
   const isVerified = me.totpverified;
   const label = isVerified ? "Reset" : "Verify";
 
   function handleSubmit(values) {
+    console.log("Submit code", values);
     if (isVerified) {
-      console.log("Reset...", values);
+      openToast({
+        title: "User Two-Factor Authentication Reset",
+        body: "You have successfully disabled the Two-Factor Authentication for your account",
+        kind: "success",
+      });
     } else {
-      console.log("Verify...", values);
+      openToast({
+        title: "User Two-Factor Authentication",
+        body: "You have successfully set up Two-Factor Authentication for your account",
+        kind: "success",
+      });
     }
   }
 
@@ -50,7 +61,7 @@ function User2FA() {
           initialValues={{ code: "" }}
         >
           <div>
-            <DigitsInput length={6} name="code" />
+            <DigitsInput length={6} name="code" autoFocus />
             <SubmitButton>{label}</SubmitButton>
           </div>
         </RecordForm>

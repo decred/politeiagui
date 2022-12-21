@@ -8,11 +8,15 @@ export default function useToast() {
 
   // Wrapps on useCallback to prevent clearToast effect renders
   const openToast = useCallback(
-    ({ title, body, kind }) => {
+    ({ title, body, kind, timeout = 5000 } = {}) => {
       dispatch(message.set({ title, body, kind }));
+      setTimeout(() => {
+        dispatch(message.clear());
+      }, timeout);
     },
     [dispatch]
   );
+
   const clearToast = useCallback(() => {
     dispatch(message.clear());
   }, [dispatch]);

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { NumberInput, classNames } from "pi-ui";
-import styles from "./DigitsField.module.css";
+import styles from "./styles.module.css";
 
 const getDigitsArrayFromCode = (code = "", length) => {
   let newDigits = code.split("").slice(0, length);
@@ -36,14 +36,6 @@ export const DigitsField = ({
   useEffect(() => {
     setDigits(getDigitsArrayFromCode(code, length));
   }, [code, length]);
-
-  const onChangeDigit = (index) => {
-    const newDigits = [...digits];
-    newDigits[index] = "";
-    inputRef.current.selectionStart = index;
-    inputRef.current.selectionEnd = index + 1;
-    inputRef.current.focus();
-  };
 
   // Both useEffects are used to trigger the input focus
   // on render because useEffect does not recognize changes
@@ -80,14 +72,13 @@ export const DigitsField = ({
         {digits.map((value, index) => {
           return (
             <NumberInput
+              readOnly
               id={`id-digit-${index}`}
               key={`digit-${index}`}
               defaultValue={value}
               tabIndex={tabIndex}
-              onFocus={(e) => {
-                e && e.target && e.target.value
-                  ? onChangeDigit(index)
-                  : inputRef.current.focus();
+              onFocus={() => {
+                inputRef.current.focus();
                 setFocused(true);
               }}
             />

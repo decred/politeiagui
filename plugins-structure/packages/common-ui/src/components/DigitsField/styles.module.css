@@ -21,8 +21,8 @@
   margin: 0;
 }
 
-/* Firefox */
 .digitsWrapper input[type="number"] {
+  /* Firefox */
   -moz-appearance: textfield;
 }
 
