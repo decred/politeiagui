@@ -9,10 +9,13 @@ import {
   Table,
   Text,
 } from "pi-ui";
+import {
+  UserRegistrationFeeModal,
+  useModal,
+  useToast,
+} from "@politeiagui/common-ui";
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
-import { useToast } from "@politeiagui/common-ui/hooks";
 import { downloadCSV } from "@politeiagui/core/downloads";
-import { UserRegistrationFeeModal, useModal } from "@politeiagui/common-ui";
 import { CreditsModal, InfoCard } from "../../../components";
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
