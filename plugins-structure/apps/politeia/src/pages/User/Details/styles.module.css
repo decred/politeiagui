@@ -21,6 +21,10 @@
   align-items: center;
 }
 
+.column h5 {
+  color: var(--text-heading-color) !important;
+}
+
 .column > *:not(:first-child) {
   margin-top: var(--spacing-small);
 }

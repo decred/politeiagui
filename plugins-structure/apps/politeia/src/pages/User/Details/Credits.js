@@ -1,11 +1,18 @@
 import React from "react";
-import { Button, ButtonIcon, Column, Row, StatusTag, Table, Text } from "pi-ui";
+import {
+  Button,
+  ButtonIcon,
+  Column,
+  H5,
+  Row,
+  StatusTag,
+  Table,
+  Text,
+} from "pi-ui";
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
 import { downloadCSV } from "@politeiagui/core/downloads";
 import { UserRegistrationFeeModal, useModal } from "@politeiagui/common-ui";
-
 import { InfoCard } from "../../../components";
-
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
 import {
@@ -38,9 +45,7 @@ const CreditsBalanceAndFee = ({
     <InfoCard>
       <Row>
         <Column xs={12} md={6} className={styles.column}>
-          <Text color="grayDark" weight="semibold">
-            Registration Fee
-          </Text>
+          <H5>Registration Fee</H5>
           <StatusTag {...statusTagProps} />
           <Text size="small" color="gray">
             Politeia requires a small registration fee of {feePriceDCR} DCR
@@ -53,10 +58,8 @@ const CreditsBalanceAndFee = ({
           )}
         </Column>
         <Column xs={12} md={6} className={styles.column}>
-          <Text color="grayDark" weight="semibold">
-            Proposal Credits
-          </Text>
-          <Text color="grayDark" weight="bold">
+          <H5>Proposal Credits</H5>
+          <Text color="primaryDark" weight="bold">
             {unspentCredits || 0}
           </Text>
           <Text size="small" color="gray">
