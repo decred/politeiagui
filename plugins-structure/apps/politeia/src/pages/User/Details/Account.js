@@ -12,9 +12,7 @@ import {
   formatUnixTimestamp,
 } from "@politeiagui/common-ui/utils";
 import UserDetails from "./Details";
-
 import { InfoCard } from "../../../components";
-
 import styles from "./styles.module.css";
 import { formatItemsList } from "./helpers";
 
@@ -61,8 +59,10 @@ function UserAccount() {
   }
 
   const accountItems = [
-    { label: "Admin", value: user.isadmin },
+    { label: "Username", value: user.username },
+    { label: "E-mail", value: user.email },
     { label: "Verified Email", value: !user.newuserverificationtoken },
+    { label: "Admin", value: user.isadmin },
     {
       label: "Password",
       value: (
