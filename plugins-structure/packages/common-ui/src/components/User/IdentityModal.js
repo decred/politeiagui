@@ -6,7 +6,7 @@ import {
   FileInput,
   Input,
   ModalConfirm,
-  RecordForm,
+  ModalForm,
   SubmitButton,
   getMarkdownSection,
 } from "@politeiagui/common-ui";
@@ -56,20 +56,20 @@ export const IdentityImportModal = ({
   onSubmit = () => {},
 }) => {
   return (
-    <Modal onClose={onClose} show={show} title={title} className={styles.modal}>
-      <RecordForm
-        onSubmit={({ publicKey, secretKey }) =>
-          onSubmit({ publicKey, secretKey })
-        }
-        className={styles.form}
-        autoComplete="off"
-      >
-        <UploadIdentityButton />
-        <Input name="publicKey" label="Public Key" id="pubkey-input" />
-        <Input name="secretKey" label="Private Key" id="privkey-input" />
-        <SubmitButton>Update Identity</SubmitButton>
-      </RecordForm>
-    </Modal>
+    <ModalForm
+      onSubmit={({ publicKey, secretKey }) =>
+        onSubmit({ publicKey, secretKey })
+      }
+      autoComplete="off"
+      onClose={onClose}
+      show={show}
+      title={title}
+    >
+      <UploadIdentityButton />
+      <Input name="publicKey" label="Public Key" id="pubkey-input" />
+      <Input name="secretKey" label="Private Key" id="privkey-input" />
+      <SubmitButton>Update Identity</SubmitButton>
+    </ModalForm>
   );
 };
 

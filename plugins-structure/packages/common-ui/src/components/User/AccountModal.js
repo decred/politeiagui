@@ -1,8 +1,8 @@
 import React from "react";
 import { Modal, Text } from "pi-ui";
-import { Input, RecordForm, SubmitButton } from "../RecordForm";
+import { Input, SubmitButton } from "../RecordForm";
 import styles from "./styles.module.css";
-import { ModalConfirm } from "../Modal";
+import { ModalConfirm, ModalForm } from "../Modal";
 import { Payment } from "../Payment";
 
 export const AccountPasswordChangeModal = ({
@@ -12,14 +12,12 @@ export const AccountPasswordChangeModal = ({
   onSubmit,
 }) => {
   return (
-    <Modal {...{ onClose, title, show }} className={styles.modal}>
-      <RecordForm onSubmit={onSubmit} className={styles.form}>
-        <Input id="c" name="current" label="Current Password" type="password" />
-        <Input id="new" name="password" label="New Password" type="password" />
-        <Input id="vf" name="verify" label="Verify Password" type="password" />
-        <SubmitButton>Change Password</SubmitButton>
-      </RecordForm>
-    </Modal>
+    <ModalForm {...{ onClose, title, show }} onSubmit={onSubmit}>
+      <Input id="c" name="current" label="Current Password" type="password" />
+      <Input id="new" name="password" label="New Password" type="password" />
+      <Input id="vf" name="verify" label="Verify Password" type="password" />
+      <SubmitButton>Change Password</SubmitButton>
+    </ModalForm>
   );
 };
 

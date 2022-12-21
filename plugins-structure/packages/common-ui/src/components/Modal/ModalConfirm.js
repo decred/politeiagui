@@ -47,7 +47,7 @@ export const ModalConfirm = ({
   }
   return (
     <Modal
-      className={styles.modalConfirmWrapper}
+      className={styles.modalWrapper}
       show={show}
       onClose={handleClose}
       title={modalTitle}

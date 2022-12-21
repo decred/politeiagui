@@ -1,12 +1,3 @@
-.form {
-  padding: 0;
-}
-
-.form button[type="submit"] {
-  width: fit-content;
-  align-self: end;
-}
-
 .identityFile {
   display: flex;
   align-items: center;
@@ -15,6 +6,10 @@
 
 .modal {
   width: 70%;
+}
+
+.modal > * {
+  padding: 1rem 0;
 }
 
 .inactivePubkeys > li:not(:first-child) {
