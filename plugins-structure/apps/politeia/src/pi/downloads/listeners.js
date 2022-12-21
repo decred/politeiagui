@@ -18,6 +18,7 @@ function injectErrorEffect(effect) {
     await effect(getState(), dispatch, {
       title: "Download failed",
       body: payload,
+      kind: "error",
     });
   };
 }
