@@ -3,7 +3,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Card, classNames } from "pi-ui";
 import styles from "./styles.module.css";
 import { DatePickerInput } from "./DatePickerInput";
-import { ErrorMessage, Warning } from "./Message";
+import { ErrorMessage, InfoMessage, Warning } from "./Message";
 import { SaveButton, SubmitButton } from "./Button";
 import {
   Checkbox,
@@ -12,6 +12,7 @@ import {
   FileInput,
   Input,
   MarkdownInput,
+  NumberInput,
   SelectInput,
   TextInput,
 } from "./Input";
@@ -45,6 +46,7 @@ export function RecordForm({
                 DigitsInput,
                 ErrorMessage,
                 MarkdownInput,
+                NumberInput,
                 SaveButton,
                 SelectInput,
                 SubmitButton,
@@ -52,6 +54,7 @@ export function RecordForm({
                 FileInput,
                 Input,
                 Warning,
+                InfoMessage,
               })
             : children}
         </form>

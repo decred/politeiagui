@@ -53,13 +53,14 @@ export function FileInput({
   name = "file",
   placeholder = "Upload File",
   buttonKind = "primary",
+  className,
   ...props
 }) {
   const { register } = useFormContext();
   return (
     <div className={styles.fileInput}>
       <input type="file" {...register(name)} id={name} {...props} />
-      <Button size="sm" kind={buttonKind}>
+      <Button size="sm" kind={buttonKind} className={className}>
         <label htmlFor={name}>{placeholder}</label>
       </Button>
     </div>
@@ -92,7 +93,7 @@ export function SelectInput({ name = "select", options, ...props }) {
   const handleChange = (onChange) => (option) => {
     onChange(option.value);
   };
-  const getValue = (value) => options.find((o) => o.value === value);
+  const getValue = (value) => options?.find((o) => o.value === value);
   return (
     <Controller
       name={name}
