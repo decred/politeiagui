@@ -30,7 +30,7 @@ export function getCreditsTableHeaders() {
   return Object.values(TABLE_HEADERS);
 }
 
-export function getCreditsTableData(credits, creditPriceDCR = 0.1) {
+export function getCreditsTableData(credits, creditPriceDCR = 1 / 10) {
   const rows = groupBy(credits, "datepurchased");
   const data = Object.values(rows).map((row) => ({
     [TABLE_HEADERS.type]: "Credits",

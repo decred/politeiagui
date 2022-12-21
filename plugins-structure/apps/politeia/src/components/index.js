@@ -12,6 +12,8 @@ import ProposalsListEmpty from "./ProposalsList/EmptyList";
 import ProposalsList from "./ProposalsList/ProposalsList";
 // Cards
 export * from "./Card";
+// Modals
+export * from "./Modal";
 
 export {
   About,

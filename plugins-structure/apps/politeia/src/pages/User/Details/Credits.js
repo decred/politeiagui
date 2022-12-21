@@ -12,7 +12,7 @@ import {
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
 import { downloadCSV } from "@politeiagui/core/downloads";
 import { UserRegistrationFeeModal, useModal } from "@politeiagui/common-ui";
-import { InfoCard } from "../../../components";
+import { CreditsModal, InfoCard } from "../../../components";
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
 import {
@@ -40,6 +40,9 @@ const CreditsBalanceAndFee = ({
   function handlePayFee() {
     open(UserRegistrationFeeModal, { address });
   }
+  function handlePurchaseCredits() {
+    open(CreditsModal, { address });
+  }
 
   return (
     <InfoCard>
@@ -50,7 +53,6 @@ const CreditsBalanceAndFee = ({
           <Text size="small" color="gray">
             Politeia requires a small registration fee of {feePriceDCR} DCR
           </Text>
-          {/* TODO: onClick */}
           {!isPaid && (
             <Button size="sm" onClick={handlePayFee}>
               Pay Registration Fee
@@ -68,7 +70,9 @@ const CreditsBalanceAndFee = ({
           </Text>
           <div>
             {/* TODO: onClick */}
-            <Button size="sm">Purchase More</Button>
+            <Button size="sm" onClick={handlePurchaseCredits}>
+              Purchase More
+            </Button>
             <Button size="sm">Rescan</Button>
           </div>
         </Column>
