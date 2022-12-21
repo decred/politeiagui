@@ -34,6 +34,7 @@
 }
 
 .horizontalSection {
+  display: flex;
   flex-flow: row !important;
   align-items: center;
 }

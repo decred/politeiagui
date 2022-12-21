@@ -1,8 +1,9 @@
 import React from "react";
-import { Button, Text } from "pi-ui";
+import { Button, ButtonIcon, Text } from "pi-ui";
 import {
   AccountClearDataModal,
   AccountPasswordChangeModal,
+  AccountUsernameChangeModal,
   LabelValueList,
   ModalConfirmWithReason,
   useModal,
@@ -33,6 +34,15 @@ const PersonalData = ({ onClear }) => (
   </div>
 );
 
+const Username = ({ username, isOwner, onEdit }) => {
+  return (
+    <div className={styles.horizontalSection}>
+      <span>{username}</span>
+      {isOwner && <ButtonIcon type="edit" onClick={onEdit} />}
+    </div>
+  );
+};
+
 function UserAccount() {
   const [open] = useModal();
   function handleChangePassword() {
@@ -57,9 +67,25 @@ function UserAccount() {
       successMessage: "Account Deactivated. You'll be logged out.",
     });
   }
+  function handleEditUsername() {
+    open(AccountUsernameChangeModal, {
+      onSubmit: (values) => {
+        console.log("Edit user", values);
+      },
+    });
+  }
 
   const accountItems = [
-    { label: "Username", value: user.username },
+    {
+      label: "Username",
+      value: (
+        <Username
+          username={user.username}
+          isOwner
+          onEdit={handleEditUsername}
+        />
+      ),
+    },
     { label: "E-mail", value: user.email },
     { label: "Verified Email", value: !user.newuserverificationtoken },
     { label: "Admin", value: user.isadmin },
