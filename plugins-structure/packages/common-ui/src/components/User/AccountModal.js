@@ -21,6 +21,19 @@ export const AccountPasswordChangeModal = ({
   );
 };
 
+export const AccountUsernameChangeModal = ({
+  onClose,
+  title = "Change Username",
+  show,
+  onSubmit,
+}) => (
+  <ModalForm {...{ onClose, title, show }} onSubmit={onSubmit}>
+    <Input id="username" name="username" label="New Username" />
+    <Input id="password" name="password" label="Password" type="password" />
+    <SubmitButton>Change Username</SubmitButton>
+  </ModalForm>
+);
+
 export const AccountClearDataModal = ({
   onClose,
   title = "Clear Account Data",
