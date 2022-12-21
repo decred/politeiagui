@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   ButtonIcon,
@@ -10,6 +10,7 @@ import {
   Text,
 } from "pi-ui";
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
+import { useToast } from "@politeiagui/common-ui/hooks";
 import { downloadCSV } from "@politeiagui/core/downloads";
 import { UserRegistrationFeeModal, useModal } from "@politeiagui/common-ui";
 import { CreditsModal, InfoCard } from "../../../components";
@@ -24,6 +25,14 @@ import {
 // MOCK DATA
 import { credits, paywall, registration, user } from "./_mock";
 
+function mockPaymentsScan() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 2000);
+  });
+}
+
 const CreditsBalanceAndFee = ({
   isPaid,
   unspentCredits,
@@ -32,6 +41,8 @@ const CreditsBalanceAndFee = ({
   address,
 }) => {
   const [open] = useModal();
+  const [isScanning, setIsScanning] = useState(false);
+  const { openToast } = useToast();
 
   const statusTagProps = isPaid
     ? { text: "Paid", type: "greenCheck" }
@@ -42,6 +53,17 @@ const CreditsBalanceAndFee = ({
   }
   function handlePurchaseCredits() {
     open(CreditsModal, { address });
+  }
+  function handleRescanPayments() {
+    setIsScanning(true);
+    mockPaymentsScan().then(() => {
+      setIsScanning(false);
+      openToast({
+        title: "Payments Scan",
+        body: "Payments scan completed!",
+        kind: "success",
+      });
+    });
   }
 
   return (
@@ -73,7 +95,13 @@ const CreditsBalanceAndFee = ({
             <Button size="sm" onClick={handlePurchaseCredits}>
               Purchase More
             </Button>
-            <Button size="sm">Rescan</Button>
+            <Button
+              size="sm"
+              loading={isScanning}
+              onClick={handleRescanPayments}
+            >
+              Rescan
+            </Button>
           </div>
         </Column>
       </Row>
