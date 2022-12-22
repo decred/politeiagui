@@ -11,11 +11,15 @@
   -ms-animation: fadeIn linear 1s alternate infinite;
 }
 
-.footerButtons {
+.draftButtons {
   display: flex;
 }
 
-.footerButtons > * {
+.buttons {
+  display: flex;
+}
+
+.buttons > * {
   margin-left: 1rem;
 }
 

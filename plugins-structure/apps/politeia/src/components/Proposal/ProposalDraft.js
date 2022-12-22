@@ -3,10 +3,12 @@ import { Event, Join, RecordCard } from "@politeiagui/common-ui";
 import { decodeProposalDraftForm } from "../../pi/proposals/utils";
 import { ProposalTitle } from "./common";
 import { PROPOSAL_TYPE_RFP } from "../../pi";
-import { Link, StatusTag } from "pi-ui";
+import { ButtonIcon } from "pi-ui";
+import styles from "./styles.module.css";
 
-function DraftCard({ draft, draftid }) {
+function DraftCard({ draft, draftid, onDelete }) {
   const { name, type } = decodeProposalDraftForm(draft.record);
+
   return (
     <div data-testid="draft-card">
       <RecordCard
@@ -20,13 +22,22 @@ function DraftCard({ draft, draftid }) {
         }
         subtitle={
           <Join inline>
-            <Link data-link href={`/record/new?draft=${draftid}`}>
-              edit draft
-            </Link>
+            <span>Proposal Draft</span>
             <Event timestamp={draft.timestamp} />
           </Join>
         }
-        rightHeader={<StatusTag text="Draft" type="blueTime" />}
+        rightHeader={
+          <div className={styles.buttons}>
+            <a data-link href={`/record/new?draft=${draftid}`}>
+              <ButtonIcon type="edit" tooltipText="edit" />
+            </a>
+            <ButtonIcon
+              type="trash"
+              onClick={() => onDelete(draftid)}
+              tooltipText="delete"
+            />
+          </div>
+        }
       />
     </div>
   );

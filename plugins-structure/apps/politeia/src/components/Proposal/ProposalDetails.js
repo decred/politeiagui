@@ -176,7 +176,7 @@ const ProposalDetails = ({
               token={proposalDetails.token}
               version={proposalDetails.version}
             />
-            <div className={styles.footerButtons}>
+            <div className={styles.buttons}>
               <a
                 href={`/record/${getShortToken(proposalDetails.token)}/raw`}
                 data-link
