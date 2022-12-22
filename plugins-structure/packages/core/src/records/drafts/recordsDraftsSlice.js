@@ -4,7 +4,7 @@ import {
   saveToLocalStorage,
 } from "../../localStorage/localStorage";
 
-const RECORD_DRAFT_LS_KEY = "records-drafts";
+export const RECORD_DRAFT_LS_KEY = "records-drafts";
 
 export const initialState = {
   byUserId: {},
@@ -36,9 +36,10 @@ export const deleteRecordDraft = createAction(
   "recordsDrafts/delete",
   ({ userid, draftid }) => {
     const drafts = getFromLocalStorage(RECORD_DRAFT_LS_KEY, userid);
+    if (!drafts || !drafts[draftid]) return { payload: { draftid, userid } };
     delete drafts[draftid];
     saveToLocalStorage(RECORD_DRAFT_LS_KEY, drafts, userid);
-    return { payload: { draftid } };
+    return { payload: { draftid, userid } };
   }
 );
 
@@ -57,6 +58,11 @@ const recordsDraftsSlice = createSlice({
           ...(state.byUserId[userid] || {}),
           [draftid]: record,
         };
+      })
+      .addCase(deleteRecordDraft, (state, action) => {
+        const { draftid, userid } = action.payload;
+        if (state.byUserId[userid]?.[draftid])
+          delete state.byUserId[userid][draftid];
       });
   },
 });
