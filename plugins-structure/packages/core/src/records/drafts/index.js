@@ -1,4 +1,5 @@
 import {
+  deleteRecordDraft,
   loadRecordDrafts,
   saveRecordDraft,
   selectUserDraftById,
@@ -8,6 +9,7 @@ import {
 export const recordsDrafts = {
   load: loadRecordDrafts,
   save: saveRecordDraft,
+  delete: deleteRecordDraft,
   selectByUser: selectUserDrafts,
   selectById: selectUserDraftById,
 };
