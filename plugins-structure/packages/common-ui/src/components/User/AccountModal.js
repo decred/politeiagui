@@ -13,10 +13,27 @@ export const AccountPasswordChangeModal = ({
 }) => {
   return (
     <ModalForm {...{ onClose, title, show }} onSubmit={onSubmit}>
-      <Input id="c" name="current" label="Current Password" type="password" />
-      <Input id="new" name="password" label="New Password" type="password" />
-      <Input id="vf" name="verify" label="Verify Password" type="password" />
-      <SubmitButton>Change Password</SubmitButton>
+      <Input
+        id="current"
+        name="current"
+        label="Current Password"
+        type="password"
+      />
+      <Input
+        id="newpassword"
+        name="newpassword"
+        label="New Password"
+        type="password"
+      />
+      <Input
+        id="verify"
+        name="verify"
+        label="Verify Password"
+        type="password"
+      />
+      <SubmitButton id="account-change-password-button">
+        Change Password
+      </SubmitButton>
     </ModalForm>
   );
 };
@@ -30,7 +47,9 @@ export const AccountUsernameChangeModal = ({
   <ModalForm {...{ onClose, title, show }} onSubmit={onSubmit}>
     <Input id="username" name="username" label="New Username" />
     <Input id="password" name="password" label="Password" type="password" />
-    <SubmitButton>Change Username</SubmitButton>
+    <SubmitButton id="account-change-username-button">
+      Change Username
+    </SubmitButton>
   </ModalForm>
 );
 

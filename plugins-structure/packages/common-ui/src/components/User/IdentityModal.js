@@ -19,8 +19,8 @@ const UploadIdentityButton = () => {
     useFormContext();
   watch(async (data, { name }) => {
     if (name === "file") {
-      const fileJson = await decodeFileText(data.file?.[0]);
       try {
+        const fileJson = await decodeFileText(data.file?.[0]);
         const { publicKey, secretKey } = JSON.parse(fileJson);
         // TODO: Validate publickey and secretkey!
         if (publicKey && secretKey) {
@@ -68,7 +68,9 @@ export const IdentityImportModal = ({
       <UploadIdentityButton />
       <Input name="publicKey" label="Public Key" id="pubkey-input" />
       <Input name="secretKey" label="Private Key" id="privkey-input" />
-      <SubmitButton>Update Identity</SubmitButton>
+      <SubmitButton data-testid="identity-import-button">
+        Update Identity
+      </SubmitButton>
     </ModalForm>
   );
 };
