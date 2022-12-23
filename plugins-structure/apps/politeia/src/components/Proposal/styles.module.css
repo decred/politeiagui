@@ -11,15 +11,24 @@
   -ms-animation: fadeIn linear 1s alternate infinite;
 }
 
+.draftSubtitle {
+  align-items: center;
+  display: flex;
+}
+
 .draftButtons {
   display: flex;
 }
 
-.buttons {
+.draftButtons > *:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.footerButtons {
   display: flex;
 }
 
-.buttons > * {
+.footerButtons > * {
   margin-left: 1rem;
 }
 
@@ -66,6 +75,13 @@
 .textTooltip {
   width: 15rem;
   display: block;
+}
+
+@media (--sm-viewport) {
+  .draftButtons {
+    /* width: 100%; */
+    justify-content: flex-end;
+  }
 }
 
 @keyframes fadeIn {

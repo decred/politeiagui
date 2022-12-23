@@ -72,10 +72,6 @@
   align-items: center;
 }
 
-.proposalSubtitle {
-  padding-top: var(--spacing-small);
-}
-
 .disabled {
   color: var(--color-gray-light);
 }

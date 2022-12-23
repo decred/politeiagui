@@ -3,7 +3,7 @@ import { Event, Join, RecordCard } from "@politeiagui/common-ui";
 import { decodeProposalDraftForm } from "../../pi/proposals/utils";
 import { ProposalTitle } from "./common";
 import { PROPOSAL_TYPE_RFP } from "../../pi";
-import { ButtonIcon } from "pi-ui";
+import { ButtonIcon, StatusTag } from "pi-ui";
 import styles from "./styles.module.css";
 
 function DraftCard({ draft, draftid, onDelete }) {
@@ -21,23 +21,21 @@ function DraftCard({ draft, draftid, onDelete }) {
           />
         }
         subtitle={
-          <Join inline>
-            <span>Proposal Draft</span>
-            <Event timestamp={draft.timestamp} />
+          <Join inline className={styles.draftSubtitle}>
+            <div className={styles.draftButtons}>
+              <a data-link href={`/record/new?draft=${draftid}`}>
+                <ButtonIcon type="edit" tooltipText="edit" />
+              </a>
+              <ButtonIcon
+                type="trash"
+                onClick={() => onDelete(draftid)}
+                tooltipText="delete"
+              />
+            </div>
+            <Event event="drafted" timestamp={draft.timestamp} />
           </Join>
         }
-        rightHeader={
-          <div className={styles.buttons}>
-            <a data-link href={`/record/new?draft=${draftid}`}>
-              <ButtonIcon type="edit" tooltipText="edit" />
-            </a>
-            <ButtonIcon
-              type="trash"
-              onClick={() => onDelete(draftid)}
-              tooltipText="delete"
-            />
-          </div>
-        }
+        rightHeader={<StatusTag text="Draft" type="grayNegative" />}
       />
     </div>
   );
