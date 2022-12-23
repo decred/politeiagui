@@ -2,6 +2,10 @@
   all: unset;
 }
 
+.form {
+  margin-bottom: var(--spacing-large);
+}
+
 .form > *:first-child {
   margin-top: 0;
 }

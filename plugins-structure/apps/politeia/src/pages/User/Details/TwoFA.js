@@ -2,7 +2,6 @@ import React from "react";
 import { CopyableText } from "pi-ui";
 import UserDetails from "./Details";
 import styles from "./styles.module.css";
-import { me, totp } from "./_mock";
 import {
   DigitsInput,
   MarkdownRenderer,
@@ -12,6 +11,8 @@ import {
 } from "@politeiagui/common-ui";
 import { InfoCard } from "../../../components";
 import instructions from "../../../assets/copies/2fa-instructions.md";
+// MOCKS
+import { me, totp } from "./_mock";
 
 const QrCode = ({ image, totpKey }) => {
   return <img src={`data:image/png;base64, ${image}`} alt={totpKey} />;
@@ -41,7 +42,11 @@ function User2FA() {
 
   return (
     <UserDetails>
-      <InfoCard title="Set Two-Factor Authentication" hide={isVerified}>
+      <InfoCard
+        title="Set Two-Factor Authentication"
+        hide={isVerified}
+        data-testid="user-2fa-set"
+      >
         <div className={styles.totp}>
           <QrCode image={totp.image} totpKey={totp.key} />
           <MarkdownRenderer
@@ -50,10 +55,14 @@ function User2FA() {
           />
         </div>
       </InfoCard>
-      <InfoCard title="Backup Code" hide={isVerified}>
+      <InfoCard
+        title="Backup Code"
+        hide={isVerified}
+        data-testid="user-2fa-backup"
+      >
         <CopyableText id="totp-key">{totp.key}</CopyableText>
       </InfoCard>
-      <InfoCard title={`${label} Code`}>
+      <InfoCard title={`${label} Code`} data-testid="user-2fa-code">
         <RecordForm
           className={styles.reset}
           formClassName={styles.form}

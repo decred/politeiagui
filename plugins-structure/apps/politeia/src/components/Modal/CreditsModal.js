@@ -22,7 +22,12 @@ const CreditsForm = ({ address }) => {
 
 const CreditsModal = ({ address, onClose, show }) => {
   return (
-    <ModalForm title="Purchase Proposal Credits" show={show} onClose={onClose}>
+    <ModalForm
+      title="Purchase Proposal Credits"
+      show={show}
+      onClose={onClose}
+      data-testid="credits-modal"
+    >
       <CreditsForm address={address} />
     </ModalForm>
   );

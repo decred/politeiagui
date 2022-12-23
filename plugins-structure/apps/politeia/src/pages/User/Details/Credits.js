@@ -32,7 +32,7 @@ function mockPaymentsScan() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve();
-    }, 2000);
+    }, 1000);
   });
 }
 
@@ -70,7 +70,7 @@ const CreditsBalanceAndFee = ({
   }
 
   return (
-    <InfoCard>
+    <InfoCard data-testid="user-credits-balance-fee">
       <Row>
         <Column xs={12} md={6} className={styles.column}>
           <H5>Registration Fee</H5>
@@ -79,7 +79,11 @@ const CreditsBalanceAndFee = ({
             Politeia requires a small registration fee of {feePriceDCR} DCR
           </Text>
           {!isPaid && (
-            <Button size="sm" onClick={handlePayFee}>
+            <Button
+              size="sm"
+              onClick={handlePayFee}
+              data-testid="user-credits-pay-fee-button"
+            >
               Pay Registration Fee
             </Button>
           )}
@@ -94,14 +98,18 @@ const CreditsBalanceAndFee = ({
             {creditPriceDCR} DCR
           </Text>
           <div>
-            {/* TODO: onClick */}
-            <Button size="sm" onClick={handlePurchaseCredits}>
+            <Button
+              size="sm"
+              onClick={handlePurchaseCredits}
+              data-testid="user-credits-purchase-button"
+            >
               Purchase More
             </Button>
             <Button
               size="sm"
               loading={isScanning}
               onClick={handleRescanPayments}
+              data-testid="user-credits-rescan-button"
             >
               Rescan
             </Button>
@@ -138,11 +146,11 @@ const PaymentsHistory = ({
   return (
     <>
       <InfoCard
+        data-testid="user-credits-payments"
         title={
           <>
             Payments History
             <ButtonIcon
-              // TODO: onClick and download csv data from credits table
               type="down"
               text="Export to .csv"
               iconBackgroundColor="#8997a5"

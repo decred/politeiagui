@@ -38,7 +38,13 @@ const Username = ({ username, isOwner, onEdit }) => {
   return (
     <div className={styles.horizontalSection}>
       <span>{username}</span>
-      {isOwner && <ButtonIcon type="edit" onClick={onEdit} />}
+      {isOwner && (
+        <ButtonIcon
+          type="edit"
+          onClick={onEdit}
+          data-testid="user-account-username-edit-button"
+        />
+      )}
     </div>
   );
 };
@@ -61,6 +67,9 @@ function UserAccount() {
   }
   function handleDeactivate() {
     open(ModalConfirmWithReason, {
+      title: "Account Deactivation",
+      message:
+        "You are about to deactivate your account. Please, provide a reason for this action.",
       onSubmit: (values) => {
         console.log("Deactivating account", values);
       },
@@ -120,13 +129,13 @@ function UserAccount() {
 
   return (
     <UserDetails>
-      <InfoCard title="Account Details">
+      <InfoCard title="Account Details" data-testid="user-account-details">
         <LabelValueList alignValues items={formatItemsList(accountItems)} />
       </InfoCard>
-      <InfoCard title="Paywall">
+      <InfoCard title="Paywall" data-testid="user-account-paywall">
         <LabelValueList alignValues items={formatItemsList(paywallItems)} />
       </InfoCard>
-      <InfoCard title="Security">
+      <InfoCard title="Security" data-testid="user-account-security">
         <LabelValueList alignValues items={formatItemsList(securityItems)} />
         <Button size="sm" onClick={handleDeactivate}>
           Deactivate Account

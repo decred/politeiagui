@@ -11,7 +11,7 @@ const baseRoute = App.createRoute({
   path: "/user/:userid",
   cleanup: routeCleanup,
   view: ({ userid }) => {
-    router.navigateTo(`/user/${userid}/proposals`);
+    router.navigateTo(`/user/${userid}/identity`);
   },
 });
 

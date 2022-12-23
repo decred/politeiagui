@@ -11,6 +11,7 @@ import {
   useModal,
 } from "@politeiagui/common-ui";
 import { downloadJSON } from "@politeiagui/core/downloads";
+import isEmpty from "lodash/isEmpty";
 // Mock User
 import { user } from "./_mock";
 
@@ -73,9 +74,9 @@ function UserIdentity({ userid }) {
 
   return (
     <UserDetails>
-      <InfoCard title="Manage Identity">
+      <InfoCard title="Manage Identity" data-testid="user-identity-manage">
         <IdentityDescription />
-        <div>
+        <div data-testid="user-identity-manage-buttons">
           <Button size="sm" onClick={handleCreateIdentity}>
             Create new Identity
           </Button>
@@ -88,21 +89,29 @@ function UserIdentity({ userid }) {
         </div>
       </InfoCard>
       {activePubkey && (
-        <InfoCard title="Active Public Key">
+        <InfoCard
+          title="Active Public Key"
+          data-testid="user-identity-active-pubkey"
+        >
           <TextHighlighted text={activePubkey} />
         </InfoCard>
       )}
-      <InfoCard title="Past Public Keys">
-        <Text>
-          List of inactive public keys your account has had in the past.
-        </Text>
-        <div>
-          <Button size="sm" onClick={handleShowPastPubkeys}>
-            Show All
-          </Button>
-        </div>
-      </InfoCard>
-      <InfoCard title="User ID">
+      {!isEmpty(inactivePubkeys) && (
+        <InfoCard
+          title="Past Public Keys"
+          data-testid="user-identity-past-pubkeys"
+        >
+          <Text>
+            List of inactive public keys your account has had in the past.
+          </Text>
+          <div>
+            <Button size="sm" onClick={handleShowPastPubkeys}>
+              Show All
+            </Button>
+          </div>
+        </InfoCard>
+      )}
+      <InfoCard title="User ID" data-testid="user-identity-userid">
         <TextUuidMessage />
         <TextHighlighted text={userid} />
       </InfoCard>
