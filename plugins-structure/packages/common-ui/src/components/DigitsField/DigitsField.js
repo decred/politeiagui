@@ -50,7 +50,7 @@ export const DigitsField = ({
   }, [autoFocus]);
 
   return (
-    <>
+    <div>
       <input
         type="number"
         className={styles.mainInput}
@@ -85,7 +85,7 @@ export const DigitsField = ({
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 

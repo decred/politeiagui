@@ -69,7 +69,7 @@ function User2FA() {
           onSubmit={handleSubmit}
           initialValues={{ code: "" }}
         >
-          <div>
+          <div className={styles.totpCode}>
             <DigitsInput length={6} name="code" autoFocus />
             <SubmitButton>{label}</SubmitButton>
           </div>

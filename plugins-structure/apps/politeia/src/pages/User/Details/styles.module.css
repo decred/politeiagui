@@ -74,6 +74,15 @@
   margin-bottom: var(--spacing-1);
 }
 
+.totpCode {
+  display: flex;
+  align-items: center;
+}
+
+.totpCode > *:not(:first-child) {
+  margin-left: var(--spacing-medium);
+}
+
 @media (--sm-viewport) {
   .column:not(:first-child) {
     margin-top: var(--spacing-large);
