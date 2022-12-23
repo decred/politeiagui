@@ -16,6 +16,7 @@ export const ModalConfirm = ({
   successMessage,
   onCloseSuccess,
   confirmButtonText,
+  ...props
 }) => {
   const [success, setSuccess] = useState();
   const [error, setError] = useState();
@@ -47,6 +48,7 @@ export const ModalConfirm = ({
   }
   return (
     <Modal
+      {...props}
       className={styles.modalWrapper}
       show={show}
       onClose={handleClose}

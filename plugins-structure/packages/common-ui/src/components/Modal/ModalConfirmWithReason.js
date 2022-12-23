@@ -3,11 +3,11 @@ import { Text, TextInput } from "pi-ui";
 import styles from "./styles.module.css";
 import { ModalConfirm } from "../Modal";
 
-const ConfirmReason = ({ text, onChange }) => {
+const ConfirmReason = ({ message, onChange }) => {
   const [value, setValue] = useState("");
   return (
     <div>
-      <Text>{text}</Text>
+      <Text>{message}</Text>
       <TextInput
         id="reason"
         name="reason"
@@ -27,7 +27,7 @@ const ConfirmReason = ({ text, onChange }) => {
 export const ModalConfirmWithReason = ({
   onClose,
   title = "Confirm Action",
-  text = "Please, provide a reason for this action.",
+  message = "Please, provide a reason for this action.",
   show,
   onSubmit,
   ...props
@@ -40,7 +40,7 @@ export const ModalConfirmWithReason = ({
     <ModalConfirm
       {...{ onClose, title, show, ...props }}
       className={styles.modalContent}
-      message={<ConfirmReason text={text} onChange={setReason} />}
+      message={<ConfirmReason message={message} onChange={setReason} />}
       onSubmit={handleSubmit}
     />
   );

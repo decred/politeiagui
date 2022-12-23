@@ -12,7 +12,11 @@ export const AccountPasswordChangeModal = ({
   onSubmit,
 }) => {
   return (
-    <ModalForm {...{ onClose, title, show }} onSubmit={onSubmit}>
+    <ModalForm
+      {...{ onClose, title, show }}
+      onSubmit={onSubmit}
+      data-testid="account-password-change-modal"
+    >
       <Input
         id="current"
         name="current"
@@ -44,7 +48,11 @@ export const AccountUsernameChangeModal = ({
   show,
   onSubmit,
 }) => (
-  <ModalForm {...{ onClose, title, show }} onSubmit={onSubmit}>
+  <ModalForm
+    {...{ onClose, title, show }}
+    onSubmit={onSubmit}
+    data-testid="account-username-change-modal"
+  >
     <Input id="username" name="username" label="New Username" />
     <Input id="password" name="password" label="Password" type="password" />
     <SubmitButton id="account-change-username-button">
@@ -60,6 +68,7 @@ export const AccountClearDataModal = ({
   onSubmit,
 }) => (
   <ModalConfirm
+    data-testid="account-clear-data-modal"
     {...{ onClose, title, show, onSubmit }}
     successMessage="Data Cleared"
   />
@@ -72,7 +81,11 @@ export const UserRegistrationFeeModal = ({
   address,
 }) => {
   return (
-    <Modal {...{ onClose, title, show }} className={styles.modal}>
+    <Modal
+      {...{ onClose, title, show }}
+      className={styles.modal}
+      data-testid="registration-fee-modal"
+    >
       <Text>
         Politeia requires you to pay a small registration fee of exactly 0.1
         DCR. This helps keep Politeia free of things like spam and comment

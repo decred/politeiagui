@@ -37,7 +37,10 @@ const UploadIdentityButton = () => {
   return (
     <>
       {formState.errors.file && <ErrorMessage error="Invalid identity file." />}
-      <div className={styles.identityFile}>
+      <div
+        className={styles.identityFile}
+        data-testid="identity-modal-upload-button"
+      >
         <FileInput
           name="file"
           placeholder="Upload json identity file"
@@ -57,6 +60,7 @@ export const IdentityImportModal = ({
 }) => {
   return (
     <ModalForm
+      data-testid="identity-import-modal"
       onSubmit={({ publicKey, secretKey }) =>
         onSubmit({ publicKey, secretKey })
       }
@@ -68,7 +72,7 @@ export const IdentityImportModal = ({
       <UploadIdentityButton />
       <Input name="publicKey" label="Public Key" id="pubkey-input" />
       <Input name="secretKey" label="Private Key" id="privkey-input" />
-      <SubmitButton data-testid="identity-import-button">
+      <SubmitButton data-testid="identity-import-modal-update-button">
         Update Identity
       </SubmitButton>
     </ModalForm>
@@ -78,6 +82,7 @@ export const IdentityImportModal = ({
 export const IdentityCreateModal = ({ onClose, show, onSubmit = () => {} }) => {
   return (
     <ModalConfirm
+      data-testid="identity-create-modal"
       onClose={onClose}
       show={show}
       title="Create New identity"
@@ -99,7 +104,12 @@ export const IdentityInactivePubkeysModal = ({
   keys,
   title = "Inactive Public Keys",
 }) => (
-  <Modal onClose={onClose} show={show} title={title}>
+  <Modal
+    onClose={onClose}
+    show={show}
+    title={title}
+    data-testid="identity-inactive-pubkeys-modal"
+  >
     <ol className={styles.inactivePubkeys}>
       {keys.map((k, i) => (
         <li key={i}>

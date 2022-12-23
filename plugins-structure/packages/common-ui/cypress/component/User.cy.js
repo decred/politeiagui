@@ -106,7 +106,7 @@ describe("given <IdentityImportModal />", () => {
     );
     cy.get("#pubkey-input").type(values.publicKey);
     cy.get("#privkey-input").type(values.secretKey);
-    cy.get("[data-testid=identity-import-button]")
+    cy.get("[data-testid=identity-import-modal-update-button]")
       .click()
       .then(() => {
         expect(onSubmit).to.be.calledWith(values);
@@ -123,7 +123,7 @@ describe("given <IdentityImportModal />", () => {
     );
 
     cy.get("label[for=file]").selectFile("@identity");
-    cy.get("[data-testid=identity-import-button]").click();
+    cy.get("[data-testid=identity-import-modal-update-button]").click();
     cy.get("@identity").then(({ publicKey, secretKey }) => {
       expect(onSubmit).to.be.calledWith({ publicKey, secretKey });
     });
