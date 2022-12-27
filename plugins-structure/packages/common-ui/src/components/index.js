@@ -14,3 +14,5 @@ export * from "./RecordsList";
 export * from "./RecordToken";
 export * from "./Thumbnail";
 export * from "./Toast";
+
+export * from "./User";

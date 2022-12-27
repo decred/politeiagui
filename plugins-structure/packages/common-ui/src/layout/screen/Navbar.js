@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { navigation } from "@politeiagui/core/globalServices";
 import { Column, Row, classNames, useLockBodyScrollOnTrue } from "pi-ui";
 import styles from "./Navbar.module.css";
 
@@ -22,6 +24,11 @@ function HamburgerToggle({ onToggle, isActive }) {
 export function Navbar({ logo, children, drawerContent }) {
   const [showCollapsed, setShowCollapsed] = useState(false);
   useLockBodyScrollOnTrue(showCollapsed);
+  // Collapse drawer on route change
+  const currentLocation = useSelector(navigation.selectHistoryLastItem);
+  useEffect(() => {
+    setShowCollapsed(false);
+  }, [currentLocation]);
   return (
     <>
       <nav className={styles.navWrapper} data-testid="common-ui-navbar">

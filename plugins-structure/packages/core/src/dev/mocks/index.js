@@ -1,4 +1,5 @@
 export * from "./records";
+export * from "./user";
 
 export function mockApi({
   mode = "mock_mode",

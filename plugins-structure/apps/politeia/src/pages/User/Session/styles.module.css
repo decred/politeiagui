@@ -1,0 +1,44 @@
+.page {
+  margin: var(--spacing-large);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+}
+
+.page > *:not(:first-child) {
+  margin-top: var(--spacing-large);
+}
+
+.links {
+  text-align: center;
+}
+
+.content {
+  margin-top: 8rem;
+  width: 40%;
+}
+
+.verifyMessage > *:not(:first-child) {
+  margin-top: var(--spacing-medium);
+}
+
+@media (--lg-viewport) {
+  .content {
+    width: 60%;
+  }
+}
+
+@media (--md-viewport) {
+  .content {
+    margin-top: 0;
+    width: 80%;
+  }
+}
+
+@media (--sm-viewport) {
+  .content {
+    margin-top: 0;
+    width: 100%;
+  }
+}

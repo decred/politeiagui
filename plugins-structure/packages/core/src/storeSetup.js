@@ -9,6 +9,7 @@ import apiReducer from "./api/apiSlice";
 import progressReducer from "./globalServices/progress";
 import messageReducer from "./globalServices/message";
 import navigationReducer from "./globalServices/navigation";
+import userReducer from "./user/userSlice";
 
 import { listenerMiddleware } from "./listeners";
 
@@ -22,6 +23,7 @@ const staticReducers = {
   globalProgress: progressReducer,
   globalMessage: messageReducer,
   globalNavigation: navigationReducer,
+  user: userReducer,
 };
 
 function createReducer(reducers, asyncReducers) {
