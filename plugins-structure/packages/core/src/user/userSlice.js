@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // MOCKS
 import { mockUser } from "../dev/mocks";
 
+// TODO: Use correct methods from user layer once it gets implemented on backend
+
 const initialState = {
   currentUser: null,
   byId: {},
@@ -9,6 +11,7 @@ const initialState = {
   error: null,
 };
 
+// Auth
 export const userLogin = createAsyncThunk(
   "user/login",
   ({ email, password }, { rejectWithValue }) => {
@@ -33,7 +36,7 @@ export const userSignup = createAsyncThunk(
   "user/signup",
   ({ email, password, publickey, username }, { rejectWithValue }) => {
     // Mock user. ONLY FOR DEV PURPOSES. THIS MUST BE REMOVED BEFORE PRODUCTION.
-    // Replace this mock by the api/user new method.
+    // Replace this mock by the api/user signup method.
     if (email === "error@error.com") throw rejectWithValue("User not found");
     return { verificationtoken: "fake-verification-token" };
     // END MOCK
@@ -57,17 +60,39 @@ export const userLogout = createAsyncThunk(
   }
 );
 
+// Password
+export const userPasswordRequestReset = createAsyncThunk(
+  "user/passwordRequest",
+  ({ username, email }, { rejectWithValue }) => {
+    // Mock user. ONLY FOR DEV PURPOSES. THIS MUST BE REMOVED BEFORE PRODUCTION.
+    // Replace this mock by the api/user request password reset method.
+    if (email === "error@error.com") return rejectWithValue("User not found");
+    return { verificationtoken: "fake-verification-token" };
+    // END MOCK
+  }
+);
+
+// Email
 export const userVerificationEmailResend = createAsyncThunk(
   "user/verificationResend",
   ({ email, username }, { rejectWithValue }) => {
     // Mock user. ONLY FOR DEV PURPOSES. THIS MUST BE REMOVED BEFORE PRODUCTION.
-    // Replace this mock by the api/user new method.
+    // Replace this mock by the api/user email resend method.
     if (email === "error@error.com") return rejectWithValue("User not found");
     return { verificationtoken: "fake-verification-token" };
     // END MOCK
   },
   {
     condition: (data) => data && data.email && data.username,
+  }
+);
+export const userVerifyEmail = createAsyncThunk(
+  "user/verify",
+  ({ email, verificationtoken, username }, { rejectWithValue }) => {
+    // Mock user. ONLY FOR DEV PURPOSES. THIS MUST BE REMOVED BEFORE PRODUCTION.
+    // Replace this mock by the api/user verify email method.
+    if (email === "error@error.com") return rejectWithValue("User not found");
+    return { verificationtoken: "fake-verification-token" };
   }
 );
 
@@ -113,15 +138,39 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      // Verification email
+      // Password Request Reset
+      .addCase(userPasswordRequestReset.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(userPasswordRequestReset.fulfilled, (state) => {
+        state.status = "succeeded";
+        // TODO: save server response
+      })
+      .addCase(userPasswordRequestReset.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // Verification email Resend
       .addCase(userVerificationEmailResend.pending, (state) => {
         state.status = "loading";
       })
       .addCase(userVerificationEmailResend.fulfilled, (state) => {
         state.status = "succeeded";
       })
-      .addCase(userVerificationEmailResend.rejected, (state) => {
+      .addCase(userVerificationEmailResend.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload;
+      })
+      // User Email Verification
+      .addCase(userVerifyEmail.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(userVerifyEmail.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addCase(userVerifyEmail.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });
