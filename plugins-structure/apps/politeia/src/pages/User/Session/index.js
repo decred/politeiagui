@@ -27,11 +27,44 @@ const resendVerificationEmailRoute = App.createRoute({
   cleanup: routeCleanup,
   view: createRouteView(
     lazy(() =>
-      import(/* webpackChunkName: "user_signup_page" */ "./ResendEmail")
+      import(/* webpackChunkName: "user_signup_page" */ "./EmailResend")
     )
   ),
 });
 
-const routes = [loginRoute, signupRoute, resendVerificationEmailRoute];
+const passwordResetRequestRoute = App.createRoute({
+  path: "/user/password/request",
+  title: "Request Password Reset",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() =>
+      import(
+        /* webpackChunkName: "user_pass_reset_request_page" */
+        "./PasswordResetRequest"
+      )
+    )
+  ),
+});
+const passwordResetRoute = App.createRoute({
+  path: "/user/password/reset",
+  title: "Password Reset",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() =>
+      import(
+        /* webpackChunkName: "user_pass_reset_request_page" */
+        "./PasswordReset"
+      )
+    )
+  ),
+});
+
+const routes = [
+  loginRoute,
+  signupRoute,
+  resendVerificationEmailRoute,
+  passwordResetRequestRoute,
+  passwordResetRoute,
+];
 
 export default routes;
