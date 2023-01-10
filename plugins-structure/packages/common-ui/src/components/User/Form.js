@@ -54,3 +54,33 @@ export const VerificationEmailForm = ({ onSubmit, className }) => {
     </RecordForm>
   );
 };
+
+export const PasswordResetForm = ({
+  onSubmit,
+  className,
+  requestMode = false,
+}) => (
+  <RecordForm className={className} onSubmit={onSubmit}>
+    {({ TextInput: Input, SubmitButton }) =>
+      requestMode ? (
+        <>
+          <H1>Request Password Reset</H1>
+          <Input name="email" placeholder="E-mail" />
+          <Input name="username" placeholder="Username" />
+          <SubmitButton>Reset</SubmitButton>
+        </>
+      ) : (
+        <>
+          <H1>Reset Password</H1>
+          <Input name="password" placeholder="New Password" type="password" />
+          <Input
+            name="verifypass"
+            placeholder="Verify New Password"
+            type="password"
+          />
+          <SubmitButton>Reset</SubmitButton>
+        </>
+      )
+    }
+  </RecordForm>
+);
