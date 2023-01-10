@@ -15,17 +15,20 @@ function UserLoginPage() {
   return (
     <div className={styles.page}>
       <LoginForm className={styles.content} onSubmit={handleLogin} />
+      <div className={styles.links}>
+        Don't have an account?{" "}
+        <Link data-link href="/user/signup">
+          Create one Here!
+        </Link>
+      </div>
       <Join className={styles.links}>
-        <Link href="/user/password-reset" data-link>
+        <Link href="/user/password/request" data-link>
           Reset Password
         </Link>
-        <div>Privacy Policy</div>
-        <div>
-          Don't have an account?{" "}
-          <Link data-link href="/user/signup">
-            Create one Here!
-          </Link>
-        </div>
+        {/* TODO: Add privacy policy page */}
+        <Link data-link href="/policy">
+          Privacy Policy
+        </Link>
       </Join>
     </div>
   );

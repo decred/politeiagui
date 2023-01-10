@@ -12,6 +12,10 @@
 
 .links {
   text-align: center;
+  color: var(--color-gray-blueish);
+}
+.links a {
+  color: var(--text-color-light);
 }
 
 .content {
