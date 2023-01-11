@@ -2,7 +2,9 @@ import { lazy } from "react";
 import App from "../../../app";
 import { routeCleanup } from "../../../utils/routeCleanup";
 import { createRouteView } from "../../../utils/createRouteView";
+import { serviceListeners } from "@politeiagui/core/user/services";
 
+// Auth
 const loginRoute = App.createRoute({
   path: "/user/login",
   title: "Login",
@@ -21,17 +23,30 @@ const signupRoute = App.createRoute({
   ),
 });
 
-const resendVerificationEmailRoute = App.createRoute({
+// Email
+const emailResendRoute = App.createRoute({
   path: "/user/resend-verification-email",
   title: "Resend Verification Email",
   cleanup: routeCleanup,
   view: createRouteView(
     lazy(() =>
-      import(/* webpackChunkName: "user_signup_page" */ "./EmailResend")
+      import(/* webpackChunkName: "user_resend_email_page" */ "./EmailResend")
+    )
+  ),
+});
+const emailVerifyRoute = App.createRoute({
+  path: "/user/verify",
+  title: "Verify Email",
+  cleanup: routeCleanup,
+  setupServices: [serviceListeners.verify],
+  view: createRouteView(
+    lazy(() =>
+      import(/* webpackChunkName: "user_verify_email_page" */ "./EmailVerify")
     )
   ),
 });
 
+// Password
 const passwordResetRequestRoute = App.createRoute({
   path: "/user/password/request",
   title: "Request Password Reset",
@@ -45,6 +60,7 @@ const passwordResetRequestRoute = App.createRoute({
     )
   ),
 });
+
 const passwordResetRoute = App.createRoute({
   path: "/user/password/reset",
   title: "Password Reset",
@@ -62,7 +78,8 @@ const passwordResetRoute = App.createRoute({
 const routes = [
   loginRoute,
   signupRoute,
-  resendVerificationEmailRoute,
+  emailResendRoute,
+  emailVerifyRoute,
   passwordResetRequestRoute,
   passwordResetRoute,
 ];

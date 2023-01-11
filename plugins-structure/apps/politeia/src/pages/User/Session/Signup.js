@@ -8,18 +8,40 @@ import {
   SignupForm,
   useModal,
 } from "@politeiagui/common-ui";
-import { Link } from "pi-ui";
+import { Link, P } from "pi-ui";
 import styles from "./styles.module.css";
 import message from "../../../assets/copies/before-signup.md";
 import PrivacyPolicyModal from "../../../components/Modal/PrivacyPolicyModal";
+
+// MOCK DEV ENV. Handle that on #2855 - [plugin-architecture] Handle
+//   Mainnet/Testnet envs
+const IS_DEV = true;
+
+const SuccessMessage = ({ email }) => (
+  <div>
+    <P>
+      The verification e-mail has been sent to {email}. Please check your inbox
+      and open the verification link within the same browser you used to perform
+      this signup operation.
+    </P>
+    {IS_DEV && (
+      <Link
+        data-link
+        href={`/user/verify?email=${email}&verificationtoken=fake-verification-token`}
+      >
+        {"[DEV ONLY]"} Verify Email
+      </Link>
+    )}
+  </div>
+);
 
 function ModalBeforeSignup({ onSubmit, email, ...props }) {
   return (
     <ModalConfirm
       message={message}
       title="Before you sign up"
-      onCloseSuccess={router.navigateTo("/")}
-      successMessage={`The verification e-mail has been sent to ${email}. Please check your inbox and open the verification link within the same browser you used to perform this signup operation.`}
+      onCloseSuccess={() => router.navigateTo("/")}
+      successMessage={<SuccessMessage email={email} />}
       onSubmit={onSubmit}
       {...props}
     />
@@ -29,10 +51,11 @@ function ModalBeforeSignup({ onSubmit, email, ...props }) {
 function UserSignupPage() {
   const dispatch = useDispatch();
   const [open] = useModal();
+
   function handleSignup({ username, email, password }) {
     open(ModalBeforeSignup, {
       email,
-      onSubmit: () =>
+      onSubmit: () => {
         dispatch(
           user.signup({
             email,
@@ -40,7 +63,8 @@ function UserSignupPage() {
             publickey: "MOCK_THIS_FOR_NOW",
             username,
           })
-        ),
+        );
+      },
     });
   }
   function handlePrivacyPolicy() {

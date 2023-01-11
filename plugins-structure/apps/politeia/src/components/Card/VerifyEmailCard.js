@@ -15,7 +15,7 @@ function VerifyEmailCard({ email, className }) {
         email:
       </P>
       <ul>
-        <li>Check that {email} is the correct address.</li>
+        {email && <li>Check that {email} is the correct address.</li>}
         <li>Check your spam folder!</li>
       </ul>
       <P>

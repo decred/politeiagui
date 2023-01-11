@@ -21,7 +21,7 @@ function UserResendVerificationEmail() {
           className={styles.content}
         />
       ) : (
-        <VerifyEmailCard email={email} />
+        <VerifyEmailCard email={email} className={styles.content} />
       )}
     </div>
   );
