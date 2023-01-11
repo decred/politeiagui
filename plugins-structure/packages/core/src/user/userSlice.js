@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { mockUser } from "../dev/mocks";
 
 // TODO: Use correct methods from user layer once it gets implemented on backend
+// TODO 2: Split methods into sub-slices, ex: auth, email, password...
 
 const initialState = {
   currentUser: null,
@@ -86,13 +87,18 @@ export const userVerificationEmailResend = createAsyncThunk(
     condition: (data) => data && data.email && data.username,
   }
 );
+
 export const userVerifyEmail = createAsyncThunk(
   "user/verify",
-  ({ email, verificationtoken, username }, { rejectWithValue }) => {
+  ({ email, verificationtoken }, { rejectWithValue }) => {
     // Mock user. ONLY FOR DEV PURPOSES. THIS MUST BE REMOVED BEFORE PRODUCTION.
     // Replace this mock by the api/user verify email method.
-    if (email === "error@error.com") return rejectWithValue("User not found");
-    return { verificationtoken: "fake-verification-token" };
+    if (email === "error@error.com")
+      throw rejectWithValue("Invalid verification token");
+    return {};
+  },
+  {
+    condition: (data) => data && data.email && data.verificationtoken,
   }
 );
 
@@ -176,5 +182,7 @@ const userSlice = createSlice({
 });
 
 export const selectCurrentUser = (state) => state.user.currentUser;
+export const selectUserStatus = (state) => state.user.status;
+export const selectUserError = (state) => state.user.error;
 
 export default userSlice.reducer;
