@@ -38,7 +38,7 @@ const emailVerifyRoute = App.createRoute({
   path: "/user/verify",
   title: "Verify Email",
   cleanup: routeCleanup,
-  setupServices: [serviceListeners.verify],
+  setupServices: [serviceListeners.emailVerify],
   view: createRouteView(
     lazy(() =>
       import(/* webpackChunkName: "user_verify_email_page" */ "./EmailVerify")
@@ -75,11 +75,28 @@ const passwordResetRoute = App.createRoute({
   ),
 });
 
+// Identity
+const keyVerifyRoute = App.createRoute({
+  path: "/user/key/verify",
+  title: "Verify User Identity",
+  cleanup: routeCleanup,
+  setupServices: [serviceListeners.keyVerify],
+  view: createRouteView(
+    lazy(() =>
+      import(
+        /* webpackChunkName: "user_key_verify_page" */
+        "./KeyVerify"
+      )
+    )
+  ),
+});
+
 const routes = [
   loginRoute,
   signupRoute,
   emailResendRoute,
   emailVerifyRoute,
+  keyVerifyRoute,
   passwordResetRequestRoute,
   passwordResetRoute,
 ];
