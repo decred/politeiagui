@@ -11,6 +11,7 @@ import {
 import { Link } from "pi-ui";
 import styles from "./styles.module.css";
 import message from "../../../assets/copies/before-signup.md";
+import PrivacyPolicyModal from "../../../components/Modal/PrivacyPolicyModal";
 
 function ModalBeforeSignup({ onSubmit, email, ...props }) {
   return (
@@ -42,16 +43,25 @@ function UserSignupPage() {
         ),
     });
   }
+  function handlePrivacyPolicy() {
+    open(PrivacyPolicyModal);
+  }
   return (
     <div className={styles.page}>
       <SignupForm className={styles.content} onSubmit={handleSignup} />
-      <Join>
+      <div className={styles.links}>
+        Already have an account?{" "}
+        <Link href="/user/login" data-link>
+          Log in!
+        </Link>
+      </div>
+      <Join className={styles.links}>
         <Link href="/user/resend-verification-email" data-link>
           Resend Verification Email
         </Link>
-        <span>
-          Already have an account? <Link href="/user/login">Log in!</Link>
-        </span>
+        <div onClick={handlePrivacyPolicy} className={styles.policy}>
+          Privacy Policy
+        </div>
       </Join>
     </div>
   );

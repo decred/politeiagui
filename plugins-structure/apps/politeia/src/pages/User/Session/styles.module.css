@@ -23,6 +23,15 @@
   width: 40%;
 }
 
+.policy {
+  cursor: pointer;
+  color: var(--text-color-light);
+}
+
+.policy:hover {
+  text-decoration: underline;
+}
+
 .verifyMessage > *:not(:first-child) {
   margin-top: var(--spacing-medium);
 }
