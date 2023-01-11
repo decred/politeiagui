@@ -8,11 +8,19 @@ export const { pluginServices, serviceSetups: serviceListeners } =
   createSliceServices({
     name: "userEmail",
     services: {
-      verify: {
+      emailVerify: {
         onSetup: () => {
-          const { email, verificationtoken } = getURLSearchParams();
-          if (email && verificationtoken) {
-            store.dispatch(user.verifyEmail({ email, verificationtoken }));
+          const { verificationtoken } = getURLSearchParams();
+          if (verificationtoken) {
+            store.dispatch(user.verifyEmail({ verificationtoken }));
+          }
+        },
+      },
+      keyVerify: {
+        onSetup: () => {
+          const { verificationtoken } = getURLSearchParams();
+          if (verificationtoken) {
+            store.dispatch(user.verifyKey({ verificationtoken }));
           }
         },
       },

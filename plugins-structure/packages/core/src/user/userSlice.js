@@ -102,6 +102,18 @@ export const userVerifyEmail = createAsyncThunk(
   }
 );
 
+// Identity
+export const userVerifyKey = createAsyncThunk(
+  "user/key/verify",
+  ({ verificationtoken }, { rejectWithValue }) => {
+    // Mock user. ONLY FOR DEV PURPOSES. THIS MUST BE REMOVED BEFORE PRODUCTION.
+    // Replace this mock by the api/user verify key method.
+    if (verificationtoken === "invalid")
+      throw rejectWithValue("Invalid verification token");
+    return {};
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -175,6 +187,17 @@ const userSlice = createSlice({
         state.status = "succeeded";
       })
       .addCase(userVerifyEmail.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // User key Verification
+      .addCase(userVerifyKey.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(userVerifyKey.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
+      .addCase(userVerifyKey.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
