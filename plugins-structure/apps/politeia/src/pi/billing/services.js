@@ -1,22 +1,24 @@
+import { createSliceServices } from "@politeiagui/core/toolkit";
 import { fetchPolicyIfIdle } from "../utils";
 import {
   fetchRecordsBillingStatusChanges,
   fetchSingleRecordBillingStatusChanges,
 } from "./effects";
 
-export const services = [
-  {
-    id: "pi/billingStatusChanges/single",
-    action: async () => {
-      await fetchPolicyIfIdle();
+async function onSetup() {
+  await fetchPolicyIfIdle();
+}
+
+export const { pluginServices, serviceListeners } = createSliceServices({
+  name: "piBilling",
+  services: {
+    statusChanges: {
+      onSetup,
+      effect: fetchRecordsBillingStatusChanges,
     },
-    effect: fetchSingleRecordBillingStatusChanges,
-  },
-  {
-    id: "pi/billingStatusChanges",
-    action: async () => {
-      await fetchPolicyIfIdle();
+    statusChangesSingle: {
+      onSetup,
+      effect: fetchSingleRecordBillingStatusChanges,
     },
-    effect: fetchRecordsBillingStatusChanges,
   },
-];
+});

@@ -4,7 +4,7 @@ import { routeCleanup } from "../../../utils/routeCleanup";
 import { createRouteView } from "../../../utils/createRouteView";
 import { router } from "@politeiagui/core/router";
 import { serviceListeners as draftsListeners } from "@politeiagui/core/records/drafts/services";
-import { recordsInventorySetupServices } from "../../../pi/proposalsList/servicesSetup";
+import { servicesSetupsByRecordsInventory } from "../../../pi/proposalsList/servicesSetups";
 import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listeners";
 
 const baseRoute = App.createRoute({
@@ -20,7 +20,7 @@ const userProposalsRoute = App.createRoute({
   title: "User Proposals",
   cleanup: routeCleanup,
   // TODO: Use user proposals inventory & listeners
-  setupServices: recordsInventorySetupServices,
+  setupServices: servicesSetupsByRecordsInventory,
   listeners: [listenToRecordsInventoryFetch],
   view: createRouteView(
     lazy(() =>

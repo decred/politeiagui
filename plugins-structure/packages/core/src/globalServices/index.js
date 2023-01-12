@@ -1,22 +1,19 @@
 import {
   endProgress,
   initProgress,
-  services as progressServices,
   selectProgress,
   updateProgress,
 } from "./progress";
-import {
-  clearMessage,
-  services as messageServices,
-  selectMessage,
-  setMessage,
-} from "./message";
+import { clearMessage, selectMessage, setMessage } from "./message";
 import {
   popNavigation,
   pushNavigation,
   selectNavigationHistory,
   selectNavigationHistoryLastItem,
 } from "./navigation";
+import { messageServices, progressServices } from "./services";
+
+export { messageListeners, progressListeners } from "./services";
 
 export const message = {
   clear: clearMessage,
