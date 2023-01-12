@@ -7,25 +7,27 @@ import {
   fetchRecordDetails,
 } from "./effects";
 
-export const services = [
-  {
-    id: "records/batch",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validateRecordsPageSize(store.getState());
+import { createSliceServices } from "../../toolkit";
+
+export const { pluginServices, serviceListeners } = createSliceServices({
+  name: "records",
+  services: {
+    batch: {
+      onSetup: async () => {
+        await fetchPolicyIfIdle();
+        validateRecordsPageSize(store.getState());
+      },
+      effect: fetchNextRecords,
     },
-    effect: fetchNextRecords,
-  },
-  {
-    id: "records/batch/all",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validateRecordsPageSize(store.getState());
+    batchAll: {
+      onSetup: async () => {
+        await fetchPolicyIfIdle();
+        validateRecordsPageSize(store.getState());
+      },
+      effect: fetchAllRecordsInventory,
     },
-    effect: fetchAllRecordsInventory,
+    details: {
+      effect: fetchRecordDetails,
+    },
   },
-  {
-    id: "records/details",
-    effect: fetchRecordDetails,
-  },
-];
+});

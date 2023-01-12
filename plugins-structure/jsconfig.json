@@ -27,8 +27,8 @@
       "@politeiagui/core/records": [
         "./packages/core/src/records/records/index.js"
       ],
-      "@politeiagui/core/records/effects": [
-        "./packages/core/src/records/effects/index.js"
+      "@politeiagui/core/records/services": [
+        "./packages/core/src/records/records/services.js"
       ],
       "@politeiagui/core/records/utils": [
         "./packages/core/src/records/utils.js"
@@ -41,6 +41,9 @@
       ],
       "@politeiagui/core/records/inventory": [
         "./packages/core/src/records/inventory/index.js"
+      ],
+      "@politeiagui/core/records/inventory/services": [
+        "./packages/core/src/records/inventory/services.js"
       ],
       "@politeiagui/core/records/timestamps": [
         "./packages/core/src/records/timestamps/index.js"
@@ -62,6 +65,9 @@
       "@politeiagui/ticketvote/inventory": [
         "./packages/ticketvote/src/ticketvote/inventory/index.js"
       ],
+      "@politeiagui/ticketvote/inventory/services": [
+        "./packages/ticketvote/src/ticketvote/inventory/services.js"
+      ],
       "@politeiagui/ticketvote/policy": [
         "./packages/ticketvote/src/ticketvote/policy/index.js"
       ],
@@ -74,11 +80,20 @@
       "@politeiagui/ticketvote/submissions": [
         "./packages/ticketvote/src/ticketvote/submissions/index.js"
       ],
+      "@politeiagui/ticketvote/submissions/services": [
+        "./packages/ticketvote/src/ticketvote/submissions/services.js"
+      ],
       "@politeiagui/ticketvote/summaries": [
         "./packages/ticketvote/src/ticketvote/summaries/index.js"
       ],
+      "@politeiagui/ticketvote/summaries/services": [
+        "./packages/ticketvote/src/ticketvote/summaries/services.js"
+      ],
       "@politeiagui/ticketvote/timestamps": [
         "./packages/ticketvote/src/ticketvote/timestamps/index.js"
+      ],
+      "@politeiagui/ticketvote/timestamps/services": [
+        "./packages/ticketvote/src/ticketvote/timestamps/services.js"
       ],
       "@politeiagui/ticketvote/ui": ["./packages/ticketvote/src/ui/index.js"],
       "@politeiagui/ticketvote/helpers": [
@@ -105,8 +120,14 @@
       "@politeiagui/comments/comments": [
         "./packages/comments/src/comments/comments/index.js"
       ],
+      "@politeiagui/comments/comments/services": [
+        "./packages/comments/src/comments/comments/services.js"
+      ],
       "@politeiagui/comments/count": [
         "./packages/comments/src/comments/count/index.js"
+      ],
+      "@politeiagui/comments/count/services": [
+        "./packages/comments/src/comments/count/services.js"
       ],
       "@politeiagui/comments/policy": [
         "./packages/comments/src/comments/policy/index.js"
@@ -116,6 +137,9 @@
       ],
       "@politeiagui/comments/timestamps": [
         "./packages/comments/src/comments/timestamps/index.js"
+      ],
+      "@politeiagui/comments/timestamps/services": [
+        "./packages/comments/src/comments/timestamps/services.js"
       ],
       "@politeiagui/comments/votes": [
         "./packages/comments/src/comments/votes/index.js"

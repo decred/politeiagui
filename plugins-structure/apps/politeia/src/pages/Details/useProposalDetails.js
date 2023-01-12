@@ -71,7 +71,7 @@ function useProposalDetails({ token }) {
       recordStatus !== "failed" &&
       !record?.detailsFetched
     ) {
-      dispatch(fetchProposalDetails(token));
+      dispatch(fetchProposalDetails({ token }));
     }
   }, [token, dispatch, recordStatus, record]);
 

@@ -2,22 +2,17 @@ import { fetchPolicyIfIdle } from "../utils";
 import { validateCommentsCountsPageSize } from "../../lib/validation";
 import { store } from "@politeiagui/core";
 import { fetchAllCommentsCounts, fetchNextCommentsCount } from "./effects";
+import { createSliceServices } from "@politeiagui/core/toolkit";
 
-export const services = [
-  {
-    id: "comments/count",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validateCommentsCountsPageSize(store.getState());
-    },
-    effect: fetchNextCommentsCount,
+async function onSetup() {
+  await fetchPolicyIfIdle();
+  validateCommentsCountsPageSize(store.getState());
+}
+
+export const { pluginServices, serviceListeners } = createSliceServices({
+  name: "commentsCount",
+  services: {
+    fetch: { onSetup, effect: fetchNextCommentsCount },
+    all: { onSetup, effect: fetchAllCommentsCounts },
   },
-  {
-    id: "comments/count/all",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validateCommentsCountsPageSize(store.getState());
-    },
-    effect: fetchAllCommentsCounts,
-  },
-];
+});

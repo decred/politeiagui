@@ -6,30 +6,18 @@ import {
   fetchSingleRecordPiSummaries,
 } from "./effects";
 import { validatePiSummariesPageSize } from "../lib/validation";
+import { createSliceServices } from "@politeiagui/core/toolkit";
 
-export const services = [
-  {
-    id: "pi/summaries/single",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validatePiSummariesPageSize(store.getState());
-    },
-    effect: fetchSingleRecordPiSummaries,
+async function onSetup() {
+  await fetchPolicyIfIdle();
+  validatePiSummariesPageSize(store.getState());
+}
+
+export const { pluginServices, serviceListeners } = createSliceServices({
+  name: "piSummaries",
+  services: {
+    all: { onSetup, effect: fetchAllRecordsPiSummaries },
+    batch: { onSetup, effect: fetchRecordsPiSummaries },
+    single: { onSetup, effect: fetchSingleRecordPiSummaries },
   },
-  {
-    id: "pi/summaries/batch",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validatePiSummariesPageSize(store.getState());
-    },
-    effect: fetchRecordsPiSummaries,
-  },
-  {
-    id: "pi/summaries/all",
-    action: async () => {
-      await fetchPolicyIfIdle();
-      validatePiSummariesPageSize(store.getState());
-    },
-    effect: fetchAllRecordsPiSummaries,
-  },
-];
+});
