@@ -1,9 +1,9 @@
-import { services as timestampsServices } from "./timestamps/services";
-import { services as inventoryServices } from "./inventory/services";
-import { services as summariesServices } from "./summaries/services";
-import { services as submissionsServices } from "./submissions/services";
+import { pluginServices as timestampsServices } from "./timestamps/services";
+import { pluginServices as inventoryServices } from "./inventory/services";
+import { pluginServices as summariesServices } from "./summaries/services";
+import { pluginServices as submissionsServices } from "./submissions/services";
 
-export const services = [
+export const pluginServices = [
   ...timestampsServices,
   ...inventoryServices,
   ...summariesServices,

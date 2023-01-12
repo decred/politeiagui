@@ -60,7 +60,7 @@ import { validateSliceServices } from "./validation";
  * @typedef {{
  *  id: String,
  *  listenTo: onServiceListener
- * }} ServiceSetupParams
+ * }} ServiceListenerParams
  */
 /**
  * @typedef {{ [id:string]: ServiceParams }} ServicesMapType
@@ -79,7 +79,8 @@ function setSliceId(sliceName, id) {
  * @type {CurriedListenerEffect}
  */
 function defaultInjectEffect(effect, action, { getState, dispatch }) {
-  effect(getState(), dispatch, action);
+  const { payload, ...rest } = action;
+  effect(getState(), dispatch, payload, rest);
 }
 
 /**
@@ -111,14 +112,14 @@ function createServiceListener(id) {
 }
 
 /**
- * getServicesSetups returns a services setup map, where each setup can declare
+ * getServicesListeners returns a services setup map, where each setup can declare
  * a ServiceListener to some Redux Action.
  * @template {ServicesMapType} ServicesMap
  * @param {ServicesMap} services
  * @param {string} sliceName
- * @returns {{[serviceId in keyof ServicesMap]: ServiceSetupParams }}
+ * @returns {{[serviceId in keyof ServicesMap]: ServiceListenerParams }}
  */
-export function getServicesSetups(services, sliceName) {
+export function getServicesListeners(services, sliceName) {
   return Object.keys(services).reduce((acc, serviceId) => {
     const id = setSliceId(sliceName, serviceId);
     return {
@@ -161,9 +162,13 @@ export function formatServicesToPlugin(services, sliceName) {
 /**
  * createSliceServices is an interface for creating slice services.
  *
+ * Plugins can create services to listen to redux actions and add pre-configured
+ * side-effects.
+ *
  * Each service is composed by an `id`, used to identify the service among our
- * plugins and apps, an `onSetup` function to be executed when our service is
- * setup, and an `effect` that will be executed for each Service Listener.
+ * plugins and apps, an `onSetup` function to be executed when our Service
+ * Listener is setup, and an `effect` that will be executed for each redux
+ * action match.
  *
  * Example:
  * ```javascript
@@ -189,7 +194,7 @@ export function formatServicesToPlugin(services, sliceName) {
  * // Action to listen to.
  * const myAction = createAction("myAction")
  *
- * const { foo } = services.setup;
+ * const { foo } = services.serviceListeners;
  *
  * // setup foo without listeners. This return the serviceId, and once it's
  * // connected to our app, the `onSetup` action will be executed.
@@ -227,13 +232,13 @@ export function formatServicesToPlugin(services, sliceName) {
  * }} sliceServiceParams
  * @returns {{
  *  pluginServices: PluginService[],
- *  serviceSetups: { [serviceId in keyof ServicesMap]: ServiceSetupParams }
+ *  serviceListeners: { [serviceId in keyof ServicesMap]: ServiceListenerParams }
  * }}
  */
 export function createSliceServices({ name: sliceName, services }) {
   validateSliceServices({ name: sliceName, services });
   const pluginServices = formatServicesToPlugin(services, sliceName);
-  const serviceSetups = getServicesSetups(services, sliceName);
+  const serviceListeners = getServicesListeners(services, sliceName);
 
-  return { pluginServices, serviceSetups };
+  return { pluginServices, serviceListeners };
 }
