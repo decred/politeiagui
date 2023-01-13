@@ -23,11 +23,13 @@
     "test:components:browser": "cypress open --component --browser chrome"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.10",
     "@politeiagui/comments": "1.0.0",
     "@politeiagui/common-ui": "1.0.0",
     "@politeiagui/core": "1.0.0",
     "@politeiagui/ticketvote": "1.0.0",
-    "js-file-download": "^0.4.12"
+    "js-file-download": "^0.4.12",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "politeiagui-scripts": "1.0.0",

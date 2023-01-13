@@ -1,3 +1,10 @@
+import * as yup from "yup";
+import { buildRegexFromSupportedChars } from "../policy/utils";
+import {
+  PROPOSAL_TYPE_REGULAR,
+  PROPOSAL_TYPE_RFP,
+  PROPOSAL_TYPE_SUBMISSION,
+} from "./constants";
 /**
  * validatePiSummariesPageSize receives the state and returns if pi
  * summariespagesize exists. If no policy is loaded, it will throw and log an
@@ -36,3 +43,67 @@ export function validatePiBillingStatusChangesPageSize(state) {
   }
   return true;
 }
+
+export const validateProposalForm = ({
+  namelengthmin,
+  namelengthmax,
+  namesupportedchars,
+  amountmin,
+  amountmax,
+  domains,
+}) => {
+  return yup.object().shape({
+    type: yup
+      .number()
+      .oneOf([
+        PROPOSAL_TYPE_RFP,
+        PROPOSAL_TYPE_REGULAR,
+        PROPOSAL_TYPE_SUBMISSION,
+      ])
+      .required(),
+    name: yup
+      .string()
+      .min(namelengthmin)
+      .max(namelengthmax)
+      .matches(buildRegexFromSupportedChars(namesupportedchars), {
+        excludeEmptyString: true,
+      })
+      .required(),
+    amount: yup.number().when("type", {
+      is: PROPOSAL_TYPE_RFP,
+      then: (schema) => schema.notRequired(),
+      otherwise: (schema) => schema.min(amountmin).max(amountmax).required(),
+    }),
+    startDate: yup.number().when("type", {
+      is: PROPOSAL_TYPE_RFP,
+      then: (schema) => schema.notRequired(),
+      otherwise: (schema) => schema.required(),
+    }),
+    endDate: yup
+      .number()
+      .when("type", {
+        is: PROPOSAL_TYPE_RFP,
+        then: (schema) => schema.notRequired(),
+        otherwise: (schema) => schema.required(),
+      })
+      .when("startDate", {
+        is: (sd) => sd > 0,
+        then: (schema) => schema.min(yup.ref("startDate")),
+        otherwise: (schema) => schema,
+      }),
+    domain: yup.string().required().oneOf(domains),
+    body: yup.string().required(),
+    // RFP Proposal
+    deadline: yup.number().when("type", {
+      is: PROPOSAL_TYPE_RFP,
+      then: (schema) => schema.required(),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    // RFP Submission
+    rfpToken: yup.string().when("type", {
+      is: PROPOSAL_TYPE_SUBMISSION,
+      then: (schema) => schema.required().min(),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  });
+};

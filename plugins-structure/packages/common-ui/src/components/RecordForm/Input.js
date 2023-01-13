@@ -79,7 +79,7 @@ export function CurrencyInput({ name = "amount", placeholder, ...props }) {
             inputClassName={classNames(styles.numberInput)}
             placeholder={placeholder}
             onChange={onChange}
-            value={value}
+            value={value || ""}
             {...props}
           />
         </div>

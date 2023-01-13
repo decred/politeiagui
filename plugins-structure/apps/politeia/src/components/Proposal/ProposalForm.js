@@ -10,28 +10,25 @@ import {
 } from "../../pi";
 import { convertProposalFormToRecordFiles } from "../../pi/proposals/utils";
 
+// Validation
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validateProposalForm } from "../../pi/lib/validation";
+
 const PROPOSAL_TYPE_OPTIONS = [
   { label: "Regular Proposal", value: PROPOSAL_TYPE_REGULAR },
   { label: "RFP Proposal", value: PROPOSAL_TYPE_RFP },
   { label: "RFP Submission", value: PROPOSAL_TYPE_SUBMISSION },
 ];
 
-export function ProposalForm({
-  onSubmit,
-  onSave,
-  initialValues,
-  domains,
-  maxEndDate,
-  minStartDate,
-}) {
-  const domainsOptions = domains.map((domain) => ({
+export function ProposalForm({ onSubmit, onSave, initialValues, policy }) {
+  const domainsOptions = policy.domains.map((domain) => ({
     label: domain.charAt(0).toUpperCase() + domain.slice(1),
     value: domain,
   }));
 
   const now = Date.now();
-  const minTimestamp = now + minStartDate * 1000;
-  const maxTimestamp = now + maxEndDate * 1000;
+  const minTimestamp = now + policy.startdatemin * 1000;
+  const maxTimestamp = now + policy.enddatemax * 1000;
 
   const handleSubmit = (fn) => (values) => {
     const files = convertProposalFormToRecordFiles(values);
@@ -39,7 +36,12 @@ export function ProposalForm({
   };
 
   return (
-    <RecordForm onSubmit={handleSubmit(onSubmit)} initialValues={initialValues}>
+    <RecordForm
+      onSubmit={handleSubmit(onSubmit)}
+      initialValues={initialValues}
+      resolver={yupResolver(validateProposalForm(policy))}
+      mode="onChange"
+    >
       {({
         CurrencyInput,
         DatePickerInput,
@@ -52,6 +54,7 @@ export function ProposalForm({
         formProps,
       }) => {
         const proposalType = formProps.watch("type");
+        const startDate = formProps.watch("startDate");
         const isRfpProposal = proposalType === PROPOSAL_TYPE_RFP;
         const isSubmission = proposalType === PROPOSAL_TYPE_SUBMISSION;
         const isRfp = isRfpProposal || isSubmission;
@@ -140,7 +143,7 @@ export function ProposalForm({
                 </Column>
                 <Column xs={12} md={6}>
                   <DatePickerInput
-                    minTimestamp={minTimestamp}
+                    minTimestamp={Math.max(minTimestamp, startDate * 1000)}
                     maxTimestamp={maxTimestamp}
                     tabIndex={1}
                     data-testid="proposal-form-end-date-input"
