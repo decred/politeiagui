@@ -102,7 +102,7 @@ export const validateProposalForm = ({
     // RFP Submission
     rfpToken: yup.string().when("type", {
       is: PROPOSAL_TYPE_SUBMISSION,
-      then: (schema) => schema.required().min(),
+      then: (schema) => schema.required().min(16),
       otherwise: (schema) => schema.notRequired(),
     }),
   });
