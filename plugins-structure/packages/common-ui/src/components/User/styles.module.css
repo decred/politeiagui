@@ -16,6 +16,10 @@
   padding-top: var(--spacing-1);
 }
 
+.flatForm {
+  padding: 0 !important;
+}
+
 @media (--xl-viewport) {
   .modal {
     width: 50%;

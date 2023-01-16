@@ -55,6 +55,10 @@
   flex-flow: column;
 }
 
+.form > *:not(:first-child) {
+  margin-top: var(--spacing-medium) !important;
+}
+
 .input {
   padding-left: 1rem !important;
   padding-bottom: 0.9rem !important;

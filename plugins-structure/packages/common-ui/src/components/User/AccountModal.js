@@ -4,6 +4,7 @@ import { Input, SubmitButton } from "../RecordForm";
 import styles from "./styles.module.css";
 import { ModalConfirm, ModalForm } from "../Modal";
 import { Payment } from "../Payment";
+import { LoginForm } from "./Form";
 
 export const AccountPasswordChangeModal = ({
   onClose,
@@ -95,3 +96,9 @@ export const UserRegistrationFeeModal = ({
     </Modal>
   );
 };
+
+export const LoginModal = ({ onClose, show, onSubmit }) => (
+  <Modal {...{ onClose, show }}>
+    <LoginForm onSubmit={onSubmit} className={styles.flatForm} />
+  </Modal>
+);
