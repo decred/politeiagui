@@ -1,0 +1,43 @@
+.digitsWrapper {
+  display: inline-block;
+}
+
+.digitsWrapper :first-child {
+  margin-top: 1rem;
+}
+
+.digitsWrapper > div {
+  margin-right: 2rem;
+}
+
+.digitsWrapper > div > input:hover {
+  border-bottom: 0.1rem solid var(--color-primary-dark);
+}
+
+/* Chrome, Safari, Edge, Opera */
+.digitsWrapper input::-webkit-outer-spin-button,
+.digitsWrapper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.digitsWrapper input[type="number"] {
+  /* Firefox */
+  -moz-appearance: textfield;
+}
+
+.focusedInput :first-child > input {
+  border-bottom: 0.1rem solid var(--color-primary);
+}
+
+.mainInput {
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+@media screen and (max-width: 560px) {
+  .digitsWrapper > div {
+    margin-right: 1rem;
+  }
+}

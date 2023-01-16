@@ -51,6 +51,7 @@
 
 .summary {
   display: flex;
+  color: var(--text-color-light);
 }
 
 .recordOwner {

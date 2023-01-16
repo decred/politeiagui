@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Button, Icon, Message, Modal, Text } from "pi-ui";
+import { Button, Icon, Message, Modal } from "pi-ui";
 import { useModal } from "./ModalProvider";
 import styles from "./styles.module.css";
+import { MarkdownRenderer } from "../Markdown";
+import isString from "lodash/isString";
 
 export const ModalConfirm = ({
   show,
@@ -13,6 +15,8 @@ export const ModalConfirm = ({
   successTitle,
   successMessage,
   onCloseSuccess,
+  confirmButtonText,
+  ...props
 }) => {
   const [success, setSuccess] = useState();
   const [error, setError] = useState();
@@ -44,6 +48,8 @@ export const ModalConfirm = ({
   }
   return (
     <Modal
+      {...props}
+      className={styles.modalWrapper}
       show={show}
       onClose={handleClose}
       title={modalTitle}
@@ -58,21 +64,27 @@ export const ModalConfirm = ({
       {error && <Message kind="error">{error.toString()}</Message>}
       {!success ? (
         <div className={styles.modalContent}>
-          <Text data-testid="modal-confirm-message">{message}</Text>
+          <div data-testid="modal-confirm-message">
+            {isString(message) ? <MarkdownRenderer body={message} /> : message}
+          </div>
           <div className={styles.modalButtons}>
             <Button
               data-testid="modal-confirm-submit-button"
               onClick={handleSubmit}
             >
-              Confirm
+              {confirmButtonText}
             </Button>
           </div>
         </div>
       ) : (
         <div className={styles.modalContent}>
-          <Text data-testid="modal-confirm-success-message">
-            {successMessage}
-          </Text>
+          <div data-testid="modal-confirm-success-message">
+            {isString(successMessage) ? (
+              <MarkdownRenderer body={successMessage} />
+            ) : (
+              successMessage
+            )}
+          </div>
           <div className={styles.modalButtons}>
             <Button
               data-testid="modal-confirm-ok-button"
@@ -96,11 +108,14 @@ ModalConfirm.propTypes = {
   onSubmit: PropTypes.func,
   successTitle: PropTypes.string,
   successMessage: PropTypes.node,
+  confirmButtonText: PropTypes.string,
 };
 
 ModalConfirm.defaultProps = {
   title: "Confirm Action",
   message: "Are you sure?",
+  successMessage: "",
+  confirmButtonText: "Confirm",
   onCloseSuccess: () => {},
   onSubmit: () => {},
   onClose: () => {},

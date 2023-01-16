@@ -10,11 +10,11 @@ describe("Given <Event/>", () => {
     cy.clock(now);
   });
   it("should render events properly", () => {
-    cy.mount(<Event event="test" timestamp={timestamp} />);
-    cy.get(`#event-test-${timestamp}`).should("have.text", "test 4 days ago");
+    cy.mount(<Event event="test" timestamp={timestamp} className="event" />);
+    cy.get(".event").should("have.text", "test 4 days ago");
   });
   it("should render timeago when no event is passed", () => {
-    cy.mount(<Event timestamp={timestamp} />);
-    cy.get(`#event--${timestamp}`).should("have.text", "4 days ago");
+    cy.mount(<Event timestamp={timestamp} className="event" />);
+    cy.get(".event").should("have.text", "4 days ago");
   });
 });

@@ -5,6 +5,11 @@
 
 .modalContent > *:not(.modalButtons) {
   padding: 1rem 0;
+  margin-bottom: var(--spacing-2);
+}
+
+.modalWrapper {
+  width: 70% !important;
 }
 
 .modalButtons {
@@ -38,4 +43,19 @@
 
 .modalImage {
   max-width: 100%;
+}
+
+.form {
+  padding: 0 !important;
+}
+
+.form button[type="submit"] {
+  width: fit-content;
+  align-self: end;
+}
+
+@media (--xl-viewport) {
+  .modalWrapper {
+    width: 50% !important;
+  }
 }

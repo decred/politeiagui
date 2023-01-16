@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   title: null,
   body: null,
+  kind: null,
 };
 
 const messageSlice = createSlice({
@@ -10,9 +11,10 @@ const messageSlice = createSlice({
   initialState,
   reducers: {
     setMessage: (state, action) => {
-      const { title, body } = action.payload;
+      const { title, body, kind } = action.payload;
       if (title) state.title = title;
       if (body) state.body = body;
+      if (kind) state.kind = kind;
     },
     clearMessage: () => {
       return initialState;

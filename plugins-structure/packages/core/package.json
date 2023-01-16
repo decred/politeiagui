@@ -13,6 +13,8 @@
     "./records/validation": "./src/records/validation.js",
     "./records/inventory": "./src/records/inventory/index.js",
     "./records/inventory/services": "./src/records/inventory/services.js",
+    "./records/drafts": "./src/records/drafts/index.js",
+    "./records/drafts/services": "./src/records/drafts/services.js",
     "./records/timestamps": "./src/records/timestamps/index.js",
     "./records/policy": "./src/records/policy/index.js",
     "./user": "./src/user/index.js",
@@ -39,6 +41,7 @@
   },
   "dependencies": {
     "js-file-download": "^0.4.12",
-    "politeiagui-scripts": "1.0.0"
+    "politeiagui-scripts": "1.0.0",
+    "qrcode": "^1.5.1"
   }
 }

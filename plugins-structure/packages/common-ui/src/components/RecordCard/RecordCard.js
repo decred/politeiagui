@@ -69,9 +69,11 @@ export function RecordCard({
           {fourthRow}
         </div>
       )}
-      <div className={styles.footer} data-testid="record-card-footer">
-        {footer}
-      </div>
+      {footer && (
+        <div className={styles.footer} data-testid="record-card-footer">
+          {footer}
+        </div>
+      )}
     </Card>
   );
 }

@@ -1,10 +1,12 @@
 import React from "react";
 import {
   ModalConfirm,
+  ModalConfirmWithReason,
   ModalExternalLink,
+  ModalForm,
   ModalImages,
   ModalProvider,
-} from "../../src/components/Modal";
+} from "../../src";
 import { faker } from "@faker-js/faker";
 
 const defaultModalProps = {
@@ -80,6 +82,24 @@ describe("Given <ModalConfirm />", () => {
   });
 });
 
+describe("Given <ModalConfirmWithReason />", () => {
+  it("should confirm with reason", () => {
+    const reason = "My Reason";
+    const onSubmit = cy.stub();
+    cy.mount(
+      <ModalProvider>
+        <ModalConfirmWithReason {...defaultModalProps} onSubmit={onSubmit} />
+      </ModalProvider>
+    );
+    cy.get("#reason").type(reason);
+    cy.get("[data-testid=modal-confirm-submit-button]")
+      .click()
+      .then(() => {
+        expect(onSubmit).to.be.calledWith(reason);
+      });
+  });
+});
+
 describe("Given <ModalExternalLink />", () => {
   it("should display link and warning", () => {
     const link = "https://my-link.com";
@@ -91,6 +111,33 @@ describe("Given <ModalExternalLink />", () => {
     cy.contains(link);
     cy.contains("You are about to be sent to an external website.");
     cy.contains("Are you sure you want to open this link?");
+  });
+});
+
+describe("Given <ModalForm />", () => {
+  it("should display form and submit values", () => {
+    const onSubmit = cy.stub();
+    const text = "My Text";
+    cy.mount(
+      <ModalProvider>
+        <ModalForm {...defaultModalProps} onSubmit={onSubmit}>
+          {({ Input, SubmitButton }) => (
+            <div>
+              <Input name="input" id="myinput" />
+              <Input name="input2" id="myinput2" />
+              <SubmitButton id="button" />
+            </div>
+          )}
+        </ModalForm>
+      </ModalProvider>
+    );
+    cy.get("#myinput").type(text);
+    cy.get("#myinput2").type(text);
+    cy.get("#button")
+      .click()
+      .then(() => {
+        expect(onSubmit).to.be.calledWith({ input: text, input2: text });
+      });
   });
 });
 

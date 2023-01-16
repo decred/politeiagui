@@ -37,7 +37,7 @@
   align-items: center;
   display: grid;
   grid-template-columns: 5fr 2fr;
-  gap: 0 var(--spacing-small);
+  gap: var(--spacing-small);
   grid-template-areas:
     "title rightHeader"
     "subtitle subtitle";
@@ -49,16 +49,16 @@
 }
 
 .rightHeader {
-  align-self: flex-start;
+  display: flex;
   align-items: center;
   justify-self: end;
   grid-area: rightHeader;
-  margin-top: 0.5rem;
   text-align: end;
 }
 
 .subtitle {
   grid-area: subtitle;
+  color: var(--text-secondary-color);
 }
 
 @media (--sm-viewport) {
@@ -70,7 +70,6 @@
   .rightHeader {
     justify-self: start;
     margin-top: 0;
-    margin-bottom: 0.5rem;
     text-align: start;
   }
 
@@ -78,9 +77,5 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     grid-template-areas: "rightHeader" "title" "subtitle ";
-  }
-
-  .title {
-    padding-top: 1rem;
   }
 }

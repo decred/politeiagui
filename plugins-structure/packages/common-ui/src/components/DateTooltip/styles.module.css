@@ -1,5 +1,4 @@
-.dateTooltip {
-  white-space: nowrap;
+.content {
   font-size: var(--font-size-small);
-  color: var(--color-gray);
+  width: max-content;
 }

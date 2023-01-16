@@ -1,183 +1,62 @@
 import React from "react";
-import {
-  Controller,
-  FormProvider,
-  useForm,
-  useFormContext,
-} from "react-hook-form";
-import {
-  BoxTextInput,
-  Button,
-  Card,
-  Message,
-  Select,
-  classNames,
-  useTheme,
-} from "pi-ui";
+import { FormProvider, useForm } from "react-hook-form";
+import { Card, classNames } from "pi-ui";
 import styles from "./styles.module.css";
-import { MarkdownEditor } from "../Markdown";
 import { DatePickerInput } from "./DatePickerInput";
+import { ErrorMessage, InfoMessage, Warning } from "./Message";
+import { SaveButton, SubmitButton } from "./Button";
+import {
+  Checkbox,
+  CurrencyInput,
+  DigitsInput,
+  FileInput,
+  Input,
+  MarkdownInput,
+  NumberInput,
+  SelectInput,
+  TextInput,
+} from "./Input";
+import isFunction from "lodash/isFunction";
 
-function TextInput({ name = "name", placeholder, ...props }) {
-  return (
-    <Controller
-      name={name}
-      render={({ field: { onChange, value } }) => (
-        <BoxTextInput
-          onChange={onChange}
-          value={value || ""}
-          placeholder={placeholder}
-          inputClassName={styles.input}
-          {...props}
-        />
-      )}
-    />
-  );
-}
-
-function CurrencyInput({ name = "amount", placeholder, ...props }) {
-  return (
-    <Controller
-      name={name}
-      render={({ field: { onChange, value } }) => (
-        <div className={styles.currency}>
-          <span className={styles.currencyValue}>$</span>
-          <BoxTextInput
-            type="number"
-            inputClassName={classNames(styles.numberInput)}
-            placeholder={placeholder}
-            onChange={onChange}
-            value={value}
-            {...props}
-          />
-        </div>
-      )}
-    />
-  );
-}
-
-function SelectInput({ name = "select", options, ...props }) {
-  const { theme } = useTheme();
-  return (
-    <Controller
-      name={name}
-      render={({ field: { onChange, value } }) => (
-        <Select
-          options={options}
-          value={value}
-          onChange={onChange}
-          className={styles.select}
-          customStyles={{
-            control: (_, { isFocused }) => ({
-              borderColor: isFocused
-                ? theme["color-primary"]
-                : theme["input-border-color"],
-            }),
-            placeholder: () => ({
-              color: theme["text-input-color"],
-            }),
-          }}
-          {...props}
-        />
-      )}
-    />
-  );
-}
-
-function MarkdownInput({ name, initialValue, ...props }) {
-  return (
-    <Controller
-      name={name}
-      render={({ field: { onChange } }) => (
-        <MarkdownEditor
-          wrapperClassName={styles.markdownInput}
-          onChange={onChange}
-          initialValue={initialValue}
-          {...props}
-        />
-      )}
-    />
-  );
-}
-
-function SubmitButton({ children = "Submit", ...props }) {
-  return (
-    <Button type="submit" className={styles.button} {...props}>
-      {children}
-    </Button>
-  );
-}
-
-function SaveButton({
-  children = "Save",
-  onSave = () => {},
+export function RecordForm({
+  initialValues,
+  children,
+  onSubmit,
   className,
+  formClassName,
+  autoComplete = "on",
   ...props
 }) {
-  const { getValues } = useFormContext();
-  function handleSave() {
-    onSave(getValues());
-  }
-  return (
-    <Button
-      kind="secondary"
-      onClick={handleSave}
-      className={classNames(styles.button, className)}
-      {...props}
-    >
-      {children}
-    </Button>
-  );
-}
-
-function Warning({ children }) {
-  return (
-    <Message
-      kind="warning"
-      data-testid="record-form-warning-message"
-      className={styles.message}
-    >
-      {children}
-    </Message>
-  );
-}
-
-function ErrorMessage({ error }) {
-  return (
-    error && (
-      <Message
-        kind="error"
-        data-testid="record-form-error-message"
-        className={styles.message}
-      >
-        {error.toString()}
-      </Message>
-    )
-  );
-}
-
-export function RecordForm({ initialValues, children, onSubmit, className }) {
-  const formProps = useForm({ defaultValues: initialValues });
+  const formProps = useForm({ defaultValues: initialValues, ...props });
   return (
     <Card className={classNames(styles.card, className)}>
       <FormProvider {...formProps}>
         <form
           onSubmit={formProps.handleSubmit(onSubmit)}
-          className={styles.form}
+          className={classNames(styles.form, formClassName)}
           data-testid="record-form"
+          autoComplete={autoComplete}
         >
-          {children({
-            formProps,
-            CurrencyInput,
-            DatePickerInput,
-            ErrorMessage,
-            MarkdownInput,
-            SaveButton,
-            SelectInput,
-            SubmitButton,
-            TextInput,
-            Warning,
-          })}
+          {isFunction(children)
+            ? children({
+                formProps,
+                Checkbox,
+                CurrencyInput,
+                DatePickerInput,
+                DigitsInput,
+                ErrorMessage,
+                MarkdownInput,
+                NumberInput,
+                SaveButton,
+                SelectInput,
+                SubmitButton,
+                TextInput,
+                FileInput,
+                Input,
+                Warning,
+                InfoMessage,
+              })
+            : children}
         </form>
       </FormProvider>
     </Card>
