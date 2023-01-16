@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip } from "pi-ui";
+import { Tooltip, classNames } from "pi-ui";
 import styles from "./styles.module.css";
 
 function RfpTag() {
@@ -21,9 +21,14 @@ function RfpTag() {
   );
 }
 
-function ProposalTitle({ title, isRfp }) {
+function ProposalTitle({ title, isRfp, isDisabled }) {
   return (
-    <div className={styles.proposalTitle}>
+    <div
+      className={classNames(
+        styles.proposalTitle,
+        isDisabled && styles.disabled
+      )}
+    >
       {isRfp && <RfpTag />}
       {title}
     </div>

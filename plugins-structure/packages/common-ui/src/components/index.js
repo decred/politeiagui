@@ -1,5 +1,6 @@
-export * from "./Diff";
 export * from "./DateTooltip";
+export * from "./Diff";
+export * from "./DigitsField";
 export * from "./Event";
 export * from "./GoBackLink";
 export * from "./Join";
@@ -14,3 +15,6 @@ export * from "./RecordsList";
 export * from "./RecordToken";
 export * from "./Thumbnail";
 export * from "./Toast";
+
+export * from "./User";
+export * from "./Payment";

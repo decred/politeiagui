@@ -1,5 +1,5 @@
 import React from "react";
-import { RecordCard } from "../../src/components/RecordCard";
+import { RecordCard } from "../../src";
 
 const props = {
   title: "My Record",
@@ -23,7 +23,7 @@ describe("<RecordCard />", () => {
     cy.get("[data-testid=record-card-second-row]").should("not.exist");
     cy.get("[data-testid=record-card-third-row]").should("not.exist");
     cy.get("[data-testid=record-card-fourth-row]").should("not.exist");
-    cy.get("[data-testid=record-card-footer]").should("exist");
+    cy.get("[data-testid=record-card-footer]").should("not.exist");
   });
   it("should render title properly", () => {
     cy.mount(<RecordCard title={props.title} />);

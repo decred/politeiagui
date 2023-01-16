@@ -1,0 +1,23 @@
+.identityFile {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal {
+  width: 70%;
+}
+
+.modal > * {
+  padding: 1rem 0;
+}
+
+.inactivePubkeys > li:not(:first-child) {
+  padding-top: var(--spacing-1);
+}
+
+@media (--xl-viewport) {
+  .modal {
+    width: 50%;
+  }
+}

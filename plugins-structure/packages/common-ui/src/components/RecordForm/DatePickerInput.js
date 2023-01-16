@@ -8,8 +8,36 @@ import {
   classNames,
 } from "pi-ui";
 import styles from "./styles.module.css";
-import { formatDateToInternationalString } from "../../utils";
+import {
+  formatDateObjToTimestamp,
+  formatShortUnixTimestamp,
+  formatUnixTimestampToObj,
+} from "../../utils";
 import { MONTHS_LABELS } from "../../constants";
+
+const PickerError = ({ error }) => (
+  <p className={classNames(styles.datePickerError, error && styles.visible)}>
+    {error}
+  </p>
+);
+
+const PickerContent = ({ date, placeholder, tooltipInfo }) => (
+  <div className={styles.datePickerContent}>
+    {date ? (
+      formatShortUnixTimestamp(date)
+    ) : (
+      <Text className={styles.datePickerPlaceholder}>{placeholder}</Text>
+    )}
+    <div>
+      <Icon type="calendar" />
+      {tooltipInfo && (
+        <Tooltip content={tooltipInfo} className={styles.info}>
+          <Icon type="info" />
+        </Tooltip>
+      )}
+    </div>
+  </div>
+);
 
 export function DatePickerInput({
   name = "datePicker",
@@ -22,9 +50,10 @@ export function DatePickerInput({
   minTimestamp,
   ...props
 }) {
-  function formatValue(value) {
-    return formatDateToInternationalString(value);
-  }
+  const handleChange = (fn) => (values) => {
+    const timestamp = formatDateObjToTimestamp(values);
+    fn(timestamp);
+  };
 
   return (
     <Controller
@@ -34,40 +63,21 @@ export function DatePickerInput({
           <DatePicker
             className={classNames(styles.datePicker, className)}
             activeClassName={styles.activeDatePicker}
-            value={value}
+            value={value && formatUnixTimestampToObj(value)}
             isMonthsMode={isMonthsMode}
             maxTimestamp={maxTimestamp}
             minTimestamp={minTimestamp}
             lang={MONTHS_LABELS}
             tabIndex={tabIndex}
-            onChange={onChange}
+            onChange={handleChange(onChange)}
           >
-            <div className={styles.datePickerContent}>
-              {value ? (
-                formatValue(value)
-              ) : (
-                <Text className={styles.datePickerPlaceholder}>
-                  {placeholder}
-                </Text>
-              )}
-              <div>
-                <Icon type="calendar" />
-                {tooltipInfo && (
-                  <Tooltip content={tooltipInfo} className={styles.info}>
-                    <Icon type="info" />
-                  </Tooltip>
-                )}
-              </div>
-            </div>
+            <PickerContent
+              date={value}
+              placeholder={placeholder}
+              tooltipInfo={tooltipInfo}
+            />
           </DatePicker>
-          <p
-            className={classNames(
-              styles.datePickerError,
-              error && styles.visible
-            )}
-          >
-            {error}
-          </p>
+          <PickerError error={error} />
         </div>
       )}
     />

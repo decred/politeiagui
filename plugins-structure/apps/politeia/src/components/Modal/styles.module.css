@@ -1,0 +1,24 @@
+.credits {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  display: flex;
+}
+
+.input > *:not(:last-child) {
+  margin-right: var(--spacing-small);
+}
+
+@media (--xs-viewport) {
+  .credits,
+  .input {
+    flex-direction: column;
+    align-items: center;
+  }
+  .input > *:not(:last-child) {
+    margin-right: 0;
+    margin-bottom: var(--spacing-small);
+  }
+}

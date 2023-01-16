@@ -1,0 +1,104 @@
+.reset {
+  all: unset;
+}
+
+.form {
+  margin-bottom: var(--spacing-large);
+}
+
+.form > *:first-child {
+  margin-top: 0;
+}
+
+.textHighlight {
+  width: fit-content;
+}
+
+.section {
+  display: flex;
+  flex-flow: column;
+}
+
+.column {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.column h5 {
+  color: var(--text-heading-color) !important;
+}
+
+.column > *:not(:first-child) {
+  margin-top: var(--spacing-small);
+}
+
+.section > *:not(:last-child) {
+  padding-bottom: 1rem;
+}
+
+.horizontalSection {
+  display: flex;
+  flex-flow: row !important;
+  align-items: center;
+}
+
+.horizontalSection > *:not(:first-child) {
+  margin-left: var(--spacing-1);
+}
+
+.table {
+  padding: 0;
+}
+
+.tableCell * {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.totp {
+  display: flex;
+}
+
+.totp > *:not(:first-child) {
+  margin-left: var(--spacing-medium);
+}
+
+.totp > img {
+  width: 200px;
+  height: 200px;
+  border: 0.1rem var(--input-border-color) solid;
+}
+
+.totp > .instructions > *:not(:first-child) {
+  margin-bottom: var(--spacing-1);
+}
+
+.totpCode {
+  display: flex;
+  align-items: center;
+}
+
+.totpCode > *:not(:first-child) {
+  margin-left: var(--spacing-medium);
+}
+
+@media (--sm-viewport) {
+  .column:not(:first-child) {
+    margin-top: var(--spacing-large);
+  }
+  .column {
+    align-items: flex-start;
+  }
+  .tableCell::before {
+    padding-right: 1rem;
+  }
+  .totp {
+    align-items: center;
+    flex-direction: column;
+  }
+  .totp > *:not(:first-child) {
+    margin-left: 0;
+    margin-top: var(--spacing-1);
+  }
+}

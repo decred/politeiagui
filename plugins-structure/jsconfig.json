@@ -38,6 +38,12 @@
       "@politeiagui/core/records/inventory": [
         "./packages/core/src/records/inventory/index.js"
       ],
+      "@politeiagui/core/records/drafts": [
+        "./packages/core/src/records/drafts/index.js"
+      ],
+      "@politeiagui/core/records/drafts/services": [
+        "./packages/core/src/records/drafts/services.js"
+      ],
       "@politeiagui/core/records/inventory/services": [
         "./packages/core/src/records/inventory/services.js"
       ],

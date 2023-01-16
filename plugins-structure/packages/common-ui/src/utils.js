@@ -1,6 +1,14 @@
 import { INVALID_DATE_LABEL, MONTHS_LABELS } from "./constants";
 
 /**
+ * Converts atoms to DCR
+ *
+ * @param {number} atoms - amount in atoms
+ * @return {number} dcr - amount in dcr
+ */
+export const convertAtomsToDcr = (atoms) => atoms / 100000000;
+
+/**
  * Formats unix seconds timestamp to a UTC string date
  *
  * @param {number} unixtimestamp - unix timestamp
@@ -21,6 +29,26 @@ export const formatUnixTimestampToObj = (unixtimestamp) => {
     month: date.getMonth() + 1,
     year: date.getFullYear(),
   };
+};
+/**
+ * Formats a date object `{ day, month, year }` to seconds timestamp
+ * @param {{ day: number, month: number, year: number }} DateObj
+ * @returns
+ */
+export const formatDateObjToTimestamp = ({ day, month, year } = {}) =>
+  Math.floor(new Date(year, month - 1, day).getTime() / 1000);
+
+/**
+ * Formats unix seconds timestamp to a short UTC string date
+ *
+ * @param {number} unixtimestamp - unix seconds timestamp
+ * @return {string} date - date formated in dd mmm yyyy
+ */
+export const formatShortUnixTimestamp = (unixtimestamp) => {
+  const currentdate = new Date(unixtimestamp * 1000);
+  return `${currentdate.getUTCDate()} ${
+    MONTHS_LABELS[currentdate.getUTCMonth()]
+  } ${currentdate.getUTCFullYear()}`;
 };
 
 /**
