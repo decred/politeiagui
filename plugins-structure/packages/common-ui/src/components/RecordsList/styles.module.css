@@ -2,10 +2,6 @@
   list-style-type: none;
 }
 
-.recordsList > * {
+.recordsList > *:not(:last-child) {
   margin-bottom: var(--spacing-medium);
-}
-
-.recordsList > *:nth-last-child(2) {
-  margin-bottom: 0;
 }
