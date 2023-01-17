@@ -22,12 +22,16 @@ function UserLoginPage() {
       <LoginForm className={styles.content} onSubmit={handleLogin} />
       <div className={styles.links}>
         Don't have an account?{" "}
-        <Link data-link href="/user/signup">
+        <Link data-link href="/user/signup" data-testid="login-signup-link">
           Create one Here!
         </Link>
       </div>
       <Join className={styles.links}>
-        <Link href="/user/password/request" data-link>
+        <Link
+          href="/user/password/request"
+          data-link
+          data-testid="login-reset-password-link"
+        >
           Reset Password
         </Link>
         <div onClick={handlePrivacyPolicy} className={styles.policy}>

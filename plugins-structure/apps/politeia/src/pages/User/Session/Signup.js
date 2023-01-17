@@ -38,6 +38,7 @@ const SuccessMessage = ({ email }) => (
 function ModalBeforeSignup({ onSubmit, email, ...props }) {
   return (
     <ModalConfirm
+      data-testid="before-signup-modal"
       message={message}
       title="Before you sign up"
       onCloseSuccess={() => router.navigateTo("/")}

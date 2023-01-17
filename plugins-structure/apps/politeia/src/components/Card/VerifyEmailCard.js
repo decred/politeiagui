@@ -5,6 +5,7 @@ import { Card, H2, Link, P, classNames } from "pi-ui";
 function VerifyEmailCard({ email, className }) {
   return (
     <Card
+      data-testid="verify-email-card"
       paddingSize="small"
       className={classNames(styles.verifyMessage, className)}
     >

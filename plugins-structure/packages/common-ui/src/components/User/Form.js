@@ -8,7 +8,7 @@ export const LoginForm = ({ onSubmit, className }) => {
       <H1>Log In</H1>
       <Input name="email" label="E-mail" id="email" />
       <Input name="password" type="password" label="Password" id="pass" />
-      <SubmitButton>Login</SubmitButton>
+      <SubmitButton data-testid="login-form-button">Login</SubmitButton>
     </RecordForm>
   );
 };
@@ -17,7 +17,6 @@ export const SignupForm = ({ onSubmit, className }) => {
   return (
     <RecordForm className={className} onSubmit={onSubmit}>
       <H1>Create a new account</H1>
-      {/* TODO: Replace TextInput by Input from #2884 */}
       <Input name="email" label="E-mail" id="email" />
       <Input name="username" label="Username" id="username" />
       <Input name="password" type="password" label="Password" id="pass" />
@@ -27,7 +26,7 @@ export const SignupForm = ({ onSubmit, className }) => {
         label="Verify Password"
         id="vpass"
       />
-      <SubmitButton>Sign Up</SubmitButton>
+      <SubmitButton data-testid="signup-form-button">Sign Up</SubmitButton>
     </RecordForm>
   );
 };
@@ -54,7 +53,9 @@ export const PasswordResetForm = ({
         <H1>Request Password Reset</H1>
         <Input name="email" label="E-mail" id="email" />
         <Input name="username" label="Username" id="username" />
-        <SubmitButton>Reset</SubmitButton>
+        <SubmitButton data-testid="password-reset-form-request-button">
+          Reset
+        </SubmitButton>
       </>
     ) : (
       <>
@@ -64,9 +65,11 @@ export const PasswordResetForm = ({
           name="verifypass"
           label="Verify New Password"
           type="password"
-          id="pass"
+          id="vpass"
         />
-        <SubmitButton>Reset</SubmitButton>
+        <SubmitButton data-testid="password-reset-form-button">
+          Reset
+        </SubmitButton>
       </>
     )}
   </RecordForm>
