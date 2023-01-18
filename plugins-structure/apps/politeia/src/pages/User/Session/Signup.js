@@ -10,12 +10,28 @@ import {
 } from "@politeiagui/common-ui";
 import { Link, P } from "pi-ui";
 import styles from "./styles.module.css";
+import { buildRegexFromSupportedChars } from "../../../pi/policy/utils";
 import message from "../../../assets/copies/before-signup.md";
 import PrivacyPolicyModal from "../../../components/Modal/PrivacyPolicyModal";
 
 // MOCK DEV ENV. Handle that on #2855 - [plugin-architecture] Handle
 //   Mainnet/Testnet envs
 const IS_DEV = true;
+const USERNAME_SUPPORTED_CHARS = [
+  "a-z",
+  "0-9",
+  ".",
+  ",",
+  ":",
+  ";",
+  "-",
+  "@",
+  "+",
+  "(",
+  ")",
+  "_",
+];
+const MIN_PASSWORD_LENGTH = 8;
 
 const SuccessMessage = ({ email }) => (
   <div>
@@ -73,7 +89,14 @@ function UserSignupPage() {
   }
   return (
     <div className={styles.page}>
-      <SignupForm className={styles.content} onSubmit={handleSignup} />
+      <SignupForm
+        className={styles.content}
+        onSubmit={handleSignup}
+        usernameValidationRegex={buildRegexFromSupportedChars(
+          USERNAME_SUPPORTED_CHARS
+        )}
+        minpasswordlength={MIN_PASSWORD_LENGTH}
+      />
       <div className={styles.links}>
         Already have an account?{" "}
         <Link href="/user/login" data-link>

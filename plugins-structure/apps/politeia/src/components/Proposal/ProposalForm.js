@@ -40,7 +40,6 @@ export function ProposalForm({ onSubmit, onSave, initialValues, policy }) {
       onSubmit={handleSubmit(onSubmit)}
       initialValues={initialValues}
       resolver={yupResolver(validateProposalForm(policy))}
-      mode="onChange"
     >
       {({
         CurrencyInput,
