@@ -17,8 +17,6 @@
 }
 
 .statusLabelWrapper {
-  position: absolute;
-  right: var(--container-padding-right);
   display: flex;
   flex-flow: column;
 }

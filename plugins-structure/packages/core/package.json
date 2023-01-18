@@ -17,6 +17,8 @@
     "./records/drafts/services": "./src/records/drafts/services.js",
     "./records/timestamps": "./src/records/timestamps/index.js",
     "./records/policy": "./src/records/policy/index.js",
+    "./user": "./src/user/index.js",
+    "./user/services": "./src/user/services.js",
     "./router": "./src/router/index.js",
     "./toolkit": "./src/toolkit/index.js",
     "./listeners": "./src/listeners/index.js",
