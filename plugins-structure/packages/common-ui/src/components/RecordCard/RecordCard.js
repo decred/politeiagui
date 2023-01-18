@@ -43,13 +43,19 @@ export function RecordCard({
         <H2 className={styles.title} data-testid="record-card-title">
           <TitleWrapper titleLink={titleLink}>{title}</TitleWrapper>
         </H2>
-        <div
-          className={styles.rightHeader}
-          data-testid="record-card-right-header"
-        >
-          {rightHeader}
-          {rightHeaderSubtitle}
-        </div>
+        {rightHeader && (
+          <div
+            className={styles.rightHeader}
+            data-testid="record-card-right-header"
+          >
+            {rightHeader}
+          </div>
+        )}
+        {rightHeaderSubtitle && (
+          <div className={styles.rightHeaderSubtitle}>
+            {rightHeaderSubtitle}
+          </div>
+        )}
         <div className={styles.subtitle} data-testid="record-card-subtitle">
           {subtitle}
         </div>
