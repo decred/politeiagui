@@ -35,16 +35,21 @@ export function Input({ name = "name", placeholder, label, error, ...props }) {
   return (
     <Controller
       name={name}
-      render={({ field: { onChange, value } }) => (
-        <TextInputUI
-          onChange={onChange}
-          value={value || ""}
-          placeholder={placeholder}
-          label={label}
-          error={error}
-          {...props}
-        />
-      )}
+      render={({
+        field: { onChange, value },
+        fieldState: { error: formError },
+      }) => {
+        return (
+          <TextInputUI
+            onChange={onChange}
+            value={value || ""}
+            placeholder={placeholder}
+            label={label}
+            error={error || formError?.message}
+            {...props}
+          />
+        );
+      }}
     />
   );
 }

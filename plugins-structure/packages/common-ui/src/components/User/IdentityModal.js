@@ -13,6 +13,8 @@ import {
 import { decodeFileText } from "@politeiagui/core/downloads";
 import styles from "./styles.module.css";
 import instructions from "../../assets/copies/identity.md";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validateIdentityImportForm } from "./validation";
 
 const UploadIdentityButton = () => {
   const { watch, setValue, setError, formState, clearErrors, resetField } =
@@ -68,6 +70,7 @@ export const IdentityImportModal = ({
       onClose={onClose}
       show={show}
       title={title}
+      formProps={{ resolver: yupResolver(validateIdentityImportForm()) }}
     >
       <UploadIdentityButton />
       <Input name="publicKey" label="Public Key" id="pubkey-input" />

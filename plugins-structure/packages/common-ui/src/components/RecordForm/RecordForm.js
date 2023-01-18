@@ -24,10 +24,11 @@ export function RecordForm({
   onSubmit,
   className,
   formClassName,
+  mode = "onChange",
   autoComplete = "on",
   ...props
 }) {
-  const formProps = useForm({ defaultValues: initialValues, ...props });
+  const formProps = useForm({ defaultValues: initialValues, mode, ...props });
   return (
     <Card className={classNames(styles.card, className)}>
       <FormProvider {...formProps}>
