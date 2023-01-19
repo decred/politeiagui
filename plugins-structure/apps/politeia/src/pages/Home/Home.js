@@ -1,6 +1,6 @@
 import React from "react";
 import { MultiContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
-import { getURLSearchParams } from "../../utils/getURLSearchParams";
+import { getURLSearchParams } from "@politeiagui/core/router";
 import { About } from "../../components";
 import HomeProposals from "./HomeProposals";
 
