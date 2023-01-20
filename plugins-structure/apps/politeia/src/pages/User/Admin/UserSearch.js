@@ -40,11 +40,21 @@ function SearchBanner({ onSubmit = () => {} }) {
             />
             <div className={styles.fields}>
               {mode === MODE_EMAIL ? (
-                <TextInput name="email" placeholder="Search by E-mail" />
+                <TextInput
+                  name="email"
+                  placeholder="Search by E-mail"
+                  data-testid="admin-search-email"
+                />
               ) : (
-                <TextInput name="username" placeholder="Search by Username" />
+                <TextInput
+                  name="username"
+                  placeholder="Search by Username"
+                  data-testid="admin-search-username"
+                />
               )}
-              <SubmitButton>Search</SubmitButton>
+              <SubmitButton data-testid="admin-search-button">
+                Search
+              </SubmitButton>
             </div>
           </>
         )}
@@ -68,7 +78,7 @@ function AdminUserSearch() {
   return (
     <SingleContentPage banner={<SearchBanner />}>
       {users ? (
-        <InfoCard title="Search Results">
+        <InfoCard title="Search Results" data-testid="admin-search-results">
           <Table headers={Object.values(TABLE_HEADERS)} data={formattedUsers} />
         </InfoCard>
       ) : null}

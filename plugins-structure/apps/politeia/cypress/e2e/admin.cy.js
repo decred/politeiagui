@@ -7,7 +7,7 @@ Cypress.Commands.add("mockInventory", (amount, matcherParams = {}) =>
   )
 );
 
-describe("Admin", () => {
+describe("Admin Proposals Page", () => {
   beforeEach(() => {
     cy.mockProposalsBatch("unreviewed");
     cy.mockInventory(0);
@@ -42,5 +42,17 @@ describe("Admin", () => {
     });
     cy.waitProposalsBatch({ hasCounts: false });
     cy.assertProposalsListLength(10);
+  });
+});
+
+describe("User Search Page", () => {
+  it("should list users", () => {
+    cy.visit("/admin/search");
+    cy.findByText("Search for Users").should("be.visible");
+    cy.findByTestId("admin-search-email").type("test");
+    cy.findByTestId("admin-search-button").click();
+
+    // Should display list of users on table
+    cy.findByTestId("admin-search-results").should("be.visible");
   });
 });
