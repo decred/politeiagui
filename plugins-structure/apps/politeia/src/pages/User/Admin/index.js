@@ -8,6 +8,7 @@ import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listene
 const adminProposalsRoute = App.createRoute({
   path: "/admin/records",
   cleanup: routeCleanup,
+  title: "Admin Unvetted Proposals",
   setupServices: servicesSetupsByRecordsInventory,
   listeners: [listenToRecordsInventoryFetch],
   view: createRouteView(
@@ -19,6 +20,7 @@ const adminProposalsRoute = App.createRoute({
 
 const adminUserSearchRoute = App.createRoute({
   path: "/admin/search",
+  title: "Search for Users",
   cleanup: routeCleanup,
   view: createRouteView(
     lazy(() =>
