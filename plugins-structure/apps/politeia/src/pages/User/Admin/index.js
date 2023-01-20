@@ -17,6 +17,16 @@ const adminProposalsRoute = App.createRoute({
   ),
 });
 
-const routes = [adminProposalsRoute];
+const adminUserSearchRoute = App.createRoute({
+  path: "/admin/search",
+  cleanup: routeCleanup,
+  view: createRouteView(
+    lazy(() =>
+      import(/* webpackChunkName: "admin_user_search_page" */ "./UserSearch")
+    )
+  ),
+});
+
+const routes = [adminProposalsRoute, adminUserSearchRoute];
 
 export default routes;
