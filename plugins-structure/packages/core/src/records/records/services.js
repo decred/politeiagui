@@ -5,7 +5,10 @@ import {
   fetchNextRecords,
   fetchRecordDetails,
 } from "./effects";
-import { fetchRecordDetails as onFetchRecordDetails } from "./recordsSlice";
+import {
+  fetchRecordDetails as onFetchRecordDetails,
+  // selectRecordByShortToken,
+} from "./recordsSlice";
 
 import { createSliceServices } from "../../toolkit";
 
@@ -26,15 +29,27 @@ export const { pluginServices, serviceListeners } = createSliceServices({
       },
       effect: fetchAllRecordsInventory,
     },
+    // TODO: Deprecate this service and use the one below.
     details: {
       effect: fetchRecordDetails,
     },
     // TODO: merge details service with the service below. Using this for now
-    // to avoid changing out of scope code.
+    // to keep the same scope of this PR.
     detailsOnLoad: {
       onSetup: ({ params, dispatch }) => {
         const { token } = params || {};
+        if (!token) return;
+        // FIXME: This is a temporary fix to avoid issues from listeners logic.
+        // Ideally, we should handle this issue on service listeners config
+        // level, but in order to keep the same scope of this PR, records
+        // details will be fetched on every page load.
         dispatch(onFetchRecordDetails({ token }));
+        // TODO: Uncomment this code when the issue above is fixed.
+        // (the `getState` param is retreived from onSetup args).
+        // const record = selectRecordByShortToken(getState(), token);
+        // if (!record?.detailsFetched) {
+        //   dispatch(onFetchRecordDetails({ token }));
+        // }
       },
     },
   },

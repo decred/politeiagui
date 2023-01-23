@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProposalDetails } from "./actions";
+import { useSelector } from "react-redux";
 import { selectDetailsStatus } from "./selectors";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSummaries } from "@politeiagui/ticketvote/summaries";
@@ -15,7 +14,6 @@ import { piSummaries, proposals } from "../../pi";
 import app from "../../app";
 
 function useProposalDetails({ token }) {
-  const dispatch = useDispatch();
   const detailsStatus = useSelector(selectDetailsStatus);
   const fullToken = useSelector((state) =>
     records.selectFullToken(state, token)
@@ -23,7 +21,6 @@ function useProposalDetails({ token }) {
   const record = useSelector((state) =>
     records.selectByToken(state, fullToken)
   );
-  const recordStatus = useSelector(records.selectStatus);
   const voteSummary = useSelector((state) =>
     ticketvoteSummaries.selectByToken(state, fullToken)
   );
@@ -64,16 +61,6 @@ function useProposalDetails({ token }) {
   const rfpLinkedRecord = useSelector((state) =>
     records.selectByToken(state, rfpLinkedRecordToken)
   );
-
-  useEffect(() => {
-    if (
-      recordStatus !== "loading" &&
-      recordStatus !== "failed" &&
-      !record?.detailsFetched
-    ) {
-      dispatch(fetchProposalDetails({ token }));
-    }
-  }, [token, dispatch, recordStatus, record]);
 
   useEffect(() => {
     if (record?.files) {

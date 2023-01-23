@@ -1,4 +1,3 @@
-import { fetchProposalDetails } from "./actions";
 import { records } from "@politeiagui/core/records";
 import { ticketvoteSubmissions } from "@politeiagui/ticketvote/submissions";
 import { piSummaries } from "../../pi/summaries";
@@ -19,9 +18,7 @@ import {
   onVoteSubmissionsFetch,
 } from "./customEffects";
 
-export const recordDetailsListener = recordsListeners.details.listenTo({
-  actionCreator: fetchProposalDetails,
-});
+export const recordDetailsListener = recordsListeners.detailsOnLoad;
 
 export const voteSummaryListener = voteSummariesListeners.single
   .listenTo({ actionCreator: records.fetchDetails.fulfilled })
