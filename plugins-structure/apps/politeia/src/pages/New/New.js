@@ -5,7 +5,7 @@ import { SingleContentPage } from "@politeiagui/common-ui/layout";
 import { ProposalForm } from "../../components/Proposal/ProposalForm";
 import { piPolicy } from "../../pi/policy";
 import { H1 } from "pi-ui";
-import { decodeProposalDraftForm } from "../../pi/proposals/utils";
+import { decodeProposalRecordForm } from "../../pi/proposals/utils";
 import { getURLSearchParams } from "@politeiagui/core/router";
 
 function New() {
@@ -18,7 +18,7 @@ function New() {
   );
 
   // Decode Form values for drafts
-  const formValues = decodeProposalDraftForm(draft?.record);
+  const formValues = decodeProposalRecordForm(draft?.record);
 
   // Submission handlers
   function handleSubmit(data) {

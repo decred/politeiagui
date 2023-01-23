@@ -116,9 +116,10 @@ const ProposalDetails = ({
             title={proposalDetails.name}
             isRfp={isRfpProposal(record)}
             token={proposalDetails.token}
-            // TODO: use correct condition below.
-            // allowEdit={proposalDetails.author === currentUser?.username}
-            // DON'T USE THIS:
+            // TODO: use correct condition. We should handle edits only for
+            // unauthorized proposals, and if current user is the proposal
+            // author
+            // FIXME: DON'T USE THIS BELOW
             allowEdit={true}
           />
         }

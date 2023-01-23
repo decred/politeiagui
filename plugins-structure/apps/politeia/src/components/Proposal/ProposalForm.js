@@ -159,6 +159,7 @@ export function ProposalForm({
               />
             </div>
             <MarkdownInput
+              initialValue={initialValues?.body}
               name="body"
               tabIndex={1}
               data-testid="proposal-form-markdown-input"

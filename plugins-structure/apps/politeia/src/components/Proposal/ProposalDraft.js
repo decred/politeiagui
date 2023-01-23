@@ -1,13 +1,13 @@
 import React from "react";
 import { Event, Join, RecordCard } from "@politeiagui/common-ui";
-import { decodeProposalDraftForm } from "../../pi/proposals/utils";
+import { decodeProposalRecordForm } from "../../pi/proposals/utils";
 import { ProposalTitle } from "./common";
 import { PROPOSAL_TYPE_RFP } from "../../pi";
 import { ButtonIcon, StatusTag } from "pi-ui";
 import styles from "./styles.module.css";
 
 function DraftCard({ draft, draftid, onDelete }) {
-  const { name, type } = decodeProposalDraftForm(draft.record);
+  const { name, type } = decodeProposalRecordForm(draft.record);
 
   return (
     <div data-testid="draft-card">

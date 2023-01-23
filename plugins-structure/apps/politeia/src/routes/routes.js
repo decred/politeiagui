@@ -2,6 +2,7 @@ import { store } from "@politeiagui/core";
 import { records } from "@politeiagui/core/records";
 import {
   DetailsRoute,
+  EditProposalRoute,
   HomeRoute,
   NewProposalRoute,
   UserRoutes,
@@ -13,6 +14,7 @@ export const routes = [
   HomeRoute,
   NewProposalRoute,
   DetailsRoute,
+  EditProposalRoute,
   ...UserRoutes,
   { ...DetailsRoute, path: "/record/:token/comment/:commentid" },
   {

@@ -134,6 +134,22 @@ const MONTHS_LABELS = [
  */
 
 /**
+ * Proposal form object
+ * @typedef {{
+ *  name: string,
+ *  body: string,
+ *  attachments: Array,
+ *  amount: number,
+ *  domain: number,
+ *  endDate: number,
+ *  startDate: number,
+ *  type: number,
+ *  deadline: number,
+ *  rfpToken: string
+ * }} ProposalFormValues
+ *
+ */
+/**
  * decodeProposalType returns proposal type for given voteMetadata
  * @param {{ linkto: ?String, linkby: ?Number  }} voteMetadata
  */
@@ -263,10 +279,18 @@ export function decodeProposalRecord(record) {
   };
 }
 
-export function decodeProposalDraftForm(draft) {
-  if (!draft) return;
+/**
+ * decodeProposalRecordForm returns a formatted proposal form object values for
+ * given record.
+ *
+ * @param {Record} record
+ * @returns {ProposalFormValues}
+ *
+ */
+export function decodeProposalRecordForm(record) {
+  if (!record) return;
   const { name, proposalMetadata, voteMetadata, body, attachments } =
-    decodeProposalRecordFiles(draft.files);
+    decodeProposalRecordFiles(record.files);
   return {
     name,
     body,
