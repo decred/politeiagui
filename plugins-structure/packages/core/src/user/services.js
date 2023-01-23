@@ -1,24 +1,23 @@
 import { user } from ".";
 import { getURLSearchParams } from "../router";
-import { store } from "../storeSetup";
 import { createSliceServices } from "../toolkit";
 
 export const { pluginServices, serviceListeners } = createSliceServices({
   name: "userEmail",
   services: {
     emailVerify: {
-      onSetup: () => {
+      onSetup: ({ dispatch }) => {
         const { verificationtoken } = getURLSearchParams();
         if (verificationtoken) {
-          store.dispatch(user.verifyEmail({ verificationtoken }));
+          dispatch(user.verifyEmail({ verificationtoken }));
         }
       },
     },
     keyVerify: {
-      onSetup: () => {
+      onSetup: ({ dispatch }) => {
         const { verificationtoken } = getURLSearchParams();
         if (verificationtoken) {
-          store.dispatch(user.verifyKey({ verificationtoken }));
+          dispatch(user.verifyKey({ verificationtoken }));
         }
       },
     },

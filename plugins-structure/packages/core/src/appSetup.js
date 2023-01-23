@@ -215,7 +215,11 @@ export function appSetup({
           registerListeners(allListeners);
           for (const service of routeServices) {
             if (service.action) {
-              await service.action();
+              await service.action({
+                params: routeParams,
+                getState: store.getState,
+                dispatch: store.dispatch,
+              });
             }
           }
           return await view(routeParams);
