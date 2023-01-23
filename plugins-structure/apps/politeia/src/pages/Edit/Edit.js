@@ -6,6 +6,7 @@ import { ProposalForm } from "../../components/Proposal/ProposalForm";
 import { piPolicy } from "../../pi/policy";
 import { decodeProposalRecordForm } from "../../pi/proposals/utils";
 import { records } from "@politeiagui/core/records";
+import { GoBackLink } from "@politeiagui/common-ui";
 
 function ProposalEditPage({ token }) {
   const { domains, startdatemin, enddatemax } = useSelector(piPolicy.selectAll);
@@ -20,6 +21,11 @@ function ProposalEditPage({ token }) {
 
   return (
     <SingleContentPage banner={<H1>Edit Proposal</H1>}>
+      <GoBackLink
+        style={{ marginBottom: "2rem" }}
+        data-testid="proposal-go-back"
+        backFromPathname={`/record/${token}`}
+      />
       {record && proposalFormValues ? (
         <ProposalForm
           initialValues={proposalFormValues}
