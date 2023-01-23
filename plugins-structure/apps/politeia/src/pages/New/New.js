@@ -8,7 +8,7 @@ import { H1 } from "pi-ui";
 import { decodeProposalRecordForm } from "../../pi/proposals/utils";
 import { getURLSearchParams } from "@politeiagui/core/router";
 
-function New() {
+function ProposalNewPage() {
   const dispatch = useDispatch();
   const { draft: draftid } = getURLSearchParams();
 
@@ -45,4 +45,4 @@ function New() {
   );
 }
 
-export default New;
+export default ProposalNewPage;

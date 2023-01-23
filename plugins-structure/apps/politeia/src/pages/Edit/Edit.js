@@ -7,13 +7,10 @@ import { piPolicy } from "../../pi/policy";
 import { decodeProposalRecordForm } from "../../pi/proposals/utils";
 import { records } from "@politeiagui/core/records";
 
-function Edit({ token }) {
+function ProposalEditPage({ token }) {
   const { domains, startdatemin, enddatemax } = useSelector(piPolicy.selectAll);
-  const fullToken = useSelector((state) =>
-    records.selectFullToken(state, token)
-  );
   const record = useSelector((state) =>
-    records.selectByToken(state, fullToken)
+    records.selectByShortToken(state, token)
   );
   const proposalFormValues = decodeProposalRecordForm(record);
 
@@ -37,4 +34,4 @@ function Edit({ token }) {
   );
 }
 
-export default Edit;
+export default ProposalEditPage;
