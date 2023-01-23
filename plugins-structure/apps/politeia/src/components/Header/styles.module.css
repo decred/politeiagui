@@ -4,6 +4,10 @@
   align-items: center;
 }
 
+.bannerTitle button {
+  margin-right: 0 !important;
+}
+
 .xsScreenButton {
   display: none;
 }
@@ -19,7 +23,6 @@
 @media (--xs-viewport) {
   .xsScreenButton {
     display: block;
-    /* padding: var(--spacing-small); */
     width: 3rem;
     height: 3rem;
   }

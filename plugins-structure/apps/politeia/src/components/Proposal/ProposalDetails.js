@@ -49,6 +49,8 @@ const ProposalDetails = ({
   rfpSubmissionsProposalSummaries,
   rfpSubmissionsCommentsCounts,
   hideBody,
+  // TODO: Use this to control proposal view
+  // currentUser,
 }) => {
   const [open] = useModal();
 
@@ -113,6 +115,11 @@ const ProposalDetails = ({
           <ProposalTitle
             title={proposalDetails.name}
             isRfp={isRfpProposal(record)}
+            token={proposalDetails.token}
+            // TODO: use correct condition below.
+            // allowEdit={proposalDetails.author === currentUser?.username}
+            // DON'T USE THIS:
+            allowEdit={true}
           />
         }
         titleLink={proposalLink}

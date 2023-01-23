@@ -12,6 +12,8 @@ import useProposalDetails from "./useProposalDetails";
 import { getURLSearchParams } from "../../utils/getURLSearchParams";
 import { GoBackLink } from "@politeiagui/common-ui";
 import { keyCommentsThreadsBy } from "@politeiagui/comments/utils";
+import { useSelector } from "react-redux";
+import { user } from "@politeiagui/core/user";
 
 function ErrorsMessages({ errors }) {
   return errors.reduce((acc, cur, i) => {
@@ -55,6 +57,9 @@ function Details({ token, commentid = 0 }) {
     rfpSubmissionsProposalsSummaries,
     rfpSumbissionsVoteSummaries,
   } = useProposalDetails({ token });
+
+  // Get current logged in user
+  const currentUser = useSelector(user.selectCurrent);
 
   // TODO: this can be moved somewhere else
   const params = getURLSearchParams();
@@ -108,6 +113,7 @@ function Details({ token, commentid = 0 }) {
             rfpSubmissionsProposalSummaries={rfpSubmissionsProposalsSummaries}
             rfpSubmissionsVoteSummaries={rfpSumbissionsVoteSummaries}
             hideBody={!!commentid}
+            currentUser={currentUser}
           />
           <span id="proposal-comments" />
           {orderedAuthorUpdatesKeys.map((update, i) => (
@@ -126,7 +132,7 @@ function Details({ token, commentid = 0 }) {
               comments={mainCommentsThread}
               recordOwner={record.username}
               fullThreadUrl={`/record/${token}`}
-              // Mocking onReply until user layer is done.
+              // TODO: reply to user
               onReply={(comment, parentid) => {
                 console.log(`Replying ${parentid}:`, comment);
               }}

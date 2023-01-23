@@ -1,6 +1,7 @@
 import React from "react";
-import { Tooltip, classNames } from "pi-ui";
+import { ButtonIcon, Tooltip, classNames } from "pi-ui";
 import styles from "./styles.module.css";
+import { getShortToken } from "@politeiagui/core";
 
 function RfpTag() {
   return (
@@ -21,7 +22,8 @@ function RfpTag() {
   );
 }
 
-function ProposalTitle({ title, isRfp, isDisabled }) {
+function ProposalTitle({ title, isRfp, isDisabled, allowEdit, token }) {
+  const shortToken = getShortToken(token);
   return (
     <div
       className={classNames(
@@ -31,6 +33,15 @@ function ProposalTitle({ title, isRfp, isDisabled }) {
     >
       {isRfp && <RfpTag />}
       {title}
+      {allowEdit && (
+        <a
+          data-link
+          href={`/record/edit/${shortToken}`}
+          className={styles.edit}
+        >
+          <ButtonIcon type="edit" />
+        </a>
+      )}
     </div>
   );
 }
