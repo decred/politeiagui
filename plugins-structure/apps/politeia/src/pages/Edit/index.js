@@ -5,7 +5,7 @@ import { createRouteView } from "../../utils/createRouteView";
 import { serviceListeners } from "@politeiagui/core/records/services";
 
 export default App.createRoute({
-  path: "/record/edit/:token",
+  path: "/record/:token/edit",
   // TODO: replace {id: "pi/new"} with piPolicy service listener
   setupServices: [{ id: "pi/new" }, serviceListeners.detailsOnLoad],
   title: "Edit Proposal",
