@@ -32,11 +32,17 @@ function ProposalTitle({ title, isRfp, isDisabled, allowEdit, token }) {
       )}
     >
       {isRfp && <RfpTag />}
-      {title}
+      <a
+        data-link
+        data-testid="proposal-card-title-link"
+        href={`/record/${shortToken}`}
+      >
+        {title}
+      </a>
       {allowEdit && (
         <a
           data-link
-          href={`/record/edit/${shortToken}`}
+          href={`/record/${shortToken}/edit`}
           className={styles.edit}
         >
           <ButtonIcon type="edit" />
