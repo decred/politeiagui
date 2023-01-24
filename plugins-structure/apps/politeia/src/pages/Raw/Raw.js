@@ -23,7 +23,6 @@ function displayProposalInMarkdown({
   const endDate =
     enddate &&
     formatDateToInternationalString(formatUnixTimestampToObj(enddate));
-  console.log(author);
 
   return `
 ****
@@ -35,10 +34,10 @@ function displayProposalInMarkdown({
 - Censored: ${censored}
 
 ## Proposal Metadata
-${domain && `- Domain: ${domain}`}
-${amount && `- Amount: ${amount} USD`}
-${startDate && `- Start Date: ${startDate}`}
-${endDate && `- End Date: ${endDate}`}
+${domain ? `- Domain: ${domain}` : ""}
+${amount ? `- Amount: ${amount} USD` : ""}
+${startDate ? `- Start Date: ${startDate}` : ""}
+${endDate ? `- End Date: ${endDate}` : ""}
 
 ****
 
