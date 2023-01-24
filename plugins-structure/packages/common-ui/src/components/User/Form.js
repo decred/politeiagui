@@ -1,10 +1,23 @@
 import { H1 } from "pi-ui";
 import React from "react";
 import { Input, RecordForm, SubmitButton } from "../RecordForm";
+// Validation
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  validateLoginForm,
+  validatePasswordResetForm,
+  validatePasswordResetRequestForm,
+  validateSignupForm,
+  validateVerificationEmailResendForm,
+} from "./validation";
 
 export const LoginForm = ({ onSubmit, className }) => {
   return (
-    <RecordForm className={className} onSubmit={onSubmit}>
+    <RecordForm
+      className={className}
+      onSubmit={onSubmit}
+      resolver={yupResolver(validateLoginForm())}
+    >
       <H1>Log In</H1>
       <Input name="email" label="E-mail" id="email" />
       <Input name="password" type="password" label="Password" id="pass" />
@@ -13,9 +26,23 @@ export const LoginForm = ({ onSubmit, className }) => {
   );
 };
 
-export const SignupForm = ({ onSubmit, className }) => {
+export const SignupForm = ({
+  onSubmit,
+  className,
+  usernameValidationRegex,
+  minpasswordlength,
+}) => {
   return (
-    <RecordForm className={className} onSubmit={onSubmit}>
+    <RecordForm
+      className={className}
+      onSubmit={onSubmit}
+      resolver={yupResolver(
+        validateSignupForm({
+          usernameRegex: usernameValidationRegex,
+          minpasswordlength,
+        })
+      )}
+    >
       <H1>Create a new account</H1>
       <Input name="email" label="E-mail" id="email" />
       <Input name="username" label="Username" id="username" />
@@ -33,7 +60,11 @@ export const SignupForm = ({ onSubmit, className }) => {
 
 export const VerificationEmailForm = ({ onSubmit, className }) => {
   return (
-    <RecordForm className={className} onSubmit={onSubmit}>
+    <RecordForm
+      className={className}
+      onSubmit={onSubmit}
+      resolver={yupResolver(validateVerificationEmailResendForm())}
+    >
       <H1>Resend Verification Email</H1>
       <Input name="email" label="E-mail" id="email" />
       <Input name="username" label="Username" id="username" />
@@ -46,8 +77,17 @@ export const PasswordResetForm = ({
   onSubmit,
   className,
   requestMode = false,
+  minpasswordlength,
 }) => (
-  <RecordForm className={className} onSubmit={onSubmit}>
+  <RecordForm
+    className={className}
+    onSubmit={onSubmit}
+    resolver={yupResolver(
+      requestMode
+        ? validatePasswordResetRequestForm()
+        : validatePasswordResetForm({ minpasswordlength })
+    )}
+  >
     {requestMode ? (
       <>
         <H1>Request Password Reset</H1>

@@ -5,15 +5,26 @@ import styles from "./styles.module.css";
 import { ModalConfirm, ModalForm } from "../Modal";
 import { Payment } from "../Payment";
 import { LoginForm } from "./Form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  validatePasswordChangeForm,
+  validateUsernameChangeForm,
+} from "./validation";
 
 export const AccountPasswordChangeModal = ({
   onClose,
   title = "Change Password",
   show,
   onSubmit,
+  minpasswordlength,
 }) => {
   return (
     <ModalForm
+      formProps={{
+        resolver: yupResolver(
+          validatePasswordChangeForm({ minpasswordlength })
+        ),
+      }}
       {...{ onClose, title, show }}
       onSubmit={onSubmit}
       data-testid="account-password-change-modal"
@@ -48,11 +59,17 @@ export const AccountUsernameChangeModal = ({
   title = "Change Username",
   show,
   onSubmit,
+  usernameValidationRegex,
 }) => (
   <ModalForm
     {...{ onClose, title, show }}
     onSubmit={onSubmit}
     data-testid="account-username-change-modal"
+    formProps={{
+      resolver: yupResolver(
+        validateUsernameChangeForm({ usernameRegex: usernameValidationRegex })
+      ),
+    }}
   >
     <Input id="username" name="username" label="New Username" />
     <Input id="password" name="password" label="Password" type="password" />

@@ -3,6 +3,8 @@ import { PasswordResetForm, useToast } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 import { getURLSearchParams, router } from "@politeiagui/core/router";
 
+const MIN_PASSWORD_LENGTH = 8;
+
 function UserPasswordResetPage() {
   const { username, verificationtoken } = getURLSearchParams();
   const { openToast } = useToast();
@@ -18,7 +20,11 @@ function UserPasswordResetPage() {
   }
   return (
     <div className={styles.page}>
-      <PasswordResetForm className={styles.content} onSubmit={handleSubmit} />
+      <PasswordResetForm
+        className={styles.content}
+        onSubmit={handleSubmit}
+        minpasswordlength={MIN_PASSWORD_LENGTH}
+      />
     </div>
   );
 }

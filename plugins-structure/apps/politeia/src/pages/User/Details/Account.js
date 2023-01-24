@@ -18,6 +18,23 @@ import styles from "./styles.module.css";
 import { formatItemsList } from "./helpers";
 
 import { user } from "./_mock";
+import { buildRegexFromSupportedChars } from "../../../pi/policy/utils";
+
+const MIN_PASSWORD_LENGTH = 8;
+const USERNAME_SUPPORTED_CHARS = [
+  "a-z",
+  "0-9",
+  ".",
+  ",",
+  ":",
+  ";",
+  "-",
+  "@",
+  "+",
+  "(",
+  ")",
+  "_",
+];
 
 const PersonalData = ({ onClear }) => (
   <div className={styles.section}>
@@ -53,6 +70,7 @@ function UserAccount() {
   const [open] = useModal();
   function handleChangePassword() {
     open(AccountPasswordChangeModal, {
+      minpasswordlength: MIN_PASSWORD_LENGTH,
       onSubmit: (values) => {
         console.log("Password Changed", values);
       },
@@ -78,6 +96,9 @@ function UserAccount() {
   }
   function handleEditUsername() {
     open(AccountUsernameChangeModal, {
+      usernameValidationRegex: buildRegexFromSupportedChars(
+        USERNAME_SUPPORTED_CHARS
+      ),
       onSubmit: (values) => {
         console.log("Edit user", values);
       },
