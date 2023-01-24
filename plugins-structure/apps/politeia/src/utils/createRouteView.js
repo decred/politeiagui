@@ -11,7 +11,7 @@ export function createRouteView(Component) {
       <Provider store={store}>
         <ModalProvider>
           <UiTheme>
-            <Suspense fallback={React.Component}>
+            <Suspense fallback={<React.Fragment />}>
               <Component {...params} />
             </Suspense>
           </UiTheme>
