@@ -14,6 +14,20 @@ import {
 } from "@politeiagui/ticketvote/dev/mocks";
 
 const proposalStatusMap = {
+  // Record Status
+  unreviewed: {
+    voteStatus: "ineligible",
+    recordsStatus: "unreviewed",
+    recordsState: "unvetted",
+    piStatus: "unvetted",
+  },
+  unvettedCensored: {
+    voteStatus: "ineligible",
+    recordsStatus: "censored",
+    recordsState: "unvetted",
+    piStatus: "censored",
+  },
+  // Vote Status
   unauthorized: {
     voteStatus: "unauthorized",
     recordsStatus: "public",

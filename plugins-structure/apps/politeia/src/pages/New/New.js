@@ -12,7 +12,8 @@ function ProposalNewPage() {
   const dispatch = useDispatch();
   const { draft: draftid } = getURLSearchParams();
 
-  const { domains, startdatemin, enddatemax } = useSelector(piPolicy.selectAll);
+  const policy = useSelector(piPolicy.selectAll);
+  // const { domains, startdatemin, enddatemax } = useSelector(piPolicy.selectAll);
   const draft = useSelector((state) =>
     recordsDrafts.selectById(state, { draftid, userid: "user-id-test" })
   );
@@ -37,9 +38,7 @@ function ProposalNewPage() {
         onSave={handleSave}
         initialValues={formValues}
         onSubmit={handleSubmit}
-        domains={domains}
-        maxEndDate={enddatemax}
-        minStartDate={startdatemin}
+        policy={policy}
       />
     </SingleContentPage>
   );

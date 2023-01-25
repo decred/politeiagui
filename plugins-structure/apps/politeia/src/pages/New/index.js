@@ -3,11 +3,12 @@ import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
 
-import { serviceListeners } from "@politeiagui/core/records/drafts/services";
+import { serviceListeners as draftsListeners } from "@politeiagui/core/records/drafts/services";
+import { serviceListeners as policyListeners } from "../../pi/policy/services";
 
 export default App.createRoute({
   path: "/record/new",
-  setupServices: [{ id: "pi/new" }, serviceListeners.load],
+  setupServices: [policyListeners.fetch, draftsListeners.load],
   title: "New Proposal",
   cleanup: routeCleanup,
   view: createRouteView(

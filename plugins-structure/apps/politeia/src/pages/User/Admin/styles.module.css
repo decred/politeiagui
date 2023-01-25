@@ -1,0 +1,15 @@
+.form {
+  width: fit-content;
+  margin-top: var(--spacing-medium);
+  padding: 0;
+}
+
+.form .fields {
+  display: flex;
+  align-items: center;
+}
+
+.fields button {
+  margin-bottom: 2.2rem;
+  margin-left: var(--spacing-medium);
+}
