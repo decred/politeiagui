@@ -13,7 +13,6 @@ function ProposalNewPage() {
   const { draft: draftid } = getURLSearchParams();
 
   const policy = useSelector(piPolicy.selectAll);
-  // const { domains, startdatemin, enddatemax } = useSelector(piPolicy.selectAll);
   const draft = useSelector((state) =>
     recordsDrafts.selectById(state, { draftid, userid: "user-id-test" })
   );

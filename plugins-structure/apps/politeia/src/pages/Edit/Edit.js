@@ -9,7 +9,7 @@ import { records } from "@politeiagui/core/records";
 import { GoBackLink } from "@politeiagui/common-ui";
 
 function ProposalEditPage({ token }) {
-  const { domains, startdatemin, enddatemax } = useSelector(piPolicy.selectAll);
+  const policy = useSelector(piPolicy.selectAll);
   const record = useSelector((state) =>
     records.selectByShortToken(state, token)
   );
@@ -31,9 +31,7 @@ function ProposalEditPage({ token }) {
           initialValues={proposalFormValues}
           // onSave={handleSave}
           onSubmit={handleSubmit}
-          domains={domains}
-          maxEndDate={enddatemax}
-          minStartDate={startdatemin}
+          policy={policy}
         />
       ) : null}
     </SingleContentPage>

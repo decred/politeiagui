@@ -2,12 +2,12 @@ import { lazy } from "react";
 import App from "../../app";
 import { routeCleanup } from "../../utils/routeCleanup";
 import { createRouteView } from "../../utils/createRouteView";
-import { serviceListeners } from "@politeiagui/core/records/services";
+import { serviceListeners as detailsListeners } from "@politeiagui/core/records/services";
+import { serviceListeners as policyListeners } from "../../pi/policy/services";
 
 export default App.createRoute({
   path: "/record/:token/edit",
-  // TODO: replace {id: "pi/new"} with piPolicy service listener
-  setupServices: [{ id: "pi/new" }, serviceListeners.detailsOnLoad],
+  setupServices: [policyListeners.fetch, detailsListeners.detailsOnLoad],
   title: "Edit Proposal",
   cleanup: routeCleanup,
   view: createRouteView(
