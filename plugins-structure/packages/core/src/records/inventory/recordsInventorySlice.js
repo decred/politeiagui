@@ -90,7 +90,7 @@ const recordsInventorySlice = createSlice({
         const stringState = getHumanReadableRecordState(recordsState);
         const readableStatus = getHumanReadableRecordStatus(status);
         if (
-          recordsInventory[stringState][readableStatus].length ===
+          recordsInventory[stringState][readableStatus]?.length ===
           inventoryPageSize
         ) {
           state[stringState][readableStatus].status = "succeeded/hasMore";
@@ -99,7 +99,7 @@ const recordsInventorySlice = createSlice({
         }
         state[stringState][readableStatus].lastPage = page;
         state[stringState][readableStatus].tokens.push(
-          ...recordsInventory[stringState][readableStatus]
+          ...(recordsInventory[stringState][readableStatus] || [])
         );
       })
       .addCase(fetchRecordsInventory.rejected, (state, action) => {
