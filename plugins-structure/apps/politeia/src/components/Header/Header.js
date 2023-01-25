@@ -49,6 +49,10 @@ function HeaderItems() {
           name="My Proposals"
         />
         <Item href={`/user/${currentUser.userid}/drafts`} name="My Drafts" />
+        {/* TODO: only show this for admin */}
+        <Item href="/admin/records" name="Admin" />
+        <Item href="/admin/search" name="Search for Users" />
+        {/* END TODO */}
         <Item name="Logout" onClick={handleLogout} />
       </Dropdown>
     </div>

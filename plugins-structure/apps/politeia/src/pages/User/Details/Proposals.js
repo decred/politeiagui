@@ -22,13 +22,13 @@ function UserProposals() {
     status,
     recordsState,
   });
-  const isEmpty = useSelector((state) =>
+  const isListEmpty = useSelector((state) =>
     selectIsRecordsInventoryListEmpty(state, { recordsState, status })
   );
 
   return (
     <UserDetails>
-      {isEmpty ? (
+      {isListEmpty ? (
         <ProposalsListEmpty listName="from user" />
       ) : (
         <ProposalsList

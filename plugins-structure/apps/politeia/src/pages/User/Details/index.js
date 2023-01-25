@@ -2,17 +2,17 @@ import { lazy } from "react";
 import App from "../../../app";
 import { routeCleanup } from "../../../utils/routeCleanup";
 import { createRouteView } from "../../../utils/createRouteView";
-import { router } from "@politeiagui/core/router";
 import { serviceListeners as draftsListeners } from "@politeiagui/core/records/drafts/services";
 import { servicesSetupsByRecordsInventory } from "../../../pi/proposalsList/servicesSetups";
 import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listeners";
 
 const baseRoute = App.createRoute({
   path: "/user/:userid",
+  title: "User Details",
   cleanup: routeCleanup,
-  view: ({ userid }) => {
-    router.navigateTo(`/user/${userid}/identity`);
-  },
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Identity"))
+  ),
 });
 
 const userProposalsRoute = App.createRoute({
