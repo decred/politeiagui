@@ -54,7 +54,7 @@ function ProposalRawPage({ token }) {
 
   return (
     <SingleContentPage>
-      <pre>{md}</pre>
+      <div style={{ whiteSpace: "pre" }}>{md}</div>
     </SingleContentPage>
   );
 }
