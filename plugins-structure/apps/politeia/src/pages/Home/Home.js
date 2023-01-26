@@ -1,7 +1,7 @@
 import React from "react";
 import { MultiContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
-import { getURLSearchParams } from "@politeiagui/core/router";
-import { About } from "../../components";
+import { getURLSearchParams } from "../../utils/getURLSearchParams";
+import { About, BannerTitle } from "../../components";
 import HomeProposals from "./HomeProposals";
 
 const TAB_LABELS = {
@@ -39,7 +39,7 @@ function Home() {
     <MultiContentPage
       banner={
         <TabsBanner
-          title="Proposals"
+          title={<BannerTitle title="Proposals" />}
           activeTab={TAB_VALUES.indexOf(tab || TAB_LABELS.underReview)}
           tabs={tabs}
         />

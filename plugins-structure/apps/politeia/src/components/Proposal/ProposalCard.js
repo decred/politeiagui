@@ -38,9 +38,12 @@ const ProposalCard = ({
     <div data-testid="proposal-card">
       <RecordCard
         isDimmed={proposal.archived || proposal.censored}
-        titleLink={proposalLink}
         title={
-          <ProposalTitle title={proposal.name} isRfp={isRfpProposal(record)} />
+          <ProposalTitle
+            title={proposal.name}
+            isRfp={isRfpProposal(record)}
+            token={proposal.token}
+          />
         }
         subtitle={
           <ProposalSubtitle

@@ -212,11 +212,27 @@ export function appSetup({
           clearListeners(allListeners);
         },
         view: async (routeParams) => {
+          const actionsDispatchesQueue = [];
           registerListeners(allListeners);
           for (const service of routeServices) {
+            // We must cache all dispatches, because they might trigger services
+            // listeners effects that may not have executed their setup actions
+            // yet. Once they are properly setup, we can execute all cached
+            // actions.
             if (service.action) {
-              await service.action();
+              await service.action({
+                params: routeParams,
+                getState: store.getState,
+                dispatch: (fn) => {
+                  actionsDispatchesQueue.push(fn);
+                },
+              });
             }
+          }
+          // Now we can execute all cached actionsDispatchesQueue, because all
+          // actions have been successfully setup.
+          for (const fn of actionsDispatchesQueue) {
+            await store.dispatch(fn);
           }
           return await view(routeParams);
         },

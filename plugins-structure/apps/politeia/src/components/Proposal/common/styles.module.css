@@ -70,6 +70,10 @@
   align-items: center;
 }
 
+.edit {
+  margin-left: var(--spacing-1);
+}
+
 .disabled {
   color: var(--color-gray-light);
 }

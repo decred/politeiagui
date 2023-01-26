@@ -211,5 +211,13 @@ export const selectRecordVersionStatusByToken = (state, { version, token }) => {
   return recordVersions[version]?.status;
 };
 
+export const selectRecordByShortToken = (state, shortToken) => {
+  const allRecords = selectRecords(state);
+  const fullToken = selectFullToken(state, shortToken);
+  if (fullToken) {
+    return allRecords[fullToken];
+  }
+};
+
 // Export default reducer
 export default recordsSlice.reducer;

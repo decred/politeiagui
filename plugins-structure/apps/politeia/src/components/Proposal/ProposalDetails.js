@@ -49,6 +49,8 @@ const ProposalDetails = ({
   rfpSubmissionsProposalSummaries,
   rfpSubmissionsCommentsCounts,
   hideBody,
+  // TODO: Use this to control proposal view
+  // currentUser,
 }) => {
   const [open] = useModal();
 
@@ -108,14 +110,19 @@ const ProposalDetails = ({
           </Message>
         )}
       <RecordCard
-        token={proposalDetails.token}
         title={
           <ProposalTitle
             title={proposalDetails.name}
             isRfp={isRfpProposal(record)}
+            token={proposalDetails.token}
+            // FIXME: DON'T USE THIS BELOW
+            allowEdit={true}
+            // TODO: use correct condition. We should handle edits only for
+            // unauthorized proposals, and if current user is the proposal
+            // author
           />
         }
-        titleLink={proposalLink}
+        // titleLink={proposalLink}
         isDimmed={isAbandoned}
         subtitle={
           <ProposalSubtitle

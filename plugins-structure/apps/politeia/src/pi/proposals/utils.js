@@ -61,21 +61,6 @@ export const proposalFilenames = [
   PROPOSAL_VOTE_METADATA_FILENAME,
 ];
 
-const MONTHS_LABELS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
 /**
  * Record object
  * @typedef {{
@@ -133,6 +118,22 @@ const MONTHS_LABELS = [
  * }} Proposal
  */
 
+/**
+ * Proposal form object
+ * @typedef {{
+ *  name: string,
+ *  body: string,
+ *  attachments: Array,
+ *  amount: number,
+ *  domain: number,
+ *  endDate: number,
+ *  startDate: number,
+ *  type: number,
+ *  deadline: number,
+ *  rfpToken: string
+ * }} ProposalFormValues
+ *
+ */
 /**
  * decodeProposalType returns proposal type for given voteMetadata
  * @param {{ linkto: ?String, linkby: ?Number  }} voteMetadata
@@ -263,10 +264,18 @@ export function decodeProposalRecord(record) {
   };
 }
 
-export function decodeProposalDraftForm(draft) {
-  if (!draft) return;
+/**
+ * decodeProposalRecordForm returns a formatted proposal form object values for
+ * given record.
+ *
+ * @param {Record} record
+ * @returns {ProposalFormValues}
+ *
+ */
+export function decodeProposalRecordForm(record) {
+  if (!record) return;
   const { name, proposalMetadata, voteMetadata, body, attachments } =
-    decodeProposalRecordFiles(draft.files);
+    decodeProposalRecordFiles(record.files);
   return {
     name,
     body,
@@ -309,23 +318,6 @@ export function getRecordStatusChangesMetadata(record) {
   const userMetadata = decodeProposalUserMetadata(record.metadata);
   const payloads = userMetadata.map((md) => md.payload);
   return getStatusMetadataPayloads(payloads);
-}
-
-/**
- * formatDateToInternationalString accepts an object of day, month and year.
- * It returns a string of human viewable international date from the result
- * of DatePicker or BackEnd and supposes they are correct.
- * String format: 08 Sep 2021
- * @param {object} { day, month, year }
- * @returns {string}
- */
-export function formatDateToInternationalString({ day, month, year }) {
-  const monthLabel = MONTHS_LABELS[month - 1];
-  if (monthLabel === undefined) {
-    return "Invalid Date";
-  }
-  const dayView = `0${day}`.slice(-2);
-  return `${dayView} ${MONTHS_LABELS[month - 1]} ${year}`;
 }
 
 /**

@@ -1,4 +1,3 @@
-import { store } from "../storeSetup";
 import curry from "lodash/fp/curry";
 import { validateSliceServices } from "./validation";
 /**
@@ -22,9 +21,9 @@ import { validateSliceServices } from "./validation";
  */
 /**
  * @callback ListenerEffect
- * @param {Object} state
- * @param {import("@reduxjs/toolkit").Dispatch} dispatch
- * @param {Object} effectPayload
+ * @param {Object} state - The current state of the store
+ * @param {import("@reduxjs/toolkit").Dispatch} dispatch - The store's dispatch function
+ * @param {Object} effectPayload - The payload of the action that triggered the effect
  */
 /**
  * @callback CurriedListenerEffect
@@ -39,6 +38,7 @@ import { validateSliceServices } from "./validation";
 /**
  * @callback ServiceOnSetup
  * @param {{
+ *  params: Object,
  *  getState: Function,
  *  dispatch: import("@reduxjs/toolkit").Dispatch
  * }}
@@ -146,10 +146,11 @@ export function formatServicesToPlugin(services, sliceName) {
       {
         id: setSliceId(sliceName, id),
         action: services[id].onSetup
-          ? () =>
+          ? ({ params, getState, dispatch }) =>
               services[id].onSetup({
-                getState: store.getState,
-                dispatch: store.dispatch,
+                params, // Route params passed to the service
+                getState, // Redux getState function
+                dispatch, // Redux dispatch function
               })
           : null,
         effect: services[id].effect,

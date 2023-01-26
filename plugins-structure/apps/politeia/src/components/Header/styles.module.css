@@ -1,7 +1,32 @@
+.bannerTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bannerTitle button {
+  margin-right: 0 !important;
+}
+
+.xsScreenButton {
+  display: none;
+}
+
 .headerItems {
   padding: 0 !important;
 }
 
 .headerItems > * {
   margin: 0.6rem 1rem;
+}
+
+@media (--xs-viewport) {
+  .xsScreenButton {
+    display: block;
+    width: 3rem;
+    height: 3rem;
+  }
+  .fullScreenButton {
+    display: none;
+  }
 }
