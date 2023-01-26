@@ -28,69 +28,119 @@ export function getDefaultErrorMessage(code = 0, api = "") {
   `;
 }
 
-// export client object with functions to interact with the API
-export const client = {
-  async fetchRecordsInventory(obj) {
-    const response = await fetch(
-      `${RECORDS_API_ROUTE}${VERSION}${ROUTE_INVENTORY}`,
-      fetchOptions(null, obj, "POST")
-    );
-    const inventory = await parseResponse(response);
-    return inventory;
-  },
-  async fetchRecords(state, records, filenames) {
-    if (!state) {
-      const error = Error("state is a required parameter");
-      console.error(error);
-      throw error;
-    }
-    const csrf = await getCsrf(state);
-    const body = {
-      requests: records.map((token) => ({
-        token,
-        filenames,
-      })),
-    };
-    const response = await fetch(
-      `${RECORDS_API_ROUTE}${VERSION}${ROUTE_RECORDS}`,
-      fetchOptions(csrf, body, "POST")
-    );
-    const recordsInfo = await parseResponse(response);
-    return recordsInfo.records;
-  },
-  async fetchRecordDetails(state, { token, version }) {
-    const csrf = await getCsrf(state);
-    const response = await fetch(
-      `${RECORDS_API_ROUTE}${VERSION}${ROUTE_DETAILS}`,
-      fetchOptions(csrf, { token, version }, "POST")
-    );
-    const recordResponse = await parseResponse(response);
-    return recordResponse.record;
-  },
-  async fetchRecordTimestamps(state, { token, version }) {
-    const csrf = await getCsrf(state);
-    const response = await fetch(
-      `${RECORDS_API_ROUTE}${VERSION}${ROUTE_TIMESTAMPS}`,
-      fetchOptions(csrf, { token, version }, "POST")
-    );
-    return await parseResponse(response);
-  },
-  async fetchApi() {
-    const response = await fetch("/api");
-    const api = await parseResponse(response);
-    const csrf = response.headers.get("X-Csrf-Token");
-    return { api, csrf };
-  },
-  async fetchRecordsPolicy(state) {
-    const csrf = await getCsrf(state);
-    const response = await fetch(
-      `${RECORDS_API_ROUTE}${VERSION}${ROUTE_POLICY}`,
-      fetchOptions(csrf, {}, "POST")
-    );
-    return await parseResponse(response);
-  },
-};
+// Records API client
+/**
+ * fetchRecordsInventory fetches the records inventory for given records state
+ * and status. Page is optional and defaults to 1.
+ * @param {{
+ *  recordsState: Number,
+ *  status: Number,
+ *  page?: Number
+ * }} options
+ * @returns
+ */
+async function fetchRecordsInventory({ recordsState, status, page = 1 }) {
+  const response = await fetch(
+    `${RECORDS_API_ROUTE}${VERSION}${ROUTE_INVENTORY}`,
+    fetchOptions(null, { state: recordsState, status, page }, "POST")
+  );
+  const inventory = await parseResponse(response);
+  return inventory;
+}
 
+/**
+ * fetchRecords fetches records for given records tokens batch and files names.
+ *
+ * @param {Object} state redux state
+ * @param {String[]} records records tokens arrray
+ * @param {String[]} filenames files names array
+ */
+async function fetchRecords(state, records, filenames) {
+  if (!state) {
+    const error = Error("state is a required parameter");
+    console.error(error);
+    throw error;
+  }
+  const csrf = await getCsrf(state);
+  const body = {
+    requests: records.map((token) => ({
+      token,
+      filenames,
+    })),
+  };
+  const response = await fetch(
+    `${RECORDS_API_ROUTE}${VERSION}${ROUTE_RECORDS}`,
+    fetchOptions(csrf, body, "POST")
+  );
+  const recordsInfo = await parseResponse(response);
+  return recordsInfo.records;
+}
+
+/**
+ * fetchRecordDetails fetches record details for given record token.
+ *
+ * @param {Object} state redux state
+ * @param {{ token: String, version: Number }} params record token and version
+ */
+async function fetchRecordDetails(state, { token, version }) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${RECORDS_API_ROUTE}${VERSION}${ROUTE_DETAILS}`,
+    fetchOptions(csrf, { token, version }, "POST")
+  );
+  const recordResponse = await parseResponse(response);
+  return recordResponse.record;
+}
+
+/**
+ * fetchRecordTimestamps fetches record timestamps for given record token and
+ * version.
+ *
+ * @param {Object} state redux state
+ * @param {{ token: String, version: Number }} params record token and version
+ */
+async function fetchRecordTimestamps(state, { token, version }) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${RECORDS_API_ROUTE}${VERSION}${ROUTE_TIMESTAMPS}`,
+    fetchOptions(csrf, { token, version }, "POST")
+  );
+  return await parseResponse(response);
+}
+
+/**
+ * fetchRecordsPolicy fetches the records API policy.
+ *
+ * @param {Object} state redux state
+ */
+async function fetchRecordsPolicy(state) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${RECORDS_API_ROUTE}${VERSION}${ROUTE_POLICY}`,
+    fetchOptions(csrf, {}, "POST")
+  );
+  return await parseResponse(response);
+}
+
+// WWW Api client
+/**
+ * fetchApi fetches the api information, and a new csrf token.
+ *
+ */
+async function fetchApi() {
+  const response = await fetch("/api");
+  const api = await parseResponse(response);
+  const csrf = response.headers.get("X-Csrf-Token");
+  return { api, csrf };
+}
+
+/**
+ * getCsrf returns the csrf token from the state, if it doesn't exist, it calls
+ * client's `fetchApi` to get it.
+ *
+ * @param {Object} state redux state
+ * @returns {String} csrf token
+ */
 export async function getCsrf(state) {
   const csrf = state.api && state.api.csrf;
   // if already has csrf just return it
@@ -99,6 +149,20 @@ export async function getCsrf(state) {
   const { csrf: newCsrf } = await client.fetchApi();
   return newCsrf;
 }
+
+// User API client
+
+// export client object with functions to interact with the API
+export const client = {
+  // Records API
+  fetchRecordsInventory,
+  fetchRecords,
+  fetchRecordDetails,
+  fetchRecordTimestamps,
+  fetchRecordsPolicy,
+  // WWW API
+  fetchApi,
+};
 
 export async function parseResponse(response) {
   const { status, statusText } = response;

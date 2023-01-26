@@ -51,7 +51,7 @@ export const fetchRecordsInventory = createAsyncThunk(
     const { inventorypagesize: inventoryPageSize } = state.recordsPolicy.policy;
     try {
       const recordsInventory = await extra.fetchRecordsInventory({
-        state: requestRecordsState,
+        recordsState: requestRecordsState,
         status: requestStatus,
         page,
       });
