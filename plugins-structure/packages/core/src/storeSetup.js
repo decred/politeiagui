@@ -7,6 +7,7 @@ import recordsDraftsReducer from "./records/drafts/recordsDraftsSlice";
 import policyReducer from "./records/policy/policySlice";
 import recordsTimestampsReducer from "./records/timestamps/timestampsSlice";
 import apiReducer from "./api/apiSlice";
+import apiPolicyReducer from "./api/policySlice";
 import progressReducer from "./globalServices/progress";
 import messageReducer from "./globalServices/message";
 import navigationReducer from "./globalServices/navigation";
@@ -18,6 +19,7 @@ import { listenerMiddleware } from "./listeners";
 // Define the Reducers that will always be present in the application
 const staticReducers = {
   api: apiReducer,
+  apiPolicy: apiPolicyReducer,
   recordsInventory: recordsInventoryReducer,
   records: recordsReducer,
   recordsDrafts: recordsDraftsReducer,

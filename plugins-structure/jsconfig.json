@@ -7,6 +7,9 @@
       "@politeiagui/core/router": ["./packages/core/src/router/index.js"],
       "@politeiagui/core/user": ["./packages/core/src/user/index.js"],
       "@politeiagui/core/user/auth": ["./packages/core/src/user/auth/index.js"],
+      "@politeiagui/core/user/auth/services": [
+        "./packages/core/src/user/auth/services.js"
+      ],
       "@politeiagui/core/user/services": [
         "./packages/core/src/user/services.js"
       ],

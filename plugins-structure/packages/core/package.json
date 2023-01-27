@@ -19,6 +19,7 @@
     "./records/policy": "./src/records/policy/index.js",
     "./user": "./src/user/index.js",
     "./user/auth": "./src/user/auth/index.js",
+    "./user/auth/services": "./src/user/auth/services.js",
     "./user/services": "./src/user/services.js",
     "./router": "./src/router/index.js",
     "./toolkit": "./src/toolkit/index.js",

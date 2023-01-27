@@ -9,8 +9,10 @@ import {
   // Users
   ROUTE_USER_LOGIN,
   ROUTE_USER_ME,
+  ROUTE_WWW_POLICY,
   // ROUTE_USER_DETAILS,
   USER_API_ROUTE,
+  WWW_API_ROUTE,
 } from "./constants";
 
 const VERSION = "v1";
@@ -156,7 +158,10 @@ export async function getCsrf(state) {
   return newCsrf;
 }
 
-// TODO: Fetch WWW policy.
+async function fetchWWWPolicy() {
+  const response = await fetch(`${WWW_API_ROUTE}${VERSION}${ROUTE_WWW_POLICY}`);
+  return await parseResponse(response);
+}
 
 // User API client
 async function fetchUserMe(state) {
@@ -188,6 +193,7 @@ export const client = {
   fetchRecordsPolicy,
   // WWW API
   fetchApi,
+  fetchWWWPolicy,
   // User API
   fetchUserMe,
   userLogin,

@@ -3,7 +3,7 @@ import { api } from "./api";
 import { router } from "./router";
 import { services as recordsServices } from "./records/services";
 import { services as globalServices } from "./globalServices";
-import { pluginServices as userServices } from "./user/services";
+import { services as userServices } from "./user/services";
 import { listener } from "./listeners";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
