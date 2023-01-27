@@ -1,10 +1,16 @@
 import {
+  // Records
   RECORDS_API_ROUTE,
   ROUTE_DETAILS,
   ROUTE_INVENTORY,
   ROUTE_POLICY,
   ROUTE_RECORDS,
   ROUTE_TIMESTAMPS,
+  // Users
+  ROUTE_USER_LOGIN,
+  ROUTE_USER_ME,
+  // ROUTE_USER_DETAILS,
+  USER_API_ROUTE,
 } from "./constants";
 
 const VERSION = "v1";
@@ -150,7 +156,27 @@ export async function getCsrf(state) {
   return newCsrf;
 }
 
+// TODO: Fetch WWW policy.
+
 // User API client
+async function fetchUserMe(state) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_ME}`,
+    fetchOptions(csrf, {}, "POST")
+  );
+  return await parseResponse(response);
+}
+
+async function userLogin({ email, password, code }) {
+  // Renew csrf token so it matches the login session duration.
+  const { csrf } = await fetchApi();
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_LOGIN}`,
+    fetchOptions(csrf, { email, password, code }, "POST")
+  );
+  return await parseResponse(response);
+}
 
 // export client object with functions to interact with the API
 export const client = {
@@ -162,6 +188,9 @@ export const client = {
   fetchRecordsPolicy,
   // WWW API
   fetchApi,
+  // User API
+  fetchUserMe,
+  userLogin,
 };
 
 export async function parseResponse(response) {

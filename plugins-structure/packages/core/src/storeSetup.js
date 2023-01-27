@@ -10,7 +10,8 @@ import apiReducer from "./api/apiSlice";
 import progressReducer from "./globalServices/progress";
 import messageReducer from "./globalServices/message";
 import navigationReducer from "./globalServices/navigation";
-import userReducer from "./user/userSlice";
+import userReducer from "./user/userSlice"; // TODO: Remove this.
+import userAuthReducer from "./user/auth/userAuthSlice";
 
 import { listenerMiddleware } from "./listeners";
 
@@ -25,7 +26,8 @@ const staticReducers = {
   globalProgress: progressReducer,
   globalMessage: messageReducer,
   globalNavigation: navigationReducer,
-  user: userReducer,
+  user: userReducer, // TODO: Remove this reducer when the user layer is done.
+  userAuth: userAuthReducer,
 };
 
 function createReducer(reducers, asyncReducers) {

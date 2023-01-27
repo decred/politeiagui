@@ -1,9 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Join, LoginForm, useModal } from "@politeiagui/common-ui";
+import { Join, LoginForm, useModal, useToast } from "@politeiagui/common-ui";
 import styles from "./styles.module.css";
 
-import { user } from "@politeiagui/core/user";
+import { userAuth } from "@politeiagui/core/user/auth";
 import { router } from "@politeiagui/core/router";
 import { Link } from "pi-ui";
 import PrivacyPolicyModal from "../../../components/Modal/PrivacyPolicyModal";
@@ -11,9 +11,20 @@ import PrivacyPolicyModal from "../../../components/Modal/PrivacyPolicyModal";
 function UserLoginPage() {
   const dispatch = useDispatch();
   const [open] = useModal();
+  const { openToast } = useToast();
+
   function handleLogin({ email, password }) {
-    dispatch(user.login({ email, password })).then(router.navigateTo("/"));
+    dispatch(userAuth.login({ email, password }))
+      .unwrap()
+      .then(() => {
+        router.navigateTo("/");
+      })
+      .catch((e) => {
+        // TODO: handle 2fa
+        openToast({ kind: "error", title: "Login error", body: e });
+      });
   }
+
   function handlePrivacyPolicy() {
     open(PrivacyPolicyModal);
   }

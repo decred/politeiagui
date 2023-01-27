@@ -18,6 +18,7 @@
     "./records/timestamps": "./src/records/timestamps/index.js",
     "./records/policy": "./src/records/policy/index.js",
     "./user": "./src/user/index.js",
+    "./user/auth": "./src/user/auth/index.js",
     "./user/services": "./src/user/services.js",
     "./router": "./src/router/index.js",
     "./toolkit": "./src/toolkit/index.js",
@@ -41,6 +42,7 @@
   },
   "dependencies": {
     "js-file-download": "^0.4.12",
+    "js-sha3": "^0.8.0",
     "politeiagui-scripts": "1.0.0",
     "qrcode": "^1.5.1"
   }
