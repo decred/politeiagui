@@ -9,6 +9,7 @@ import {
   // Users
   ROUTE_USER_LOGIN,
   ROUTE_USER_ME,
+  ROUTE_USER_NEW,
   ROUTE_WWW_POLICY,
   // ROUTE_USER_DETAILS,
   USER_API_ROUTE,
@@ -183,6 +184,15 @@ async function userLogin({ email, password, code }) {
   return await parseResponse(response);
 }
 
+// async function userSignup(state, { email, password, username, publickey }) {
+//   const csrf = await getCsrf(state);
+//   const response = await fetch(
+//     `${USER_API_ROUTE}${VERSION}${ROUTE_USER_NEW}`,
+//     fetchOptions(csrf, { email, password, username, publickey }, "POST")
+//   );
+//   return await parseResponse(response);
+// }
+
 // export client object with functions to interact with the API
 export const client = {
   // Records API
@@ -197,6 +207,14 @@ export const client = {
   // User API
   fetchUserMe,
   userLogin,
+  userSignup: async (state, { email, password, username, publickey }) => {
+    const csrf = await getCsrf(state);
+    const response = await fetch(
+      `${USER_API_ROUTE}${VERSION}${ROUTE_USER_NEW}`,
+      fetchOptions(csrf, { email, password, username, publickey }, "POST")
+    );
+    return await parseResponse(response);
+  },
 };
 
 export async function parseResponse(response) {

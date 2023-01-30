@@ -5,6 +5,7 @@ export const initialState = {
   currentUser: null,
   status: "idle",
   error: null,
+  verificationtoken: null,
 };
 
 /**
@@ -32,8 +33,37 @@ export const userLogin = createAsyncThunk(
   },
   {
     condition: (credentials) => {
-      return credentials && credentials.email && credentials.password;
+      return !!(credentials && credentials.email && credentials.password);
     },
+  }
+);
+
+export const userSignup = createAsyncThunk(
+  "userAuth/signup",
+  async (
+    { email, password, username },
+    { rejectWithValue, getState, extra }
+  ) => {
+    try {
+      const publickey = await extra.pki.generateNewUserPubkeyHex(username);
+      return await extra.userSignup(getState(), {
+        email: email.toLowerCase(),
+        password: sha3_256(password),
+        publickey,
+        username,
+      });
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+  {
+    condition: (credentials) =>
+      !!(
+        credentials &&
+        credentials.email &&
+        credentials.password &&
+        credentials.username
+      ),
   }
 );
 
@@ -50,6 +80,19 @@ const userAuthSlice = createSlice({
         state.currentUser = action.payload;
       })
       .addCase(userLogin.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(userSignup.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(userSignup.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        if (action.payload.verificationtoken) {
+          state.verificationtoken = action.payload.verificationtoken;
+        }
+      })
+      .addCase(userSignup.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
