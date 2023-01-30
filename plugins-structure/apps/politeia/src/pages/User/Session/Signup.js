@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { user } from "@politeiagui/core/user";
+import { userAuth } from "@politeiagui/core/user/auth";
 import { router } from "@politeiagui/core/router";
 import {
   Join,
@@ -59,15 +59,8 @@ function UserSignupPage() {
   function handleSignup({ username, email, password }) {
     open(ModalBeforeSignup, {
       email,
-      onSubmit: () => {
-        dispatch(
-          user.signup({
-            email,
-            password,
-            publickey: "MOCK_THIS_FOR_NOW",
-            username,
-          })
-        );
+      onSubmit: async () => {
+        await dispatch(userAuth.signup({ email, password, username }));
       },
     });
   }

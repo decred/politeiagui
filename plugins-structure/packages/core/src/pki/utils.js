@@ -1,3 +1,5 @@
+import { Buffer } from "buffer";
+
 /**
  * STORAGE_PREFIX - Prefix for local forage keys
  */
