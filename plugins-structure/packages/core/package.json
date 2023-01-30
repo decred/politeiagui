@@ -44,7 +44,9 @@
   "dependencies": {
     "js-file-download": "^0.4.12",
     "js-sha3": "^0.8.0",
+    "localforage": "^1.10.0",
     "politeiagui-scripts": "1.0.0",
-    "qrcode": "^1.5.1"
+    "qrcode": "^1.5.1",
+    "tweetnacl": "^1.0.3"
   }
 }

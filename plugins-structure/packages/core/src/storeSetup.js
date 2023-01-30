@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { client } from "./client/client";
+import { pki } from "./pki";
 import recordsInventoryReducer from "./records/inventory/recordsInventorySlice";
 import recordsReducer from "./records/records/recordsSlice";
 import recordsDraftsReducer from "./records/drafts/recordsDraftsSlice";
@@ -49,7 +50,7 @@ export function configureCustomStore(initialState, reducers = staticReducers) {
           // This will make the client available in the 'extra' argument
           // for all our thunks created with createAsyncThunk
           thunk: {
-            extraArgument: client,
+            extraArgument: { ...client, pki },
           },
         }).concat([listenerMiddleware]),
     },
