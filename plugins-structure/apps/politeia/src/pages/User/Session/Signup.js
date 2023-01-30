@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { user } from "@politeiagui/core/user";
 import { router } from "@politeiagui/core/router";
 import {
@@ -13,25 +13,11 @@ import styles from "./styles.module.css";
 import { buildRegexFromSupportedChars } from "../../../pi/policy/utils";
 import message from "../../../assets/copies/before-signup.md";
 import PrivacyPolicyModal from "../../../components/Modal/PrivacyPolicyModal";
+import { apiPolicy } from "@politeiagui/core/api";
 
 // MOCK DEV ENV. Handle that on #2855 - [plugin-architecture] Handle
 //   Mainnet/Testnet envs
 const IS_DEV = true;
-const USERNAME_SUPPORTED_CHARS = [
-  "a-z",
-  "0-9",
-  ".",
-  ",",
-  ":",
-  ";",
-  "-",
-  "@",
-  "+",
-  "(",
-  ")",
-  "_",
-];
-const MIN_PASSWORD_LENGTH = 8;
 
 const SuccessMessage = ({ email }) => (
   <div>
@@ -68,6 +54,7 @@ function ModalBeforeSignup({ onSubmit, email, ...props }) {
 function UserSignupPage() {
   const dispatch = useDispatch();
   const [open] = useModal();
+  const policy = useSelector(apiPolicy.select);
 
   function handleSignup({ username, email, password }) {
     open(ModalBeforeSignup, {
@@ -93,9 +80,9 @@ function UserSignupPage() {
         className={styles.content}
         onSubmit={handleSignup}
         usernameValidationRegex={buildRegexFromSupportedChars(
-          USERNAME_SUPPORTED_CHARS
+          policy?.usernamesupportedchars
         )}
-        minpasswordlength={MIN_PASSWORD_LENGTH}
+        minpasswordlength={policy?.minpasswordlength}
       />
       <div className={styles.links}>
         Already have an account?{" "}
