@@ -1,4 +1,9 @@
-import reducer, { initialState, userLogin, userSignup } from "./userAuthSlice";
+import reducer, {
+  initialState,
+  userLogin,
+  userSignup,
+  userVerifyEmail,
+} from "./userAuthSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { client } from "../../client/client";
 import { pki } from "../../pki";
@@ -6,7 +11,7 @@ import { pki } from "../../pki";
 describe("Given the userAuthSlice", () => {
   let store;
   // spy on the method used to fetch
-  let userLoginSpy, userSignupSpy;
+  let userLoginSpy, userSignupSpy, userVerifyEmailSpy;
   const extraArgument = { ...client, pki };
   beforeEach(() => {
     // mock a minimal store with extra argument
@@ -24,10 +29,12 @@ describe("Given the userAuthSlice", () => {
     });
     userLoginSpy = jest.spyOn(extraArgument, "userLogin");
     userSignupSpy = jest.spyOn(extraArgument, "userSignup");
+    userVerifyEmailSpy = jest.spyOn(extraArgument, "userVerifyEmail");
   });
   afterEach(() => {
     userLoginSpy.mockRestore();
     userSignupSpy.mockRestore();
+    userVerifyEmailSpy.mockRestore();
   });
 
   describe("when empty params", () => {
@@ -127,6 +134,48 @@ describe("Given the userAuthSlice", () => {
       });
       it("should update error to the error message", async () => {
         await store.dispatch(userSignup(validParms));
+        expect(store.getState().error).toEqual(err.message);
+      });
+    });
+  });
+
+  describe("userVerifyEmail", () => {
+    const validParms = {
+      email: "email",
+      verificationtoken: "token",
+      username: "username",
+    };
+    const signature = "signature";
+    beforeEach(() => {
+      const signStringSpy = jest.spyOn(pki, "signString");
+      signStringSpy.mockResolvedValue(signature);
+    });
+    describe("when dispatched with invalid params", () => {
+      it("should not fetch nor fire actions", async () => {
+        const badArgs = [null, undefined, { email: "email" }];
+        for (const badArg of badArgs) {
+          await store.dispatch(userVerifyEmail(badArg));
+          expect(userVerifyEmailSpy).not.toHaveBeenCalled();
+          expect(store.getState().status).toEqual("idle");
+        }
+      });
+    });
+    describe("when dispatched with valid params", () => {
+      it("should call userVerifyEmail with the correct params", async () => {
+        userVerifyEmailSpy.mockResolvedValue({});
+        await store.dispatch(userVerifyEmail(validParms));
+        const { email, verificationtoken } = validParms;
+        expect(userVerifyEmailSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ email, verificationtoken, signature })
+        );
+      });
+    });
+    describe("when dispatched with valid params and userVerifyEmail fails", () => {
+      it("should update status to failed", async () => {
+        const err = { message: "error msg" };
+        userVerifyEmailSpy.mockRejectedValue(err);
+        await store.dispatch(userVerifyEmail(validParms));
+        expect(store.getState().status).toEqual("failed");
         expect(store.getState().error).toEqual(err.message);
       });
     });

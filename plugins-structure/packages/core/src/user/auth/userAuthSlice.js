@@ -38,6 +38,14 @@ export const userLogin = createAsyncThunk(
   }
 );
 
+/**
+ * userSignup is an async thunk responsible for signing up a user.
+ * @param {{
+ *  email: String,
+ *  password: String,
+ *  username: String
+ * }} credentials - The user's credentials
+ */
 export const userSignup = createAsyncThunk(
   "userAuth/signup",
   async (
@@ -53,6 +61,7 @@ export const userSignup = createAsyncThunk(
         username,
       });
     } catch (error) {
+      // TODO: Format user error messages
       return rejectWithValue(error.message);
     }
   },
@@ -62,6 +71,43 @@ export const userSignup = createAsyncThunk(
         credentials &&
         credentials.email &&
         credentials.password &&
+        credentials.username
+      ),
+  }
+);
+
+/**
+ * userVerifyEmail is an async thunk responsible for verifying a user's email.
+ *
+ * @param {{
+ *  verificationtoken: String,
+ *  email: String
+ * }} verificationObj - The user's verification token and email
+ */
+export const userVerifyEmail = createAsyncThunk(
+  "userAuth/verifyEmail",
+  async (
+    { verificationtoken, email, username },
+    { rejectWithValue, extra }
+  ) => {
+    try {
+      const signature = await extra.pki.signString(username, verificationtoken);
+      return await extra.userVerifyEmail({
+        verificationtoken,
+        email,
+        signature,
+      });
+    } catch (error) {
+      // TODO: Format user error messages
+      return rejectWithValue(error.message);
+    }
+  },
+  {
+    condition: (credentials) =>
+      !!(
+        credentials &&
+        credentials.verificationtoken &&
+        credentials.email &&
         credentials.username
       ),
   }
@@ -88,18 +134,33 @@ const userAuthSlice = createSlice({
       })
       .addCase(userSignup.fulfilled, (state, action) => {
         state.status = "succeeded";
-        if (action.payload.verificationtoken) {
+        const { verificationtoken } = action.payload || {};
+        if (verificationtoken && verificationtoken !== "") {
           state.verificationtoken = action.payload.verificationtoken;
         }
       })
       .addCase(userSignup.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      .addCase(userVerifyEmail.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(userVerifyEmail.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentUser = action.payload;
+      })
+      .addCase(userVerifyEmail.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });
 
+export const selectAuthStatus = (state) => state.userAuth.status;
 export const selectCurrentUser = (state) => state.userAuth.currentUser;
 export const selectAuthError = (state) => state.userAuth.error;
+export const selectVerificationToken = (state) =>
+  state.userAuth.verificationtoken;
 
 export default userAuthSlice.reducer;

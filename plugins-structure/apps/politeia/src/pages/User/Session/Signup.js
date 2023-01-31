@@ -19,32 +19,41 @@ import { apiPolicy } from "@politeiagui/core/api";
 //   Mainnet/Testnet envs
 const IS_DEV = true;
 
-const SuccessMessage = ({ email }) => (
-  <div>
-    <P>
-      The verification e-mail has been sent to {email}. Please check your inbox
-      and open the verification link within the same browser you used to perform
-      this signup operation.
-    </P>
-    {IS_DEV && (
+const DevVerifyLink = ({ email, username }) => {
+  const verificationtoken = useSelector(userAuth.selectVerificationToken);
+  return (
+    IS_DEV && (
       <Link
         data-link
-        href={`/user/verify?email=${email}&verificationtoken=fake-verification-token`}
+        href={`/user/verify?email=${email}&verificationtoken=${verificationtoken}&username=${username}`}
       >
         {"[DEV ONLY]"} Verify Email
       </Link>
-    )}
-  </div>
-);
+    )
+  );
+};
 
-function ModalBeforeSignup({ onSubmit, email, ...props }) {
+const SuccessMessage = ({ email, username }) => {
+  return (
+    <div>
+      <P>
+        The verification e-mail has been sent to {email}. Please check your
+        inbox and open the verification link within the same browser you used to
+        perform this signup operation.
+      </P>
+      <DevVerifyLink email={email} username={username} />
+    </div>
+  );
+};
+
+function ModalBeforeSignup({ onSubmit, email, username, ...props }) {
   return (
     <ModalConfirm
       data-testid="before-signup-modal"
       message={message}
       title="Before you sign up"
       onCloseSuccess={() => router.navigateTo("/")}
-      successMessage={<SuccessMessage email={email} />}
+      successMessage={<SuccessMessage email={email} username={username} />}
       onSubmit={onSubmit}
       {...props}
     />
@@ -59,8 +68,9 @@ function UserSignupPage() {
   function handleSignup({ username, email, password }) {
     open(ModalBeforeSignup, {
       email,
-      onSubmit: async () => {
-        await dispatch(userAuth.signup({ email, password, username }));
+      username,
+      onSubmit: () => {
+        dispatch(userAuth.signup({ email, password, username }));
       },
     });
   }

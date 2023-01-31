@@ -3,6 +3,8 @@ import {
   generateNewUserPubkeyHex,
   removeKeys,
   setKeys,
+  sign,
+  signString,
 } from "./pki";
 
 export const pki = {
@@ -10,4 +12,6 @@ export const pki = {
   generateNewUserPubkeyHex,
   removeKeys,
   setKeys,
+  sign,
+  signString,
 };

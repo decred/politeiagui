@@ -1,6 +1,6 @@
 import localforage from "localforage";
 import nacl from "tweetnacl";
-import { getStorageKey, toHex } from "./utils";
+import { getStorageKey, toHex, toUint8Array } from "./utils";
 
 /**
  * generateKeys - Generates a new key pair
@@ -39,4 +39,32 @@ export async function generateNewUserPubkeyHex(username) {
   const keys = await generateKeys();
   await setKeys(username, keys);
   return toHex(keys.publicKey);
+}
+
+/**
+ * sign - Signs a message with the key pair associated with the given uuid
+ *
+ * @param {String} uuid
+ * @param {Object} data
+ * @returns {Promise} A promise that resolves to the signed message
+ * @throws {Error} If the key pair is not found in local storage
+ */
+export async function sign(uuid, data) {
+  const keys = await localforage.getItem(getStorageKey(uuid));
+  return nacl.sign.detached(toUint8Array(data), toUint8Array(keys.secretKey));
+}
+
+/**
+ * signString - Signs a string with the key pair associated with the given uuid
+ *
+ * @param {String} uuid
+ * @param {String} msg
+ * @returns {Promise} A promise that resolves to the signed message as a hex
+ * string
+ * @throws {Error} If the key pair is not found in local storage
+ */
+export async function signString(uuid, msg) {
+  const encoder = new TextEncoder();
+  const sigUint8Array = await sign(uuid, encoder.encode(msg));
+  return toHex(sigUint8Array);
 }

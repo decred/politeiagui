@@ -7,6 +7,7 @@ import {
   ROUTE_RECORDS,
   ROUTE_TIMESTAMPS,
   // Users
+  ROUTE_USER_EMAIL_VERIFY,
   ROUTE_USER_LOGIN,
   ROUTE_USER_ME,
   ROUTE_USER_NEW,
@@ -15,6 +16,7 @@ import {
   USER_API_ROUTE,
   WWW_API_ROUTE,
 } from "./constants";
+import qs from "querystring";
 
 const VERSION = "v1";
 
@@ -165,6 +167,11 @@ async function fetchWWWPolicy() {
 }
 
 // User API client
+/**
+ * fetchUserMe fetches the user that has an active session.
+ *
+ * @param {Object} state redux state
+ */
 async function fetchUserMe(state) {
   const csrf = await getCsrf(state);
   const response = await fetch(
@@ -174,6 +181,15 @@ async function fetchUserMe(state) {
   return await parseResponse(response);
 }
 
+/**
+ * userLogin logs in the user.
+ *
+ * @param {{
+ *  email: String,
+ *  password: String,
+ *  code?: String
+ * }} credentials
+ */
 async function userLogin({ email, password, code }) {
   // Renew csrf token so it matches the login session duration.
   const { csrf } = await fetchApi();
@@ -184,14 +200,45 @@ async function userLogin({ email, password, code }) {
   return await parseResponse(response);
 }
 
-// async function userSignup(state, { email, password, username, publickey }) {
-//   const csrf = await getCsrf(state);
-//   const response = await fetch(
-//     `${USER_API_ROUTE}${VERSION}${ROUTE_USER_NEW}`,
-//     fetchOptions(csrf, { email, password, username, publickey }, "POST")
-//   );
-//   return await parseResponse(response);
-// }
+/**
+ * userSignup signs up a new user.
+ *
+ * @param {Object} state redux state
+ * @param {{
+ *  email: String,
+ *  password: String,
+ *  username: String,
+ *  publickey: String
+ * }} credentials
+ */
+async function userSignup(state, { email, password, username, publickey }) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_NEW}`,
+    fetchOptions(csrf, { email, password, username, publickey }, "POST")
+  );
+  return await parseResponse(response);
+}
+
+/**
+ * userVerifyEmail verifies the user account email.
+ *
+ * @param {{
+ * verificationtoken: String,
+ * email: String,
+ * signature: String
+ * }} params verification token, email and signature for the verification token
+ */
+async function userVerifyEmail({ verificationtoken, email, signature }) {
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_EMAIL_VERIFY}?${toQueryString({
+      verificationtoken,
+      email,
+      signature,
+    })}`
+  );
+  return await parseResponse(response);
+}
 
 // export client object with functions to interact with the API
 export const client = {
@@ -207,14 +254,8 @@ export const client = {
   // User API
   fetchUserMe,
   userLogin,
-  userSignup: async (state, { email, password, username, publickey }) => {
-    const csrf = await getCsrf(state);
-    const response = await fetch(
-      `${USER_API_ROUTE}${VERSION}${ROUTE_USER_NEW}`,
-      fetchOptions(csrf, { email, password, username, publickey }, "POST")
-    );
-    return await parseResponse(response);
-  },
+  userSignup,
+  userVerifyEmail,
 };
 
 export async function parseResponse(response) {
@@ -249,4 +290,8 @@ export function fetchOptions(csrf, json, method) {
     method,
     body: JSON.stringify(json),
   };
+}
+
+export function toQueryString(params) {
+  return qs.stringify(params);
 }

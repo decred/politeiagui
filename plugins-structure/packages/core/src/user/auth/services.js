@@ -1,5 +1,7 @@
+import { getURLSearchParams } from "../../router/helpers";
 import { createSliceServices } from "../../toolkit/createSliceServices";
 import { fetchPolicyIfIdle } from "../utils";
+import { userVerifyEmail } from "./userAuthSlice";
 
 export const { pluginServices, serviceListeners } = createSliceServices({
   name: "userAuth",
@@ -7,6 +9,16 @@ export const { pluginServices, serviceListeners } = createSliceServices({
     signup: {
       onSetup: async () => {
         await fetchPolicyIfIdle();
+      },
+    },
+    verifyEmailOnLoad: {
+      onSetup: async ({ dispatch }) => {
+        const { email, verificationtoken, username } = getURLSearchParams();
+        if (email && verificationtoken && username) {
+          await dispatch(
+            userVerifyEmail({ email, username, verificationtoken })
+          );
+        }
       },
     },
   },

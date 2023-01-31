@@ -40,7 +40,7 @@ const emailVerifyRoute = App.createRoute({
   path: "/user/verify",
   title: "Verify Email",
   cleanup: routeCleanup,
-  setupServices: [userListeners.emailVerify],
+  setupServices: [authListeners.verifyEmailOnLoad],
   view: createRouteView(
     lazy(() =>
       import(/* webpackChunkName: "user_verify_email_page" */ "./EmailVerify")

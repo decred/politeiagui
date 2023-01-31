@@ -12,6 +12,7 @@ export const ROUTE_USER_LOGIN = "/login";
 export const ROUTE_USER_NEW = "/user/new";
 export const ROUTE_USER_DETAILS = "/user/:userid";
 export const ROUTE_USER_ME = "/user/me";
+export const ROUTE_USER_EMAIL_VERIFY = "/user/verify";
 
 // WWW api endpoints
 export const WWW_API_ROUTE = "/api/";
