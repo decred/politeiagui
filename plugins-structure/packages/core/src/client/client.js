@@ -9,6 +9,7 @@ import {
   // Users
   ROUTE_USER_EMAIL_VERIFY,
   ROUTE_USER_LOGIN,
+  ROUTE_USER_LOGOUT,
   ROUTE_USER_ME,
   ROUTE_USER_NEW,
   ROUTE_WWW_POLICY,
@@ -168,15 +169,15 @@ async function fetchWWWPolicy() {
 
 // User API client
 /**
- * fetchUserMe fetches the user that has an active session.
+ * userFetchMe fetches the user that has an active session.
  *
  * @param {Object} state redux state
  */
-async function fetchUserMe(state) {
+async function userFetchMe(state) {
   const csrf = await getCsrf(state);
   const response = await fetch(
     `${USER_API_ROUTE}${VERSION}${ROUTE_USER_ME}`,
-    fetchOptions(csrf, {}, "POST")
+    fetchOptions(csrf, null, "GET")
   );
   return await parseResponse(response);
 }
@@ -196,6 +197,20 @@ async function userLogin({ email, password, code }) {
   const response = await fetch(
     `${USER_API_ROUTE}${VERSION}${ROUTE_USER_LOGIN}`,
     fetchOptions(csrf, { email, password, code }, "POST")
+  );
+  return await parseResponse(response);
+}
+
+/**
+ * userLogout logs out the currently logged in user.
+ *
+ * @param {Object} state redux state
+ */
+async function userLogout(state) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_LOGOUT}`,
+    fetchOptions(csrf, {}, "POST")
   );
   return await parseResponse(response);
 }
@@ -252,8 +267,9 @@ export const client = {
   fetchApi,
   fetchWWWPolicy,
   // User API
-  fetchUserMe,
+  userFetchMe,
   userLogin,
+  userLogout,
   userSignup,
   userVerifyEmail,
 };
@@ -284,11 +300,19 @@ export function fetchOptions(csrf, json, method) {
     ...headers,
     "X-Csrf-Token": csrf,
   };
+  // Prevent json payload from being sent if it's empty
+  if (json) {
+    return {
+      headers: csrf ? headersWithCsrf : headers,
+      credentials: "include", // Include cookies
+      method,
+      body: JSON.stringify(json),
+    };
+  }
   return {
     headers: csrf ? headersWithCsrf : headers,
     credentials: "include", // Include cookies
     method,
-    body: JSON.stringify(json),
   };
 }
 

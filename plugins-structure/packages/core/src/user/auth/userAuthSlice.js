@@ -39,6 +39,34 @@ export const userLogin = createAsyncThunk(
 );
 
 /**
+ * userFetchMe is an async thunk responsible for fetching the current user.
+ */
+export const userFetchMe = createAsyncThunk(
+  "userAuth/fetchMe",
+  async (_, { rejectWithValue, getState, extra }) => {
+    try {
+      return await extra.userFetchMe(getState());
+    } catch (error) {
+      throw rejectWithValue(error.message);
+    }
+  }
+);
+
+/**
+ * userLogout
+ */
+export const userLogout = createAsyncThunk(
+  "userAuth/logout",
+  async (_, { rejectWithValue, getState, extra }) => {
+    try {
+      return await extra.userLogout(getState());
+    } catch (error) {
+      throw rejectWithValue(error.message);
+    }
+  }
+);
+
+/**
  * userSignup is an async thunk responsible for signing up a user.
  * @param {{
  *  email: String,
@@ -118,6 +146,7 @@ const userAuthSlice = createSlice({
   initialState,
   extraReducers(builder) {
     builder
+      // userLogin
       .addCase(userLogin.pending, (state) => {
         state.status = "loading";
       })
@@ -129,6 +158,31 @@ const userAuthSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+      // userLogout
+      .addCase(userLogout.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(userLogout.fulfilled, (state) => {
+        state.status = "succeeded";
+        state.currentUser = null;
+      })
+      .addCase(userLogout.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // userFetchMe
+      .addCase(userFetchMe.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(userFetchMe.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentUser = action.payload;
+      })
+      .addCase(userFetchMe.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // userSignup
       .addCase(userSignup.pending, (state) => {
         state.status = "loading";
       })
@@ -143,6 +197,7 @@ const userAuthSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+      // userVerifyEmail
       .addCase(userVerifyEmail.pending, (state) => {
         state.status = "loading";
       })

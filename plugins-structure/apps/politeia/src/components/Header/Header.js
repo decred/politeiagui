@@ -5,8 +5,8 @@ import { Navbar, ThemeToggle, theme } from "@politeiagui/common-ui/layout";
 import LogoLight from "../../public/assets/images/pi-logo-light.svg";
 import LogoDark from "../../public/assets/images/pi-logo-dark.svg";
 import About from "../Static/About";
-import { user } from "@politeiagui/core/user";
 import styles from "./styles.module.css";
+import { userAuth } from "@politeiagui/core/user/auth";
 
 function PoliteiaLogo() {
   const themeName = useSelector(theme.select);
@@ -31,11 +31,12 @@ function Item({ href, name, onClick }) {
 
 function HeaderItems() {
   const dispatch = useDispatch();
-  const currentUser = useSelector(user.selectCurrent);
+  const currentUser = useSelector(userAuth.selectCurrent);
   function handleLogout() {
     // TODO: Display logout modal
-    dispatch(user.logout());
+    dispatch(userAuth.logout());
   }
+
   return currentUser ? (
     <div>
       <Dropdown
@@ -49,10 +50,12 @@ function HeaderItems() {
           name="My Proposals"
         />
         <Item href={`/user/${currentUser.userid}/drafts`} name="My Drafts" />
-        {/* TODO: only show this for admin */}
-        <Item href="/admin/records" name="Admin" />
-        <Item href="/admin/search" name="Search for Users" />
-        {/* END TODO */}
+        {currentUser.isAdmin && (
+          <>
+            <Item href="/admin/records" name="Admin" />
+            <Item href="/admin/search" name="Search for Users" />
+          </>
+        )}
         <Item name="Logout" onClick={handleLogout} />
       </Dropdown>
     </div>

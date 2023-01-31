@@ -1,11 +1,18 @@
 import { getURLSearchParams } from "../../router/helpers";
 import { createSliceServices } from "../../toolkit/createSliceServices";
 import { fetchPolicyIfIdle } from "../utils";
-import { userVerifyEmail } from "./userAuthSlice";
+import { userFetchMe, userVerifyEmail } from "./userAuthSlice";
 
 export const { pluginServices, serviceListeners } = createSliceServices({
   name: "userAuth",
   services: {
+    loadMe: {
+      effect: (_, dispatch, { activeusersession }) => {
+        if (activeusersession) {
+          dispatch(userFetchMe());
+        }
+      },
+    },
     signup: {
       onSetup: async () => {
         await fetchPolicyIfIdle();

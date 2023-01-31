@@ -1,6 +1,8 @@
 import reducer, {
   initialState,
+  userFetchMe,
   userLogin,
+  userLogout,
   userSignup,
   userVerifyEmail,
 } from "./userAuthSlice";
@@ -11,7 +13,11 @@ import { pki } from "../../pki";
 describe("Given the userAuthSlice", () => {
   let store;
   // spy on the method used to fetch
-  let userLoginSpy, userSignupSpy, userVerifyEmailSpy;
+  let userLoginSpy,
+    userLogoutSpy,
+    userSignupSpy,
+    userVerifyEmailSpy,
+    userFetchMeSpy;
   const extraArgument = { ...client, pki };
   beforeEach(() => {
     // mock a minimal store with extra argument
@@ -30,11 +36,15 @@ describe("Given the userAuthSlice", () => {
     userLoginSpy = jest.spyOn(extraArgument, "userLogin");
     userSignupSpy = jest.spyOn(extraArgument, "userSignup");
     userVerifyEmailSpy = jest.spyOn(extraArgument, "userVerifyEmail");
+    userFetchMeSpy = jest.spyOn(extraArgument, "userFetchMe");
+    userLogoutSpy = jest.spyOn(extraArgument, "userLogout");
   });
   afterEach(() => {
     userLoginSpy.mockRestore();
     userSignupSpy.mockRestore();
     userVerifyEmailSpy.mockRestore();
+    userFetchMeSpy.mockRestore();
+    userLogoutSpy.mockRestore();
   });
 
   describe("when empty params", () => {
@@ -175,6 +185,56 @@ describe("Given the userAuthSlice", () => {
         const err = { message: "error msg" };
         userVerifyEmailSpy.mockRejectedValue(err);
         await store.dispatch(userVerifyEmail(validParms));
+        expect(store.getState().status).toEqual("failed");
+        expect(store.getState().error).toEqual(err.message);
+      });
+    });
+  });
+
+  describe("userFetchMe", () => {
+    describe("when dispatched with valid params", () => {
+      it("should call userFetchMe with the correct params", async () => {
+        userFetchMeSpy.mockResolvedValue({});
+        await store.dispatch(userFetchMe());
+        expect(userFetchMeSpy).toHaveBeenCalled();
+      });
+      it("should update status to succeeded", async () => {
+        userFetchMeSpy.mockResolvedValue({});
+        await store.dispatch(userFetchMe());
+        expect(store.getState().status).toEqual("succeeded");
+      });
+      it("should update user to the response", async () => {
+        const user = { id: 1, username: "user" };
+        userFetchMeSpy.mockResolvedValue(user);
+        await store.dispatch(userFetchMe());
+        expect(store.getState().currentUser).toEqual(user);
+      });
+    });
+    describe("when dispatched with valid params and userFetchMe fails", () => {
+      it("should update status to failed and update error", async () => {
+        const err = { message: "error msg" };
+        userFetchMeSpy.mockRejectedValue(err);
+        await store.dispatch(userFetchMe());
+        expect(store.getState().status).toEqual("failed");
+        expect(store.getState().error).toEqual(err.message);
+      });
+    });
+  });
+
+  describe("userLogout", () => {
+    describe("when logout dispatched and returns valid response", () => {
+      it("should delete current user and change status to succeeded", async () => {
+        userLogoutSpy.mockResolvedValue({});
+        await store.dispatch(userLogout());
+        expect(store.getState().currentUser).toEqual(null);
+        expect(store.getState().status).toEqual("succeeded");
+      });
+    });
+    describe("when logout dispatched and returns invalid response", () => {
+      it("should update status to failed and update error", async () => {
+        const err = { message: "error msg" };
+        userLogoutSpy.mockRejectedValue(err);
+        await store.dispatch(userLogout());
         expect(store.getState().status).toEqual("failed");
         expect(store.getState().error).toEqual(err.message);
       });
