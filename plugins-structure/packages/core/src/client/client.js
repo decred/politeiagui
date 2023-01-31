@@ -7,13 +7,13 @@ import {
   ROUTE_RECORDS,
   ROUTE_TIMESTAMPS,
   // Users
+  ROUTE_USER_DETAILS,
   ROUTE_USER_EMAIL_VERIFY,
   ROUTE_USER_LOGIN,
   ROUTE_USER_LOGOUT,
   ROUTE_USER_ME,
   ROUTE_USER_NEW,
   ROUTE_WWW_POLICY,
-  // ROUTE_USER_DETAILS,
   USER_API_ROUTE,
   WWW_API_ROUTE,
 } from "./constants";
@@ -183,7 +183,8 @@ async function userFetchMe(state) {
 }
 
 /**
- * userLogin logs in the user.
+ * userLogin logs in the user. It also renews the csrf token so user session
+ * duration matches the csrf token duration.
  *
  * @param {{
  *  email: String,
@@ -192,7 +193,6 @@ async function userFetchMe(state) {
  * }} credentials
  */
 async function userLogin({ email, password, code }) {
-  // Renew csrf token so it matches the login session duration.
   const { csrf } = await fetchApi();
   const response = await fetch(
     `${USER_API_ROUTE}${VERSION}${ROUTE_USER_LOGIN}`,
@@ -255,6 +255,15 @@ async function userVerifyEmail({ verificationtoken, email, signature }) {
   return await parseResponse(response);
 }
 
+async function userFetchDetails({ userid }) {
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_DETAILS}?${toQueryString({
+      userid,
+    })}`
+  );
+  return await parseResponse(response);
+}
+
 // export client object with functions to interact with the API
 export const client = {
   // Records API
@@ -267,6 +276,7 @@ export const client = {
   fetchApi,
   fetchWWWPolicy,
   // User API
+  userFetchDetails,
   userFetchMe,
   userLogin,
   userLogout,

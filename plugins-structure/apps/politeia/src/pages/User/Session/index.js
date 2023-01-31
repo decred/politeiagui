@@ -18,7 +18,7 @@ const loginRoute = App.createRoute({
 const signupRoute = App.createRoute({
   path: "/user/signup",
   title: "Sign Up",
-  setupServices: [authListeners.signup],
+  setupServices: [authListeners.userPolicyOnLoad],
   cleanup: routeCleanup,
   view: createRouteView(
     lazy(() => import(/* webpackChunkName: "user_signup_page" */ "./Signup"))

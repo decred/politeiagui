@@ -13,7 +13,7 @@ export const { pluginServices, serviceListeners } = createSliceServices({
         }
       },
     },
-    signup: {
+    userPolicyOnLoad: {
       onSetup: async () => {
         await fetchPolicyIfIdle();
       },

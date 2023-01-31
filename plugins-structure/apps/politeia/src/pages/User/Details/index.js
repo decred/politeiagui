@@ -3,6 +3,7 @@ import App from "../../../app";
 import { routeCleanup } from "../../../utils/routeCleanup";
 import { createRouteView } from "../../../utils/createRouteView";
 import { serviceListeners as draftsListeners } from "@politeiagui/core/records/drafts/services";
+import { serviceListeners as authListeners } from "@politeiagui/core/user/auth/services";
 import { servicesSetupsByRecordsInventory } from "../../../pi/proposalsList/servicesSetups";
 import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listeners";
 
@@ -41,6 +42,7 @@ const userIdentityRoute = App.createRoute({
 const userAccountRoute = App.createRoute({
   path: "/user/:userid/account",
   title: "User Account",
+  setupServices: [authListeners.userPolicyOnLoad],
   cleanup: routeCleanup,
   view: createRouteView(
     lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Account"))

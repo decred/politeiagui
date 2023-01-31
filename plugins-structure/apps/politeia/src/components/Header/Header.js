@@ -50,7 +50,7 @@ function HeaderItems() {
           name="My Proposals"
         />
         <Item href={`/user/${currentUser.userid}/drafts`} name="My Drafts" />
-        {currentUser.isAdmin && (
+        {currentUser.isadmin && (
           <>
             <Item href="/admin/records" name="Admin" />
             <Item href="/admin/search" name="Search for Users" />
