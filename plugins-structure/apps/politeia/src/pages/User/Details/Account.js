@@ -12,7 +12,6 @@ import {
   convertAtomsToDcr,
   formatUnixTimestamp,
 } from "@politeiagui/common-ui/utils";
-import UserDetails from "./Details";
 import { InfoCard } from "../../../components";
 import styles from "./styles.module.css";
 import { formatItemsList } from "./helpers";
@@ -149,7 +148,7 @@ function UserAccount() {
   ];
 
   return (
-    <UserDetails>
+    <>
       <InfoCard title="Account Details" data-testid="user-account-details">
         <LabelValueList alignValues items={formatItemsList(accountItems)} />
       </InfoCard>
@@ -162,7 +161,7 @@ function UserAccount() {
           Deactivate Account
         </Button>
       </InfoCard>
-    </UserDetails>
+    </>
   );
 }
 

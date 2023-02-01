@@ -17,7 +17,6 @@ import {
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
 import { downloadCSV } from "@politeiagui/core/downloads";
 import { CreditsModal, InfoCard } from "../../../components";
-import UserDetails from "./Details";
 import styles from "./styles.module.css";
 import {
   formatDataToTable,
@@ -180,7 +179,7 @@ function UserCredits() {
   const username = user.username;
 
   return (
-    <UserDetails>
+    <>
       <CreditsBalanceAndFee
         isPaid={isPaid}
         unspentCredits={unspentCredits}
@@ -196,7 +195,7 @@ function UserCredits() {
         feeTimestamp={feeTimestamp}
         feeTx={feeTx}
       />
-    </UserDetails>
+    </>
   );
 }
 

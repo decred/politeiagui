@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Link, Text } from "pi-ui";
-import UserDetails from "./Details";
 import styles from "./styles.module.css";
 import { InfoCard } from "../../../components";
 import {
@@ -73,7 +72,7 @@ function UserIdentity({ userid }) {
   }
 
   return (
-    <UserDetails>
+    <>
       <InfoCard title="Manage Identity" data-testid="user-identity-manage">
         <IdentityDescription />
         <div data-testid="user-identity-manage-buttons">
@@ -115,7 +114,7 @@ function UserIdentity({ userid }) {
         <TextUuidMessage />
         <TextHighlighted text={userid} />
       </InfoCard>
-    </UserDetails>
+    </>
   );
 }
 

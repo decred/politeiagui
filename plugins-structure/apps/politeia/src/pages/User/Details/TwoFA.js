@@ -1,6 +1,5 @@
 import React from "react";
 import { CopyableText } from "pi-ui";
-import UserDetails from "./Details";
 import styles from "./styles.module.css";
 import {
   DigitsInput,
@@ -41,7 +40,7 @@ function User2FA() {
   }
 
   return (
-    <UserDetails>
+    <>
       <InfoCard
         title="Set Two-Factor Authentication"
         hide={isVerified}
@@ -75,7 +74,7 @@ function User2FA() {
           </div>
         </RecordForm>
       </InfoCard>
-    </UserDetails>
+    </>
   );
 }
 

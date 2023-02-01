@@ -5,9 +5,9 @@ import { Provider } from "react-redux";
 import { ModalProvider } from "@politeiagui/common-ui";
 import { UiTheme } from "@politeiagui/common-ui/layout";
 
-export function createRouteView(Component) {
+export function createRouteView(Component, selector = "#root") {
   return async (params) => {
-    return ReactDOM.render(
+    return await ReactDOM.render(
       <Provider store={store}>
         <ModalProvider>
           <UiTheme>
@@ -17,7 +17,7 @@ export function createRouteView(Component) {
           </UiTheme>
         </ModalProvider>
       </Provider>,
-      document.querySelector("#root")
+      document.querySelector(selector)
     );
   };
 }

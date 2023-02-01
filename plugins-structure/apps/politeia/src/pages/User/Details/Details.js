@@ -3,6 +3,7 @@ import { SingleContentPage, TabsBanner } from "@politeiagui/common-ui/layout";
 import { router } from "@politeiagui/core/router";
 import { userAuth } from "@politeiagui/core/user/auth";
 import { useSelector } from "react-redux";
+import { users } from "@politeiagui/core/user/users";
 
 export const TAB_LABELS = {
   identity: { title: "Identity", public: true },
@@ -32,29 +33,29 @@ const getTabs = (userid, isCurrent, isAdmin) =>
     return null;
   }).filter((tab) => !!tab);
 
-function UserDetails({ children }) {
+function UserDetails() {
   const location = router.getCurrentLocation();
   const [, , userid, activeTab] = location.pathname.split("/");
   // TODO: get user from users reducer as well. Only use current user if
   // userid is the same as currentUser's userid.
 
+  const user = useSelector((state) => users.selectById(state, userid));
   const currentUser = useSelector(userAuth.selectCurrent);
+  const isCurrent = user && user?.id === currentUser?.userid;
+  const isAdmin = currentUser?.isadmin;
+
   return (
     <SingleContentPage
       banner={
         <TabsBanner
-          title={currentUser?.username}
-          subtitle={currentUser?.email}
+          title={user?.username}
+          subtitle={user?.email}
           activeTab={TAB_KEYS.indexOf(activeTab || "identity")}
-          tabs={getTabs(
-            currentUser?.userid,
-            currentUser?.userid === userid,
-            currentUser?.isadmin
-          )}
+          tabs={getTabs(userid, isCurrent, isAdmin)}
         />
       }
     >
-      {children}
+      <div id="user-router" />
     </SingleContentPage>
   );
 }

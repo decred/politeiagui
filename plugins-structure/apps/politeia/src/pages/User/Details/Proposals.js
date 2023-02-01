@@ -6,7 +6,6 @@ import {
   ProposalsList,
   ProposalsListEmpty,
 } from "../../../components";
-import UserDetails from "./Details";
 // Hooks
 import useProposalsList from "../../../pi/hooks/useProposalsList";
 import useRecordsInventory from "../../../pi/hooks/useRecordsInventory";
@@ -26,20 +25,16 @@ function UserProposals() {
     selectIsRecordsInventoryListEmpty(state, { recordsState, status })
   );
 
-  return (
-    <UserDetails>
-      {isListEmpty ? (
-        <ProposalsListEmpty listName="from user" />
-      ) : (
-        <ProposalsList
-          inventory={inventory}
-          inventoryFetchStatus={inventoryStatus}
-          onFetchNextBatch={onFetchNextBatch}
-          onFetchNextInventoryPage={onFetchNextInventoryPage}
-          listFetchStatus={listFetchStatus}
-        />
-      )}
-    </UserDetails>
+  return isListEmpty ? (
+    <ProposalsListEmpty listName="from user" />
+  ) : (
+    <ProposalsList
+      inventory={inventory}
+      inventoryFetchStatus={inventoryStatus}
+      onFetchNextBatch={onFetchNextBatch}
+      onFetchNextInventoryPage={onFetchNextInventoryPage}
+      listFetchStatus={listFetchStatus}
+    />
   );
 }
 
