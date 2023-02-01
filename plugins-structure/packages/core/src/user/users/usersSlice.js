@@ -36,7 +36,7 @@ export const usersSlice = createSlice({
       .addCase(fetchUserDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
         const userid = action.meta.arg;
-        state.byId[userid] = action.payload;
+        state.byId[userid] = action.payload.user;
       })
       .addCase(fetchUserDetails.rejected, (state, action) => {
         state.status = "failed";
