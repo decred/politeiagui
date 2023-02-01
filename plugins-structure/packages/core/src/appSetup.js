@@ -238,5 +238,79 @@ export function appSetup({
         },
       };
     },
+    /**
+     * createSubRouter is an interface for creating app gateway routes.
+     * Gateway routes are routes that are not rendered by the router, but
+     * instead they are used to wrap other sub-routes.
+     *
+     * This is useful for implementing authentication, for example, where you
+     * can wrap authenticated routes with a gateway route that checks if the
+     * user is authenticated and redirects to the login page if not.
+     *
+     * It can also be used to define services and listeners that are shared
+     * among multiple routes.
+     *
+     * Sub-routes are defined in the `subRoutes` param. Each sub-route must have
+     * the same parameters as the `createRoute` method. The path must be
+     * relative to the gateway route path. For example: if the gateway route
+     * path is `/app` and the sub-route path is `/home`, the final path for the
+     * sub-route  will be `/app/home`.
+     *
+     * defaultPath is the path that will be used by the router when the gateway
+     * base route is rendered. It must have the same path as one of the
+     * sub-routes. Defaults to the first sub-route.
+     *
+     * @param {{
+     *  path: string,
+     *  wrapperView: Function,
+     *  defaultPath: string,
+     *  setupServices: Array,
+     *  title: string,
+     *  listeners: Array,
+     *  cleanup: Function
+     *  subRoutes: Array
+     * }} routeParams
+     *
+     * @returns {{ path: string, view: Function, title: string }[]} - Returns
+     * an array of routes that can be passed to the router.
+     *
+     */
+    createSubRouter({
+      path,
+      wrapperView = () => {},
+      title,
+      defaultPath,
+      setupServices = [],
+      cleanup,
+      listeners = [],
+      subRoutes = [],
+    }) {
+      // Create app routes for sub-routes. They can now be used by the router.
+      const routes = subRoutes.map((route) => {
+        return this.createRoute({
+          path: `${path}${route.path}`,
+          view: async (params) => {
+            await wrapperView(params);
+            await route.view(params);
+          },
+          title: `${route.title} - ${title}`,
+          setupServices: [...setupServices, ...(route.setupServices || [])],
+          listeners: [...listeners, ...(route.listeners || [])],
+          cleanup: cleanup,
+        });
+      });
+
+      // Add default route for the path.
+      const defaultRouteMatch =
+        routes.find((route) => route.path === defaultPath) || routes[0];
+      const defaultRoute = {
+        path,
+        view: defaultRouteMatch.view,
+        title: defaultRouteMatch.title,
+        cleanup: cleanup,
+      };
+
+      return [defaultRoute, ...routes];
+    },
   };
 }
