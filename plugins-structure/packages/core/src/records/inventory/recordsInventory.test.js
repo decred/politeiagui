@@ -129,7 +129,7 @@ describe("Given the recordsInventorySlice", () => {
           preloadedStore.dispatch(fetchRecordsInventory(params));
 
           const objAfterTransformation = {
-            state: params.recordsState,
+            recordsState: params.recordsState,
             status: params.status,
             page: params.page,
           };
@@ -153,7 +153,7 @@ describe("Given the recordsInventorySlice", () => {
           await preloadedStore.dispatch(fetchRecordsInventory(params));
 
           const objAfterTransformation = {
-            state: params.recordsState,
+            recordsState: params.recordsState,
             status: params.status,
             page: params.page,
           };
@@ -182,7 +182,7 @@ describe("Given the recordsInventorySlice", () => {
           await preloadedStore.dispatch(fetchRecordsInventory(params));
 
           const objAfterTransformation = {
-            state: params.recordsState,
+            recordsState: params.recordsState,
             status: params.status,
             page: params.page,
           };
@@ -204,7 +204,7 @@ describe("Given the recordsInventorySlice", () => {
         it("should dispatch failure and update the error", async () => {
           const error = new Error("FAIL!");
           const objAfterTransformation = {
-            state: params.recordsState,
+            recordsState: params.recordsState,
             status: params.status,
             page: params.page,
           };
