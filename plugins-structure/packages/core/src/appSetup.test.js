@@ -6,7 +6,13 @@ import apiReducer from "./api/apiSlice";
 import { client } from "./client/client";
 
 const reducer = () => ({});
-const store = configureCustomStore({}, { dumb: reducer, api: apiReducer });
+const fetchApi = jest.fn();
+const extraArgument = { ...client, fetchApi };
+const store = configureCustomStore({
+  initialState: {},
+  reducers: { dumb: reducer, api: apiReducer },
+  extraArgument,
+});
 const action = jest.fn();
 const mockApiReturn = {
   version: 1,
@@ -19,7 +25,6 @@ const mockApiReturn = {
 const mockCsrfToken = "fake_csrf";
 
 jest.spyOn(console, "error").mockImplementation();
-const fetchApiSpy = jest.spyOn(client, "fetchApi");
 
 const plugin = pluginSetup({
   services: [{ id: "custom/service1", action }],
@@ -31,10 +36,13 @@ const plugin = pluginSetup({
 });
 
 beforeEach(() => {
-  fetchApiSpy.mockResolvedValueOnce({
+  fetchApi.mockResolvedValue({
     api: mockApiReturn,
     csrf: mockCsrfToken,
   });
+});
+afterEach(() => {
+  fetchApi.mockRestore();
 });
 
 describe("Given appSetup method", () => {

@@ -41,7 +41,11 @@ function createReducer(reducers, asyncReducers) {
 }
 
 // Configure the store
-export function configureCustomStore(initialState, reducers = staticReducers) {
+export function configureCustomStore({
+  initialState,
+  reducers = staticReducers,
+  extraArgument = { ...client, pki },
+} = {}) {
   const store = configureStore(
     {
       reducer: { ...reducers },
@@ -50,7 +54,7 @@ export function configureCustomStore(initialState, reducers = staticReducers) {
           // This will make the client available in the 'extra' argument
           // for all our thunks created with createAsyncThunk
           thunk: {
-            extraArgument: { ...client, pki },
+            extraArgument,
           },
         }).concat([listenerMiddleware]),
     },
