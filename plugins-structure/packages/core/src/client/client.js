@@ -18,6 +18,7 @@ import {
   WWW_API_ROUTE,
 } from "./constants";
 import qs from "querystring";
+import { generatePath } from "../router/helpers";
 
 const VERSION = "v1";
 
@@ -255,12 +256,13 @@ async function userVerifyEmail({ verificationtoken, email, signature }) {
   return await parseResponse(response);
 }
 
+/**
+ * userFetchDetails fetches the user details for given userid.
+ * @param {{ userid: String }} params userid
+ */
 async function userFetchDetails({ userid }) {
-  const response = await fetch(
-    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_DETAILS}?${toQueryString({
-      userid,
-    })}`
-  );
+  const route = generatePath(ROUTE_USER_DETAILS, { userid });
+  const response = await fetch(`${USER_API_ROUTE}${VERSION}${route}`);
   return await parseResponse(response);
 }
 

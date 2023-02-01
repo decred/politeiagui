@@ -14,6 +14,7 @@ import messageReducer from "./globalServices/message";
 import navigationReducer from "./globalServices/navigation";
 import userReducer from "./user/userSlice"; // TODO: Remove this.
 import userAuthReducer from "./user/auth/userAuthSlice";
+import usersReducer from "./user/users/usersSlice";
 
 import { listenerMiddleware } from "./listeners";
 
@@ -31,6 +32,7 @@ const staticReducers = {
   globalNavigation: navigationReducer,
   user: userReducer, // TODO: Remove this reducer when the user layer is done.
   userAuth: userAuthReducer,
+  users: usersReducer,
 };
 
 function createReducer(reducers, asyncReducers) {

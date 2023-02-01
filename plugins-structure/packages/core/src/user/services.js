@@ -2,6 +2,7 @@ import { user } from ".";
 import { getURLSearchParams } from "../router";
 import { createSliceServices } from "../toolkit";
 import { pluginServices as authServices } from "./auth/services";
+import { pluginServices as usersServices } from "./users/services";
 
 // TODO: Move this to a more appropriate place
 export const { pluginServices, serviceListeners } = createSliceServices({
@@ -26,4 +27,4 @@ export const { pluginServices, serviceListeners } = createSliceServices({
   },
 });
 
-export const services = [...authServices, ...pluginServices];
+export const services = [...authServices, ...pluginServices, ...usersServices];

@@ -10,6 +10,12 @@
       "@politeiagui/core/user/auth/services": [
         "./packages/core/src/user/auth/services.js"
       ],
+      "@politeiagui/core/user/users": [
+        "./packages/core/src/user/users/index.js"
+      ],
+      "@politeiagui/core/user/users/services": [
+        "./packages/core/src/user/users/services.js"
+      ],
       "@politeiagui/core/user/services": [
         "./packages/core/src/user/services.js"
       ],
