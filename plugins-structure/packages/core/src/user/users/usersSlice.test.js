@@ -56,12 +56,12 @@ describe("Given the usersSlice", () => {
       });
       it("should update status to succeeded and users by id", async () => {
         const userid = "1234";
-        const userDetails = { userid, name: "John Doe" };
+        const userDetails = { user: { userid, name: "John Doe" } };
         userFetchDetailsSpy.mockResolvedValue(userDetails);
         await store.dispatch(fetchUserDetails(userid));
         expect(userFetchDetailsSpy).toHaveBeenCalledWith({ userid });
         expect(store.getState().status).toEqual("succeeded");
-        expect(store.getState().byId[userid]).toEqual(userDetails);
+        expect(store.getState().byId[userid]).toEqual(userDetails.user);
       });
     });
     describe("when dispatched with valid params but fetch fails", () => {
