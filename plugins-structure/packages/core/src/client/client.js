@@ -11,6 +11,7 @@ import {
   ROUTE_USER_EMAIL_VERIFY,
   ROUTE_USER_LOGIN,
   ROUTE_USER_LOGOUT,
+  ROUTE_USER_MANAGE,
   ROUTE_USER_ME,
   ROUTE_USER_NEW,
   ROUTE_WWW_POLICY,
@@ -266,6 +267,15 @@ async function userFetchDetails({ userid }) {
   return await parseResponse(response);
 }
 
+async function userManage(state, { action, reason, userid }) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_MANAGE}`,
+    fetchOptions(csrf, { action, reason, userid }, "POST")
+  );
+  return await parseResponse(response);
+}
+
 // export client object with functions to interact with the API
 export const client = {
   // Records API
@@ -282,6 +292,7 @@ export const client = {
   userFetchMe,
   userLogin,
   userLogout,
+  userManage,
   userSignup,
   userVerifyEmail,
 };
