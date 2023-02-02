@@ -15,34 +15,34 @@ export const TAB_LABELS = {
   "2fa": { title: "Two-Factor Authentication", private: true },
 };
 
-const TAB_KEYS = Object.keys(TAB_LABELS);
-
-const getTabs = (userid, isCurrent, isAdmin) =>
-  TAB_KEYS.map((tab) => {
-    if (
+const getTabsToDisplay = (isCurrent, isAdmin) =>
+  Object.keys(TAB_LABELS).filter(
+    (tab) =>
       TAB_LABELS[tab].public ||
       (isAdmin && TAB_LABELS[tab].admin) ||
       (isCurrent && TAB_LABELS[tab].private)
-    ) {
-      return (
-        <a href={`/user/${userid}/${tab}`} data-link>
-          {TAB_LABELS[tab].title}
-        </a>
-      );
-    }
-    return null;
-  }).filter((tab) => !!tab);
+  );
+
+const formatTabs = (tabs, userid) =>
+  tabs.map((tab) => (
+    <a href={`/user/${userid}/${tab}`} data-link key={tab}>
+      {TAB_LABELS[tab].title}
+    </a>
+  ));
 
 function UserDetails() {
   const location = router.getCurrentLocation();
-  const [, , userid, activeTab] = location.pathname.split("/");
-  // TODO: get user from users reducer as well. Only use current user if
-  // userid is the same as currentUser's userid.
+  const [, , userid, targetTab] = location.pathname.split("/");
 
   const user = useSelector((state) => users.selectById(state, userid));
   const currentUser = useSelector(userAuth.selectCurrent);
+
   const isCurrent = user && user?.id === currentUser?.userid;
   const isAdmin = currentUser?.isadmin;
+
+  const tabsToDisplay = getTabsToDisplay(isCurrent, isAdmin);
+  const tabActive = targetTab ? tabsToDisplay.indexOf(targetTab) : 0;
+  const tabs = formatTabs(tabsToDisplay, userid);
 
   return (
     <SingleContentPage
@@ -50,8 +50,8 @@ function UserDetails() {
         <TabsBanner
           title={user?.username}
           subtitle={user?.email}
-          activeTab={TAB_KEYS.indexOf(activeTab || "identity")}
-          tabs={getTabs(userid, isCurrent, isAdmin)}
+          activeTab={tabActive}
+          tabs={tabs}
         />
       }
     >
