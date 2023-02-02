@@ -81,8 +81,10 @@ function formatItemValue(value) {
 }
 
 export function formatItemsList(items) {
-  return items.map(({ label, value }) => ({
-    label,
-    value: formatItemValue(value),
-  }));
+  return items
+    .filter(({ hide }) => !hide)
+    .map(({ label, value }) => ({
+      label,
+      value: formatItemValue(value),
+    }));
 }
