@@ -7,8 +7,9 @@ import {
   SubmitButton,
 } from "@politeiagui/common-ui";
 import { InfoCard } from "../../../components";
-
-import { user } from "./_mock";
+import { useSelector } from "react-redux";
+import { users } from "@politeiagui/core/user/users";
+import { emailNotificationsToPreferences } from "./helpers";
 
 function CheckboxSection({ title, items, ...props }) {
   return (
@@ -20,8 +21,10 @@ function CheckboxSection({ title, items, ...props }) {
   );
 }
 
-function UserPreferences() {
+function UserPreferences({ userid }) {
+  const user = useSelector((state) => users.selectById(state, userid));
   const isAdmin = user.isadmin;
+  const preferences = emailNotificationsToPreferences(user.emailnotifications);
 
   function handleSavePreferences(values) {
     console.log("Saving...", values);
@@ -31,6 +34,7 @@ function UserPreferences() {
     <RecordForm
       className={styles.reset}
       formClassName={styles.reset}
+      initialValues={preferences}
       onSubmit={handleSavePreferences}
     >
       <InfoMessage>
@@ -42,25 +46,40 @@ function UserPreferences() {
         data-testid="user-preferences-my-proposals"
         title="Email notifications for my proposals"
         items={[
-          { name: "approved", label: "Proposal approved or censored" },
-          { name: "started", label: "Voting started for proposal" },
+          {
+            name: "myProposalStatusChange",
+            label: "Proposal approved or censored",
+          },
+          {
+            name: "myProposalVoteStarted",
+            label: "Voting started for proposal",
+          },
         ]}
       />
       <CheckboxSection
         data-testid="user-preferences-others-proposals"
         title="Email notifications for other's proposals"
         items={[
-          { name: "newProposal", label: "New proposal published" },
-          { name: "editedProposal", label: "Proposal edited" },
-          { name: "startedOthers", label: "Voting started for proposal" },
+          { name: "regularProposalVetted", label: "New proposal published" },
+          { name: "regularProposalEdited", label: "Proposal edited" },
+          {
+            name: "regularProposalVoteStarted",
+            label: "Voting started for proposal",
+          },
         ]}
       />
       <CheckboxSection
         data-testid="user-preferences-comments"
         title="Email notifications for comments"
         items={[
-          { name: "newComment", label: "New comment on your proposal" },
-          { name: "newReply", label: "New comment reply to your comment" },
+          {
+            name: "commentOnMyProposal",
+            label: "New comment on your proposal",
+          },
+          {
+            name: "commentOnMyComment",
+            label: "New comment reply to your comment",
+          },
         ]}
       />
       {isAdmin && (
@@ -68,9 +87,9 @@ function UserPreferences() {
           data-testid="user-preferences-admin"
           title="Admin email notifications"
           items={[
-            { name: "newProposalAdmin", label: "New proposal submitted" },
+            { name: "adminProposalNew", label: "New proposal submitted" },
             {
-              name: "authorizeAdmin",
+              name: "adminProposalVoteAuthorized",
               label: "Voting authorized for proposal",
             },
           ]}

@@ -88,3 +88,48 @@ export function formatItemsList(items) {
       value: formatItemValue(value),
     }));
 }
+
+// User Preferences
+const PREF_MY_PROPOSAL_STATUS_CHANGE = 1 << 0;
+const PREF_MY_PROPOSAL_VOTE_STARTED = 1 << 1;
+const PREF_REGULAR_PROPOSAL_VETTED = 1 << 2;
+const PREF_REGULAR_PROPOSAL_EDITED = 1 << 3;
+const PREF_REGULAR_PROPOSAL_VOTE_STARTED = 1 << 4;
+const PREF_ADMIN_PROPOSAL_NEW = 1 << 5;
+const PREF_ADMIN_PROPOSAL_VOTE_AUTHORIZED = 1 << 6;
+const PREF_COMMENT_ON_MY_PROPOSAL = 1 << 7;
+const PREF_COMMENT_ON_MY_COMMENT = 1 << 8;
+
+/**
+ * emailNotificationsToPreferences decodes the email notifications preference code
+ * into a readable object of user preferences.
+ * @param {number} notifications - The email notifications preference code.
+ * @returns {{
+ *  myProposalStatusChange: boolean,
+ *  myProposalVoteStarted: boolean,
+ *  regularProposalVetted: boolean,
+ *  regularProposalEdited: boolean,
+ *  regularProposalVoteStarted: boolean,
+ *  adminProposalNew: boolean,
+ *  adminProposalVoteAuthorized: boolean,
+ *  commentOnMyProposal: boolean,
+ *  commentOnMyComment: boolean
+ * }} - The decoded email notifications preference object.
+ */
+export function emailNotificationsToPreferences(notifications) {
+  return {
+    myProposalStatusChange: !!(notifications & PREF_MY_PROPOSAL_STATUS_CHANGE),
+    myProposalVoteStarted: !!(notifications & PREF_MY_PROPOSAL_VOTE_STARTED),
+    regularProposalVetted: !!(notifications & PREF_REGULAR_PROPOSAL_VETTED),
+    regularProposalEdited: !!(notifications & PREF_REGULAR_PROPOSAL_EDITED),
+    regularProposalVoteStarted: !!(
+      notifications & PREF_REGULAR_PROPOSAL_VOTE_STARTED
+    ),
+    adminProposalNew: !!(notifications & PREF_ADMIN_PROPOSAL_NEW),
+    adminProposalVoteAuthorized: !!(
+      notifications & PREF_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+    ),
+    commentOnMyProposal: !!(notifications & PREF_COMMENT_ON_MY_PROPOSAL),
+    commentOnMyComment: !!(notifications & PREF_COMMENT_ON_MY_COMMENT),
+  };
+}
