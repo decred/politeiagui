@@ -8,6 +8,15 @@ import { listener } from "./listeners";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
 
+/**
+ * @typedef {{ path: string,
+ *  view: Function,
+ *  setupServices: Array,
+ *  listeners: Array
+ *  cleanup: Function
+ * }} CreateRouteParams
+ */
+
 function getRouteTitle(appTitle, title) {
   if (!title && appTitle) return appTitle;
   if (title && !appTitle) return title;
@@ -182,12 +191,7 @@ export function appSetup({
     /**
      * createRoute is an interface for creating app routes. Before rendering
      * some route view, execute all services actions for given `service`.
-     * @param {{ path: string,
-     *  view: Function,
-     *  setupServices: Array,
-     *  listeners: Array
-     *  cleanup: Function
-     * }} routeParams
+     * @param {CreateRouteParams} routeParams
      */
     createRoute({
       path,
@@ -268,7 +272,7 @@ export function appSetup({
      *  title: string,
      *  listeners: Array,
      *  cleanup: Function
-     *  subRoutes: Array
+     *  subRoutes: CreateRouteParams[]
      * }} routeParams
      *
      * @returns {{ path: string, view: Function, title: string }[]} - Returns
@@ -296,18 +300,19 @@ export function appSetup({
           title: `${route.title} - ${title}`,
           setupServices: [...setupServices, ...(route.setupServices || [])],
           listeners: [...listeners, ...(route.listeners || [])],
-          cleanup: cleanup,
+          cleanup,
         });
       });
 
       // Add default route for the path.
       const defaultRouteMatch =
         routes.find((route) => route.path === defaultPath) || routes[0];
+      if (!defaultRouteMatch) return routes;
       const defaultRoute = {
         path,
         view: defaultRouteMatch.view,
         title: defaultRouteMatch.title,
-        cleanup: cleanup,
+        cleanup,
       };
 
       return [defaultRoute, ...routes];

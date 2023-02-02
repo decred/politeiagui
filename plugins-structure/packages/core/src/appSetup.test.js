@@ -66,10 +66,8 @@ describe("Given appSetup method", () => {
     it("should create route correctly and allow navigation", async () => {
       const view = jest.fn();
       const route = myApp.createRoute({ path: "/", view, cleanup: jest.fn() });
-
       await myApp.init({ routes: [route] });
       router.navigateTo("/");
-
       expect(view).toBeCalled();
     });
   });
@@ -108,6 +106,23 @@ describe("Given appSetup method", () => {
         "'listeners' must be an array"
       );
       expect(() => appSetup({ plugins: [], listeners: [{}], store })).toThrow();
+    });
+  });
+  describe("when creating a subrouter", () => {
+    it("should create all routes from subrouter with nested path", () => {
+      const app = appSetup({ plugins: [plugin], store });
+      const view = jest.fn();
+      const subRouter = app.createSubRouter({
+        path: "/sub",
+        title: "Sub",
+        defaultPath: "/sub/foo",
+        cleanup: jest.fn(),
+        subRoutes: [{ path: "/foo", title: "Foo", view }],
+      });
+
+      expect(subRouter).toHaveLength(2);
+      expect(subRouter[0]).toHaveProperty("path", "/sub");
+      expect(subRouter[1]).toHaveProperty("path", "/sub/foo");
     });
   });
 });
