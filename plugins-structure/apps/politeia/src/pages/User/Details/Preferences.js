@@ -1,15 +1,19 @@
 import React from "react";
-import styles from "./styles.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { users } from "@politeiagui/core/user/users";
 import {
   Checkbox,
   InfoMessage,
   RecordForm,
   SubmitButton,
+  useToast,
 } from "@politeiagui/common-ui";
 import { InfoCard } from "../../../components";
-import { useSelector } from "react-redux";
-import { users } from "@politeiagui/core/user/users";
-import { emailNotificationsToPreferences } from "./helpers";
+import {
+  emailNotificationsToPreferences,
+  preferencesToEmailNotifications,
+} from "./helpers";
+import styles from "./styles.module.css";
 
 function CheckboxSection({ title, items, ...props }) {
   return (
@@ -22,19 +26,29 @@ function CheckboxSection({ title, items, ...props }) {
 }
 
 function UserPreferences({ userid }) {
+  const dispatch = useDispatch();
+  const { openToast } = useToast();
+
   const user = useSelector((state) => users.selectById(state, userid));
   const isAdmin = user.isadmin;
   const preferences = emailNotificationsToPreferences(user.emailnotifications);
 
   function handleSavePreferences(values) {
-    console.log("Saving...", values);
+    const emailnotifications = preferencesToEmailNotifications(values);
+    dispatch(users.edit({ emailnotifications, userid }))
+      .then(() => {
+        openToast({ title: "Preferences saved", kind: "success" });
+      })
+      .catch(() => {
+        openToast({ title: "Error saving preferences", kind: "error" });
+      });
   }
-
   return (
     <RecordForm
       className={styles.reset}
       formClassName={styles.reset}
       initialValues={preferences}
+      mode="onTouched"
       onSubmit={handleSavePreferences}
     >
       <InfoMessage>

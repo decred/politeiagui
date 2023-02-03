@@ -101,20 +101,26 @@ const PREF_COMMENT_ON_MY_PROPOSAL = 1 << 7;
 const PREF_COMMENT_ON_MY_COMMENT = 1 << 8;
 
 /**
+ * @typedef {{
+ * myProposalStatusChange: boolean,
+ * myProposalVoteStarted: boolean,
+ * regularProposalVetted: boolean,
+ * regularProposalEdited: boolean,
+ * regularProposalVoteStarted: boolean,
+ * adminProposalNew: boolean,
+ * adminProposalVoteAuthorized: boolean,
+ * commentOnMyProposal: boolean,
+ * commentOnMyComment: boolean
+ * }} EmailNotificationsPreferences - The user email notifications preferences.
+ */
+
+/**
  * emailNotificationsToPreferences decodes the email notifications preference code
  * into a readable object of user preferences.
+ *
  * @param {number} notifications - The email notifications preference code.
- * @returns {{
- *  myProposalStatusChange: boolean,
- *  myProposalVoteStarted: boolean,
- *  regularProposalVetted: boolean,
- *  regularProposalEdited: boolean,
- *  regularProposalVoteStarted: boolean,
- *  adminProposalNew: boolean,
- *  adminProposalVoteAuthorized: boolean,
- *  commentOnMyProposal: boolean,
- *  commentOnMyComment: boolean
- * }} - The decoded email notifications preference object.
+ * @returns {EmailNotificationsPreferences} - The decoded email notifications
+ * preference object.
  */
 export function emailNotificationsToPreferences(notifications) {
   return {
@@ -132,4 +138,29 @@ export function emailNotificationsToPreferences(notifications) {
     commentOnMyProposal: !!(notifications & PREF_COMMENT_ON_MY_PROPOSAL),
     commentOnMyComment: !!(notifications & PREF_COMMENT_ON_MY_COMMENT),
   };
+}
+
+/**
+ * preferencesToEmailNotifications encodes the user preferences into a code
+ * that can be used to update the user's email notifications preferences.
+ *
+ * @param {EmailNotificationsPreferences} preferences - The user preferences.
+ * @returns {number} - The encoded email notifications preference code.
+ */
+export function preferencesToEmailNotifications(preferences) {
+  return (
+    (preferences.myProposalStatusChange ? PREF_MY_PROPOSAL_STATUS_CHANGE : 0) |
+    (preferences.myProposalVoteStarted ? PREF_MY_PROPOSAL_VOTE_STARTED : 0) |
+    (preferences.regularProposalVetted ? PREF_REGULAR_PROPOSAL_VETTED : 0) |
+    (preferences.regularProposalEdited ? PREF_REGULAR_PROPOSAL_EDITED : 0) |
+    (preferences.regularProposalVoteStarted
+      ? PREF_REGULAR_PROPOSAL_VOTE_STARTED
+      : 0) |
+    (preferences.adminProposalNew ? PREF_ADMIN_PROPOSAL_NEW : 0) |
+    (preferences.adminProposalVoteAuthorized
+      ? PREF_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+      : 0) |
+    (preferences.commentOnMyProposal ? PREF_COMMENT_ON_MY_PROPOSAL : 0) |
+    (preferences.commentOnMyComment ? PREF_COMMENT_ON_MY_COMMENT : 0)
+  );
 }
