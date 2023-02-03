@@ -8,6 +8,7 @@ import {
   ROUTE_TIMESTAMPS,
   // Users
   ROUTE_USER_DETAILS,
+  ROUTE_USER_EDIT,
   ROUTE_USER_EMAIL_VERIFY,
   ROUTE_USER_LOGIN,
   ROUTE_USER_LOGOUT,
@@ -267,11 +268,38 @@ async function userFetchDetails({ userid }) {
   return await parseResponse(response);
 }
 
+/**
+ * userManage manages the user account for given userid. Action defines the
+ * action to be performed on the user account. Reason defines the reason for
+ * the action.
+ * @param {Object} state redux state
+ * @param {{
+ *  action: String,
+ *  reason: String,
+ *  userid: String
+ * }} params action, reason and userid
+ */
 async function userManage(state, { action, reason, userid }) {
   const csrf = await getCsrf(state);
   const response = await fetch(
     `${USER_API_ROUTE}${VERSION}${ROUTE_USER_MANAGE}`,
     fetchOptions(csrf, { action, reason, userid }, "POST")
+  );
+  return await parseResponse(response);
+}
+
+/**
+ * userEdit edits the user account preferences. Preferences are defined by the
+ * emailnotifications configuration.
+ *
+ * @param {Object} state redux state
+ * @param {{ emailnotifications: Number }} params emailnotifications
+ */
+async function userEdit(state, { emailnotifications }) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_EDIT}`,
+    fetchOptions(csrf, { emailnotifications }, "POST")
   );
   return await parseResponse(response);
 }
@@ -292,6 +320,7 @@ export const client = {
   userFetchMe,
   userLogin,
   userLogout,
+  userEdit,
   userManage,
   userSignup,
   userVerifyEmail,

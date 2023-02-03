@@ -3,6 +3,8 @@ import {
   selectUserById,
   selectUsersError,
   selectUsersStatus,
+  userEdit,
+  userManage,
 } from "./usersSlice";
 
 export const users = {
@@ -10,4 +12,6 @@ export const users = {
   selectById: selectUserById,
   selectError: selectUsersError,
   selectStatus: selectUsersStatus,
+  manage: userManage,
+  edit: userEdit,
 };

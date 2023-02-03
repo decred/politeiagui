@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import isString from "lodash/isString";
+import isNumber from "lodash/isNumber";
 import { userManageActionToCode } from "./helpers";
 
 export const initialState = {
@@ -58,6 +59,33 @@ export const userManage = createAsyncThunk(
   }
 );
 
+/**
+ * userEdit - async thunk to edit user account. It receives the
+ * emailnotifications configuration and updates the logged in user's account.
+ */
+export const userEdit = createAsyncThunk(
+  "users/edit",
+  async (
+    { emailnotifications, userid },
+    { getState, rejectWithValue, extra }
+  ) => {
+    try {
+      await extra.userEdit(getState(), { emailnotifications });
+      return { emailnotifications, userid };
+    } catch (error) {
+      throw rejectWithValue(error.message);
+    }
+  },
+  {
+    condition: (params) =>
+      !!(
+        params &&
+        isNumber(params.emailnotifications) &&
+        isString(params.userid)
+      ),
+  }
+);
+
 export const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -82,6 +110,20 @@ export const usersSlice = createSlice({
         state.status = "succeeded";
       })
       .addCase(userManage.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(userEdit.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(userEdit.fulfilled, (state, action) => {
+        const { emailnotifications, userid } = action.payload;
+        if (state.byId[userid]) {
+          state.byId[userid].emailnotifications = emailnotifications;
+        }
+        state.status = "succeeded";
+      })
+      .addCase(userEdit.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

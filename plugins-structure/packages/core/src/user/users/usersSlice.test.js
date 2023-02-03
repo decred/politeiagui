@@ -1,6 +1,7 @@
 import reducer, {
   fetchUserDetails,
   initialState,
+  userEdit,
   userManage,
 } from "./usersSlice";
 import { configureStore } from "@reduxjs/toolkit";
@@ -9,7 +10,7 @@ import { client } from "../../client/client";
 describe("Given the usersSlice", () => {
   let store;
   // Methods used to fetch
-  let userFetchDetailsSpy, userManageSpy;
+  let userFetchDetailsSpy, userManageSpy, userEditSpy;
   beforeEach(() => {
     store = configureStore({
       reducer,
@@ -24,10 +25,12 @@ describe("Given the usersSlice", () => {
     });
     userFetchDetailsSpy = jest.spyOn(client, "userFetchDetails");
     userManageSpy = jest.spyOn(client, "userManage");
+    userEditSpy = jest.spyOn(client, "userEdit");
   });
   afterEach(() => {
     userFetchDetailsSpy.mockRestore();
     userManageSpy.mockRestore();
+    userEditSpy.mockRestore();
   });
   describe("when empty params", () => {
     it("should return the initial state", () => {
@@ -126,6 +129,58 @@ describe("Given the usersSlice", () => {
         expect(userManageSpy).toHaveBeenCalledWith(
           expect.anything(),
           expect.objectContaining(validParams)
+        );
+        expect(store.getState().status).toEqual("failed");
+        expect(store.getState().error).toEqual(errorMsg);
+      });
+    });
+  });
+
+  describe("userEdit", () => {
+    describe("when dispatched with invalid params", () => {
+      it("should not fetch nor fire actions", async () => {
+        const badArgs = [
+          null,
+          undefined,
+          {},
+          { emailnotifications: null },
+          { emailnotifications: undefined },
+          { emailnotifications: "invalid" },
+          { emailnotifications: 123, userid: undefined },
+          { emailnotifications: 123, userid: null },
+          { emailnotifications: 123, userid: 123 },
+        ];
+        await Promise.all(
+          badArgs.map(async (args) => {
+            await store.dispatch(userEdit(args));
+            expect(userEditSpy).not.toHaveBeenCalled();
+            expect(store.getState().status).toEqual("idle");
+          })
+        );
+      });
+    });
+    describe("when dispatched with valid params", () => {
+      const params = { emailnotifications: 123, userid: "myuserid" };
+      it("should update status to loading", () => {
+        store.dispatch(userEdit(params));
+        expect(store.getState().status).toEqual("loading");
+      });
+      it("should update status to succeeded when resolved", async () => {
+        userEditSpy.mockResolvedValue();
+        await store.dispatch(userEdit(params));
+        expect(userEditSpy).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ emailnotifications: 123 })
+        );
+        expect(store.getState().status).toEqual("succeeded");
+      });
+      it("should update status to failed when rejected", async () => {
+        const errorMsg = "Failed";
+        userEditSpy.mockRejectedValue(new Error(errorMsg));
+        await store.dispatch(userEdit(params));
+        expect(userEditSpy).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ emailnotifications: 123 })
         );
         expect(store.getState().status).toEqual("failed");
         expect(store.getState().error).toEqual(errorMsg);
