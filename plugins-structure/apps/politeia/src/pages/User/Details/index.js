@@ -9,6 +9,9 @@ import { serviceListeners as usersListeners } from "@politeiagui/core/user/users
 import { servicesSetupsByRecordsInventory } from "../../../pi/proposalsList/servicesSetups";
 import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listeners";
 
+import overSome from "lodash/overSome";
+import { isUserAdmin, isUserOwner, navigateToDetails } from "../utils";
+
 import Details from "./Details";
 
 const userIdentityParams = {
@@ -26,6 +29,8 @@ const userDraftsParams = {
   path: "/drafts",
   title: "Drafts",
   setupServices: [draftsListeners.load],
+  when: isUserOwner,
+  otherwise: navigateToDetails,
   view: createRouteView(
     lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Drafts")),
     "#user-router"
@@ -59,6 +64,8 @@ const userAccountParams = {
 const userPreferencesParams = {
   path: "/preferences",
   title: "Preferences",
+  when: isUserOwner,
+  otherwise: navigateToDetails,
   view: createRouteView(
     lazy(() =>
       import(/* webpackChunkName: "user_details_page" */ "./Preferences")
@@ -70,6 +77,8 @@ const userPreferencesParams = {
 const userCreditsParams = {
   path: "/credits",
   title: "Credits",
+  when: overSome([isUserAdmin, isUserOwner]),
+  otherwise: navigateToDetails,
   view: createRouteView(
     lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Credits")),
     "#user-router"
@@ -79,6 +88,8 @@ const userCreditsParams = {
 const user2faParams = {
   path: "/2fa",
   title: "2FA",
+  when: isUserOwner,
+  otherwise: navigateToDetails,
   view: createRouteView(
     lazy(() => import(/* webpackChunkName: "user_details_page" */ "./TwoFA")),
     "#user-router"
@@ -92,13 +103,16 @@ const userRouter = App.createSubRouter({
   setupServices: [usersListeners.fetchDetailsOnLoad],
   defaultPath: "/user/:userid/identity",
   subRoutes: [
+    // Public Routes (everyone)
     userAccountParams,
-    userCreditsParams,
-    userDraftsParams,
     userIdentityParams,
-    userPreferencesParams,
     userProposalsParams,
+    // Owner Routes (user only)
+    userDraftsParams,
+    userPreferencesParams,
     user2faParams,
+    // Private Routes (owner or admin)
+    userCreditsParams,
   ],
   wrapperView: createRouteView(Details),
 });
