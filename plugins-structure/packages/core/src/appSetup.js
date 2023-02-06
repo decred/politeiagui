@@ -4,6 +4,7 @@ import { router } from "./router";
 import { services as recordsServices } from "./records/services";
 import { services as globalServices } from "./globalServices";
 import { services as userServices } from "./user/services";
+import { pluginServices as apiServices } from "./api/services";
 import { listener } from "./listeners";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
@@ -136,7 +137,12 @@ export function appSetup({
     throw Error("'listeners' must be an array");
   }
 
-  let appServices = [...recordsServices, ...globalServices, ...userServices];
+  let appServices = [
+    ...recordsServices,
+    ...globalServices,
+    ...userServices,
+    ...apiServices,
+  ];
   plugins.every(validatePlugin);
 
   // Connect plugins reducers and services

@@ -4,6 +4,7 @@
     "paths": {
       "@politeiagui/core": ["./packages/core/src/index.js"],
       "@politeiagui/core/api": ["./packages/core/src/api/index.js"],
+      "@politeiagui/core/api/services": ["./packages/core/src/api/services.js"],
       "@politeiagui/core/router": ["./packages/core/src/router/index.js"],
       "@politeiagui/core/user": ["./packages/core/src/user/index.js"],
       "@politeiagui/core/user/auth": ["./packages/core/src/user/auth/index.js"],

@@ -5,6 +5,7 @@
   "exports": {
     ".": "./src/index.js",
     "./api": "./src/api/index.js",
+    "./api/services": "./src/api/services.js",
     "./client": "./src/client/index.js",
     "./records": "./src/records/records/index.js",
     "./records/services": "./src/records/records/services.js",
