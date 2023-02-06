@@ -125,4 +125,39 @@ describe("Given appSetup method", () => {
       expect(subRouter[1]).toHaveProperty("path", "/sub/foo");
     });
   });
+  describe("when creating a route with condition", () => {
+    const app = appSetup({ plugins: [plugin], store });
+    it("should render route view only if condition is true", async () => {
+      const view = jest.fn();
+      const when = jest.fn(() => true);
+      const otherwise = jest.fn();
+      const routeFalse = app.createRoute({
+        path: "/",
+        view,
+        cleanup: jest.fn(),
+        when,
+        otherwise,
+      });
+      await routeFalse.view();
+      expect(when).toBeCalled();
+      expect(otherwise).not.toBeCalled();
+      expect(view).toBeCalled();
+    });
+    it("should render otherwise view if condition is false", async () => {
+      const view = jest.fn();
+      const when = jest.fn(() => false);
+      const otherwise = jest.fn();
+      const routeFalse = app.createRoute({
+        path: "/",
+        view,
+        cleanup: jest.fn(),
+        when,
+        otherwise,
+      });
+      await routeFalse.view();
+      expect(when).toBeCalled();
+      expect(otherwise).toBeCalled();
+      expect(view).not.toBeCalled();
+    });
+  });
 });
