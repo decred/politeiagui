@@ -7,13 +7,29 @@ import { services as userServices } from "./user/services";
 import { listener } from "./listeners";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
+import over from "lodash/over";
+import overEvery from "lodash/overEvery";
 
 /**
- * @typedef {{ path: string,
+ * @callback ConditionFn - A function that returns a boolean value indicating
+ * whether the route should be rendered or not.
+ * @param {Object} params - Route params.
+ * @param {Function} getState - Redux getState function.
+ * @returns {boolean} - Whether the route should be rendered or not.
+ */
+
+/**
+ * CreateRouteParams is a type definition for the params object that is passed
+ * to the app's createRoute function.
+ * @typedef {{
+ *  path: string,
  *  view: Function,
+ *  title: string,
  *  setupServices: Array,
  *  listeners: Array
  *  cleanup: Function
+ *  when: ConditionFn
+ *  otherwise: Function
  * }} CreateRouteParams
  */
 
@@ -200,6 +216,8 @@ export function appSetup({
       listeners = [],
       cleanup,
       title,
+      when = () => true,
+      otherwise = () => {},
     } = {}) {
       validatServicesSetups(setupServices);
       const routeServices = addRouteServicesProperties(
@@ -216,8 +234,16 @@ export function appSetup({
           clearListeners(allListeners);
         },
         view: async (routeParams) => {
+          // onlu render view if when is true
+          const shouldRenderView = when(routeParams, store.getState);
+          if (!shouldRenderView)
+            return await otherwise(routeParams, (path) =>
+              router.navigateTo(path)
+            );
+
           const actionsDispatchesQueue = [];
           registerListeners(allListeners);
+
           for (const service of routeServices) {
             // We must cache all dispatches, because they might trigger services
             // listeners effects that may not have executed their setup actions
@@ -273,6 +299,8 @@ export function appSetup({
      *  listeners: Array,
      *  cleanup: Function
      *  subRoutes: CreateRouteParams[]
+     *  when: ConditionFn,
+     *  otherwise: Function
      * }} routeParams
      *
      * @returns {{ path: string, view: Function, title: string }[]} - Returns
@@ -288,6 +316,8 @@ export function appSetup({
       cleanup,
       listeners = [],
       subRoutes = [],
+      when = () => true,
+      otherwise = () => {},
     }) {
       // Create app routes for sub-routes. They can now be used by the router.
       const routes = subRoutes.map((route) => {
@@ -300,6 +330,8 @@ export function appSetup({
           title: `${route.title} - ${title}`,
           setupServices: [...setupServices, ...(route.setupServices || [])],
           listeners: [...listeners, ...(route.listeners || [])],
+          when: overEvery([when, route.when]),
+          otherwise: over([otherwise, route.otherwise]),
           cleanup,
         });
       });
