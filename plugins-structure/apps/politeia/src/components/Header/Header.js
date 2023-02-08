@@ -38,7 +38,7 @@ function HeaderItems() {
   }
 
   return currentUser ? (
-    <div>
+    <div data-testid="header-dropdown">
       <Dropdown
         title={currentUser.username}
         itemsListClassName={styles.headerItems}
