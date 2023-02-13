@@ -61,10 +61,10 @@ function HeaderItems() {
     </div>
   ) : (
     <>
-      <a href="/user/login" data-link>
+      <a href="/user/login" data-link data-testid="login-header-link">
         Log in
       </a>
-      <a href="/user/signup" data-link>
+      <a href="/user/signup" data-link data-testid="signup-header-link">
         Sign up
       </a>
     </>
