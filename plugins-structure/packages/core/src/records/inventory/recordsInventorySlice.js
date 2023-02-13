@@ -30,6 +30,8 @@ export const initialState = {
     censored: initialObj,
     public: initialObj,
   },
+  byUserId: {},
+  byUserStatus: "idle",
   error: null,
 };
 
@@ -71,6 +73,27 @@ export const fetchRecordsInventory = createAsyncThunk(
   }
 );
 
+/**
+ * fetchRecordsUserInventory is an Async thunk responsible for fetching records
+ * tokens for a given userid. `userid` must be valid.
+ */
+export const fetchRecordsUserInventory = createAsyncThunk(
+  "recordsInventory/user",
+  async ({ userid }, { extra, rejectWithValue }) => {
+    try {
+      return await extra.fetchRecordsUserInventory({
+        userid,
+      });
+    } catch (e) {
+      const message = getRecordsErrorMessage(e.body, e.message);
+      return rejectWithValue(message);
+    }
+  },
+  {
+    condition: (params) => !!(params && params.userid),
+  }
+);
+
 // Reducer
 const recordsInventorySlice = createSlice({
   name: "recordsInventory",
@@ -104,6 +127,18 @@ const recordsInventorySlice = createSlice({
       })
       .addCase(fetchRecordsInventory.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(fetchRecordsUserInventory.pending, (state) => {
+        state.byUserStatus = "loading";
+      })
+      .addCase(fetchRecordsUserInventory.fulfilled, (state, action) => {
+        const { userid } = action.meta.arg;
+        state.byUserId[userid] = action.payload;
+        state.byUserStatus = "succeeded";
+      })
+      .addCase(fetchRecordsUserInventory.rejected, (state, action) => {
+        state.byUserStatus = "failed";
         state.error = action.payload;
       });
   },
@@ -148,6 +183,11 @@ export const selectRecordsInventoryLastPage = (
       .lastPage;
   }
 };
+
+export const selectRecordsInventoryByUser = (state, userid) =>
+  state.recordsInventory.byUserId[userid];
+export const selectRecordsUserInventoryStatus = (state) =>
+  state.recordsInventory.byUserStatus;
 
 // Export default reducer
 export default recordsInventorySlice.reducer;

@@ -1,5 +1,6 @@
 import recordsInventoryReducer, {
   fetchRecordsInventory,
+  fetchRecordsUserInventory,
   initialState,
 } from "./recordsInventorySlice";
 import recordsReducer from "../records/recordsSlice";
@@ -12,8 +13,7 @@ describe("Given the recordsInventorySlice", () => {
   let store;
   let preloadedStore;
   // spy on methods used to fetch
-  let fetchRecordsInventorySpy;
-  let fetchRecordsSpy;
+  let fetchRecordsInventorySpy, fetchRecordsSpy, fetchRecordsUserInventorySpy;
   const params = {
     recordsState: 2,
     status: 2,
@@ -39,10 +39,15 @@ describe("Given the recordsInventorySlice", () => {
     });
     fetchRecordsInventorySpy = jest.spyOn(client, "fetchRecordsInventory");
     fetchRecordsSpy = jest.spyOn(client, "fetchRecords");
+    fetchRecordsUserInventorySpy = jest.spyOn(
+      client,
+      "fetchRecordsUserInventory"
+    );
   });
   afterEach(() => {
     fetchRecordsInventorySpy.mockRestore();
     fetchRecordsSpy.mockRestore();
+    fetchRecordsUserInventorySpy.mockRestore();
   });
   describe("when empty parameters", () => {
     it("should return the initial state", () => {
@@ -68,173 +73,214 @@ describe("Given the recordsInventorySlice", () => {
       expect(state.recordsInventory.vetted.public.status).toEqual("idle");
       consoleErrorMock.mockRestore();
     });
+  });
+  describe("when invalid params are passed to fetchRecordsInventory", () => {
+    it("should not fetch nor fire actions", async () => {
+      const badParams = {
+        status: 2,
+        page: 1,
+      };
 
-    describe("when invalid params are passed to fetchRecordsInventory", () => {
-      it("should not fetch nor fire actions", async () => {
-        const badParams = {
-          status: 2,
-          page: 1,
-        };
+      const consoleErrorMock = jest
+        .spyOn(console, "error")
+        .mockImplementation();
 
-        const consoleErrorMock = jest
-          .spyOn(console, "error")
-          .mockImplementation();
-
-        await store.dispatch(fetchRecordsInventory(badParams));
-        expect(consoleErrorMock).toBeCalledWith(
-          Error("recordsState is required")
-        );
-        expect(fetchRecordsInventorySpy).not.toBeCalled();
-        const state = store.getState();
-        expect(state.recordsInventory.vetted.public.tokens).toEqual([]);
-        expect(state.recordsInventory.vetted.public.lastPage).toEqual(0);
-        expect(state.recordsInventory.vetted.public.status).toEqual("idle");
-        consoleErrorMock.mockRestore();
+      await store.dispatch(fetchRecordsInventory(badParams));
+      expect(consoleErrorMock).toBeCalledWith(
+        Error("recordsState is required")
+      );
+      expect(fetchRecordsInventorySpy).not.toBeCalled();
+      const state = store.getState();
+      expect(state.recordsInventory.vetted.public.tokens).toEqual([]);
+      expect(state.recordsInventory.vetted.public.lastPage).toEqual(0);
+      expect(state.recordsInventory.vetted.public.status).toEqual("idle");
+      consoleErrorMock.mockRestore();
+    });
+  });
+  describe("when policy is loaded, given the fetchRecordsInventory", () => {
+    beforeEach(() => {
+      preloadedStore = configureStore({
+        reducer: {
+          recordsInventory: recordsInventoryReducer,
+          recordsPolicy: recordsPolicyReducer,
+          records: recordsReducer,
+        },
+        preloadedState: {
+          records: {
+            records: {},
+            status: "idle",
+            error: null,
+          },
+          recordsInventory: initialState,
+          recordsPolicy: {
+            policy: {
+              inventorypagesize: 20,
+              recordspagesize: 5,
+            },
+          },
+        },
+        middleware: (getDefaultMiddleware) =>
+          getDefaultMiddleware({
+            // This will make the client available in the 'extra' argument
+            // for all our thunks created with createAsyncThunk
+            thunk: {
+              extraArgument: client,
+            },
+          }),
       });
     });
-    describe("when policy is loaded, given the fetchRecordsInventory", () => {
-      beforeEach(() => {
-        preloadedStore = configureStore({
-          reducer: {
-            recordsInventory: recordsInventoryReducer,
-            recordsPolicy: recordsPolicyReducer,
-            records: recordsReducer,
-          },
-          preloadedState: {
-            records: {
-              records: {},
-              status: "idle",
-              error: null,
-            },
-            recordsInventory: initialState,
-            recordsPolicy: {
-              policy: {
-                inventorypagesize: 20,
-                recordspagesize: 5,
-              },
-            },
-          },
-          middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware({
-              // This will make the client available in the 'extra' argument
-              // for all our thunks created with createAsyncThunk
-              thunk: {
-                extraArgument: client,
-              },
-            }),
-        });
+    describe("when policy is loaded and fetchRecordsInventory dispatches", () => {
+      it("should update the status to loading", () => {
+        preloadedStore.dispatch(fetchRecordsInventory(params));
+
+        const objAfterTransformation = {
+          recordsState: params.recordsState,
+          status: params.status,
+          page: params.page,
+        };
+
+        expect(fetchRecordsInventorySpy).toBeCalledWith(objAfterTransformation);
+        const state = preloadedStore.getState();
+        expect(state.recordsInventory.vetted.public.tokens).toEqual([]);
+        expect(state.recordsInventory.vetted.public.lastPage).toEqual(0);
+        expect(state.recordsInventory.vetted.public.status).toEqual("loading");
       });
-      describe("when policy is loaded and fetchRecordsInventory dispatches", () => {
-        it("should update the status to loading", () => {
-          preloadedStore.dispatch(fetchRecordsInventory(params));
+    });
+    describe("when fetchRecordsInventory succeeds", () => {
+      it("should update tokens, last page and status (succeeded/isDone for tokens.length < inventorypagesize)", async () => {
+        const resValue = { vetted: { public: [] }, unvetted: {} };
+        fetchRecordsInventorySpy.mockResolvedValueOnce(resValue);
 
-          const objAfterTransformation = {
-            recordsState: params.recordsState,
-            status: params.status,
-            page: params.page,
-          };
+        await preloadedStore.dispatch(fetchRecordsInventory(params));
 
-          expect(fetchRecordsInventorySpy).toBeCalledWith(
-            objAfterTransformation
-          );
-          const state = preloadedStore.getState();
-          expect(state.recordsInventory.vetted.public.tokens).toEqual([]);
-          expect(state.recordsInventory.vetted.public.lastPage).toEqual(0);
-          expect(state.recordsInventory.vetted.public.status).toEqual(
-            "loading"
-          );
-        });
+        const objAfterTransformation = {
+          recordsState: params.recordsState,
+          status: params.status,
+          page: params.page,
+        };
+
+        expect(fetchRecordsInventorySpy).toBeCalledWith(objAfterTransformation);
+        const state = preloadedStore.getState();
+        expect(state.recordsInventory.vetted.public.tokens).toEqual([]);
+        expect(state.recordsInventory.vetted.public.lastPage).toEqual(1);
+        expect(state.recordsInventory.vetted.public.status).toEqual(
+          "succeeded/isDone"
+        );
       });
-      describe("when fetchRecordsInventory succeeds", () => {
-        it("should update tokens, last page and status (succeeded/isDone for tokens.length < inventorypagesize)", async () => {
-          const resValue = { vetted: { public: [] }, unvetted: {} };
-          fetchRecordsInventorySpy.mockResolvedValueOnce(resValue);
 
+      it("should update tokens, last page and status (succeeded/hasMore for tokens.length == inventorypagesize)", async () => {
+        const inventoryPageSize =
+          preloadedStore.getState().recordsPolicy.policy.inventorypagesize;
+        const dummyToken = "testToken";
+        const resValue = {
+          vetted: { public: Array(inventoryPageSize).fill(dummyToken) },
+          unvetted: {},
+        };
+        fetchRecordsInventorySpy.mockResolvedValueOnce(resValue);
+
+        await preloadedStore.dispatch(fetchRecordsInventory(params));
+
+        const objAfterTransformation = {
+          recordsState: params.recordsState,
+          status: params.status,
+          page: params.page,
+        };
+
+        expect(fetchRecordsInventorySpy).toBeCalledWith(objAfterTransformation);
+        const state = preloadedStore.getState();
+        expect(state.recordsInventory.vetted.public.tokens).toEqual(
+          Array(inventoryPageSize).fill(dummyToken)
+        );
+        expect(state.recordsInventory.vetted.public.lastPage).toEqual(1);
+        expect(state.recordsInventory.vetted.public.status).toEqual(
+          "succeeded/hasMore"
+        );
+      });
+    });
+    describe("when fetchRecordsInventory fails", () => {
+      it("should dispatch failure and update the error", async () => {
+        const error = new Error("FAIL!");
+        const objAfterTransformation = {
+          recordsState: params.recordsState,
+          status: params.status,
+          page: params.page,
+        };
+        fetchRecordsInventorySpy.mockRejectedValue(error);
+        await preloadedStore.dispatch(fetchRecordsInventory(params));
+        expect(fetchRecordsInventorySpy).toBeCalledWith(objAfterTransformation);
+        const state = preloadedStore.getState();
+        expect(state.recordsInventory.vetted.public.tokens).toEqual([]);
+        expect(state.recordsInventory.vetted.public.lastPage).toEqual(0);
+        expect(state.recordsInventory.status).toEqual("failed");
+        expect(state.recordsInventory.error).toEqual("FAIL!");
+      });
+      it("should return correct user error messages", async () => {
+        const errorcodes = Array(20)
+          .fill()
+          .map((_, i) => i + 1);
+        for (const errorcode of errorcodes) {
+          const error = { body: { errorcode } };
+          const message = getRecordsUserError(errorcode);
+          fetchRecordsInventorySpy.mockRejectedValueOnce(error);
           await preloadedStore.dispatch(fetchRecordsInventory(params));
-
-          const objAfterTransformation = {
-            recordsState: params.recordsState,
-            status: params.status,
-            page: params.page,
-          };
-
-          expect(fetchRecordsInventorySpy).toBeCalledWith(
-            objAfterTransformation
-          );
-          const state = preloadedStore.getState();
-          expect(state.recordsInventory.vetted.public.tokens).toEqual([]);
-          expect(state.recordsInventory.vetted.public.lastPage).toEqual(1);
-          expect(state.recordsInventory.vetted.public.status).toEqual(
-            "succeeded/isDone"
-          );
-        });
-
-        it("should update tokens, last page and status (succeeded/hasMore for tokens.length == inventorypagesize)", async () => {
-          const inventoryPageSize =
-            preloadedStore.getState().recordsPolicy.policy.inventorypagesize;
-          const dummyToken = "testToken";
-          const resValue = {
-            vetted: { public: Array(inventoryPageSize).fill(dummyToken) },
-            unvetted: {},
-          };
-          fetchRecordsInventorySpy.mockResolvedValueOnce(resValue);
-
-          await preloadedStore.dispatch(fetchRecordsInventory(params));
-
-          const objAfterTransformation = {
-            recordsState: params.recordsState,
-            status: params.status,
-            page: params.page,
-          };
-
-          expect(fetchRecordsInventorySpy).toBeCalledWith(
-            objAfterTransformation
-          );
-          const state = preloadedStore.getState();
-          expect(state.recordsInventory.vetted.public.tokens).toEqual(
-            Array(inventoryPageSize).fill(dummyToken)
-          );
-          expect(state.recordsInventory.vetted.public.lastPage).toEqual(1);
-          expect(state.recordsInventory.vetted.public.status).toEqual(
-            "succeeded/hasMore"
-          );
-        });
+          expect(fetchRecordsInventorySpy).toBeCalled();
+          const state = preloadedStore.getState().recordsInventory;
+          expect(state.status).toEqual("failed");
+          expect(state.error).toEqual(message);
+        }
       });
-      describe("when fetchRecordsInventory fails", () => {
-        it("should dispatch failure and update the error", async () => {
-          const error = new Error("FAIL!");
-          const objAfterTransformation = {
-            recordsState: params.recordsState,
-            status: params.status,
-            page: params.page,
-          };
-          fetchRecordsInventorySpy.mockRejectedValue(error);
-          await preloadedStore.dispatch(fetchRecordsInventory(params));
-          expect(fetchRecordsInventorySpy).toBeCalledWith(
-            objAfterTransformation
-          );
-          const state = preloadedStore.getState();
-          expect(state.recordsInventory.vetted.public.tokens).toEqual([]);
-          expect(state.recordsInventory.vetted.public.lastPage).toEqual(0);
-          expect(state.recordsInventory.status).toEqual("failed");
-          expect(state.recordsInventory.error).toEqual("FAIL!");
-        });
-        it("should return correct user error messages", async () => {
-          const errorcodes = Array(20)
-            .fill()
-            .map((_, i) => i + 1);
-          for (const errorcode of errorcodes) {
-            const error = { body: { errorcode } };
-            const message = getRecordsUserError(errorcode);
-            fetchRecordsInventorySpy.mockRejectedValueOnce(error);
-            await preloadedStore.dispatch(fetchRecordsInventory(params));
-            expect(fetchRecordsInventorySpy).toBeCalled();
-            const state = preloadedStore.getState().recordsInventory;
-            expect(state.status).toEqual("failed");
-            expect(state.error).toEqual(message);
-          }
-        });
+    });
+  });
+
+  describe("when fetchRecordsUserInventory is called with invalid params", () => {
+    it("should not fetch nor fire actions", () => {
+      const invalidParams = [
+        "userid",
+        null,
+        undefined,
+        {},
+        { userid: null },
+        { userid: undefined },
+        { userid: false },
+      ];
+      invalidParams.forEach((params) => {
+        store.dispatch(fetchRecordsUserInventory(params));
+        expect(fetchRecordsUserInventorySpy).not.toBeCalled();
+        const state = store.getState();
+        expect(state.recordsInventory.byUserId).toEqual({});
+        expect(state.recordsInventory.byUserStatus).toEqual("idle");
       });
+    });
+  });
+  describe("when fetchRecordsUserInventory is called with valid params", () => {
+    it("should update the status to loading", () => {
+      const params = { userid: "testuserid" };
+      store.dispatch(fetchRecordsUserInventory(params));
+      expect(fetchRecordsUserInventorySpy).toBeCalledWith(params);
+      const state = store.getState();
+      expect(state.recordsInventory.byUserId).toEqual({});
+      expect(state.recordsInventory.byUserStatus).toEqual("loading");
+    });
+    it("should update the status to succeeded and update the inventory on success", async () => {
+      const params = { userid: "testuserid" };
+      const resValue = { vetted: { public: [] }, unvetted: {} };
+      fetchRecordsUserInventorySpy.mockResolvedValueOnce(resValue);
+      await store.dispatch(fetchRecordsUserInventory(params));
+      expect(fetchRecordsUserInventorySpy).toBeCalledWith(params);
+      const state = store.getState();
+      expect(state.recordsInventory.byUserId[params.userid]).toEqual(resValue);
+      expect(state.recordsInventory.byUserStatus).toEqual("succeeded");
+    });
+    it("should upate the status to failed and update the error on failure", async () => {
+      const params = { userid: "testuserid" };
+      const error = new Error("FAIL!");
+      fetchRecordsUserInventorySpy.mockRejectedValueOnce(error);
+      await store.dispatch(fetchRecordsUserInventory(params));
+      expect(fetchRecordsUserInventorySpy).toBeCalledWith(params);
+      const state = store.getState();
+      expect(state.recordsInventory.byUserId).toEqual({});
+      expect(state.recordsInventory.byUserStatus).toEqual("failed");
+      expect(state.recordsInventory.error).toEqual("FAIL!");
     });
   });
 });

@@ -1,5 +1,8 @@
 import { fetchPolicyIfIdle } from "../utils";
-import { fetchRecordsInventoryEffect } from "./effects";
+import {
+  fetchRecordsInventoryEffect,
+  fetchRecordsUserInventoryEffect,
+} from "./effects";
 import { createSliceServices } from "../../toolkit";
 
 export const { pluginServices, serviceListeners } = createSliceServices({
@@ -10,6 +13,12 @@ export const { pluginServices, serviceListeners } = createSliceServices({
         await fetchPolicyIfIdle();
       },
       effect: fetchRecordsInventoryEffect,
+    },
+    userInventory: {
+      onSetup: async () => {
+        await fetchPolicyIfIdle();
+      },
+      effect: fetchRecordsUserInventoryEffect,
     },
   },
 });

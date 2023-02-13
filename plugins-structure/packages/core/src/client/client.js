@@ -5,6 +5,7 @@ import {
   ROUTE_INVENTORY,
   ROUTE_POLICY,
   ROUTE_RECORDS,
+  ROUTE_RECORDS_USER_INVENTORY,
   ROUTE_TIMESTAMPS,
   // Users
   ROUTE_USER_DETAILS,
@@ -58,6 +59,15 @@ async function fetchRecordsInventory({ recordsState, status, page = 1 }) {
   const response = await fetch(
     `${RECORDS_API_ROUTE}${VERSION}${ROUTE_INVENTORY}`,
     fetchOptions(null, { state: recordsState, status, page }, "POST")
+  );
+  const inventory = await parseResponse(response);
+  return inventory;
+}
+
+async function fetchRecordsUserInventory({ userid }) {
+  const response = await fetch(
+    `${RECORDS_API_ROUTE}${VERSION}${ROUTE_RECORDS_USER_INVENTORY}`,
+    fetchOptions(null, { userid }, "POST")
   );
   const inventory = await parseResponse(response);
   return inventory;
@@ -308,6 +318,7 @@ async function userEdit(state, { emailnotifications }) {
 export const client = {
   // Records API
   fetchRecordsInventory,
+  fetchRecordsUserInventory,
   fetchRecords,
   fetchRecordDetails,
   fetchRecordTimestamps,
