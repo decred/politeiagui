@@ -22,3 +22,13 @@ export const listenToRecordsInventoryFetch = {
     }
   },
 };
+
+export const listenToUserInventoryFetch = {
+  actionCreator: recordsInventory.fetchUserInventory.fulfilled,
+  effect: ({ meta, payload }, { dispatch }) => {
+    const { userid } = meta.arg;
+    if (payload) {
+      dispatch(fetchNextBatch({ userid }));
+    }
+  },
+};

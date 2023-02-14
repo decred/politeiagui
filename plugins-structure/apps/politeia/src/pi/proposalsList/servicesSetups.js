@@ -5,6 +5,7 @@ import {
   recordsBatchListener,
   recordsInventoryFetchListener,
   rfpSubmissionsFetchListener,
+  userInventoryFetchListener,
   voteInventoryFetchListener,
   voteSummariesBatchListener,
 } from "./servicesListeners";
@@ -16,6 +17,7 @@ import {
 import {
   onRecordsInventoryFetch,
   onRfpSubmissionFetch,
+  onUserInventoryFetch,
   onVoteInventoryFetch,
 } from "./customEffects";
 
@@ -48,4 +50,15 @@ export const servicesSetupsByRecordsInventory = [
   proposalsSummariesBatchListener.customizeEffect(onRecordsInventoryFetch),
   proposalsBillingListener.customizeEffect(onRecordsInventoryFetch),
   commentsCountListener.customizeEffect(onRecordsInventoryFetch),
+];
+
+export const servicesSetupsByUserInventory = [
+  ...commonSetups,
+  userInventoryFetchListener,
+  // Customize listeners effects for user inventory fetch
+  voteSummariesBatchListener.customizeEffect(onUserInventoryFetch),
+  recordsBatchListener.customizeEffect(onUserInventoryFetch),
+  proposalsSummariesBatchListener.customizeEffect(onUserInventoryFetch),
+  proposalsBillingListener.customizeEffect(onUserInventoryFetch),
+  commentsCountListener.customizeEffect(onUserInventoryFetch),
 ];

@@ -6,8 +6,8 @@ import { createRouteView } from "../../../utils/createRouteView";
 import { serviceListeners as draftsListeners } from "@politeiagui/core/records/drafts/services";
 import { serviceListeners as authListeners } from "@politeiagui/core/user/auth/services";
 import { serviceListeners as usersListeners } from "@politeiagui/core/user/users/services";
-import { servicesSetupsByRecordsInventory } from "../../../pi/proposalsList/servicesSetups";
-import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listeners";
+import { servicesSetupsByUserInventory } from "../../../pi/proposalsList/servicesSetups";
+import { listenToUserInventoryFetch } from "../../../pi/proposalsList/listeners";
 
 import overSome from "lodash/overSome";
 import { isUserAdmin, isUserOwner, navigateToDetails } from "../utils";
@@ -40,9 +40,8 @@ const userDraftsParams = {
 const userProposalsParams = {
   path: "/proposals",
   title: "Proposals",
-  // TODO: Use user proposals inventory & listeners
-  setupServices: servicesSetupsByRecordsInventory,
-  listeners: [listenToRecordsInventoryFetch],
+  setupServices: servicesSetupsByUserInventory,
+  listeners: [listenToUserInventoryFetch],
   view: createRouteView(
     lazy(() =>
       import(/* webpackChunkName: "user_details_page" */ "./Proposals")
