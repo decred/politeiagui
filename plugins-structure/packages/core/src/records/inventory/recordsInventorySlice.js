@@ -184,8 +184,15 @@ export const selectRecordsInventoryLastPage = (
   }
 };
 
-export const selectRecordsInventoryByUser = (state, userid) =>
-  state.recordsInventory.byUserId[userid];
+export const selectRecordsInventoryByUser = (state, userid) => {
+  const inv = state.recordsInventory.byUserId[userid];
+  if (inv) {
+    const { unvetted, vetted } = inv;
+    return [...unvetted, ...vetted];
+  }
+  return inv;
+};
+
 export const selectRecordsUserInventoryStatus = (state) =>
   state.recordsInventory.byUserStatus;
 

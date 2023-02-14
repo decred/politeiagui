@@ -16,10 +16,15 @@ export async function fetchRecordsInventoryEffect(
   }
 }
 
-export async function fetchRecordsUserInventoryEffect(state, dispatch, userid) {
-  const userRecordsInventory = recordsInventory.selectUserInventory(state, {
-    userid,
-  });
+export async function fetchRecordsUserInventoryEffect(
+  state,
+  dispatch,
+  { userid }
+) {
+  const userRecordsInventory = recordsInventory.selectUserInventory(
+    state,
+    userid
+  );
   if (!userRecordsInventory)
     await dispatch(recordsInventory.fetchUserInventory({ userid }));
 }
