@@ -31,15 +31,17 @@ export function getCreditsTableHeaders() {
 }
 
 export function getCreditsTableData(credits, creditPriceDCR = 1 / 10) {
-  const rows = groupBy(credits, "datepurchased");
-  const data = Object.values(rows).map((row) => ({
-    [TABLE_HEADERS.type]: "Credits",
-    [TABLE_HEADERS.amount]: row.length,
-    [TABLE_HEADERS.dcrspaid]: row.length * creditPriceDCR,
-    [TABLE_HEADERS.transaction]: row[0].txid,
-    [TABLE_HEADERS.status]: "confirmed",
-    [TABLE_HEADERS.date]: formatShortUnixTimestamp(row[0].datepurchased),
-  }));
+  const rows = groupBy(credits, "txid");
+  const data = Object.values(rows)
+    .sort((a, b) => b[0].datepurchased - a[0].datepurchased)
+    .map((row) => ({
+      [TABLE_HEADERS.type]: "Credits",
+      [TABLE_HEADERS.amount]: row.length,
+      [TABLE_HEADERS.dcrspaid]: row.length * creditPriceDCR,
+      [TABLE_HEADERS.transaction]: row[0].txid,
+      [TABLE_HEADERS.status]: "confirmed",
+      [TABLE_HEADERS.date]: formatShortUnixTimestamp(row[0].datepurchased),
+    }));
 
   return data;
 }

@@ -6,6 +6,7 @@ import { createRouteView } from "../../../utils/createRouteView";
 import { serviceListeners as draftsListeners } from "@politeiagui/core/records/drafts/services";
 import { serviceListeners as authListeners } from "@politeiagui/core/user/auth/services";
 import { serviceListeners as usersListeners } from "@politeiagui/core/user/users/services";
+import { serviceListeners as paymentsListeners } from "@politeiagui/core/user/payments/services";
 import { servicesSetupsByUserInventory } from "../../../pi/proposalsList/servicesSetups";
 import { listenToUserInventoryFetch } from "../../../pi/proposalsList/listeners";
 
@@ -13,6 +14,8 @@ import overSome from "lodash/overSome";
 import { isUserAdmin, isUserOwner, navigateToDetails } from "../utils";
 
 import Details from "./Details";
+import { userPayments } from "@politeiagui/core/user/payments";
+import { router } from "@politeiagui/core/router";
 
 const userIdentityParams = {
   path: "/identity",
@@ -76,6 +79,19 @@ const userPreferencesParams = {
 const userCreditsParams = {
   path: "/credits",
   title: "Credits",
+  setupServices: [
+    paymentsListeners.fetchPaywallOnLoad,
+    paymentsListeners.credits
+      .listenTo({
+        actionCreator: userPayments.fetchPaywall.fulfilled,
+      })
+      .customizeEffect((effect, _, { getState, dispatch }) => {
+        const { params } = router.getCurrentLocation();
+        if (isUserOwner(params, getState)) {
+          return effect(getState(), dispatch);
+        }
+      }),
+  ],
   when: overSome([isUserAdmin, isUserOwner]),
   otherwise: navigateToDetails,
   view: createRouteView(

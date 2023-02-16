@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Button,
   ButtonIcon,
@@ -14,6 +15,9 @@ import {
   useModal,
   useToast,
 } from "@politeiagui/common-ui";
+import { users } from "@politeiagui/core/user/users";
+import { userPayments } from "@politeiagui/core/user/payments";
+import { userAuth } from "@politeiagui/core/user/auth";
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
 import { downloadCSV } from "@politeiagui/core/downloads";
 import { CreditsModal, InfoCard } from "../../../components";
@@ -24,8 +28,6 @@ import {
   getCreditsTableHeaders,
   getFeeTableData,
 } from "./helpers";
-// MOCK DATA
-import { credits, paywall, registration, user } from "./_mock";
 
 function mockPaymentsScan() {
   return new Promise((resolve) => {
@@ -120,14 +122,18 @@ const CreditsBalanceAndFee = ({
 };
 
 const PaymentsHistory = ({
-  credits,
   creditPriceDCR,
   feePriceDCR,
   feeTx,
   feeTimestamp,
   username,
 }) => {
-  const creditsData = getCreditsTableData(credits, creditPriceDCR);
+  const credits = useSelector(userPayments.selectCredits);
+  const allCredits = [
+    ...(credits?.unspentcredits || []),
+    ...(credits?.spentcredits || []),
+  ];
+  const creditsData = getCreditsTableData(allCredits, creditPriceDCR);
   const feeData = getFeeTableData({
     feePriceDCR,
     timestamp: feeTimestamp,
@@ -169,14 +175,20 @@ const PaymentsHistory = ({
   );
 };
 
-function UserCredits() {
-  const isPaid = registration.haspaid;
-  const unspentCredits = credits.unspentcredits.length;
+function UserCredits({ userid }) {
+  const user = useSelector((state) => users.selectById(state, userid));
+  const currentUser = useSelector(userAuth.selectCurrent);
+  const paywall = useSelector(userPayments.selectPaywall);
+
+  const isPaid = user.newuserpaywalltx !== "";
+  const unspentCredits = user.proposalcredits;
+
+  const isOwner = currentUser && currentUser.userid === userid;
+
   const creditPriceDCR = convertAtomsToDcr(paywall.creditprice);
   const feePriceDCR = convertAtomsToDcr(user.newuserpaywallamount);
   const feeTx = user.newuserpaywalltx;
   const feeTimestamp = user.newuserpaywalltxnotbefore;
-  const username = user.username;
 
   return (
     <>
@@ -187,14 +199,15 @@ function UserCredits() {
         feePriceDCR={feePriceDCR}
         address={user.newuserpaywalladdress}
       />
-      <PaymentsHistory
-        username={username}
-        creditPriceDCR={creditPriceDCR}
-        credits={[...credits.spentcredits, ...credits.unspentcredits]}
-        feePriceDCR={feePriceDCR}
-        feeTimestamp={feeTimestamp}
-        feeTx={feeTx}
-      />
+      {isOwner && (
+        <PaymentsHistory
+          username={user.username}
+          creditPriceDCR={creditPriceDCR}
+          feePriceDCR={feePriceDCR}
+          feeTimestamp={feeTimestamp}
+          feeTx={feeTx}
+        />
+      )}
     </>
   );
 }
