@@ -12,8 +12,10 @@ import apiPolicyReducer from "./api/policySlice";
 import progressReducer from "./globalServices/progress";
 import messageReducer from "./globalServices/message";
 import navigationReducer from "./globalServices/navigation";
+// User layer
 import userReducer from "./user/userSlice"; // TODO: Remove this.
 import userAuthReducer from "./user/auth/userAuthSlice";
+import userPaymentsReducer from "./user/payments/userPaymentsSlice";
 import usersReducer from "./user/users/usersSlice";
 
 import { listenerMiddleware } from "./listeners";
@@ -33,6 +35,7 @@ const staticReducers = {
   user: userReducer, // TODO: Remove this reducer when the user layer is done.
   userAuth: userAuthReducer,
   users: usersReducer,
+  userPayments: userPaymentsReducer,
 };
 
 function createReducer(reducers, asyncReducers) {

@@ -23,6 +23,8 @@
     "./user/auth/services": "./src/user/auth/services.js",
     "./user/users": "./src/user/users/index.js",
     "./user/users/services": "./src/user/users/services.js",
+    "./user/payments": "./src/user/payments/index.js",
+    "./user/payments/services": "./src/user/payments/services.js",
     "./user/services": "./src/user/services.js",
     "./router": "./src/router/index.js",
     "./toolkit": "./src/toolkit/index.js",

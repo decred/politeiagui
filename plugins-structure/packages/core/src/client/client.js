@@ -7,6 +7,7 @@ import {
   ROUTE_RECORDS,
   ROUTE_RECORDS_USER_INVENTORY,
   ROUTE_TIMESTAMPS,
+  ROUTE_USER_CREDITS,
   // Users
   ROUTE_USER_DETAILS,
   ROUTE_USER_EDIT,
@@ -16,6 +17,7 @@ import {
   ROUTE_USER_MANAGE,
   ROUTE_USER_ME,
   ROUTE_USER_NEW,
+  ROUTE_USER_PAYWALL,
   ROUTE_WWW_POLICY,
   USER_API_ROUTE,
   WWW_API_ROUTE,
@@ -314,6 +316,32 @@ async function userEdit(state, { emailnotifications }) {
   return await parseResponse(response);
 }
 
+/**
+ * userPaywall fetches the user paywall information.
+ *
+ * @param {Object} state redux state
+ */
+async function userPaywall(state) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_PAYWALL}`,
+    fetchOptions(csrf, null, "GET")
+  );
+  return await parseResponse(response);
+}
+
+/**
+ * userCredits fetches the logged in user user credits information.
+ */
+async function userCredits(state) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_CREDITS}`,
+    fetchOptions(csrf, null, "GET")
+  );
+  return await parseResponse(response);
+}
+
 // export client object with functions to interact with the API
 export const client = {
   // Records API
@@ -335,6 +363,9 @@ export const client = {
   userManage,
   userSignup,
   userVerifyEmail,
+  // User Payments API,
+  userCredits,
+  userPaywall,
 };
 
 export async function parseResponse(response) {

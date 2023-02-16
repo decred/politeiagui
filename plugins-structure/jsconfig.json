@@ -17,6 +17,12 @@
       "@politeiagui/core/user/users/services": [
         "./packages/core/src/user/users/services.js"
       ],
+      "@politeiagui/core/user/payments": [
+        "./packages/core/src/user/payments/index.js"
+      ],
+      "@politeiagui/core/user/payments/services": [
+        "./packages/core/src/user/payments/services.js"
+      ],
       "@politeiagui/core/user/services": [
         "./packages/core/src/user/services.js"
       ],
