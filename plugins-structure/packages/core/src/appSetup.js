@@ -8,8 +8,7 @@ import { pluginServices as apiServices } from "./api/services";
 import { listener } from "./listeners";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
-import over from "lodash/over";
-import overEvery from "lodash/overEvery";
+import cloneDeep from "lodash/cloneDeep";
 
 /**
  * @callback ConditionFn - A function that returns a boolean value indicating
@@ -218,10 +217,10 @@ export function appSetup({
     createRoute({
       path,
       view,
+      title,
       setupServices = [],
       listeners = [],
-      cleanup,
-      title,
+      cleanup = () => {},
       when = () => true,
       otherwise = () => {},
     } = {}) {
@@ -242,10 +241,11 @@ export function appSetup({
         view: async (routeParams) => {
           // onlu render view if when is true
           const shouldRenderView = when(routeParams, store.getState);
-          if (!shouldRenderView)
+          if (!shouldRenderView) {
             return await otherwise(routeParams, (path) =>
               router.navigateTo(path)
             );
+          }
 
           const actionsDispatchesQueue = [];
           registerListeners(allListeners);
@@ -275,84 +275,92 @@ export function appSetup({
       };
     },
     /**
-     * createSubRouter is an interface for creating app gateway routes.
-     * Gateway routes are routes that are not rendered by the router, but
-     * instead they are used to wrap other sub-routes.
+     * createSubRouter is an interface for creating route wrappers, which are
+     * routes that rendered by the router, and they wrap other sub-routes.
+     *
+     * Every sub-route will be modified to include and execute the wrapper route
+     * methods and properties. Modifications include:
+     *
+     * `path`: must be relative to the wrapper route path. For example:
+     * if the wrapper route path is `/app` and the sub-route path is `/home`,
+     * the final path for the sub-route  will be `/app/home`.
+     *
+     * `title`: will be rendered as `wrapper-title sub-router-title`.
+     *
+     * `view`: will execute first the wrapper view, and then the sub-route view.
+     *
+     * If the wrapper route has a `when` condition, the sub-route will only be
+     * rendered if the wrapper route `when` condition is true.
+     *
+     * Also, if user navigates to the wrapper route path, the router will
+     * automatically render first sub-route path view (by default).
      *
      * This is useful for implementing authentication, for example, where you
      * can wrap authenticated routes with a gateway route that checks if the
      * user is authenticated and redirects to the login page if not.
      *
-     * It can also be used to define services and listeners that are shared
-     * among multiple routes.
+     * Each subRoute must be either created by the `createRoute` method,
+     * by the `createSubRouter` method, or be a route that is accepted by the
+     * router.
      *
-     * Sub-routes are defined in the `subRoutes` param. Each sub-route must have
-     * the same parameters as the `createRoute` method. The path must be
-     * relative to the gateway route path. For example: if the gateway route
-     * path is `/app` and the sub-route path is `/home`, the final path for the
-     * sub-route  will be `/app/home`.
+     * Example:
      *
-     * defaultPath is the path that will be used by the router when the gateway
-     * base route is rendered. It must have the same path as one of the
-     * sub-routes. Defaults to the first sub-route.
-     *
-     * @param {{
-     *  path: string,
-     *  wrapperView: Function,
-     *  defaultPath: string,
-     *  setupServices: Array,
-     *  title: string,
-     *  listeners: Array,
-     *  cleanup: Function
-     *  subRoutes: CreateRouteParams[]
-     *  when: ConditionFn,
-     *  otherwise: Function
-     * }} routeParams
-     *
-     * @returns {{ path: string, view: Function, title: string }[]} - Returns
-     * an array of routes that can be passed to the router.
-     *
+     * ```javascript
+     * const routes = createSubRouter({
+     *  path: '/app',
+     *  view: myWrapperView,
+     *  title: 'App',
+     *  subRoutes: [
+     *    createRoute({
+     *      view: MyHomeView,
+     *      path: '/home',
+     *      title: 'Home',
+     *      ...subRouteProps
+     *    }),
+     *    ...otherSubRoutes,
+     *  ],
+     *  ...wrapperRouteProps
+     * });
+     * ```
      */
     createSubRouter({
       path,
-      wrapperView = () => {},
-      title,
-      defaultPath,
+      view,
       setupServices = [],
-      cleanup,
       listeners = [],
-      subRoutes = [],
+      cleanup,
+      title,
       when = () => true,
       otherwise = () => {},
+      subRoutes = [],
     }) {
-      // Create app routes for sub-routes. They can now be used by the router.
-      const routes = subRoutes.map((route) => {
-        return this.createRoute({
-          path: `${path}${route.path}`,
-          view: async (params) => {
-            await wrapperView(params);
-            await route.view(params);
-          },
-          title: `${route.title} - ${title}`,
-          setupServices: [...setupServices, ...(route.setupServices || [])],
-          listeners: [...listeners, ...(route.listeners || [])],
-          when: overEvery([when, route.when]),
-          otherwise: over([otherwise, route.otherwise]),
-          cleanup,
-        });
-      });
-
-      // Add default route for the path.
-      const defaultRouteMatch =
-        routes.find((route) => route.path === defaultPath) || routes[0];
-      if (!defaultRouteMatch) return routes;
-      const defaultRoute = {
+      const parentRoute = this.createRoute({
         path,
-        view: defaultRouteMatch.view,
-        title: defaultRouteMatch.title,
+        setupServices,
+        listeners,
         cleanup,
-      };
-
+        title,
+        when,
+        otherwise,
+        view,
+      });
+      const routes = subRoutes.map((route) => {
+        return {
+          cleanup: () => {
+            route.cleanup();
+            parentRoute.cleanup();
+          },
+          path: `${path}${route.path}`,
+          title: `${title} ${route.title}`,
+          view: async (...params) => {
+            await parentRoute.view(...params);
+            await route.view(...params);
+          },
+        };
+      });
+      // First route is always the default.
+      const defaultRoute = cloneDeep(routes[0]);
+      defaultRoute.path = path;
       return [defaultRoute, ...routes];
     },
   };
