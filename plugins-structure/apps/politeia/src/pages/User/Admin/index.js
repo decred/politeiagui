@@ -35,8 +35,12 @@ const adminRouter = App.createSubRouter({
   title: "Admin",
   when: isUserAdmin,
   otherwise: (_, go) => go("/user/login"),
+  view: () => {},
   cleanup: routeCleanup,
-  subRoutes: [adminProposalsRoute, adminUserSearchRoute],
+  subRoutes: [
+    App.createRoute(adminProposalsRoute),
+    App.createRoute(adminUserSearchRoute),
+  ],
 });
 
 export default adminRouter;
