@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   ButtonIcon,
@@ -29,23 +29,19 @@ import {
   getFeeTableData,
 } from "./helpers";
 
-function mockPaymentsScan() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
-  });
-}
-
 const CreditsBalanceAndFee = ({
   isPaid,
   unspentCredits,
   creditPriceDCR,
-  feePriceDCR,
   address,
+  userid,
+  isAdminView,
 }) => {
   const [open] = useModal();
-  const [isScanning, setIsScanning] = useState(false);
+  const dispatch = useDispatch();
+
+  const creditsStatus = useSelector(userPayments.selectCreditsStatus);
+
   const { openToast } = useToast();
 
   const statusTagProps = isPaid
@@ -59,14 +55,20 @@ const CreditsBalanceAndFee = ({
     open(CreditsModal, { address });
   }
   function handleRescanPayments() {
-    setIsScanning(true);
-    mockPaymentsScan().then(() => {
-      setIsScanning(false);
+    dispatch(userPayments.rescan({ userid })).then(() => {
       openToast({
         title: "Payments Scan",
         body: "Payments scan completed!",
         kind: "success",
       });
+    });
+  }
+  function handleMarkAsPaid() {
+    // TODO: implement mark as paid
+    openToast({
+      title: "Mark as Paid",
+      body: "Registration fee marked as paid!",
+      kind: "success",
     });
   }
 
@@ -77,17 +79,28 @@ const CreditsBalanceAndFee = ({
           <H5>Registration Fee</H5>
           <StatusTag {...statusTagProps} />
           <Text size="small" color="gray">
-            Politeia requires a small registration fee of {feePriceDCR} DCR
+            Politeia requires a small registration fee of 0.1 DCR
           </Text>
-          {!isPaid && (
-            <Button
-              size="sm"
-              onClick={handlePayFee}
-              data-testid="user-credits-pay-fee-button"
-            >
-              Pay Registration Fee
-            </Button>
-          )}
+          <div>
+            {!isPaid && (
+              <Button
+                size="sm"
+                onClick={handlePayFee}
+                data-testid="user-credits-pay-fee-button"
+              >
+                Pay Registration Fee
+              </Button>
+            )}
+            {!isPaid && isAdminView && (
+              <Button
+                size="sm"
+                onClick={handleMarkAsPaid}
+                data-testid="user-credits-mark-as-paid-button"
+              >
+                Mark as Paid
+              </Button>
+            )}
+          </div>
         </Column>
         <Column xs={12} md={6} className={styles.column}>
           <H5>Proposal Credits</H5>
@@ -108,7 +121,7 @@ const CreditsBalanceAndFee = ({
             </Button>
             <Button
               size="sm"
-              loading={isScanning}
+              loading={creditsStatus === "loading"}
               onClick={handleRescanPayments}
               data-testid="user-credits-rescan-button"
             >
@@ -194,9 +207,10 @@ function UserCredits({ userid }) {
     <>
       <CreditsBalanceAndFee
         isPaid={isPaid}
+        isAdminView={currentUser.isadmin}
         unspentCredits={unspentCredits}
         creditPriceDCR={creditPriceDCR}
-        feePriceDCR={feePriceDCR}
+        userid={userid}
         address={user.newuserpaywalladdress}
       />
       {isOwner && (

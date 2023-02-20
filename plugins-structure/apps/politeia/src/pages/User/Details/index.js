@@ -14,8 +14,6 @@ import overSome from "lodash/overSome";
 import { isUserAdmin, isUserOwner, navigateToDetails } from "../utils";
 
 import Details from "./Details";
-import { userPayments } from "@politeiagui/core/user/payments";
-import { router } from "@politeiagui/core/router";
 
 const userIdentityParams = {
   path: "/identity",
@@ -81,16 +79,7 @@ const userCreditsParams = {
   title: "Credits",
   setupServices: [
     paymentsListeners.fetchPaywallOnLoad,
-    paymentsListeners.credits
-      .listenTo({
-        actionCreator: userPayments.fetchPaywall.fulfilled,
-      })
-      .customizeEffect((effect, _, { getState, dispatch }) => {
-        const { params } = router.getCurrentLocation();
-        if (isUserOwner(params, getState)) {
-          return effect(getState(), dispatch);
-        }
-      }),
+    paymentsListeners.creditsOwnerOnLoad,
   ],
   when: overSome([isUserAdmin, isUserOwner]),
   otherwise: navigateToDetails,
@@ -116,20 +105,19 @@ const userRouter = App.createSubRouter({
   title: "User",
   cleanup: routeCleanup,
   setupServices: [usersListeners.fetchDetailsOnLoad],
-  defaultPath: "/user/:userid/identity",
   subRoutes: [
     // Public Routes (everyone)
-    userAccountParams,
-    userIdentityParams,
-    userProposalsParams,
+    App.createRoute(userIdentityParams),
+    App.createRoute(userAccountParams),
+    App.createRoute(userProposalsParams),
     // Owner Routes (user only)
-    userDraftsParams,
-    userPreferencesParams,
-    user2faParams,
+    App.createRoute(userDraftsParams),
+    App.createRoute(userPreferencesParams),
+    App.createRoute(user2faParams),
     // Private Routes (owner or admin)
-    userCreditsParams,
+    App.createRoute(userCreditsParams),
   ],
-  wrapperView: createRouteView(Details),
+  view: createRouteView(Details),
 });
 
 export default userRouter;

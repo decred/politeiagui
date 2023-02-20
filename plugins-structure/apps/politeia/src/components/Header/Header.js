@@ -71,9 +71,22 @@ function HeaderItems() {
   );
 }
 
+function ProposalCredits() {
+  const currentUser = useSelector(userAuth.selectCurrent);
+  if (!currentUser) return null;
+
+  const credits = currentUser.proposalcredits;
+  return (
+    <a href={`/user/${currentUser.userid}/credits`}>
+      {credits} Proposal Credits
+    </a>
+  );
+}
+
 function Header() {
   return (
     <Navbar logo={<PoliteiaLogo />} drawerContent={<About />}>
+      <ProposalCredits />
       <ThemeToggle />
       <HeaderItems />
     </Navbar>
