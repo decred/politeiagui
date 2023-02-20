@@ -3,6 +3,7 @@ import App from "../../../app";
 import { routeCleanup } from "../../../utils/routeCleanup";
 import { createRouteView } from "../../../utils/createRouteView";
 import { serviceListeners as userListeners } from "@politeiagui/core/user/services";
+import { serviceListeners as authListeners } from "@politeiagui/core/user/auth/services";
 
 // Auth
 const loginRoute = App.createRoute({
@@ -17,6 +18,7 @@ const loginRoute = App.createRoute({
 const signupRoute = App.createRoute({
   path: "/user/signup",
   title: "Sign Up",
+  setupServices: [authListeners.userPolicyOnLoad],
   cleanup: routeCleanup,
   view: createRouteView(
     lazy(() => import(/* webpackChunkName: "user_signup_page" */ "./Signup"))
@@ -38,7 +40,7 @@ const emailVerifyRoute = App.createRoute({
   path: "/user/verify",
   title: "Verify Email",
   cleanup: routeCleanup,
-  setupServices: [userListeners.emailVerify],
+  setupServices: [authListeners.verifyEmailOnLoad],
   view: createRouteView(
     lazy(() =>
       import(/* webpackChunkName: "user_verify_email_page" */ "./EmailVerify")

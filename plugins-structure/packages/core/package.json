@@ -5,6 +5,7 @@
   "exports": {
     ".": "./src/index.js",
     "./api": "./src/api/index.js",
+    "./api/services": "./src/api/services.js",
     "./client": "./src/client/index.js",
     "./records": "./src/records/records/index.js",
     "./records/services": "./src/records/records/services.js",
@@ -18,6 +19,14 @@
     "./records/timestamps": "./src/records/timestamps/index.js",
     "./records/policy": "./src/records/policy/index.js",
     "./user": "./src/user/index.js",
+    "./user/auth": "./src/user/auth/index.js",
+    "./user/auth/services": "./src/user/auth/services.js",
+    "./user/identity": "./src/user/identity/index.js",
+    "./user/identity/services": "./src/user/identity/services.js",
+    "./user/users": "./src/user/users/index.js",
+    "./user/users/services": "./src/user/users/services.js",
+    "./user/payments": "./src/user/payments/index.js",
+    "./user/payments/services": "./src/user/payments/services.js",
     "./user/services": "./src/user/services.js",
     "./router": "./src/router/index.js",
     "./toolkit": "./src/toolkit/index.js",
@@ -41,7 +50,10 @@
   },
   "dependencies": {
     "js-file-download": "^0.4.12",
+    "js-sha3": "^0.8.0",
+    "localforage": "^1.10.0",
     "politeiagui-scripts": "1.0.0",
-    "qrcode": "^1.5.1"
+    "qrcode": "^1.5.1",
+    "tweetnacl": "^1.0.3"
   }
 }

@@ -4,8 +4,31 @@
     "paths": {
       "@politeiagui/core": ["./packages/core/src/index.js"],
       "@politeiagui/core/api": ["./packages/core/src/api/index.js"],
+      "@politeiagui/core/api/services": ["./packages/core/src/api/services.js"],
       "@politeiagui/core/router": ["./packages/core/src/router/index.js"],
       "@politeiagui/core/user": ["./packages/core/src/user/index.js"],
+      "@politeiagui/core/user/auth": ["./packages/core/src/user/auth/index.js"],
+      "@politeiagui/core/user/auth/services": [
+        "./packages/core/src/user/auth/services.js"
+      ],
+      "@politeiagui/core/user/identity": [
+        "./packages/core/src/user/identity/index.js"
+      ],
+      "@politeiagui/core/user/identity/services": [
+        "./packages/core/src/user/identity/services.js"
+      ],
+      "@politeiagui/core/user/users": [
+        "./packages/core/src/user/users/index.js"
+      ],
+      "@politeiagui/core/user/users/services": [
+        "./packages/core/src/user/users/services.js"
+      ],
+      "@politeiagui/core/user/payments": [
+        "./packages/core/src/user/payments/index.js"
+      ],
+      "@politeiagui/core/user/payments/services": [
+        "./packages/core/src/user/payments/services.js"
+      ],
       "@politeiagui/core/user/services": [
         "./packages/core/src/user/services.js"
       ],

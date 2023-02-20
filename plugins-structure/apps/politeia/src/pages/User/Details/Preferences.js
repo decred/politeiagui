@@ -1,15 +1,19 @@
 import React from "react";
-import UserDetails from "./Details";
-import styles from "./styles.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { users } from "@politeiagui/core/user/users";
 import {
   Checkbox,
   InfoMessage,
   RecordForm,
   SubmitButton,
+  useToast,
 } from "@politeiagui/common-ui";
 import { InfoCard } from "../../../components";
-
-import { user } from "./_mock";
+import {
+  emailNotificationsToPreferences,
+  preferencesToEmailNotifications,
+} from "./helpers";
+import styles from "./styles.module.css";
 
 function CheckboxSection({ title, items, ...props }) {
   return (
@@ -21,70 +25,96 @@ function CheckboxSection({ title, items, ...props }) {
   );
 }
 
-function UserPreferences() {
+function UserPreferences({ userid }) {
+  const dispatch = useDispatch();
+  const { openToast } = useToast();
+
+  const user = useSelector((state) => users.selectById(state, userid));
   const isAdmin = user.isadmin;
+  const preferences = emailNotificationsToPreferences(user.emailnotifications);
 
   function handleSavePreferences(values) {
-    console.log("Saving...", values);
+    const emailnotifications = preferencesToEmailNotifications(values);
+    dispatch(users.edit({ emailnotifications, userid }))
+      .then(() => {
+        openToast({ title: "Preferences saved", kind: "success" });
+      })
+      .catch(() => {
+        openToast({ title: "Error saving preferences", kind: "error" });
+      });
   }
-
   return (
-    <UserDetails>
-      <RecordForm
-        className={styles.reset}
-        formClassName={styles.form}
-        onSubmit={handleSavePreferences}
-      >
-        <InfoMessage>
-          Currently, only one attempt is made to send each notification email.
-          Politeia will not try to resend an email if, for whatever reason, it
-          cannot be delivered.
-        </InfoMessage>
+    <RecordForm
+      className={styles.reset}
+      formClassName={styles.reset}
+      initialValues={preferences}
+      mode="onTouched"
+      onSubmit={handleSavePreferences}
+    >
+      <InfoMessage>
+        Currently, only one attempt is made to send each notification email.
+        Politeia will not try to resend an email if, for whatever reason, it
+        cannot be delivered.
+      </InfoMessage>
+      <CheckboxSection
+        data-testid="user-preferences-my-proposals"
+        title="Email notifications for my proposals"
+        items={[
+          {
+            name: "myProposalStatusChange",
+            label: "Proposal approved or censored",
+          },
+          {
+            name: "myProposalVoteStarted",
+            label: "Voting started for proposal",
+          },
+        ]}
+      />
+      <CheckboxSection
+        data-testid="user-preferences-others-proposals"
+        title="Email notifications for other's proposals"
+        items={[
+          { name: "regularProposalVetted", label: "New proposal published" },
+          { name: "regularProposalEdited", label: "Proposal edited" },
+          {
+            name: "regularProposalVoteStarted",
+            label: "Voting started for proposal",
+          },
+        ]}
+      />
+      <CheckboxSection
+        data-testid="user-preferences-comments"
+        title="Email notifications for comments"
+        items={[
+          {
+            name: "commentOnMyProposal",
+            label: "New comment on your proposal",
+          },
+          {
+            name: "commentOnMyComment",
+            label: "New comment reply to your comment",
+          },
+        ]}
+      />
+      {isAdmin && (
         <CheckboxSection
-          data-testid="user-preferences-my-proposals"
-          title="Email notifications for my proposals"
+          data-testid="user-preferences-admin"
+          title="Admin email notifications"
           items={[
-            { name: "approved", label: "Proposal approved or censored" },
-            { name: "started", label: "Voting started for proposal" },
+            { name: "adminProposalNew", label: "New proposal submitted" },
+            {
+              name: "adminProposalVoteAuthorized",
+              label: "Voting authorized for proposal",
+            },
           ]}
         />
-        <CheckboxSection
-          data-testid="user-preferences-others-proposals"
-          title="Email notifications for other's proposals"
-          items={[
-            { name: "newProposal", label: "New proposal published" },
-            { name: "editedProposal", label: "Proposal edited" },
-            { name: "startedOthers", label: "Voting started for proposal" },
-          ]}
-        />
-        <CheckboxSection
-          data-testid="user-preferences-comments"
-          title="Email notifications for comments"
-          items={[
-            { name: "newComment", label: "New comment on your proposal" },
-            { name: "newReply", label: "New comment reply to your comment" },
-          ]}
-        />
-        {isAdmin && (
-          <CheckboxSection
-            data-testid="user-preferences-admin"
-            title="Admin email notifications"
-            items={[
-              { name: "newProposalAdmin", label: "New proposal submitted" },
-              {
-                name: "authorizeAdmin",
-                label: "Voting authorized for proposal",
-              },
-            ]}
-          />
-        )}
-        <div>
-          <SubmitButton data-testid="user-preferences-save-button">
-            Save Preferences
-          </SubmitButton>
-        </div>
-      </RecordForm>
-    </UserDetails>
+      )}
+      <div>
+        <SubmitButton data-testid="user-preferences-save-button">
+          Save Preferences
+        </SubmitButton>
+      </div>
+    </RecordForm>
   );
 }
 

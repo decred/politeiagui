@@ -31,15 +31,17 @@ export function getCreditsTableHeaders() {
 }
 
 export function getCreditsTableData(credits, creditPriceDCR = 1 / 10) {
-  const rows = groupBy(credits, "datepurchased");
-  const data = Object.values(rows).map((row) => ({
-    [TABLE_HEADERS.type]: "Credits",
-    [TABLE_HEADERS.amount]: row.length,
-    [TABLE_HEADERS.dcrspaid]: row.length * creditPriceDCR,
-    [TABLE_HEADERS.transaction]: row[0].txid,
-    [TABLE_HEADERS.status]: "confirmed",
-    [TABLE_HEADERS.date]: formatShortUnixTimestamp(row[0].datepurchased),
-  }));
+  const rows = groupBy(credits, "txid");
+  const data = Object.values(rows)
+    .sort((a, b) => b[0].datepurchased - a[0].datepurchased)
+    .map((row) => ({
+      [TABLE_HEADERS.type]: "Credits",
+      [TABLE_HEADERS.amount]: row.length,
+      [TABLE_HEADERS.dcrspaid]: row.length * creditPriceDCR,
+      [TABLE_HEADERS.transaction]: row[0].txid,
+      [TABLE_HEADERS.status]: "confirmed",
+      [TABLE_HEADERS.date]: formatShortUnixTimestamp(row[0].datepurchased),
+    }));
 
   return data;
 }
@@ -81,8 +83,86 @@ function formatItemValue(value) {
 }
 
 export function formatItemsList(items) {
-  return items.map(({ label, value }) => ({
-    label,
-    value: formatItemValue(value),
-  }));
+  return items
+    .filter(({ hide }) => !hide)
+    .map(({ label, value }) => ({
+      label,
+      value: formatItemValue(value),
+    }));
+}
+
+// User Preferences
+const PREF_MY_PROPOSAL_STATUS_CHANGE = 1 << 0;
+const PREF_MY_PROPOSAL_VOTE_STARTED = 1 << 1;
+const PREF_REGULAR_PROPOSAL_VETTED = 1 << 2;
+const PREF_REGULAR_PROPOSAL_EDITED = 1 << 3;
+const PREF_REGULAR_PROPOSAL_VOTE_STARTED = 1 << 4;
+const PREF_ADMIN_PROPOSAL_NEW = 1 << 5;
+const PREF_ADMIN_PROPOSAL_VOTE_AUTHORIZED = 1 << 6;
+const PREF_COMMENT_ON_MY_PROPOSAL = 1 << 7;
+const PREF_COMMENT_ON_MY_COMMENT = 1 << 8;
+
+/**
+ * @typedef {{
+ * myProposalStatusChange: boolean,
+ * myProposalVoteStarted: boolean,
+ * regularProposalVetted: boolean,
+ * regularProposalEdited: boolean,
+ * regularProposalVoteStarted: boolean,
+ * adminProposalNew: boolean,
+ * adminProposalVoteAuthorized: boolean,
+ * commentOnMyProposal: boolean,
+ * commentOnMyComment: boolean
+ * }} EmailNotificationsPreferences - The user email notifications preferences.
+ */
+
+/**
+ * emailNotificationsToPreferences decodes the email notifications preference code
+ * into a readable object of user preferences.
+ *
+ * @param {number} notifications - The email notifications preference code.
+ * @returns {EmailNotificationsPreferences} - The decoded email notifications
+ * preference object.
+ */
+export function emailNotificationsToPreferences(notifications) {
+  return {
+    myProposalStatusChange: !!(notifications & PREF_MY_PROPOSAL_STATUS_CHANGE),
+    myProposalVoteStarted: !!(notifications & PREF_MY_PROPOSAL_VOTE_STARTED),
+    regularProposalVetted: !!(notifications & PREF_REGULAR_PROPOSAL_VETTED),
+    regularProposalEdited: !!(notifications & PREF_REGULAR_PROPOSAL_EDITED),
+    regularProposalVoteStarted: !!(
+      notifications & PREF_REGULAR_PROPOSAL_VOTE_STARTED
+    ),
+    adminProposalNew: !!(notifications & PREF_ADMIN_PROPOSAL_NEW),
+    adminProposalVoteAuthorized: !!(
+      notifications & PREF_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+    ),
+    commentOnMyProposal: !!(notifications & PREF_COMMENT_ON_MY_PROPOSAL),
+    commentOnMyComment: !!(notifications & PREF_COMMENT_ON_MY_COMMENT),
+  };
+}
+
+/**
+ * preferencesToEmailNotifications encodes the user preferences into a code
+ * that can be used to update the user's email notifications preferences.
+ *
+ * @param {EmailNotificationsPreferences} preferences - The user preferences.
+ * @returns {number} - The encoded email notifications preference code.
+ */
+export function preferencesToEmailNotifications(preferences) {
+  return (
+    (preferences.myProposalStatusChange ? PREF_MY_PROPOSAL_STATUS_CHANGE : 0) |
+    (preferences.myProposalVoteStarted ? PREF_MY_PROPOSAL_VOTE_STARTED : 0) |
+    (preferences.regularProposalVetted ? PREF_REGULAR_PROPOSAL_VETTED : 0) |
+    (preferences.regularProposalEdited ? PREF_REGULAR_PROPOSAL_EDITED : 0) |
+    (preferences.regularProposalVoteStarted
+      ? PREF_REGULAR_PROPOSAL_VOTE_STARTED
+      : 0) |
+    (preferences.adminProposalNew ? PREF_ADMIN_PROPOSAL_NEW : 0) |
+    (preferences.adminProposalVoteAuthorized
+      ? PREF_ADMIN_PROPOSAL_VOTE_AUTHORIZED
+      : 0) |
+    (preferences.commentOnMyProposal ? PREF_COMMENT_ON_MY_PROPOSAL : 0) |
+    (preferences.commentOnMyComment ? PREF_COMMENT_ON_MY_COMMENT : 0)
+  );
 }

@@ -12,30 +12,20 @@ import {
   convertAtomsToDcr,
   formatUnixTimestamp,
 } from "@politeiagui/common-ui/utils";
-import UserDetails from "./Details";
 import { InfoCard } from "../../../components";
 import styles from "./styles.module.css";
 import { formatItemsList } from "./helpers";
 
-import { user } from "./_mock";
 import { buildRegexFromSupportedChars } from "../../../pi/policy/utils";
+import { useSelector } from "react-redux";
+import { users } from "@politeiagui/core/user/users";
+import { userAuth } from "@politeiagui/core/user/auth";
+import { apiPolicy } from "@politeiagui/core/api";
 
-const MIN_PASSWORD_LENGTH = 8;
-const USERNAME_SUPPORTED_CHARS = [
-  "a-z",
-  "0-9",
-  ".",
-  ",",
-  ":",
-  ";",
-  "-",
-  "@",
-  "+",
-  "(",
-  ")",
-  "_",
-];
-
+/**
+ * PersonalData component defines the personal data section of the user account
+ * items list.
+ */
 const PersonalData = ({ onClear }) => (
   <div className={styles.section}>
     <Text color="gray">
@@ -51,14 +41,30 @@ const PersonalData = ({ onClear }) => (
   </div>
 );
 
-const Username = ({ username, isOwner, onEdit }) => {
+/**
+ * Username component defines the username section of the user account items
+ * list. If user is the owner of the account, it will render an edit button.
+ */
+const Username = ({ username, isOwner }) => {
+  const [open] = useModal();
+  const { usernamesupportedchars } = useSelector(apiPolicy.select);
+  function handleEditUsername() {
+    open(AccountUsernameChangeModal, {
+      usernameValidationRegex: buildRegexFromSupportedChars(
+        usernamesupportedchars
+      ),
+      onSubmit: (values) => {
+        console.log("Edit user", values);
+      },
+    });
+  }
   return (
     <div className={styles.horizontalSection}>
       <span>{username}</span>
       {isOwner && (
         <ButtonIcon
           type="edit"
-          onClick={onEdit}
+          onClick={handleEditUsername}
           data-testid="user-account-username-edit-button"
         />
       )}
@@ -66,11 +72,74 @@ const Username = ({ username, isOwner, onEdit }) => {
   );
 };
 
-function UserAccount() {
+/**
+ * PaywallItems component defines the paywall section. It will render the
+ * paywall address, amount and pay after date.
+ */
+const PaywallItems = ({ user }) => {
+  const paywallItems = [
+    { label: "Address", value: user.newuserpaywalladdress },
+    {
+      label: "Amount",
+      value: `${convertAtomsToDcr(user.newuserpaywallamount)} DCR`,
+    },
+    {
+      label: "Pay after",
+      value: formatUnixTimestamp(user.newuserpaywalltxnotbefore),
+    },
+  ];
+  return (
+    <InfoCard title="Paywall" data-testid="user-account-paywall">
+      <LabelValueList alignValues items={formatItemsList(paywallItems)} />
+    </InfoCard>
+  );
+};
+
+/**
+ * SecurityItems component defines the security section. It will render the
+ * failed login attempts and locked status, as well as a button to deactivate
+ * the account if the user is the owner of the account.
+ */
+const SecurityItems = ({ user }) => {
   const [open] = useModal();
+  const securityItems = [
+    { label: "Failed login attempts", value: user.failedloginattempts },
+    { label: "Locked", value: user.islocked },
+  ];
+  function handleDeactivate() {
+    open(ModalConfirmWithReason, {
+      title: "Account Deactivation",
+      message:
+        "You are about to deactivate your account. Please, provide a reason for this action.",
+      onSubmit: (values) => {
+        console.log("Deactivating account", values);
+      },
+      successMessage: "Account Deactivated. You'll be logged out.",
+    });
+  }
+  return (
+    <InfoCard title="Security" data-testid="user-account-security">
+      <LabelValueList alignValues items={formatItemsList(securityItems)} />
+      <Button size="sm" onClick={handleDeactivate}>
+        Deactivate Account
+      </Button>
+    </InfoCard>
+  );
+};
+
+/**
+ * AccountItems component defines the account section. It will render the
+ * username, email, verified email, admin status, password and clear data
+ * sections. Admins will be able to see all the information, while regular
+ * users will only see their own information. If user is neither admin nor
+ * the owner of the account, only show username and admin status.
+ */
+const AccountItems = ({ user, isOwner, isAdmin }) => {
+  const [open] = useModal();
+  const { minpasswordlength } = useSelector(apiPolicy.select);
   function handleChangePassword() {
     open(AccountPasswordChangeModal, {
-      minpasswordlength: MIN_PASSWORD_LENGTH,
+      minpasswordlength: minpasswordlength,
       onSubmit: (values) => {
         console.log("Password Changed", values);
       },
@@ -83,41 +152,19 @@ function UserAccount() {
       },
     });
   }
-  function handleDeactivate() {
-    open(ModalConfirmWithReason, {
-      title: "Account Deactivation",
-      message:
-        "You are about to deactivate your account. Please, provide a reason for this action.",
-      onSubmit: (values) => {
-        console.log("Deactivating account", values);
-      },
-      successMessage: "Account Deactivated. You'll be logged out.",
-    });
-  }
-  function handleEditUsername() {
-    open(AccountUsernameChangeModal, {
-      usernameValidationRegex: buildRegexFromSupportedChars(
-        USERNAME_SUPPORTED_CHARS
-      ),
-      onSubmit: (values) => {
-        console.log("Edit user", values);
-      },
-    });
-  }
 
+  const hidePublic = !isAdmin && !isOwner;
   const accountItems = [
     {
       label: "Username",
-      value: (
-        <Username
-          username={user.username}
-          isOwner
-          onEdit={handleEditUsername}
-        />
-      ),
+      value: <Username username={user.username} isOwner={isOwner} />,
     },
-    { label: "E-mail", value: user.email },
-    { label: "Verified Email", value: !user.newuserverificationtoken },
+    { label: "E-mail", value: user.email, hide: hidePublic },
+    {
+      label: "Verified Email",
+      value: !user.newuserverificationtoken,
+      hide: hidePublic,
+    },
     { label: "Admin", value: user.isadmin },
     {
       label: "Password",
@@ -126,43 +173,33 @@ function UserAccount() {
           Change Password
         </Button>
       ),
+      hide: !isOwner,
     },
     {
       label: "Personal Data",
       value: <PersonalData onClear={handleClearData} />,
+      hide: !isOwner,
     },
   ];
-  const paywallItems = [
-    { label: "Address", value: user.newuserpaywalladdress },
-    {
-      label: "Amount",
-      value: `${convertAtomsToDcr(user.newuserpaywallamount)} DCR`,
-    },
-    {
-      label: "Pay after",
-      value: formatUnixTimestamp(user.newuserpaywalltxnotbefore),
-    },
-  ];
-  const securityItems = [
-    { label: "Failed login attempts", value: user.failedloginattempts },
-    { label: "Locked", value: user.islocked },
-  ];
+  return (
+    <InfoCard title="Account Details" data-testid="user-account-details">
+      <LabelValueList alignValues items={formatItemsList(accountItems)} />
+    </InfoCard>
+  );
+};
+
+function UserAccount({ userid }) {
+  const user = useSelector((state) => users.selectById(state, userid));
+  const currentUser = useSelector(userAuth.selectCurrent);
+  const isOwner = currentUser && currentUser.userid === userid;
+  const isAdmin = currentUser && currentUser.isadmin;
 
   return (
-    <UserDetails>
-      <InfoCard title="Account Details" data-testid="user-account-details">
-        <LabelValueList alignValues items={formatItemsList(accountItems)} />
-      </InfoCard>
-      <InfoCard title="Paywall" data-testid="user-account-paywall">
-        <LabelValueList alignValues items={formatItemsList(paywallItems)} />
-      </InfoCard>
-      <InfoCard title="Security" data-testid="user-account-security">
-        <LabelValueList alignValues items={formatItemsList(securityItems)} />
-        <Button size="sm" onClick={handleDeactivate}>
-          Deactivate Account
-        </Button>
-      </InfoCard>
-    </UserDetails>
+    <>
+      <AccountItems user={user} isOwner={isOwner} isAdmin={isAdmin} />
+      {(isOwner || isAdmin) && <PaywallItems user={user} />}
+      {(isOwner || isAdmin) && <SecurityItems user={user} />}
+    </>
   );
 }
 

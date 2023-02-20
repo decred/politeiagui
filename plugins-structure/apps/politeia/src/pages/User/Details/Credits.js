@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   ButtonIcon,
@@ -14,10 +15,12 @@ import {
   useModal,
   useToast,
 } from "@politeiagui/common-ui";
+import { users } from "@politeiagui/core/user/users";
+import { userPayments } from "@politeiagui/core/user/payments";
+import { userAuth } from "@politeiagui/core/user/auth";
 import { convertAtomsToDcr } from "@politeiagui/common-ui/utils";
 import { downloadCSV } from "@politeiagui/core/downloads";
 import { CreditsModal, InfoCard } from "../../../components";
-import UserDetails from "./Details";
 import styles from "./styles.module.css";
 import {
   formatDataToTable,
@@ -25,26 +28,20 @@ import {
   getCreditsTableHeaders,
   getFeeTableData,
 } from "./helpers";
-// MOCK DATA
-import { credits, paywall, registration, user } from "./_mock";
-
-function mockPaymentsScan() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
-  });
-}
 
 const CreditsBalanceAndFee = ({
   isPaid,
   unspentCredits,
   creditPriceDCR,
-  feePriceDCR,
   address,
+  userid,
+  isAdminView,
 }) => {
   const [open] = useModal();
-  const [isScanning, setIsScanning] = useState(false);
+  const dispatch = useDispatch();
+
+  const creditsStatus = useSelector(userPayments.selectCreditsStatus);
+
   const { openToast } = useToast();
 
   const statusTagProps = isPaid
@@ -58,14 +55,20 @@ const CreditsBalanceAndFee = ({
     open(CreditsModal, { address });
   }
   function handleRescanPayments() {
-    setIsScanning(true);
-    mockPaymentsScan().then(() => {
-      setIsScanning(false);
+    dispatch(userPayments.rescan({ userid })).then(() => {
       openToast({
         title: "Payments Scan",
         body: "Payments scan completed!",
         kind: "success",
       });
+    });
+  }
+  function handleMarkAsPaid() {
+    // TODO: implement mark as paid
+    openToast({
+      title: "Mark as Paid",
+      body: "Registration fee marked as paid!",
+      kind: "success",
     });
   }
 
@@ -76,17 +79,28 @@ const CreditsBalanceAndFee = ({
           <H5>Registration Fee</H5>
           <StatusTag {...statusTagProps} />
           <Text size="small" color="gray">
-            Politeia requires a small registration fee of {feePriceDCR} DCR
+            Politeia requires a small registration fee of 0.1 DCR
           </Text>
-          {!isPaid && (
-            <Button
-              size="sm"
-              onClick={handlePayFee}
-              data-testid="user-credits-pay-fee-button"
-            >
-              Pay Registration Fee
-            </Button>
-          )}
+          <div>
+            {!isPaid && (
+              <Button
+                size="sm"
+                onClick={handlePayFee}
+                data-testid="user-credits-pay-fee-button"
+              >
+                Pay Registration Fee
+              </Button>
+            )}
+            {!isPaid && isAdminView && (
+              <Button
+                size="sm"
+                onClick={handleMarkAsPaid}
+                data-testid="user-credits-mark-as-paid-button"
+              >
+                Mark as Paid
+              </Button>
+            )}
+          </div>
         </Column>
         <Column xs={12} md={6} className={styles.column}>
           <H5>Proposal Credits</H5>
@@ -107,7 +121,7 @@ const CreditsBalanceAndFee = ({
             </Button>
             <Button
               size="sm"
-              loading={isScanning}
+              loading={creditsStatus === "loading"}
               onClick={handleRescanPayments}
               data-testid="user-credits-rescan-button"
             >
@@ -121,14 +135,18 @@ const CreditsBalanceAndFee = ({
 };
 
 const PaymentsHistory = ({
-  credits,
   creditPriceDCR,
   feePriceDCR,
   feeTx,
   feeTimestamp,
   username,
 }) => {
-  const creditsData = getCreditsTableData(credits, creditPriceDCR);
+  const credits = useSelector(userPayments.selectCredits);
+  const allCredits = [
+    ...(credits?.unspentcredits || []),
+    ...(credits?.spentcredits || []),
+  ];
+  const creditsData = getCreditsTableData(allCredits, creditPriceDCR);
   const feeData = getFeeTableData({
     feePriceDCR,
     timestamp: feeTimestamp,
@@ -170,33 +188,41 @@ const PaymentsHistory = ({
   );
 };
 
-function UserCredits() {
-  const isPaid = registration.haspaid;
-  const unspentCredits = credits.unspentcredits.length;
+function UserCredits({ userid }) {
+  const user = useSelector((state) => users.selectById(state, userid));
+  const currentUser = useSelector(userAuth.selectCurrent);
+  const paywall = useSelector(userPayments.selectPaywall);
+
+  const isPaid = user.newuserpaywalltx !== "";
+  const unspentCredits = user.proposalcredits;
+
+  const isOwner = currentUser && currentUser.userid === userid;
+
   const creditPriceDCR = convertAtomsToDcr(paywall.creditprice);
   const feePriceDCR = convertAtomsToDcr(user.newuserpaywallamount);
   const feeTx = user.newuserpaywalltx;
   const feeTimestamp = user.newuserpaywalltxnotbefore;
-  const username = user.username;
 
   return (
-    <UserDetails>
+    <>
       <CreditsBalanceAndFee
         isPaid={isPaid}
+        isAdminView={currentUser.isadmin}
         unspentCredits={unspentCredits}
         creditPriceDCR={creditPriceDCR}
-        feePriceDCR={feePriceDCR}
+        userid={userid}
         address={user.newuserpaywalladdress}
       />
-      <PaymentsHistory
-        username={username}
-        creditPriceDCR={creditPriceDCR}
-        credits={[...credits.spentcredits, ...credits.unspentcredits]}
-        feePriceDCR={feePriceDCR}
-        feeTimestamp={feeTimestamp}
-        feeTx={feeTx}
-      />
-    </UserDetails>
+      {isOwner && (
+        <PaymentsHistory
+          username={user.username}
+          creditPriceDCR={creditPriceDCR}
+          feePriceDCR={feePriceDCR}
+          feeTimestamp={feeTimestamp}
+          feeTx={feeTx}
+        />
+      )}
+    </>
   );
 }
 

@@ -1,22 +1,30 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { client } from "./client/client";
+import { pki } from "./pki";
 import recordsInventoryReducer from "./records/inventory/recordsInventorySlice";
 import recordsReducer from "./records/records/recordsSlice";
 import recordsDraftsReducer from "./records/drafts/recordsDraftsSlice";
 import policyReducer from "./records/policy/policySlice";
 import recordsTimestampsReducer from "./records/timestamps/timestampsSlice";
 import apiReducer from "./api/apiSlice";
+import apiPolicyReducer from "./api/policySlice";
 import progressReducer from "./globalServices/progress";
 import messageReducer from "./globalServices/message";
 import navigationReducer from "./globalServices/navigation";
-import userReducer from "./user/userSlice";
+// User layer
+import userReducer from "./user/userSlice"; // TODO: Remove this.
+import userAuthReducer from "./user/auth/userAuthSlice";
+import userPaymentsReducer from "./user/payments/userPaymentsSlice";
+import usersReducer from "./user/users/usersSlice";
+import userIdentityReducer from "./user/identity/userIdentitySlice";
 
 import { listenerMiddleware } from "./listeners";
 
 // Define the Reducers that will always be present in the application
 const staticReducers = {
   api: apiReducer,
+  apiPolicy: apiPolicyReducer,
   recordsInventory: recordsInventoryReducer,
   records: recordsReducer,
   recordsDrafts: recordsDraftsReducer,
@@ -25,7 +33,11 @@ const staticReducers = {
   globalProgress: progressReducer,
   globalMessage: messageReducer,
   globalNavigation: navigationReducer,
-  user: userReducer,
+  user: userReducer, // TODO: Remove this reducer when the user layer is done.
+  userAuth: userAuthReducer,
+  users: usersReducer,
+  userPayments: userPaymentsReducer,
+  userIdentity: userIdentityReducer,
 };
 
 function createReducer(reducers, asyncReducers) {
@@ -36,7 +48,11 @@ function createReducer(reducers, asyncReducers) {
 }
 
 // Configure the store
-export function configureCustomStore(initialState, reducers = staticReducers) {
+export function configureCustomStore({
+  initialState,
+  reducers = staticReducers,
+  extraArgument = { ...client, pki },
+} = {}) {
   const store = configureStore(
     {
       reducer: { ...reducers },
@@ -45,7 +61,7 @@ export function configureCustomStore(initialState, reducers = staticReducers) {
           // This will make the client available in the 'extra' argument
           // for all our thunks created with createAsyncThunk
           thunk: {
-            extraArgument: client,
+            extraArgument,
           },
         }).concat([listenerMiddleware]),
     },

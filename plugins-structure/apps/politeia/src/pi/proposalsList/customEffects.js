@@ -11,6 +11,9 @@ function getRecordsInventoryList({ status, recordsState }, state) {
     status,
   });
 }
+function getUserInventoryList({ userid }, state) {
+  return recordsInventory.selectUserInventory(state, userid);
+}
 
 export async function onVoteInventoryFetch(
   effect,
@@ -51,4 +54,17 @@ export async function onRfpSubmissionFetch(
     filenames: proposalFilenames,
   });
   subscribe();
+}
+
+export async function onUserInventoryFetch(
+  effect,
+  { payload },
+  { getState, dispatch }
+) {
+  const state = getState();
+  const inventoryList = getUserInventoryList(payload, state);
+  await effect(state, dispatch, {
+    inventoryList,
+    filenames: proposalFilenames,
+  });
 }

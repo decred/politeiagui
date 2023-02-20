@@ -1,7 +1,12 @@
 import { user } from ".";
 import { getURLSearchParams } from "../router";
 import { createSliceServices } from "../toolkit";
+import { pluginServices as authServices } from "./auth/services";
+import { pluginServices as usersServices } from "./users/services";
+import { pluginServices as paymentsServices } from "./payments/services";
+import { pluginServices as identityServices } from "./identity/services";
 
+// TODO: Move this to a more appropriate place
 export const { pluginServices, serviceListeners } = createSliceServices({
   name: "userEmail",
   services: {
@@ -23,3 +28,11 @@ export const { pluginServices, serviceListeners } = createSliceServices({
     },
   },
 });
+
+export const services = [
+  ...authServices,
+  ...pluginServices,
+  ...usersServices,
+  ...paymentsServices,
+  ...identityServices,
+];

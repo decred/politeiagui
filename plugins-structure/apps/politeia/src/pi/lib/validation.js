@@ -44,6 +44,18 @@ export function validatePiBillingStatusChangesPageSize(state) {
   return true;
 }
 
+/**
+ * validateProposalForm returns a yup schema that can be used to validate
+ * proposal form data.
+ * @param {{
+ *  namelengthmin: number,
+ *  namelengthmax: number,
+ *  namesupportedchars: string[],
+ *  amountmin: number,
+ *  amountmax: number,
+ *  domains: string[],
+ * }} policy - Pi policy object.
+ */
 export const validateProposalForm = ({
   namelengthmin,
   namelengthmax,

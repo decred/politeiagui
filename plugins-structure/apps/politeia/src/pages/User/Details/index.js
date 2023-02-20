@@ -2,99 +2,122 @@ import { lazy } from "react";
 import App from "../../../app";
 import { routeCleanup } from "../../../utils/routeCleanup";
 import { createRouteView } from "../../../utils/createRouteView";
+
 import { serviceListeners as draftsListeners } from "@politeiagui/core/records/drafts/services";
-import { servicesSetupsByRecordsInventory } from "../../../pi/proposalsList/servicesSetups";
-import { listenToRecordsInventoryFetch } from "../../../pi/proposalsList/listeners";
+import { serviceListeners as authListeners } from "@politeiagui/core/user/auth/services";
+import { serviceListeners as usersListeners } from "@politeiagui/core/user/users/services";
+import { serviceListeners as paymentsListeners } from "@politeiagui/core/user/payments/services";
+import { servicesSetupsByUserInventory } from "../../../pi/proposalsList/servicesSetups";
+import { listenToUserInventoryFetch } from "../../../pi/proposalsList/listeners";
 
-const baseRoute = App.createRoute({
-  path: "/user/:userid",
-  title: "User Details",
-  cleanup: routeCleanup,
+import overSome from "lodash/overSome";
+import { isUserAdmin, isUserOwner, navigateToDetails } from "../utils";
+
+import Details from "./Details";
+
+const userIdentityParams = {
+  path: "/identity",
+  title: "Identity",
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Identity"))
+    lazy(() =>
+      import(/* webpackChunkName: "user_details_page" */ "./Identity")
+    ),
+    "#user-router"
   ),
-});
+};
 
-const userProposalsRoute = App.createRoute({
-  path: "/user/:userid/proposals",
-  title: "User Proposals",
-  cleanup: routeCleanup,
-  // TODO: Use user proposals inventory & listeners
-  setupServices: servicesSetupsByRecordsInventory,
-  listeners: [listenToRecordsInventoryFetch],
+const userDraftsParams = {
+  path: "/drafts",
+  title: "Drafts",
+  setupServices: [draftsListeners.load],
+  when: isUserOwner,
+  otherwise: navigateToDetails,
+  view: createRouteView(
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Drafts")),
+    "#user-router"
+  ),
+};
+
+const userProposalsParams = {
+  path: "/proposals",
+  title: "Proposals",
+  setupServices: servicesSetupsByUserInventory,
+  listeners: [listenToUserInventoryFetch],
   view: createRouteView(
     lazy(() =>
       import(/* webpackChunkName: "user_details_page" */ "./Proposals")
-    )
+    ),
+    "#user-router"
   ),
-});
+};
 
-const userIdentityRoute = App.createRoute({
-  path: "/user/:userid/identity",
-  title: "User Identity",
-  cleanup: routeCleanup,
+const userAccountParams = {
+  path: "/account",
+  title: "Account",
+  setupServices: [authListeners.userPolicyOnLoad],
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Identity"))
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Account")),
+    "#user-router"
   ),
-});
+};
 
-const userAccountRoute = App.createRoute({
-  path: "/user/:userid/account",
-  title: "User Account",
-  cleanup: routeCleanup,
-  view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Account"))
-  ),
-});
-
-const userPreferencesRoute = App.createRoute({
-  path: "/user/:userid/preferences",
-  title: "User Preferences",
-  cleanup: routeCleanup,
+const userPreferencesParams = {
+  path: "/preferences",
+  title: "Preferences",
+  when: isUserOwner,
+  otherwise: navigateToDetails,
   view: createRouteView(
     lazy(() =>
       import(/* webpackChunkName: "user_details_page" */ "./Preferences")
-    )
+    ),
+    "#user-router"
   ),
-});
+};
 
-const userCreditsRoute = App.createRoute({
-  path: "/user/:userid/credits",
-  title: "User Credits",
-  cleanup: routeCleanup,
+const userCreditsParams = {
+  path: "/credits",
+  title: "Credits",
+  setupServices: [
+    paymentsListeners.fetchPaywallOnLoad,
+    paymentsListeners.creditsOwnerOnLoad,
+  ],
+  when: overSome([isUserAdmin, isUserOwner]),
+  otherwise: navigateToDetails,
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Credits"))
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Credits")),
+    "#user-router"
   ),
-});
+};
 
-const userDraftsRoute = App.createRoute({
-  path: "/user/:userid/drafts",
-  title: "User Drafts",
-  cleanup: routeCleanup,
-  setupServices: [draftsListeners.load],
+const user2faParams = {
+  path: "/2fa",
+  title: "2FA",
+  when: isUserOwner,
+  otherwise: navigateToDetails,
   view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./Drafts"))
+    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./TwoFA")),
+    "#user-router"
   ),
-});
+};
 
-const user2faRoute = App.createRoute({
-  path: "/user/:userid/2fa",
-  title: "User 2FA",
+const userRouter = App.createSubRouter({
+  path: "/user/:userid",
+  title: "User",
   cleanup: routeCleanup,
-  view: createRouteView(
-    lazy(() => import(/* webpackChunkName: "user_details_page" */ "./TwoFA"))
-  ),
+  setupServices: [usersListeners.fetchDetailsOnLoad],
+  subRoutes: [
+    // Public Routes (everyone)
+    App.createRoute(userIdentityParams),
+    App.createRoute(userAccountParams),
+    App.createRoute(userProposalsParams),
+    // Owner Routes (user only)
+    App.createRoute(userDraftsParams),
+    App.createRoute(userPreferencesParams),
+    App.createRoute(user2faParams),
+    // Private Routes (owner or admin)
+    App.createRoute(userCreditsParams),
+  ],
+  view: createRouteView(Details),
 });
 
-const userDetailsRoutes = [
-  baseRoute,
-  userProposalsRoute,
-  userIdentityRoute,
-  userAccountRoute,
-  userPreferencesRoute,
-  userCreditsRoute,
-  userDraftsRoute,
-  user2faRoute,
-];
-
-export default userDetailsRoutes;
+export default userRouter;

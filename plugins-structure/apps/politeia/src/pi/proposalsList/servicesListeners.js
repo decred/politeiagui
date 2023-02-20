@@ -53,3 +53,8 @@ export const voteInventoryFetchListener = voteInventoryListeners.fetch.listenTo(
 export const rfpSubmissionsFetchListener = recordsListeners.batchAll.listenTo({
   actionCreator: records.fetch.fulfilled,
 });
+
+export const userInventoryFetchListener =
+  recordsInventoryListeners.userInventory.listenTo({
+    actionCreator: fetchInventory,
+  });

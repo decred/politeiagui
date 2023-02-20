@@ -3,10 +3,35 @@ import { api } from "./api";
 import { router } from "./router";
 import { services as recordsServices } from "./records/services";
 import { services as globalServices } from "./globalServices";
-import { pluginServices as userServices } from "./user/services";
+import { services as userServices } from "./user/services";
+import { pluginServices as apiServices } from "./api/services";
 import { listener } from "./listeners";
 import isArray from "lodash/isArray";
 import isString from "lodash/isString";
+import cloneDeep from "lodash/cloneDeep";
+
+/**
+ * @callback ConditionFn - A function that returns a boolean value indicating
+ * whether the route should be rendered or not.
+ * @param {Object} params - Route params.
+ * @param {Function} getState - Redux getState function.
+ * @returns {boolean} - Whether the route should be rendered or not.
+ */
+
+/**
+ * CreateRouteParams is a type definition for the params object that is passed
+ * to the app's createRoute function.
+ * @typedef {{
+ *  path: string,
+ *  view: Function,
+ *  title: string,
+ *  setupServices: Array,
+ *  listeners: Array
+ *  cleanup: Function
+ *  when: ConditionFn
+ *  otherwise: Function
+ * }} CreateRouteParams
+ */
 
 function getRouteTitle(appTitle, title) {
   if (!title && appTitle) return appTitle;
@@ -111,7 +136,12 @@ export function appSetup({
     throw Error("'listeners' must be an array");
   }
 
-  let appServices = [...recordsServices, ...globalServices, ...userServices];
+  let appServices = [
+    ...recordsServices,
+    ...globalServices,
+    ...userServices,
+    ...apiServices,
+  ];
   plugins.every(validatePlugin);
 
   // Connect plugins reducers and services
@@ -130,8 +160,6 @@ export function appSetup({
   );
   const globalListeners = mergeListeners(globalAppServices, listeners);
 
-  registerListeners(globalListeners);
-
   return {
     config,
     /**
@@ -139,11 +167,26 @@ export function appSetup({
      * @param {{ routes: Array }} initParams
      */
     async init({ routes, routerOptions, errorView } = {}) {
+      // Only register global listeners once the app init is called.
+      registerListeners(globalListeners);
+      // Setup api. It is required to load csrf tokens and other required
+      // information to make api calls.
       await store.dispatch(api.fetch());
       const apiStatus = api.selectStatus(store.getState());
       if (apiStatus == "failed") {
         throw Error(api.selectError(store.getState()));
       }
+      // Execute all actions from global services before initializing the router
+      for (const service of globalAppServices) {
+        if (service.action) {
+          await service.action({
+            getState: store.getState,
+            dispatch: store.dispatch,
+          });
+        }
+      }
+      // Now, after all global services actions are executed, we can initialize
+      // the router.
       await router.init({ routes, options: routerOptions, errorView });
     },
     /**
@@ -182,20 +225,17 @@ export function appSetup({
     /**
      * createRoute is an interface for creating app routes. Before rendering
      * some route view, execute all services actions for given `service`.
-     * @param {{ path: string,
-     *  view: Function,
-     *  setupServices: Array,
-     *  listeners: Array
-     *  cleanup: Function
-     * }} routeParams
+     * @param {CreateRouteParams} routeParams
      */
     createRoute({
       path,
       view,
+      title,
       setupServices = [],
       listeners = [],
-      cleanup,
-      title,
+      cleanup = () => {},
+      when = () => true,
+      otherwise = () => {},
     } = {}) {
       validatServicesSetups(setupServices);
       const routeServices = addRouteServicesProperties(
@@ -212,8 +252,16 @@ export function appSetup({
           clearListeners(allListeners);
         },
         view: async (routeParams) => {
+          // onlu render view if when is true
+          const shouldRenderView = when(routeParams, store.getState);
+          if (!shouldRenderView) {
+            await otherwise(routeParams, (path) => router.navigateTo(path));
+            return false;
+          }
+
           const actionsDispatchesQueue = [];
           registerListeners(allListeners);
+
           for (const service of routeServices) {
             // We must cache all dispatches, because they might trigger services
             // listeners effects that may not have executed their setup actions
@@ -234,9 +282,101 @@ export function appSetup({
           for (const fn of actionsDispatchesQueue) {
             await store.dispatch(fn);
           }
-          return await view(routeParams);
+          await view(routeParams);
+          return true;
         },
       };
+    },
+    /**
+     * createSubRouter is an interface for creating route wrappers, which are
+     * routes that rendered by the router, and they wrap other sub-routes.
+     *
+     * Every sub-route will be modified to include and execute the wrapper route
+     * methods and properties. Modifications include:
+     *
+     * `path`: must be relative to the wrapper route path. For example:
+     * if the wrapper route path is `/app` and the sub-route path is `/home`,
+     * the final path for the sub-route  will be `/app/home`.
+     *
+     * `title`: will be rendered as `wrapper-title sub-router-title`.
+     *
+     * `view`: will execute first the wrapper view, and then the sub-route view.
+     *
+     * If the wrapper route has a `when` condition, the sub-route will only be
+     * rendered if the wrapper route `when` condition is true.
+     *
+     * Also, if user navigates to the wrapper route path, the router will
+     * automatically render first sub-route path view (by default).
+     *
+     * This is useful for implementing authentication, for example, where you
+     * can wrap authenticated routes with a gateway route that checks if the
+     * user is authenticated and redirects to the login page if not.
+     *
+     * Each subRoute must be either created by the `createRoute` method,
+     * by the `createSubRouter` method, or be a route that is accepted by the
+     * router.
+     *
+     * Example:
+     *
+     * ```javascript
+     * const routes = createSubRouter({
+     *  path: '/app',
+     *  view: myWrapperView,
+     *  title: 'App',
+     *  subRoutes: [
+     *    createRoute({
+     *      view: MyHomeView,
+     *      path: '/home',
+     *      title: 'Home',
+     *      ...subRouteProps
+     *    }),
+     *    ...otherSubRoutes,
+     *  ],
+     *  ...wrapperRouteProps
+     * });
+     * ```
+     */
+    createSubRouter({
+      path,
+      view,
+      setupServices = [],
+      listeners = [],
+      cleanup,
+      title,
+      when = () => true,
+      otherwise = () => {},
+      subRoutes = [],
+    }) {
+      const parentRoute = this.createRoute({
+        path,
+        setupServices,
+        listeners,
+        cleanup,
+        title,
+        when,
+        otherwise,
+        view,
+      });
+      const routes = subRoutes.map((route) => {
+        return {
+          cleanup: () => {
+            route.cleanup();
+            parentRoute.cleanup();
+          },
+          path: `${path}${route.path}`,
+          title: `${title} ${route.title}`,
+          view: async (...params) => {
+            const parentOk = await parentRoute.view(...params);
+            if (parentOk) {
+              await route.view(...params);
+            }
+          },
+        };
+      });
+      // First route is always the default.
+      const defaultRoute = cloneDeep(routes[0]);
+      defaultRoute.path = path;
+      return [defaultRoute, ...routes];
     },
   };
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { user } from "@politeiagui/core/user";
+import { useDispatch, useSelector } from "react-redux";
+import { userAuth } from "@politeiagui/core/user/auth";
 import { router } from "@politeiagui/core/router";
 import {
   Join,
@@ -13,52 +13,47 @@ import styles from "./styles.module.css";
 import { buildRegexFromSupportedChars } from "../../../pi/policy/utils";
 import message from "../../../assets/copies/before-signup.md";
 import PrivacyPolicyModal from "../../../components/Modal/PrivacyPolicyModal";
+import { apiPolicy } from "@politeiagui/core/api";
 
 // MOCK DEV ENV. Handle that on #2855 - [plugin-architecture] Handle
 //   Mainnet/Testnet envs
 const IS_DEV = true;
-const USERNAME_SUPPORTED_CHARS = [
-  "a-z",
-  "0-9",
-  ".",
-  ",",
-  ":",
-  ";",
-  "-",
-  "@",
-  "+",
-  "(",
-  ")",
-  "_",
-];
-const MIN_PASSWORD_LENGTH = 8;
 
-const SuccessMessage = ({ email }) => (
-  <div>
-    <P>
-      The verification e-mail has been sent to {email}. Please check your inbox
-      and open the verification link within the same browser you used to perform
-      this signup operation.
-    </P>
-    {IS_DEV && (
+const DevVerifyLink = ({ email, username }) => {
+  const verificationtoken = useSelector(userAuth.selectVerificationToken);
+  return (
+    IS_DEV && (
       <Link
         data-link
-        href={`/user/verify?email=${email}&verificationtoken=fake-verification-token`}
+        href={`/user/verify?email=${email}&verificationtoken=${verificationtoken}&username=${username}`}
       >
         {"[DEV ONLY]"} Verify Email
       </Link>
-    )}
-  </div>
-);
+    )
+  );
+};
 
-function ModalBeforeSignup({ onSubmit, email, ...props }) {
+const SuccessMessage = ({ email, username }) => {
+  return (
+    <div>
+      <P>
+        The verification e-mail has been sent to {email}. Please check your
+        inbox and open the verification link within the same browser you used to
+        perform this signup operation.
+      </P>
+      <DevVerifyLink email={email} username={username} />
+    </div>
+  );
+};
+
+function ModalBeforeSignup({ onSubmit, email, username, ...props }) {
   return (
     <ModalConfirm
       data-testid="before-signup-modal"
       message={message}
       title="Before you sign up"
       onCloseSuccess={() => router.navigateTo("/")}
-      successMessage={<SuccessMessage email={email} />}
+      successMessage={<SuccessMessage email={email} username={username} />}
       onSubmit={onSubmit}
       {...props}
     />
@@ -68,19 +63,14 @@ function ModalBeforeSignup({ onSubmit, email, ...props }) {
 function UserSignupPage() {
   const dispatch = useDispatch();
   const [open] = useModal();
+  const policy = useSelector(apiPolicy.select);
 
   function handleSignup({ username, email, password }) {
     open(ModalBeforeSignup, {
       email,
+      username,
       onSubmit: () => {
-        dispatch(
-          user.signup({
-            email,
-            password,
-            publickey: "MOCK_THIS_FOR_NOW",
-            username,
-          })
-        );
+        dispatch(userAuth.signup({ email, password, username }));
       },
     });
   }
@@ -93,9 +83,9 @@ function UserSignupPage() {
         className={styles.content}
         onSubmit={handleSignup}
         usernameValidationRegex={buildRegexFromSupportedChars(
-          USERNAME_SUPPORTED_CHARS
+          policy?.usernamesupportedchars
         )}
-        minpasswordlength={MIN_PASSWORD_LENGTH}
+        minpasswordlength={policy?.minpasswordlength}
       />
       <div className={styles.links}>
         Already have an account?{" "}
