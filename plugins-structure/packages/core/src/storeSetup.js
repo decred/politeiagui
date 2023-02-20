@@ -17,6 +17,7 @@ import userReducer from "./user/userSlice"; // TODO: Remove this.
 import userAuthReducer from "./user/auth/userAuthSlice";
 import userPaymentsReducer from "./user/payments/userPaymentsSlice";
 import usersReducer from "./user/users/usersSlice";
+import userIdentityReducer from "./user/identity/userIdentitySlice";
 
 import { listenerMiddleware } from "./listeners";
 
@@ -36,6 +37,7 @@ const staticReducers = {
   userAuth: userAuthReducer,
   users: usersReducer,
   userPayments: userPaymentsReducer,
+  userIdentity: userIdentityReducer,
 };
 
 function createReducer(reducers, asyncReducers) {

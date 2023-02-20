@@ -1,6 +1,6 @@
 import localforage from "localforage";
 import nacl from "tweetnacl";
-import { getStorageKey, toHex, toUint8Array } from "./utils";
+import { getStorageKey, toByteArray, toHex, toUint8Array } from "./utils";
 
 /**
  * generateKeys - Generates a new key pair
@@ -13,11 +13,18 @@ export function generateKeys() {
 /**
  * setKeys - Loads a key pair into local storage
  * @param {String} uuid
- * @param {Object} keys
+ * @param {{
+ *  publicKey: string,
+ *  secretKey: string
+ * }} keys
  * @returns {Promise} A promise that resolves to the loaded key pair
  */
-export function setKeys(uuid, keys) {
-  return localforage.setItem(getStorageKey(uuid), keys);
+export async function setKeys(uuid, keys) {
+  const { publicKey, secretKey } = keys;
+  return await localforage.setItem(getStorageKey(uuid), {
+    publicKey: toByteArray(publicKey),
+    secretKey: toByteArray(secretKey),
+  });
 }
 
 /**
@@ -38,6 +45,19 @@ export function removeKeys(uuid) {
 export async function generateNewUserPubkeyHex(username) {
   const keys = await generateKeys();
   await setKeys(username, keys);
+  return toHex(keys.publicKey);
+}
+
+/**
+ * getCurrentUserPubkeyHex - Returns the public key associated with the given
+ * userid.
+ * @param {String} userid
+ * @returns {Promise} A promise that resolves to the public key as a hex string.
+ */
+export async function getCurrentUserPubkeyHex(userid) {
+  const keys = await localforage.getItem(getStorageKey(userid));
+  console.log("current localforage keys", { keys, userid });
+  if (!keys) return;
   return toHex(keys.publicKey);
 }
 

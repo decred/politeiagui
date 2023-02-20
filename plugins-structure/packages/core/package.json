@@ -21,6 +21,8 @@
     "./user": "./src/user/index.js",
     "./user/auth": "./src/user/auth/index.js",
     "./user/auth/services": "./src/user/auth/services.js",
+    "./user/identity": "./src/user/identity/index.js",
+    "./user/identity/services": "./src/user/identity/services.js",
     "./user/users": "./src/user/users/index.js",
     "./user/users/services": "./src/user/users/services.js",
     "./user/payments": "./src/user/payments/index.js",

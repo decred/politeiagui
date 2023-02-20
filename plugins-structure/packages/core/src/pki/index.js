@@ -1,6 +1,7 @@
 import {
   generateKeys,
   generateNewUserPubkeyHex,
+  getCurrentUserPubkeyHex,
   removeKeys,
   setKeys,
   sign,
@@ -10,6 +11,7 @@ import {
 export const pki = {
   generateKeys,
   generateNewUserPubkeyHex,
+  getCurrentUserPubkeyHex,
   removeKeys,
   setKeys,
   sign,

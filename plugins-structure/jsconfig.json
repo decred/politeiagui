@@ -11,6 +11,12 @@
       "@politeiagui/core/user/auth/services": [
         "./packages/core/src/user/auth/services.js"
       ],
+      "@politeiagui/core/user/identity": [
+        "./packages/core/src/user/identity/index.js"
+      ],
+      "@politeiagui/core/user/identity/services": [
+        "./packages/core/src/user/identity/services.js"
+      ],
       "@politeiagui/core/user/users": [
         "./packages/core/src/user/users/index.js"
       ],
