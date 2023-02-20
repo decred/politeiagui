@@ -2,10 +2,19 @@ import { getURLSearchParams } from "../../router/helpers";
 import { createSliceServices } from "../../toolkit/createSliceServices";
 import { fetchPolicyIfIdle } from "../utils";
 import { userFetchMe, userVerifyEmail } from "./userAuthSlice";
+import { selectApi } from "../../api/apiSlice";
 
 export const { pluginServices, serviceListeners } = createSliceServices({
   name: "userAuth",
   services: {
+    meOnLoad: {
+      onSetup: async ({ dispatch, getState }) => {
+        const { activeusersession } = selectApi(getState());
+        if (activeusersession) {
+          await dispatch(userFetchMe());
+        }
+      },
+    },
     loadMe: {
       effect: (_, dispatch, { activeusersession }) => {
         if (activeusersession) {

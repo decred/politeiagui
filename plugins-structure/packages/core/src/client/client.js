@@ -17,6 +17,7 @@ import {
   ROUTE_USER_MANAGE,
   ROUTE_USER_ME,
   ROUTE_USER_NEW,
+  ROUTE_USER_PAYMENTS_RESCAN,
   ROUTE_USER_PAYWALL,
   ROUTE_WWW_POLICY,
   USER_API_ROUTE,
@@ -332,12 +333,23 @@ async function userPaywall(state) {
 
 /**
  * userCredits fetches the logged in user user credits information.
+ *
+ * @param {Object} state redux state
  */
 async function userCredits(state) {
   const csrf = await getCsrf(state);
   const response = await fetch(
     `${USER_API_ROUTE}${VERSION}${ROUTE_USER_CREDITS}`,
     fetchOptions(csrf, null, "GET")
+  );
+  return await parseResponse(response);
+}
+
+async function userPaymentsRescan(state, { userid }) {
+  const csrf = await getCsrf(state);
+  const response = await fetch(
+    `${USER_API_ROUTE}${VERSION}${ROUTE_USER_PAYMENTS_RESCAN}`,
+    fetchOptions(csrf, { userid }, "PUT")
   );
   return await parseResponse(response);
 }
@@ -366,6 +378,7 @@ export const client = {
   // User Payments API,
   userCredits,
   userPaywall,
+  userPaymentsRescan,
 };
 
 export async function parseResponse(response) {

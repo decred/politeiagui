@@ -21,6 +21,7 @@ export const ROUTE_USER_EMAIL_VERIFY = "/user/verify";
 // User Paywall API
 export const ROUTE_USER_PAYWALL = "/user/payments/paywall";
 export const ROUTE_USER_CREDITS = "/user/payments/credits";
+export const ROUTE_USER_PAYMENTS_RESCAN = "/user/payments/rescan";
 
 // WWW api endpoints
 export const WWW_API_ROUTE = "/api/";

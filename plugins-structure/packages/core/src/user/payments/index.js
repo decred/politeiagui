@@ -2,6 +2,7 @@ import {
   // Thunks
   fetchUserCredits,
   fetchUserPaywall,
+  rescanUserPayments,
   // Credits
   selectUserCredits,
   selectUserCreditsError,
@@ -23,4 +24,5 @@ export const userPayments = {
   selectCredits: selectUserCredits,
   selectCreditsError: selectUserCreditsError,
   selectCreditsStatus: selectUserCreditsStatus,
+  rescan: rescanUserPayments,
 };

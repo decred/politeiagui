@@ -40,6 +40,17 @@ export const fetchUserCredits = createAsyncThunk(
   }
 );
 
+export const rescanUserPayments = createAsyncThunk(
+  "userPayments/rescan",
+  async ({ userid }, { getState, rejectWithValue, extra }) => {
+    try {
+      return await extra.userPaymentsRescan(getState(), { userid });
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const userPaymentsSlice = createSlice({
   name: "userPayments",
   initialState,
@@ -49,22 +60,37 @@ const userPaymentsSlice = createSlice({
         state.paywall.status = "loading";
       })
       .addCase(fetchUserPaywall.fulfilled, (state, action) => {
-        state.paywall.status = "idle";
+        state.paywall.status = "succeeded";
         state.paywall.data = action.payload;
       })
       .addCase(fetchUserPaywall.rejected, (state, action) => {
-        state.paywall.status = "idle";
+        state.paywall.status = "failed";
         state.paywall.error = action.payload;
       })
       .addCase(fetchUserCredits.pending, (state) => {
         state.credits.status = "loading";
       })
       .addCase(fetchUserCredits.fulfilled, (state, action) => {
-        state.credits.status = "idle";
+        state.credits.status = "succeeded";
         state.credits.data = action.payload;
       })
       .addCase(fetchUserCredits.rejected, (state, action) => {
-        state.credits.status = "idle";
+        state.credits.status = "failed";
+        state.credits.error = action.payload;
+      })
+      .addCase(rescanUserPayments.pending, (state) => {
+        state.credits.status = "loading";
+      })
+      .addCase(rescanUserPayments.fulfilled, (state, action) => {
+        state.credits.status = "succeeded";
+        if (state.credits.data.unspentcredits) {
+          state.credits.data.unspentcredits.push(...action.payload.newcredits);
+        } else {
+          state.credits.data = { unspentcredits: action.payload.newcredits };
+        }
+      })
+      .addCase(rescanUserPayments.rejected, (state, action) => {
+        state.credits.status = "failed";
         state.credits.error = action.payload;
       });
   },

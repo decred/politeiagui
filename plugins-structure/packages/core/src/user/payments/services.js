@@ -1,4 +1,5 @@
 import { createSliceServices } from "../../toolkit/createSliceServices";
+import { selectCurrentUser } from "../auth/userAuthSlice";
 import {
   fetchUserCredits,
   fetchUserPaywall,
@@ -21,6 +22,17 @@ export const { pluginServices, serviceListeners } = createSliceServices({
       effect: async (state, dispatch) => {
         const creditsStatus = selectUserCreditsStatus(state);
         if (creditsStatus === "idle") {
+          await dispatch(fetchUserCredits());
+        }
+      },
+    },
+    creditsOwnerOnLoad: {
+      onSetup: async ({ dispatch, getState, params }) => {
+        const state = getState();
+        const creditsStatus = selectUserCreditsStatus(state);
+        const currentUser = selectCurrentUser(state);
+        const isOwner = currentUser && currentUser.userid === params.userid;
+        if (creditsStatus === "idle" && isOwner) {
           await dispatch(fetchUserCredits());
         }
       },
