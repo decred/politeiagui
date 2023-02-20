@@ -9,7 +9,6 @@ import { downloadServicesListeners } from "./pi/downloads/listeners";
 import { serviceListeners as authListeners } from "@politeiagui/core/user/auth/services";
 import { serviceListeners as apiListeners } from "@politeiagui/core/api/services";
 // Slices
-import { api } from "@politeiagui/core/api";
 import { userAuth } from "@politeiagui/core/user/auth";
 
 /**
@@ -17,11 +16,7 @@ import { userAuth } from "@politeiagui/core/user/auth";
  * server. The active session status is retrieved from api fetch fulfilled
  * action.
  */
-const loadActiveSession = authListeners.loadMe
-  .listenTo({ actionCreator: api.fetch.fulfilled })
-  .customizeEffect((effect, action, { getState, dispatch }) => {
-    effect(getState(), dispatch, action.payload.api);
-  });
+const loadActiveSession = authListeners.meOnLoad;
 
 /**
  * This listener will be executed when the user logs out. The logout action
