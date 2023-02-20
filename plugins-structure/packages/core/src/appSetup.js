@@ -160,8 +160,6 @@ export function appSetup({
   );
   const globalListeners = mergeListeners(globalAppServices, listeners);
 
-  registerListeners(globalListeners);
-
   return {
     config,
     /**
@@ -169,11 +167,26 @@ export function appSetup({
      * @param {{ routes: Array }} initParams
      */
     async init({ routes, routerOptions, errorView } = {}) {
+      // Only register global listeners once the app init is called.
+      registerListeners(globalListeners);
+      // Setup api. It is required to load csrf tokens and other required
+      // information to make api calls.
       await store.dispatch(api.fetch());
       const apiStatus = api.selectStatus(store.getState());
       if (apiStatus == "failed") {
         throw Error(api.selectError(store.getState()));
       }
+      // Execute all actions from global services before initializing the router
+      for (const service of globalAppServices) {
+        if (service.action) {
+          await service.action({
+            getState: store.getState,
+            dispatch: store.dispatch,
+          });
+        }
+      }
+      // Now, after all global services actions are executed, we can initialize
+      // the router.
       await router.init({ routes, options: routerOptions, errorView });
     },
     /**
@@ -242,9 +255,8 @@ export function appSetup({
           // onlu render view if when is true
           const shouldRenderView = when(routeParams, store.getState);
           if (!shouldRenderView) {
-            return await otherwise(routeParams, (path) =>
-              router.navigateTo(path)
-            );
+            await otherwise(routeParams, (path) => router.navigateTo(path));
+            return false;
           }
 
           const actionsDispatchesQueue = [];
@@ -270,7 +282,8 @@ export function appSetup({
           for (const fn of actionsDispatchesQueue) {
             await store.dispatch(fn);
           }
-          return await view(routeParams);
+          await view(routeParams);
+          return true;
         },
       };
     },
@@ -353,8 +366,10 @@ export function appSetup({
           path: `${path}${route.path}`,
           title: `${title} ${route.title}`,
           view: async (...params) => {
-            await parentRoute.view(...params);
-            await route.view(...params);
+            const parentOk = await parentRoute.view(...params);
+            if (parentOk) {
+              await route.view(...params);
+            }
           },
         };
       });
